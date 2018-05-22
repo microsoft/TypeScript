@@ -1,0 +1,419 @@
+=== tests/cases/compiler/nestedExcessPropertyChecks.ts ===
+// Repro #20863
+
+// An object to hold all the possible options
+type AllOptions = {
+>AllOptions : AllOptions
+
+    startDate: Date
+>startDate : Date
+>Date : Date
+
+    endDate: Date
+>endDate : Date
+>Date : Date
+
+    author: number
+>author : number
+}
+
+// Any combination of startDate, endDate can be used
+type DateOptions =
+>DateOptions : DateOptions
+
+    | Pick<AllOptions, 'startDate'>
+>Pick : Pick<T, K>
+>AllOptions : AllOptions
+
+    | Pick<AllOptions, 'endDate'>
+>Pick : Pick<T, K>
+>AllOptions : AllOptions
+
+    | Pick<AllOptions, 'startDate' | 'endDate'>
+>Pick : Pick<T, K>
+>AllOptions : AllOptions
+
+type AuthorOptions = Pick<AllOptions, 'author'>
+>AuthorOptions : Pick<AllOptions, "author">
+>Pick : Pick<T, K>
+>AllOptions : AllOptions
+
+type AllowedOptions = DateOptions | AuthorOptions
+>AllowedOptions : AllowedOptions
+>DateOptions : DateOptions
+>AuthorOptions : Pick<AllOptions, "author">
+
+// options double dips
+const options: AllowedOptions = {
+>options : AllowedOptions
+>AllowedOptions : AllowedOptions
+>{    startDate: new Date(), // error    author: 1} : { startDate: Date; author: number; }
+
+    startDate: new Date(), // error
+>startDate : Date
+>new Date() : Date
+>Date : DateConstructor
+
+    author: 1
+>author : number
+>1 : 1
+}
+
+// Repro #13813
+
+interface A {
+>A : A
+
+    x: string
+>x : string
+}
+
+interface B {
+>B : B
+
+    a: A;
+>a : A
+>A : A
+}
+
+interface C {
+>C : C
+
+    c: number;
+>c : number
+}
+
+type D = B & C;
+>D : D
+>B : B
+>C : C
+
+let a: B = {a: {x: 'hello'}}; // ok
+>a : B
+>B : B
+>{a: {x: 'hello'}} : { a: { x: string; }; }
+>a : { x: string; }
+>{x: 'hello'} : { x: string; }
+>x : string
+>'hello' : "hello"
+
+let b: B = {a: {x: 2}}; // error - types of property x are incompatible
+>b : B
+>B : B
+>{a: {x: 2}} : { a: { x: number; }; }
+>a : { x: number; }
+>{x: 2} : { x: number; }
+>x : number
+>2 : 2
+
+let c: B = {a: {x: 'hello', y: 2}}; // error - y does not exist in type B
+>c : B
+>B : B
+>{a: {x: 'hello', y: 2}} : { a: { x: string; y: number; }; }
+>a : { x: string; y: number; }
+>{x: 'hello', y: 2} : { x: string; y: number; }
+>x : string
+>'hello' : "hello"
+>y : number
+>2 : 2
+
+let d: D = {a: {x: 'hello'}, c: 5}; // ok
+>d : D
+>D : D
+>{a: {x: 'hello'}, c: 5} : { a: { x: string; }; c: number; }
+>a : { x: string; }
+>{x: 'hello'} : { x: string; }
+>x : string
+>'hello' : "hello"
+>c : number
+>5 : 5
+
+let e: D = {a: {x: 2}, c: 5}; // error - types of property x are incompatible
+>e : D
+>D : D
+>{a: {x: 2}, c: 5} : { a: { x: number; }; c: number; }
+>a : { x: number; }
+>{x: 2} : { x: number; }
+>x : number
+>2 : 2
+>c : number
+>5 : 5
+
+let f: D = {a: {x: 'hello', y: 2}, c: 5}; // y does not exist in type D
+>f : D
+>D : D
+>{a: {x: 'hello', y: 2}, c: 5} : { a: { x: string; y: number; }; c: number; }
+>a : { x: string; y: number; }
+>{x: 'hello', y: 2} : { x: string; y: number; }
+>x : string
+>'hello' : "hello"
+>y : number
+>2 : 2
+>c : number
+>5 : 5
+
+// Repro #23706
+
+type Template<T> = {
+>Template : Template<T>
+>T : T
+
+    [K in keyof T]: Template<T[K]>;
+>K : K
+>T : T
+>Template : Template<T>
+>T : T
+>K : K
+
+} & {
+    __name?: string;
+>__name : string
+}
+
+const template: Template<{
+>template : Template<{ foo: number; bar: { baz: string; }; }>
+>Template : Template<T>
+
+    foo: number;
+>foo : number
+
+    bar: {
+>bar : { baz: string; }
+
+        baz: string;
+>baz : string
+    }
+}> = {
+>{    foo: 1,    __name: 'n',    bar: {        baz: 'b',        not_exist_key: true // error    }} : { foo: number; __name: string; bar: { baz: string; not_exist_key: boolean; }; }
+
+    foo: 1,
+>foo : number
+>1 : 1
+
+    __name: 'n',
+>__name : string
+>'n' : "n"
+
+    bar: {
+>bar : { baz: string; not_exist_key: boolean; }
+>{        baz: 'b',        not_exist_key: true // error    } : { baz: string; not_exist_key: boolean; }
+
+        baz: 'b',
+>baz : string
+>'b' : "b"
+
+        not_exist_key: true // error
+>not_exist_key : boolean
+>true : true
+    }
+};
+
+// Other tests
+
+// Empty alias normalises {} for intersection, but EmptyInterface will
+// not. Check that they behave the same.
+
+type Empty = {};
+>Empty : Empty
+
+interface EmptyInterface {}
+>EmptyInterface : EmptyInterface
+
+let empty1: A & Empty = {x: "hello"};
+>empty1 : A
+>A : A
+>Empty : Empty
+>{x: "hello"} : { x: string; }
+>x : string
+>"hello" : "hello"
+
+let empty2: A & EmptyInterface = {x: "hello"};
+>empty2 : A & EmptyInterface
+>A : A
+>EmptyInterface : EmptyInterface
+>{x: "hello"} : { x: string; }
+>x : string
+>"hello" : "hello"
+
+let empty3: A & Empty = {x: "hello", y: true}; // error as A & Empty = A
+>empty3 : A
+>A : A
+>Empty : Empty
+>{x: "hello", y: true} : { x: string; y: boolean; }
+>x : string
+>"hello" : "hello"
+>y : boolean
+>true : true
+
+let empty4: A & EmptyInterface = {x: "hello", y: true}; // error as A & EmptyInterface is equivalent to A
+>empty4 : A & EmptyInterface
+>A : A
+>EmptyInterface : EmptyInterface
+>{x: "hello", y: true} : { x: string; y: boolean; }
+>x : string
+>"hello" : "hello"
+>y : boolean
+>true : true
+
+let empty5: {x: A} & {x: Empty} = {x: {x: "hello"}};
+>empty5 : { x: A; } & { x: Empty; }
+>x : A
+>A : A
+>x : Empty
+>Empty : Empty
+>{x: {x: "hello"}} : { x: { x: string; }; }
+>x : { x: string; }
+>{x: "hello"} : { x: string; }
+>x : string
+>"hello" : "hello"
+
+let empty6: {x: A} & {x: EmptyInterface} = {x: {x: "hello"}};
+>empty6 : { x: A; } & { x: EmptyInterface; }
+>x : A
+>A : A
+>x : EmptyInterface
+>EmptyInterface : EmptyInterface
+>{x: {x: "hello"}} : { x: { x: string; }; }
+>x : { x: string; }
+>{x: "hello"} : { x: string; }
+>x : string
+>"hello" : "hello"
+
+let empty7: {x: A} & {x: Empty} = {x: {x: "hello", y: true}}; // error
+>empty7 : { x: A; } & { x: Empty; }
+>x : A
+>A : A
+>x : Empty
+>Empty : Empty
+>{x: {x: "hello", y: true}} : { x: { x: string; y: boolean; }; }
+>x : { x: string; y: boolean; }
+>{x: "hello", y: true} : { x: string; y: boolean; }
+>x : string
+>"hello" : "hello"
+>y : boolean
+>true : true
+
+let empty8: {x: A} & {x: EmptyInterface} = {x: {x: "hello", y: true}}; // error
+>empty8 : { x: A; } & { x: EmptyInterface; }
+>x : A
+>A : A
+>x : EmptyInterface
+>EmptyInterface : EmptyInterface
+>{x: {x: "hello", y: true}} : { x: { x: string; y: boolean; }; }
+>x : { x: string; y: boolean; }
+>{x: "hello", y: true} : { x: string; y: boolean; }
+>x : string
+>"hello" : "hello"
+>y : boolean
+>true : true
+
+// Nesting with intersection and union
+
+type Nesting = {x: {a: boolean, b: string}} | {x: {y: boolean} & {z: string} & {}};
+>Nesting : Nesting
+>x : { a: boolean; b: string; }
+>a : boolean
+>b : string
+>x : { y: boolean; } & { z: string; }
+>y : boolean
+>z : string
+
+let nesting1: Nesting = {x: {a: true, b: "b"}};
+>nesting1 : Nesting
+>Nesting : Nesting
+>{x: {a: true, b: "b"}} : { x: { a: true; b: string; }; }
+>x : { a: true; b: string; }
+>{a: true, b: "b"} : { a: true; b: string; }
+>a : true
+>true : true
+>b : string
+>"b" : "b"
+
+let nesting2: Nesting = {y: "excess"}; // y is excess
+>nesting2 : Nesting
+>Nesting : Nesting
+>{y: "excess"} : { y: string; }
+>y : string
+>"excess" : "excess"
+
+let nesting3: Nesting = {x: {excess: true}}; // excess is excess
+>nesting3 : Nesting
+>Nesting : Nesting
+>{x: {excess: true}} : { x: { excess: boolean; }; }
+>x : { excess: boolean; }
+>{excess: true} : { excess: boolean; }
+>excess : boolean
+>true : true
+
+let nesting4: Nesting = {x: {a: true, b: "b", y: true, z: "hello"}}; // Double dipping on both sides of the union
+>nesting4 : Nesting
+>Nesting : Nesting
+>{x: {a: true, b: "b", y: true, z: "hello"}} : { x: { a: true; b: string; y: true; z: string; }; }
+>x : { a: true; b: string; y: true; z: string; }
+>{a: true, b: "b", y: true, z: "hello"} : { a: true; b: string; y: true; z: string; }
+>a : true
+>true : true
+>b : string
+>"b" : "b"
+>y : true
+>true : true
+>z : string
+>"hello" : "hello"
+
+let nesting5: Nesting = {x: {y: true, z: "b", excess: true}}; // excess is excess
+>nesting5 : Nesting
+>Nesting : Nesting
+>{x: {y: true, z: "b", excess: true}} : { x: { y: true; z: string; excess: boolean; }; }
+>x : { y: true; z: string; excess: boolean; }
+>{y: true, z: "b", excess: true} : { y: true; z: string; excess: boolean; }
+>y : true
+>true : true
+>z : string
+>"b" : "b"
+>excess : boolean
+>true : true
+
+
+type InnerUnion = {x: ({y: string} | {z: boolean})} & {x: {q: boolean}};
+>InnerUnion : InnerUnion
+>x : { y: string; } | { z: boolean; }
+>y : string
+>z : boolean
+>x : { q: boolean; }
+>q : boolean
+
+let innerUnion1: InnerUnion = {x: {y: "ok", q: true}};
+>innerUnion1 : InnerUnion
+>InnerUnion : InnerUnion
+>{x: {y: "ok", q: true}} : { x: { y: string; q: true; }; }
+>x : { y: string; q: true; }
+>{y: "ok", q: true} : { y: string; q: true; }
+>y : string
+>"ok" : "ok"
+>q : true
+>true : true
+
+let innerUnion2: InnerUnion = {x: {z: true, q: true}};
+>innerUnion2 : InnerUnion
+>InnerUnion : InnerUnion
+>{x: {z: true, q: true}} : { x: { z: true; q: true; }; }
+>x : { z: true; q: true; }
+>{z: true, q: true} : { z: true; q: true; }
+>z : true
+>true : true
+>q : true
+>true : true
+
+let innerUnion3: InnerUnion = {x: {y: "not ok", z: true, q: true}};
+>innerUnion3 : InnerUnion
+>InnerUnion : InnerUnion
+>{x: {y: "not ok", z: true, q: true}} : { x: { y: string; z: true; q: true; }; }
+>x : { y: string; z: true; q: true; }
+>{y: "not ok", z: true, q: true} : { y: string; z: true; q: true; }
+>y : string
+>"not ok" : "not ok"
+>z : true
+>true : true
+>q : true
+>true : true
+

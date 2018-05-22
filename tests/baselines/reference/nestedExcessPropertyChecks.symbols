@@ -1,0 +1,329 @@
+=== tests/cases/compiler/nestedExcessPropertyChecks.ts ===
+// Repro #20863
+
+// An object to hold all the possible options
+type AllOptions = {
+>AllOptions : Symbol(AllOptions, Decl(nestedExcessPropertyChecks.ts, 0, 0))
+
+    startDate: Date
+>startDate : Symbol(startDate, Decl(nestedExcessPropertyChecks.ts, 3, 19))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    endDate: Date
+>endDate : Symbol(endDate, Decl(nestedExcessPropertyChecks.ts, 4, 19))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    author: number
+>author : Symbol(author, Decl(nestedExcessPropertyChecks.ts, 5, 17))
+}
+
+// Any combination of startDate, endDate can be used
+type DateOptions =
+>DateOptions : Symbol(DateOptions, Decl(nestedExcessPropertyChecks.ts, 7, 1))
+
+    | Pick<AllOptions, 'startDate'>
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>AllOptions : Symbol(AllOptions, Decl(nestedExcessPropertyChecks.ts, 0, 0))
+
+    | Pick<AllOptions, 'endDate'>
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>AllOptions : Symbol(AllOptions, Decl(nestedExcessPropertyChecks.ts, 0, 0))
+
+    | Pick<AllOptions, 'startDate' | 'endDate'>
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>AllOptions : Symbol(AllOptions, Decl(nestedExcessPropertyChecks.ts, 0, 0))
+
+type AuthorOptions = Pick<AllOptions, 'author'>
+>AuthorOptions : Symbol(AuthorOptions, Decl(nestedExcessPropertyChecks.ts, 13, 47))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>AllOptions : Symbol(AllOptions, Decl(nestedExcessPropertyChecks.ts, 0, 0))
+
+type AllowedOptions = DateOptions | AuthorOptions
+>AllowedOptions : Symbol(AllowedOptions, Decl(nestedExcessPropertyChecks.ts, 15, 47))
+>DateOptions : Symbol(DateOptions, Decl(nestedExcessPropertyChecks.ts, 7, 1))
+>AuthorOptions : Symbol(AuthorOptions, Decl(nestedExcessPropertyChecks.ts, 13, 47))
+
+// options double dips
+const options: AllowedOptions = {
+>options : Symbol(options, Decl(nestedExcessPropertyChecks.ts, 20, 5))
+>AllowedOptions : Symbol(AllowedOptions, Decl(nestedExcessPropertyChecks.ts, 15, 47))
+
+    startDate: new Date(), // error
+>startDate : Symbol(startDate, Decl(nestedExcessPropertyChecks.ts, 20, 33))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    author: 1
+>author : Symbol(author, Decl(nestedExcessPropertyChecks.ts, 21, 26))
+}
+
+// Repro #13813
+
+interface A {
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+
+    x: string
+>x : Symbol(A.x, Decl(nestedExcessPropertyChecks.ts, 27, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(nestedExcessPropertyChecks.ts, 29, 1))
+
+    a: A;
+>a : Symbol(B.a, Decl(nestedExcessPropertyChecks.ts, 31, 13))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+}
+
+interface C {
+>C : Symbol(C, Decl(nestedExcessPropertyChecks.ts, 33, 1))
+
+    c: number;
+>c : Symbol(C.c, Decl(nestedExcessPropertyChecks.ts, 35, 13))
+}
+
+type D = B & C;
+>D : Symbol(D, Decl(nestedExcessPropertyChecks.ts, 37, 1))
+>B : Symbol(B, Decl(nestedExcessPropertyChecks.ts, 29, 1))
+>C : Symbol(C, Decl(nestedExcessPropertyChecks.ts, 33, 1))
+
+let a: B = {a: {x: 'hello'}}; // ok
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 41, 3))
+>B : Symbol(B, Decl(nestedExcessPropertyChecks.ts, 29, 1))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 41, 12))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 41, 16))
+
+let b: B = {a: {x: 2}}; // error - types of property x are incompatible
+>b : Symbol(b, Decl(nestedExcessPropertyChecks.ts, 42, 3))
+>B : Symbol(B, Decl(nestedExcessPropertyChecks.ts, 29, 1))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 42, 12))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 42, 16))
+
+let c: B = {a: {x: 'hello', y: 2}}; // error - y does not exist in type B
+>c : Symbol(c, Decl(nestedExcessPropertyChecks.ts, 43, 3))
+>B : Symbol(B, Decl(nestedExcessPropertyChecks.ts, 29, 1))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 43, 12))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 43, 16))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 43, 27))
+
+let d: D = {a: {x: 'hello'}, c: 5}; // ok
+>d : Symbol(d, Decl(nestedExcessPropertyChecks.ts, 45, 3))
+>D : Symbol(D, Decl(nestedExcessPropertyChecks.ts, 37, 1))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 45, 12))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 45, 16))
+>c : Symbol(c, Decl(nestedExcessPropertyChecks.ts, 45, 28))
+
+let e: D = {a: {x: 2}, c: 5}; // error - types of property x are incompatible
+>e : Symbol(e, Decl(nestedExcessPropertyChecks.ts, 46, 3))
+>D : Symbol(D, Decl(nestedExcessPropertyChecks.ts, 37, 1))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 46, 12))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 46, 16))
+>c : Symbol(c, Decl(nestedExcessPropertyChecks.ts, 46, 22))
+
+let f: D = {a: {x: 'hello', y: 2}, c: 5}; // y does not exist in type D
+>f : Symbol(f, Decl(nestedExcessPropertyChecks.ts, 47, 3))
+>D : Symbol(D, Decl(nestedExcessPropertyChecks.ts, 37, 1))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 47, 12))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 47, 16))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 47, 27))
+>c : Symbol(c, Decl(nestedExcessPropertyChecks.ts, 47, 34))
+
+// Repro #23706
+
+type Template<T> = {
+>Template : Symbol(Template, Decl(nestedExcessPropertyChecks.ts, 47, 41))
+>T : Symbol(T, Decl(nestedExcessPropertyChecks.ts, 51, 14))
+
+    [K in keyof T]: Template<T[K]>;
+>K : Symbol(K, Decl(nestedExcessPropertyChecks.ts, 52, 5))
+>T : Symbol(T, Decl(nestedExcessPropertyChecks.ts, 51, 14))
+>Template : Symbol(Template, Decl(nestedExcessPropertyChecks.ts, 47, 41))
+>T : Symbol(T, Decl(nestedExcessPropertyChecks.ts, 51, 14))
+>K : Symbol(K, Decl(nestedExcessPropertyChecks.ts, 52, 5))
+
+} & {
+    __name?: string;
+>__name : Symbol(__name, Decl(nestedExcessPropertyChecks.ts, 53, 5))
+}
+
+const template: Template<{
+>template : Symbol(template, Decl(nestedExcessPropertyChecks.ts, 57, 5))
+>Template : Symbol(Template, Decl(nestedExcessPropertyChecks.ts, 47, 41))
+
+    foo: number;
+>foo : Symbol(foo, Decl(nestedExcessPropertyChecks.ts, 57, 26))
+
+    bar: {
+>bar : Symbol(bar, Decl(nestedExcessPropertyChecks.ts, 58, 16))
+
+        baz: string;
+>baz : Symbol(baz, Decl(nestedExcessPropertyChecks.ts, 59, 10))
+    }
+}> = {
+    foo: 1,
+>foo : Symbol(foo, Decl(nestedExcessPropertyChecks.ts, 62, 6))
+
+    __name: 'n',
+>__name : Symbol(__name, Decl(nestedExcessPropertyChecks.ts, 63, 11))
+
+    bar: {
+>bar : Symbol(bar, Decl(nestedExcessPropertyChecks.ts, 64, 16))
+
+        baz: 'b',
+>baz : Symbol(baz, Decl(nestedExcessPropertyChecks.ts, 65, 10))
+
+        not_exist_key: true // error
+>not_exist_key : Symbol(not_exist_key, Decl(nestedExcessPropertyChecks.ts, 66, 17))
+    }
+};
+
+// Other tests
+
+// Empty alias normalises {} for intersection, but EmptyInterface will
+// not. Check that they behave the same.
+
+type Empty = {};
+>Empty : Symbol(Empty, Decl(nestedExcessPropertyChecks.ts, 69, 2))
+
+interface EmptyInterface {}
+>EmptyInterface : Symbol(EmptyInterface, Decl(nestedExcessPropertyChecks.ts, 76, 16))
+
+let empty1: A & Empty = {x: "hello"};
+>empty1 : Symbol(empty1, Decl(nestedExcessPropertyChecks.ts, 79, 3))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>Empty : Symbol(Empty, Decl(nestedExcessPropertyChecks.ts, 69, 2))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 79, 25))
+
+let empty2: A & EmptyInterface = {x: "hello"};
+>empty2 : Symbol(empty2, Decl(nestedExcessPropertyChecks.ts, 80, 3))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>EmptyInterface : Symbol(EmptyInterface, Decl(nestedExcessPropertyChecks.ts, 76, 16))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 80, 34))
+
+let empty3: A & Empty = {x: "hello", y: true}; // error as A & Empty = A
+>empty3 : Symbol(empty3, Decl(nestedExcessPropertyChecks.ts, 81, 3))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>Empty : Symbol(Empty, Decl(nestedExcessPropertyChecks.ts, 69, 2))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 81, 25))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 81, 36))
+
+let empty4: A & EmptyInterface = {x: "hello", y: true}; // error as A & EmptyInterface is equivalent to A
+>empty4 : Symbol(empty4, Decl(nestedExcessPropertyChecks.ts, 82, 3))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>EmptyInterface : Symbol(EmptyInterface, Decl(nestedExcessPropertyChecks.ts, 76, 16))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 82, 34))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 82, 45))
+
+let empty5: {x: A} & {x: Empty} = {x: {x: "hello"}};
+>empty5 : Symbol(empty5, Decl(nestedExcessPropertyChecks.ts, 83, 3))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 83, 13))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 83, 22))
+>Empty : Symbol(Empty, Decl(nestedExcessPropertyChecks.ts, 69, 2))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 83, 35))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 83, 39))
+
+let empty6: {x: A} & {x: EmptyInterface} = {x: {x: "hello"}};
+>empty6 : Symbol(empty6, Decl(nestedExcessPropertyChecks.ts, 84, 3))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 84, 13))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 84, 22))
+>EmptyInterface : Symbol(EmptyInterface, Decl(nestedExcessPropertyChecks.ts, 76, 16))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 84, 44))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 84, 48))
+
+let empty7: {x: A} & {x: Empty} = {x: {x: "hello", y: true}}; // error
+>empty7 : Symbol(empty7, Decl(nestedExcessPropertyChecks.ts, 85, 3))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 85, 13))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 85, 22))
+>Empty : Symbol(Empty, Decl(nestedExcessPropertyChecks.ts, 69, 2))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 85, 35))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 85, 39))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 85, 50))
+
+let empty8: {x: A} & {x: EmptyInterface} = {x: {x: "hello", y: true}}; // error
+>empty8 : Symbol(empty8, Decl(nestedExcessPropertyChecks.ts, 86, 3))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 86, 13))
+>A : Symbol(A, Decl(nestedExcessPropertyChecks.ts, 23, 1))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 86, 22))
+>EmptyInterface : Symbol(EmptyInterface, Decl(nestedExcessPropertyChecks.ts, 76, 16))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 86, 44))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 86, 48))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 86, 59))
+
+// Nesting with intersection and union
+
+type Nesting = {x: {a: boolean, b: string}} | {x: {y: boolean} & {z: string} & {}};
+>Nesting : Symbol(Nesting, Decl(nestedExcessPropertyChecks.ts, 86, 70))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 90, 16))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 90, 20))
+>b : Symbol(b, Decl(nestedExcessPropertyChecks.ts, 90, 31))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 90, 47))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 90, 51))
+>z : Symbol(z, Decl(nestedExcessPropertyChecks.ts, 90, 66))
+
+let nesting1: Nesting = {x: {a: true, b: "b"}};
+>nesting1 : Symbol(nesting1, Decl(nestedExcessPropertyChecks.ts, 92, 3))
+>Nesting : Symbol(Nesting, Decl(nestedExcessPropertyChecks.ts, 86, 70))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 92, 25))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 92, 29))
+>b : Symbol(b, Decl(nestedExcessPropertyChecks.ts, 92, 37))
+
+let nesting2: Nesting = {y: "excess"}; // y is excess
+>nesting2 : Symbol(nesting2, Decl(nestedExcessPropertyChecks.ts, 93, 3))
+>Nesting : Symbol(Nesting, Decl(nestedExcessPropertyChecks.ts, 86, 70))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 93, 25))
+
+let nesting3: Nesting = {x: {excess: true}}; // excess is excess
+>nesting3 : Symbol(nesting3, Decl(nestedExcessPropertyChecks.ts, 94, 3))
+>Nesting : Symbol(Nesting, Decl(nestedExcessPropertyChecks.ts, 86, 70))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 94, 25))
+>excess : Symbol(excess, Decl(nestedExcessPropertyChecks.ts, 94, 29))
+
+let nesting4: Nesting = {x: {a: true, b: "b", y: true, z: "hello"}}; // Double dipping on both sides of the union
+>nesting4 : Symbol(nesting4, Decl(nestedExcessPropertyChecks.ts, 95, 3))
+>Nesting : Symbol(Nesting, Decl(nestedExcessPropertyChecks.ts, 86, 70))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 95, 25))
+>a : Symbol(a, Decl(nestedExcessPropertyChecks.ts, 95, 29))
+>b : Symbol(b, Decl(nestedExcessPropertyChecks.ts, 95, 37))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 95, 45))
+>z : Symbol(z, Decl(nestedExcessPropertyChecks.ts, 95, 54))
+
+let nesting5: Nesting = {x: {y: true, z: "b", excess: true}}; // excess is excess
+>nesting5 : Symbol(nesting5, Decl(nestedExcessPropertyChecks.ts, 96, 3))
+>Nesting : Symbol(Nesting, Decl(nestedExcessPropertyChecks.ts, 86, 70))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 96, 25))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 96, 29))
+>z : Symbol(z, Decl(nestedExcessPropertyChecks.ts, 96, 37))
+>excess : Symbol(excess, Decl(nestedExcessPropertyChecks.ts, 96, 45))
+
+
+type InnerUnion = {x: ({y: string} | {z: boolean})} & {x: {q: boolean}};
+>InnerUnion : Symbol(InnerUnion, Decl(nestedExcessPropertyChecks.ts, 96, 61))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 99, 19))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 99, 24))
+>z : Symbol(z, Decl(nestedExcessPropertyChecks.ts, 99, 38))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 99, 55))
+>q : Symbol(q, Decl(nestedExcessPropertyChecks.ts, 99, 59))
+
+let innerUnion1: InnerUnion = {x: {y: "ok", q: true}};
+>innerUnion1 : Symbol(innerUnion1, Decl(nestedExcessPropertyChecks.ts, 100, 3))
+>InnerUnion : Symbol(InnerUnion, Decl(nestedExcessPropertyChecks.ts, 96, 61))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 100, 31))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 100, 35))
+>q : Symbol(q, Decl(nestedExcessPropertyChecks.ts, 100, 43))
+
+let innerUnion2: InnerUnion = {x: {z: true, q: true}};
+>innerUnion2 : Symbol(innerUnion2, Decl(nestedExcessPropertyChecks.ts, 101, 3))
+>InnerUnion : Symbol(InnerUnion, Decl(nestedExcessPropertyChecks.ts, 96, 61))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 101, 31))
+>z : Symbol(z, Decl(nestedExcessPropertyChecks.ts, 101, 35))
+>q : Symbol(q, Decl(nestedExcessPropertyChecks.ts, 101, 43))
+
+let innerUnion3: InnerUnion = {x: {y: "not ok", z: true, q: true}};
+>innerUnion3 : Symbol(innerUnion3, Decl(nestedExcessPropertyChecks.ts, 102, 3))
+>InnerUnion : Symbol(InnerUnion, Decl(nestedExcessPropertyChecks.ts, 96, 61))
+>x : Symbol(x, Decl(nestedExcessPropertyChecks.ts, 102, 31))
+>y : Symbol(y, Decl(nestedExcessPropertyChecks.ts, 102, 35))
+>z : Symbol(z, Decl(nestedExcessPropertyChecks.ts, 102, 47))
+>q : Symbol(q, Decl(nestedExcessPropertyChecks.ts, 102, 56))
+

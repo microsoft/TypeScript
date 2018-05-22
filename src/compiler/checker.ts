@@ -479,6 +479,8 @@ namespace ts {
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
+        const literalSubPropertyCache: {[id: number]: Symbol[]} = {};
+
         const diagnostics = createDiagnosticCollection();
         // Suggestion diagnostics must have a file. Keyed by source file name.
         const suggestionDiagnostics = createMultiMap<DiagnosticWithLocation>();
@@ -1061,6 +1063,269 @@ namespace ts {
                 }
             }
             // return undefined if we can't find a symbol.
+        }
+
+        interface SymbolSet {
+            [symbolId: number]: Symbol;
+        }
+
+        interface ExcessSymbolInfo {
+            excess: SymbolSet;
+            implicitExcess: SymbolSet;
+            implicitContained: SymbolSet;
+        }
+
+        /*
+         * Get all properties in fresh object literal type (including sub-properties).
+         */
+        function getAllLiteralProperties(type: Type): Symbol[] {
+            if (literalSubPropertyCache[getTypeId(type)]) {
+                return literalSubPropertyCache[getTypeId(type)];
+            }
+            if (isObjectLiteralType(type) && type.flags & TypeFlags.FreshLiteral) {
+                const thisProps = getPropertiesOfObjectType(type);
+                const mappedProps: ReadonlyArray<Symbol[]> = thisProps.map(prop => getAllLiteralProperties(getTypeOfPropertyOfType(type, prop.escapedName)));
+                const result = concatenate(thisProps, flatten(mappedProps));
+                literalSubPropertyCache[getTypeId(type)] = result;
+                return result;
+            }
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                if ((<UnionOrIntersectionType>type).types) {
+                    const allProps: ReadonlyArray<Symbol[]> = (<UnionOrIntersectionType>type).types.map(getAllLiteralProperties);
+                    const result = flatten(allProps);
+                    literalSubPropertyCache[getTypeId(type)] = result;
+                    return result;
+                }
+            }
+            literalSubPropertyCache[getTypeId(type)] = emptyArray;
+            return emptyArray;
+        }
+
+        function emptyExcessSymbolInfo(): ExcessSymbolInfo {
+            return { excess: {}, implicitExcess: {}, implicitContained: {} };
+        }
+
+        function symbolSetSize(symbolSet: SymbolSet): number {
+            let result = 0;
+            for (const _ in symbolSet) {
+                result++;
+            }
+            return result;
+        }
+
+        function addSymbols(left: ExcessSymbolInfo, right: ExcessSymbolInfo): ExcessSymbolInfo {
+            for (const rightID in right.excess) {
+                left.excess[rightID] = right.excess[rightID];
+            }
+            for (const rightID in right.implicitExcess) {
+                left.implicitExcess[rightID] = right.implicitExcess[rightID];
+            }
+            for (const rightID in right.implicitContained) {
+                left.implicitContained[rightID] = right.implicitContained[rightID];
+            }
+            return left;
+        }
+
+        function mergeSymbolInfoIntersection(left: ExcessSymbolInfo, right: ExcessSymbolInfo): ExcessSymbolInfo {
+            const newSymbolInfo = emptyExcessSymbolInfo();
+            for (const leftID in left.excess) {
+                if (right.excess[leftID] !== undefined) {
+                    newSymbolInfo.excess[leftID] = left.excess[leftID];
+                }
+                else if (right.implicitExcess[leftID] !== undefined) {
+                    newSymbolInfo.implicitExcess[leftID] = left.excess[leftID];
+                }
+                else if (right.implicitContained[leftID] !== undefined) {
+                    newSymbolInfo.excess[leftID] = left.excess[leftID];
+                }
+            }
+            for (const leftID in left.implicitExcess) {
+                if (right.excess[leftID] !== undefined ||
+                   right.implicitExcess[leftID] !== undefined ||
+                   right.implicitContained[leftID] !== undefined) {
+                    newSymbolInfo.implicitExcess[leftID] = left.implicitExcess[leftID];
+                }
+            }
+            for (const leftID in left.implicitContained) {
+                if (right.excess[leftID] !== undefined) {
+                    newSymbolInfo.excess[leftID] = left.implicitContained[leftID];
+                }
+                else if (right.implicitExcess[leftID] !== undefined) {
+                    newSymbolInfo.implicitExcess[leftID] = left.implicitContained[leftID];
+                }
+                else if (right.implicitContained[leftID] !== undefined) {
+                    newSymbolInfo.implicitContained[leftID] = left.implicitContained[leftID];
+                }
+            }
+            return newSymbolInfo;
+        }
+
+        function mergeSymbolInfoUnion(left: ExcessSymbolInfo, right: ExcessSymbolInfo): ExcessSymbolInfo {
+            const newSymbolInfo = emptyExcessSymbolInfo();
+            for (const leftID in left.excess) {
+                if (right.excess[leftID] !== undefined) {
+                    newSymbolInfo.excess[leftID] = left.excess[leftID];
+                }
+                else if (right.implicitExcess[leftID] !== undefined) {
+                    newSymbolInfo.excess[leftID] = left.excess[leftID];
+                    continue;
+                }
+                else if (right.implicitContained[leftID] !== undefined) {
+                    newSymbolInfo.implicitContained[leftID] = left.excess[leftID];
+                }
+            }
+            for (const leftID in left.implicitExcess) {
+                if (right.excess[leftID] !== undefined) {
+                    newSymbolInfo.excess[leftID] = left.implicitExcess[leftID];
+                }
+                else if (right.implicitExcess[leftID] !== undefined) {
+                    newSymbolInfo.implicitExcess[leftID] = left.implicitExcess[leftID];
+                }
+                else if (right.implicitContained[leftID] !== undefined) {
+                    newSymbolInfo.implicitContained[leftID] = left.implicitExcess[leftID];
+                }
+            }
+            for (const leftID in left.implicitContained) {
+                if (right.excess[leftID] !== undefined ||
+                   right.implicitExcess[leftID] !== undefined ||
+                   right.implicitContained[leftID] !== undefined) {
+                    newSymbolInfo.implicitContained[leftID] = left.implicitContained[leftID];
+                }
+            }
+            return newSymbolInfo;
+        }
+
+        function getExcessProperties(
+            source: Type, target: Type, inconsistency: (source: Type, target: Type) => void, reportErrors: boolean,
+            relation: Map<RelationComparisonResult>, reportExcessPropertyError: (source: Type, target: Type, prop: Symbol) => void
+        ): Symbol[] {
+            if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral &&
+                maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+                const result: Symbol[] = [];
+                const cancel: [boolean] = [false];
+                const { excess } = getExcessPropertiesInSource(source, target, inconsistency, reportErrors, 0, cancel, relation, reportExcessPropertyError);
+                for (const prop in excess) {
+                    result.push(excess[prop]);
+                }
+                return result;
+            }
+            return [];
+        }
+
+        function getExcessPropertiesInSource(
+            source: Type, target: Type, inconsistency: (source: Type, target: Type) => void, reportErrors: boolean, depth: number, cancel: [boolean],
+            relation: Map<RelationComparisonResult>, reportExcessPropertyError: (source: Type, target: Type, prop: Symbol) => void
+        ): ExcessSymbolInfo {
+            if (cancel[0]) {
+                return emptyExcessSymbolInfo();
+            }
+            if (!(isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral)) {
+                return emptyExcessSymbolInfo();
+            }
+            if (target.flags & TypeFlags.Any) {
+                return emptyExcessSymbolInfo();
+            }
+            const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
+            if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
+                (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
+                const implicitContained: SymbolSet = {};
+                for (const prop of getAllLiteralProperties(source)) {
+                    implicitContained[getSymbolId(prop)] = prop;
+                }
+                return { excess: {}, implicitExcess: {}, implicitContained };
+            }
+            if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+                if (target.flags & TypeFlags.Union) {
+                    const excessPerBranch: number[] = [];
+                    let symbolInfo: ExcessSymbolInfo;
+                    for (const t of (<UnionType>target).types) {
+                        const branchInfo = getExcessPropertiesInSource(source, t, inconsistency, reportErrors, depth + 1, cancel, relation, reportExcessPropertyError);
+                        excessPerBranch.push(symbolSetSize(branchInfo.excess));
+                        if (!symbolInfo) {
+                            symbolInfo = branchInfo;
+                        }
+                        else {
+                            symbolInfo = mergeSymbolInfoUnion(symbolInfo, branchInfo);
+                        }
+                    }
+                    if (!symbolInfo) {
+                        return emptyExcessSymbolInfo();
+                    }
+                    const lookForDoubleDip = excessPerBranch.every(n => n > symbolSetSize(symbolInfo.excess));
+                    if (lookForDoubleDip) {
+                        inconsistency(source, target);
+                    }
+                    if (reportErrors && depth === 0) {
+                        for (const id in symbolInfo.excess) {
+                            reportExcessPropertyError(source, target, symbolInfo.excess[id]);
+                            cancel[0] = true;
+                            break;
+                        }
+                    }
+                    return symbolInfo;
+                }
+                if (target.flags & TypeFlags.Intersection) {
+                    let symbolInfo: ExcessSymbolInfo;
+                    for (const t of (<IntersectionType>target).types) {
+                        const branchInfo = getExcessPropertiesInSource(source, t, inconsistency, reportErrors, depth + 1, cancel, relation, reportExcessPropertyError);
+                        if (!symbolInfo) {
+                            symbolInfo = branchInfo;
+                        }
+                        else {
+                            symbolInfo = mergeSymbolInfoIntersection(symbolInfo, branchInfo);
+                        }
+                    }
+                    if (!symbolInfo) {
+                        return emptyExcessSymbolInfo();
+                    }
+                    if (reportErrors && depth === 0) {
+                        for (const id in symbolInfo.excess) {
+                            reportExcessPropertyError(source, target, symbolInfo.excess[id]);
+                            cancel[0] = true;
+                            break;
+                        }
+                    }
+                    return symbolInfo;
+                }
+                if (target.flags & TypeFlags.Object) {
+                    let symbolInfo: ExcessSymbolInfo = emptyExcessSymbolInfo();
+                    let excess: Symbol[] = [];
+                    for (const prop of getPropertiesOfObjectType(source)) {
+                        const sourcePropType = getTypeOfPropertyOfType(source, prop.escapedName);
+                        if (isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+                            // recurse onto object property
+                            const targetPropType = getTypeOfPropertyOfType(target, prop.escapedName);
+                            if (targetPropType) {
+                                const excessSubProperties =
+                                    getExcessPropertiesInSource(sourcePropType, targetPropType, inconsistency, reportErrors, depth + 1, cancel, relation, reportExcessPropertyError);
+                                symbolInfo = addSymbols(symbolInfo, excessSubProperties);
+                            }
+                        }
+                        else {
+                            // add this property as excess, and any sub properties.
+                            excess.push(prop);
+                            excess = concatenate(excess, getAllLiteralProperties(sourcePropType));
+                        }
+                    }
+                    for (const prop of excess) {
+                        const id = getSymbolId(prop);
+                        symbolInfo.excess[id] = prop;
+                    }
+                    if (reportErrors && depth === 0) {
+                        for (const id in symbolInfo.excess) {
+                            reportExcessPropertyError(source, target, symbolInfo.excess[id]);
+                            cancel[0] = true;
+                            break;
+                        }
+                    }
+                    return symbolInfo;
+                }
+            }
+            const implicitExcess: SymbolSet = {};
+            for (const prop of getAllLiteralProperties(source)) {
+                implicitExcess[getSymbolId(prop)] = prop;
+            }
+            return { excess: {}, implicitExcess, implicitContained: {} };
         }
 
         /**
@@ -10393,24 +10658,24 @@ namespace ts {
                 }
             }
 
-            function isUnionOrIntersectionTypeWithoutNullableConstituents(type: Type): boolean {
-                if (!(type.flags & TypeFlags.UnionOrIntersection)) {
-                    return false;
-                }
-                // at this point we know that this is union or intersection type possibly with nullable constituents.
-                // check if we still will have compound type if we ignore nullable components.
-                let seenNonNullable = false;
-                for (const t of (<UnionOrIntersectionType>type).types) {
-                    if (t.flags & TypeFlags.Nullable) {
-                        continue;
-                    }
-                    if (seenNonNullable) {
-                        return true;
-                    }
-                    seenNonNullable = true;
-                }
-                return false;
-            }
+            // function isUnionOrIntersectionTypeWithoutNullableConstituents(type: Type): boolean {
+            //     if (!(type.flags & TypeFlags.UnionOrIntersection)) {
+            //         return false;
+            //     }
+            //     // at this point we know that this is union or intersection type possibly with nullable constituents.
+            //     // check if we still will have compound type if we ignore nullable components.
+            //     let seenNonNullable = false;
+            //     for (const t of (<UnionOrIntersectionType>type).types) {
+            //         if (t.flags & TypeFlags.Nullable) {
+            //             continue;
+            //         }
+            //         if (seenNonNullable) {
+            //             return true;
+            //         }
+            //         seenNonNullable = true;
+            //     }
+            //     return false;
+            // }
 
             /**
              * Compare two types and return
@@ -10449,20 +10714,40 @@ namespace ts {
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral) {
-                    const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
-                    if (hasExcessProperties(<FreshObjectLiteralType>source, target, discriminantType, reportErrors)) {
+//                    const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
+                    let inconsistencyFound = false;
+                    let doubleDipSource: Type;
+                    let doubleDipTarget: Type;
+                    const inconsistency = (source: Type, target: Type) => {
+                        doubleDipSource = source;
+                        doubleDipTarget = target;
+                        inconsistencyFound = true;
+                    };
+                    const excessSymbols = getExcessProperties(source, target, inconsistency, reportErrors, relation, reportExcessPropertyError);
+                    source = getRegularTypeOfObjectLiteral(source);
+                    if (inconsistencyFound || excessSymbols.length > 0) {
+                        if (reportError && errorNode && inconsistencyFound && doubleDipSource !== source && doubleDipTarget !== target) {
+                            reportRelationError(headMessage, doubleDipSource, doubleDipTarget);
+                        }
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
                         return Ternary.False;
                     }
+                    // if (hasExcessProperties(<FreshObjectLiteralType>source, target, discriminantType, reportErrors)) {
+                        // if (reportErrors) {
+                        //     reportRelationError(headMessage, source, target);
+                        // }
+                        // return Ternary.False;
+                    // }
                     // Above we check for excess properties with respect to the entire target type. When union
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    if (isUnionOrIntersectionTypeWithoutNullableConstituents(target) && !discriminantType) {
-                        source = getRegularTypeOfObjectLiteral(source);
-                    }
+
+                    // if (isUnionOrIntersectionTypeWithoutNullableConstituents(target) && !discriminantType) {
+                    //     source = getRegularTypeOfObjectLiteral(source);
+                    // }
                 }
 
                 if (relation !== comparableRelation &&
@@ -10604,60 +10889,96 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, discriminant: Type | undefined, reportErrors: boolean): boolean {
-                if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
-                    const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                    if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
-                        (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
-                        return false;
-                    }
-                    if (discriminant) {
-                        // check excess properties against discriminant type only, not the entire union
-                        return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
-                    }
-                    for (const prop of getPropertiesOfObjectType(source)) {
-                        if (!isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
-                            if (reportErrors) {
-                                // We know *exactly* where things went wrong when comparing the types.
-                                // Use this property as the error node as this will be more helpful in
-                                // reasoning about what went wrong.
-                                Debug.assert(!!errorNode);
-                                if (isJsxAttributes(errorNode) || isJsxOpeningLikeElement(errorNode)) {
-                                    // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
-                                    // However, using an object-literal error message will be very confusing to the users so we give different a message.
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
-                                }
-                                else {
-                                    // use the property's value declaration if the property is assigned inside the literal itself
-                                    const objectLiteralDeclaration = source.symbol && firstOrUndefined(source.symbol.declarations);
-                                    let suggestion;
-                                    if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration)) {
-                                        const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
-                                        Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
+            function reportExcessPropertyError(source: Type, target: Type, prop: Symbol): void {
+                // We know *exactly* where things went wrong when comparing the types.
+                // Use this property as the error node as this will be more helpful in
+                // reasoning about what went wrong.
+                Debug.assert(!!errorNode);
+                if (isJsxAttributes(errorNode) || isJsxOpeningLikeElement(errorNode)) {
+                    // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
+                    // However, using an object-literal error message will be very confusing to the users so we give different a message.
+                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
+                }
+                else {
+                    // use the property's value declaration if the property is assigned inside the literal itself
+                    const objectLiteralDeclaration = source.symbol && firstOrUndefined(source.symbol.declarations);
+                    let suggestion;
+                    if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration)) {
+                        const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
+                        Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
-                                        errorNode = propDeclaration;
+                        errorNode = propDeclaration;
 
-                                        if (isIdentifier(propDeclaration.name)) {
-                                            suggestion = getSuggestionForNonexistentProperty(propDeclaration.name, target);
-                                        }
-                                    }
-
-                                    if (suggestion !== undefined) {
-                                        reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
-                                            symbolToString(prop), typeToString(target), suggestion);
-                                    }
-                                    else {
-                                        reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                            symbolToString(prop), typeToString(target));
-                                    }
-                                }
-                            }
-                            return true;
+                        if (isIdentifier(propDeclaration.name)) {
+                            suggestion = getSuggestionForNonexistentProperty(propDeclaration.name, target);
                         }
                     }
+
+                    if (suggestion !== undefined) {
+                        reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
+                                    symbolToString(prop), typeToString(target), suggestion);
+                    }
+                    else {
+                        reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                    symbolToString(prop), typeToString(target));
+                    }
                 }
-                return false;
             }
+
+            // function hasExcessProperties(source: FreshObjectLiteralType, target: Type, discriminant: Type | undefined, reportErrors: boolean): boolean {
+            //     if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+            //         const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
+            //         if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
+            //             (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
+            //             return false;
+            //         }
+            //         if (discriminant) {
+            //             // check excess properties against discriminant type only, not the entire union
+            //             return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
+            //         }
+            //         for (const prop of getPropertiesOfObjectType(source)) {
+            //             if (!isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+            //                 if (reportErrors) {
+            //                     // We know *exactly* where things went wrong when comparing the types.
+            //                     // Use this property as the error node as this will be more helpful in
+            //                     // reasoning about what went wrong.
+            //                     Debug.assert(!!errorNode);
+            //                     if (isJsxAttributes(errorNode) || isJsxOpeningLikeElement(errorNode)) {
+            //                         // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
+            //                         // However, using an object-literal error message will be very confusing to the users so we give different a message.
+            //                         reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
+            //                     }
+            //                     else {
+            //                         // use the property's value declaration if the property is assigned inside the literal itself
+            //                         const objectLiteralDeclaration = source.symbol && firstOrUndefined(source.symbol.declarations);
+            //                         let suggestion;
+            //                         if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration)) {
+            //                             const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
+            //                             Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
+
+            //                             errorNode = propDeclaration;
+
+            //                             if (isIdentifier(propDeclaration.name)) {
+            //                                 suggestion = getSuggestionForNonexistentProperty(propDeclaration.name, target);
+            //                             }
+            //                         }
+
+            //                         if (suggestion !== undefined) {
+            //                             reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
+            //                                 symbolToString(prop), typeToString(target), suggestion);
+            //                         }
+            //                         else {
+            //                             reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+            //                                 symbolToString(prop), typeToString(target));
+            //                         }
+            //                     }
+            //                 }
+            //                 return true;
+            //             }
+            //         }
+            //     }
+            //     return false;
+            // }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
                 let result = Ternary.True;

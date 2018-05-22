@@ -1,0 +1,192 @@
+tests/cases/compiler/nestedExcessPropertyChecks.ts(21,7): error TS2322: Type '{ startDate: Date; author: number; }' is not assignable to type 'AllowedOptions'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(43,5): error TS2322: Type '{ a: { x: number; }; }' is not assignable to type 'B'.
+  Types of property 'a' are incompatible.
+    Type '{ x: number; }' is not assignable to type 'A'.
+      Types of property 'x' are incompatible.
+        Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(44,29): error TS2322: Type '{ a: { x: string; y: number; }; }' is not assignable to type 'B'.
+  Object literal may only specify known properties, and 'y' does not exist in type 'B'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(47,5): error TS2322: Type '{ a: { x: number; }; c: number; }' is not assignable to type 'D'.
+  Type '{ a: { x: number; }; c: number; }' is not assignable to type 'B'.
+    Types of property 'a' are incompatible.
+      Type '{ x: number; }' is not assignable to type 'A'.
+        Types of property 'x' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(48,29): error TS2322: Type '{ a: { x: string; y: number; }; c: number; }' is not assignable to type 'D'.
+  Object literal may only specify known properties, and 'y' does not exist in type 'D'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(68,9): error TS2322: Type '{ foo: number; __name: string; bar: { baz: string; not_exist_key: boolean; }; }' is not assignable to type 'Template<{ foo: number; bar: { baz: string; }; }>'.
+  Object literal may only specify known properties, and 'not_exist_key' does not exist in type 'Template<{ foo: number; bar: { baz: string; }; }>'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(82,38): error TS2322: Type '{ x: string; y: boolean; }' is not assignable to type 'A'.
+  Object literal may only specify known properties, and 'y' does not exist in type 'A'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(83,47): error TS2322: Type '{ x: string; y: boolean; }' is not assignable to type 'A & EmptyInterface'.
+  Object literal may only specify known properties, and 'y' does not exist in type 'A & EmptyInterface'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(86,52): error TS2322: Type '{ x: { x: string; y: boolean; }; }' is not assignable to type '{ x: A; } & { x: Empty; }'.
+  Object literal may only specify known properties, and 'y' does not exist in type '{ x: A; } & { x: Empty; }'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(87,61): error TS2322: Type '{ x: { x: string; y: boolean; }; }' is not assignable to type '{ x: A; } & { x: EmptyInterface; }'.
+  Object literal may only specify known properties, and 'y' does not exist in type '{ x: A; } & { x: EmptyInterface; }'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(94,26): error TS2322: Type '{ y: string; }' is not assignable to type 'Nesting'.
+  Object literal may only specify known properties, and 'y' does not exist in type 'Nesting'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(95,30): error TS2322: Type '{ x: { excess: boolean; }; }' is not assignable to type 'Nesting'.
+  Object literal may only specify known properties, and 'excess' does not exist in type 'Nesting'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(96,5): error TS2322: Type '{ x: { a: true; b: string; y: true; z: string; }; }' is not assignable to type 'Nesting'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(97,47): error TS2322: Type '{ x: { y: true; z: string; excess: boolean; }; }' is not assignable to type 'Nesting'.
+  Object literal may only specify known properties, and 'excess' does not exist in type 'Nesting'.
+tests/cases/compiler/nestedExcessPropertyChecks.ts(103,5): error TS2322: Type '{ x: { y: string; z: true; q: true; }; }' is not assignable to type 'InnerUnion'.
+  Type '{ y: string; z: true; q: true; }' is not assignable to type '{ y: string; } | { z: boolean; }'.
+
+
+==== tests/cases/compiler/nestedExcessPropertyChecks.ts (15 errors) ====
+    // Repro #20863
+    
+    // An object to hold all the possible options
+    type AllOptions = {
+        startDate: Date
+        endDate: Date
+        author: number
+    }
+    
+    // Any combination of startDate, endDate can be used
+    type DateOptions =
+        | Pick<AllOptions, 'startDate'>
+        | Pick<AllOptions, 'endDate'>
+        | Pick<AllOptions, 'startDate' | 'endDate'>
+    
+    type AuthorOptions = Pick<AllOptions, 'author'>
+    
+    type AllowedOptions = DateOptions | AuthorOptions
+    
+    // options double dips
+    const options: AllowedOptions = {
+          ~~~~~~~
+!!! error TS2322: Type '{ startDate: Date; author: number; }' is not assignable to type 'AllowedOptions'.
+        startDate: new Date(), // error
+        author: 1
+    }
+    
+    // Repro #13813
+    
+    interface A {
+        x: string
+    }
+    
+    interface B {
+        a: A;
+    }
+    
+    interface C {
+        c: number;
+    }
+    
+    type D = B & C;
+    
+    let a: B = {a: {x: 'hello'}}; // ok
+    let b: B = {a: {x: 2}}; // error - types of property x are incompatible
+        ~
+!!! error TS2322: Type '{ a: { x: number; }; }' is not assignable to type 'B'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type '{ x: number; }' is not assignable to type 'A'.
+!!! error TS2322:       Types of property 'x' are incompatible.
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.
+    let c: B = {a: {x: 'hello', y: 2}}; // error - y does not exist in type B
+                                ~~~~
+!!! error TS2322: Type '{ a: { x: string; y: number; }; }' is not assignable to type 'B'.
+!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'B'.
+    
+    let d: D = {a: {x: 'hello'}, c: 5}; // ok
+    let e: D = {a: {x: 2}, c: 5}; // error - types of property x are incompatible
+        ~
+!!! error TS2322: Type '{ a: { x: number; }; c: number; }' is not assignable to type 'D'.
+!!! error TS2322:   Type '{ a: { x: number; }; c: number; }' is not assignable to type 'B'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type '{ x: number; }' is not assignable to type 'A'.
+!!! error TS2322:         Types of property 'x' are incompatible.
+!!! error TS2322:           Type 'number' is not assignable to type 'string'.
+    let f: D = {a: {x: 'hello', y: 2}, c: 5}; // y does not exist in type D
+                                ~~~~
+!!! error TS2322: Type '{ a: { x: string; y: number; }; c: number; }' is not assignable to type 'D'.
+!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'D'.
+    
+    // Repro #23706
+    
+    type Template<T> = {
+        [K in keyof T]: Template<T[K]>;
+    } & {
+        __name?: string;
+    }
+    
+    const template: Template<{
+        foo: number;
+        bar: {
+            baz: string;
+        }
+    }> = {
+        foo: 1,
+        __name: 'n',
+        bar: {
+            baz: 'b',
+            not_exist_key: true // error
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ foo: number; __name: string; bar: { baz: string; not_exist_key: boolean; }; }' is not assignable to type 'Template<{ foo: number; bar: { baz: string; }; }>'.
+!!! error TS2322:   Object literal may only specify known properties, and 'not_exist_key' does not exist in type 'Template<{ foo: number; bar: { baz: string; }; }>'.
+        }
+    };
+    
+    // Other tests
+    
+    // Empty alias normalises {} for intersection, but EmptyInterface will
+    // not. Check that they behave the same.
+    
+    type Empty = {};
+    interface EmptyInterface {}
+    
+    let empty1: A & Empty = {x: "hello"};
+    let empty2: A & EmptyInterface = {x: "hello"};
+    let empty3: A & Empty = {x: "hello", y: true}; // error as A & Empty = A
+                                         ~~~~~~~
+!!! error TS2322: Type '{ x: string; y: boolean; }' is not assignable to type 'A'.
+!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'A'.
+    let empty4: A & EmptyInterface = {x: "hello", y: true}; // error as A & EmptyInterface is equivalent to A
+                                                  ~~~~~~~
+!!! error TS2322: Type '{ x: string; y: boolean; }' is not assignable to type 'A & EmptyInterface'.
+!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'A & EmptyInterface'.
+    let empty5: {x: A} & {x: Empty} = {x: {x: "hello"}};
+    let empty6: {x: A} & {x: EmptyInterface} = {x: {x: "hello"}};
+    let empty7: {x: A} & {x: Empty} = {x: {x: "hello", y: true}}; // error
+                                                       ~~~~~~~
+!!! error TS2322: Type '{ x: { x: string; y: boolean; }; }' is not assignable to type '{ x: A; } & { x: Empty; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: A; } & { x: Empty; }'.
+    let empty8: {x: A} & {x: EmptyInterface} = {x: {x: "hello", y: true}}; // error
+                                                                ~~~~~~~
+!!! error TS2322: Type '{ x: { x: string; y: boolean; }; }' is not assignable to type '{ x: A; } & { x: EmptyInterface; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: A; } & { x: EmptyInterface; }'.
+    
+    // Nesting with intersection and union
+    
+    type Nesting = {x: {a: boolean, b: string}} | {x: {y: boolean} & {z: string} & {}};
+    
+    let nesting1: Nesting = {x: {a: true, b: "b"}};
+    let nesting2: Nesting = {y: "excess"}; // y is excess
+                             ~~~~~~~~~~~
+!!! error TS2322: Type '{ y: string; }' is not assignable to type 'Nesting'.
+!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'Nesting'.
+    let nesting3: Nesting = {x: {excess: true}}; // excess is excess
+                                 ~~~~~~~~~~~~
+!!! error TS2322: Type '{ x: { excess: boolean; }; }' is not assignable to type 'Nesting'.
+!!! error TS2322:   Object literal may only specify known properties, and 'excess' does not exist in type 'Nesting'.
+    let nesting4: Nesting = {x: {a: true, b: "b", y: true, z: "hello"}}; // Double dipping on both sides of the union
+        ~~~~~~~~
+!!! error TS2322: Type '{ x: { a: true; b: string; y: true; z: string; }; }' is not assignable to type 'Nesting'.
+    let nesting5: Nesting = {x: {y: true, z: "b", excess: true}}; // excess is excess
+                                                  ~~~~~~~~~~~~
+!!! error TS2322: Type '{ x: { y: true; z: string; excess: boolean; }; }' is not assignable to type 'Nesting'.
+!!! error TS2322:   Object literal may only specify known properties, and 'excess' does not exist in type 'Nesting'.
+    
+    
+    type InnerUnion = {x: ({y: string} | {z: boolean})} & {x: {q: boolean}};
+    let innerUnion1: InnerUnion = {x: {y: "ok", q: true}};
+    let innerUnion2: InnerUnion = {x: {z: true, q: true}};
+    let innerUnion3: InnerUnion = {x: {y: "not ok", z: true, q: true}};
+        ~~~~~~~~~~~
+!!! error TS2322: Type '{ x: { y: string; z: true; q: true; }; }' is not assignable to type 'InnerUnion'.
+!!! error TS2322:   Type '{ y: string; z: true; q: true; }' is not assignable to type '{ y: string; } | { z: boolean; }'.
+    
