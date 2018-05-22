@@ -686,7 +686,7 @@ namespace ts.Completions {
         return firstDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), type => {
             const symbol = type && type.symbol;
             // Don't include make a recommended completion for an abstract class
-            return symbol && (symbol.flags & SymbolFlags.EnumMember || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
+            return symbol && (symbol.flags & (SymbolFlags.EnumMember | SymbolFlags.Enum | SymbolFlags.Class) && !isAbstractConstructorSymbol(symbol))
                 ? getFirstSymbolInChain(symbol, currentToken, checker)
                 : undefined;
         });
