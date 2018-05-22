@@ -4,17 +4,18 @@
 ////    v1, v2,
 ////    v3
 ////}|] from "./module";
-////f1/*0*/();
+////v4/*0*/();
 
 // @Filename: module.ts
-//// export function f1() {}
+//// export function v4() {}
 //// export var v1 = 5;
 //// export var v2 = 5;
 //// export var v3 = 5;
 
 verify.importFixAtPosition([
 `{
-    f1, v1, v2,
-    v3
+    v1, v2,
+    v3,
+    v4
 }`
 ]);

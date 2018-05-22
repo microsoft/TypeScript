@@ -306,10 +306,7 @@ namespace ts.codefix {
                 const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName));
                 if (namedBindings && namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length !== 0) {
                     // There are already named imports; add another.
-                    return ChangeTracker.with(context, t => t.insertNodeInListAfter(
-                        sourceFile,
-                        namedBindings.elements[namedBindings.elements.length - 1],
-                        newImportSpecifier));
+                    return insertNodeInsideListNodesAlphabetically(context, sourceFile, namedBindings.elements, newImportSpecifier);
                 }
                 if (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length === 0) {
                     return ChangeTracker.with(context, t =>
@@ -328,6 +325,27 @@ namespace ts.codefix {
             default:
                 Debug.assertNever(importKind);
         }
+    }
+
+    /**
+     * This function should be used to insert nodes alphabetically in lists when nodes don't carry separators as the part of the node range,
+     * e.g. export lists, import lists, etc.
+     * Linear search is used instead of binary as the (generally few) nodes are not guaranteed to be in order.
+     */
+    function insertNodeInsideListNodesAlphabetically(context: SymbolContext, sourceFile: SourceFile, containingList: NodeArray<ImportSpecifier>, newNode: ImportSpecifier) {
+        return ChangeTracker.with(context, t => {
+            if (compareStringsCaseInsensitive(newNode.name.text, containingList[0].name.text) === Comparison.LessThan) {
+                return t.insertNodeInListBeforeFirst(sourceFile, containingList, containingList[0], newNode);
+            }
+
+            for (let i = 1; i < containingList.length; i += 1) {
+                if (compareStringsCaseInsensitive(newNode.name.text, containingList[i].name.text) === Comparison.LessThan) {
+                    return t.insertNodeInListAfter(sourceFile, containingList[i - 1], newNode);
+                }
+            }
+
+            return t.insertNodeInListAfter(sourceFile, containingList[containingList.length - 1], newNode);
+        });
     }
 
     function getCodeActionForUseExistingNamespaceImport(namespacePrefix: string, context: SymbolContext, symbolToken: Identifier): CodeFixAction {
