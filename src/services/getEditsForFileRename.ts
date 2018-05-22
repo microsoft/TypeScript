@@ -25,23 +25,17 @@ namespace ts {
     }
 
     function updateImports(program: Program, changeTracker: textChanges.ChangeTracker, pathUpdater: PathUpdater, host: LanguageServiceHost): void {
-        const checker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             for (const ref of sourceFile.referencedFiles) {
-                if (program.getSourceFileFromReference(sourceFile, ref)) continue;
-
                 const updated = pathUpdater(resolveTripleslashReference(ref.fileName, sourceFile.fileName), ref.fileName, /*isImport*/ false);
                 if (updated !== undefined) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
             }
 
             for (const importStringLiteral of sourceFile.imports) {
-                // If it resolved to something already, ignore.
-                if (checker.getSymbolAtLocation(importStringLiteral)) continue;
-
                 const resolved = host.resolveModuleNames
                     ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName)
                     : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
-                const updated = resolved && firstDefined(resolved.failedLookupLocations, path => pathUpdater(path, importStringLiteral.text, /*isImport*/ true));
+                const updated = resolved && firstDefined(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, path => pathUpdater(path, importStringLiteral.text, /*isImport*/ true));
                 if (updated !== undefined) {
                     changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
                 }
@@ -57,20 +51,20 @@ namespace ts {
     function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost): PathUpdater {
         // Get the relative path from old to new location, and append it on to the end of imports and normalize.
         const rel = getRelativePathFromFile(oldFileOrDirPath, newFileOrDirPath, createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host)));
-        return (fullPath, relPath, isImport) => {
+        return (fullPath, importText, isImport) => {
             if (fullPath === oldFileOrDirPath) {
-                const newRelPath = pathIsRelative(relPath)
-                    ? combinePathsSafe(tryRemoveIndexOrPackage(fullPath) && !endsWithSomeIndex(relPath) ? relPath : getDirectoryPath(relPath), rel)
+                const newImportText = pathIsRelative(importText)
+                    ? combinePathsSafe(tryRemoveIndexOrPackage(fullPath) && !endsWithSomeIndex(importText) ? importText : getDirectoryPath(importText), rel)
                     : newFileOrDirPath;
-                return isImport ? pathToImportPath(newRelPath) : newRelPath;
+                return isImport ? pathToImportPath(newImportText) : newImportText;
             }
             else {
                 // e.g., Importing from "/old/a/b", suffix is "/a/b", and we'll leave that part alone.
                 const relToOld = tryRemovePrefix(fullPath, oldFileOrDirPath);
                 if (relToOld === undefined || !startsWith(relToOld, "/")) return undefined;
                 const suffix = isImport ? pathToImportPath(relToOld) : relToOld;
-                const newPrefix = pathIsRelative(relPath)
-                    ? combinePathsSafe(getDirectoryPath(Debug.assertDefined(tryRemoveSuffix(relPath, suffix))), rel)
+                const newPrefix = pathIsRelative(importText)
+                    ? combinePathsSafe(getDirectoryPath(Debug.assertDefined(tryRemoveSuffix(importText, suffix))), rel)
                     : newFileOrDirPath;
                 return newPrefix + suffix;
             }
