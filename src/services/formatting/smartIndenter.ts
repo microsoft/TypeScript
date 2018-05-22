@@ -111,6 +111,7 @@ namespace ts.formatting {
             // if such node is found - compute initial indentation for 'position' inside this node
             let previous: Node | undefined;
             let current = precedingToken;
+
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(options, current, previous, sourceFile, /*isNextChild*/ true)) {
                     const currentStart = getStartLineAndCharacterForNode(current, sourceFile);
@@ -119,7 +120,7 @@ namespace ts.formatting {
                         // handle cases when codefix is about to be inserted before the close brace
                         ? assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize : 0
                         : lineAtPosition !== currentStart.line ? options.indentSize : 0;
-                    return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, /*isNextChild*/ true, options);
+                    return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta!, sourceFile, /*isNextChild*/ true, options); // TODO: GH#18217
                 }
 
                 // check if current node is a list item - if yes, take indentation from it
@@ -129,7 +130,7 @@ namespace ts.formatting {
                 }
                 actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                 if (actualIndentation !== Value.Unknown) {
-                    return actualIndentation + options.indentSize;
+                    return actualIndentation + options.indentSize!; // TODO: GH#18217
                 }
 
                 previous = current;
@@ -151,12 +152,13 @@ namespace ts.formatting {
         function getIndentationForNodeWorker(
             current: Node,
             currentStart: LineAndCharacter,
-            ignoreActualIndentationRange: TextRange,
+            ignoreActualIndentationRange: TextRange | undefined,
             indentationDelta: number,
             sourceFile: SourceFile,
             isNextChild: boolean,
             options: EditorSettings): number {
-            let parent = current.parent!;
+            let parent = current.parent;
+
             // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
             // * parent and child nodes start on the same line, or
             // * parent is an IfStatement and child starts on the same line as an 'else clause'.
@@ -194,7 +196,7 @@ namespace ts.formatting {
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
                 if (shouldIndentChildNode(options, parent, current, sourceFile, isNextChild) && !parentAndChildShareLine) {
-                    indentationDelta += options.indentSize;
+                    indentationDelta += options.indentSize!;
                 }
 
                 // In our AST, a call argument's `parent` is the call-expression, not the argument list.
@@ -311,7 +313,7 @@ namespace ts.formatting {
 
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
-                const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
+                const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile)!;
                 Debug.assert(elseKeyword !== undefined);
 
                 const elseKeywordStartLine = getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
@@ -321,11 +323,11 @@ namespace ts.formatting {
             return false;
         }
 
-        function getListIfStartEndIsInListRange(list: NodeArray<Node>, start: number, end: number) {
+        function getListIfStartEndIsInListRange(list: NodeArray<Node> | undefined, start: number, end: number) {
             return list && rangeContainsStartEnd(list, start, end) ? list : undefined;
         }
 
-        export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> {
+        export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             if (node.parent) {
                 const { end } = node;
                 switch (node.parent.kind) {
@@ -467,7 +469,7 @@ namespace ts.formatting {
                 }
 
                 if (ch === CharacterCodes.tab) {
-                    column += options.tabSize + (column % options.tabSize);
+                    column += options.tabSize! + (column % options.tabSize!);
                 }
                 else {
                     column++;
@@ -482,7 +484,7 @@ namespace ts.formatting {
             return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
 
-        export function nodeWillIndentChild(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
+        export function nodeWillIndentChild(settings: FormatCodeSettings, parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
             const childKind = child ? child.kind : SyntaxKind.Unknown;
 
             switch (parent.kind) {
@@ -533,8 +535,8 @@ namespace ts.formatting {
                     return true;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
-                    if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) {
-                        return rangeIsOnOneLine(sourceFile, child);
+                    if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) { // TODO: GH#18217
+                        return rangeIsOnOneLine(sourceFile, child!);
                     }
                     return true;
                 case SyntaxKind.DoStatement:
@@ -555,7 +557,7 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.NamedExports;
                 case SyntaxKind.ImportDeclaration:
                     return childKind !== SyntaxKind.ImportClause ||
-                        (!!(<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
+                        (!!(<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings!.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.JsxFragment:
@@ -594,7 +596,7 @@ namespace ts.formatting {
          * True when the parent node should indent the given child by an explicit rule.
          * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
          */
-        export function shouldIndentChildNode(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child?: Node, sourceFile?: SourceFileLike, isNextChild = false): boolean {
+        export function shouldIndentChildNode(settings: FormatCodeSettings, parent: TextRangeWithKind, child?: Node, sourceFile?: SourceFileLike, isNextChild = false): boolean {
             return nodeWillIndentChild(settings, parent, child, sourceFile, /*indentByDefault*/ false)
                 && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
         }

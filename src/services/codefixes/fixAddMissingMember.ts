@@ -60,7 +60,7 @@ namespace ts.codefix {
         const { parent } = token;
         if (!isPropertyAccessExpression(parent)) return undefined;
 
-        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression));
+        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression)!);
         const { symbol } = leftExpressionType;
         const classDeclaration = symbol && symbol.declarations && find(symbol.declarations, isClassLike);
         if (!classDeclaration) return undefined;
@@ -84,7 +84,7 @@ namespace ts.codefix {
             if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                 return;
             }
-            const className = classDeclaration.name.getText();
+            const className = classDeclaration.name!.getText();
             const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
             changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization);
         }
@@ -109,11 +109,11 @@ namespace ts.codefix {
     }
 
     function getTypeNode(checker: TypeChecker, classDeclaration: ClassLikeDeclaration, token: Node) {
-        let typeNode: TypeNode;
+        let typeNode: TypeNode | undefined;
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
-            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
+            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)!)); // TODO: GH#18217
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
         }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);

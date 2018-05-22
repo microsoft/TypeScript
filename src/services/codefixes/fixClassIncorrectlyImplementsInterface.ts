@@ -20,7 +20,7 @@ namespace ts.codefix {
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
-                    for (const implementedTypeNode of getClassImplementsHeritageClauseElements(classDeclaration)) {
+                    for (const implementedTypeNode of getClassImplementsHeritageClauseElements(classDeclaration)!) {
                         addMissingDeclarations(context.program.getTypeChecker(), implementedTypeNode, diag.file, classDeclaration, changes, context.preferences);
                     }
                 }
@@ -46,7 +46,7 @@ namespace ts.codefix {
         const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
         const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
-        const classType = checker.getTypeAtLocation(classDeclaration);
+        const classType = checker.getTypeAtLocation(classDeclaration)!;
 
         if (!classType.getNumberIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);
@@ -60,7 +60,7 @@ namespace ts.codefix {
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
             if (indexInfoOfKind) {
-                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration));
+                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration)!);
             }
         }
     }

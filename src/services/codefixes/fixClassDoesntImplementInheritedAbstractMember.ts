@@ -33,8 +33,8 @@ namespace ts.codefix {
     }
 
     function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
-        const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
-        const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
+        const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration)!;
+        const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode)!;
 
         // Note that this is ultimately derived from a map indexed by symbol names,
         // so duplicates cannot occur.
@@ -46,7 +46,7 @@ namespace ts.codefix {
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
         // See `codeFixClassExtendAbstractProtectedProperty.ts` in https://github.com/Microsoft/TypeScript/pull/11547/files
         // (now named `codeFixClassExtendAbstractPrivateProperty.ts`)
-        const flags = getModifierFlags(first(symbol.getDeclarations()));
+        const flags = getModifierFlags(first(symbol.getDeclarations()!));
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
 }

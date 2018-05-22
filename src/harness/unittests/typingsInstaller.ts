@@ -1447,7 +1447,7 @@ namespace ts.projectSystem {
                 commander: { typingLocation: commander.path, version: Semver.parse("1.3.0-next.0") }
             });
             const registry = createTypesRegistry("node", "commander");
-            registry.get("node")[`ts${versionMajorMinor}`] = "1.3.0-next.1";
+            registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
             assert.deepEqual(logger.finish(), [
@@ -1535,8 +1535,8 @@ namespace ts.projectSystem {
                 content: "export let x: number"
             };
             const host = createServerHost([f1, packageFile, packageLockFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent!: server.BeginInstallTypes;
+            let endEvent!: server.EndInstallTypes;
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1583,8 +1583,8 @@ namespace ts.projectSystem {
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent: server.BeginInstallTypes | undefined;
+            let endEvent: server.EndInstallTypes | undefined;
             const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1611,8 +1611,8 @@ namespace ts.projectSystem {
 
             assert.isTrue(!!beginEvent);
             assert.isTrue(!!endEvent);
-            assert.isTrue(beginEvent.eventId === endEvent.eventId);
-            assert.isFalse(endEvent.installSuccess);
+            assert.isTrue(beginEvent!.eventId === endEvent!.eventId);
+            assert.isFalse(endEvent!.installSuccess);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
         });
@@ -1651,7 +1651,7 @@ namespace ts.projectSystem {
         const appPath = "/a/b/app.js" as Path;
         const foooPath = "/a/b/node_modules/fooo/index.d.ts";
         function verifyResolvedModuleOfFooo(project: server.Project) {
-            const foooResolution = project.getLanguageService().getProgram().getSourceFileByPath(appPath).resolvedModules.get("fooo");
+            const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo")!;
             assert.equal(foooResolution.resolvedFileName, foooPath);
             return foooResolution;
         }
