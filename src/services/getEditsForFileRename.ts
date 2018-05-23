@@ -1,10 +1,11 @@
 /* @internal */
 namespace ts {
-    export function getEditsForFileRename(program: Program, oldFilePath: string, newFilePath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext): ReadonlyArray<FileTextChanges> {
-        const pathUpdater = getPathUpdater(oldFilePath, newFilePath, host);
+    export function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext): ReadonlyArray<FileTextChanges> {
+        const pathUpdater = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, host);
+        const internalPathUpdater = getMovedFilePathUpdater(oldFileOrDirPath, newFileOrDirPath);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, pathUpdater);
-            updateImports(program, changeTracker, pathUpdater, host);
+            updateImports(program, changeTracker, pathUpdater, internalPathUpdater, oldFileOrDirPath, newFileOrDirPath, host);
         });
     }
 
@@ -25,23 +26,60 @@ namespace ts {
         }
     }
 
-    function updateImports(program: Program, changeTracker: textChanges.ChangeTracker, pathUpdater: PathUpdater, host: LanguageServiceHost): void {
+    function updateImports(program: Program, changeTracker: textChanges.ChangeTracker, pathUpdater: PathUpdater, internalPathUpdater: MovedFilePathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost): void {
         for (const sourceFile of program.getSourceFiles()) {
-            for (const ref of sourceFile.referencedFiles) {
-                const updated = pathUpdater(resolveTripleslashReference(ref.fileName, sourceFile.fileName), ref.fileName, /*isImport*/ false);
-                if (updated !== undefined) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
+            if (sourceFile.fileName === oldFileOrDirPath || removeDirectoryPrefixFromPath(oldFileOrDirPath, sourceFile.fileName) ||
+                sourceFile.fileName === newFileOrDirPath || removeDirectoryPrefixFromPath(newFileOrDirPath, sourceFile.fileName)) {
+                // Update imports in a moved file.
+                updateImportsWorker(sourceFile, changeTracker, referenceText => internalPathUpdater(sourceFile, referenceText), importText => internalPathUpdater(sourceFile, importText));
             }
-
-            for (const importStringLiteral of sourceFile.imports) {
-                const resolved = host.resolveModuleNames
-                    ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName)
-                    : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
-                const updated = resolved && firstDefined(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, path => pathUpdater(path, importStringLiteral.text, /*isImport*/ true));
-                if (updated !== undefined) {
-                    changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
-                }
+            else {
+                // This is not a moved file, but may reference a moved file.
+                updateImportsWorker(sourceFile, changeTracker,
+                    referenceText => pathUpdater(resolveTripleslashReference(referenceText, sourceFile.fileName), referenceText, /*isImport*/ false),
+                    importText => {
+                        const resolved = host.resolveModuleNames
+                            ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importText, sourceFile.fileName)
+                            : program.getResolvedModuleWithFailedLookupLocationsFromCache(importText, sourceFile.fileName);
+                        return resolved && firstDefined(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, path => pathUpdater(path, importText, /*isImport*/ true));
+                    });
             }
         }
+    }
+
+    function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (r: string) => string | undefined, updateImport: (importText: string) => string | undefined) {
+        for (const ref of sourceFile.referencedFiles) {
+            const updated = updateRef(ref.fileName);
+            if (updated !== undefined) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
+        }
+
+        for (const importStringLiteral of sourceFile.imports) {
+            const updated = updateImport(importStringLiteral.text);
+            if (updated !== undefined) changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
+        }
+    }
+
+    // Path updater for imports in the file(s) being moved
+    type MovedFilePathUpdater = (sourceFile: SourceFile, importText: string) => string | undefined;
+    function getMovedFilePathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string): MovedFilePathUpdater {
+        const relativeNewDirToOldDir = getRelativePathFromDirectory(toDirectory(newFileOrDirPath), toDirectory(oldFileOrDirPath), /*ignoreCase*/ false);
+
+        if (relativeNewDirToOldDir === ".") return () => undefined;
+
+        return (sourceFile, importText) =>
+            !pathIsRelative(importText) ||
+                importIsInternalToDirectory(oldFileOrDirPath, sourceFile.fileName, importText) ||
+                importIsInternalToDirectory(newFileOrDirPath, sourceFile.fileName, importText)
+                ? undefined
+                : combineNormal(relativeNewDirToOldDir, importText);
+    }
+
+    function toDirectory(path: string): string {
+        return isAnySupportedFileExtension(path) ? getDirectoryPath(path) : path;
+    }
+
+    function importIsInternalToDirectory(oldDir: string, sourceFilePath: string, importText: string): boolean {
+        return !!removeDirectoryPrefixFromPath(oldDir, combineNormal(getDirectoryPath(sourceFilePath), importText));
     }
 
     /**
@@ -61,8 +99,8 @@ namespace ts {
             }
             else {
                 // e.g., Importing from "/old/a/b", suffix is "/a/b", and we'll leave that part alone.
-                const relToOld = tryRemovePrefix(fullPath, oldFileOrDirPath);
-                if (relToOld === undefined || !startsWith(relToOld, "/")) return undefined;
+                const relToOld = removeDirectoryPrefixFromPath(oldFileOrDirPath, fullPath);
+                if (relToOld === undefined) return undefined;
                 const suffix = isImport ? pathToImportPath(relToOld) : relToOld;
                 const newPrefix = pathIsRelative(importText)
                     ? combinePathsSafe(getDirectoryPath(Debug.assertDefined(tryRemoveSuffix(importText, suffix))), rel)
@@ -72,8 +110,17 @@ namespace ts {
         };
     }
 
+    function combineNormal(pathA: string, pathB: string): string {
+        return normalizePath(combinePaths(pathA, pathB));
+    }
+
+    function removeDirectoryPrefixFromPath(directory: string, path: string): string | undefined {
+        const withoutDir = tryRemovePrefix(path, directory);
+        return withoutDir === undefined || !startsWith(withoutDir, "/") ? undefined : withoutDir;
+    }
+
     function combinePathsSafe(pathA: string, pathB: string): string {
-        return ensurePathIsNonModuleName(normalizePath(combinePaths(pathA, pathB)));
+        return ensurePathIsNonModuleName(combineNormal(pathA, pathB));
     }
 
     function endsWithSomeIndex(path: string): boolean {
