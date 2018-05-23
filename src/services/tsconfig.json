@@ -111,6 +111,7 @@
         "codefixes/requireInTs.ts",
         "codefixes/useDefaultImport.ts",
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
+        "codefixes/convertToMappedObjectType.ts",
         "refactors/extractSymbol.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
         "refactors/moveToNewFile.ts",
