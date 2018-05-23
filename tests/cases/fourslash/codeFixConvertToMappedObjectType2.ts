@@ -12,6 +12,6 @@ verify.codeFix({
 type SomeType = {
     [prop in K]: any;
 } & {
-        a: string;
-    };`
+    a: string;
+};`
 })

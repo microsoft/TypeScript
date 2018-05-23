@@ -35,18 +35,13 @@ namespace ts.codefix {
         })
     });
 
-    function isFixableDeclaration(node: Node): node is FixableDeclaration {
-        return isInterfaceDeclaration(node) || (node.parent && isTypeLiteralNode(node) && isTypeAliasDeclaration(node.parent));
-    }
-
-    function isIndexSignatureParameterName(node: Node): node is Identifier {
-        return node && node.parent && node.parent.parent && node.parent.parent.parent &&
-            isIdentifier(node) && isParameter(node.parent) && isIndexSignatureDeclaration(node.parent.parent) && isFixableDeclaration(node.parent.parent.parent);
+    function isFixableParameterName(node: Node): boolean {
+        return node && node.parent && node.parent.parent && node.parent.parent.parent && !isClassDeclaration(node.parent.parent.parent);
     }
 
     function getFixableSignatureAtPosition(sourceFile: SourceFile, pos: number): Info | undefined {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        if (!isIndexSignatureParameterName(token)) return undefined;
+        if (!isFixableParameterName(token)) return undefined;
 
         const indexSignature = <IndexSignatureDeclaration>token.parent.parent;
         const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : <TypeAliasDeclaration>indexSignature.parent.parent;
@@ -59,7 +54,7 @@ namespace ts.codefix {
             container,
             otherMembers,
             parameterName: <Identifier>parameter.name,
-            parameterType: parameter.type
+            parameterType: parameter.type!
         };
     }
 

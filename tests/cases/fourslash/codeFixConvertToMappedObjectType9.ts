@@ -16,6 +16,6 @@ interface Bar<T> { bar: T; }
 type SomeType = Foo & Bar<number> & {
     [prop in K]: any;
 } & {
-        a: number;
-    };`
+    a: number;
+};`
 })
