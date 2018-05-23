@@ -161,7 +161,7 @@ namespace ts.SignatureHelp {
         else if (isNoSubstitutionTemplateLiteral(node) && isTaggedTemplateExpression(parent)) {
             // Check if we're actually inside the template;
             // otherwise we'll fall out and return undefined.
-            if (isInsideTemplateLiteral(node, position)) {
+            if (isInsideTemplateLiteral(node, position, sourceFile)) {
                 return getArgumentListInfoForTemplate(parent, /*argumentIndex*/ 0, sourceFile);
             }
         }
@@ -170,7 +170,7 @@ namespace ts.SignatureHelp {
             const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
-            const argumentIndex = isInsideTemplateLiteral(node, position) ? 0 : 1;
+            const argumentIndex = isInsideTemplateLiteral(node, position, sourceFile) ? 0 : 1;
 
             return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile);
         }
@@ -179,12 +179,12 @@ namespace ts.SignatureHelp {
             const tagExpression = parent.parent.parent;
 
             // If we're just after a template tail, don't show signature help.
-            if (node.kind === SyntaxKind.TemplateTail && !isInsideTemplateLiteral(<LiteralExpression>node, position)) {
+            if (isTemplateTail(node) && !isInsideTemplateLiteral(node, position, sourceFile)) {
                 return undefined;
             }
 
             const spanIndex = templateSpan.parent.templateSpans.indexOf(templateSpan);
-            const argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node, position);
+            const argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node, position, sourceFile);
 
             return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile);
         }
@@ -266,7 +266,7 @@ namespace ts.SignatureHelp {
 
     // spanIndex is either the index for a given template span.
     // This does not give appropriate results for a NoSubstitutionTemplateLiteral
-    function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, position: number): number {
+    function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, position: number, sourceFile: SourceFile): number {
         // Because the TemplateStringsArray is the first argument, we have to offset each substitution expression by 1.
         // There are three cases we can encounter:
         //      1. We are precisely in the template literal (argIndex = 0).
@@ -281,8 +281,8 @@ namespace ts.SignatureHelp {
         // Case:        1       1 3       2   1          3 2      2     1
         // tslint:enable no-double-space
         Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
-        if (isTemplateLiteralKind(node.kind)) {
-            if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
+        if (isTemplateLiteralToken(node)) {
+            if (isInsideTemplateLiteral(node, position, sourceFile)) {
                 return 0;
             }
             return spanIndex + 2;

@@ -1471,27 +1471,13 @@ namespace ts.Completions {
         }
 
         function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
-            if (contextToken.kind === SyntaxKind.StringLiteral
-                || contextToken.kind === SyntaxKind.RegularExpressionLiteral
-                || isTemplateLiteralKind(contextToken.kind)) {
-                const start = contextToken.getStart();
-                const end = contextToken.getEnd();
-
-                // To be "in" one of these literals, the position has to be:
-                //   1. entirely within the token text.
-                //   2. at the end position of an unterminated token.
-                //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
-                if (start < position && position < end) {
-                    return true;
-                }
-
-                if (position === end) {
-                    return !!(<LiteralExpression>contextToken).isUnterminated
-                        || contextToken.kind === SyntaxKind.RegularExpressionLiteral;
-                }
-            }
-
-            return false;
+            // To be "in" one of these literals, the position has to be:
+            //   1. entirely within the token text.
+            //   2. at the end position of an unterminated token.
+            //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
+            return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
+                rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
+                    position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
         }
 
         /**

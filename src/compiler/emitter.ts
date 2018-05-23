@@ -1015,7 +1015,7 @@ namespace ts {
         function emitLiteral(node: LiteralLikeNode) {
             const text = getLiteralTextOfNode(node);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
-                && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
+                && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralToken(node))) {
                 writeLiteral(text);
             }
             else {
