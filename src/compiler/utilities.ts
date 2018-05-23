@@ -1540,37 +1540,39 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    // TODO: Maybe should be named getDeclarationOfJSAlias or JSAliasSymbol? (and should search ALL declarations of the symbol)
-    export function getDeclarationOfJavascriptInitializer(node: Node): Node | undefined {
+    export function getDeclarationOfJSInitializer(node: Node): Node | undefined {
         if (!node.parent) {
             return undefined;
         }
-        // TODO: Callers already know which category of initializer they fall into, and some are trivially valid, so this check is kind of pointless
-        const isPrototypeAssignment = isAssignment(node.parent) && isPrototypeAccess(node.parent.left) || isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isAssignment(node.parent.parent) && isPrototypeAccess(node.parent.parent.left);
-        if (!getJavascriptInitializer(node, isPrototypeAssignment)) {
+        let name: Expression | BindingName | undefined;
+        let decl: Node | undefined;
+        if (isVariableDeclaration(node.parent)) {
+            name = node.parent.name;
+            decl = node.parent;
+        }
+        else if(isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            name = node.parent.left;
+            decl = name;
+        }
+        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken) {
+            if (isVariableDeclaration(node.parent.parent)) {
+                name = node.parent.parent.name;
+                decl = node.parent.parent;
+            }
+            else if (isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+                name = node.parent.parent.left;
+                decl = name;
+            }
+
+            if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
+                return undefined;
+            }
+        }
+
+        if (!name || !getJavascriptInitializer(node, isPrototypeAccess(name))) {
             return undefined;
         }
-        if (isAssignment(node.parent) || isVariableDeclaration(node.parent)) {
-            // TODO: Maybe also verify that node is the rhs of node.parent?
-            return isBinaryExpression(node.parent) ? node.parent.left : node.parent;
-        }
-        if (isBinaryExpression(node.parent) &&
-            node.parent.operatorToken.kind === SyntaxKind.BarBarToken &&
-            (isAssignment(node.parent.parent) || isVariableDeclaration(node.parent.parent)) &&
-            isSameDefaultedName(node.parent.parent, node.parent.left)) {
-            // TODO: I thought binary expressions were sometimes declarations, but it appears (for now) to be the property access on the lhs
-            // TODO: That means this function is extremely tangled and duplicative
-            return isBinaryExpression(node.parent.parent) ? node.parent.parent.left : node.parent.parent;
-        }
-    }
-
-    function isAssignment(node: Node): node is BinaryExpression {
-        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken;
-    }
-
-    function isSameDefaultedName(declaration: Node, initializer: Expression) {
-        return isAssignment(declaration) && isEntityNameExpression(declaration.left) && isSameEntityName(declaration.left, initializer) ||
-            isVariableDeclaration(declaration) && isIdentifier(declaration.name) && isSameEntityName(declaration.name, initializer);
+        return decl;
     }
 
     // TODO: Remaining calls to this are probably errors

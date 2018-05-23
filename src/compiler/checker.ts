@@ -5016,7 +5016,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                const jsDeclaration = getDeclarationOfJavascriptInitializer(symbol.valueDeclaration);
+                const jsDeclaration = getDeclarationOfJSInitializer(symbol.valueDeclaration);
                 if (jsDeclaration) {
                     const jsSymbol = getMergedSymbol(jsDeclaration.symbol);
                     if (jsSymbol && (jsSymbol.exports && jsSymbol.exports.size || jsSymbol.members && jsSymbol.members.size)) {
@@ -15888,7 +15888,7 @@ namespace ts {
             let hasComputedNumberProperty = false;
 
             if (isInJSFile) {
-                const decl = getDeclarationOfJavascriptInitializer(node);
+                const decl = getDeclarationOfJSInitializer(node);
                 if (decl) {
                     // a JS object literal whose declaration's symbol has exports is a JS namespace
                     const symbol = getMergedSymbol(decl.symbol);
@@ -19106,7 +19106,7 @@ namespace ts {
             }
             let jsAssignmentType: Type | undefined;
             if (isInJavaScriptFile(node)) {
-                const decl = getDeclarationOfJavascriptInitializer(node);
+                const decl = getDeclarationOfJSInitializer(node);
                 if (decl) {
                     const jsSymbol = getMergedSymbol(decl.symbol);
                     if (jsSymbol && jsSymbol.exports && jsSymbol.exports.size) {

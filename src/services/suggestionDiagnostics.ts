@@ -17,7 +17,7 @@ namespace ts {
             if (isJsFile) {
                 switch (node.kind) {
                     case SyntaxKind.FunctionExpression:
-                        const decl = getDeclarationOfJavascriptInitializer(node);
+                        const decl = getDeclarationOfJSInitializer(node);
                         if (decl) {
                             const symbol = decl.symbol;
                             if (symbol && (symbol.exports && symbol.exports.size || symbol.members && symbol.members.size)) {
