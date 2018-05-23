@@ -1019,10 +1019,13 @@
       </Item>
       <Item ItemId=";Add_missing_typeof_95052" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add missing typeof]]></Val>
+          <Val><![CDATA[Add missing 'typeof']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ajouter un typeof manquant]]></Val>
+            <Val><![CDATA[Ajouter un 'typeof' manquant]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add missing typeof]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1139,6 +1142,15 @@
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Les importations de la déclaration d'importation ne sont pas toutes utilisées.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";All_variables_are_unused_6199" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All variables are unused.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toutes les variables sont inutilisées.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6582,6 +6594,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Remove_all_unused_labels_95054" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove all unused labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Supprimer toutes les étiquettes inutilisées]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove declaration for: '{0}']]></Val>
@@ -6617,6 +6638,24 @@
           <Val><![CDATA[Remove unreachable code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Supprimer le code inaccessible]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_label_95053" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Supprimer l'étiquette inutilisée]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_variable_statement_90010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove variable statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Supprimer l'instruction de variable]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
