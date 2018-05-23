@@ -1,4 +1,4 @@
-=== tests/cases/compiler/parseCommaSeperatedNewlineString.ts ===
+=== tests/cases/compiler/parseCommaSeparatedNewlineString.ts ===
 (a,
 >(a,'') : ""
 >a,'' : ""

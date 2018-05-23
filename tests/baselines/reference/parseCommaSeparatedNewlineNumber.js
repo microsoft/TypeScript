@@ -1,7 +1,7 @@
-//// [parseCommaSeperatedNewlineNumber.ts]
+//// [parseCommaSeparatedNewlineNumber.ts]
 (a,
 1)
 
-//// [parseCommaSeperatedNewlineNumber.js]
+//// [parseCommaSeparatedNewlineNumber.js]
 (a,
     1);
