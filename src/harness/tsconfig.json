@@ -63,6 +63,7 @@
         "../services/documentRegistry.ts",
         "../services/importTracker.ts",
         "../services/findAllReferences.ts",
+        "../services/getEditsForFileRename.ts",
         "../services/goToDefinition.ts",
         "../services/jsDoc.ts",
         "../services/semver.ts",
