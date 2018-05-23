@@ -18,6 +18,7 @@ branches:
   - master
   - release-2.7
   - release-2.8
+  - release-2.9
 
 install:
   - npm uninstall typescript --no-save

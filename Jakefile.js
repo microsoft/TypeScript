@@ -131,7 +131,7 @@ var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"].map(function (f) {
     return path.join(builtLocalDirectory, f);
 }).concat(path.dirname(generatedLCGFile));
 
@@ -251,7 +251,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         else {
             options += " --lib es5";
         }
-        options += " --noUnusedLocals --noUnusedParameters";
+        options += " --noUnusedLocals --noUnusedParameters --strictNullChecks";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
@@ -922,7 +922,7 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
-    var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var browser = process.env.browser || process.env.b ||  (os.platform() === "win32" ? "edge" : "chrome");
     var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -1114,65 +1114,17 @@ task("build-rules-end", [], function () {
     if (fold.isTravis()) console.log(fold.end("build-rules"));
 });
 
-var lintTargets = compilerSources
-    .concat(harnessSources)
-    // Other harness sources
-    .concat(["instrumenter.ts"].map(function (f) { return path.join(harnessDirectory, f); }))
-    .concat(serverSources)
-    .concat(tslintRulesFiles)
-    .concat(servicesSources)
-    .concat(typingsInstallerSources)
-    .concat(cancellationTokenSources)
-    .concat(["Gulpfile.ts"])
-    .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath])
-    .map(function (p) { return path.resolve(p); });
-// keep only unique items
-lintTargets = Array.from(new Set(lintTargets));
-
-function sendNextFile(files, child, callback, failures) {
-    var file = files.pop();
-    if (file) {
-        console.log("Linting '" + file + "'.");
-        child.send({ kind: "file", name: file });
-    }
-    else {
-        child.send({ kind: "close" });
-        callback(failures);
-    }
-}
-
-function spawnLintWorker(files, callback) {
-    var child = child_process.fork("./scripts/parallel-lint");
-    var failures = 0;
-    child.on("message", function (data) {
-        switch (data.kind) {
-            case "result":
-                if (data.failures > 0) {
-                    failures += data.failures;
-                    console.log(data.output);
-                }
-                sendNextFile(files, child, callback, failures);
-                break;
-            case "error":
-                console.error(data.error);
-                failures++;
-                sendNextFile(files, child, callback, failures);
-                break;
-        }
-    });
-    sendNextFile(files, child, callback, failures);
-}
-
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-   function lint(project, cb) {
-        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+    function lint(project, cb) {
+        const fix = process.env.fix || process.env.f;
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish${fix ? " --fix" : ""}`;
         console.log("Linting: " + cmd);
         jake.exec([cmd], cb, /** @type {jake.ExecOptions} */({ interactive: true, windowsVerbatimArguments: true }));
-   }
-   lint("scripts/tslint/tsconfig.json", () => lint("src/tsconfig-base.json", () => {
+    }
+    lint("scripts/tslint/tsconfig.json", () => lint("src/tsconfig-base.json", () => {
         if (fold.isTravis()) console.log(fold.end("lint"));
         complete();
-   }));
+    }));
 });

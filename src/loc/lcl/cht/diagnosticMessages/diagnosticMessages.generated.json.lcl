@@ -1008,6 +1008,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_missing_typeof_95052" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add missing 'typeof']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新增遺漏的 'typeof']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
@@ -1107,11 +1116,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_destructured_elements_are_unused_6198" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All destructured elements are unused.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不會使用所有未經結構化的項目。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[匯入宣告中的所有匯入皆未使用。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";All_variables_are_unused_6199" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All variables are unused.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[所有變數都未使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2043,6 +2070,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_prepend_project_0_because_it_does_not_have_outFile_set_6308" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot prepend project '{0}' because it does not have 'outFile' set]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[因為專案 '{0}' 未設定 'outFile'，所以無法於其前面加上任何內容]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided_1205" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot re-export a type when the '--isolatedModules' flag is provided.]]></Val>
@@ -2417,6 +2453,15 @@
           <Val><![CDATA[Compiler option '{0}' requires a value of type {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[編譯器選項 '{0}' 需要類型 {1} 的值。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Composite_projects_may_not_disable_declaration_emit_6304" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Composite projects may not disable declaration emit.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[複合式專案可能未停用宣告發出。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3054,20 +3099,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules_1323" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Dynamic import cannot be used when targeting ECMAScript 2015 modules.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[以 ECMAScript 2015 模組為目標時，無法使用動態匯入。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[動態匯入不能有型別引數]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Dynamic_import_is_only_supported_when_module_flag_is_commonjs_or_esNext_1323" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有當 '--module' 旗標是 'commonjs' 或 'esNext' 時，才支援動態匯入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3140,6 +3185,15 @@
           <Val><![CDATA[Enable all strict type-checking options.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[啟用所有 Strict 類型檢查選項。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Enable_project_compilation_6302" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable project compilation]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[啟用專案編譯]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3695,6 +3749,15 @@
           <Val><![CDATA[File '{0}' is not a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[檔案 '{0}' 不是模組。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern_6307" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File '{0}' is not in project file list. Projects must list all files or use an 'include' pattern.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[檔案 '{0}' 不在專案檔案清單內。專案必須列出所有檔案，或使用 'include' 模式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4305,6 +4368,9 @@
       <Item ItemId=";Include_modules_imported_with_json_extension_6197" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Include modules imported with '.json' extension]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[包含匯入有 '.json' 延伸模組的模組]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5232,6 +5298,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Move_to_a_new_file_95049" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Move to a new file]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移至新行]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
@@ -5607,6 +5682,9 @@
       <Item ItemId=";Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy_5070" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[指定選項 '-resolveJsonModule' 時，不可沒有 'node' 模組解析策略。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5624,6 +5702,24 @@
           <Val><![CDATA[Output directory for generated declaration files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[所產生之宣告檔案的輸出目錄。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Output_file_0_from_project_1_does_not_exist_6309" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Output file '{0}' from project '{1}' does not exist]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[沒有來自專案 '{1}' 的輸出檔 '{0}']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Output_file_0_has_not_been_built_from_source_file_1_6305" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Output file '{0}' has not been built from source file '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[輸出檔 '{0}' 並非從原始程式檔 '{1}' 建置。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6020,6 +6116,24 @@
           <Val><![CDATA[Print this message.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[列印這則訊息。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0_6202" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project references may not form a circular graph. Cycle detected: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[專案參考不會形成循環圖。但偵測到循環: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Projects_to_reference_6300" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Projects to reference]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[專案至參考]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6450,6 +6564,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Referenced_project_0_must_have_setting_composite_Colon_true_6306" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Referenced project '{0}' must have setting "composite": true.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[參考的專案 '{0}' 之設定 "composite" 必須為 true。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_all_unreachable_code_95051" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove all unreachable code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移除所有無法連線的程式碼]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_all_unused_labels_95054" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove all unused labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移除所有未使用的標籤]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove declaration for: '{0}']]></Val>
@@ -6462,11 +6603,47 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove destructuring]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移除解構]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove import from '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[從 '{0}' 移除匯入]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unreachable_code_95050" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unreachable code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移除無法連線的程式碼]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_label_95053" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移除未使用的標籤]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_variable_statement_90010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove variable statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移除變數陳述式]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

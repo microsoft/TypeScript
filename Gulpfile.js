@@ -36,7 +36,7 @@ const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
 const constEnumReplacement = "$1$2enum $3 {$4";
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "fix"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         "b": "browser",
@@ -47,6 +47,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         "r": "reporter",
         "c": "colors", "color": "colors",
         "w": "workers",
+        "f": "fix",
     },
     default: {
         soft: false,
@@ -54,13 +55,14 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         debug: process.env.debug || process.env["debug-brk"] || process.env.d,
         inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
-        browser: process.env.browser || process.env.b || "IE",
+        browser: process.env.browser || process.env.b || (os.platform() === "win32" ? "edge" : "chrome"),
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
+        fix: process.env.fix || process.env.f,
         workers: process.env.workerCount || os.cpus().length,
     }
 });
@@ -160,7 +162,7 @@ const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessag
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
     .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
     .concat(generatedLCGFile);
 
@@ -260,6 +262,7 @@ function getCompilerSettings(base, useBuiltCompiler) {
     for (const key in base) {
         copy[key] = base[key];
     }
+    copy.strictNullChecks = true;
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
     }
@@ -1069,7 +1072,7 @@ gulp.task("build-rules", "Compiles tslint rules to js", () => {
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
     for (const project of ["scripts/tslint/tsconfig.json", "src/tsconfig-base.json"]) {
-        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish${cmdLineOptions.fix ? " --fix" : ""}`;
         console.log("Linting: " + cmd);
         child_process.execSync(cmd, { stdio: [0, 1, 2] });
     }

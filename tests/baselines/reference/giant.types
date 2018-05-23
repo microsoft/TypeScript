@@ -870,7 +870,7 @@ export interface eI {
 >pa2 : any
 }
 export module eM {
->eM : typeof eM
+>eM : typeof import("tests/cases/compiler/giant").eM
 
     var V;
 >V : any

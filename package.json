@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.9.0",
+    "version": "3.0.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -29,6 +29,7 @@
         "node": ">=4.2.0"
     },
     "devDependencies": {
+        "@octokit/rest": "latest",
         "@types/browserify": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",

@@ -18,11 +18,11 @@ var A = /** @class */ (function () {
     A[(_a = A.p1, A.p2)] = function () { return 0; };
     ;
     A.prototype[A.p1] = function () { };
+    var _a, _b;
     _b = A.p2;
     A.p1 = Symbol();
     A.p2 = Symbol();
     // All of the below should be out of scope or TDZ - `A` has not finished being constructed as they are executed
     A[_a] = 0;
     return A;
-    var _a, _b;
 }());

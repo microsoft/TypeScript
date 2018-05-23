@@ -130,3 +130,4 @@ declare const Test_base: {
 } & typeof FooItem;
 export declare class Test extends Test_base {
 }
+export {};

@@ -13,9 +13,9 @@ const b = {x3}
 
 //// [x.js]
 System.register([], function (exports_1, context_1) {
+    var x;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var x;
     return {
         setters: [],
         execute: function () {
@@ -25,9 +25,9 @@ System.register([], function (exports_1, context_1) {
 });
 //// [index.js]
 System.register(["./x.js"], function (exports_1, context_1) {
+    var x_js_1, x2, a, x3, b;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var x_js_1, x2, a, x3, b;
     return {
         setters: [
             function (x_js_1_1) {

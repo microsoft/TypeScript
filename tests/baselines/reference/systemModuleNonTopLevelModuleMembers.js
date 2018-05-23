@@ -13,11 +13,11 @@ export module TopLevelModule2 {
 
 //// [systemModuleNonTopLevelModuleMembers.js]
 System.register([], function (exports_1, context_1) {
+    var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function TopLevelFunction() { }
     exports_1("TopLevelFunction", TopLevelFunction);
-    var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     return {
         setters: [],
         execute: function () {

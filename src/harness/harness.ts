@@ -148,7 +148,7 @@ namespace Utils {
             path = "tests/" + path;
         }
 
-        let content: string;
+        let content: string | undefined;
         try {
             content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
         }
@@ -177,7 +177,7 @@ namespace Utils {
 
     export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
 
-    export function assertInvariants(node: ts.Node, parent: ts.Node): void {
+    export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined): void {
         if (node) {
             assert.isFalse(node.pos < 0, "node.pos < 0");
             assert.isFalse(node.end < 0, "node.end < 0");
@@ -504,16 +504,17 @@ namespace Harness {
         newLine(): string;
         getCurrentDirectory(): string;
         useCaseSensitiveFileNames(): boolean;
-        resolvePath(path: string): string;
+        resolvePath(path: string): string | undefined;
         getFileSize(path: string): number;
         readFile(path: string): string | undefined;
         writeFile(path: string, contents: string): void;
-        directoryName(path: string): string;
+        directoryName(path: string): string | undefined;
         getDirectories(path: string): string[];
         createDirectory(path: string): void;
         fileExists(fileName: string): boolean;
         directoryExists(path: string): boolean;
         deleteFile(fileName: string): void;
+        enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[];
         listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
         args(): string[];
@@ -524,7 +525,7 @@ namespace Harness {
         getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
-        getMemoryUsage?(): number;
+        getMemoryUsage?(): number | undefined;
     }
 
     export let IO: IO;
@@ -559,9 +560,11 @@ namespace Harness {
             return dirPath === path ? undefined : dirPath;
         }
 
-        function listFiles(path: string, spec: RegExp, options?: { recursive?: boolean }) {
-            options = options || {};
+        function enumerateTestFiles(runner: RunnerBase) {
+            return runner.enumerateTestFiles();
+        }
 
+        function listFiles(path: string, spec: RegExp, options: { recursive?: boolean } = {}) {
             function filesInFolder(folder: string): string[] {
                 let paths: string[] = [];
 
@@ -629,7 +632,7 @@ namespace Harness {
             getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
             useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
             resolvePath: (path: string) => ts.sys.resolvePath(path),
-            getFileSize: (path: string) => ts.sys.getFileSize(path),
+            getFileSize: (path: string) => ts.sys.getFileSize!(path),
             readFile: path => ts.sys.readFile(path),
             writeFile: (path, content) => ts.sys.writeFile(path, content),
             directoryName,
@@ -639,6 +642,7 @@ namespace Harness {
             directoryExists: path => ts.sys.directoryExists(path),
             deleteFile,
             listFiles,
+            enumerateTestFiles,
             log: s => console.log(s),
             args: () => ts.sys.args,
             getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
@@ -686,7 +690,7 @@ namespace Harness {
                 }
             }
 
-            public static combine(left: HttpHeaders | undefined, right: HttpHeaders | undefined): HttpHeaders {
+            public static combine(left: HttpHeaders | undefined, right: HttpHeaders | undefined): HttpHeaders | undefined {
                 if (!left && !right) return undefined;
                 const headers = new HttpHeaders();
                 if (left) left.forEach((value, key) => { headers.set(key, value); });
@@ -762,8 +766,8 @@ namespace Harness {
             public static readResponseContent(xhr: XMLHttpRequest) {
                 if (typeof xhr.responseText === "string") {
                     return new HttpContent({
-                        "Content-Type": xhr.getResponseHeader("Content-Type") || undefined,
-                        "Content-Length": xhr.getResponseHeader("Content-Length") || undefined
+                        "Content-Type": xhr.getResponseHeader("Content-Type") || undefined!, // TODO: GH#18217
+                        "Content-Length": xhr.getResponseHeader("Content-Length") || undefined!, // TODO: GH#18217
                     }, xhr.responseText);
                 }
                 return undefined;
@@ -882,7 +886,7 @@ namespace Harness {
 
         function getFileSize(path: string): number {
             const response = send(HttpRequestMessage.head(new URL(path, serverRoot)));
-            return HttpResponseMessage.hasSuccessStatusCode(response) ? +response.headers.get("Content-Length").toString() : 0;
+            return HttpResponseMessage.hasSuccessStatusCode(response) ? +response.headers.get("Content-Length")!.toString() : 0;
         }
 
         function readFile(path: string): string | undefined {
@@ -911,6 +915,11 @@ namespace Harness {
         function directoryName(path: string) {
             const url = new URL(path, serverRoot);
             return ts.getDirectoryPath(ts.normalizeSlashes(url.pathname || "/"));
+        }
+
+        function enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[] {
+            const response = send(HttpRequestMessage.post(new URL("/api/enumerateTestFiles", serverRoot), HttpContent.text(runner.kind())));
+            return hasJsonContent(response) ? JSON.parse(response.content.content) : [];
         }
 
         function listFiles(dirname: string, spec?: RegExp, options?: { recursive?: boolean }): string[] {
@@ -959,6 +968,7 @@ namespace Harness {
             directoryExists,
             deleteFile,
             listFiles: Utils.memoize(listFiles, (path, spec, options) => `${path}|${spec}|${options ? options.recursive === true : true}`),
+            enumerateTestFiles: Utils.memoize(enumerateTestFiles, runner => runner.kind()),
             log: s => console.log(s),
             args: () => [],
             getExecutingFilePath: () => "",
@@ -986,7 +996,7 @@ namespace Harness {
     }
 }
 
-if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable!("NODE_ENV"))) {
     Harness.IO.tryEnableSourceMapsForHost();
 }
 
@@ -1018,7 +1028,7 @@ namespace Harness {
          */
         export class WriterAggregator {
             public lines: string[] = [];
-            public currentLine = <string>undefined;
+            public currentLine: string = undefined!;
 
             public Write(str: string) {
                 // out of memory usage concerns avoid using + or += if we're going to do any manipulation of this string later
@@ -1028,17 +1038,17 @@ namespace Harness {
             public WriteLine(str: string) {
                 // out of memory usage concerns avoid using + or += if we're going to do any manipulation of this string later
                 this.lines.push([(this.currentLine || ""), str].join(""));
-                this.currentLine = undefined;
+                this.currentLine = undefined!;
             }
 
             public Close() {
                 if (this.currentLine !== undefined) { this.lines.push(this.currentLine); }
-                this.currentLine = undefined;
+                this.currentLine = undefined!;
             }
 
             public reset() {
                 this.lines = [];
-                this.currentLine = undefined;
+                this.currentLine = undefined!;
             }
         }
 
@@ -1065,20 +1075,20 @@ namespace Harness {
         // Cache of lib files from "built/local"
         let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
 
-        export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
+        export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile | undefined {
             if (!isDefaultLibraryFile(fileName)) {
                 return undefined;
             }
 
             if (!libFileNameSourceFileMap) {
                 libFileNameSourceFileMap = ts.createMapFromTemplate({
-                    [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+                    [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest)
                 });
             }
 
             let sourceFile = libFileNameSourceFileMap.get(fileName);
             if (!sourceFile) {
-                libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
+                libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest));
             }
             return sourceFile;
         }
@@ -1194,10 +1204,10 @@ namespace Harness {
         export function compileFiles(
             inputFiles: TestFile[],
             otherFiles: TestFile[],
-            harnessSettings: TestCaseParser.CompilerSettings,
-            compilerOptions: ts.CompilerOptions,
+            harnessSettings: TestCaseParser.CompilerSettings | undefined,
+            compilerOptions: ts.CompilerOptions | undefined,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-            currentDirectory: string): compiler.CompilationResult {
+            currentDirectory: string | undefined): compiler.CompilationResult {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -1213,7 +1223,7 @@ namespace Harness {
                 setCompilerOptionsFromHarnessSetting(harnessSettings, options);
             }
             if (options.rootDirs) {
-                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
+                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory!));
             }
 
             const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
@@ -1241,7 +1251,7 @@ namespace Harness {
         export interface DeclarationCompilationContext {
             declInputFiles: TestFile[];
             declOtherFiles: TestFile[];
-            harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions;
+            harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions | undefined;
             options: ts.CompilerOptions;
             currentDirectory: string;
         }
@@ -1252,7 +1262,7 @@ namespace Harness {
             harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-            currentDirectory: string): DeclarationCompilationContext | undefined {
+            currentDirectory: string | undefined): DeclarationCompilationContext | undefined {
 
             if (options.declaration && result.diagnostics.length === 0) {
                 if (options.emitDeclarationOnly) {
@@ -1288,7 +1298,7 @@ namespace Harness {
             }
 
             function findResultCodeFile(fileName: string) {
-                const sourceFile = result.program.getSourceFile(fileName);
+                const sourceFile = result.program!.getSourceFile(fileName)!;
                 assert(sourceFile, "Program has no source file with name '" + fileName + "'");
                 // Is this file going to be emitted separately
                 let sourceFileName: string;
@@ -1296,7 +1306,7 @@ namespace Harness {
                 if (!outFile) {
                     if (options.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.vfs.cwd());
-                        sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
+                        sourceFilePath = sourceFilePath.replace(result.program!.getCommonSourceDirectory(), "");
                         sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                     }
                     else {
@@ -1333,7 +1343,7 @@ namespace Harness {
 
         export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
             let outputLines = "";
-            const gen = iterateErrorBaseline(inputFiles, diagnostics, pretty);
+            const gen = iterateErrorBaseline(inputFiles, diagnostics, { pretty });
             for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                 const [, content] = value;
                 outputLines += content;
@@ -1343,7 +1353,7 @@ namespace Harness {
 
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
-        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean): IterableIterator<[string, string, number]> {
+        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
             diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1381,7 +1391,7 @@ namespace Harness {
                 }
             }
 
-            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
+            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
 
             // Report global errors
             const globalErrors = diagnostics.filter(err => !err.file);
@@ -1394,9 +1404,9 @@ namespace Harness {
             const dupeCase = ts.createMap<number>();
             for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
                 // Filter down to the errors in the file
-                const fileErrors = diagnostics.filter(e => {
+                const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                     const errFn = e.file;
-                    return errFn && utils.removeTestPathPrefixes(errFn.fileName) === utils.removeTestPathPrefixes(inputFile.unitName);
+                    return !!errFn && ts.comparePaths(utils.removeTestPathPrefixes(errFn.fileName), utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) === ts.Comparison.EqualTo;
                 });
 
 
@@ -1431,7 +1441,8 @@ namespace Harness {
                     }
                     // Emit this line from the original file
                     outputLines += (newLine() + "    " + line);
-                    fileErrors.forEach(err => {
+                    fileErrors.forEach(errDiagnostic => {
+                        const err = errDiagnostic as ts.TextSpan; // TODO: GH#18217
                         // Does any error start or continue on to this line? Emit squiggles
                         const end = ts.textSpanEnd(err);
                         if ((end >= thisLineStart) && ((err.start < nextLineStart) || (lineIndex === lines.length - 1))) {
@@ -1449,7 +1460,7 @@ namespace Harness {
                                 // Just like above, we need to do a split on a string instead of on a regex
                                 // because the JS engine does regexes wrong
 
-                                outputErrorText(err);
+                                outputErrorText(errDiagnostic);
                                 markedErrorCount++;
                             }
                         }
@@ -1464,12 +1475,12 @@ namespace Harness {
             }
 
             const numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
+                return !!diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
             });
 
             const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
                 // Count an error generated from tests262-harness folder.This should only apply for test262
-                return diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
+                return !!diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
             });
 
             // Verify we didn't miss any errors in total
@@ -1477,7 +1488,7 @@ namespace Harness {
         }
 
         export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
-            Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
+            Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string | null => {
                 if (!errors || (errors.length === 0)) {
                     /* tslint:disable:no-null-keyword */
                     return null;
@@ -1507,7 +1518,7 @@ namespace Harness {
 
             // Produce baselines.  The first gives the types for all expressions.
             // The second gives symbols for all identifiers.
-            let typesError: Error, symbolsError: Error;
+            let typesError: Error | undefined, symbolsError: Error | undefined;
             try {
                 checkBaseLines(/*isSymbolBaseLine*/ false);
             }
@@ -1555,7 +1566,7 @@ namespace Harness {
                 }
             }
 
-            function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string {
+            function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null {
                 let result = "";
                 const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -1742,7 +1753,7 @@ namespace Harness {
             resultName = sanitizeTestFilePath(resultName);
             if (dupeCase.has(resultName)) {
                 // A different baseline filename should be manufactured if the names differ only in case, for windows compat
-                const count = 1 + dupeCase.get(resultName);
+                const count = 1 + dupeCase.get(resultName)!;
                 dupeCase.set(resultName, count);
                 resultName = `${resultName}.dupe${count}`;
             }
@@ -1759,6 +1770,74 @@ namespace Harness {
             }
             return path;
         }
+    }
+
+    export interface FileBasedTest {
+        file: string;
+        configurations?: FileBasedTestConfiguration[];
+    }
+
+    export interface FileBasedTestConfiguration {
+        [key: string]: string;
+    }
+
+    function splitVaryBySettingValue(text: string): string[] | undefined {
+        if (!text) return undefined;
+        const entries = text.split(/,/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+        return entries && entries.length > 1 ? entries : undefined;
+    }
+
+    function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
+        if (offset >= varyByEntries.length) {
+            // make a copy of the current variation state
+            configurations.push({ ...variationState });
+            return;
+        }
+
+        const [varyBy, entries] = varyByEntries[offset];
+        for (const entry of entries) {
+            // set or overwrite the variation, then compute the next variation
+            variationState[varyBy] = entry;
+            computeFileBasedTestConfigurationVariations(configurations, variationState, varyByEntries, offset + 1);
+        }
+    }
+
+    /**
+     * Compute FileBasedTestConfiguration variations based on a supplied list of variable settings.
+     */
+    export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: string[]): FileBasedTestConfiguration[] | undefined {
+        let varyByEntries: [string, string[]][] | undefined;
+        for (const varyByKey of varyBy) {
+            if (ts.hasProperty(settings, varyByKey)) {
+                // we only consider variations when there are 2 or more variable entries.
+                const entries = splitVaryBySettingValue(settings[varyByKey]);
+                if (entries) {
+                    if (!varyByEntries) varyByEntries = [];
+                    varyByEntries.push([varyByKey, entries]);
+                }
+            }
+        }
+
+        if (!varyByEntries) return undefined;
+
+        const configurations: FileBasedTestConfiguration[] = [];
+        computeFileBasedTestConfigurationVariations(configurations, /*variationState*/ {}, varyByEntries, /*offset*/ 0);
+        return configurations;
+    }
+
+    /**
+     * Compute a description for this configuration based on its entries
+     */
+    export function getFileBasedTestConfigurationDescription(configuration: FileBasedTestConfiguration) {
+        let name = "";
+        if (configuration) {
+            const keys = Object.keys(configuration).sort();
+            for (const key of keys) {
+                if (name) name += ", ";
+                name += `@${key}: ${configuration[key]}`;
+            }
+        }
+        return name;
     }
 
     export namespace TestCaseParser {
@@ -1779,10 +1858,10 @@ namespace Harness {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
-        function extractCompilerSettings(content: string): CompilerSettings {
+        export function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
 
-            let match: RegExpExecArray;
+            let match: RegExpExecArray | null;
             /* tslint:disable:no-null-keyword */
             while ((match = optionRegex.exec(content)) !== null) {
             /* tslint:enable:no-null-keyword */
@@ -1795,21 +1874,19 @@ namespace Harness {
         export interface TestCaseContent {
             settings: CompilerSettings;
             testUnitData: TestUnitData[];
-            tsConfig: ts.ParsedCommandLine;
-            tsConfigFileUnitData: TestUnitData;
+            tsConfig: ts.ParsedCommandLine | undefined;
+            tsConfigFileUnitData: TestUnitData | undefined;
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): TestCaseContent {
-            const settings = extractCompilerSettings(code);
-
+        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string, settings = extractCompilerSettings(code)): TestCaseContent {
             // List of all the subfiles we've parsed out
             const testUnitData: TestUnitData[] = [];
 
             const lines = Utils.splitContentByNewlines(code);
 
             // Stuff related to the subfile we're parsing
-            let currentFileContent: string;
+            let currentFileContent: string | undefined;
             let currentFileOptions: any = {};
             let currentFileName: any;
             let refs: string[] = [];
@@ -1829,7 +1906,7 @@ namespace Harness {
                     if (currentFileName) {
                         // Store result file
                         const newTestFile = {
-                            content: currentFileContent,
+                            content: currentFileContent!, // TODO: GH#18217
                             name: currentFileName,
                             fileOptions: currentFileOptions,
                             originalFilePath: fileName,
@@ -1884,8 +1961,8 @@ namespace Harness {
             };
 
             // check if project has tsconfig.json in the list of files
-            let tsConfig: ts.ParsedCommandLine;
-            let tsConfigFileUnitData: TestUnitData;
+            let tsConfig: ts.ParsedCommandLine | undefined;
+            let tsConfigFileUnitData: TestUnitData | undefined;
             for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
                 if (getConfigNameFromFileName(data.name)) {
@@ -1946,7 +2023,7 @@ namespace Harness {
         }
 
         const fileCache: { [idx: string]: boolean } = {};
-        function generateActual(generateContent: () => string): string {
+        function generateActual(generateContent: () => string | null): string | null {
 
             const actual = generateContent();
 
@@ -1957,12 +2034,12 @@ namespace Harness {
             return actual;
         }
 
-        function compareToBaseline(actual: string, relativeFileName: string, opts: BaselineOptions) {
+        function compareToBaseline(actual: string | null, relativeFileName: string, opts: BaselineOptions | undefined) {
             // actual is now either undefined (the generator had an error), null (no file requested),
             // or some real output of the function
             if (actual === undefined) {
                 // Nothing to do
-                return;
+                return undefined!; // TODO: GH#18217
             }
 
             const refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
@@ -1975,7 +2052,7 @@ namespace Harness {
 
             let expected = "<no content>";
             if (IO.fileExists(refFileName)) {
-                expected = IO.readFile(refFileName);
+                expected = IO.readFile(refFileName)!; // TODO: GH#18217
             }
 
             return { expected, actual };
@@ -1991,7 +2068,7 @@ namespace Harness {
                     return;
                 }
 
-                const parentDirectory = IO.directoryName(dirName);
+                const parentDirectory = IO.directoryName(dirName)!; // TODO: GH#18217
                 if (parentDirectory !== "" && parentDirectory !== dirName) {
                     createDirectoryStructure(parentDirectory);
                 }
@@ -2000,7 +2077,7 @@ namespace Harness {
             }
 
             // Create folders if needed
-            createDirectoryStructure(IO.directoryName(actualFileName));
+            createDirectoryStructure(IO.directoryName(actualFileName)!); // TODO: GH#18217
 
             // Delete the actual file in case it fails
             if (IO.fileExists(actualFileName)) {
@@ -2019,14 +2096,14 @@ namespace Harness {
             }
         }
 
-        export function runBaseline(relativeFileName: string, generateContent: () => string, opts?: BaselineOptions): void {
+        export function runBaseline(relativeFileName: string, generateContent: () => string | null, opts?: BaselineOptions): void {
             const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
             const actual = generateActual(generateContent);
             const comparison = compareToBaseline(actual, relativeFileName, opts);
             writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
         }
 
-        export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]>, opts?: BaselineOptions, referencedExtensions?: string[]): void {
+        export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
             const errors: Error[] = [];
@@ -2097,7 +2174,7 @@ namespace Harness {
 
     export function getDefaultLibraryFile(filePath: string, io: IO): Compiler.TestFile {
         const libFile = userSpecifiedRoot + libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
-        return { unitName: libFile, content: io.readFile(libFile) };
+        return { unitName: libFile, content: io.readFile(libFile)! };
     }
 
     export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {

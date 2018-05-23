@@ -163,6 +163,7 @@ function foo8() {
     var x;
 }
 function foo9() {
+    var _a;
     var y = (_a = /** @class */ (function () {
             function class_3() {
             }
@@ -171,7 +172,6 @@ function foo9() {
         _a.a = x,
         _a);
     var x;
-    var _a;
 }
 function foo10() {
     var A = /** @class */ (function () {
@@ -184,6 +184,7 @@ function foo10() {
 }
 function foo11() {
     function f() {
+        var _a;
         var y = (_a = /** @class */ (function () {
                 function class_4() {
                 }
@@ -191,7 +192,6 @@ function foo11() {
             }()),
             _a.a = x,
             _a);
-        var _a;
     }
     var x;
 }

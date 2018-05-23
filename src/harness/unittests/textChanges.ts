@@ -8,9 +8,9 @@
 namespace ts {
     describe("textChanges", () => {
         function findChild(name: string, n: Node) {
-            return find(n);
+            return find(n)!;
 
-            function find(node: Node): Node {
+            function find(node: Node): Node | undefined {
                 if (isDeclaration(node) && node.name && isIdentifier(node.name) && node.name.escapedText === name) {
                     return node;
                 }
@@ -88,7 +88,7 @@ namespace M
     }
 }`;
             runSingleFileTest("extractMethodLike", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                const statements = (<FunctionDeclaration>findChild("foo", sourceFile)).body.statements.slice(1);
+                const statements = (<FunctionDeclaration>findChild("foo", sourceFile)).body!.statements.slice(1);
                 const newFunction = createFunctionDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
@@ -105,11 +105,11 @@ namespace M
                 // replace statements with return statement
                 const newStatement = createReturn(
                     createCall(
-                        /*expression*/ newFunction.name,
+                        /*expression*/ newFunction.name!,
                         /*typeArguments*/ undefined,
                         /*argumentsArray*/ emptyArray
                     ));
-                changeTracker.replaceNodeRange(sourceFile, statements[0], lastOrUndefined(statements), newStatement, { suffix: newLineCharacter });
+                changeTracker.replaceNodeRange(sourceFile, statements[0], last(statements), newStatement, { suffix: newLineCharacter });
             });
         }
         {
