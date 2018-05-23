@@ -24752,7 +24752,11 @@ namespace ts {
                     case SyntaxKind.ParenthesizedExpression:
                         return evaluate((<ParenthesizedExpression>expr).expression);
                     case SyntaxKind.Identifier:
-                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), (<Identifier>expr).escapedText);
+                        const identifier = <Identifier>expr;
+                        if (isInfinityOrNaNString(identifier.escapedText)) {
+                            return +(identifier.escapedText);
+                        }
+                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), identifier.escapedText);
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
                         const ex = <PropertyAccessExpression | ElementAccessExpression>expr;
