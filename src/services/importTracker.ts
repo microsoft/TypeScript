@@ -578,6 +578,9 @@ namespace ts.FindAllReferences {
         else if (isBinaryExpression(decl)) { // `module.exports = class {}`
             return Debug.assertDefined(decl.right.symbol);
         }
+        else if (isSourceFile(decl)) { // json module
+            return Debug.assertDefined(decl.symbol);
+        }
         return Debug.fail();
     }
 
