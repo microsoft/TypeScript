@@ -1114,65 +1114,17 @@ task("build-rules-end", [], function () {
     if (fold.isTravis()) console.log(fold.end("build-rules"));
 });
 
-var lintTargets = compilerSources
-    .concat(harnessSources)
-    // Other harness sources
-    .concat(["instrumenter.ts"].map(function (f) { return path.join(harnessDirectory, f); }))
-    .concat(serverSources)
-    .concat(tslintRulesFiles)
-    .concat(servicesSources)
-    .concat(typingsInstallerSources)
-    .concat(cancellationTokenSources)
-    .concat(["Gulpfile.ts"])
-    .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath])
-    .map(function (p) { return path.resolve(p); });
-// keep only unique items
-lintTargets = Array.from(new Set(lintTargets));
-
-function sendNextFile(files, child, callback, failures) {
-    var file = files.pop();
-    if (file) {
-        console.log("Linting '" + file + "'.");
-        child.send({ kind: "file", name: file });
-    }
-    else {
-        child.send({ kind: "close" });
-        callback(failures);
-    }
-}
-
-function spawnLintWorker(files, callback) {
-    var child = child_process.fork("./scripts/parallel-lint");
-    var failures = 0;
-    child.on("message", function (data) {
-        switch (data.kind) {
-            case "result":
-                if (data.failures > 0) {
-                    failures += data.failures;
-                    console.log(data.output);
-                }
-                sendNextFile(files, child, callback, failures);
-                break;
-            case "error":
-                console.error(data.error);
-                failures++;
-                sendNextFile(files, child, callback, failures);
-                break;
-        }
-    });
-    sendNextFile(files, child, callback, failures);
-}
-
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-   function lint(project, cb) {
-        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+    function lint(project, cb) {
+        const fix = process.env.fix || process.env.f;
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish${fix ? " --fix" : ""}`;
         console.log("Linting: " + cmd);
         jake.exec([cmd], cb, /** @type {jake.ExecOptions} */({ interactive: true, windowsVerbatimArguments: true }));
-   }
-   lint("scripts/tslint/tsconfig.json", () => lint("src/tsconfig-base.json", () => {
+    }
+    lint("scripts/tslint/tsconfig.json", () => lint("src/tsconfig-base.json", () => {
         if (fold.isTravis()) console.log(fold.end("lint"));
         complete();
-   }));
+    }));
 });
