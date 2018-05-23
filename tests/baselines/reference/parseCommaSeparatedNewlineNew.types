@@ -1,4 +1,4 @@
-=== tests/cases/compiler/parseCommaSeperatedNewlineNew.ts ===
+=== tests/cases/compiler/parseCommaSeparatedNewlineNew.ts ===
 (a,
 >(a,new) : any
 >a,new : any

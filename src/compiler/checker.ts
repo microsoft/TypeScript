@@ -27061,7 +27061,7 @@ namespace ts {
                 }
             }
 
-            // We do global augmentations seperately from module augmentations (and before creating global types) because they
+            // We do global augmentations separately from module augmentations (and before creating global types) because they
             //  1. Affect global types. We won't have the correct global types until global augmentations are merged. Also,
             //  2. Module augmentation instantiation requires creating the type of a module, which, in turn, can require
             //       checking for an export or property on the module (if export=) which, in turn, can fall back to the
