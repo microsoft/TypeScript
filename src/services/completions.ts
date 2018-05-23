@@ -1051,8 +1051,9 @@ namespace ts.Completions {
                 }
             }
 
-            if (isMetaProperty(node) && node.keywordToken === SyntaxKind.NewKeyword) {
-                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores("target")));
+            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword)) {
+                const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
+                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
                 return;
             }
 
