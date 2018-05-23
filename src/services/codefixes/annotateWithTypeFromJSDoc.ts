@@ -12,8 +12,8 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const decl = getDeclaration(diag.file!, diag.start!);
-            if (decl) doChange(changes, diag.file!, decl);
+            const decl = getDeclaration(diag.file, diag.start);
+            if (decl) doChange(changes, diag.file, decl);
         }),
     });
 
@@ -43,7 +43,7 @@ namespace ts.codefix {
         if (isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)))) {
             if (!decl.typeParameters) {
                 const typeParameters = getJSDocTypeParameterDeclarations(decl);
-                if (typeParameters) changes.insertTypeParameters(sourceFile, decl, typeParameters);
+                if (typeParameters.length) changes.insertTypeParameters(sourceFile, decl, typeParameters);
             }
             const needParens = isArrowFunction(decl) && !findChildOfKind(decl, SyntaxKind.OpenParenToken, sourceFile);
             if (needParens) changes.insertNodeBefore(sourceFile, first(decl.parameters), createToken(SyntaxKind.OpenParenToken));

@@ -28,7 +28,7 @@ namespace ts.codefix {
         const variations: CodeFixAction[] = [];
 
         // import Bluebird from "bluebird";
-        variations.push(createAction(context, sourceFile, node, makeImportDeclaration(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier)));
+        variations.push(createAction(context, sourceFile, node, makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier)));
 
         if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
             // import Bluebird = require("bluebird");

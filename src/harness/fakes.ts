@@ -39,9 +39,7 @@ namespace fakes {
         public readFile(path: string) {
             try {
                 const content = this.vfs.readFileSync(path, "utf8");
-                return content === undefined ? undefined :
-                    vpath.extname(path) === ".json" ? utils.removeComments(utils.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
-                        utils.removeByteOrderMark(content);
+                return content === undefined ? undefined : utils.removeByteOrderMark(content);
             }
             catch {
                 return undefined;
@@ -152,7 +150,7 @@ namespace fakes {
 
         private _getStats(path: string) {
             try {
-                return this.vfs.statSync(path);
+                return this.vfs.existsSync(path) ? this.vfs.statSync(path) : undefined;
             }
             catch {
                 return undefined;
@@ -203,6 +201,7 @@ namespace fakes {
         public readonly sys: System;
         public readonly defaultLibLocation: string;
         public readonly outputs: documents.TextDocument[] = [];
+        private readonly _outputsMap: collections.SortedMap<string, number>;
         public readonly traces: string[] = [];
         public readonly shouldAssertInvariants = !Harness.lightMode;
 
@@ -218,6 +217,7 @@ namespace fakes {
             this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
             this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
             this._setParentNodes = setParentNodes;
+            this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
         }
 
         public get vfs() {
@@ -256,6 +256,10 @@ namespace fakes {
             return this.sys.getDirectories(path);
         }
 
+        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+            return this.sys.readDirectory(path, extensions, exclude, include, depth);
+        }
+
         public readFile(path: string): string | undefined {
             return this.sys.readFile(path);
         }
@@ -267,13 +271,11 @@ namespace fakes {
             const document = new documents.TextDocument(fileName, content);
             document.meta.set("fileName", fileName);
             this.vfs.filemeta(fileName).set("document", document);
-            const index = this.outputs.findIndex(output => this.vfs.stringComparer(document.file, output.file) === 0);
-            if (index < 0) {
+            if (!this._outputsMap.has(document.file)) {
+                this._outputsMap.set(document.file, this.outputs.length);
                 this.outputs.push(document);
             }
-            else {
-                this.outputs[index] = document;
-            }
+            this.outputs[this._outputsMap.get(document.file)] = document;
         }
 
         public trace(s: string): void {
@@ -289,27 +291,7 @@ namespace fakes {
         }
 
         public getDefaultLibFileName(options: ts.CompilerOptions): string {
-            // return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
-
-            // TODO(rbuckton): This patches the baseline to replace lib.es5.d.ts with lib.d.ts.
-            // This is only to make the PR for this change easier to read. A follow-up PR will
-            // revert this change and accept the new baselines.
-            // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
-            return vpath.resolve(this.getDefaultLibLocation(), getDefaultLibFileName(options));
-            function getDefaultLibFileName(options: ts.CompilerOptions) {
-                switch (options.target) {
-                    case ts.ScriptTarget.ESNext:
-                    case ts.ScriptTarget.ES2017:
-                        return "lib.es2017.d.ts";
-                    case ts.ScriptTarget.ES2016:
-                        return "lib.es2016.d.ts";
-                    case ts.ScriptTarget.ES2015:
-                        return "lib.es2015.d.ts";
-
-                    default:
-                        return "lib.d.ts";
-                }
-            }
+            return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
         }
 
         public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
@@ -350,7 +332,7 @@ namespace fakes {
                 let fs = this.vfs;
                 while (fs.shadowRoot) {
                     try {
-                        const shadowRootStats = fs.shadowRoot.statSync(canonicalFileName);
+                        const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) && fs.shadowRoot.statSync(canonicalFileName);
                         if (shadowRootStats.dev !== stats.dev ||
                             shadowRootStats.ino !== stats.ino ||
                             shadowRootStats.mtimeMs !== stats.mtimeMs) {

@@ -4,7 +4,8 @@
 
 namespace ts.tscWatch {
     import WatchedSystem = TestFSWithWatch.TestServerHost;
-    type FileOrFolder = TestFSWithWatch.FileOrFolder;
+    type File = TestFSWithWatch.File;
+    type SymLink = TestFSWithWatch.SymLink;
     import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
     import checkArray = TestFSWithWatch.checkArray;
     import libFile = TestFSWithWatch.libFile;
@@ -33,7 +34,7 @@ namespace ts.tscWatch {
         return () => watch.getCurrentProgram().getProgram();
     }
 
-    function getEmittedLineForMultiFileOutput(file: FileOrFolder, host: WatchedSystem) {
+    function getEmittedLineForMultiFileOutput(file: File, host: WatchedSystem) {
         return `TSFILE: ${file.path.replace(".ts", ".js")}${host.newLine}`;
     }
 
@@ -41,11 +42,11 @@ namespace ts.tscWatch {
         return `TSFILE: ${filename}${host.newLine}`;
     }
 
-    interface FileOrFolderEmit extends FileOrFolder {
+    interface FileOrFolderEmit extends File {
         output?: string;
     }
 
-    function getFileOrFolderEmit(file: FileOrFolder, getOutput?: (file: FileOrFolder) => string): FileOrFolderEmit {
+    function getFileOrFolderEmit(file: File, getOutput?: (file: File) => string): FileOrFolderEmit {
         const result = file as FileOrFolderEmit;
         if (getOutput) {
             result.output = getOutput(file);
@@ -202,7 +203,7 @@ namespace ts.tscWatch {
         return getDiagnosticOfFileFrom(file, text, start, length, message);
     }
 
-    function getUnknownCompilerOption(program: Program, configFile: FileOrFolder, option: string) {
+    function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
         const quotedOption = `"${option}"`;
         return getDiagnosticOfFile(program.getCompilerOptions().configFile, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
     }
@@ -218,23 +219,23 @@ namespace ts.tscWatch {
             text, start, length, message);
     }
 
-    function getDiagnosticModuleNotFoundOfFile(program: Program, file: FileOrFolder, moduleName: string) {
+    function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
         const quotedModuleName = `"${moduleName}"`;
         return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0, moduleName);
     }
 
     describe("tsc-watch program updates", () => {
-        const commonFile1: FileOrFolder = {
+        const commonFile1: File = {
             path: "/a/b/commonFile1.ts",
             content: "let x = 1"
         };
-        const commonFile2: FileOrFolder = {
+        const commonFile2: File = {
             path: "/a/b/commonFile2.ts",
             content: "let y = 1"
         };
 
         it("create watch without config file", () => {
-            const appFile: FileOrFolder = {
+            const appFile: File = {
                 path: "/a/b/c/app.ts",
                 content: `
                 import {f} from "./module"
@@ -242,7 +243,7 @@ namespace ts.tscWatch {
                 `
             };
 
-            const moduleFile: FileOrFolder = {
+            const moduleFile: File = {
                 path: "/a/b/c/module.d.ts",
                 content: `export let x: number`
             };
@@ -277,7 +278,7 @@ namespace ts.tscWatch {
         });
 
         it("create configured project without file list", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `
                 {
@@ -287,15 +288,15 @@ namespace ts.tscWatch {
                     ]
                 }`
             };
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/c/f1.ts",
                 content: "let x = 1"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: "/a/b/d/f2.ts",
                 content: "let y = 1"
             };
-            const file3: FileOrFolder = {
+            const file3: File = {
                 path: "/a/b/e/f3.ts",
                 content: "let z = 1"
             };
@@ -315,7 +316,7 @@ namespace ts.tscWatch {
         // });
 
         it("add new files to a configured program without file list", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
@@ -333,7 +334,7 @@ namespace ts.tscWatch {
         });
 
         it("should ignore non-existing files specified in the config file", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {},
@@ -352,7 +353,7 @@ namespace ts.tscWatch {
         });
 
         it("handle recreated files correctly", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
@@ -373,7 +374,7 @@ namespace ts.tscWatch {
 
         it("handles the missing files - that were added to program because they were added with ///<ref", () => {
             const commonFile2Name = "commonFile2.ts";
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/commonFile1.ts",
                 content: `/// <reference path="${commonFile2Name}"/>
                     let x = y`
@@ -396,7 +397,7 @@ namespace ts.tscWatch {
         });
 
         it("should reflect change in config file", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {},
@@ -419,7 +420,7 @@ namespace ts.tscWatch {
         });
 
         it("works correctly when config file is changed but its content havent", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {},
@@ -441,14 +442,14 @@ namespace ts.tscWatch {
         });
 
         it("files explicitly excluded in config file", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {},
                     "exclude": ["/a/c"]
                 }`
             };
-            const excludedFile1: FileOrFolder = {
+            const excludedFile1: File = {
                 path: "/a/c/excluedFile1.ts",
                 content: `let t = 1;`
             };
@@ -459,19 +460,19 @@ namespace ts.tscWatch {
         });
 
         it("should properly handle module resolution changes in config file", () => {
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/file1.ts",
                 content: `import { T } from "module1";`
             };
-            const nodeModuleFile: FileOrFolder = {
+            const nodeModuleFile: File = {
                 path: "/a/b/node_modules/module1.ts",
                 content: `export interface T {}`
             };
-            const classicModuleFile: FileOrFolder = {
+            const classicModuleFile: File = {
                 path: "/a/module1.ts",
                 content: `export interface T {}`
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -499,7 +500,7 @@ namespace ts.tscWatch {
         });
 
         it("should tolerate config file errors and still try to build a project", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -1117,15 +1118,15 @@ namespace ts.tscWatch {
 
         it("should not trigger recompilation because of program emit", () => {
             const proj = "/user/username/projects/myproject";
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: `${proj}/file1.ts`,
                 content: "export const c = 30;"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: `${proj}/src/file2.ts`,
                 content: `import {c} from "file1"; export const d = 30;`
             };
-            const tsconfig: FileOrFolder = {
+            const tsconfig: File = {
                 path: `${proj}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
@@ -1153,7 +1154,7 @@ namespace ts.tscWatch {
                         one();
                       }
                     }`;
-            const file: FileOrFolder = {
+            const file: File = {
                 path: "/a/b/file.ts",
                 content: getFileContent(/*asModule*/ false)
             };
@@ -1174,11 +1175,11 @@ namespace ts.tscWatch {
 
         it("watched files when file is deleted and new file is added as part of change", () => {
             const projectLocation = "/home/username/project";
-            const file: FileOrFolder = {
+            const file: File = {
                 path: `${projectLocation}/src/file1.ts`,
                 content: "var a = 10;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: `${projectLocation}/tsconfig.json`,
                 content: "{}"
             };
@@ -1211,7 +1212,7 @@ namespace ts.tscWatch {
                 })
             };
 
-            let getOutput: (file: FileOrFolder) => string;
+            let getOutput: (file: File) => string;
             if (out) {
                 config.content = JSON.stringify({
                     compilerOptions: { listEmittedFiles: true, out }
@@ -1266,23 +1267,23 @@ namespace ts.tscWatch {
         });
 
         function verifyFilesEmittedOnce(useOutFile: boolean) {
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/output/AnotherDependency/file1.d.ts",
                 content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: "/a/b/dependencies/file2.d.ts",
                 content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }"
             };
-            const file3: FileOrFolder = {
+            const file3: File = {
                 path: "/a/b/project/src/main.ts",
                 content: "namespace Main { export function fooBar() {} }"
             };
-            const file4: FileOrFolder = {
+            const file4: File = {
                 path: "/a/b/project/src/main2.ts",
                 content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/project/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: useOutFile ?
@@ -1334,16 +1335,16 @@ namespace ts.tscWatch {
             /** list of the files that will be emitted for first compilation */
             firstCompilationEmitFiles?: string[];
             /** get the emit file for file - default is multi file emit line */
-            getEmitLine?(file: FileOrFolder, host: WatchedSystem): string;
+            getEmitLine?(file: File, host: WatchedSystem): string;
             /** Additional files and folders to add */
-            getAdditionalFileOrFolder?(): FileOrFolder[];
+            getAdditionalFileOrFolder?(): File[];
             /** initial list of files to emit if not the default list */
             firstReloadFileList?: string[];
         }
         function getInitialState({ configObj = {}, firstCompilationEmitFiles, getEmitLine, getAdditionalFileOrFolder, firstReloadFileList }: InitialStateParams = {}) {
             const host = createWatchedSystem([]);
-            const getOutputName = getEmitLine ? (file: FileOrFolder) => getEmitLine(file, host) :
-                (file: FileOrFolder) => getEmittedLineForMultiFileOutput(file, host);
+            const getOutputName = getEmitLine ? (file: File) => getEmitLine(file, host) :
+                (file: File) => getEmittedLineForMultiFileOutput(file, host);
 
             const moduleFile1 = getFileOrFolderEmit({
                 path: moduleFile1Path,
@@ -1555,7 +1556,7 @@ namespace ts.tscWatch {
         });
 
         it("should return cascaded affected file list", () => {
-            const file1Consumer1Consumer1: FileOrFolder = {
+            const file1Consumer1Consumer1: File = {
                 path: "/a/b/file1Consumer1Consumer1.ts",
                 content: `import {y} from "./file1Consumer1";`
             };
@@ -1582,13 +1583,13 @@ namespace ts.tscWatch {
         it("should work fine for files with circular references", () => {
             // TODO: do not exit on such errors? Just continue to watch the files for update in watch mode
 
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/file1.ts",
                 content: `
                     /// <reference path="./file2.ts" />
                     export var t1 = 10;`
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: "/a/b/file2.ts",
                 content: `
                     /// <reference path="./file1.ts" />
@@ -1611,7 +1612,7 @@ namespace ts.tscWatch {
         });
 
         it("should detect removed code file", () => {
-            const referenceFile1: FileOrFolder = {
+            const referenceFile1: File = {
                 path: "/a/b/referenceFile1.ts",
                 content: `
                     /// <reference path="./moduleFile1.ts" />
@@ -1632,7 +1633,7 @@ namespace ts.tscWatch {
         });
 
         it("should detect non-existing code file", () => {
-            const referenceFile1: FileOrFolder = {
+            const referenceFile1: File = {
                 path: "/a/b/referenceFile1.ts",
                 content: `
                     /// <reference path="./moduleFile2.ts" />
@@ -1659,7 +1660,7 @@ namespace ts.tscWatch {
     });
 
     describe("tsc-watch emit file content", () => {
-        interface EmittedFile extends FileOrFolder {
+        interface EmittedFile extends File {
             shouldBeWritten: boolean;
         }
         function getEmittedFiles(files: FileOrFolderEmit[], contents: string[]): EmittedFile[] {
@@ -1684,8 +1685,8 @@ namespace ts.tscWatch {
             }
         }
 
-        function verifyEmittedFileContents(newLine: string, inputFiles: FileOrFolder[], initialEmittedFileContents: string[],
-            modifyFiles: (files: FileOrFolderEmit[], emitedFiles: EmittedFile[]) => FileOrFolderEmit[], configFile?: FileOrFolder) {
+        function verifyEmittedFileContents(newLine: string, inputFiles: File[], initialEmittedFileContents: string[],
+            modifyFiles: (files: FileOrFolderEmit[], emitedFiles: EmittedFile[]) => FileOrFolderEmit[], configFile?: File) {
             const host = createWatchedSystem([], { newLine });
             const files = concatenate(
                 map(inputFiles, file => getFileOrFolderEmit(file, fileToConvert => getEmittedLineForMultiFileOutput(fileToConvert, host))),
@@ -1778,15 +1779,15 @@ namespace ts.tscWatch {
 
         it("Elides const enums correctly in incremental compilation", () => {
             const currentDirectory = "/user/someone/projects/myproject";
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: `${currentDirectory}/file1.ts`,
                 content: "export const enum E1 { V = 1 }"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: `${currentDirectory}/file2.ts`,
                 content: `import { E1 } from "./file1"; export const enum E2 { V = E1.V }`
             };
-            const file3: FileOrFolder = {
+            const file3: File = {
                 path: `${currentDirectory}/file3.ts`,
                 content: `import { E2 } from "./file2"; const v: E2 = E2.V;`
             };
@@ -1808,12 +1809,12 @@ namespace ts.tscWatch {
 
         it("file is deleted and created as part of change", () => {
             const projectLocation = "/home/username/project";
-            const file: FileOrFolder = {
+            const file: File = {
                 path: `${projectLocation}/app/file.ts`,
                 content: "var a = 10;"
             };
             const fileJs = `${projectLocation}/app/file.js`;
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: `${projectLocation}/tsconfig.json`,
                 content: JSON.stringify({
                     include: [
@@ -2101,19 +2102,19 @@ declare module "fs" {
         it("works when reusing program with files from external library", () => {
             interface ExpectedFile { path: string; isExpectedToEmit?: boolean; content?: string; }
             const configDir = "/a/b/projects/myProject/src/";
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: configDir + "file1.ts",
                 content: 'import module1 = require("module1");\nmodule1("hello");'
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: configDir + "file2.ts",
                 content: 'import module11 = require("module1");\nmodule11("hello");'
             };
-            const module1: FileOrFolder = {
+            const module1: File = {
                 path: "/a/b/projects/myProject/node_modules/module1/index.js",
                 content: "module.exports = options => { return options.toString(); }"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: configDir + "tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
@@ -2169,7 +2170,7 @@ declare module "fs" {
                 };
             }
 
-            function createExpectedEmittedFile(file: FileOrFolder): ExpectedFile {
+            function createExpectedEmittedFile(file: File): ExpectedFile {
                 return {
                     path: removeFileExtension(file.path.replace(configDir, outDirFolder)) + Extension.Js,
                     isExpectedToEmit: true,
@@ -2180,11 +2181,11 @@ declare module "fs" {
 
         it("works when renaming node_modules folder that already contains @types folder", () => {
             const currentDirectory = "/user/username/projects/myproject";
-            const file: FileOrFolder = {
+            const file: File = {
                 path: `${currentDirectory}/a.ts`,
                 content: `import * as q from "qqq";`
             };
-            const module: FileOrFolder = {
+            const module: File = {
                 path: `${currentDirectory}/node_modules2/@types/qqq/index.d.ts`,
                 content: "export {}"
             };
@@ -2203,7 +2204,7 @@ declare module "fs" {
 
     describe("tsc-watch with when module emit is specified as node", () => {
         it("when instead of filechanged recursive directory watcher is invoked", () => {
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/rootFolder/project/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
@@ -2217,11 +2218,11 @@ declare module "fs" {
                 })
             };
             const outputFolder = "/a/rootFolder/project/Static/scripts/";
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/rootFolder/project/Scripts/TypeScript.ts",
                 content: "var z = 10;"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: "/a/rootFolder/project/Scripts/Javascript.js",
                 content: "var zz = 10;"
             };
@@ -2299,7 +2300,7 @@ declare module "fs" {
     describe("tsc-watch with different polling/non polling options", () => {
         it("watchFile using dynamic priority polling", () => {
             const projectFolder = "/a/username/project";
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: `${projectFolder}/typescript.ts`,
                 content: "var z = 10;"
             };
@@ -2362,11 +2363,11 @@ declare module "fs" {
             function verifyRenamingFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
                 const projectFolder = "/a/username/project";
                 const projectSrcFolder = `${projectFolder}/src`;
-                const configFile: FileOrFolder = {
+                const configFile: File = {
                     path: `${projectFolder}/tsconfig.json`,
                     content: "{}"
                 };
-                const file: FileOrFolder = {
+                const file: File = {
                     path: `${projectSrcFolder}/file1.ts`,
                     content: ""
                 };
@@ -2428,35 +2429,35 @@ declare module "fs" {
 
             it("when there are symlinks to folders in recursive folders", () => {
                 const cwd = "/home/user/projects/myproject";
-                const file1: FileOrFolder = {
+                const file1: File = {
                     path: `${cwd}/src/file.ts`,
                     content: `import * as a from "a"`
                 };
-                const tsconfig: FileOrFolder = {
+                const tsconfig: File = {
                     path: `${cwd}/tsconfig.json`,
                     content: `{ "compilerOptions": { "extendedDiagnostics": true, "traceResolution": true }}`
                 };
-                const realA: FileOrFolder = {
+                const realA: File = {
                     path: `${cwd}/node_modules/reala/index.d.ts`,
                     content: `export {}`
                 };
-                const realB: FileOrFolder = {
+                const realB: File = {
                     path: `${cwd}/node_modules/realb/index.d.ts`,
                     content: `export {}`
                 };
-                const symLinkA: FileOrFolder = {
+                const symLinkA: SymLink = {
                     path: `${cwd}/node_modules/a`,
                     symLink: `${cwd}/node_modules/reala`
                 };
-                const symLinkB: FileOrFolder = {
+                const symLinkB: SymLink = {
                     path: `${cwd}/node_modules/b`,
                     symLink: `${cwd}/node_modules/realb`
                 };
-                const symLinkBInA: FileOrFolder = {
+                const symLinkBInA: SymLink = {
                     path: `${cwd}/node_modules/reala/node_modules/b`,
                     symLink: `${cwd}/node_modules/b`
                 };
-                const symLinkAInB: FileOrFolder = {
+                const symLinkAInB: SymLink = {
                     path: `${cwd}/node_modules/realb/node_modules/a`,
                     symLink: `${cwd}/node_modules/a`
                 };

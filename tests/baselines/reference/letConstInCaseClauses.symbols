@@ -12,6 +12,9 @@ var y = 20;
 >y : Symbol(y, Decl(letConstInCaseClauses.ts, 4, 7))
 
     console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(letConstInCaseClauses.ts, 3, 7))
 
     switch (x) {
@@ -38,6 +41,9 @@ var y = 20;
 >y : Symbol(y, Decl(letConstInCaseClauses.ts, 18, 9))
 
     console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(letConstInCaseClauses.ts, 17, 9))
 
     switch (x) {

@@ -86,13 +86,6 @@ namespace ts {
             };
     }
 
-    /**
-     * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
-     */
-    export interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
-        getCurrentDirectory(): string;
-    }
-
     /** Parses config file using System interface */
     export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter) {
         const host: ParseConfigFileHost = <any>system;
@@ -100,30 +93,6 @@ namespace ts {
         const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
         host.onUnRecoverableConfigFileDiagnostic = undefined;
         return result;
-    }
-
-    /**
-     * Reads the config file, reports errors if any and exits if the config file cannot be found
-     */
-    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
-        let configFileText: string;
-        try {
-            configFileText = host.readFile(configFileName);
-        }
-        catch (e) {
-            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
-            host.onUnRecoverableConfigFileDiagnostic(error);
-            return undefined;
-        }
-        if (!configFileText) {
-            const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
-            host.onUnRecoverableConfigFileDiagnostic(error);
-            return undefined;
-        }
-
-        const result = parseJsonText(configFileName, configFileText);
-        const cwd = host.getCurrentDirectory();
-        return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
     }
 
     /**
@@ -297,7 +266,6 @@ namespace ts {
 }
 
 namespace ts {
-    export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
@@ -380,16 +348,6 @@ namespace ts {
 
         /** Compiler options */
         options: CompilerOptions;
-    }
-
-    /**
-     * Reports config file diagnostics
-     */
-    export interface ConfigFileDiagnosticsReporter {
-        /**
-         * Reports unrecoverable error when parsing config file
-         */
-        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
     }
 
     /**

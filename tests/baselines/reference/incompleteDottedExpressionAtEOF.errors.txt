@@ -1,11 +1,8 @@
-tests/cases/compiler/incompleteDottedExpressionAtEOF.ts(2,10): error TS2304: Cannot find name 'window'.
 tests/cases/compiler/incompleteDottedExpressionAtEOF.ts(2,17): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/incompleteDottedExpressionAtEOF.ts (2 errors) ====
+==== tests/cases/compiler/incompleteDottedExpressionAtEOF.ts (1 errors) ====
     // used to leak __missing into error message
     var p2 = window. 
-             ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
                     
 !!! error TS1003: Identifier expected.

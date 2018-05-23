@@ -18,8 +18,9 @@ sourceFile:ES5For-of33.ts
 >>>        }
 >>>    };
 >>>};
+>>>var e_1, _a;
 >>>try {
->>>    for (var _a = __values(['a', 'b', 'c']), _b = _a.next(); !_b.done; _b = _a.next()) {
+>>>    for (var _b = __values(['a', 'b', 'c']), _c = _b.next(); !_c.done; _c = _b.next()) {
 1 >^^^^
 2 >    ^^^^^
 3 >         ^^^^
@@ -50,23 +51,23 @@ sourceFile:ES5For-of33.ts
 13>                                          
 14>                                           
 15>                                                           ) 
-1 >Emitted(12, 5) Source(1, 1) + SourceIndex(0)
-2 >Emitted(12, 10) Source(1, 15) + SourceIndex(0)
-3 >Emitted(12, 14) Source(1, 15) + SourceIndex(0)
-4 >Emitted(12, 19) Source(1, 15) + SourceIndex(0)
-5 >Emitted(12, 28) Source(1, 15) + SourceIndex(0)
-6 >Emitted(12, 29) Source(1, 16) + SourceIndex(0)
-7 >Emitted(12, 32) Source(1, 19) + SourceIndex(0)
-8 >Emitted(12, 34) Source(1, 21) + SourceIndex(0)
-9 >Emitted(12, 37) Source(1, 24) + SourceIndex(0)
-10>Emitted(12, 39) Source(1, 26) + SourceIndex(0)
-11>Emitted(12, 42) Source(1, 29) + SourceIndex(0)
-12>Emitted(12, 43) Source(1, 30) + SourceIndex(0)
-13>Emitted(12, 44) Source(1, 30) + SourceIndex(0)
-14>Emitted(12, 60) Source(1, 30) + SourceIndex(0)
-15>Emitted(12, 88) Source(1, 32) + SourceIndex(0)
+1 >Emitted(13, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(13, 10) Source(1, 15) + SourceIndex(0)
+3 >Emitted(13, 14) Source(1, 15) + SourceIndex(0)
+4 >Emitted(13, 19) Source(1, 15) + SourceIndex(0)
+5 >Emitted(13, 28) Source(1, 15) + SourceIndex(0)
+6 >Emitted(13, 29) Source(1, 16) + SourceIndex(0)
+7 >Emitted(13, 32) Source(1, 19) + SourceIndex(0)
+8 >Emitted(13, 34) Source(1, 21) + SourceIndex(0)
+9 >Emitted(13, 37) Source(1, 24) + SourceIndex(0)
+10>Emitted(13, 39) Source(1, 26) + SourceIndex(0)
+11>Emitted(13, 42) Source(1, 29) + SourceIndex(0)
+12>Emitted(13, 43) Source(1, 30) + SourceIndex(0)
+13>Emitted(13, 44) Source(1, 30) + SourceIndex(0)
+14>Emitted(13, 60) Source(1, 30) + SourceIndex(0)
+15>Emitted(13, 88) Source(1, 32) + SourceIndex(0)
 ---
->>>        var v = _b.value;
+>>>        var v = _c.value;
 1 >^^^^^^^^
 2 >        ^^^^
 3 >            ^
@@ -75,10 +76,10 @@ sourceFile:ES5For-of33.ts
 2 >        var 
 3 >            v
 4 >             
-1 >Emitted(13, 9) Source(1, 6) + SourceIndex(0)
-2 >Emitted(13, 13) Source(1, 10) + SourceIndex(0)
-3 >Emitted(13, 14) Source(1, 11) + SourceIndex(0)
-4 >Emitted(13, 25) Source(1, 11) + SourceIndex(0)
+1 >Emitted(14, 9) Source(1, 6) + SourceIndex(0)
+2 >Emitted(14, 13) Source(1, 10) + SourceIndex(0)
+3 >Emitted(14, 14) Source(1, 11) + SourceIndex(0)
+4 >Emitted(14, 25) Source(1, 11) + SourceIndex(0)
 ---
 >>>        console.log(v);
 1 >^^^^^^^^
@@ -98,28 +99,27 @@ sourceFile:ES5For-of33.ts
 6 >                    v
 7 >                     )
 8 >                      ;
-1 >Emitted(14, 9) Source(2, 5) + SourceIndex(0)
-2 >Emitted(14, 16) Source(2, 12) + SourceIndex(0)
-3 >Emitted(14, 17) Source(2, 13) + SourceIndex(0)
-4 >Emitted(14, 20) Source(2, 16) + SourceIndex(0)
-5 >Emitted(14, 21) Source(2, 17) + SourceIndex(0)
-6 >Emitted(14, 22) Source(2, 18) + SourceIndex(0)
-7 >Emitted(14, 23) Source(2, 19) + SourceIndex(0)
-8 >Emitted(14, 24) Source(2, 20) + SourceIndex(0)
+1 >Emitted(15, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(15, 16) Source(2, 12) + SourceIndex(0)
+3 >Emitted(15, 17) Source(2, 13) + SourceIndex(0)
+4 >Emitted(15, 20) Source(2, 16) + SourceIndex(0)
+5 >Emitted(15, 21) Source(2, 17) + SourceIndex(0)
+6 >Emitted(15, 22) Source(2, 18) + SourceIndex(0)
+7 >Emitted(15, 23) Source(2, 19) + SourceIndex(0)
+8 >Emitted(15, 24) Source(2, 20) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(15, 6) Source(3, 2) + SourceIndex(0)
+1 >Emitted(16, 6) Source(3, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
 >>>finally {
 >>>    try {
->>>        if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+>>>        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
 >>>    }
 >>>    finally { if (e_1) throw e_1.error; }
 >>>}
->>>var e_1, _c;
 >>>//# sourceMappingURL=ES5For-of33.js.map

@@ -47,7 +47,7 @@ function fn2() { return undefined; }
 
 var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
 >d1 : Symbol(d1, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 14, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >fn2 : Symbol(fn2, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 8, 14), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 10, 71), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 11, 64))
 >undefined : Symbol(undefined)
 

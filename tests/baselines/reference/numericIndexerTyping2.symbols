@@ -4,7 +4,7 @@ class I {
 
     [x: string]: Date
 >x : Symbol(x, Decl(numericIndexerTyping2.ts, 1, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 class I2 extends I {

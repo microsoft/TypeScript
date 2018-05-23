@@ -25,11 +25,8 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(46,33): error TS2300: Duplicate identifier 'T'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,25): error TS2300: Duplicate identifier 'T'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,37): error TS2300: Duplicate identifier 'T'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,61): error TS2326: Types of property 'cb' are incompatible.
-  Type '(props: ComponentProps<string, string>) => any' is not assignable to type '(props: ComponentProps<number, string>) => void'.
-    Types of parameters 'props' and 'props' are incompatible.
-      Type 'ComponentProps<number, string>' is not assignable to type 'ComponentProps<string, string>'.
-        Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,49): error TS2326: Types of property 'x' are incompatible.
+  Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,88): error TS2339: Property 'toFixed' does not exist on type 'string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,14): error TS2300: Duplicate identifier 'T'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,14): error TS1351: No value provided for required type argument 'U'.
@@ -149,12 +146,9 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
 !!! error TS2300: Duplicate identifier 'T'.
                                         ~
 !!! error TS2300: Duplicate identifier 'T'.
-                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2326: Types of property 'cb' are incompatible.
-!!! error TS2326:   Type '(props: ComponentProps<string, string>) => any' is not assignable to type '(props: ComponentProps<number, string>) => void'.
-!!! error TS2326:     Types of parameters 'props' and 'props' are incompatible.
-!!! error TS2326:       Type 'ComponentProps<number, string>' is not assignable to type 'ComponentProps<string, string>'.
-!!! error TS2326:         Type 'number' is not assignable to type 'string'.
+                                                    ~~~~~~
+!!! error TS2326: Types of property 'x' are incompatible.
+!!! error TS2326:   Type 'number' is not assignable to type 'string'.
                                                                                            ~~~~~~~
 !!! error TS2339: Property 'toFixed' does not exist on type 'string'.
     type C = Foo<T = number, T = string>;

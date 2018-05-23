@@ -1602,8 +1602,31 @@ define(function () {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 
         return window.screen.width < window.screen.height ?
+>window.screen.width : Symbol(Screen.width, Decl(lib.d.ts, --, --))
+>window.screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>width : Symbol(Screen.width, Decl(lib.d.ts, --, --))
+>window.screen.height : Symbol(Screen.height, Decl(lib.d.ts, --, --))
+>window.screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>height : Symbol(Screen.height, Decl(lib.d.ts, --, --))
+
             window.screen.width :
+>window.screen.width : Symbol(Screen.width, Decl(lib.d.ts, --, --))
+>window.screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>width : Symbol(Screen.width, Decl(lib.d.ts, --, --))
+
             window.screen.height;
+>window.screen.height : Symbol(Screen.height, Decl(lib.d.ts, --, --))
+>window.screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>height : Symbol(Screen.height, Decl(lib.d.ts, --, --))
+
     };
 
     /**
@@ -2018,6 +2041,11 @@ define(function () {
 
     // environment-dependent
     if (typeof window !== 'undefined' && window.screen) {
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>window.screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>screen : Symbol(Window.screen, Decl(lib.d.ts, --, --))
+
         MobileDetect.isPhoneSized = function (maxPhoneWidth) {
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
 >maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 962, 46))
@@ -2057,8 +2085,11 @@ define(function () {
     } else if (typeof define === 'function' && define.amd) {
         return define;
     } else if (typeof window !== 'undefined') {
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+
         return function (factory) { window.MobileDetect = factory(); };
 >factory : Symbol(factory, Decl(fixSignatureCaching.ts, 982, 25))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 >factory : Symbol(factory, Decl(fixSignatureCaching.ts, 982, 25))
 
     } else {

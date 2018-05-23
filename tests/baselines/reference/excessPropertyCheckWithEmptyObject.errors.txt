@@ -1,4 +1,3 @@
-tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(4,23): error TS2304: Cannot find name 'window'.
 tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(4,58): error TS2345: Argument of type '{ value: string; readonly: boolean; }' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Object literal may only specify known properties, and 'readonly' does not exist in type 'PropertyDescriptor & ThisType<any>'.
 tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(9,30): error TS2322: Type '{ y: number; }' is not assignable to type 'A & ThisType<any>'.
@@ -7,13 +6,11 @@ tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(14,34): error TS2322:
   Object literal may only specify known properties, and 'y' does not exist in type 'Empty & { x: number; }'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts (4 errors) ====
+==== tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts (3 errors) ====
     // Repro from #14910
     
     // Excess property error expected here
     Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
-                          ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
                                                              ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ value: string; readonly: boolean; }' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'readonly' does not exist in type 'PropertyDescriptor & ThisType<any>'.

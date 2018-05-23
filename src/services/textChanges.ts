@@ -211,7 +211,8 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
-        private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+        private readonly newFiles: { readonly oldFile: SourceFile, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
+        private readonly deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         private readonly classesWithNodesInsertedAtStart = createMap<ClassDeclaration>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -261,35 +262,15 @@ namespace ts.textChanges {
                 this.deleteNode(sourceFile, node);
                 return this;
             }
-            const id = getNodeId(node);
-            Debug.assert(!this.deletedNodesInLists[id], "Deleting a node twice");
-            this.deletedNodesInLists[id] = true;
-            if (index !== containingList.length - 1) {
-                const nextToken = getTokenAtPosition(sourceFile, node.end, /*includeJsDocComment*/ false);
-                if (nextToken && isSeparator(node, nextToken)) {
-                    // find first non-whitespace position in the leading trivia of the node
-                    const startPosition = skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
-                    const nextElement = containingList[index + 1];
-                    /// find first non-whitespace position in the leading trivia of the next node
-                    const endPosition = skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, nextElement, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
-                    // shift next node so its first non-whitespace position will be moved to the first non-whitespace position of the deleted node
-                    this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
-                }
-            }
-            else {
-                const prev = containingList[index - 1];
-                if (this.deletedNodesInLists[getNodeId(prev)]) {
-                    const pos = skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
-                    const end = getAdjustedEndPosition(sourceFile, node, {});
-                    this.deleteRange(sourceFile, { pos, end });
-                }
-                else {
-                    const previousToken = getTokenAtPosition(sourceFile, containingList[index - 1].end, /*includeJsDocComment*/ false);
-                    if (previousToken && isSeparator(node, previousToken)) {
-                        this.deleteNodeRange(sourceFile, previousToken, node);
-                    }
-                }
-            }
+
+            // Note: We will only delete a comma *after* a node. This will leave a trailing comma if we delete the last node.
+            // That's handled in the end by `finishTrailingCommaAfterDeletingNodesInList`.
+            Debug.assert(!this.deletedNodesInLists.has(node), "Deleting a node twice");
+            this.deletedNodesInLists.add(node);
+            this.deleteRange(sourceFile, {
+                pos: startPositionToDeleteNodeInList(sourceFile, node),
+                end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
+            });
             return this;
         }
 
@@ -319,10 +300,14 @@ namespace ts.textChanges {
             return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
+        private nextCommaToken (sourceFile: SourceFile, node: Node): Node | undefined {
+            const next = findNextToken(node, node.parent, sourceFile);
+            return next && next.kind === SyntaxKind.CommaToken ? next : undefined;
+        }
+
         public replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment) {
-            return this.replaceNode(sourceFile, oldNode, newNode, {
-                suffix: "," + this.newLineCharacter
-            });
+            const suffix = this.nextCommaToken(sourceFile, oldNode) ? "" : ("," + this.newLineCharacter);
+            return this.replaceNode(sourceFile, oldNode, newNode, { suffix });
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
@@ -359,7 +344,8 @@ namespace ts.textChanges {
             // Otherwise, add an extra new line immediately before the error span.
             const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
             const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
-            const text = `${insertAtLineStart ? "" : this.newLineCharacter}${sourceFile.text.slice(lineStartPosition, startPosition)}//${commentText}${this.newLineCharacter}`;
+            const indent = sourceFile.text.slice(lineStartPosition, startPosition);
+            const text = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent}`;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
@@ -442,22 +428,43 @@ namespace ts.textChanges {
 
         public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement): void {
             const clsStart = cls.getStart(sourceFile);
-            let prefix = "";
-            let suffix = this.newLineCharacter;
-            if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), cls)) {
-                prefix = this.newLineCharacter;
-                // For `class C {\n}`, don't add the trailing "\n"
-                if (cls.members.length === 0 && !(positionsAreOnSameLine as any)(...getClassBraceEnds(cls, sourceFile), sourceFile)) { // TODO: GH#4130 remove 'as any'
-                    suffix = "";
-                }
-            }
-
             const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
                 + this.formatContext.options.indentSize;
-            this.insertNodeAt(sourceFile, cls.members.pos, newElement, { indentation, prefix, suffix });
+            this.insertNodeAt(sourceFile, cls.members.pos, newElement, { indentation, ...this.getInsertNodeAtClassStartPrefixSuffix(sourceFile, cls) });
         }
 
-        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): this {
+        private getInsertNodeAtClassStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration): { prefix: string, suffix: string } {
+            if (cls.members.length === 0) {
+                if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), cls)) {
+                    // For `class C {\n}`, don't add the trailing "\n"
+                    const shouldSuffix = (positionsAreOnSameLine as any)(...getClassBraceEnds(cls, sourceFile), sourceFile); // TODO: GH#4130 remove 'as any'
+                    return { prefix: this.newLineCharacter, suffix: shouldSuffix ? this.newLineCharacter : "" };
+                }
+                else {
+                    return { prefix: "", suffix: this.newLineCharacter };
+                }
+            }
+            else {
+                return { prefix: this.newLineCharacter, suffix: "" };
+            }
+        }
+
+        public insertNodeAfterComma(sourceFile: SourceFile, after: Node, newNode: Node): void {
+            const endPosition = this.insertNodeAfterWorker(sourceFile, this.nextCommaToken(sourceFile, after) || after, newNode);
+            this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
+        }
+
+        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): void {
+            const endPosition = this.insertNodeAfterWorker(sourceFile, after, newNode);
+            this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
+        }
+
+        public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
+            const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
+            this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
+        }
+
+        private insertNodeAfterWorker(sourceFile: SourceFile, after: Node, newNode: Node): number {
             if (needSemicolonBetween(after, newNode)) {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
@@ -466,14 +473,17 @@ namespace ts.textChanges {
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
-            const options = this.getInsertNodeAfterOptions(after);
-            return this.replaceRange(sourceFile, createTextRange(endPosition), newNode, {
-                ...options,
-                prefix: after.end === sourceFile.end && isStatement(after) ? (options.prefix ? `\n${options.prefix}` : "\n") : options.prefix,
-            });
+            return endPosition;
         }
 
-        private getInsertNodeAfterOptions(node: Node): InsertNodeOptions {
+        private getInsertNodeAfterOptions(sourceFile: SourceFile, after: Node) {
+            const options = this.getInsertNodeAfterOptionsWorker(after);
+            return {
+                ...options,
+                prefix: after.end === sourceFile.end && isStatement(after) ? (options.prefix ? `\n${options.prefix}` : "\n") : options.prefix,
+            };
+        }
+        private getInsertNodeAfterOptionsWorker(node: Node): InsertNodeOptions {
             if (isClassDeclaration(node) || isModuleDeclaration(node)) {
                 return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
             }
@@ -521,13 +531,16 @@ namespace ts.textChanges {
             }
         }
 
+        public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
+            this.insertText(sourceFile, node.getStart(sourceFile), "export ");
+        }
+
         /**
          * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
          * i.e. arguments in arguments lists, parameters in parameter lists etc.
          * Note that separators are part of the node in statements and class elements.
          */
-        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
-            const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
+        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)) {
             if (!containingList) {
                 Debug.fail("node is not a list element");
                 return this;
@@ -650,6 +663,19 @@ namespace ts.textChanges {
             });
         }
 
+        private finishTrailingCommaAfterDeletingNodesInList() {
+            this.deletedNodesInLists.forEach(node => {
+                const sourceFile = node.getSourceFile();
+                const list = formatting.SmartIndenter.getContainingList(node, sourceFile);
+                if (node !== last(list)) return;
+
+                const lastNonDeletedIndex = findLastIndex(list, n => !this.deletedNodesInLists.has(n), list.length - 2);
+                if (lastNonDeletedIndex !== -1) {
+                    this.deleteRange(sourceFile, { pos: list[lastNonDeletedIndex].end, end: startPositionToDeleteNodeInList(sourceFile, list[lastNonDeletedIndex + 1]) });
+                }
+            });
+        }
+
         /**
          * Note: after calling this, the TextChanges object must be discarded!
          * @param validate only for tests
@@ -658,8 +684,22 @@ namespace ts.textChanges {
          */
         public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
             this.finishClassesWithNodesInsertedAtStart();
-            return changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+            this.finishTrailingCommaAfterDeletingNodesInList();
+            const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+            for (const { oldFile, fileName, statements } of this.newFiles) {
+                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter));
+            }
+            return changes;
         }
+
+        public createNewFile(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>) {
+            this.newFiles.push({ oldFile, fileName, statements });
+        }
+    }
+
+    // find first non-whitespace position in the leading trivia of the node
+    function startPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node): number {
+        return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
     function getClassBraceEnds(cls: ClassLikeDeclaration, sourceFile: SourceFile): [number, number] {
@@ -673,7 +713,8 @@ namespace ts.textChanges {
             return group(changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
-                const normalized = stableSort(changesInFile, (a, b) => a.range.pos - b.range.pos);
+                // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
+                const normalized = stableSort(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
                 // verify that change intervals do not overlap, except possibly at end points.
                 for (let i = 0; i < normalized.length - 1; i++) {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
@@ -683,6 +724,11 @@ namespace ts.textChanges {
                     createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
                 return { fileName: sourceFile.fileName, textChanges };
             });
+        }
+
+        export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string): FileTextChanges {
+            const text = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+            return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
         }
 
         function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {

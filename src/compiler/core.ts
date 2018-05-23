@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.9";
+    export const versionMajorMinor = "3.0";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -14,8 +14,8 @@ namespace ts {
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
 
-    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
-        return sortAndDeduplicate(diagnostics, compareDiagnostics);
+    export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[] {
+        return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
     }
 }
 
@@ -311,8 +311,17 @@ namespace ts {
     }
 
     /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
-    export function findIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): number {
-        for (let i = 0; i < array.length; i++) {
+    export function findIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        for (let i = startIndex || 0; i < array.length; i++) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    export function findLastIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        for (let i = startIndex === undefined ? array.length - 1 : startIndex; i >= 0; i--) {
             if (predicate(array[i], i)) {
                 return i;
             }
@@ -696,6 +705,23 @@ namespace ts {
         return false;
     }
 
+    /** Calls the callback with (start, afterEnd) index pairs for each range where 'pred' is true. */
+    export function getRangesWhere<T>(arr: ReadonlyArray<T>, pred: (t: T) => boolean, cb: (start: number, afterEnd: number) => void): void {
+        let start: number | undefined;
+        for (let i = 0; i < arr.length; i++) {
+            if (pred(arr[i])) {
+                start = start === undefined ? i : start;
+            }
+            else {
+                if (start !== undefined) {
+                    cb(start, i);
+                    start = undefined;
+                }
+            }
+        }
+        if (start !== undefined) cb(start, arr.length);
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[];
     export function concatenate<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>): ReadonlyArray<T>;
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
@@ -948,6 +974,21 @@ namespace ts {
                 to.push(from[i]);
             }
         }
+        return to;
+    }
+
+    /**
+     * Appends a range of value to begin of an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * appended. If an element of `from` is `undefined`, that element is not appended.
+     */
+    export function prependRange<T>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
+        if (from === undefined || from.length === 0) return to;
+        if (to === undefined) return from.slice();
+        to.unshift(...from);
         return to;
     }
 
@@ -1578,8 +1619,8 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): DiagnosticWithLocation;
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
         Debug.assertGreaterThanOrEqual(start, 0);
         Debug.assertGreaterThanOrEqual(length, 0);
 
@@ -1950,6 +1991,14 @@ namespace ts {
         return moduleResolution;
     }
 
+    export function unreachableCodeIsError(options: CompilerOptions): boolean {
+        return options.allowUnreachableCode === false;
+    }
+
+    export function unusedLabelIsError(options: CompilerOptions): boolean {
+        return options.allowUnusedLabels === false;
+    }
+
     export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
         return !!(options.declaration && options.declarationMap);
     }
@@ -1961,6 +2010,10 @@ namespace ts {
             : compilerOptions.esModuleInterop
                 ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
                 : moduleKind === ModuleKind.System;
+    }
+
+    export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
+        return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
@@ -2223,6 +2276,7 @@ namespace ts {
         const reduced = [components[0]];
         for (let i = 1; i < components.length; i++) {
             const component = components[i];
+            if (!component) continue;
             if (component === ".") continue;
             if (component === "..") {
                 if (reduced.length > 1) {
@@ -2289,20 +2343,24 @@ namespace ts {
         return ["", ...relative, ...components];
     }
 
+    export function getRelativePathFromFile(from: string, to: string, getCanonicalFileName: GetCanonicalFileName) {
+        return ensurePathIsNonModuleName(getRelativePathFromDirectory(getDirectoryPath(from), to, getCanonicalFileName));
+    }
+
     /**
      * Gets a relative path that can be used to traverse between `from` and `to`.
      */
-    export function getRelativePath(from: string, to: string, ignoreCase: boolean): string;
+    export function getRelativePathFromDirectory(from: string, to: string, ignoreCase: boolean): string;
     /**
      * Gets a relative path that can be used to traverse between `from` and `to`.
      */
     // tslint:disable-next-line:unified-signatures
-    export function getRelativePath(from: string, to: string, getCanonicalFileName: GetCanonicalFileName): string;
-    export function getRelativePath(from: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
-        Debug.assert((getRootLength(from) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
+    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileName: GetCanonicalFileName): string;
+    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
+        Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
         const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
         const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
-        const pathComponents = getPathComponentsRelativeTo(from, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
+        const pathComponents = getPathComponentsRelativeTo(fromDirectory, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
         return getPathFromPathComponents(pathComponents);
     }
 
@@ -2966,7 +3024,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx];
+    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);
@@ -3305,6 +3363,10 @@ namespace ts {
     /** True if an extension is one of the supported TypeScript extensions. */
     export function extensionIsTypeScript(ext: Extension): boolean {
         return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts;
+    }
+
+    export function resolutionExtensionIsTypeScriptOrJson(ext: Extension) {
+        return extensionIsTypeScript(ext) || ext === Extension.Json;
     }
 
     /**

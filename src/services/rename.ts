@@ -36,6 +36,9 @@ namespace ts.Rename {
                     return undefined;
                 }
 
+                // Can't rename a module name.
+                if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
+
                 const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
                 const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
                     ? stripQuotes(getTextOfIdentifierOrLiteral(node))

@@ -25,11 +25,11 @@ class Event {
 		 /// <param name="listener">The callback function to register.</param>
 
 		 this._listeners.push(listener);
->this._listeners.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>this._listeners.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this._listeners : Symbol(Event._listeners, Decl(lambdaArgCrash.ts, 0, 13))
 >this : Symbol(Event, Decl(lambdaArgCrash.ts, 0, 0))
 >_listeners : Symbol(Event._listeners, Decl(lambdaArgCrash.ts, 0, 13))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >listener : Symbol(listener, Decl(lambdaArgCrash.ts, 12, 6))
 
 	}

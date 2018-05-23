@@ -19,7 +19,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            doChange(changes, context.sourceFile, getInfo(diag.file, diag.start!, diag.code));
+            doChange(changes, context.sourceFile, getInfo(diag.file, diag.start, diag.code));
         }),
     });
 

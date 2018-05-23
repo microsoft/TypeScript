@@ -101,6 +101,7 @@ class Test262BaselineRunner extends RunnerBase {
     }
 
     public enumerateTestFiles() {
+        // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return ts.map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), ts.normalizePath);
     }
 
@@ -113,7 +114,7 @@ class Test262BaselineRunner extends RunnerBase {
             });
         }
         else {
-            this.tests.forEach(test => this.runTest(test));
+            this.tests.forEach(test => this.runTest(typeof test === "string" ? test : test.file));
         }
     }
 }

@@ -10,12 +10,6 @@ namespace ts {
             assert.equal(JSON.stringify(parsed), JSON.stringify(expectedConfigObject));
         }
 
-        function assertParseError(jsonText: string) {
-             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-             assert.deepEqual(parsed.config, {});
-             assert.isTrue(undefined !== parsed.error);
-        }
-
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
             {
                 const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
@@ -138,7 +132,14 @@ namespace ts {
          });
 
         it("returns object with error when json is invalid", () => {
-             assertParseError("invalid");
+            const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
+            assert.deepEqual(parsed.config, { invalid: undefined });
+            const expected = createCompilerDiagnostic(Diagnostics._0_expected, "{");
+            assert.equal(parsed.error.messageText, expected.messageText);
+            assert.equal(parsed.error.category, expected.category);
+            assert.equal(parsed.error.code, expected.code);
+            assert.equal(parsed.error.start, 0);
+            assert.equal(parsed.error.length, "invalid".length);
         });
 
         it("returns object when users correctly specify library", () => {
@@ -212,6 +213,29 @@ namespace ts {
             const rootDir = "/";
             const allFiles = ["/bin/a.ts", "/b.ts"];
             const expectedFiles = ["/b.ts"];
+            assertParseFileList(tsconfigWithoutExclude, "tsconfig.json", rootDir, allFiles, expectedFiles);
+            assertParseFileList(tsconfigWithExclude, "tsconfig.json", rootDir, allFiles, allFiles);
+        });
+
+        it("exclude declarationDir unless overridden", () => {
+            const tsconfigWithoutExclude =
+            `{
+                "compilerOptions": {
+                    "declarationDir": "declarations"
+                }
+            }`;
+            const tsconfigWithExclude =
+            `{
+                "compilerOptions": {
+                    "declarationDir": "declarations"
+                },
+                "exclude": [ "types" ]
+            }`;
+
+            const rootDir = "/";
+            const allFiles = ["/declarations/a.d.ts", "/a.ts"];
+            const expectedFiles = ["/a.ts"];
+
             assertParseFileList(tsconfigWithoutExclude, "tsconfig.json", rootDir, allFiles, expectedFiles);
             assertParseFileList(tsconfigWithExclude, "tsconfig.json", rootDir, allFiles, allFiles);
         });

@@ -25,7 +25,7 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: string | undefined): CompletionInfo | undefined {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: CompletionsTriggerCharacter | undefined): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         if (isInReferenceComment(sourceFile, position)) {
@@ -47,7 +47,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(contextToken.parent);
         }
 
-        const completionData = getCompletionData(program, log, sourceFile, position, preferences, /*detailsEntryId*/ undefined);
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined);
         if (!completionData) {
             return undefined;
         }
@@ -81,7 +81,7 @@ namespace ts.Completions {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
-                const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.typeElement, sortText: "0" }));
+                const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.string, sortText: "0" }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }
             default:
@@ -121,7 +121,7 @@ namespace ts.Completions {
 
         const entries: CompletionEntry[] = [];
 
-        if (isSourceFileJavaScript(sourceFile)) {
+        if (isUncheckedFile(sourceFile, compilerOptions)) {
             const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, preferences, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
             getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
@@ -144,6 +144,10 @@ namespace ts.Completions {
         }
 
         return { isGlobalCompletion: isInSnippetScope, isMemberCompletion, isNewIdentifierLocation, entries };
+    }
+
+    function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        return isSourceFileJavaScript(sourceFile) && !isCheckJsEnabledForFile(sourceFile, compilerOptions);
     }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -488,7 +492,8 @@ namespace ts.Completions {
     }
     function getSymbolCompletionFromEntryId(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(program, log, sourceFile, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId);
+        const compilerOptions = program.getCompilerOptions();
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId);
         if (!completionData) {
             return { type: "none" };
         }
@@ -504,7 +509,7 @@ namespace ts.Completions {
         // completion entry.
         return firstDefined<Symbol, SymbolCompletion>(symbols, (symbol): SymbolCompletion => { // TODO: Shouldn't need return type annotation (GH#12632)
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, origin, completionKind);
+            const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target, origin, completionKind);
             return info && info.name === entryId.name && getSourceFromOrigin(origin) === entryId.source
                 ? { type: "symbol" as "symbol", symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer }
                 : undefined;
@@ -681,12 +686,15 @@ namespace ts.Completions {
     }
 
     function getRecommendedCompletion(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Symbol | undefined {
-        const ty = getContextualType(currentToken, position, sourceFile, checker);
-        const symbol = ty && ty.symbol;
-        // Don't include make a recommended completion for an abstract class
-        return symbol && (symbol.flags & SymbolFlags.Enum || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
-            ? getFirstSymbolInChain(symbol, currentToken, checker)
-            : undefined;
+        const contextualType = getContextualType(currentToken, position, sourceFile, checker);
+        // For a union, return the first one with a recommended completion.
+        return firstDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), type => {
+            const symbol = type && type.symbol;
+            // Don't include make a recommended completion for an abstract class
+            return symbol && (symbol.flags & (SymbolFlags.EnumMember | SymbolFlags.Enum | SymbolFlags.Class) && !isAbstractConstructorSymbol(symbol))
+                ? getFirstSymbolInChain(symbol, currentToken, checker)
+                : undefined;
+        });
     }
 
     function getContextualType(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Type | undefined {
@@ -759,6 +767,7 @@ namespace ts.Completions {
         program: Program,
         log: (message: string) => void,
         sourceFile: SourceFile,
+        isUncheckedFile: boolean,
         position: number,
         preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
@@ -972,12 +981,8 @@ namespace ts.Completions {
         }
         else if (isRightOfOpenTag) {
             const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
-            if (tryGetGlobalSymbols()) {
-                symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
-            }
-            else {
-                symbols = tagSymbols;
-            }
+            tryGetGlobalSymbols();
+            symbols = tagSymbols.concat(symbols);
             completionKind = CompletionKind.MemberLike;
         }
         else if (isStartingCloseTag) {
@@ -1062,7 +1067,7 @@ namespace ts.Completions {
         function addTypeProperties(type: Type): void {
             isNewIdentifierLocation = hasIndexSignature(type);
 
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isUncheckedFile) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
                 // each individual type has. This is because we're going to add all identifiers
@@ -1207,7 +1212,7 @@ namespace ts.Completions {
             // If some file is using ES6 modules, assume that it's OK to add more.
             if (programContainsEs6Modules(program)) return true;
             // For JS, stay on the safe side.
-            if (isSourceFileJavaScript(sourceFile)) return false;
+            if (isUncheckedFile) return false;
             // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
             return compilerOptionsIndicateEs6Modules(program.getCompilerOptions());
         }
@@ -1298,7 +1303,7 @@ namespace ts.Completions {
                 const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                 // If the exported symbols contains type,
                 // symbol can be referenced at locations where type is allowed
-                return forEach(exportedSymbols, symbolCanBeReferencedAtTypeLocation);
+                return exportedSymbols.some(symbolCanBeReferencedAtTypeLocation);
             }
         }
 
@@ -2208,8 +2213,11 @@ namespace ts.Completions {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
     }
 
-    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: string, contextToken: Node, position: number): boolean {
+    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTriggerCharacter, contextToken: Node, position: number): boolean {
         switch (triggerCharacter) {
+            case ".":
+            case "@":
+                return true;
             case '"':
             case "'":
             case "`":
@@ -2218,8 +2226,12 @@ namespace ts.Completions {
             case "<":
                 // Opening JSX tag
                 return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+            case "/":
+                return isStringLiteralLike(contextToken)
+                    ? !!tryGetImportFromModuleSpecifier(contextToken)
+                    : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent);
             default:
-                return Debug.fail(triggerCharacter);
+                return Debug.assertNever(triggerCharacter);
         }
     }
 

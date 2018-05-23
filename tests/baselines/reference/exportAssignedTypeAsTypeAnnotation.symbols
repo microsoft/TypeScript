@@ -12,7 +12,7 @@ interface x {
 >x : Symbol(x, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 0, 0))
 
     (): Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: string;
 >foo : Symbol(x.foo, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 1, 13))

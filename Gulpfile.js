@@ -54,7 +54,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         debug: process.env.debug || process.env["debug-brk"] || process.env.d,
         inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
-        browser: process.env.browser || process.env.b || "IE",
+        browser: process.env.browser || process.env.b || (os.platform() === "win32" ? "edge" : "chrome"),
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         runners: process.env.runners || process.env.runner || process.env.ru,
@@ -160,7 +160,7 @@ const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessag
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
     .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
     .concat(generatedLCGFile);
 

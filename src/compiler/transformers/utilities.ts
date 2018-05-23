@@ -25,6 +25,18 @@ namespace ts {
         return e.propertyName && e.propertyName.escapedText === InternalSymbolName.Default;
     }
 
+    export function chainBundle(transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
+        return transformSourceFileOrBundle;
+
+        function transformSourceFileOrBundle(node: SourceFile | Bundle) {
+            return node.kind === SyntaxKind.SourceFile ? transformSourceFile(node) : transformBundle(node);
+        }
+
+        function transformBundle(node: Bundle) {
+            return createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+        }
+    }
+
     export function getImportNeedsImportStarHelper(node: ImportDeclaration) {
         if (!!getNamespaceDeclarationNode(node)) {
             return true;

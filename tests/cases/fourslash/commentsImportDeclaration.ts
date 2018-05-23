@@ -40,8 +40,7 @@ verify.completions({
     ]
 })
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("exported function");
+verify.signatureHelp({ marker: "8", docComment: "exported function" });
 verify.quickInfos({
     "8q": ["function extMod.m1.fooExport(): number", "exported function"],
     9: "var newVar: extMod.m1.m2.c"

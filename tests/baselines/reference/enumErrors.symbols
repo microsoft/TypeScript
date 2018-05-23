@@ -59,10 +59,11 @@ enum E11 {
 
     B = new Date(),
 >B : Symbol(E11.B, Decl(enumErrors.ts, 25, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     C = window,
 >C : Symbol(E11.C, Decl(enumErrors.ts, 26, 19))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 
     D = {}
 >D : Symbol(E11.D, Decl(enumErrors.ts, 27, 15))
@@ -77,10 +78,11 @@ enum E12 {
 
     B = new Date(),
 >B : Symbol(E12.B, Decl(enumErrors.ts, 33, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     C = window,
 >C : Symbol(E12.C, Decl(enumErrors.ts, 34, 19))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 
     D = {},
 >D : Symbol(E12.D, Decl(enumErrors.ts, 35, 15))

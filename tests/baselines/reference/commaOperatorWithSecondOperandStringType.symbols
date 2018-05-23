@@ -71,7 +71,7 @@ null, STRING;
 
 ANY = new Date(), STRING;
 >ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 true, "";
@@ -96,7 +96,7 @@ var resultIsString6 = (null, STRING);
 var resultIsString7 = (ANY = new Date(), STRING);
 >resultIsString7 : Symbol(resultIsString7, Decl(commaOperatorWithSecondOperandStringType.ts, 31, 3))
 >ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString8 = (true, "");

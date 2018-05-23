@@ -269,7 +269,7 @@ namespace ts.formatting {
         }
 
         function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): NextTokenKind {
-            const nextToken = findNextToken(precedingToken, current);
+            const nextToken = findNextToken(precedingToken, current, sourceFile);
             if (!nextToken) {
                 return NextTokenKind.Unknown;
             }
@@ -327,9 +327,10 @@ namespace ts.formatting {
 
         export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> {
             if (node.parent) {
+                const { end } = node;
                 switch (node.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        return getListIfStartEndIsInListRange((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), end);
                     case SyntaxKind.ObjectLiteralExpression:
                         return (<ObjectLiteralExpression>node.parent).properties;
                     case SyntaxKind.ArrayLiteralExpression:
@@ -344,22 +345,25 @@ namespace ts.formatting {
                     case SyntaxKind.ConstructorType:
                     case SyntaxKind.ConstructSignature: {
                         const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd()) ||
-                            getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, node.getEnd());
+                        return getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).typeParameters, start, end) ||
+                            getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, end);
                     }
                     case SyntaxKind.ClassDeclaration:
-                        return getListIfStartEndIsInListRange((<ClassDeclaration>node.parent).typeParameters, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<ClassDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression: {
                         const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<CallExpression>node.parent).typeArguments, start, node.getEnd()) ||
-                            getListIfStartEndIsInListRange((<CallExpression>node.parent).arguments, start, node.getEnd());
+                        return getListIfStartEndIsInListRange((<CallExpression>node.parent).typeArguments, start, end) ||
+                            getListIfStartEndIsInListRange((<CallExpression>node.parent).arguments, start, end);
                     }
                     case SyntaxKind.VariableDeclarationList:
-                        return getListIfStartEndIsInListRange((<VariableDeclarationList>node.parent).declarations, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<VariableDeclarationList>node.parent).declarations, node.getStart(sourceFile), end);
                     case SyntaxKind.NamedImports:
                     case SyntaxKind.NamedExports:
-                        return getListIfStartEndIsInListRange((<NamedImportsOrExports>node.parent).elements, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<NamedImportsOrExports>node.parent).elements, node.getStart(sourceFile), end);
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        return getListIfStartEndIsInListRange((<ObjectBindingPattern | ArrayBindingPattern>node.parent).elements, node.getStart(sourceFile), end);
                 }
             }
             return undefined;
@@ -478,8 +482,10 @@ namespace ts.formatting {
             return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
 
-        function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
-            switch (kind) {
+        export function nodeWillIndentChild(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
+            const childKind = child ? child.kind : SyntaxKind.Unknown;
+
+            switch (parent.kind) {
                 case SyntaxKind.ExpressionStatement:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -501,7 +507,6 @@ namespace ts.formatting {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
-                case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.ConditionalExpression:
@@ -524,24 +529,14 @@ namespace ts.formatting {
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.ExportSpecifier:
                 case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyDeclaration:
                     return true;
-            }
-            return false;
-        }
-
-        export function nodeWillIndentChild(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
-            const childKind = child ? child.kind : SyntaxKind.Unknown;
-
-            switch (parent.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ObjectLiteralExpression:
                     if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) {
                         return rangeIsOnOneLine(sourceFile, child);
                     }
-                    break;
+                    return true;
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
@@ -565,6 +560,12 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.JsxFragment:
                     return childKind !== SyntaxKind.JsxClosingFragment;
+                case SyntaxKind.IntersectionType:
+                case SyntaxKind.UnionType:
+                    if (childKind === SyntaxKind.TypeLiteral) {
+                        return false;
+                    }
+                    // falls through
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
@@ -594,7 +595,7 @@ namespace ts.formatting {
          * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
          */
         export function shouldIndentChildNode(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child?: Node, sourceFile?: SourceFileLike, isNextChild = false): boolean {
-            return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(settings, parent, child, sourceFile, /*indentByDefault*/ false))
+            return nodeWillIndentChild(settings, parent, child, sourceFile, /*indentByDefault*/ false)
                 && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
         }
 

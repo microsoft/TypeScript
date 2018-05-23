@@ -17,7 +17,7 @@ namespace ts.codefix {
             const { sourceFile } = context;
             const seenClasses = createMap<true>(); // Ensure we only do this once per class.
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const nodes = getNodes(diag.file!, diag.start!);
+                const nodes = getNodes(diag.file, diag.start);
                 if (!nodes) return;
                 const { constructor, superCall } = nodes;
                 if (addToSeen(seenClasses, getNodeId(constructor.parent))) {

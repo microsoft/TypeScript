@@ -514,6 +514,7 @@ namespace Harness {
         fileExists(fileName: string): boolean;
         directoryExists(path: string): boolean;
         deleteFile(fileName: string): void;
+        enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[];
         listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
         args(): string[];
@@ -557,6 +558,10 @@ namespace Harness {
             const dirPath = pathModule.dirname(path);
             // Node will just continue to repeat the root path, rather than return null
             return dirPath === path ? undefined : dirPath;
+        }
+
+        function enumerateTestFiles(runner: RunnerBase) {
+            return runner.enumerateTestFiles();
         }
 
         function listFiles(path: string, spec: RegExp, options?: { recursive?: boolean }) {
@@ -639,6 +644,7 @@ namespace Harness {
             directoryExists: path => ts.sys.directoryExists(path),
             deleteFile,
             listFiles,
+            enumerateTestFiles,
             log: s => console.log(s),
             args: () => ts.sys.args,
             getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
@@ -913,6 +919,11 @@ namespace Harness {
             return ts.getDirectoryPath(ts.normalizeSlashes(url.pathname || "/"));
         }
 
+        function enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[] {
+            const response = send(HttpRequestMessage.post(new URL("/api/enumerateTestFiles", serverRoot), HttpContent.text(runner.kind())));
+            return hasJsonContent(response) ? JSON.parse(response.content.content) : [];
+        }
+
         function listFiles(dirname: string, spec?: RegExp, options?: { recursive?: boolean }): string[] {
             if (spec || (options && !options.recursive)) {
                 let results = IO.listFiles(dirname);
@@ -959,6 +970,7 @@ namespace Harness {
             directoryExists,
             deleteFile,
             listFiles: Utils.memoize(listFiles, (path, spec, options) => `${path}|${spec}|${options ? options.recursive === true : true}`),
+            enumerateTestFiles: Utils.memoize(enumerateTestFiles, runner => runner.kind()),
             log: s => console.log(s),
             args: () => [],
             getExecutingFilePath: () => "",
@@ -1217,7 +1229,7 @@ namespace Harness {
             }
 
             const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
-            const programFileNames = inputFiles.map(file => file.unitName);
+            const programFileNames = inputFiles.map(file => file.unitName).filter(fileName => !ts.fileExtensionIs(fileName, ts.Extension.Json));
 
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
             // Treat them as library files, so include them in build, but not in baselines.
@@ -1394,7 +1406,7 @@ namespace Harness {
             const dupeCase = ts.createMap<number>();
             for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
                 // Filter down to the errors in the file
-                const fileErrors = diagnostics.filter(e => {
+                const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                     const errFn = e.file;
                     return errFn && utils.removeTestPathPrefixes(errFn.fileName) === utils.removeTestPathPrefixes(inputFile.unitName);
                 });
@@ -1761,6 +1773,74 @@ namespace Harness {
         }
     }
 
+    export interface FileBasedTest {
+        file: string;
+        configurations?: FileBasedTestConfiguration[];
+    }
+
+    export interface FileBasedTestConfiguration {
+        [key: string]: string;
+    }
+
+    function splitVaryBySettingValue(text: string): string[] | undefined {
+        if (!text) return undefined;
+        const entries = text.split(/,/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+        return entries && entries.length > 1 ? entries : undefined;
+    }
+
+    function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
+        if (offset >= varyByEntries.length) {
+            // make a copy of the current variation state
+            configurations.push({ ...variationState });
+            return;
+        }
+
+        const [varyBy, entries] = varyByEntries[offset];
+        for (const entry of entries) {
+            // set or overwrite the variation, then compute the next variation
+            variationState[varyBy] = entry;
+            computeFileBasedTestConfigurationVariations(configurations, variationState, varyByEntries, offset + 1);
+        }
+    }
+
+    /**
+     * Compute FileBasedTestConfiguration variations based on a supplied list of variable settings.
+     */
+    export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: string[]): FileBasedTestConfiguration[] | undefined {
+        let varyByEntries: [string, string[]][] | undefined;
+        for (const varyByKey of varyBy) {
+            if (ts.hasProperty(settings, varyByKey)) {
+                // we only consider variations when there are 2 or more variable entries.
+                const entries = splitVaryBySettingValue(settings[varyByKey]);
+                if (entries) {
+                    if (!varyByEntries) varyByEntries = [];
+                    varyByEntries.push([varyByKey, entries]);
+                }
+            }
+        }
+
+        if (!varyByEntries) return undefined;
+
+        const configurations: FileBasedTestConfiguration[] = [];
+        computeFileBasedTestConfigurationVariations(configurations, /*variationState*/ {}, varyByEntries, /*offset*/ 0);
+        return configurations;
+    }
+
+    /**
+     * Compute a description for this configuration based on its entries
+     */
+    export function getFileBasedTestConfigurationDescription(configuration: FileBasedTestConfiguration) {
+        let name = "";
+        if (configuration) {
+            const keys = Object.keys(configuration).sort();
+            for (const key of keys) {
+                if (name) name += ", ";
+                name += `@${key}: ${configuration[key]}`;
+            }
+        }
+        return name;
+    }
+
     export namespace TestCaseParser {
         /** all the necessary information to set the right compiler settings */
         export interface CompilerSettings {
@@ -1779,7 +1859,7 @@ namespace Harness {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
-        function extractCompilerSettings(content: string): CompilerSettings {
+        export function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
 
             let match: RegExpExecArray;
@@ -1800,9 +1880,7 @@ namespace Harness {
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): TestCaseContent {
-            const settings = extractCompilerSettings(code);
-
+        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string, settings = extractCompilerSettings(code)): TestCaseContent {
             // List of all the subfiles we've parsed out
             const testUnitData: TestUnitData[] = [];
 

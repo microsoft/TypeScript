@@ -1,6 +1,7 @@
 /// <reference types="node" />
 // tslint:disable:no-null-keyword
 
+import minimist = require("minimist");
 import http = require("http");
 import fs = require("fs");
 import path = require("path");
@@ -20,9 +21,19 @@ const baseUrl = new URL(`http://localhost:${port}/`);
 const rootDir = path.dirname(__dirname);
 const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
-let browser = "IE";
+const defaultBrowser = os.platform() === "win32" ? "edge" : "chrome";
+let browser: "edge" | "chrome" | "none" = defaultBrowser;
 let grep: string | undefined;
 let verbose = false;
+
+interface FileBasedTest {
+    file: string;
+    configurations?: FileBasedTestConfiguration[];
+}
+
+interface FileBasedTestConfiguration {
+    [setting: string]: string;
+}
 
 function isFileSystemCaseSensitive(): boolean {
     // win32\win64 are case insensitive platforms
@@ -82,6 +93,20 @@ function toClientPath(pathname: string) {
     clientPath = ensureLeadingSeparator(clientPath);
     clientPath = normalizeSlashes(clientPath);
     return clientPath;
+}
+
+function flatMap<T, U>(array: T[], selector: (value: T) => U | U[]) {
+    let result: U[] = [];
+    for (const item of array) {
+        const mapped = selector(item);
+        if (Array.isArray(mapped)) {
+            result = result.concat(mapped);
+        }
+        else {
+            result.push(mapped);
+        }
+    }
+    return result;
 }
 
 declare module "http" {
@@ -640,29 +665,132 @@ function handleApiResolve(req: http.ServerRequest, res: http.ServerResponse) {
     });
 }
 
+function handleApiEnumerateTestFiles(req: http.ServerRequest, res: http.ServerResponse) {
+    readContent(req, (err, content) => {
+        try {
+            if (err) return sendInternalServerError(res, err);
+            if (!content) return sendBadRequest(res);
+            const tests: (string | FileBasedTest)[] = enumerateTestFiles(content);
+            return sendJson(res, /*statusCode*/ 200, tests);
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function enumerateTestFiles(runner: string) {
+    switch (runner) {
+        case "conformance":
+        case "compiler":
+            return listFiles(`tests/cases/${runner}`, /*serverDirname*/ undefined, /\.tsx?$/, { recursive: true }).map(parseCompilerTestConfigurations);
+        case "fourslash":
+            return listFiles(`tests/cases/fourslash`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        case "fourslash-shims":
+            return listFiles(`tests/cases/fourslash/shims`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        case "fourslash-shims-pp":
+            return listFiles(`tests/cases/fourslash/shims-pp`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        case "fourslash-server":
+            return listFiles(`tests/cases/fourslash/server`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        default:
+            throw new Error(`Runner '${runner}' not supported in browser tests.`);
+    }
+}
+
+// Regex for parsing options in the format "@Alpha: Value of any sort"
+const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
+
+function extractCompilerSettings(content: string): Record<string, string> {
+    const opts: Record<string, string> = {};
+
+    let match: RegExpExecArray;
+    while ((match = optionRegex.exec(content)) !== null) {
+        opts[match[1]] = match[2].trim();
+    }
+
+    return opts;
+}
+
+function splitVaryBySettingValue(text: string): string[] | undefined {
+    if (!text) return undefined;
+    const entries = text.split(/,/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+    return entries && entries.length > 1 ? entries : undefined;
+}
+
+function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
+    if (offset >= varyByEntries.length) {
+        // make a copy of the current variation state
+        configurations.push({ ...variationState });
+        return;
+    }
+
+    const [varyBy, entries] = varyByEntries[offset];
+    for (const entry of entries) {
+        // set or overwrite the variation
+        variationState[varyBy] = entry;
+        computeFileBasedTestConfigurationVariations(configurations, variationState, varyByEntries, offset + 1);
+    }
+}
+
+function getFileBasedTestConfigurations(settings: Record<string, string>, varyBy: string[]): FileBasedTestConfiguration[] | undefined {
+    let varyByEntries: [string, string[]][] | undefined;
+    for (const varyByKey of varyBy) {
+        if (Object.prototype.hasOwnProperty.call(settings, varyByKey)) {
+            const entries = splitVaryBySettingValue(settings[varyByKey]);
+            if (entries) {
+                if (!varyByEntries) varyByEntries = [];
+                varyByEntries.push([varyByKey, entries]);
+            }
+        }
+    }
+
+    if (!varyByEntries) return undefined;
+
+    const configurations: FileBasedTestConfiguration[] = [];
+    computeFileBasedTestConfigurationVariations(configurations, {}, varyByEntries, 0);
+    return configurations;
+}
+
+function parseCompilerTestConfigurations(file: string): FileBasedTest {
+    const content = fs.readFileSync(path.join(rootDir, file), "utf8");
+    const settings = extractCompilerSettings(content);
+    const configurations = getFileBasedTestConfigurations(settings, ["module", "target"]);
+    return { file, configurations };
+}
+
 function handleApiListFiles(req: http.ServerRequest, res: http.ServerResponse) {
     readContent(req, (err, content) => {
         try {
             if (err) return sendInternalServerError(res, err);
             if (!content) return sendBadRequest(res);
             const serverPath = toServerPath(content);
-            const files: string[] = [];
-            visit(serverPath, content, files);
+            const files = listFiles(content, serverPath, /*spec*/ undefined, { recursive: true });
             return sendJson(res, /*statusCode*/ 200, files);
-            function visit(dirname: string, relative: string, results: string[]) {
-                const { files, directories } = getAccessibleFileSystemEntries(dirname);
-                for (const file of files) {
-                    results.push(path.join(relative, file));
-                }
-                for (const directory of directories) {
-                    visit(path.join(dirname, directory), path.join(relative, directory), results);
-                }
-            }
         }
         catch (e) {
             return sendInternalServerError(res, e);
         }
     });
+}
+
+function listFiles(clientDirname: string, serverDirname: string = path.resolve(rootDir, clientDirname), spec?: RegExp, options: { recursive?: boolean } = {}): string[] {
+    const files: string[] = [];
+    visit(serverDirname, clientDirname, files);
+    return files;
+
+    function visit(dirname: string, relative: string, results: string[]) {
+        const { files, directories } = getAccessibleFileSystemEntries(dirname);
+        for (const file of files) {
+            if (!spec || file.match(spec)) {
+                results.push(path.join(relative, file));
+            }
+        }
+        for (const directory of directories) {
+            if (options.recursive) {
+                visit(path.join(dirname, directory), path.join(relative, directory), results);
+            }
+        }
+    }
 }
 
 function handleApiDirectoryExists(req: http.ServerRequest, res: http.ServerResponse) {
@@ -707,6 +835,7 @@ function handlePostRequest(req: http.ServerRequest, res: http.ServerResponse) {
     switch (new URL(req.url, baseUrl).pathname) {
         case "/api/resolve": return handleApiResolve(req, res);
         case "/api/listFiles": return handleApiListFiles(req, res);
+        case "/api/enumerateTestFiles": return handleApiEnumerateTestFiles(req, res);
         case "/api/directoryExists": return handleApiDirectoryExists(req, res);
         case "/api/getAccessibleFileSystemEntries": return handleApiGetAccessibleFileSystemEntries(req, res);
         default: return sendMethodNotAllowed(res, ["HEAD", "GET", "PUT", "DELETE", "OPTIONS"]);
@@ -735,50 +864,101 @@ function startServer() {
     return http.createServer(handleRequest).listen(port);
 }
 
+const REG_COLUMN_PADDING = 4;
+
+function queryRegistryValue(keyPath: string, callback: (error: Error | null, value: string) => void) {
+    const args = ["query", keyPath];
+    child_process.execFile("reg", ["query", keyPath, "/ve"], { encoding: "utf8" }, (error, stdout) => {
+        if (error) return callback(error, null);
+
+        const valueLine = stdout.replace(/^\r\n.+?\r\n|\r\n\r\n$/g, "");
+        if (!valueLine) {
+            return callback(new Error("Unable to retrieve value."), null);
+        }
+
+        const valueNameColumnOffset = REG_COLUMN_PADDING;
+        if (valueLine.lastIndexOf("(Default)", valueNameColumnOffset) !== valueNameColumnOffset) {
+            return callback(new Error("Unable to retrieve value."), null);
+        }
+
+        const dataTypeColumnOffset = valueNameColumnOffset + "(Default)".length + REG_COLUMN_PADDING;
+        if (valueLine.lastIndexOf("REG_SZ", dataTypeColumnOffset) !== dataTypeColumnOffset) {
+            return callback(new Error("Unable to retrieve value."), null);
+        }
+
+        const valueColumnOffset = dataTypeColumnOffset + "REG_SZ".length + REG_COLUMN_PADDING;
+        const value = valueLine.slice(valueColumnOffset);
+        return callback(null, value);
+    });
+}
+
+interface Browser {
+    description: string;
+    command: string;
+}
+
+function createBrowserFromPath(path: string): Browser {
+    return { description: path, command: path };
+}
+
+function getChromePath(callback: (error: Error | null, browser: Browser | string | null) => void) {
+    switch (os.platform()) {
+        case "win32":
+            return queryRegistryValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe", (error, value) => {
+                if (error) return callback(null, "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+                return callback(null, createBrowserFromPath(value));
+            });
+        case "darwin": return callback(null, "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
+        case "linux": return callback(null, "/opt/google/chrome/chrome");
+        default: return callback(new Error(`Chrome location is unknown for platform '${os.platform()}'`), null);
+    }
+}
+
+function getEdgePath(callback: (error: Error | null, browser: Browser | null) => void) {
+    switch (os.platform()) {
+        case "win32": return callback(null, { description: "Microsoft Edge", command: "cmd /c start microsoft-edge:%1" });
+        default: return callback(new Error(`Edge location is unknown for platform '${os.platform()}'`), null);
+    }
+}
+
+function getBrowserPath(callback: (error: Error | null, browser: Browser | null) => void) {
+    switch (browser) {
+        case "chrome": return getChromePath(afterGetBrowserPath);
+        case "edge": return getEdgePath(afterGetBrowserPath);
+        default: return callback(new Error(`Browser location is unknown for '${browser}'`), null);
+    }
+
+    function afterGetBrowserPath(error: Error | null, browser: Browser | string | null) {
+        if (error) return callback(error, null);
+        if (typeof browser === "object") return callback(null, browser);
+        return fs.stat(browser, (error, stats) => {
+            if (!error && stats.isFile()) {
+                return callback(null, createBrowserFromPath(browser));
+            }
+            if (browser === "chrome") return callback(null, createBrowserFromPath("chrome"));
+            return callback(new Error(`Browser location is unknown for '${browser}'`), null);
+        });
+    }
+}
+
 function startClient(server: http.Server) {
     let browserPath: string;
     if (browser === "none") {
         return;
     }
 
-    if (browser === "chrome") {
-        let defaultChromePath = "";
-        switch (os.platform()) {
-            case "win32":
-                defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
-                break;
-            case "darwin":
-                defaultChromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-                break;
-            case "linux":
-                defaultChromePath = "/opt/google/chrome/chrome";
-                break;
-            default:
-                console.log(`default Chrome location is unknown for platform '${os.platform()}'`);
-                break;
-        }
-        if (fs.existsSync(defaultChromePath)) {
-            browserPath = defaultChromePath;
+    getBrowserPath((error, browser) => {
+        if (error) return console.error(error);
+        console.log(`Using browser: ${browser.description}`);
+        const queryString = grep ? `?grep=${grep}` : "";
+        const args = [`http://localhost:${port}/tests/webTestResults.html${queryString}`];
+        if (browser.command.indexOf("%") === -1) {
+            child_process.spawn(browser.command, args);
         }
         else {
-            browserPath = browser;
+            const command = browser.command.replace(/%(\d+)/g, (_, offset) => args[+offset - 1]);
+            child_process.exec(command);
         }
-    }
-    else {
-        const defaultIEPath = "C:/Program Files/Internet Explorer/iexplore.exe";
-        if (fs.existsSync(defaultIEPath)) {
-            browserPath = defaultIEPath;
-        }
-        else {
-            browserPath = browser;
-        }
-    }
-
-    console.log(`Using browser: ${browserPath}`);
-
-    const queryString = grep ? `?grep=${grep}` : "";
-    const child = child_process.spawn(browserPath, [`http://localhost:${port}/tests/webTestResults.html${queryString}`], {
-        stdio: "inherit"
     });
 }
 
@@ -786,42 +966,35 @@ function printHelp() {
     console.log("Runs an http server on port 8888, looking for tests folder in the current directory\n");
     console.log("Syntax: node webTestServer.js [browser] [tests] [--verbose]\n");
     console.log("Options:");
-    console.log(" <browser>     The browser to launch. One of 'IE', 'chrome', or 'none' (default 'IE').");
+    console.log(" <browser>     The browser to launch. One of 'edge', 'chrome', or 'none' (default 'edge' on Windows, otherwise `chrome`).");
     console.log(" <tests>       A regular expression to pass to Mocha.");
     console.log(" --verbose     Enables verbose logging.");
 }
 
 function parseCommandLine(args: string[]) {
-    let offset = 0;
-    for (const arg of args) {
-        const argLower = arg.toLowerCase();
-        if (argLower === "--help") {
-            printHelp();
-            return false;
-        }
-        else if (argLower === "--verbose") {
-            verbose = true;
-        }
-        else {
-            if (offset === 0) {
-                browser = arg;
-            }
-            else if (offset === 1) {
-                grep = arg;
-            }
-            else {
-                console.log(`Unrecognized argument: ${arg}\n`);
-                return false;
-            }
-            offset++;
-        }
-    }
-
-    if (browser !== "IE" && browser !== "chrome" && browser !== "none") {
-        console.log(`Unrecognized browser '${browser}', expected 'IE' or 'chrome'.`);
+    const parsed = minimist(args, { boolean: ["help", "verbose"] });
+    if (parsed.help) {
+        printHelp();
         return false;
     }
 
+    if (parsed.verbose) {
+        verbose = true;
+    }
+
+    const [parsedBrowser = defaultBrowser, parsedGrep, ...unrecognized] = parsed._;
+    if (parsedBrowser !== "edge" && parsedBrowser !== "chrome" && parsedBrowser !== "none") {
+        console.log(`Unrecognized browser '${parsedBrowser}', expected 'edge', 'chrome', or 'none'.`);
+        return false;
+    }
+
+    if (unrecognized.length > 0) {
+        console.log(`Unrecognized argument: ${unrecognized[0]}`);
+        return false;
+    }
+
+    browser = parsedBrowser;
+    grep = parsedGrep;
     return true;
 }
 

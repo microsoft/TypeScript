@@ -143,7 +143,7 @@ namespace ts {
             statements = setTextRange(createNodeArray([createStatement(createLiteral("use strict")), ...statements]), statements);
         }
         const declarations = context.endLexicalEnvironment();
-        return setTextRange(createNodeArray(concatenate(statements, declarations)), statements);
+        return setTextRange(createNodeArray(concatenate(declarations, statements)), statements);
     }
 
     /**
@@ -1473,8 +1473,8 @@ namespace ts {
         }
 
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(concatenate(statements, declarations)), statements)
-            : addRange(statements, declarations);
+            ? setTextRange(createNodeArray(concatenate(declarations, statements)), statements)
+            : prependRange(statements, declarations);
     }
 
     /**

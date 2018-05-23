@@ -6,6 +6,7 @@ namespace ts.server {
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
+    export const OpenFileInfoTelemetryEvent = "openFileInfo";
     // tslint:enable variable-name
 
     export interface ProjectsUpdatedInBackgroundEvent {
@@ -55,6 +56,20 @@ namespace ts.server {
         readonly version: string;
     }
 
+    /**
+     * Info that we may send about a file that was just opened.
+     * Info about a file will only be sent once per session, even if the file changes in ways that might affect the info.
+     * Currently this is only sent for '.js' files.
+     */
+    export interface OpenFileInfoTelemetryEvent {
+        readonly eventName: typeof OpenFileInfoTelemetryEvent;
+        readonly data: OpenFileInfoTelemetryEventData;
+    }
+
+    export interface OpenFileInfoTelemetryEventData {
+        readonly info: OpenFileInfo;
+    }
+
     export interface ProjectInfoTypeAcquisitionData {
         readonly enable: boolean;
         // Actual values of include/exclude entries are scrubbed.
@@ -68,9 +83,14 @@ namespace ts.server {
         readonly ts: number;
         readonly tsx: number;
         readonly dts: number;
+        readonly deferred: number;
     }
 
-    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
+    export interface OpenFileInfo {
+        readonly checkJs: boolean;
+    }
+
+    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -319,12 +339,16 @@ namespace ts.server {
         /*@internal*/
         readonly typingsCache: TypingsCache;
 
-        private readonly documentRegistry: DocumentRegistry;
+        /*@internal*/
+        readonly documentRegistry: DocumentRegistry;
 
         /**
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        // Set of all '.js' files ever opened.
+        private readonly allJsFilesForOpenFileTelemetry = createMap<true>();
+
         /**
          * Map to the real path of the infos
          */
@@ -380,7 +404,7 @@ namespace ts.server {
         /* @internal */
         pendingEnsureProjectForOpenFiles: boolean;
 
-        readonly currentDirectory: string;
+        readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
@@ -427,7 +451,7 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }
-            this.currentDirectory = this.host.getCurrentDirectory();
+            this.currentDirectory = toNormalizedPath(this.host.getCurrentDirectory());
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation &&
                 ensureTrailingDirectorySeparator(this.toPath(this.typingsInstaller.globalTypingsCacheLocation));
@@ -451,7 +475,7 @@ namespace ts.server {
                 extraFileExtensions: []
             };
 
-            this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.currentDirectory);
+            this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -470,6 +494,19 @@ namespace ts.server {
         /*@internal*/
         getNormalizedAbsolutePath(fileName: string) {
             return getNormalizedAbsolutePath(fileName, this.host.getCurrentDirectory());
+        }
+
+        /*@internal*/
+        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
+            const info = this.getScriptInfoForPath(path);
+            Debug.assert(!!info);
+            info.cacheSourceFile = { key, sourceFile };
+        }
+
+        /*@internal*/
+        getDocument(key: DocumentRegistryBucketKey, path: Path) {
+            const info = this.getScriptInfoForPath(path);
+            return info && info.cacheSourceFile && info.cacheSourceFile.key === key && info.cacheSourceFile.sourceFile;
         }
 
         /* @internal */
@@ -577,7 +614,8 @@ namespace ts.server {
             return this.pendingProjectUpdates.has(project.getProjectName());
         }
 
-        private sendProjectsUpdatedInBackgroundEvent() {
+        /* @internal */
+        sendProjectsUpdatedInBackgroundEvent() {
             if (!this.eventHandler) {
                 return;
             }
@@ -1197,8 +1235,11 @@ namespace ts.server {
             const projectRootPath = this.openFiles.get(info.path);
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
+            const isSearchPathInProjectRoot = () => containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
-            while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
+            // If projectRootPath doesnt contain info.path, then do normal search for config file
+            const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
+            do {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
@@ -1217,7 +1258,7 @@ namespace ts.server {
                     break;
                 }
                 searchPath = parentPath;
-            }
+            } while (anySearchPathOk || isSearchPathInProjectRoot());
 
             return undefined;
         }
@@ -1235,7 +1276,7 @@ namespace ts.server {
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info,
                 (configFileName, canonicalConfigFilePath) =>
-                    this.configFileExists(configFileName, canonicalConfigFilePath, info),
+                    this.configFileExists(configFileName, canonicalConfigFilePath, info)
             );
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
@@ -1302,7 +1343,7 @@ namespace ts.server {
             if (!result.endOfFileToken) {
                 result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
             }
-            const errors = result.parseDiagnostics;
+            const errors = result.parseDiagnostics as Diagnostic[];
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,
                 cachedDirectoryStructureHost,
@@ -1327,7 +1368,8 @@ namespace ts.server {
                 configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
-                compileOnSave: parsedCommandLine.compileOnSave
+                compileOnSave: parsedCommandLine.compileOnSave,
+                projectReferences: parsedCommandLine.projectReferences
             };
 
             return { projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
@@ -1401,12 +1443,12 @@ namespace ts.server {
             }
             this.seenProjects.set(projectKey, true);
 
-            if (!this.eventHandler) {
+            if (!this.eventHandler || !this.host.createSHA256Hash) {
                 return;
             }
 
             const data: ProjectInfoTelemetryEventData = {
-                projectId: this.host.createHash(projectKey),
+                projectId: this.host.createSHA256Hash(projectKey),
                 fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilationSettings()),
                 typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
@@ -1460,7 +1502,8 @@ namespace ts.server {
                 projectOptions.compilerOptions,
                 lastFileExceededProgramSize,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
-                cachedDirectoryStructureHost);
+                cachedDirectoryStructureHost,
+                projectOptions.projectReferences);
 
             project.configFileSpecs = configFileSpecs;
             // TODO: We probably should also watch the configFiles that are extended
@@ -1585,6 +1628,7 @@ namespace ts.server {
             // Update the project
             project.configFileSpecs = configFileSpecs;
             project.setProjectErrors(configFileErrors);
+            project.updateReferences(projectOptions.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
@@ -2088,7 +2132,17 @@ namespace ts.server {
 
             this.printProjects();
 
+            this.telemetryOnOpenFile(info);
             return { configFileName, configFileErrors };
+        }
+
+        private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
+            if (this.syntaxOnly || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
+                return;
+            }
+
+            const info: OpenFileInfo = { checkJs: !!scriptInfo.getDefaultProject().getSourceFile(scriptInfo.path).checkJsDirective };
+            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
         }
 
         /**

@@ -51,7 +51,7 @@ namespace project {
             describe("projects tests", () => {
                 const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
                 for (const test of tests) {
-                    this.runProjectTestCase(test);
+                    this.runProjectTestCase(typeof test === "string" ? test : test.file);
                 }
             });
         }
@@ -154,7 +154,7 @@ namespace project {
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
                 inputFiles = configParseResult.fileNames;
                 this.compilerOptions = configParseResult.options;
-                errors = result.parseDiagnostics.concat(configParseResult.errors);
+                errors = [...result.parseDiagnostics, ...configParseResult.errors];
             }
 
             const compilerHost = new ProjectCompilerHost(this.sys, this.compilerOptions, this.testCaseJustName, this.testCase, moduleKind);
@@ -219,13 +219,7 @@ namespace project {
                 .map(output => utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
 
             const content = JSON.stringify(resolutionInfo, undefined, "    ");
-
-            // TODO(rbuckton): This patches the baseline to replace lib.es5.d.ts with lib.d.ts.
-            // This is only to make the PR for this change easier to read. A follow-up PR will
-            // revert this change and accept the new baselines.
-            // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
-            const patchedContent = content.replace(/lib\.es5\.d\.ts/g, "lib.d.ts");
-            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", () => patchedContent);
+            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", () => content);
         }
 
         public verifyDiagnostics() {

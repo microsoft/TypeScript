@@ -21,7 +21,7 @@ class C {
 
     static get [<String>""]() { }
 >[<String>""] : Symbol(C[<String>""], Decl(computedPropertyNames3_ES6.ts, 5, 23))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>String : Symbol(String, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --) ... and 1 more)
 
     static set [id.toString()](v) { }
 >[id.toString()] : Symbol(C[id.toString()], Decl(computedPropertyNames3_ES6.ts, 6, 33))

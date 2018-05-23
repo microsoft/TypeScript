@@ -13,7 +13,7 @@ namespace ts {
         getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
-        getWidth(sourceFile?: SourceFile): number;
+        getWidth(sourceFile?: SourceFileLike): number;
         getFullWidth(): number;
         getLeadingTriviaWidth(sourceFile?: SourceFile): number;
         getFullText(sourceFile?: SourceFile): string;
@@ -179,6 +179,7 @@ namespace ts {
         getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
+        getProjectReferences?(): ReadonlyArray<ProjectReference> | undefined;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): HostCancellationToken;
         getCurrentDirectory(): string;
@@ -206,8 +207,11 @@ namespace ts {
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
+         *
+         * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
@@ -233,6 +237,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
     /* @internal */
     export const defaultPreferences: UserPreferences = {};
@@ -244,9 +249,10 @@ namespace ts {
     export interface LanguageService {
         cleanupSemanticCache(): void;
 
-        getSyntacticDiagnostics(fileName: string): Diagnostic[];
+        getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
+        /** The first time this is called, it will return global diagnostics (no location). */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
-        getSuggestionDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
 
         // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
         // diagnostics present for the program level, and not just 'options' diagnostics.
@@ -320,6 +326,8 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
+        toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
+
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -355,9 +363,11 @@ namespace ts {
 
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
-        triggerCharacter?: string;
+        triggerCharacter?: CompletionsTriggerCharacter;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
@@ -433,6 +443,7 @@ namespace ts {
     export interface FileTextChanges {
         fileName: string;
         textChanges: TextChange[];
+        isNewFile?: boolean;
     }
 
     export interface CodeAction {
@@ -536,6 +547,13 @@ namespace ts {
     export interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
+
+        /**
+         * If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+         * then the original filename and span will be specified here
+         */
+        originalTextSpan?: TextSpan;
+        originalFileName?: string;
     }
 
     export interface RenameLocation extends DocumentSpan {
@@ -648,9 +666,7 @@ namespace ts {
         indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     }
 
-    export interface DefinitionInfo {
-        fileName: string;
-        textSpan: TextSpan;
+    export interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
         name: string;
         containerKind: ScriptElementKind;
@@ -816,6 +832,25 @@ namespace ts {
          * the 'Collapse to Definitions' command is invoked.
          */
         autoCollapse: boolean;
+
+        /**
+         * Classification of the contents of the span
+         */
+        kind: OutliningSpanKind;
+    }
+
+    export const enum OutliningSpanKind {
+        /** Single or multi-line comments */
+        Comment = "comment",
+
+        /** Sections marked by '// #region' and '// #endregion' comments */
+        Region = "region",
+
+        /** Declarations and expressions */
+        Code = "code",
+
+        /** Contiguous blocks of import declarations */
+        Imports = "imports"
     }
 
     export const enum OutputFileType {
@@ -976,6 +1011,9 @@ namespace ts {
          * <JsxTagName attribute1 attribute2={0} />
          */
         jsxAttribute = "JSX attribute",
+
+        /** String literal */
+        string = "string",
     }
 
     export const enum ScriptElementKindModifier {

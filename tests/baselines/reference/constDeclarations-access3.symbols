@@ -139,9 +139,9 @@ M.x;
 >x : Symbol(M.x, Decl(constDeclarations-access3.ts, 1, 16))
 
 M.x.toString();
->M.x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>M.x.toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 >M.x : Symbol(M.x, Decl(constDeclarations-access3.ts, 1, 16))
 >M : Symbol(M, Decl(constDeclarations-access3.ts, 0, 0))
 >x : Symbol(M.x, Decl(constDeclarations-access3.ts, 1, 16))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 

@@ -332,35 +332,20 @@ namespace vfs {
             }
         }
 
-        private _depth: string[] = [];
-
         /**
          * Make a directory and all of its parent paths (if they don't exist).
          */
         public mkdirpSync(path: string) {
-            try {
-                this._depth.push(path);
-                path = this._resolve(path);
-                this.mkdirSync(path);
-            }
-            catch (e) {
-                if (e.code === "ENOENT") {
-                    if (this._depth.length > 10) {
-                        console.log(`path: ${path}`);
-                        console.log(`dirname: ${vpath.dirname(path)}`);
-                        console.log(this._depth);
-                        throw e;
-                    }
-                    this.mkdirpSync(vpath.dirname(path));
-                    this.mkdirSync(path);
+            path = this._resolve(path);
+            const result = this._walk(path, /*noFollow*/ true, (error, result) => {
+                if (error.code === "ENOENT") {
+                    this._mkdir(result);
+                    return "retry";
                 }
-                else if (e.code !== "EEXIST") {
-                    throw e;
-                }
-            }
-            finally {
-                this._depth.pop();
-            }
+                return "throw";
+            });
+
+            if (!result.node) this._mkdir(result);
         }
 
         /**
@@ -398,6 +383,14 @@ namespace vfs {
         }
 
         // POSIX API (aligns with NodeJS "fs" module API)
+
+        /**
+         * Determines whether a path exists.
+         */
+        public existsSync(path: string) {
+            const result = this._walk(this._resolve(path), /*noFollow*/ true, () => "stop");
+            return result !== undefined && result.node !== undefined;
+        }
 
         /**
          * Get file status. If `path` is a symbolic link, it is dereferenced.
@@ -464,9 +457,11 @@ namespace vfs {
         public mkdirSync(path: string) {
             if (this.isReadonly) throw createIOError("EROFS");
 
-            const { parent, links, node: existingNode, basename } = this._walk(this._resolve(path), /*noFollow*/ true);
-            if (existingNode) throw createIOError("EEXIST");
+            this._mkdir(this._walk(this._resolve(path), /*noFollow*/ true));
+        }
 
+        private _mkdir({ parent, links, node: existingNode, basename }: WalkResult) {
+            if (existingNode) throw createIOError("EEXIST");
             const time = this.time();
             const node = this._mknod(parent ? parent.dev : ++devCount, S_IFDIR, /*mode*/ 0o777, time);
             this._addLink(parent, links, basename, node, time);
@@ -810,17 +805,18 @@ namespace vfs {
          * @param path The path to follow.
          * @param noFollow A value indicating whether to *not* dereference a symbolic link at the
          * end of a path.
-         * @param allowPartial A value indicating whether to return a partial result if the node
-         * at the end of the path cannot be found.
          *
          * @link http://man7.org/linux/man-pages/man7/path_resolution.7.html
          */
-        private _walk(path: string, noFollow?: boolean): WalkResult {
+        private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "retry" | "throw"): WalkResult;
+        private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw"): WalkResult | undefined;
+        private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw"): WalkResult | undefined {
             let links = this._getRootLinks();
             let parent: DirectoryInode | undefined;
             let components = vpath.parse(path);
             let step = 0;
             let depth = 0;
+            let retry = false;
             while (true) {
                 if (depth >= 40) throw createIOError("ELOOP");
                 const lastStep = step === components.length - 1;
@@ -830,7 +826,8 @@ namespace vfs {
                     return { realpath: vpath.format(components), basename, parent, links, node };
                 }
                 if (node === undefined) {
-                    throw createIOError("ENOENT");
+                    if (trapError(createIOError("ENOENT"), node)) continue;
+                    return undefined;
                 }
                 if (isSymlink(node)) {
                     const dirname = vpath.format(components.slice(0, step));
@@ -840,15 +837,30 @@ namespace vfs {
                     components = vpath.parse(symlink).concat(components.slice(step + 1));
                     step = 0;
                     depth++;
+                    retry = false;
                     continue;
                 }
                 if (isDirectory(node)) {
                     links = this._getLinks(node);
                     parent = node;
                     step++;
+                    retry = false;
                     continue;
                 }
-                throw createIOError("ENOTDIR");
+                if (trapError(createIOError("ENOTDIR"), node)) continue;
+                return undefined;
+            }
+
+            function trapError(error: NodeJS.ErrnoException, node?: Inode) {
+                const realpath = vpath.format(components.slice(0, step + 1));
+                const basename = components[step];
+                const result = !retry && onError ? onError(error, { realpath, basename, parent, links, node }) : "throw";
+                if (result === "stop") return false;
+                if (result === "retry") {
+                    retry = true;
+                    return true;
+                }
+                throw error;
             }
         }
 
@@ -857,8 +869,8 @@ namespace vfs {
          */
         private _resolve(path: string) {
             return this._cwd
-                ? vpath.resolve(this._cwd, vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute))
-                : vpath.validate(path, vpath.ValidationFlags.Absolute);
+                ? vpath.resolve(this._cwd, vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute | vpath.ValidationFlags.AllowWildcard))
+                : vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
         }
 
         private _applyFiles(files: FileSet, dirname: string) {
@@ -1118,6 +1130,7 @@ namespace vfs {
     export function createIOError(code: keyof typeof IOErrorMessages) {
         const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]}`);
         err.code = code;
+        if (Error.captureStackTrace) Error.captureStackTrace(err, createIOError);
         return err;
     }
 
@@ -1253,25 +1266,6 @@ namespace vfs {
         node: Inode | undefined;
     }
 
-    // TODO(rbuckton): This patches the baseline to replace lib.d.ts with lib.es5.d.ts.
-    // This is only to make the PR for this change easier to read. A follow-up PR will
-    // revert this change and accept the new baselines.
-    // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
-    function patchResolver(host: FileSystemResolverHost, resolver: FileSystemResolver): FileSystemResolver {
-        const libFile = vpath.combine(host.getWorkspaceRoot(), "built/local/lib.d.ts");
-        const es5File = vpath.combine(host.getWorkspaceRoot(), "built/local/lib.es5.d.ts");
-        const stringComparer = host.useCaseSensitiveFileNames() ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
-        return {
-            readdirSync: path => resolver.readdirSync(path),
-            statSync: path => resolver.statSync(fixPath(path)),
-            readFileSync: (path) => resolver.readFileSync(fixPath(path))
-        };
-
-        function fixPath(path: string) {
-            return stringComparer(path, libFile) === 0 ? es5File : path;
-        }
-    }
-
     let builtLocalHost: FileSystemResolverHost | undefined;
     let builtLocalCI: FileSystem | undefined;
     let builtLocalCS: FileSystem | undefined;
@@ -1286,7 +1280,7 @@ namespace vfs {
             const resolver = createResolver(host);
             builtLocalCI = new FileSystem(/*ignoreCase*/ true, {
                 files: {
-                    [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), patchResolver(host, resolver)),
+                    [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                     [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
                     [srcFolder]: {}
                 },

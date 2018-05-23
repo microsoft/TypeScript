@@ -1,7 +1,7 @@
 === tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx ===
 type AttributeValue = number | string | Date | boolean;
 >AttributeValue : Symbol(AttributeValue, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 interface Attributes {
 >Attributes : Symbol(Attributes, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 55))

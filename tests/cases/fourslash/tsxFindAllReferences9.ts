@@ -18,7 +18,7 @@
 ////     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
 //// }
 //// interface LinkProps extends ClickableProps {
-////     [|goTo|]: string;
+////     [|{| "isWriteAccess": true, "isDefinition": true |}goTo|]: string;
 //// }
 //// declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 //// declare function MainButton(linkProps: LinkProps): JSX.Element;
@@ -27,8 +27,8 @@
 //// let opt = <MainButton children="chidlren" />;
 //// let opt = <MainButton onClick={()=>{}} />;
 //// let opt = <MainButton onClick={()=>{}} ignore-prop />;
-//// let opt = <MainButton [|goTo|]="goTo" />;
-//// let opt = <MainButton [|goTo|] />;
+//// let opt = <MainButton [|{| "isWriteAccess": true, "isDefinition": true |}goTo|]="goTo" />;
+//// let opt = <MainButton [|{| "isWriteAccess": true, "isDefinition": true |}goTo|] />;
 //// let opt = <MainButton wrong />;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) LinkProps.goTo: string");

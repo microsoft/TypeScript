@@ -884,7 +884,7 @@ namespace ts {
         });
     });
 
-    type FileOrFolder = TestFSWithWatch.FileOrFolder;
+    type File = TestFSWithWatch.File;
     import createTestSystem = TestFSWithWatch.createWatchedSystem;
     import libFile = TestFSWithWatch.libFile;
 
@@ -920,22 +920,22 @@ namespace ts {
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
-        function verifyProgram(files: FileOrFolder[], rootFiles: string[], options: CompilerOptions, configFile: string) {
+        function verifyProgram(files: File[], rootFiles: string[], options: CompilerOptions, configFile: string) {
             const system = createTestSystem(files);
             verifyProgramWithoutConfigFile(system, rootFiles, options);
             verifyProgramWithConfigFile(system, configFile);
         }
 
         it("has empty options", () => {
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/file1.ts",
                 content: "let x = 1"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: "/a/b/file2.ts",
                 content: "let y = 1"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: "{}"
             };
@@ -944,19 +944,19 @@ namespace ts {
 
         it("has lib specified in the options", () => {
             const compilerOptions: CompilerOptions = { lib: ["es5", "es2015.promise"] };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/app.ts",
                 content: "var x: Promise<string>;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions })
             };
-            const es5Lib: FileOrFolder = {
+            const es5Lib: File = {
                 path: "/compiler/lib.es5.d.ts",
                 content: "declare const eval: any"
             };
-            const es2015Promise: FileOrFolder = {
+            const es2015Promise: File = {
                 path: "/compiler/lib.es2015.promise.d.ts",
                 content: "declare class Promise<T> {}"
             };
@@ -975,26 +975,26 @@ namespace ts {
                     ]
                 }
             };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                           import classD from "module3/file3";\
                           let x = new classc();\
                           let y = new classD();'
             };
-            const module1: FileOrFolder = {
+            const module1: File = {
                 path: "/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
-            const module2: FileOrFolder = {
+            const module2: File = {
                 path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
-            const module3: FileOrFolder = {
+            const module3: File = {
                 path: "/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions })
             };
@@ -1013,26 +1013,26 @@ namespace ts {
                     ]
                 }
             };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                           import classD from "module3/file3";\
                           let x = new classc();\
                           let y = new classD();'
             };
-            const module1: FileOrFolder = {
+            const module1: File = {
                 path: "/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
-            const module2: FileOrFolder = {
+            const module2: File = {
                 path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
-            const module3: FileOrFolder = {
+            const module3: File = {
                 path: "/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] })
             };

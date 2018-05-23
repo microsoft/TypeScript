@@ -10,8 +10,7 @@ namespace compiler {
 
     export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
         if (project) {
-            project = host.vfs.stringComparer(vpath.basename(project), "tsconfig.json") === 0 ? project :
-                vpath.combine(project, "tsconfig.json");
+            project = vpath.isTsConfigFile(project) ? project : vpath.combine(project, "tsconfig.json");
         }
         else {
             [project] = host.vfs.scanSync(".", "ancestors-or-self", {
@@ -70,7 +69,7 @@ namespace compiler {
             const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             for (const document of this.host.outputs) {
-                if (vpath.isJavaScript(document.file)) {
+                if (vpath.isJavaScript(document.file) || ts.fileExtensionIs(document.file, ts.Extension.Json)) {
                     js.set(document.file, document);
                 }
                 else if (vpath.isDeclaration(document.file)) {

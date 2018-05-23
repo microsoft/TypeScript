@@ -131,7 +131,7 @@ var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"].map(function (f) {
     return path.join(builtLocalDirectory, f);
 }).concat(path.dirname(generatedLCGFile));
 
@@ -650,8 +650,8 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
         return !fs.existsSync(f);
     });
     if (missingFiles.length > 0) {
-        fail("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
-            ". The following files are missing:\n" + missingFiles.join("\n"));
+        fail(new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
+            ". The following files are missing:\n" + missingFiles.join("\n")));
     }
     // Copy all the targets into the LKG directory
     jake.mkdirP(LKGDirectory);
@@ -922,7 +922,7 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
-    var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var browser = process.env.browser || process.env.b ||  (os.platform() === "win32" ? "edge" : "chrome");
     var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
