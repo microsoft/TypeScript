@@ -21,6 +21,12 @@ namespace ts {
             fs.chdir("/src/tests");
             builder.buildProjects(["."]);
             assertDiagnosticMessages(/*empty*/);
+
+            // Check for outputs. Not an exhaustive list
+            const expectedOutputs = ["/src/tests/index.js", "/src/core/index.js", "/src/core/index.d.ts"];
+            for (const output of expectedOutputs) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
         });
     });
 
