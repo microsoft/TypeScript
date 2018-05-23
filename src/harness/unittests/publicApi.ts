@@ -6,7 +6,7 @@ describe("Public APIs", () => {
         const api = `api/${fileName}`;
         let fileContent: string;
         before(() => {
-            fileContent = Harness.IO.readFile(builtFile);
+            fileContent = Harness.IO.readFile(builtFile)!;
         });
 
         it("should be acknowledged when they change", () => {

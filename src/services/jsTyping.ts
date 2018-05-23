@@ -5,7 +5,7 @@ namespace ts.JsTyping {
         directoryExists(path: string): boolean;
         fileExists(fileName: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, depth?: number): string[];
     }
 
     interface PackageJson {
@@ -26,7 +26,7 @@ namespace ts.JsTyping {
 
     /* @internal */
     export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
-        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest"));
+        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
         return !availableVersion.greaterThan(cachedTyping.version);
     }
 
@@ -152,7 +152,7 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const module = deduplicate(
+            const module = deduplicate<string>(
                 unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
                 equateStringsCaseSensitive,
                 compareStringsCaseSensitive);
@@ -160,7 +160,7 @@ namespace ts.JsTyping {
         }
         // Add the cached typing locations for inferred typings that are already installed
         packageNameToTypingLocation.forEach((typing, name) => {
-            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && isTypingUpToDate(typing, typesRegistry.get(name))) {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && isTypingUpToDate(typing, typesRegistry.get(name)!)) {
                 inferredTypings.set(name, typing.typingLocation);
             }
         });
@@ -187,7 +187,7 @@ namespace ts.JsTyping {
 
         function addInferredTyping(typingName: string) {
             if (!inferredTypings.has(typingName)) {
-                inferredTypings.set(typingName, undefined);
+                inferredTypings.set(typingName, undefined!); // TODO: GH#18217
             }
         }
         function addInferredTypings(typingNames: ReadonlyArray<string>, message: string) {
@@ -344,7 +344,7 @@ namespace ts.JsTyping {
             case PackageNameValidationResult.Ok:
                 return Debug.fail(); // Shouldn't have called this.
             default:
-                Debug.assertNever(result);
+                throw Debug.assertNever(result);
         }
     }
 }

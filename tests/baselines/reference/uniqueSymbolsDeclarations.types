@@ -699,19 +699,19 @@ g(N["s"]);
 
 // falsy expressions
 s || "";
->s || "" : unique symbol | ""
+>s || "" : "" | unique symbol
 >s : unique symbol
 >"" : ""
 
 N.s || "";
->N.s || "" : unique symbol | ""
+>N.s || "" : "" | unique symbol
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 >"" : ""
 
 N["s"] || "";
->N["s"] || "" : unique symbol | ""
+>N["s"] || "" : "" | unique symbol
 >N["s"] : unique symbol
 >N : typeof N
 >"s" : "s"
