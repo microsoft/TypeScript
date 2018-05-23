@@ -1,3 +1,5 @@
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
+
 namespace ts.server {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
@@ -38,8 +40,7 @@ namespace ts.server {
                 return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
             }
             default:
-                Debug.fail(`unsupported platform '${process.platform}'`);
-                return;
+                return Debug.fail(`unsupported platform '${process.platform}'`);
         }
     }
 
@@ -200,7 +201,7 @@ namespace ts.server {
             if (this.fd >= 0) {
                 const buf = new Buffer(s);
                 // tslint:disable-next-line no-null-keyword
-                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {
                 console.warn(s);
@@ -230,7 +231,7 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void };
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -364,10 +365,10 @@ namespace ts.server {
                 case ActionPackageInstalled: {
                     const { success, message } = response;
                     if (success) {
-                        this.packageInstalledPromise.resolve({ successMessage: message });
+                        this.packageInstalledPromise!.resolve({ successMessage: message });
                     }
                     else {
-                        this.packageInstalledPromise.reject(message);
+                        this.packageInstalledPromise!.reject(message);
                     }
                     this.packageInstalledPromise = undefined;
 
@@ -435,7 +436,7 @@ namespace ts.server {
                         }
 
                         while (this.requestQueue.length > 0) {
-                            const queuedRequest = this.requestQueue.shift();
+                            const queuedRequest = this.requestQueue.shift()!;
                             if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
                                 this.requestMap.delete(queuedRequest.operationId);
                                 this.scheduleRequest(queuedRequest);
@@ -468,7 +469,7 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        private eventPort: number;
+        private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
         private constructed: boolean | undefined;
@@ -529,7 +530,7 @@ namespace ts.server {
         }
 
         event<T extends object>(body: T, eventName: string): void {
-            Debug.assert(this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
+            Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
             if (this.canUseEvents && this.eventPort) {
                 if (!this.eventSocket) {
@@ -550,7 +551,7 @@ namespace ts.server {
         }
 
         private writeToEventSocket(body: object, eventName: string): void {
-            this.eventSocket.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
+            this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 
         exit() {
@@ -578,7 +579,7 @@ namespace ts.server {
         logToFile?: boolean;
     }
 
-    function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
+    function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOptions {
         if (!logEnvStr) {
             return {};
         }
@@ -625,7 +626,7 @@ namespace ts.server {
         }
     }
 
-    function getLogLevel(level: string) {
+    function getLogLevel(level: string | undefined) {
         if (level) {
             const l = level.toLowerCase();
             for (const name in LogLevel) {
@@ -650,7 +651,7 @@ namespace ts.server {
                 : undefined;
 
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity);
+        return new Logger(logFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -765,11 +766,11 @@ namespace ts.server {
     function setCanWriteFlagAndWriteMessageIfNecessary() {
         canWrite = true;
         if (pending.length) {
-            writeMessage(pending.shift());
+            writeMessage(pending.shift()!);
         }
     }
 
-    function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string) {
+    function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string | undefined) {
         path = normalizeSlashes(path);
         if (isUNCPath(path)) {
             // UNC path: extract server name
@@ -804,7 +805,7 @@ namespace ts.server {
     const sys = <ServerHost>ts.sys;
     const nodeVersion = getNodeMajorVersion();
     // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && nodeVersion >= 4;
+    const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
     const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const noopWatcher: FileWatcher = { close: noop };
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
@@ -905,8 +906,8 @@ namespace ts.server {
     let eventPort: number | undefined;
     {
         const str = findArgument("--eventPort");
-        const v = str && parseInt(str);
-        if (!isNaN(v)) {
+        const v = str === undefined ? undefined : parseInt(str);
+        if (v !== undefined && !isNaN(v)) {
             eventPort = v;
         }
     }
@@ -918,7 +919,7 @@ namespace ts.server {
 
     setStackTraceLimit();
 
-    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
     const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 

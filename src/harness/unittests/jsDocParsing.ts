@@ -10,7 +10,7 @@ namespace ts {
                     assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                     Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
-                        () => Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type));
+                        () => Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type));
                 });
             }
 
@@ -89,7 +89,7 @@ namespace ts {
         describe("DocComments", () => {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
-                    const comment = parseIsolatedJSDocComment(content);
+                    const comment = parseIsolatedJSDocComment(content)!;
                     if (!comment) {
                         Debug.fail("Comment failed to parse entirely");
                     }
@@ -320,7 +320,7 @@ namespace ts {
                 assert.equal(root.kind, SyntaxKind.SourceFile);
                 const first = root.getFirstToken();
                 assert.isDefined(first);
-                assert.equal(first.kind, SyntaxKind.VarKeyword);
+                assert.equal(first!.kind, SyntaxKind.VarKeyword);
             });
         });
         describe("getLastToken", () => {
@@ -329,7 +329,7 @@ namespace ts {
                 assert.isDefined(root);
                 const last = root.getLastToken();
                 assert.isDefined(last);
-                assert.equal(last.kind, SyntaxKind.EndOfFileToken);
+                assert.equal(last!.kind, SyntaxKind.EndOfFileToken);
             });
         });
     });

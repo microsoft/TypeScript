@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
-                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target);
+                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target!);
                 if (moduleExportsChangedToDefault) {
                     for (const importingFile of program.getSourceFiles()) {
                         fixImportOfModuleExports(importingFile, sourceFile, changes);
@@ -170,7 +170,7 @@ namespace ts.codefix {
                 // `const a = require("b").c` --> `import { c as a } from "./b";
                 return [makeSingleImport(name.text, propertyName, moduleSpecifier)];
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -265,7 +265,7 @@ namespace ts.codefix {
         // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
         const moduleSpecifier = reExported.text;
         const moduleSymbol = checker.getSymbolAtLocation(reExported);
-        const exports = moduleSymbol ? moduleSymbol.exports : emptyUnderscoreEscapedMap;
+        const exports = moduleSymbol ? moduleSymbol.exports! : emptyUnderscoreEscapedMap;
         return exports.has("export=" as __String)
             ? [[reExportDefault(moduleSpecifier)], true]
             : !exports.has("default" as __String)
@@ -323,7 +323,7 @@ namespace ts.codefix {
 
         function exportConst() {
             // `exports.x = 0;` --> `export const x = 0;`
-            return makeConst(modifiers, createIdentifier(name), exported);
+            return makeConst(modifiers, createIdentifier(name!), exported); // TODO: GH#18217
         }
     }
 
@@ -346,7 +346,7 @@ namespace ts.codefix {
                 const importSpecifiers = mapAllOrFail(name.elements, e =>
                     e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
                         ? undefined
-                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text));
+                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text)); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
                 if (importSpecifiers) {
                     return [makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier)];
                 }
@@ -366,7 +366,7 @@ namespace ts.codefix {
             case SyntaxKind.Identifier:
                 return convertSingleIdentifierImport(file, name, moduleSpecifier, changes, checker, identifiers);
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -381,7 +381,7 @@ namespace ts.codefix {
         // True if there is some non-property use like `x()` or `f(x)`.
         let needDefaultImport = false;
 
-        for (const use of identifiers.original.get(name.text)) {
+        for (const use of identifiers.original.get(name.text)!) {
             if (checker.getSymbolAtLocation(use) !== nameSymbol || use === name) {
                 // This was a use of a different symbol with the same name, due to shadowing. Ignore.
                 continue;
@@ -468,7 +468,7 @@ namespace ts.codefix {
             getSynthesizedDeepClones(fn.typeParameters),
             getSynthesizedDeepClones(fn.parameters),
             getSynthesizedDeepClone(fn.type),
-            convertToFunctionBody(getSynthesizedDeepClone(fn.body)));
+            convertToFunctionBody(getSynthesizedDeepClone(fn.body!)));
     }
 
     function classExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, cls: ClassExpression): ClassDeclaration {

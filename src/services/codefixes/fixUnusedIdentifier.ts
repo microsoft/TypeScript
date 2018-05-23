@@ -53,7 +53,7 @@ namespace ts.codefix {
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { sourceFile } = context;
                 const startToken = getTokenAtPosition(sourceFile, diag.start, /*includeJsDocComment*/ false);
-                const token = findPrecedingToken(textSpanEnd(diag), diag.file);
+                const token = findPrecedingToken(textSpanEnd(diag), diag.file)!;
                 switch (context.fixId) {
                     case fixIdPrefix:
                         if (isIdentifier(token) && canPrefix(token)) {
@@ -116,9 +116,9 @@ namespace ts.codefix {
     }
 
     function getToken(sourceFile: SourceFile, pos: number): Node {
-        const token = findPrecedingToken(pos, sourceFile, /*startNode*/ undefined, /*includeJsDoc*/ true);
+        const token = findPrecedingToken(pos, sourceFile, /*startNode*/ undefined, /*includeJsDoc*/ true)!;
         // this handles var ["computed"] = 12;
-        return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile) : token;
+        return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile)! : token;
     }
 
     function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
@@ -208,7 +208,7 @@ namespace ts.codefix {
                         oldFunction,
                         oldFunction.modifiers,
                         oldFunction.typeParameters,
-                        /*parameters*/ undefined,
+                        /*parameters*/ undefined!, // TODO: GH#18217
                         oldFunction.type,
                         oldFunction.equalsGreaterThanToken,
                         oldFunction.body);
@@ -242,7 +242,7 @@ namespace ts.codefix {
 
             // handle case where 'import a = A;'
             case SyntaxKind.ImportEqualsDeclaration:
-                const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration);
+                const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration)!;
                 changes.deleteNode(sourceFile, importEquals);
                 break;
 
@@ -264,15 +264,15 @@ namespace ts.codefix {
                 }
                 else {
                     // import |d,| * as ns from './file'
-                    const start = importClause.name.getStart(sourceFile);
-                    const nextToken = getTokenAtPosition(sourceFile, importClause.name.end, /*includeJsDocComment*/ false);
+                    const start = importClause.name!.getStart(sourceFile);
+                    const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end, /*includeJsDocComment*/ false);
                     if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                         // shift first non-whitespace position after comma to the start position of the node
                         const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
                         changes.deleteRange(sourceFile, { pos: start, end });
                     }
                     else {
-                        changes.deleteNode(sourceFile, importClause.name);
+                        changes.deleteNode(sourceFile, importClause.name!);
                     }
                 }
                 break;
@@ -301,7 +301,7 @@ namespace ts.codefix {
             // Delete the entire import declaration
             // |import * as ns from './file'|
             // |import { a } from './file'|
-            const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration);
+            const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration)!;
             changes.deleteNode(sourceFile, importDecl);
         }
     }
@@ -345,18 +345,6 @@ namespace ts.codefix {
                     if (deletedAncestors) deletedAncestors.add(varDecl);
                     changes.deleteNodeInList(sourceFile, varDecl);
                 }
-        }
-    }
-
-    class NodeSet {
-        private map = createMap<Node>();
-
-        add(node: Node): void {
-            this.map.set(String(getNodeId(node)), node);
-        }
-
-        some(pred: (node: Node) => boolean): boolean {
-            return forEachEntry(this.map, pred) || false;
         }
     }
 }

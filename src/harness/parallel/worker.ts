@@ -1,3 +1,5 @@
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
+
 namespace Harness.Parallel.Worker {
     let errors: ErrorInfo[] = [];
     let passes: TestInfo[] = [];
@@ -35,7 +37,7 @@ namespace Harness.Parallel.Worker {
             if (!testList) {
                 throw new Error("Tests must occur within a describe block");
             }
-            testList.push({ name, callback, kind: "test" });
+            testList.push({ name, callback: callback!, kind: "test" });
         }) as Mocha.ITestDefinition;
         (global as any).it.skip = ts.noop;
     }
@@ -43,18 +45,18 @@ namespace Harness.Parallel.Worker {
     function setTimeoutAndExecute(timeout: number | undefined, f: () => void) {
         if (timeout !== undefined) {
             const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
-            process.send(timeoutMsg);
+            process.send!(timeoutMsg);
         }
         f();
         if (timeout !== undefined) {
             // Reset timeout
             const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
-            process.send(timeoutMsg);
+            process.send!(timeoutMsg);
         }
     }
 
     function executeSuiteCallback(name: string, callback: MochaCallback) {
-        let timeout: number;
+        let timeout: number | undefined;
         const fakeContext: Mocha.ISuiteCallbackContext = {
             retries() { return this; },
             slow() { return this; },
@@ -64,9 +66,9 @@ namespace Harness.Parallel.Worker {
             },
         };
         namestack.push(name);
-        let beforeFunc: Callable;
+        let beforeFunc: Callable | undefined;
         (before as any) = (cb: Callable) => beforeFunc = cb;
-        let afterFunc: Callable;
+        let afterFunc: Callable | undefined;
         (after as any) = (cb: Callable) => afterFunc = cb;
         const savedBeforeEach = beforeEachFunc;
         (beforeEach as any) = (cb: Callable) => beforeEachFunc = cb;
@@ -127,13 +129,13 @@ namespace Harness.Parallel.Worker {
     }
 
     function executeTestCallback(name: string, callback: MochaCallback) {
-        let timeout: number;
+        let timeout: number | undefined;
         const fakeContext: Mocha.ITestCallbackContext = {
             skip() { return this; },
             timeout(n: number) {
                 timeout = n;
                 const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
-                process.send(timeoutMsg);
+                process.send!(timeoutMsg);
                 return this;
             },
             retries() { return this; },
@@ -164,7 +166,7 @@ namespace Harness.Parallel.Worker {
                 namestack.pop();
                 if (timeout !== undefined) {
                     const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
-                    process.send(timeoutMsg);
+                    process.send!(timeoutMsg);
                 }
             }
             passing++;
@@ -195,7 +197,7 @@ namespace Harness.Parallel.Worker {
                 namestack.pop();
                 if (timeout !== undefined) {
                     const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
-                    process.send(timeoutMsg);
+                    process.send!(timeoutMsg);
                 }
             }
             if (!completed) {
@@ -219,7 +221,7 @@ namespace Harness.Parallel.Worker {
                         console.error(data);
                     }
                     const message: ParallelResultMessage = { type: "result", payload: handleTest(runner, file) };
-                    process.send(message);
+                    process.send!(message);
                     break;
                 case "close":
                     process.exit(0);
@@ -239,16 +241,16 @@ namespace Harness.Parallel.Worker {
                         else {
                             message = { type: "progress", payload };
                         }
-                        process.send(message);
+                        process.send!(message);
                     }
                     break;
                 }
             }
         });
         process.on("uncaughtException", error => {
-            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack, name: [...namestack] } };
+            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack!, name: [...namestack] } };
             try {
-                process.send(message);
+                process.send!(message);
             }
             catch (e) {
                 console.error(error);
@@ -273,7 +275,7 @@ namespace Harness.Parallel.Worker {
                 if (!runners.has(runner)) {
                     runners.set(runner, createRunner(runner));
                 }
-                const instance = runners.get(runner);
+                const instance = runners.get(runner)!;
                 instance.tests = [file];
                 return { ...resetShimHarnessAndExecute(instance), runner, file };
             }

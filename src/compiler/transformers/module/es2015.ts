@@ -9,7 +9,7 @@ namespace ts {
         context.enableEmitNotification(SyntaxKind.SourceFile);
         context.enableSubstitution(SyntaxKind.Identifier);
 
-        let currentSourceFile: SourceFile;
+        let currentSourceFile: SourceFile | undefined;
         return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -104,7 +104,7 @@ namespace ts {
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
-                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
+                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile!);
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }

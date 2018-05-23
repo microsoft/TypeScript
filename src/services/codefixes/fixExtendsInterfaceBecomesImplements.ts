@@ -21,8 +21,8 @@ namespace ts.codefix {
 
     function getNodes(sourceFile: SourceFile, pos: number) {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        const heritageClauses = getContainingClass(token)!.heritageClauses;
-        const extendsToken = heritageClauses[0].getFirstToken();
+        const heritageClauses = getContainingClass(token)!.heritageClauses!;
+        const extendsToken = heritageClauses[0].getFirstToken()!;
         return extendsToken.kind === SyntaxKind.ExtendsKeyword ? { extendsToken, heritageClauses } : undefined;
     }
 

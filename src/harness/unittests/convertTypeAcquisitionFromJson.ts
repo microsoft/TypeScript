@@ -11,7 +11,7 @@ namespace ts {
             assertTypeAcquisitionWithJsonNode(json, configFileName, expectedResult);
         }
 
-        function verifyAcquisition(actualTypeAcquisition: TypeAcquisition, expectedResult: ExpectedResult) {
+        function verifyAcquisition(actualTypeAcquisition: TypeAcquisition | undefined, expectedResult: ExpectedResult) {
             const parsedTypeAcquisition = JSON.stringify(actualTypeAcquisition);
             const expectedTypeAcquisition = JSON.stringify(expectedResult.typeAcquisition);
             assert.equal(parsedTypeAcquisition, expectedTypeAcquisition);
@@ -120,7 +120,7 @@ namespace ts {
                             file: undefined,
                             start: 0,
                             length: 0,
-                            messageText: undefined
+                            messageText: undefined!, // TODO: GH#18217
                         }
                     ]
                 });
@@ -215,7 +215,7 @@ namespace ts {
                             file: undefined,
                             start: 0,
                             length: 0,
-                            messageText: undefined
+                            messageText: undefined!, // TODO: GH#18217
                         }
                     ]
                 });
