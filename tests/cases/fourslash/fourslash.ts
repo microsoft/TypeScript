@@ -340,6 +340,7 @@ declare namespace FourSlashInterface {
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
     }
