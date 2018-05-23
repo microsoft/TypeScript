@@ -35,6 +35,14 @@ function assertAll(x: Basic) {
     return x;
 }
 
+function assertStringOrNumber(x: string | number)  {
+    return x;
+}
+
+function assertBooleanOrObject(x: boolean | object)  {
+    return x;
+}
+
 type Basic = number | boolean | string | symbol | object | Function | undefined;
 
 function testUnion(x: Basic) {
@@ -187,6 +195,22 @@ function switchOrderingWithDefault(x: string | number | boolean) {
     }
 }
 
+function fallThroughTest(x: string | number | boolean | object) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x)
+        case 'string':
+            assertStringOrNumber(x)
+            break;
+        default:
+            assertObject(x);
+        case 'number':
+        case 'boolean':
+            assertBooleanOrObject(x);
+            break;
+    }
+}
+
 
 //// [narrowingByTypeofInSwitch.js]
 function assertNever(x) {
@@ -214,6 +238,12 @@ function assertUndefined(x) {
     return x;
 }
 function assertAll(x) {
+    return x;
+}
+function assertStringOrNumber(x) {
+    return x;
+}
+function assertBooleanOrObject(x) {
     return x;
 }
 function testUnion(x) {
@@ -423,5 +453,20 @@ function switchOrderingWithDefault(x) {
         default: return local(x);
         case 'string': return assertNever(x);
         case 'number': return assertNever(x);
+    }
+}
+function fallThroughTest(x) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x);
+        case 'string':
+            assertStringOrNumber(x);
+            break;
+        default:
+            assertObject(x);
+        case 'number':
+        case 'boolean':
+            assertBooleanOrObject(x);
+            break;
     }
 }

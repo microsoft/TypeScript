@@ -13594,10 +13594,10 @@ namespace ts {
                 // }
                 //
                 // The implied type of the first clause number | string.
-                // The implied type of the second clause is string (but this doesn't get used).
+                // The implied type of the second clause is never, but this does not get just because it includes a default case.
                 // The implied type of the third clause is boolean (number has already be caught).
                 if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
-                    let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
+                    let impliedType = getTypeWithFacts(getUnionType((<string[]>clauseWitnesses).map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
                     if (impliedType.flags & TypeFlags.Union) {
                         impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
                     }
@@ -19027,17 +19027,20 @@ namespace ts {
             if (hasDefault) {
                 // Value is not equal to any types after the active clause.
                 for (let i = end; i < witnesses.length; i++) {
-                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
+                    const witness = witnesses[i];
+                    facts |= (witness && typeofNEFacts.get(witness)) || TypeFacts.TypeofNEHostObject;
                 }
                 // Remove inequalities for types that appear in the
                 // active clause because they appear before other
                 // types collected so far.
                 for (let i = start; i < end; i++) {
-                    facts &= ~(typeofNEFacts.get(witnesses[i]) || 0);
+                    const witness = witnesses[i];
+                    facts &= ~((witness && typeofNEFacts.get(witness)) || 0);
                 }
                 // Add inequalities for types before the active clause unconditionally.
                 for (let i = 0; i < start; i++) {
-                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
+                    const witness = witnesses[i];
+                    facts |= (witness && typeofNEFacts.get(witness)) || TypeFacts.TypeofNEHostObject;
                 }
             }
             // When in an active clause without default the set of
@@ -19045,12 +19048,14 @@ namespace ts {
             else {
                 // Add equalities for all types in the active clause.
                 for (let i = start; i < end; i++) {
-                    facts |= typeofEQFacts.get(witnesses[i]) || TypeFacts.TypeofEQHostObject;
+                    const witness = witnesses[i];
+                    facts |= (witness && typeofEQFacts.get(witness)) || TypeFacts.TypeofEQHostObject;
                 }
                 // Remove equalities for types that appear before the
                 // active clause.
                 for (let i = 0; i < start; i++) {
-                    facts &= ~(typeofEQFacts.get(witnesses[i]) || 0);
+                    const witness = witnesses[i];
+                    facts &= ~((witness && typeofEQFacts.get(witness)) || 0);
                 }
             }
             return facts;

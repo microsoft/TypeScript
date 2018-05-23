@@ -73,6 +73,22 @@ function assertAll(x: Basic) {
 >x : Basic
 }
 
+function assertStringOrNumber(x: string | number)  {
+>assertStringOrNumber : (x: string | number) => string | number
+>x : string | number
+
+    return x;
+>x : string | number
+}
+
+function assertBooleanOrObject(x: boolean | object)  {
+>assertBooleanOrObject : (x: boolean | object) => boolean | object
+>x : boolean | object
+
+    return x;
+>x : boolean | object
+}
+
 type Basic = number | boolean | string | symbol | object | Function | undefined;
 >Basic : Basic
 >Function : Function
@@ -690,6 +706,52 @@ function switchOrderingWithDefault(x: string | number | boolean) {
 >assertNever(x) : never
 >assertNever : (x: never) => never
 >x : never
+    }
+}
+
+function fallThroughTest(x: string | number | boolean | object) {
+>fallThroughTest : (x: string | number | boolean | object) => void
+>x : string | number | boolean | object
+
+    switch (typeof x) {
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number | boolean | object
+
+        case 'number':
+>'number' : "number"
+
+            assertNumber(x)
+>assertNumber(x) : number
+>assertNumber : (x: number) => number
+>x : number
+
+        case 'string':
+>'string' : "string"
+
+            assertStringOrNumber(x)
+>assertStringOrNumber(x) : string | number
+>assertStringOrNumber : (x: string | number) => string | number
+>x : string | number
+
+            break;
+        default:
+            assertObject(x);
+>assertObject(x) : object
+>assertObject : (x: object) => object
+>x : object
+
+        case 'number':
+>'number' : "number"
+
+        case 'boolean':
+>'boolean' : "boolean"
+
+            assertBooleanOrObject(x);
+>assertBooleanOrObject(x) : boolean | object
+>assertBooleanOrObject : (x: boolean | object) => boolean | object
+>x : boolean | object
+
+            break;
     }
 }
 

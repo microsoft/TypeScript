@@ -37,6 +37,14 @@ function assertAll(x: Basic) {
     return x;
 }
 
+function assertStringOrNumber(x: string | number)  {
+    return x;
+}
+
+function assertBooleanOrObject(x: boolean | object)  {
+    return x;
+}
+
 type Basic = number | boolean | string | symbol | object | Function | undefined;
 
 function testUnion(x: Basic) {
@@ -186,5 +194,21 @@ function switchOrderingWithDefault(x: string | number | boolean) {
         default: return local(x)
         case 'string': return assertNever(x);
         case 'number': return assertNever(x);
+    }
+}
+
+function fallThroughTest(x: string | number | boolean | object) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x)
+        case 'string':
+            assertStringOrNumber(x)
+            break;
+        default:
+            assertObject(x);
+        case 'number':
+        case 'boolean':
+            assertBooleanOrObject(x);
+            break;
     }
 }
