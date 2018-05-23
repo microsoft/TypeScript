@@ -176,7 +176,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const memberElements = createClassElementsFromSymbol(initializer.symbol);
+            const memberElements = createClassElementsFromSymbol(node.symbol);
             if (initializer.body) {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }

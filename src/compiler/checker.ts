@@ -19036,7 +19036,7 @@ namespace ts {
                 return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
             let jsAssignmentType: Type | undefined;
-            if(isInJavaScriptFile(node)) {
+            if (isInJavaScriptFile(node)) {
                 const decl = getDeclarationOfJavascriptInitializer(node);
                 if (decl) {
                     const aliasSymbol = getMergedSymbol(decl.symbol);
