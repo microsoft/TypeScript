@@ -2238,7 +2238,8 @@
     },
     "Left side of comma operator is unused and has no side effects.": {
         "category": "Error",
-        "code": 2695
+        "code": 2695,
+        "reportsUnnecessary": true
     },
     "The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?": {
         "category": "Error",
@@ -3556,6 +3557,11 @@
         "code": 6198,
         "reportsUnnecessary": true
     },
+    "All variables are unused.": {
+        "category": "Error",
+        "code": 6199,
+        "reportsUnnecessary": true
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3668,7 +3674,8 @@
     },
     "Unreachable code detected.": {
         "category": "Error",
-        "code": 7027
+        "code": 7027,
+        "reportsUnnecessary": true
     },
     "Unused label.": {
         "category": "Error",
@@ -3994,6 +4001,10 @@
         "category": "Message",
         "code": 90009
     },
+    "Remove variable statement": {
+        "category": "Message",
+        "code": 90010
+    },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
         "code": 90013
@@ -4257,5 +4268,17 @@
     "Remove all unreachable code": {
         "category": "Message",
         "code": 95051
+    },
+    "Add missing 'typeof'": {
+        "category": "Message",
+        "code": 95052
+    },
+    "Remove unused label": {
+        "category": "Message",
+        "code": 95053
+    },
+    "Remove all unused labels": {
+        "category": "Message",
+        "code": 95054
     }
 }

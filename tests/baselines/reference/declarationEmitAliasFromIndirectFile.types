@@ -62,7 +62,7 @@ const fp = { l10ns: {} } as FlatpickrFn;
 >FlatpickrFn : FlatpickrFn
 
 export default fp.l10ns;
->fp.l10ns : { ar?: { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }; bg?: { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }; } & { default: { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }; }
+>fp.l10ns : { ar?: import("tests/cases/compiler/locale").CustomLocale; bg?: import("tests/cases/compiler/locale").CustomLocale; } & { default: import("tests/cases/compiler/locale").Locale; }
 >fp : FlatpickrFn
->l10ns : { ar?: { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }; bg?: { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }; } & { default: { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }; }
+>l10ns : { ar?: import("tests/cases/compiler/locale").CustomLocale; bg?: import("tests/cases/compiler/locale").CustomLocale; } & { default: import("tests/cases/compiler/locale").Locale; }
 

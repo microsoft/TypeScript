@@ -77,7 +77,7 @@ namespace ts {
             }
         }
 
-        const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": TestFSWithWatch.libFile.content! } });
+        const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": TestFSWithWatch.libFile.content } });
         files.forEach((v, k) => {
             vfsys.mkdirpSync(getDirectoryPath(k));
             vfsys.writeFileSync(k, v);

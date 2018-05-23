@@ -4,8 +4,8 @@
 // @Filename: templateTagWithNestedTypeLiteral.js
 
 /**
- * @template {T}
  * @param {T} t
+ * @template {T}
  */
 function Zet(t) {
     /** @type {T} */

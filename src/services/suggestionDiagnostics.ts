@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts {
-    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): Diagnostic[] {
+    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile);
         const checker = program.getDiagnosticsProducingTypeChecker();
-        const diags: Diagnostic[] = [];
+        const diags: DiagnosticWithLocation[] = [];
 
         if (sourceFile.commonJsModuleIndicator &&
             (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
@@ -18,8 +18,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     if (isJsFile) {
-                        const symbol = node.symbol;
-                        if (symbol.members && (symbol.members.size > 0)) {
+                        if (node.symbol.members && (node.symbol.members.size > 0)) {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
                     }
@@ -60,7 +59,8 @@ namespace ts {
             }
         }
 
-        return diags.concat(checker.getSuggestionDiagnostics(sourceFile));
+        addRange(diags, sourceFile.bindSuggestionDiagnostics);
+        return diags.concat(checker.getSuggestionDiagnostics(sourceFile)).sort((d1, d2) => d1.start - d2.start);
     }
 
     // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
@@ -69,7 +69,7 @@ namespace ts {
             switch (statement.kind) {
                 case SyntaxKind.VariableStatement:
                     return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                        isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
+                        isRequireCall(propertyAccessLeftHandSide(decl.initializer!), /*checkArgumentIsStringLiteralLike*/ true)); // TODO: GH#18217
                 case SyntaxKind.ExpressionStatement: {
                     const { expression } = statement as ExpressionStatement;
                     if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
@@ -90,7 +90,7 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
                 const { importClause, moduleSpecifier } = node;
-                return importClause && !importClause.name && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(moduleSpecifier)
+                return importClause && !importClause.name && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(moduleSpecifier)
                     ? importClause.namedBindings.name
                     : undefined;
             case SyntaxKind.ImportEqualsDeclaration:

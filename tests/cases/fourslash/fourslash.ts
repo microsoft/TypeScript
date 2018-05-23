@@ -179,7 +179,7 @@ declare namespace FourSlashInterface {
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
-            newFileContent?: string,
+            newFileContent?: string | { readonly [fileName: string]: string },
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
@@ -516,7 +516,7 @@ declare namespace FourSlashInterface {
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
-        unused?: true;
+        reportsUnnecessary?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
@@ -537,6 +537,7 @@ declare namespace FourSlashInterface {
         readonly insertText?: string,
         readonly replacementSpan?: Range,
         readonly hasAction?: boolean,
+        readonly isRecommended?: boolean,
         readonly kind?: string,
 
         // details

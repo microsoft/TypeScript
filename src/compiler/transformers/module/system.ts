@@ -27,7 +27,7 @@ namespace ts {
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
         const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
-        const deferredExports: Statement[][] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
         const exportFunctionsMap: Identifier[] = []; // The export function associated with a source file.
         const noSubstitutionMap: boolean[][] = []; // Set of nodes for which substitution rules should be ignored for each file.
 
@@ -35,9 +35,9 @@ namespace ts {
         let moduleInfo: ExternalModuleInfo; // ExternalModuleInfo for the current file.
         let exportFunction: Identifier; // The export function for the current file.
         let contextObject: Identifier; // The context object for the current file.
-        let hoistedStatements: Statement[];
+        let hoistedStatements: Statement[] | undefined;
         let enclosingBlockScopedContainer: Node;
-        let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
+        let noSubstitution: boolean[] | undefined; // Set of nodes for which substitution rules should be ignored.
 
         return chainBundle(transformSourceFile);
 
@@ -126,12 +126,12 @@ namespace ts {
                 noSubstitution = undefined;
             }
 
-            currentSourceFile = undefined;
-            moduleInfo = undefined;
-            exportFunction = undefined;
-            contextObject = undefined;
-            hoistedStatements = undefined;
-            enclosingBlockScopedContainer = undefined;
+            currentSourceFile = undefined!;
+            moduleInfo = undefined!;
+            exportFunction = undefined!;
+            contextObject = undefined!;
+            hoistedStatements = undefined!;
+            enclosingBlockScopedContainer = undefined!;
             return aggregateTransformFlags(updated);
         }
 
@@ -259,7 +259,7 @@ namespace ts {
             // - Temporary variables will appear at the top rather than at the bottom of the file
             prependRange(statements, endLexicalEnvironment());
 
-            const exportStarFunction = addExportStarIfNeeded(statements);
+            const exportStarFunction = addExportStarIfNeeded(statements)!; // TODO: GH#18217
             const moduleObject = createObjectLiteral([
                 createPropertyAssignment("setters",
                     createSettersArray(exportStarFunction, dependencyGroups)
@@ -464,7 +464,7 @@ namespace ts {
                 const parameterName = localName ? getGeneratedNameForNode(localName) : createUniqueName("");
                 const statements: Statement[] = [];
                 for (const entry of group.externalImports) {
-                    const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile);
+                    const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile)!; // TODO: GH#18217
                     switch (entry.kind) {
                         case SyntaxKind.ImportDeclaration:
                             if (!entry.importClause) {
@@ -590,9 +590,9 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (node.importClause) {
-                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile));
+                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile)!); // TODO: GH#18217
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -615,13 +615,13 @@ namespace ts {
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
-            let statements: Statement[];
-            hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile));
+            let statements: Statement[] | undefined;
+            hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile)!); // TODO: GH#18217
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
+                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id]!, node);
             }
             else {
                 statements = appendExportsOfImportEqualsDeclaration(statements, node);
@@ -694,7 +694,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
 
             // Hoist the name of the class declaration to the outer module body function.
             const name = getLocalName(node);
@@ -745,7 +745,7 @@ namespace ts {
                 return visitNode(node, destructuringAndImportCallVisitor, isStatement);
             }
 
-            let expressions: Expression[];
+            let expressions: Expression[] | undefined;
             const isExportedDeclaration = hasModifier(node, ModifierFlags.Export);
             const isMarkedDeclaration = hasAssociatedEndOfDeclarationMarker(node);
             for (const variable of node.declarationList.declarations) {
@@ -757,7 +757,7 @@ namespace ts {
                 }
             }
 
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (expressions) {
                 statements = append(statements, setTextRange(createStatement(inlineExpressions(expressions)), node));
             }
@@ -854,7 +854,7 @@ namespace ts {
          * @param location The source map location for the assignment.
          * @param isExportedDeclaration A value indicating whether the variable is exported.
          */
-        function createVariableAssignment(name: Identifier, value: Expression, location: TextRange, isExportedDeclaration: boolean) {
+        function createVariableAssignment(name: Identifier, value: Expression, location: TextRange | undefined, isExportedDeclaration: boolean) {
             hoistVariableDeclaration(getSynthesizedClone(name));
             return isExportedDeclaration
                 ? createExportExpression(name, preventSubstitution(setTextRange(createAssignment(name, value), location)))
@@ -875,9 +875,9 @@ namespace ts {
             //
             // To balance the declaration, we defer the exports of the elided variable
             // statement until we visit this declaration's `EndOfDeclarationMarker`.
-            if (hasAssociatedEndOfDeclarationMarker(node) && node.original.kind === SyntaxKind.VariableStatement) {
+            if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
-                const isExportedDeclaration = hasModifier(node.original, ModifierFlags.Export);
+                const isExportedDeclaration = hasModifier(node.original!, ModifierFlags.Export);
                 deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original, isExportedDeclaration);
             }
 
@@ -928,7 +928,7 @@ namespace ts {
          * appended.
          * @param decl The declaration whose exports are to be recorded.
          */
-        function appendExportsOfImportDeclaration(statements: Statement[], decl: ImportDeclaration) {
+        function appendExportsOfImportDeclaration(statements: Statement[] | undefined, decl: ImportDeclaration) {
             if (moduleInfo.exportEquals) {
                 return statements;
             }
@@ -970,7 +970,7 @@ namespace ts {
          * appended.
          * @param decl The declaration whose exports are to be recorded.
          */
-        function appendExportsOfImportEqualsDeclaration(statements: Statement[], decl: ImportEqualsDeclaration): Statement[] | undefined {
+        function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, decl: ImportEqualsDeclaration): Statement[] | undefined {
             if (moduleInfo.exportEquals) {
                 return statements;
             }
@@ -1026,7 +1026,7 @@ namespace ts {
                 }
             }
             else if (!isGeneratedIdentifier(decl.name)) {
-                let excludeName: string;
+                let excludeName: string | undefined;
                 if (exportSelf) {
                     statements = appendExportStatement(statements, decl.name, getLocalName(decl));
                     excludeName = idText(decl.name);
@@ -1052,9 +1052,9 @@ namespace ts {
                 return statements;
             }
 
-            let excludeName: string;
+            let excludeName: string | undefined;
             if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? createLiteral("default") : decl.name;
+                const exportName = hasModifier(decl, ModifierFlags.Default) ? createLiteral("default") : decl.name!;
                 statements = appendExportStatement(statements, exportName, getLocalName(decl));
                 excludeName = getTextOfIdentifierOrLiteral(exportName);
             }
@@ -1221,7 +1221,7 @@ namespace ts {
 
             node = updateFor(
                 node,
-                visitForInitializer(node.initializer),
+                node.initializer && visitForInitializer(node.initializer),
                 visitNode(node.condition, destructuringAndImportCallVisitor, isExpression),
                 visitNode(node.incrementor, destructuringAndImportCallVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement)
@@ -1289,12 +1289,8 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitForInitializer(node: ForInitializer): ForInitializer {
-            if (!node) {
-                return node;
-            }
-
             if (shouldHoistForInitializer(node)) {
-                let expressions: Expression[];
+                let expressions: Expression[] | undefined;
                 for (const variable of node.declarations) {
                     expressions = append(expressions, transformInitializedVariable(variable, /*isExportedDeclaration*/ false));
                     if (!variable.initializer) {
@@ -1598,9 +1594,9 @@ namespace ts {
 
                 previousOnEmitNode(hint, node, emitCallback);
 
-                currentSourceFile = undefined;
-                moduleInfo = undefined;
-                exportFunction = undefined;
+                currentSourceFile = undefined!;
+                moduleInfo = undefined!;
+                exportFunction = undefined!;
                 noSubstitution = undefined;
             }
             else {
@@ -1841,7 +1837,7 @@ namespace ts {
          * @param name The name.
          */
         function getExports(name: Identifier) {
-            let exportedNames: Identifier[];
+            let exportedNames: Identifier[] | undefined;
             if (!isGeneratedIdentifier(name)) {
                 const valueDeclaration = resolver.getReferencedImportDeclaration(name)
                     || resolver.getReferencedValueDeclaration(name);

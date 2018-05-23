@@ -151,9 +151,9 @@ namespace documents {
             return match ? new SourceMap(/*mapFile*/ undefined, new Buffer(match[1], "base64").toString("utf8")) : undefined;
         }
 
-        public static fromSource(text: string) {
+        public static fromSource(text: string): SourceMap | undefined {
             const url = this.getUrl(text);
-            return url && this.fromUrl(url);
+            return url === undefined ? undefined : this.fromUrl(url);
         }
 
         public getMappingsForEmittedLine(emittedLine: number): ReadonlyArray<Mapping> | undefined {

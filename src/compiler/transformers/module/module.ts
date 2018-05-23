@@ -38,7 +38,7 @@ namespace ts {
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
         const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
-        const deferredExports: Statement[][] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
@@ -64,8 +64,8 @@ namespace ts {
             // Perform the transformation.
             const transformModule = getTransformModuleDelegate(moduleKind);
             const updated = transformModule(node);
-            currentSourceFile = undefined;
-            currentModuleInfo = undefined;
+            currentSourceFile = undefined!;
+            currentModuleInfo = undefined!;
             needUMDDynamicImportHelper = false;
             return aggregateTransformFlags(updated);
         }
@@ -391,7 +391,7 @@ namespace ts {
             if (isImportEqualsDeclaration(node) || isExportDeclaration(node) || !getExternalModuleNameLiteral(node, currentSourceFile, host, resolver, compilerOptions)) {
                 return undefined;
             }
-            const name = getLocalNameForExternalImport(node, currentSourceFile);
+            const name = getLocalNameForExternalImport(node, currentSourceFile)!; // TODO: GH#18217
             const expr = getHelperExpressionForImport(node, name);
             if (expr === name) {
                 return undefined;
@@ -605,7 +605,7 @@ namespace ts {
             }
         }
 
-        function createImportCallExpressionUMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
+        function createImportCallExpressionUMD(arg: Expression, containsLexicalThis: boolean): Expression {
             // (function (factory) {
             //      ... (regular UMD)
             // }
@@ -762,7 +762,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             const namespaceDeclaration = getNamespaceDeclarationNode(node);
             if (moduleKind !== ModuleKind.AMD) {
                 if (!node.importClause) {
@@ -876,7 +876,7 @@ namespace ts {
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
@@ -1009,7 +1009,7 @@ namespace ts {
                 return undefined;
             }
 
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             const original = node.original;
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
@@ -1029,7 +1029,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
@@ -1072,7 +1072,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
@@ -1113,12 +1113,12 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
-            let statements: Statement[];
-            let variables: VariableDeclaration[];
-            let expressions: Expression[];
+            let statements: Statement[] | undefined;
+            let variables: VariableDeclaration[] | undefined;
+            let expressions: Expression[] | undefined;
 
             if (hasModifier(node, ModifierFlags.Export)) {
-                let modifiers: NodeArray<Modifier>;
+                let modifiers: NodeArray<Modifier> | undefined;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
                 // We only want to emit assignments for variables with initializers.
@@ -1219,7 +1219,7 @@ namespace ts {
             //
             // To balance the declaration, add the exports of the elided variable
             // statement.
-            if (hasAssociatedEndOfDeclarationMarker(node) && node.original.kind === SyntaxKind.VariableStatement) {
+            if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
                 deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original);
             }
@@ -1532,9 +1532,9 @@ namespace ts {
 
                 previousOnEmitNode(hint, node, emitCallback);
 
-                currentSourceFile = undefined;
-                currentModuleInfo = undefined;
-                noSubstitution = undefined;
+                currentSourceFile = undefined!;
+                currentModuleInfo = undefined!;
+                noSubstitution = undefined!;
             }
             else {
                 previousOnEmitNode(hint, node, emitCallback);
