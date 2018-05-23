@@ -10,7 +10,8 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
     interface Info {
         func: ArrowFunction;
-        expression: Expression;
+        expression: Expression | undefined;
+        returnStatement?: ReturnStatement;
         addBraces: boolean;
     }
 
@@ -40,23 +41,23 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return undefined;
 
-        const { expression, func } = info;
+        const { expression, returnStatement, func } = info;
 
         let body: ConciseBody;
         if (actionName === addBracesActionName) {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(expression, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, true, true);
+            copyComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* explicitHtnl */ true);
         }
-        else if (actionName === removeBracesActionName) {
-            const returnStatement = <ReturnStatement>expression.parent;
-            body = needsParentheses(expression) ? createParen(expression) : expression;
+        else if (actionName === removeBracesActionName && returnStatement) {
+            const actualExpression = expression || createVoidZero();
+            body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, false);
+            copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* explicitHtnl */ false);
         }
         else {
-            Debug.fail('invalid action');
+            Debug.fail("invalid action");
         }
 
         const edits = textChanges.ChangeTracker.with(context, t => updateBody(t, file, func, body));
@@ -89,7 +90,8 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 return {
                     func,
                     addBraces: false,
-                    expression: firstStatement.expression
+                    expression: firstStatement.expression,
+                    returnStatement: firstStatement
                 };
             }
         }
