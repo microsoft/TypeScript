@@ -1656,6 +1656,6 @@ namespace ts {
                 pos += 2;
             }
             addSyntheticLeadingComment(targetNode, explicitKind || kind, sourceFile.text.slice(pos, end), explicitHtnl !== undefined ? explicitHtnl : htnl);
-        }, undefined, inline)
+        })
     }
 }
