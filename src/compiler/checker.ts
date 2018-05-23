@@ -7379,18 +7379,17 @@ namespace ts {
             const result: Signature[] = [];
             for (let i = 0; i < symbol.declarations.length; i++) {
                 const decl = symbol.declarations[i];
-                const node = isPropertyAccessExpression(decl) ? getAssignedJavascriptInitializer(decl)! : decl; // TODO: GH#18217
-                if (!isFunctionLike(node)) continue;
+                if (!isFunctionLike(decl)) continue;
                 // Don't include signature if node is the implementation of an overloaded function. A node is considered
                 // an implementation node if it has a body and the previous node is of the same kind and immediately
                 // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
-                if (i > 0 && (node as FunctionLikeDeclaration).body) {
+                if (i > 0 && (decl as FunctionLikeDeclaration).body) {
                     const previous = symbol.declarations[i - 1];
-                    if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
+                    if (decl.parent === previous.parent && decl.kind === previous.kind && decl.pos === previous.end) {
                         continue;
                     }
                 }
-                result.push(getSignatureFromDeclaration(node));
+                result.push(getSignatureFromDeclaration(decl));
             }
             return result;
         }
@@ -15211,7 +15210,7 @@ namespace ts {
                     // expression has no contextual type, the right operand is contextually typed by the type of the left operand,
                     // except for the special case of Javascript declarations of the form `namespace.prop = namespace.prop || {}`
                     const type = getContextualType(binaryExpression);
-                    return !type && node === right && !getDeclaredJavascriptInitializer(binaryExpression.parent) && !getAssignedJavascriptInitializer(binaryExpression) ?
+                    return !type && node === right && !isDefaultedJavascriptInitializer(binaryExpression) ?
                         getTypeOfExpression(left) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
@@ -15220,6 +15219,7 @@ namespace ts {
                     return undefined;
             }
         }
+
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for special property assignments to avoid circularity.
         function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
@@ -20610,13 +20610,12 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
-            const inJs = isInJavaScriptFile(declaration);
-            const initializer = inJs && getDeclaredJavascriptInitializer(declaration) || declaration.initializer!;
+            const initializer = getEffectiveInitializer(declaration)!;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
-            if (inJs) {
+            if (isInJavaScriptFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     if (noImplicitAny) {
                         reportImplicitAnyError(declaration, anyType);
@@ -23242,8 +23241,8 @@ namespace ts {
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error
-                if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    const initializer = isInJavaScriptFile(node) && getDeclaredJavascriptInitializer(node) || node.initializer;
+                const initializer = getEffectiveInitializer(node);
+                if (initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     checkTypeAssignableTo(checkExpressionCached(initializer), type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }

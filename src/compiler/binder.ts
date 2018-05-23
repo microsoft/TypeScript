@@ -2358,7 +2358,7 @@ namespace ts {
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    let constructorSymbol : Symbol | undefined = thisContainer.symbol;
+                    let constructorSymbol: Symbol | undefined = thisContainer.symbol;
                     // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
                     if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
                         const l = thisContainer.parent.left;
