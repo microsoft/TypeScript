@@ -1542,6 +1542,9 @@ namespace ts {
 
     // TODO: Maybe should be named getDeclarationOfJSAlias or JSAliasSymbol? (and should search ALL declarations of the symbol)
     export function getDeclarationOfJavascriptInitializer(node: Node): Node | undefined {
+        if (!node.parent) {
+            return undefined;
+        }
         // TODO: Callers already know which category of initializer they fall into, and some are trivially valid, so this check is kind of pointless
         const isPrototypeAssignment = isAssignment(node.parent) && isPrototypeAccess(node.parent.left) || isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isAssignment(node.parent.parent) && isPrototypeAccess(node.parent.parent.left);
         if (!getJavascriptInitializer(node, isPrototypeAssignment)) {
@@ -1566,17 +1569,8 @@ namespace ts {
     }
 
     function isSameDefaultedName(declaration: Node, initializer: Expression) {
-        let name: EntityNameExpression;
-        if (isAssignment(declaration) && isEntityNameExpression(declaration.left)) {
-            name = declaration.left;
-        }
-        else if (isVariableDeclaration(declaration) && isIdentifier(declaration.name)) {
-            name = declaration.name;
-        }
-        else {
-            return false;
-        }
-        return isSameEntityName(name, initializer);
+        return isAssignment(declaration) && isEntityNameExpression(declaration.left) && isSameEntityName(declaration.left, initializer) ||
+            isVariableDeclaration(declaration) && isIdentifier(declaration.name) && isSameEntityName(declaration.name, initializer);
     }
 
     // TODO: Remaining calls to this are probably errors

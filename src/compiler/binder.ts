@@ -2358,7 +2358,7 @@ namespace ts {
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    let constructorSymbol = thisContainer.symbol;
+                    let constructorSymbol : Symbol | undefined = thisContainer.symbol;
                     // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
                     if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
                         const l = thisContainer.parent.left;
@@ -2533,7 +2533,7 @@ namespace ts {
             }
         }
 
-        function forEachIdentifierInEntityName(e: EntityNameExpression, parent: Symbol, action: (e: Identifier, symbol: Symbol | undefined, parent: Symbol) => Symbol | undefined): Symbol | undefined {
+        function forEachIdentifierInEntityName(e: EntityNameExpression, parent: Symbol | undefined, action: (e: Identifier, symbol: Symbol | undefined, parent: Symbol | undefined) => Symbol | undefined): Symbol | undefined {
             if (isExportsOrModuleExportsOrAlias(file, e)) {
                 return file.symbol;
             }
@@ -2561,10 +2561,7 @@ namespace ts {
             }
             else {
                 const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Class;
-                const symbol = bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
-                if (isInJavaScriptFile(node) && getDeclarationOfJavascriptInitializer(node)) {
-                    symbol.flags |= SymbolFlags.JSAlias;
-                }
+                bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
                     classifiableNames.set(node.name.escapedText, true);
@@ -2680,11 +2677,7 @@ namespace ts {
             }
             checkStrictModeFunctionName(node);
             const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Function;
-            const symbol = bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
-            if (isInJavaScriptFile(node) && getDeclarationOfJavascriptInitializer(node)) {
-                symbol.flags |= SymbolFlags.JSAlias;
-            }
-            return symbol;
+            return bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {

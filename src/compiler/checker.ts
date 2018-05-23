@@ -954,7 +954,7 @@ namespace ts {
 
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             source.forEach((sourceSymbol, id) => {
-                target.set(id, target.has(id) ? mergeSymbol(target.get(id), sourceSymbol) : sourceSymbol);
+                target.set(id, target.has(id) ? mergeSymbol(target.get(id)!, sourceSymbol) : sourceSymbol);
             });
         }
 
@@ -5016,15 +5016,13 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                // TODO: Pretty sure I just look at valueDeclaration and figure this out syntactically. Not sure it's worth burning a symbol flag for.
-                if (symbol.flags & SymbolFlags.JSAlias) {
+                const aliasDeclaration = getDeclarationOfJavascriptInitializer(symbol.valueDeclaration);
+                if (aliasDeclaration) {
                     // TODO: eventually just call resolveAlias
-                    const aliasDeclaration = getDeclarationOfJavascriptInitializer(symbol.valueDeclaration);
                     const aliasSymbol = getMergedSymbol(aliasDeclaration.symbol);
                     // TODO: Jamming things in manually *might* be the right thing (possibly even with mergeSymbolTable)
                     // but it needs to be a lot more complete
                     // (probably I need a "cloneSymbolTable" or "cloneToSymbol")
-                    // TODO: Why not intersections? Oh...it has the wrong semantics for merges/conflicts.
                     if (aliasSymbol && (aliasSymbol.exports && aliasSymbol.exports.size || aliasSymbol.members && aliasSymbol.members.size)) {
                         symbol = cloneSymbol(symbol);
                         links = symbol as TransientSymbol; // need to overwrite links because we overwrote symbol as well -- and for transient symbol, there are their own symbolLinks
@@ -5032,7 +5030,6 @@ namespace ts {
                             symbol.exports = symbol.exports || createSymbolTable();
                             mergeSymbolTable(symbol.exports, aliasSymbol.exports);
                         }
-                        // TODO: Instead of this, I bet you could just treat prototype assignment as normal in the binder now
                         if (aliasSymbol.members && aliasSymbol.members.size) {
                             symbol.members = symbol.members || createSymbolTable();
                             mergeSymbolTable(symbol.members, aliasSymbol.members);

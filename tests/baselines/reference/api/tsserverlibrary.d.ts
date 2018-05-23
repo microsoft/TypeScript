@@ -2035,7 +2035,6 @@ declare namespace ts {
         Optional = 16777216,
         Transient = 33554432,
         JSContainer = 67108864,
-        JSAlias = 134217728,
         Enum = 384,
         Variable = 3,
         Value = 67216319,
