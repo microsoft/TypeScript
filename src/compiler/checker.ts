@@ -848,7 +848,6 @@ namespace ts {
         }
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
-            if (flags & SymbolFlags.JSContainer) return 0; // TODO: This is a big hammer, but equivalent to what we had before
             let result: SymbolFlags = 0;
             if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
             if (flags & SymbolFlags.FunctionScopedVariable) result |= SymbolFlags.FunctionScopedVariableExcludes;
@@ -894,11 +893,12 @@ namespace ts {
          * If target is not transient, mergeSymbol will produce a transient clone, mutate that and return it.
          */
         function mergeSymbol(target: Symbol, source: Symbol): Symbol {
-            if (!(target.flags & SymbolFlags.Transient)) {
-                target = cloneSymbol(target);
-            }
-            if (!(target.flags & getExcludedSymbolFlags(source.flags)) || target.flags & SymbolFlags.JSContainer) {
-                Debug.assert(!!(target.flags & SymbolFlags.Transient));
+            if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
+                (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                if (!(target.flags & SymbolFlags.Transient)) {
+                    target = cloneSymbol(target);
+                }
+                Debug.assert(source !== target);
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -5016,23 +5016,20 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                const aliasDeclaration = getDeclarationOfJavascriptInitializer(symbol.valueDeclaration);
-                if (aliasDeclaration) {
-                    // TODO: eventually just call resolveAlias
-                    const aliasSymbol = getMergedSymbol(aliasDeclaration.symbol);
-                    // TODO: Jamming things in manually *might* be the right thing (possibly even with mergeSymbolTable)
-                    // but it needs to be a lot more complete
-                    // (probably I need a "cloneSymbolTable" or "cloneToSymbol")
-                    if (aliasSymbol && (aliasSymbol.exports && aliasSymbol.exports.size || aliasSymbol.members && aliasSymbol.members.size)) {
+                const jsDeclaration = getDeclarationOfJavascriptInitializer(symbol.valueDeclaration);
+                if (jsDeclaration) {
+                    const jsSymbol = getMergedSymbol(jsDeclaration.symbol);
+                    if (jsSymbol && (jsSymbol.exports && jsSymbol.exports.size || jsSymbol.members && jsSymbol.members.size)) {
                         symbol = cloneSymbol(symbol);
-                        links = symbol as TransientSymbol; // need to overwrite links because we overwrote symbol as well -- and for transient symbol, there are their own symbolLinks
-                        if (aliasSymbol.exports && aliasSymbol.exports.size) {
+                        // note:we overwrite links because we just cloned the symbol
+                        links = symbol as TransientSymbol;
+                        if (jsSymbol.exports && jsSymbol.exports.size) {
                             symbol.exports = symbol.exports || createSymbolTable();
-                            mergeSymbolTable(symbol.exports, aliasSymbol.exports);
+                            mergeSymbolTable(symbol.exports, jsSymbol.exports);
                         }
-                        if (aliasSymbol.members && aliasSymbol.members.size) {
+                        if (jsSymbol.members && jsSymbol.members.size) {
                             symbol.members = symbol.members || createSymbolTable();
-                            mergeSymbolTable(symbol.members, aliasSymbol.members);
+                            mergeSymbolTable(symbol.members, jsSymbol.members);
                         }
                     }
                 }
@@ -15890,16 +15887,15 @@ namespace ts {
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
 
-            // (also they should have a cheaper/better way to know whether they are a defaulted initializer)
             if (isInJSFile) {
                 const decl = getDeclarationOfJavascriptInitializer(node);
                 if (decl) {
-                    // an empty JS object literal whose 'alias symbol' has exports is a JS namespace
-                    const aliasSymbol = getMergedSymbol(decl.symbol);
-                    if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
-                        propertiesTable = aliasSymbol.exports;
-                        aliasSymbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
-                        return createObjectLiteralType(); // This isn't cached, which seems bad. Don't know if the normal case is either though.
+                    // a JS object literal whose declaration's symbol has exports is a JS namespace
+                    const symbol = getMergedSymbol(decl.symbol);
+                    if (symbol && symbol.exports && symbol.exports.size) {
+                        propertiesTable = symbol.exports;
+                        symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
+                        return createObjectLiteralType();
                     }
                 }
             }
@@ -19102,7 +19098,6 @@ namespace ts {
                 return resolveExternalModuleTypeByLiteral(node.arguments![0] as StringLiteral);
             }
 
-            // TODO: I might be able to push down the exports, etc, from aliasSymbol into getReturnTypeOfSignature and its children
             const returnType = getReturnTypeOfSignature(signature);
             // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
@@ -19113,9 +19108,9 @@ namespace ts {
             if (isInJavaScriptFile(node)) {
                 const decl = getDeclarationOfJavascriptInitializer(node);
                 if (decl) {
-                    const aliasSymbol = getMergedSymbol(decl.symbol);
-                    if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
-                        jsAssignmentType = createAnonymousType(aliasSymbol, aliasSymbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+                    const jsSymbol = getMergedSymbol(decl.symbol);
+                    if (jsSymbol && jsSymbol.exports && jsSymbol.exports.size) {
+                        jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
                     }
                 }
             }
