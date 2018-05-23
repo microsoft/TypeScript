@@ -13572,10 +13572,27 @@ namespace ts {
                 if (!switchWitnesses.length) {
                     return type;
                 }
-                const clauseWitnesses = switchWitnesses.slice(clauseStart, clauseEnd);
                 //  Equal start and end denotes implicit fallthrough; undefined marks explicit default clause
-                const hasDefaultClause = clauseStart === clauseEnd || contains(clauseWitnesses, /*explicitDefaultStatement*/ undefined);
-                const switchFacts = getFactsFromTypeofSwitch(clauseStart, clauseEnd, switchWitnesses, hasDefaultClause);
+                const defaultCaseLocation = findIndex(switchWitnesses, elem => elem === undefined);
+                const hasDefaultClause = clauseStart === clauseEnd || (defaultCaseLocation >= clauseStart && defaultCaseLocation < clauseEnd);
+                let clauseWitnesses: string[];
+                let switchFacts: TypeFacts;
+                if (defaultCaseLocation > -1) {
+                    // We no longer need the undefined denoting an
+                    // explicit default case. Remove the undefined and
+                    // fix-up clauseStart and clauseEnd.  This means
+                    // that we don't have to worry about undefined
+                    // in the witness array.
+                    const witnesses = <string[]>switchWitnesses.filter(witness => witness !== undefined);
+                    const fixedClauseStart = defaultCaseLocation < clauseStart ? clauseStart - 1 : clauseStart;
+                    const fixedClauseEnd = defaultCaseLocation < clauseEnd ? clauseEnd - 1 : clauseEnd;
+                    clauseWitnesses = witnesses.slice(fixedClauseStart, fixedClauseEnd);
+                    switchFacts = getFactsFromTypeofSwitch(fixedClauseStart, fixedClauseEnd, witnesses, hasDefaultClause);
+                }
+                else {
+                    clauseWitnesses = <string[]>switchWitnesses.slice(clauseStart, clauseEnd);
+                    switchFacts = getFactsFromTypeofSwitch(clauseStart, clauseEnd, <string[]>switchWitnesses, hasDefaultClause);
+                }
                 // The implied type is the raw type suggested by a
                 // value being caught in this clause.
                 // - If there is a default the implied type is not used.
@@ -13594,10 +13611,10 @@ namespace ts {
                 // }
                 //
                 // The implied type of the first clause number | string.
-                // The implied type of the second clause is never, but this does not get just because it includes a default case.
+                // The implied type of the second clause is never, but this does not get used because it includes a default case.
                 // The implied type of the third clause is boolean (number has already be caught).
                 if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
-                    let impliedType = getTypeWithFacts(getUnionType((<string[]>clauseWitnesses).map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
+                    let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
                     if (impliedType.flags & TypeFlags.Union) {
                         impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
                     }
@@ -19019,7 +19036,7 @@ namespace ts {
          * from `start` to `end`. Parameter `hasDefault` denotes
          * whether the active clause contains a default clause.
          */
-        function getFactsFromTypeofSwitch(start: number, end: number, witnesses: (string | undefined)[], hasDefault: boolean): TypeFacts {
+        function getFactsFromTypeofSwitch(start: number, end: number, witnesses: string[], hasDefault: boolean): TypeFacts {
             let facts: TypeFacts = TypeFacts.None;
             // When in the default we only collect inequality facts
             // because default is 'in theory' a set of infinite
@@ -19027,20 +19044,17 @@ namespace ts {
             if (hasDefault) {
                 // Value is not equal to any types after the active clause.
                 for (let i = end; i < witnesses.length; i++) {
-                    const witness = witnesses[i];
-                    facts |= (witness && typeofNEFacts.get(witness)) || TypeFacts.TypeofNEHostObject;
+                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
                 }
                 // Remove inequalities for types that appear in the
                 // active clause because they appear before other
                 // types collected so far.
                 for (let i = start; i < end; i++) {
-                    const witness = witnesses[i];
-                    facts &= ~((witness && typeofNEFacts.get(witness)) || 0);
+                    facts &= ~(typeofNEFacts.get(witnesses[i]) || 0);
                 }
                 // Add inequalities for types before the active clause unconditionally.
                 for (let i = 0; i < start; i++) {
-                    const witness = witnesses[i];
-                    facts |= (witness && typeofNEFacts.get(witness)) || TypeFacts.TypeofNEHostObject;
+                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
                 }
             }
             // When in an active clause without default the set of
@@ -19048,14 +19062,12 @@ namespace ts {
             else {
                 // Add equalities for all types in the active clause.
                 for (let i = start; i < end; i++) {
-                    const witness = witnesses[i];
-                    facts |= (witness && typeofEQFacts.get(witness)) || TypeFacts.TypeofEQHostObject;
+                    facts |= typeofEQFacts.get(witnesses[i]) || TypeFacts.TypeofEQHostObject;
                 }
                 // Remove equalities for types that appear before the
                 // active clause.
                 for (let i = 0; i < start; i++) {
-                    const witness = witnesses[i];
-                    facts &= ~((witness && typeofEQFacts.get(witness)) || 0);
+                    facts &= ~(typeofEQFacts.get(witnesses[i]) || 0);
                 }
             }
             return facts;
@@ -19067,8 +19079,10 @@ namespace ts {
             }
             if (node.expression.kind === SyntaxKind.TypeOfExpression) {
                 const operandType = getTypeOfExpression((node.expression as TypeOfExpression).expression);
-                // Type is not equal to every type in the switch.
-                const notEqualFacts = getFactsFromTypeofSwitch(0, 0, getSwitchClauseTypeOfWitnesses(node), /*hasDefault*/ true);
+                // This cast is safe because the switch is possibly exhaustive and does not contain a default case, so there can be no undefined.
+                const witnesses = <string[]>getSwitchClauseTypeOfWitnesses(node);
+                // notEqualFacts states that the type of the switched value is not equal to every type in the switch.
+                const notEqualFacts = getFactsFromTypeofSwitch(0, 0, witnesses, /*hasDefault*/ true);
                 const type = getBaseConstraintOfType(operandType) || operandType;
                 return !!(filterType(type, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts).flags & TypeFlags.Never);
             }
