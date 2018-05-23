@@ -211,7 +211,7 @@ namespace ts.codefix {
 
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
         // between the only import statement and user code. Otherwise just insert the statement because chances
-        // are there are already a new line seperating code and import statements.
+        // are there are already a new line separating code and import statements.
         return createCodeAction(Diagnostics.Import_0_from_module_1, [symbolName, moduleSpecifierWithoutQuotes], changes);
     }
 
