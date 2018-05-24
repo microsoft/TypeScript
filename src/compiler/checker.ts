@@ -24752,7 +24752,11 @@ namespace ts {
                     case SyntaxKind.ParenthesizedExpression:
                         return evaluate((<ParenthesizedExpression>expr).expression);
                     case SyntaxKind.Identifier:
-                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), (<Identifier>expr).escapedText);
+                        const identifier = <Identifier>expr;
+                        if (isInfinityOrNaNString(identifier.escapedText)) {
+                            return +(identifier.escapedText);
+                        }
+                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), identifier.escapedText);
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
                         const ex = <PropertyAccessExpression | ElementAccessExpression>expr;
@@ -27061,7 +27065,7 @@ namespace ts {
                 }
             }
 
-            // We do global augmentations seperately from module augmentations (and before creating global types) because they
+            // We do global augmentations separately from module augmentations (and before creating global types) because they
             //  1. Affect global types. We won't have the correct global types until global augmentations are merged. Also,
             //  2. Module augmentation instantiation requires creating the type of a module, which, in turn, can require
             //       checking for an export or property on the module (if export=) which, in turn, can fall back to the

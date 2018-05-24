@@ -4281,16 +4281,20 @@
         "category": "Message",
         "code": 95054
     },
-    "Add or remove braces in an arrow function": {
+    "Convert '{0}' to mapped object type": {
         "category": "Message",
         "code": 95055
     },
-    "Add braces to arrow function": {
+    "Add or remove braces in an arrow function": {
         "category": "Message",
         "code": 95056
     },
-    "Remove braces from arrow function": {
+    "Add braces to arrow function": {
         "category": "Message",
         "code": 95057
+    },
+    "Remove braces from arrow function": {
+        "category": "Message",
+        "code": 95058
     }
 }

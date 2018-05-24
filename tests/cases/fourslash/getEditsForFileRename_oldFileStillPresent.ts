@@ -1,6 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-// See also `getEditsForFileRename_oldFileStillPresent.ts`
+// Same test as `getEditsForFileRename.ts`, but with the old file not yet renamed.
+
+// @Filename: /src/old.ts
+////stuff
 
 // @Filename: /a.ts
 /////// <reference path="./src/old.ts" />
