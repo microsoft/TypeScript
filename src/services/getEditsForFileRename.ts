@@ -66,11 +66,9 @@ namespace ts {
      */
     type InternalPathUpdater = (sourceFile: SourceFile, importText: string) => string | undefined;
     function getInternalPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string): InternalPathUpdater {
-        const relativeNewDirToOldDir = ensurePathIsNonModuleName(getRelativePathFromDirectory(toDirectory(newFileOrDirPath), toDirectory(oldFileOrDirPath), /*ignoreCase*/ false));
-
+        const relativeNewDirToOldDir = getRelative(newFileOrDirPath, oldFileOrDirPath);
         if (relativeNewDirToOldDir === ".") return () => undefined;
-
-        const relativeOldDirToNewDir = ensurePathIsNonModuleName(getRelativePathFromDirectory(toDirectory(oldFileOrDirPath), toDirectory(newFileOrDirPath), /*ignoreCase*/ false));
+        const relativeOldDirToNewDir = getRelative(oldFileOrDirPath, newFileOrDirPath);
 
         return (sourceFile, importText) => {
             if (!pathIsRelative(importText) ||
@@ -83,6 +81,10 @@ namespace ts {
             if (short !== undefined) return ensurePathIsNonModuleName(short);
             return combineNormal(relativeNewDirToOldDir, importText);
         };
+    }
+
+    function getRelative(from: string, to: string): string {
+        return ensurePathIsNonModuleName(getRelativePathFromDirectory(toDirectory(from), toDirectory(to), /*ignoreCase*/ false));
     }
 
     function toDirectory(path: string): string {
