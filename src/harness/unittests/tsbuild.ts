@@ -181,6 +181,31 @@ namespace ts {
         });
     });
 
+    describe("tsbuild - downstream-blocked compilations", () => {
+        it("won't build downstream projects if upstream projects have errors", () => {
+            const fs = bfs.shadow();
+            const host = new fakes.CompilerHost(fs);
+            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: true });
+
+            clearDiagnostics();
+
+            // Induce an error in the middle project
+            replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`);
+            fs.chdir("/src/tests");
+            builder.buildProjects(["."]);
+            assertDiagnosticMessages(
+                Diagnostics.Sorted_list_of_input_projects_Colon_0,
+                Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
+                Diagnostics.Building_project_0,
+                Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
+                Diagnostics.Building_project_0,
+                Diagnostics.Property_0_does_not_exist_on_type_1,
+                Diagnostics.Project_0_can_t_be_built_because_it_depends_on_a_project_with_errors,
+                Diagnostics.Skipping_build_of_project_0_because_its_upstream_project_1_has_errors
+            );
+        });
+    });
+
     function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string) {
         if (!fs.statSync(path).isFile()) {
             throw new Error(`File ${path} does not exist`);

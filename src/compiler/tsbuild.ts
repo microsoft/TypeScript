@@ -69,7 +69,8 @@ namespace ts {
         OutputMissing,
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
-        UpstreamOutOfDate
+        UpstreamOutOfDate,
+        UpstreamBlocked
     }
 
     type UpToDateStatus =
@@ -78,7 +79,8 @@ namespace ts {
         | StatusOutputMissing
         | StatusOutOfDateWithSelf
         | StatusOutOfDateWithUpstream
-        | StatusUpstreamOutOfDate;
+        | StatusUpstreamOutOfDate
+        | StatusUpstreamBlocked;
 
     /**
      * The project can't be built at all in its current state. For example,
@@ -125,6 +127,14 @@ namespace ts {
      */
     interface StatusUpstreamOutOfDate {
         type: UpToDateStatusType.UpstreamOutOfDate;
+        upstreamProjectName: string;
+    }
+
+    /**
+     * This project depends an upstream project with build errors
+     */
+    interface StatusUpstreamBlocked {
+        type: UpToDateStatusType.UpstreamBlocked;
         upstreamProjectName: string;
     }
 
@@ -466,33 +476,33 @@ namespace ts {
             const outputs = getAllProjectOutputs(project);
 
             // Now see if all outputs are newer than the newest input
-            let oldestOutputFileName: string = undefined!;
+            let oldestOutputFileName: string | undefined;
             let oldestOutputFileTime: Date = maximumDate;
             let newestOutputFileTime: Date = minimumDate;
             let newestDeclarationFileContentChangedTime: Date = minimumDate;
+            let missingOutputFileName: string | undefined;
+            let isOutOfDateWithInputs = false;
             for (const output of outputs) {
-                // Output is missing
+                // Output is missing; can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
                 if (!host.fileExists(output)) {
-                    return {
-                        type: UpToDateStatusType.OutputMissing,
-                        missingOutputFileName: output
-                    };
+                    missingOutputFileName = output;
+                    break;
                 }
 
                 const outputTime = host.getModifiedTime!(output);
-                // If an output is older than the newest input, we can stop checking
-                if (outputTime < newestInputFileTime) {
-                    return {
-                        type: UpToDateStatusType.OutOfDateWithSelf,
-                        outOfDateOutputFileName: output,
-                        newerInputFileName: newestInputFileName
-                    };
-                }
-
                 if (outputTime < oldestOutputFileTime) {
                     oldestOutputFileTime = outputTime;
                     oldestOutputFileName = output;
                 }
+
+                // If an output is older than the newest input, we can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (outputTime < newestInputFileTime) {
+                    isOutOfDateWithInputs = true;
+                    break;
+                }
+
                 newestOutputFileTime = newer(newestOutputFileTime, outputTime);
 
                 // Keep track of when the most recent time a .d.ts file was changed.
@@ -511,12 +521,18 @@ namespace ts {
             }
 
             let pseudoUpToDate = false;
-            // By here, we know the project is at least up-to-date with its own inputs.
-            // See if any of its upstream projects are newer than it
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
                     const resolvedRef = resolveProjectReferencePath(host, ref) as ResolvedConfigFileName;
                     const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
+
+                    // An upstream project is blocked
+                    if (refStatus.type === UpToDateStatusType.Unbuildable) {
+                        return {
+                            type: UpToDateStatusType.UpstreamBlocked,
+                            upstreamProjectName: ref.path
+                        };
+                    }
 
                     // If the upstream project is out of date, then so are we (someone shouldn't have asked, though?)
                     if (refStatus.type !== UpToDateStatusType.UpToDate) {
@@ -543,10 +559,25 @@ namespace ts {
                     Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
                     return {
                         type: UpToDateStatusType.OutOfDateWithUpstream,
-                        outOfDateOutputFileName: oldestOutputFileName,
+                        outOfDateOutputFileName: oldestOutputFileName!,
                         newerProjectName: ref.path
                     };
                 }
+            }
+
+            if (missingOutputFileName !== undefined) {
+                return {
+                    type: UpToDateStatusType.OutputMissing,
+                    missingOutputFileName
+                };
+            }
+
+            if (isOutOfDateWithInputs) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithSelf,
+                    outOfDateOutputFileName: oldestOutputFileName!,
+                    newerInputFileName: newestInputFileName
+                };
             }
 
             // Up to date
@@ -637,6 +668,7 @@ namespace ts {
             if (!configFile) {
                 // Failed to read the config file
                 resultFlags |= BuildResultFlags.ConfigFileErrors;
+                context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Config file errors" });
                 return resultFlags;
             }
 
@@ -660,6 +692,7 @@ namespace ts {
                 for (const diag of syntaxDiagnostics) {
                     reportDiagnostic(diag);
                 }
+                context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Syntactic errors" });
                 return resultFlags;
             }
 
@@ -671,6 +704,7 @@ namespace ts {
                     for (const diag of declDiagnostics) {
                         reportDiagnostic(diag);
                     }
+                    context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Declaration file errors" });
                     return resultFlags;
                 }
             }
@@ -681,6 +715,7 @@ namespace ts {
                 for (const diag of semanticDiagnostics) {
                     reportDiagnostic(diag);
                 }
+                context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Semantic errors" });
                 return resultFlags;
             }
 
@@ -704,7 +739,6 @@ namespace ts {
             });
 
             context.projectStatus.setValue(proj, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime } as UpToDateStatus);
-
             return resultFlags;
         }
 
@@ -812,15 +846,15 @@ namespace ts {
                 if (proj === undefined) {
                     break;
                 }
-
                 const status = getUpToDateStatus(proj);
                 reportProjectStatus(next, status);
 
+                const projName = proj.options.configFilePath;
                 if (status.type === UpToDateStatusType.UpToDate && !context.options.force) {
                     // Up to date, skip
                     if (options.dry) {
                         // In a dry build, inform the user of this fact
-                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Project_0_is_up_to_date));
+                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Project_0_is_up_to_date, projName));
                     }
                     continue;
                 }
@@ -831,10 +865,12 @@ namespace ts {
                     continue;
                 }
 
-                const result = buildSingleProject(next);
-                if (result & BuildResultFlags.AnyErrors) {
-                    break;
+                if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                    context.verbose(Diagnostics.Skipping_build_of_project_0_because_its_upstream_project_1_has_errors, projName, status.upstreamProjectName);
+                    continue;
                 }
+
+                buildSingleProject(next);
             }
 
             function getNext(): ResolvedConfigFileName | undefined {
@@ -889,9 +925,13 @@ namespace ts {
                 case UpToDateStatusType.UpToDateWithUpstreamTypes:
                     context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
                     return;
-                    case UpToDateStatusType.UpstreamOutOfDate:
+                case UpToDateStatusType.UpstreamOutOfDate:
                     context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
                     return;
+                case UpToDateStatusType.UpstreamBlocked:
+                    context.verbose(Diagnostics.Project_0_can_t_be_built_because_it_depends_on_a_project_with_errors, configFileName);
+                    return;
+
                 default:
                     throw new Error(`Invalid build status - ${UpToDateStatusType[status.type]}`);
             }

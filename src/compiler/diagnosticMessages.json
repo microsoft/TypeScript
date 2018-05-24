@@ -3644,6 +3644,14 @@
         "category": "Message",
         "code": 6360
     },
+    "Skipping build of project '{0}' because its upstream project '{1}' has errors": {
+        "category": "Message",
+        "code": 6361
+    },
+    "Project '{0}' can't be built because it depends on a project with errors": {
+        "category": "Message",
+        "code": 6362
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
