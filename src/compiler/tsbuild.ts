@@ -1,4 +1,6 @@
 namespace ts {
+    type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
+
     const minimumDate = new Date(-8640000000000000);
     const maximumDate = new Date(8640000000000000);
 
@@ -24,7 +26,7 @@ namespace ts {
 
     type Mapper = ReturnType<typeof createDependencyMapper>;
     interface DependencyGraph {
-        buildQueue: string[][];
+        buildQueue: ResolvedConfigFileName[][];
         dependencyMap: Mapper;
     }
 
@@ -296,7 +298,7 @@ namespace ts {
 
         // TODO: Cache invalidation under --watch
 
-        function parseConfigFile(configFilePath: string) {
+        function parseConfigFile(configFilePath: ResolvedConfigFileName) {
             const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
             if (sourceFile === undefined) {
                 return undefined;
@@ -401,7 +403,7 @@ namespace ts {
             context = createBuildContext(options, reportDiagnostic);
         }
 
-        function getUpToDateStatusOfFile(configFileName: string): UpToDateStatus {
+        function getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus {
             return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
         }
 
@@ -500,7 +502,7 @@ namespace ts {
             // See if any of its upstream projects are newer than it
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
-                    const resolvedRef = resolveProjectReferencePath(host, ref);
+                    const resolvedRef = resolveProjectReferencePath(host, ref) as ResolvedConfigFileName;
                     const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
 
                     // If the upstream project is out of date, then so are we (someone shouldn't have asked, though?)
@@ -544,14 +546,14 @@ namespace ts {
         }
 
         // TODO: Use the better algorithm
-        function createDependencyGraph(roots: string[]): DependencyGraph {
+        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph {
             // This is a list of list of projects that need to be built.
             // The ordering here is "backwards", i.e. the first entry in the array is the last set of projects that need to be built;
             //   and the last entry is the first set of projects to be built.
             // Each subarray is effectively unordered.
             // We traverse the reference graph from each root, then "clean" the list by removing
             //   any entry that is duplicated to its right.
-            const buildQueue: string[][] = [];
+            const buildQueue: ResolvedConfigFileName[][] = [];
             const dependencyMap = createDependencyMapper();
             let buildQueuePosition = 0;
             for (const root of roots) {
@@ -560,7 +562,7 @@ namespace ts {
                     reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, root));
                     continue;
                 }
-                enumerateReferences(normalizePath(root), config);
+                enumerateReferences(normalizePath(root) as ResolvedConfigFileName, config);
             }
             removeDuplicatesFromBuildQueue(buildQueue);
 
@@ -569,7 +571,7 @@ namespace ts {
                 dependencyMap
             };
 
-            function enumerateReferences(fileName: string, root: ParsedCommandLine): void {
+            function enumerateReferences(fileName: ResolvedConfigFileName, root: ParsedCommandLine): void {
                 const myBuildLevel = buildQueue[buildQueuePosition] = buildQueue[buildQueuePosition] || [];
                 if (myBuildLevel.indexOf(fileName) < 0) {
                     myBuildLevel.push(fileName);
@@ -579,11 +581,11 @@ namespace ts {
                 if (refs === undefined) return;
                 buildQueuePosition++;
                 for (const ref of refs) {
-                    const actualPath = resolveProjectReferencePath(host, ref);
+                    const actualPath = resolveProjectReferencePath(host, ref) as ResolvedConfigFileName;
                     dependencyMap.addReference(fileName, actualPath);
                     const resolvedRef = configFileCache.parseConfigFile(actualPath);
                     if (resolvedRef === undefined) continue;
-                    enumerateReferences(normalizePath(actualPath), resolvedRef);
+                    enumerateReferences(normalizePath(actualPath) as ResolvedConfigFileName, resolvedRef);
                 }
                 buildQueuePosition--;
             }
@@ -607,7 +609,7 @@ namespace ts {
         }
 
         // TODO Accept parsedCommandLine instead?
-        function buildSingleProject(proj: string) {
+        function buildSingleProject(proj: ResolvedConfigFileName) {
             if (context.options.dry) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
                 return;
@@ -713,8 +715,8 @@ namespace ts {
             context.projectStatus.setValue(proj.options.configFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
-        function getFilesToClean(configFileNames: string[]): string[] | undefined {
-            const resolvedNames: string[] | undefined = resolveProjectNames(configFileNames);
+        function getFilesToClean(configFileNames: ResolvedConfigFileName[]): string[] | undefined {
+            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
             if (resolvedNames === undefined) return;
 
             // Get the same graph for cleaning we'd use for building
@@ -736,7 +738,10 @@ namespace ts {
         }
 
         function cleanProjects(configFileNames: string[]) {
-            const filesToDelete = getFilesToClean(configFileNames);
+            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
+            if (resolvedNames === undefined) return;
+
+            const filesToDelete = getFilesToClean(resolvedNames);
 
             if (context.options.dry) {
                  reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join("")));
@@ -752,18 +757,17 @@ namespace ts {
             }
         }
 
-        // TODO add branding to resolved filenames
-        function resolveProjectNames(configFileNames: string[]): string[] | undefined {
-            const resolvedNames: string[] = [];
+        function resolveProjectNames(configFileNames: string[]): ResolvedConfigFileName[] | undefined {
+            const resolvedNames: ResolvedConfigFileName[] = [];
             for (const name of configFileNames) {
                 let fullPath = resolvePath(host.getCurrentDirectory(), name);
                 if (host.fileExists(fullPath)) {
-                    resolvedNames.push(fullPath);
+                    resolvedNames.push(fullPath as ResolvedConfigFileName);
                     continue;
                 }
                 fullPath = combinePaths(fullPath, "tsconfig.json");
                 if (host.fileExists(fullPath)) {
-                    resolvedNames.push(fullPath);
+                    resolvedNames.push(fullPath as ResolvedConfigFileName);
                     continue;
                 }
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, fullPath));
@@ -773,7 +777,7 @@ namespace ts {
         }
 
         function buildProjects(configFileNames: string[]) {
-            const resolvedNames: string[] | undefined = resolveProjectNames(configFileNames);
+            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
             if (resolvedNames === undefined) return;
 
             // Establish what needs to be built
@@ -782,7 +786,7 @@ namespace ts {
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
 
-            let next: string;
+            let next: ResolvedConfigFileName;
             while (next = getNext()) {
                 const proj = configFileCache.parseConfigFile(next);
                 const status = getUpToDateStatus(proj);
@@ -809,7 +813,7 @@ namespace ts {
                 }
             }
 
-            function getNext(): string | undefined {
+            function getNext(): ResolvedConfigFileName | undefined {
                 if (queue.length === 0) {
                     return undefined;
                 }
