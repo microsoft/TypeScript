@@ -24289,7 +24289,9 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
-                checkClassNameCollisionWithObject(node.name);
+                if (!(node.flags & NodeFlags.Ambient)) {
+                    checkClassNameCollisionWithObject(node.name);
+                }
             }
             checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
             checkTypeParameters(node.typeParameters);
