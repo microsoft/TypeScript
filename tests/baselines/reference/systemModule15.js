@@ -30,8 +30,8 @@ export var value2 = "v";
 
 //// [file3.js]
 System.register([], function (exports_1, context_1) {
-    var value;
     "use strict";
+    var value;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -43,8 +43,8 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file4.js]
 System.register([], function (exports_1, context_1) {
-    var value2;
     "use strict";
+    var value2;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -55,8 +55,8 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file2.js]
 System.register(["./file3"], function (exports_1, context_1) {
-    var moduleCStar, file3_1, file3_2;
     "use strict";
+    var moduleCStar, file3_1, file3_2;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
@@ -75,8 +75,8 @@ System.register(["./file3"], function (exports_1, context_1) {
 });
 //// [file1.js]
 System.register(["./file2"], function (exports_1, context_1) {
-    var moduleB;
     "use strict";
+    var moduleB;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [

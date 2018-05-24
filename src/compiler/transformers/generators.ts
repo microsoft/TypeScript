@@ -586,7 +586,7 @@ namespace ts {
             transformAndEmitStatements(body.statements, statementOffset);
 
             const buildResult = build();
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
             statements.push(createReturn(buildResult));
 
             // Restore previous generator state

@@ -253,6 +253,25 @@ namespace ts {
     }
 
     /**
+     * Appends a range of value to begin of an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * appended. If an element of `from` is `undefined`, that element is not appended.
+     */
+    export function prependStatements<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
+        if (from === undefined || from.length === 0) return to;
+        if (to === undefined) return from.slice();
+        const prologue = to.length && isPrologueDirective(to[0]) && to.shift();
+        to.unshift(...from);
+        if (prologue) {
+            to.unshift(prologue);
+        }
+        return to;
+    }
+
+    /**
      * Determine if the given comment is a triple-slash
      *
      * @return true if the comment is a triple-slash comment else false

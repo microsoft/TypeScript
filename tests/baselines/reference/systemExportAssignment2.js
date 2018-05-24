@@ -10,8 +10,8 @@ import * as a from "a";
 
 //// [a.js]
 System.register([], function (exports_1, context_1) {
-    var a;
     "use strict";
+    var a;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

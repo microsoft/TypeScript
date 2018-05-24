@@ -978,21 +978,6 @@ namespace ts {
     }
 
     /**
-     * Appends a range of value to begin of an array, returning the array.
-     *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
-     * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
-     * appended. If an element of `from` is `undefined`, that element is not appended.
-     */
-    export function prependRange<T>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
-        if (from === undefined || from.length === 0) return to;
-        if (to === undefined) return from.slice();
-        to.unshift(...from);
-        return to;
-    }
-
-    /**
      * @return Whether the value was added.
      */
     export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: EqualityComparer<T>): boolean {

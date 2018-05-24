@@ -257,7 +257,7 @@ namespace ts {
             // We emit hoisted variables early to align roughly with our previous emit output.
             // Two key differences in this approach are:
             // - Temporary variables will appear at the top rather than at the bottom of the file
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements);
             const moduleObject = createObjectLiteral([
