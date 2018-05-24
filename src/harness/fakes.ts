@@ -332,7 +332,7 @@ namespace fakes {
             if (cacheKey) {
                 const meta = this.vfs.filemeta(canonicalFileName);
                 const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
-                if (sourceFileFromMetadata) {
+                if (sourceFileFromMetadata && sourceFileFromMetadata.getFullText() === content) {
                     this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
                     return sourceFileFromMetadata;
                 }
