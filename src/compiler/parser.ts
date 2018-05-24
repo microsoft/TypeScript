@@ -6707,7 +6707,7 @@ namespace ts {
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
                     let comment: string | undefined;
                     if (indent !== undefined) comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
-                    const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target);
+                    const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
                         isNameFirst = true;
