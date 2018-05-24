@@ -15,6 +15,9 @@
 ////import old from "..";
 ////import old2 from "../index";
 
+// @Filename: /src/index.ts
+////
+
 // @Filename: /tsconfig.json
 ////{ "files": ["/a.ts", "/src/a.ts", "/src/foo/a.ts", "/src/index.ts"] }
 

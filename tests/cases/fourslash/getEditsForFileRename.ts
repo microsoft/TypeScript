@@ -14,6 +14,9 @@
 /////// <reference path="../old.ts" />
 ////import old from "../old";
 
+// @Filename: /src/new.ts
+////
+
 // @Filename: /tsconfig.json
 ////{ "files": ["/a.ts", "/src/a.ts", "/src/foo/a.ts", "/src/old.ts"] }
 

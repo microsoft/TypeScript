@@ -3360,7 +3360,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public getEditsForFileRename(options: FourSlashInterface.GetEditsForFileRenameOptions): void {
-            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings);
+            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings, ts.defaultPreferences);
             this.applyChanges(changes);
             for (const fileName in options.newFileContents) {
                 this.openFile(fileName);

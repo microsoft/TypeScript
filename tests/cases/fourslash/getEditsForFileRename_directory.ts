@@ -25,6 +25,9 @@
 ////import f from "./file";
 ////export default 0;
 
+// @Filename: /src/new/file.ts
+////
+
 // @Filename: /tsconfig.json
 ////{ "files": ["/a.ts", "/src/b.ts", "/src/foo/c.ts", "/src/old/index.ts", "/src/old/file.ts"] }
 

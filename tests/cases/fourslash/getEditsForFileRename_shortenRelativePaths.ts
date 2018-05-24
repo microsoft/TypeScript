@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-// @Filename: src/foo/x.ts
-////export const x = 0;
+// @Filename: /src/foo/x.ts
+////
 
 // @Filename: /src/foo/new.ts
 ////import { x } from "./foo/x";
