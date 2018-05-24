@@ -1,15 +1,15 @@
 /* @internal */
 namespace ts {
     export function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext): ReadonlyArray<FileTextChanges> {
-        const pathUpdater = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, host);
-        const internalPathUpdater = getMovedFilePathUpdater(oldFileOrDirPath, newFileOrDirPath);
+        const externalPathUpdater = getExternalPathUpdater(oldFileOrDirPath, newFileOrDirPath, host);
+        const internalPathUpdater = getInternalPathUpdater(oldFileOrDirPath, newFileOrDirPath);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
-            updateTsconfigFiles(program, changeTracker, pathUpdater);
-            updateImports(program, changeTracker, pathUpdater, internalPathUpdater, oldFileOrDirPath, newFileOrDirPath, host);
+            updateTsconfigFiles(program, changeTracker, externalPathUpdater);
+            updateImports(program, changeTracker, externalPathUpdater, internalPathUpdater, oldFileOrDirPath, newFileOrDirPath, host);
         });
     }
 
-    function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, pathUpdater: PathUpdater): void {
+    function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, pathUpdater: ExternalPathUpdater): void {
         const configFile = program.getCompilerOptions().configFile;
         if (!configFile) return;
         for (const property of getTsConfigPropArray(configFile, "files")) {
@@ -26,7 +26,7 @@ namespace ts {
         }
     }
 
-    function updateImports(program: Program, changeTracker: textChanges.ChangeTracker, pathUpdater: PathUpdater, internalPathUpdater: MovedFilePathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost): void {
+    function updateImports(program: Program, changeTracker: textChanges.ChangeTracker, externalPathUpdater: ExternalPathUpdater, internalPathUpdater: InternalPathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost): void {
         for (const sourceFile of program.getSourceFiles()) {
             if (sourceFile.fileName === oldFileOrDirPath || removeDirectoryPrefixFromPath(oldFileOrDirPath, sourceFile.fileName) ||
                 sourceFile.fileName === newFileOrDirPath || removeDirectoryPrefixFromPath(newFileOrDirPath, sourceFile.fileName)) {
@@ -36,18 +36,18 @@ namespace ts {
             else {
                 // This is not a moved file, but may reference a moved file.
                 updateImportsWorker(sourceFile, changeTracker,
-                    referenceText => pathUpdater(resolveTripleslashReference(referenceText, sourceFile.fileName), referenceText, /*isImport*/ false),
+                    referenceText => externalPathUpdater(resolveTripleslashReference(referenceText, sourceFile.fileName), referenceText, /*isImport*/ false),
                     importText => {
                         const resolved = host.resolveModuleNames
                             ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importText, sourceFile.fileName)
                             : program.getResolvedModuleWithFailedLookupLocationsFromCache(importText, sourceFile.fileName);
-                        return resolved && firstDefined(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, path => pathUpdater(path, importText, /*isImport*/ true));
+                        return resolved && firstDefined(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, path => externalPathUpdater(path, importText, /*isImport*/ true));
                     });
             }
         }
     }
 
-    function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (r: string) => string | undefined, updateImport: (importText: string) => string | undefined) {
+    function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importText: string) => string | undefined) {
         for (const ref of sourceFile.referencedFiles) {
             const updated = updateRef(ref.fileName);
             if (updated !== undefined) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
@@ -59,9 +59,13 @@ namespace ts {
         }
     }
 
-    // Path updater for imports in the file(s) being moved
-    type MovedFilePathUpdater = (sourceFile: SourceFile, importText: string) => string | undefined;
-    function getMovedFilePathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string): MovedFilePathUpdater {
+    /**
+     * Path updater for imports internal to the file(s) being moved.
+     * E.g., if we are moving "./old" to "./newDir/new", an import inside "./old/a.ts" of "../b" will now need to import "../../b".
+     * An import that comes from inside the directory and resolves to inside the directory won't need to be updated.
+     */
+    type InternalPathUpdater = (sourceFile: SourceFile, importText: string) => string | undefined;
+    function getInternalPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string): InternalPathUpdater {
         const relativeNewDirToOldDir = getRelativePathFromDirectory(toDirectory(newFileOrDirPath), toDirectory(oldFileOrDirPath), /*ignoreCase*/ false);
 
         if (relativeNewDirToOldDir === ".") return () => undefined;
@@ -83,11 +87,14 @@ namespace ts {
     }
 
     /**
+     * Path updater for imports external to the file(s) being moved -- we will update these if they imported from the moved file.
+     * E.g., an import from "./old" will need to import from "./new".
+     *
      * @param oldFullPath Absolute path to a failed lookup location
      * @param oldRelPath Actual import text
      */
-    type PathUpdater = (oldFullPath: string, oldRelPath: string, isImport: boolean) => string | undefined;
-    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost): PathUpdater {
+    type ExternalPathUpdater = (oldFullPath: string, oldRelPath: string, isImport: boolean) => string | undefined;
+    function getExternalPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost): ExternalPathUpdater {
         // Get the relative path from old to new location, and append it on to the end of imports and normalize.
         const rel = getRelativePathFromFile(oldFileOrDirPath, newFileOrDirPath, createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host)));
         return (fullPath, importText, isImport) => {
