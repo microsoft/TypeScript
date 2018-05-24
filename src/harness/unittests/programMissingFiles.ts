@@ -1,4 +1,6 @@
 /// <reference path="..\harness.ts" />
+/// <reference path="../documents.ts" />
+/// <reference path="../vfs.ts" />
 
 namespace ts {
     function verifyMissingFilePaths(missingPaths: ReadonlyArray<Path>, expected: ReadonlyArray<string>) {
@@ -22,32 +24,24 @@ namespace ts {
         const emptyFileName = "empty.ts";
         const emptyFileRelativePath = "./" + emptyFileName;
 
-        const emptyFile: Harness.Compiler.TestFile = {
-            unitName: emptyFileName,
-            content: ""
-        };
+        const emptyFile = new documents.TextDocument(emptyFileName, "");
 
         const referenceFileName = "reference.ts";
         const referenceFileRelativePath = "./" + referenceFileName;
 
-        const referenceFile: Harness.Compiler.TestFile = {
-            unitName: referenceFileName,
-            content:
-                "/// <reference path=\"d:/imaginary/nonexistent1.ts\"/>\n" + // Absolute
-                "/// <reference path=\"./nonexistent2.ts\"/>\n" + // Relative
-                "/// <reference path=\"nonexistent3.ts\"/>\n" + // Unqualified
-                "/// <reference path=\"nonexistent4\"/>\n"   // No extension
-        };
-
-        const testCompilerHost = Harness.Compiler.createCompilerHost(
-            /*inputFiles*/ [emptyFile, referenceFile],
-            /*writeFile*/ undefined,
-            /*scriptTarget*/ undefined,
-            /*useCaseSensitiveFileNames*/ false,
-            /*currentDirectory*/ "d:\\pretend\\",
-            /*newLineKind*/ NewLineKind.LineFeed,
-            /*libFiles*/ undefined
+        const referenceFile = new documents.TextDocument(referenceFileName,
+            "/// <reference path=\"d:/imaginary/nonexistent1.ts\"/>\n" + // Absolute
+            "/// <reference path=\"./nonexistent2.ts\"/>\n" + // Relative
+            "/// <reference path=\"nonexistent3.ts\"/>\n" + // Unqualified
+            "/// <reference path=\"nonexistent4\"/>\n"   // No extension
         );
+
+        const testCompilerHost = new fakes.CompilerHost(
+            vfs.createFromFileSystem(
+                Harness.IO,
+                /*ignoreCase*/ true,
+                { documents: [emptyFile, referenceFile], cwd: "d:\\pretend\\" }),
+            { newLine: NewLineKind.LineFeed });
 
         it("handles no missing root files", () => {
             const program = createProgram([emptyFileRelativePath], options, testCompilerHost);

@@ -24,9 +24,9 @@ node_modules/bluebird/js/release/debuggability.js(745,37): error TS2339: Propert
 node_modules/bluebird/js/release/debuggability.js(784,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
 node_modules/bluebird/js/release/debuggability.js(793,25): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/errors.js(46,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
+node_modules/bluebird/js/release/errors.js(46,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ...' has no compatible call signatures.
 node_modules/bluebird/js/release/errors.js(92,18): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; } | ((obj...' has no compatible call signatures.
-node_modules/bluebird/js/release/errors.js(99,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
+node_modules/bluebird/js/release/errors.js(99,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ...' has no compatible call signatures.
 node_modules/bluebird/js/release/generators.js(159,21): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/generators.js(190,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/generators.js(208,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -52,7 +52,7 @@ node_modules/bluebird/js/release/promise.js(4,12): error TS2351: Cannot use 'new
 node_modules/bluebird/js/release/promise.js(7,24): error TS2339: Property 'PromiseInspection' does not exist on type 'typeof Promise'.
 node_modules/bluebird/js/release/promise.js(10,27): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(20,32): error TS2322: Type 'null' is not assignable to type 'Domain'.
-node_modules/bluebird/js/release/promise.js(33,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
+node_modules/bluebird/js/release/promise.js(33,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ...' has no compatible call signatures.
 node_modules/bluebird/js/release/promise.js(62,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(65,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(123,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
@@ -155,11 +155,11 @@ node_modules/bluebird/js/release/some.js(133,23): error TS2339: Property 'promis
 node_modules/bluebird/js/release/using.js(78,20): error TS2339: Property 'doDispose' does not exist on type 'Disposer'.
 node_modules/bluebird/js/release/using.js(97,23): error TS2339: Property 'data' does not exist on type 'FunctionDisposer'.
 node_modules/bluebird/js/release/using.js(223,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/bluebird/js/release/util.js(97,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(97,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ...' has no compatible call signatures.
 node_modules/bluebird/js/release/util.js(201,5): error TS7027: Unreachable code detected.
 node_modules/bluebird/js/release/util.js(247,28): error TS2554: Expected 0 arguments, but got 2.
-node_modules/bluebird/js/release/util.js(275,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
-node_modules/bluebird/js/release/util.js(275,45): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string): PropertyDescriptor | undefined; (o: any, propertyKey: PropertyKey): Proper...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(275,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(275,45): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol) => PropertyDescriptor | undefined) | ((o: any, key: any) =...' has no compatible call signatures.
 node_modules/bluebird/js/release/util.js(363,25): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(363,51): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(364,25): error TS2304: Cannot find name 'chrome'.

@@ -20,10 +20,10 @@ tests/cases/compiler/implicitAnyCastedValue.ts(62,24): error TS7006: Parameter '
     
     class C {
         bar = null;  // this should be an error
-        ~~~~~~~~~~~
+        ~~~
 !!! error TS7008: Member 'bar' implicitly has an 'any' type.
         foo = undefined;  // this should be an error
-        ~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS7008: Member 'foo' implicitly has an 'any' type.
         public get tempVar() {
                    ~~~~~~~
@@ -42,7 +42,7 @@ tests/cases/compiler/implicitAnyCastedValue.ts(62,24): error TS7006: Parameter '
     
     class C1 {
         getValue = null;  // this should be an error
-        ~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! error TS7008: Member 'getValue' implicitly has an 'any' type.
     
         public get castedGet() {

@@ -1,7 +1,7 @@
 === tests/cases/compiler/keyofDoesntContainSymbols.ts ===
 const sym = Symbol();
 >sym : Symbol(sym, Decl(keyofDoesntContainSymbols.ts, 0, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 const num = 0;
 >num : Symbol(num, Decl(keyofDoesntContainSymbols.ts, 1, 5))

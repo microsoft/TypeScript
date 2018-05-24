@@ -36,9 +36,9 @@ interface I { x: I };
 >I : I
 
 type T = { x: T };
->T : { x: T; }
->x : { x: T; }
->T : { x: T; }
+>T : T
+>x : T
+>T : T
 
 namespace N { N; }
 >N : typeof N

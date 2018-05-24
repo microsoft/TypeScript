@@ -38,7 +38,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
     function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
@@ -47,9 +47,10 @@ function foo() {
     return __asyncGenerator(this, arguments, function foo_1() {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, "foo"];
-                case 1: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return require(_a.sent()); })])];
-                case 2:
+                case 0: return [4 /*yield*/, __await("foo")];
+                case 1: return [4 /*yield*/, _a.sent()];
+                case 2: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return require(_a.sent()); })])];
+                case 3:
                     Promise.resolve().then(function () { return require((_a.sent())["default"]); });
                     return [2 /*return*/];
             }

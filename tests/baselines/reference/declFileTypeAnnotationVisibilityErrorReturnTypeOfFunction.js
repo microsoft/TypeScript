@@ -123,3 +123,22 @@ var m;
     }
     m.foo114 = foo114;
 })(m || (m = {}));
+
+
+//// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.d.ts]
+declare module m {
+    class private1 {
+    }
+    class public1 {
+    }
+    function foo3(): private1;
+    function foo4(): private1;
+    function foo13(): public1;
+    function foo14(): public1;
+    module m2 {
+        class public2 {
+        }
+    }
+    function foo113(): m2.public2;
+    function foo114(): m2.public2;
+}

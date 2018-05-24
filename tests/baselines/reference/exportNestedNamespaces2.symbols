@@ -8,6 +8,7 @@ exports.formatters = {}
 === tests/cases/conformance/salsa/first.js ===
 exports = require('./mod')
 >exports : Symbol("tests/cases/conformance/salsa/first", Decl(first.js, 0, 0))
+>require : Symbol(require)
 >'./mod' : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
 
 exports.formatters.j = function (v) {
@@ -20,6 +21,7 @@ exports.formatters.j = function (v) {
 === tests/cases/conformance/salsa/second.js ===
 exports = require('./mod')
 >exports : Symbol("tests/cases/conformance/salsa/second", Decl(second.js, 0, 0))
+>require : Symbol(require)
 >'./mod' : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
 
 exports.formatters.o = function (v) {

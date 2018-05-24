@@ -1,8 +1,9 @@
-/// <reference types="node" />
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
 
 namespace ts.server.typingsInstaller {
     const fs: {
-        appendFileSync(file: string, content: string): void
+        appendFileSync(file: string, content: string): void;
+        existsSync(path: string): boolean;
     } = require("fs");
 
     const path: {
@@ -21,7 +22,7 @@ namespace ts.server.typingsInstaller {
         }
         writeLine = (text: string) => {
             try {
-                fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
+                fs.appendFileSync(this.logFile!, `[${nowString()}] ${text}${sys.newLine}`); // TODO: GH#18217
             }
             catch (e) {
                 this.logEnabled = false;
@@ -32,11 +33,12 @@ namespace ts.server.typingsInstaller {
     /** Used if `--npmLocation` is not passed. */
     function getDefaultNPMLocation(processName: string) {
         if (path.basename(processName).indexOf("node") === 0) {
-            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            const npmPath = `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            if (fs.existsSync(npmPath)) {
+                return npmPath;
+            }
         }
-        else {
-            return "npm";
-        }
+        return "npm";
     }
 
     interface TypesRegistryFile {
@@ -51,7 +53,7 @@ namespace ts.server.typingsInstaller {
             return createMap<MapLike<string>>();
         }
         try {
-            const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath));
+            const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
             return createMapFromTemplate(content.entries);
         }
         catch (e) {
@@ -174,7 +176,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
             }
-            process.send(response);
+            process.send!(response); // TODO: GH#18217
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Response has been sent.`);
             }
@@ -238,7 +240,7 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, /*throttleLimit*/5, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
     installer.listen();
 
     function indent(newline: string, str: string): string {

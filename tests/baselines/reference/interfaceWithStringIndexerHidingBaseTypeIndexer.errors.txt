@@ -15,10 +15,8 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringInde
         };
         // error
         y: {
-        ~~~~
-            a: number;
-    ~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+        ~
 !!! error TS2411: Property 'y' of type '{ a: number; }' is not assignable to string index type '{ a: number; b: number; }'.
+            a: number;
+        }
     }

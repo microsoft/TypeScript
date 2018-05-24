@@ -112,7 +112,7 @@ someGenerics3(() => '');
 
 someGenerics3<Date>(() => undefined);
 >someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInference.ts, 26, 58))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 someGenerics3<number>(() => 3);
@@ -317,7 +317,7 @@ interface A92 {
 
     z?: Date;
 >z : Symbol(A92.z, Decl(typeArgumentInference.ts, 78, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >a9e : Symbol(a9e, Decl(typeArgumentInference.ts, 81, 3), Decl(typeArgumentInference.ts, 82, 3))
@@ -325,7 +325,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(typeArgumentInference.ts, 81, 36))
 >z : Symbol(z, Decl(typeArgumentInference.ts, 81, 42))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeArgumentInference.ts, 81, 61))
 >y : Symbol(y, Decl(typeArgumentInference.ts, 81, 67))
 
@@ -339,7 +339,7 @@ var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(typeArgumentInference.ts, 83, 41))
 >z : Symbol(z, Decl(typeArgumentInference.ts, 83, 47))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeArgumentInference.ts, 83, 66))
 >y : Symbol(y, Decl(typeArgumentInference.ts, 83, 72))
 

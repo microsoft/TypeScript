@@ -1,3 +1,4 @@
+// @lib: es5
 class Control {
     private state: any;
 }

@@ -321,6 +321,20 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
     x4.length;
 }
 
+function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {};
+    a = x;
+    a = y;
+    a = z;
+}
+
+function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {} | null | undefined;
+    a = x;
+    a = y;
+    a = z;
+}
+
 // Repros from #12011
 
 class Base {
@@ -594,3 +608,32 @@ type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynami
 function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
     return record[flags[0]];
 }
+
+// Repro from #21368
+
+interface I {
+    foo: string;
+}
+
+declare function take<T>(p: T): void;
+
+function fn<T extends I, K extends keyof T>(o: T, k: K) {
+    take<{} | null | undefined>(o[k]);
+    take<any>(o[k]);
+}
+
+// Repro from #23133
+
+class Unbounded<T> {
+    foo(x: T[keyof T]) {
+        let y: {} | undefined | null = x;
+    }
+}
+
+// Repro from #23940
+
+interface I7 {
+    x: any;
+}
+type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;

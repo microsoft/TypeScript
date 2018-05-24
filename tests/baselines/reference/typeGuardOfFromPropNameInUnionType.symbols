@@ -15,7 +15,7 @@ class C { b: Object; }
 class D { a: Date; }
 >D : Symbol(D, Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 22))
 >a : Symbol(D.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function namedClasses(x: A | B) {
 >namedClasses : Symbol(namedClasses, Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 20))
@@ -52,7 +52,7 @@ function multipleClasses(x: A | B | C | D) {
 
         let y: string | Date = x.a;
 >y : Symbol(y, Decl(typeGuardOfFromPropNameInUnionType.ts, 15, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9), Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))
 >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 13, 25))
 >a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9), Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))

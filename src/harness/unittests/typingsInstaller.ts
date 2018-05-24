@@ -30,7 +30,7 @@ namespace ts.projectSystem {
         }
     }
 
-    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: File[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
                 host.ensureFileOrFolder(file);
@@ -417,7 +417,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -460,7 +460,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -697,7 +697,7 @@ namespace ts.projectSystem {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
                 }
                 installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
-                    let typingFiles: (FileOrFolder & { typings: string })[] = [];
+                    let typingFiles: (File & { typings: string })[] = [];
                     if (args.indexOf(typingsName("commander")) >= 0) {
                         typingFiles = [commander, jquery, lodash, cordova];
                     }
@@ -1193,7 +1193,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -1447,7 +1447,7 @@ namespace ts.projectSystem {
                 commander: { typingLocation: commander.path, version: Semver.parse("1.3.0-next.0") }
             });
             const registry = createTypesRegistry("node", "commander");
-            registry.get("node")[`ts${versionMajorMinor}`] = "1.3.0-next.1";
+            registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
             assert.deepEqual(logger.finish(), [
@@ -1535,8 +1535,8 @@ namespace ts.projectSystem {
                 content: "export let x: number"
             };
             const host = createServerHost([f1, packageFile, packageLockFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent!: server.BeginInstallTypes;
+            let endEvent!: server.EndInstallTypes;
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1583,8 +1583,8 @@ namespace ts.projectSystem {
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent: server.BeginInstallTypes | undefined;
+            let endEvent: server.EndInstallTypes | undefined;
             const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1611,8 +1611,8 @@ namespace ts.projectSystem {
 
             assert.isTrue(!!beginEvent);
             assert.isTrue(!!endEvent);
-            assert.isTrue(beginEvent.eventId === endEvent.eventId);
-            assert.isFalse(endEvent.installSuccess);
+            assert.isTrue(beginEvent!.eventId === endEvent!.eventId);
+            assert.isFalse(endEvent!.installSuccess);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
         });
@@ -1651,17 +1651,17 @@ namespace ts.projectSystem {
         const appPath = "/a/b/app.js" as Path;
         const foooPath = "/a/b/node_modules/fooo/index.d.ts";
         function verifyResolvedModuleOfFooo(project: server.Project) {
-            const foooResolution = project.getLanguageService().getProgram().getSourceFileByPath(appPath).resolvedModules.get("fooo");
+            const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo")!;
             assert.equal(foooResolution.resolvedFileName, foooPath);
             return foooResolution;
         }
 
-        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: FileOrFolder[]) {
-            const app: FileOrFolder = {
+        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: File[]) {
+            const app: File = {
                 path: appPath,
                 content: `${appContents}import * as x from "fooo";`
             };
-            const fooo: FileOrFolder = {
+            const fooo: File = {
                 path: foooPath,
                 content: `export var x: string;`
             };
@@ -1697,15 +1697,15 @@ namespace ts.projectSystem {
         });
 
         it("correctly invalidate the resolutions with typing names that are trimmed", () => {
-            const fooAA: FileOrFolder = {
+            const fooAA: File = {
                 path: `${globalTypingsCacheLocation}/node_modules/foo/a/a.d.ts`,
                 content: "export function a (): void;"
             };
-            const fooAB: FileOrFolder = {
+            const fooAB: File = {
                 path: `${globalTypingsCacheLocation}/node_modules/foo/a/b.d.ts`,
                 content: "export function b (): void;"
             };
-            const fooAC: FileOrFolder = {
+            const fooAC: File = {
                 path: `${globalTypingsCacheLocation}/node_modules/foo/a/c.d.ts`,
                 content: "export function c (): void;"
             };

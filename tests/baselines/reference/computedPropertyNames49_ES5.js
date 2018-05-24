@@ -25,6 +25,7 @@ var x = {
 }
 
 //// [computedPropertyNames49_ES5.js]
+var _a;
 var x = (_a = {
         p1: 10
     },
@@ -61,4 +62,3 @@ var x = (_a = {
     }),
     _a.p2 = 20,
     _a);
-var _a;

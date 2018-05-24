@@ -1497,6 +1497,73 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >length : number
 }
 
+function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+>f91 : <T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) => void
+>T : T
+>K : K
+>T : T
+>x : T
+>T : T
+>y : T[keyof T]
+>T : T
+>T : T
+>z : T[K]
+>T : T
+>K : K
+
+    let a: {};
+>a : {}
+
+    a = x;
+>a = x : T
+>a : {}
+>x : T
+
+    a = y;
+>a = y : T[keyof T]
+>a : {}
+>y : T[keyof T]
+
+    a = z;
+>a = z : T[K]
+>a : {}
+>z : T[K]
+}
+
+function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+>f92 : <T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) => void
+>T : T
+>K : K
+>T : T
+>x : T
+>T : T
+>y : T[keyof T]
+>T : T
+>T : T
+>z : T[K]
+>T : T
+>K : K
+
+    let a: {} | null | undefined;
+>a : {} | null | undefined
+>null : null
+
+    a = x;
+>a = x : T
+>a : {} | null | undefined
+>x : T
+
+    a = y;
+>a = y : T[keyof T]
+>a : {} | null | undefined
+>y : T[keyof T]
+
+    a = z;
+>a = z : T[K]
+>a : {} | null | undefined
+>z : T[K]
+}
+
 // Repros from #12011
 
 class Base {
@@ -2462,4 +2529,88 @@ function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<
 >flags : Flag[]
 >0 : 0
 }
+
+// Repro from #21368
+
+interface I {
+>I : I
+
+    foo: string;
+>foo : string
+}
+
+declare function take<T>(p: T): void;
+>take : <T>(p: T) => void
+>T : T
+>p : T
+>T : T
+
+function fn<T extends I, K extends keyof T>(o: T, k: K) {
+>fn : <T extends I, K extends keyof T>(o: T, k: K) => void
+>T : T
+>I : I
+>K : K
+>T : T
+>o : T
+>T : T
+>k : K
+>K : K
+
+    take<{} | null | undefined>(o[k]);
+>take<{} | null | undefined>(o[k]) : void
+>take : <T>(p: T) => void
+>null : null
+>o[k] : T[K]
+>o : T
+>k : K
+
+    take<any>(o[k]);
+>take<any>(o[k]) : void
+>take : <T>(p: T) => void
+>o[k] : T[K]
+>o : T
+>k : K
+}
+
+// Repro from #23133
+
+class Unbounded<T> {
+>Unbounded : Unbounded<T>
+>T : T
+
+    foo(x: T[keyof T]) {
+>foo : (x: T[keyof T]) => void
+>x : T[keyof T]
+>T : T
+>T : T
+
+        let y: {} | undefined | null = x;
+>y : {} | null | undefined
+>null : null
+>x : T[keyof T]
+    }
+}
+
+// Repro from #23940
+
+interface I7 {
+>I7 : I7
+
+    x: any;
+>x : any
+}
+type Foo7<T extends number> = T;
+>Foo7 : T
+>T : T
+>T : T
+
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+>f7 : <K extends "x">(type: K) => I7[K]
+>K : K
+>I7 : I7
+>type : K
+>K : K
+>Foo7 : T
+>I7 : I7
+>K : K
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/fatarrowfunctionsInFunctions.ts ===
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : (expression: any, msec?: number, language?: any) => number
+>setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; (expression: any, msec?: number, language?: any): number; }
 >expression : any
 >msec : number
 >language : any
@@ -23,7 +23,7 @@ var messenger = {
 
         setTimeout(function() {
 >setTimeout(function() {            _self.message.toString();         }, 3000) : number
->setTimeout : (expression: any, msec?: number, language?: any) => number
+>setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; (expression: any, msec?: number, language?: any): number; }
 >function() {            _self.message.toString();         } : () => void
 
             _self.message.toString(); 

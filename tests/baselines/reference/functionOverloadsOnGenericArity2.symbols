@@ -16,5 +16,5 @@ interface I {
 >U : Symbol(U, Decl(functionOverloadsOnGenericArity2.ts, 3, 9))
 >T : Symbol(T, Decl(functionOverloadsOnGenericArity2.ts, 3, 11))
 >p : Symbol(p, Decl(functionOverloadsOnGenericArity2.ts, 3, 15))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }

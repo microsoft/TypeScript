@@ -72,7 +72,7 @@ class fn2<T> {
 var d = new fn2<Date>(0, undefined);
 >d : Symbol(d, Decl(overloadResolutionClassConstructors.ts, 35, 3))
 >fn2 : Symbol(fn2, Decl(overloadResolutionClassConstructors.ts, 26, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
@@ -83,7 +83,7 @@ var s = new fn2(0, '');
 // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
 new fn2<Date>('', 0); // OK
 >fn2 : Symbol(fn2, Decl(overloadResolutionClassConstructors.ts, 26, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 new fn2('', 0); // OK
@@ -184,7 +184,7 @@ new fn4('', null);
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
 new fn4<boolean, Date>(null, null); // Error
 >fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 new fn4(true, null); // Error

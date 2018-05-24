@@ -14,7 +14,7 @@ class C2<T extends U, U> { }
 class C3<T extends Date, U extends T> { }
 >C3 : Symbol(C3, Decl(typeParameterUsedAsConstraint.ts, 1, 28))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 2, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 2, 24))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 2, 9))
 
@@ -23,7 +23,7 @@ class C4<T extends U, U extends Date> { }
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 3, 9))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 3, 21))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 3, 21))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 class C5<T extends U, U extends V, V> { }
 >C5 : Symbol(C5, Decl(typeParameterUsedAsConstraint.ts, 3, 41))
@@ -56,7 +56,7 @@ interface I2<T extends U, U> { }
 interface I3<T extends Date, U extends T> { }
 >I3 : Symbol(I3, Decl(typeParameterUsedAsConstraint.ts, 8, 32))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 9, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 9, 28))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 9, 13))
 
@@ -65,7 +65,7 @@ interface I4<T extends U, U extends Date> { }
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 10, 13))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 10, 25))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 10, 25))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 interface I5<T extends U, U extends V, V> { }
 >I5 : Symbol(I5, Decl(typeParameterUsedAsConstraint.ts, 10, 45))
@@ -98,7 +98,7 @@ function f2<T extends U, U>() { }
 function f3<T extends Date, U extends T>() { }
 >f3 : Symbol(f3, Decl(typeParameterUsedAsConstraint.ts, 15, 33))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 16, 27))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 16, 12))
 
@@ -107,7 +107,7 @@ function f4<T extends U, U extends Date>() { }
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 17, 12))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 17, 24))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 17, 24))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function f5<T extends U, U extends V, V>() { }
 >f5 : Symbol(f5, Decl(typeParameterUsedAsConstraint.ts, 17, 46))
@@ -140,7 +140,7 @@ var e2 = <T extends U, U>() => { }
 var e3 = <T extends Date, U extends T>() => { }
 >e3 : Symbol(e3, Decl(typeParameterUsedAsConstraint.ts, 23, 3))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 23, 10))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 23, 25))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 23, 10))
 
@@ -149,7 +149,7 @@ var e4 = <T extends U, U extends Date>() => { }
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 24, 10))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 24, 22))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 24, 22))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var e5 = <T extends U, U extends V, V>() => { }
 >e5 : Symbol(e5, Decl(typeParameterUsedAsConstraint.ts, 25, 3))
@@ -182,7 +182,7 @@ var a2: { <T extends U, U>(): void }
 var a3: { <T extends Date, U extends T>(): void }
 >a3 : Symbol(a3, Decl(typeParameterUsedAsConstraint.ts, 30, 3))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 30, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 30, 26))
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 30, 11))
 
@@ -191,7 +191,7 @@ var a4: { <T extends U, U extends Date>(): void }
 >T : Symbol(T, Decl(typeParameterUsedAsConstraint.ts, 31, 11))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 31, 23))
 >U : Symbol(U, Decl(typeParameterUsedAsConstraint.ts, 31, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var a5: { <T extends U, U extends V, V>(): void }
 >a5 : Symbol(a5, Decl(typeParameterUsedAsConstraint.ts, 32, 3))

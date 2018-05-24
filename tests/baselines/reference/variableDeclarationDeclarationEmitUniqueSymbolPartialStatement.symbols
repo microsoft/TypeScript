@@ -1,7 +1,7 @@
 === tests/cases/compiler/variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts ===
 const key = Symbol(), value = 12;
 >key : Symbol(key, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >value : Symbol(value, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 21))
 
 export class Foo {

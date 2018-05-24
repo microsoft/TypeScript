@@ -107,3 +107,4 @@ declare const FilteredThing_base: {
 export declare class FilteredThing extends FilteredThing_base {
     match(path: string): boolean;
 }
+export {};

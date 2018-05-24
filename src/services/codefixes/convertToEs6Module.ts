@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
-                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target);
+                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target!);
                 if (moduleExportsChangedToDefault) {
                     for (const importingFile of program.getSourceFiles()) {
                         fixImportOfModuleExports(importingFile, sourceFile, changes);
@@ -170,7 +170,7 @@ namespace ts.codefix {
                 // `const a = require("b").c` --> `import { c as a } from "./b";
                 return [makeSingleImport(name.text, propertyName, moduleSpecifier)];
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -192,13 +192,17 @@ namespace ts.codefix {
                 changes.deleteNode(sourceFile, assignment.parent);
             }
             else {
-                let newNodes = isObjectLiteralExpression(right) ? tryChangeModuleExportsObject(right) : undefined;
-                let changedToDefaultExport = false;
-                if (!newNodes) {
-                    ([newNodes, changedToDefaultExport] = convertModuleExportsToExportDefault(right, checker));
+                const replacement = isObjectLiteralExpression(right) ? tryChangeModuleExportsObject(right)
+                    : isRequireCall(right, /*checkArgumentIsStringLiteralLike*/ true) ? convertReExportAll(right.arguments[0], checker)
+                    : undefined;
+                if (replacement) {
+                    changes.replaceNodeWithNodes(sourceFile, assignment.parent, replacement[0]);
+                    return replacement[1];
                 }
-                changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
-                return changedToDefaultExport;
+                else {
+                    changes.replaceRangeWithText(sourceFile, createTextRange(left.getStart(sourceFile), right.pos), "export default");
+                    return true;
+                }
             }
         }
         else if (isExportsOrModuleExportsOrAlias(sourceFile, left.expression)) {
@@ -212,8 +216,8 @@ namespace ts.codefix {
      * Convert `module.exports = { ... }` to individual exports..
      * We can't always do this if the module has interesting members -- then it will be a default export instead.
      */
-    function tryChangeModuleExportsObject(object: ObjectLiteralExpression): ReadonlyArray<Statement> | undefined {
-        return mapAllOrFail(object.properties, prop => {
+    function tryChangeModuleExportsObject(object: ObjectLiteralExpression): [ReadonlyArray<Statement>, ModuleExportsChanged] | undefined {
+        const statements = mapAllOrFail(object.properties, prop => {
             switch (prop.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -229,6 +233,7 @@ namespace ts.codefix {
                     Debug.assertNever(prop);
             }
         });
+        return statements && [statements, false];
     }
 
     function convertNamedExport(
@@ -256,36 +261,11 @@ namespace ts.codefix {
         }
     }
 
-    function convertModuleExportsToExportDefault(exported: Expression, checker: TypeChecker): [ReadonlyArray<Statement>, ModuleExportsChanged] {
-        const modifiers = [createToken(SyntaxKind.ExportKeyword), createToken(SyntaxKind.DefaultKeyword)];
-        switch (exported.kind) {
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction: {
-                // `module.exports = function f() {}` --> `export default function f() {}`
-                const fn = exported as FunctionExpression | ArrowFunction;
-                return [[functionExpressionToDeclaration(fn.name && fn.name.text, modifiers, fn)], true];
-            }
-            case SyntaxKind.ClassExpression: {
-                // `module.exports = class C {}` --> `export default class C {}`
-                const cls = exported as ClassExpression;
-                return [[classExpressionToDeclaration(cls.name && cls.name.text, modifiers, cls)], true];
-            }
-            case SyntaxKind.CallExpression:
-                if (isRequireCall(exported, /*checkArgumentIsStringLiteralLike*/ true)) {
-                    return convertReExportAll(exported.arguments[0], checker);
-                }
-                // falls through
-            default:
-                // `module.exports = 0;` --> `export default 0;`
-                return [[createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportEquals*/ false, exported)], true];
-        }
-    }
-
     function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [ReadonlyArray<Statement>, ModuleExportsChanged] {
         // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
         const moduleSpecifier = reExported.text;
         const moduleSymbol = checker.getSymbolAtLocation(reExported);
-        const exports = moduleSymbol ? moduleSymbol.exports : emptyUnderscoreEscapedMap;
+        const exports = moduleSymbol ? moduleSymbol.exports! : emptyUnderscoreEscapedMap;
         return exports.has("export=" as __String)
             ? [[reExportDefault(moduleSpecifier)], true]
             : !exports.has("default" as __String)
@@ -343,7 +323,7 @@ namespace ts.codefix {
 
         function exportConst() {
             // `exports.x = 0;` --> `export const x = 0;`
-            return makeConst(modifiers, createIdentifier(name), exported);
+            return makeConst(modifiers, createIdentifier(name!), exported); // TODO: GH#18217
         }
     }
 
@@ -366,7 +346,7 @@ namespace ts.codefix {
                 const importSpecifiers = mapAllOrFail(name.elements, e =>
                     e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
                         ? undefined
-                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text));
+                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text)); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
                 if (importSpecifiers) {
                     return [makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier)];
                 }
@@ -386,7 +366,7 @@ namespace ts.codefix {
             case SyntaxKind.Identifier:
                 return convertSingleIdentifierImport(file, name, moduleSpecifier, changes, checker, identifiers);
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -401,7 +381,7 @@ namespace ts.codefix {
         // True if there is some non-property use like `x()` or `f(x)`.
         let needDefaultImport = false;
 
-        for (const use of identifiers.original.get(name.text)) {
+        for (const use of identifiers.original.get(name.text)!) {
             if (checker.getSymbolAtLocation(use) !== nameSymbol || use === name) {
                 // This was a use of a different symbol with the same name, due to shadowing. Ignore.
                 continue;
@@ -488,7 +468,7 @@ namespace ts.codefix {
             getSynthesizedDeepClones(fn.typeParameters),
             getSynthesizedDeepClones(fn.parameters),
             getSynthesizedDeepClone(fn.type),
-            convertToFunctionBody(getSynthesizedDeepClone(fn.body)));
+            convertToFunctionBody(getSynthesizedDeepClone(fn.body!)));
     }
 
     function classExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, cls: ClassExpression): ClassDeclaration {
@@ -505,15 +485,6 @@ namespace ts.codefix {
         return propertyName === "default"
             ? makeImport(createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier)
             : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier);
-    }
-
-    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: StringLiteralLike): ImportDeclaration {
-        return makeImportDeclaration(name, namedImports, moduleSpecifier);
-    }
-
-    export function makeImportDeclaration(name: Identifier, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: Expression) {
-        const importClause = (name || namedImports) && createImportClause(name, namedImports && createNamedImports(namedImports));
-        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifier);
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {

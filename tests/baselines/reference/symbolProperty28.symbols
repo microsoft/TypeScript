@@ -4,9 +4,9 @@ class C1 {
 
     [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : Symbol(C1[Symbol.toStringTag], Decl(symbolProperty28.ts, 0, 10))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
 
         return { x: "" };
 >x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
@@ -25,8 +25,8 @@ var obj = c[Symbol.toStringTag]().x;
 >obj : Symbol(obj, Decl(symbolProperty28.ts, 9, 3))
 >c[Symbol.toStringTag]().x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
 >c : Symbol(c, Decl(symbolProperty28.ts, 8, 3))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
 

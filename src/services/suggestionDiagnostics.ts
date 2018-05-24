@@ -1,11 +1,13 @@
 /* @internal */
 namespace ts {
-    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): Diagnostic[] {
+    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile);
         const checker = program.getDiagnosticsProducingTypeChecker();
-        const diags: Diagnostic[] = [];
+        const diags: DiagnosticWithLocation[] = [];
 
-        if (sourceFile.commonJsModuleIndicator && (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions()))) {
+        if (sourceFile.commonJsModuleIndicator &&
+            (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
+            containsTopLevelCommonjs(sourceFile)) {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
         }
 
@@ -16,8 +18,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     if (isJsFile) {
-                        const symbol = node.symbol;
-                        if (symbol.members && (symbol.members.size > 0)) {
+                        if (node.symbol.members && (node.symbol.members.size > 0)) {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
                     }
@@ -32,6 +33,19 @@ namespace ts {
         }
         check(sourceFile);
 
+        if (!isJsFile) {
+            for (const statement of sourceFile.statements) {
+                if (isVariableStatement(statement) &&
+                    statement.declarationList.flags & NodeFlags.Const &&
+                    statement.declarationList.declarations.length === 1) {
+                    const init = statement.declarationList.declarations[0].initializer;
+                    if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
+                        diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
+                    }
+                }
+            }
+        }
+
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             for (const moduleSpecifier of sourceFile.imports) {
                 const importNode = importFromModuleSpecifier(moduleSpecifier);
@@ -45,14 +59,38 @@ namespace ts {
             }
         }
 
-        return diags.concat(checker.getSuggestionDiagnostics(sourceFile));
+        addRange(diags, sourceFile.bindSuggestionDiagnostics);
+        return diags.concat(checker.getSuggestionDiagnostics(sourceFile)).sort((d1, d2) => d1.start - d2.start);
+    }
+
+    // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
+    function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
+        return sourceFile.statements.some(statement => {
+            switch (statement.kind) {
+                case SyntaxKind.VariableStatement:
+                    return (statement as VariableStatement).declarationList.declarations.some(decl =>
+                        isRequireCall(propertyAccessLeftHandSide(decl.initializer!), /*checkArgumentIsStringLiteralLike*/ true)); // TODO: GH#18217
+                case SyntaxKind.ExpressionStatement: {
+                    const { expression } = statement as ExpressionStatement;
+                    if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
+                    const kind = getSpecialPropertyAssignmentKind(expression);
+                    return kind === SpecialPropertyAssignmentKind.ExportsProperty || kind === SpecialPropertyAssignmentKind.ModuleExports;
+                }
+                default:
+                    return false;
+            }
+        });
+    }
+
+    function propertyAccessLeftHandSide(node: Expression): Expression {
+        return isPropertyAccessExpression(node) ? propertyAccessLeftHandSide(node.expression) : node;
     }
 
     function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Identifier | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
                 const { importClause, moduleSpecifier } = node;
-                return importClause && !importClause.name && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(moduleSpecifier)
+                return importClause && !importClause.name && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(moduleSpecifier)
                     ? importClause.namedBindings.name
                     : undefined;
             case SyntaxKind.ImportEqualsDeclaration:

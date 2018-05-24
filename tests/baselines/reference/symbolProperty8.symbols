@@ -4,13 +4,13 @@ interface I {
 
     [Symbol.unscopables]: number;
 >[Symbol.unscopables] : Symbol(I[Symbol.unscopables], Decl(symbolProperty8.ts, 0, 13))
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
 
     [Symbol.toPrimitive]();
 >[Symbol.toPrimitive] : Symbol(I[Symbol.toPrimitive], Decl(symbolProperty8.ts, 1, 33))
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.d.ts, --, --))
 }

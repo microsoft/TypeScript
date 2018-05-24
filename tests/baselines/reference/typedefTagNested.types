@@ -10,7 +10,7 @@ var ex;
 
 /** @type {App} */
 const app = {
->app : { name: string; icons: { image32: string; image64: string; }; }
+>app : App
 >{    name: 'name',    icons: {        image32: 'x.png',        image64: 'y.png',    }} : { name: string; icons: { image32: string; image64: string; }; }
 
     name: 'name',
@@ -40,5 +40,5 @@ const app = {
 
 /** @type {Opp} */
 var mistake;
->mistake : { name: string; oops: { horrible: string; }; }
+>mistake : Opp
 

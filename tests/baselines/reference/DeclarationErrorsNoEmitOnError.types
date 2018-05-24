@@ -1,12 +1,12 @@
 === tests/cases/compiler/DeclarationErrorsNoEmitOnError.ts ===
 type T = { x : number }
->T : { x: number; }
+>T : T
 >x : number
 
 export interface I {
 >I : I
 
     f: T;   
->f : { x: number; }
->T : { x: number; }
+>f : T
+>T : T
 }

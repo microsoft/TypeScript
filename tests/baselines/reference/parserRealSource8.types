@@ -102,44 +102,44 @@ module TypeScript {
     }
 
     export function instanceCompare(a: Symbol, b: Symbol) {
->instanceCompare : (a: any, b: any) => any
->a : any
->Symbol : No type information available!
->b : any
->Symbol : No type information available!
+>instanceCompare : (a: Symbol, b: Symbol) => Symbol
+>a : Symbol
+>Symbol : Symbol
+>b : Symbol
+>Symbol : Symbol
 
         if (((a == null) || (!a.isInstanceProperty()))) {
 >((a == null) || (!a.isInstanceProperty())) : boolean
 >(a == null) || (!a.isInstanceProperty()) : boolean
 >(a == null) : boolean
 >a == null : boolean
->a : any
+>a : Symbol
 >null : null
 >(!a.isInstanceProperty()) : boolean
 >!a.isInstanceProperty() : boolean
 >a.isInstanceProperty() : any
 >a.isInstanceProperty : any
->a : any
+>a : Symbol
 >isInstanceProperty : any
 
             return b;
->b : any
+>b : Symbol
         }
         else {
             return a;
->a : any
+>a : Symbol
         }
     }
 
     export function instanceFilterStop(s: Symbol) {
->instanceFilterStop : (s: any) => any
->s : any
->Symbol : No type information available!
+>instanceFilterStop : (s: Symbol) => any
+>s : Symbol
+>Symbol : Symbol
 
         return s.isInstanceProperty();
 >s.isInstanceProperty() : any
 >s.isInstanceProperty : any
->s : any
+>s : Symbol
 >isInstanceProperty : any
     }
 
@@ -147,21 +147,21 @@ module TypeScript {
 >ScopeSearchFilter : ScopeSearchFilter
 
         constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
->select : (a: any, b: any) => any
->a : any
->Symbol : No type information available!
->b : any
->Symbol : No type information available!
->Symbol : No type information available!
+>select : (a: Symbol, b: Symbol) => Symbol
+>a : Symbol
+>Symbol : Symbol
+>b : Symbol
+>Symbol : Symbol
+>Symbol : Symbol
 
                             public stop: (s: Symbol) =>boolean) { }
->stop : (s: any) => boolean
->s : any
->Symbol : No type information available!
+>stop : (s: Symbol) => boolean
+>s : Symbol
+>Symbol : Symbol
 
         public result: Symbol = null;
->result : any
->Symbol : No type information available!
+>result : Symbol
+>Symbol : Symbol
 >null : null
 
         public reset() {
@@ -169,44 +169,44 @@ module TypeScript {
 
             this.result = null;
 >this.result = null : null
->this.result : any
+>this.result : Symbol
 >this : this
->result : any
+>result : Symbol
 >null : null
         }
 
         public update(b: Symbol): boolean {
->update : (b: any) => boolean
->b : any
->Symbol : No type information available!
+>update : (b: Symbol) => boolean
+>b : Symbol
+>Symbol : Symbol
 
             this.result = this.select(this.result, b);
->this.result = this.select(this.result, b) : any
->this.result : any
+>this.result = this.select(this.result, b) : Symbol
+>this.result : Symbol
 >this : this
->result : any
->this.select(this.result, b) : any
->this.select : (a: any, b: any) => any
+>result : Symbol
+>this.select(this.result, b) : Symbol
+>this.select : (a: Symbol, b: Symbol) => Symbol
 >this : this
->select : (a: any, b: any) => any
->this.result : any
+>select : (a: Symbol, b: Symbol) => Symbol
+>this.result : Symbol
 >this : this
->result : any
->b : any
+>result : Symbol
+>b : Symbol
 
             if (this.result) {
->this.result : any
+>this.result : Symbol
 >this : this
->result : any
+>result : Symbol
 
                 return this.stop(this.result);
 >this.stop(this.result) : boolean
->this.stop : (s: any) => boolean
+>this.stop : (s: Symbol) => boolean
 >this : this
->stop : (s: any) => boolean
->this.result : any
+>stop : (s: Symbol) => boolean
+>this.result : Symbol
 >this : this
->result : any
+>result : Symbol
             }
             else {
                 return false;
@@ -219,8 +219,8 @@ module TypeScript {
 >instanceFilter : ScopeSearchFilter
 >new ScopeSearchFilter(instanceCompare, instanceFilterStop) : ScopeSearchFilter
 >ScopeSearchFilter : typeof ScopeSearchFilter
->instanceCompare : (a: any, b: any) => any
->instanceFilterStop : (s: any) => any
+>instanceCompare : (a: Symbol, b: Symbol) => Symbol
+>instanceFilterStop : (s: Symbol) => any
 
     export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
 >preAssignModuleScopes : (ast: any, context: AssignScopeContext) => void
@@ -868,13 +868,13 @@ module TypeScript {
 >ast : any
 
         var container: Symbol = null;
->container : any
->Symbol : No type information available!
+>container : Symbol
+>Symbol : Symbol
 >null : null
 
         var localContainer: Symbol = null;
->localContainer : any
->Symbol : No type information available!
+>localContainer : Symbol
+>Symbol : Symbol
 >null : null
 
         if (funcDecl.type) {
@@ -884,7 +884,7 @@ module TypeScript {
 
             localContainer = ast.type.symbol;
 >localContainer = ast.type.symbol : any
->localContainer : any
+>localContainer : Symbol
 >ast.type.symbol : any
 >ast.type : any
 >ast : any
@@ -1123,7 +1123,7 @@ module TypeScript {
             }
             container = instType.symbol;
 >container = instType.symbol : any
->container : any
+>container : Symbol
 >instType.symbol : any
 >instType : any
 >symbol : any
@@ -1142,7 +1142,7 @@ module TypeScript {
             // sets the container to the class type's symbol (which is shared by the instance type)
             container = context.scopeChain.thisType.symbol;
 >container = context.scopeChain.thisType.symbol : any
->container : any
+>container : Symbol
 >context.scopeChain.thisType.symbol : any
 >context.scopeChain.thisType : any
 >context.scopeChain : any
@@ -1189,7 +1189,7 @@ module TypeScript {
 
                 container = context.scopeChain.fnc.type.symbol;
 >container = context.scopeChain.fnc.type.symbol : any
->container : any
+>container : Symbol
 >context.scopeChain.fnc.type.symbol : any
 >context.scopeChain.fnc.type : any
 >context.scopeChain.fnc : any
@@ -1250,7 +1250,7 @@ module TypeScript {
 >container.getType().memberScope : any
 >container.getType() : any
 >container.getType : any
->container : any
+>container : Symbol
 >getType : any
 >memberScope : any
 
@@ -1270,7 +1270,7 @@ module TypeScript {
 >(<TypeSymbol>container) : any
 ><TypeSymbol>container : any
 >TypeSymbol : No type information available!
->container : any
+>container : Symbol
 >type : any
 >memberScope : any
 >valueMembers : any
@@ -1308,25 +1308,25 @@ module TypeScript {
 >!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>container.declAST).isConstructor : any
 >!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl : boolean
 >!funcDecl.isConstructor &&                    container &&                    container.declAST : any
->!funcDecl.isConstructor &&                    container : any
+>!funcDecl.isConstructor &&                    container : Symbol
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
 >funcDecl : any
 >isConstructor : any
 
                     container &&
->container : any
+>container : Symbol
 
                     container.declAST &&
 >container.declAST : any
->container : any
+>container : Symbol
 >declAST : any
 
                     container.declAST.nodeType == NodeType.FuncDecl &&
 >container.declAST.nodeType == NodeType.FuncDecl : boolean
 >container.declAST.nodeType : any
 >container.declAST : any
->container : any
+>container : Symbol
 >declAST : any
 >nodeType : any
 >NodeType.FuncDecl : any
@@ -1339,7 +1339,7 @@ module TypeScript {
 ><FuncDecl>container.declAST : any
 >FuncDecl : No type information available!
 >container.declAST : any
->container : any
+>container : Symbol
 >declAST : any
 >isConstructor : any
 
@@ -1428,7 +1428,7 @@ module TypeScript {
 >checker : any
 >createFunctionSignature : any
 >funcDecl : any
->container : any
+>container : Symbol
 
                                                             funcScope, fgSym, fgSym == null);
 >funcScope : any
@@ -1441,7 +1441,7 @@ module TypeScript {
             if (!funcDecl.accessorSymbol && 
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) ||                     (fgSym && fgSym.isAccessor()) : any
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
->!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : any
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : Symbol
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number
 >!funcDecl.accessorSymbol : boolean
 >funcDecl.accessorSymbol : any
@@ -1459,7 +1459,7 @@ module TypeScript {
 >ClassMethod : any
 
                 container && 
->container : any
+>container : Symbol
 
                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) || 
 >((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
@@ -1508,7 +1508,7 @@ module TypeScript {
 >fgSym : any
 >container.getType() : any
 >container.getType : any
->container : any
+>container : Symbol
 >getType : any
 >(funcDecl.isMethod() && isStatic) : any
 >funcDecl.isMethod() && isStatic : any
@@ -1519,7 +1519,7 @@ module TypeScript {
 >isStatic : any
 >true : true
 >funcScope : any
->container : any
+>container : Symbol
             }
 
             funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
@@ -1665,7 +1665,7 @@ module TypeScript {
 >null : null
 >null : null
 >parentScope : any
->localContainer : any
+>localContainer : Symbol
 
         var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
 >statics : any

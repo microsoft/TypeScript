@@ -1,7 +1,7 @@
 === tests/cases/compiler/a.ts ===
 export const x = Symbol();
 >x : Symbol(x, Decl(a.ts, 0, 12))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 === tests/cases/compiler/b.ts ===
 import { x } from "./a";

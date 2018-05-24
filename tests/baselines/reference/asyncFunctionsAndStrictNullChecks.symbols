@@ -105,7 +105,7 @@ declare function resolve1<T>(value: T): Promise<T>;
 >T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 26))
 >value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 29))
 >T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 26))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 26))
 
 declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;

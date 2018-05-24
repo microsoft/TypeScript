@@ -40,9 +40,9 @@ export {II as II1};
 
 //// [f1.js]
 System.register([], function (exports_1, context_1) {
+    var A;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var A;
     return {
         setters: [],
         execute: function () {
@@ -57,9 +57,9 @@ System.register([], function (exports_1, context_1) {
 });
 //// [f2.js]
 System.register(["f1"], function (exports_1, context_1) {
+    var x, N, IX, f1_1;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var x, N, IX, f1_1;
     return {
         setters: [
             function (f1_1_1) {

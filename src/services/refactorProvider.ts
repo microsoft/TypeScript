@@ -38,7 +38,7 @@ namespace ts {
         }
     }
 
-    export function getRefactorContextLength(context: RefactorContext): number {
-        return context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
+    export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
+        return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
     }
 }

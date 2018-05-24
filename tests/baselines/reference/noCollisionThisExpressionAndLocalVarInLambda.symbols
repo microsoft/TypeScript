@@ -1,6 +1,6 @@
 === tests/cases/compiler/noCollisionThisExpressionAndLocalVarInLambda.ts ===
 declare function alert(message?: any): void;
->alert : Symbol(alert, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
 >message : Symbol(message, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 23))
 
 var x = {
@@ -19,11 +19,11 @@ var x = {
     }
 }
 alert(x.doStuff(x => alert(x)));
->alert : Symbol(alert, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
 >x.doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 9))
 >x : Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 3))
 >doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 9))
 >x : Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 7, 16))
->alert : Symbol(alert, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
 >x : Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 7, 16))
 

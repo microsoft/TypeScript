@@ -38,8 +38,8 @@ namespace ts {
         getText(): string;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
-        setText(text: string, start?: number, length?: number): void;
-        setOnError(onError: ErrorCallback): void;
+        setText(text: string | undefined, start?: number, length?: number): void;
+        setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
         setTextPos(textPos: number): void;
@@ -267,14 +267,14 @@ namespace ts {
         return false;
     }
 
-    /* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion >= ScriptTarget.ES5 ?
+    /* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined) {
+        return languageVersion! >= ScriptTarget.ES5 ?
             lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
             lookupInUnicodeMap(code, unicodeES3IdentifierStart);
     }
 
-    function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion >= ScriptTarget.ES5 ?
+    function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | undefined) {
+        return languageVersion! >= ScriptTarget.ES5 ?
             lookupInUnicodeMap(code, unicodeES5IdentifierPart) :
             lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
@@ -612,7 +612,7 @@ namespace ts {
     }
 
     function scanShebangTrivia(text: string, pos: number) {
-        const shebang = shebangTriviaRegex.exec(text)[0];
+        const shebang = shebangTriviaRegex.exec(text)![0];
         pos = pos + shebang.length;
         return pos;
     }
@@ -637,11 +637,11 @@ namespace ts {
      * @returns If "reduce" is true, the accumulated value. If "reduce" is false, the first truthy
      *      return value of the callback.
      */
-    function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial?: U): U {
-        let pendingPos: number;
-        let pendingEnd: number;
-        let pendingKind: CommentKind;
-        let pendingHasTrailingNewLine: boolean;
+    function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U | undefined) => U, state: T, initial?: U): U | undefined {
+        let pendingPos!: number;
+        let pendingEnd!: number;
+        let pendingKind!: CommentKind;
+        let pendingHasTrailingNewLine!: boolean;
         let hasPendingCommentRange = false;
         let collecting = trailing || pos === 0;
         let accumulator = initial;
@@ -780,20 +780,20 @@ namespace ts {
         }
     }
 
-    export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
+    export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
             ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
     }
 
-    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean {
+    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
             ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
     /* @internal */
-    export function isIdentifierText(name: string, languageVersion: ScriptTarget): boolean {
+    export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined): boolean {
         if (!isIdentifierStart(name.charCodeAt(0), languageVersion)) {
             return false;
         }
@@ -811,12 +811,15 @@ namespace ts {
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
                                   languageVariant = LanguageVariant.Standard,
-                                  text?: string,
+                                  textInitial?: string,
                                   onError?: ErrorCallback,
                                   start?: number,
                                   length?: number): Scanner {
+        let text = textInitial!;
+
         // Current position (end position of text of current token)
         let pos: number;
+
 
         // end of text
         let end: number;
@@ -828,7 +831,7 @@ namespace ts {
         let tokenPos: number;
 
         let token: SyntaxKind;
-        let tokenValue: string;
+        let tokenValue!: string;
         let tokenFlags: TokenFlags;
 
         setText(text, start, length);
@@ -919,8 +922,8 @@ namespace ts {
         function scanNumber(): string {
             const start = pos;
             const mainFragment = scanNumberFragment();
-            let decimalFragment: string;
-            let scientificFragment: string;
+            let decimalFragment: string | undefined;
+            let scientificFragment: string | undefined;
             if (text.charCodeAt(pos) === CharacterCodes.dot) {
                 pos++;
                 decimalFragment = scanNumberFragment();
@@ -1345,7 +1348,7 @@ namespace ts {
             if (len >= 2 && len <= 11) {
                 const ch = tokenValue.charCodeAt(0);
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
-                    token = textToToken.get(tokenValue);
+                    token = textToToken.get(tokenValue)!;
                     if (token !== undefined) {
                         return token;
                     }
@@ -1993,12 +1996,10 @@ namespace ts {
         }
 
         function scanJSDocToken(): JsDocSyntaxKind {
+            startPos = tokenPos = pos;
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
-
-            startPos = pos;
-            tokenPos = pos;
 
             const ch = text.charCodeAt(pos);
             pos++;
@@ -2112,13 +2113,13 @@ namespace ts {
             return text;
         }
 
-        function setText(newText: string, start: number, length: number) {
+        function setText(newText: string | undefined, start: number | undefined, length: number | undefined) {
             text = newText || "";
-            end = length === undefined ? text.length : start + length;
+            end = length === undefined ? text.length : start! + length;
             setTextPos(start || 0);
         }
 
-        function setOnError(errorCallback: ErrorCallback) {
+        function setOnError(errorCallback: ErrorCallback | undefined) {
             onError = errorCallback;
         }
 
@@ -2136,7 +2137,7 @@ namespace ts {
             startPos = textPos;
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
-            tokenValue = undefined;
+            tokenValue = undefined!;
             tokenFlags = 0;
         }
     }

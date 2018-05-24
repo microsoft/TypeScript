@@ -7,12 +7,12 @@
 ////
 //// f `${ }   ${/*1*/ fa/*2*/lse /*3*/}
 
-goTo.eachMarker(() => {
-    verify.signatureHelpCountIs(3);
-    verify.signatureHelpArgumentCountIs(3);
-
-    verify.currentSignatureParameterCountIs(4);
-    verify.currentSignatureHelpIs('f(templateStrings: TemplateStringsArray, p1_o3: string, p2_o3: boolean, p3_o3: number): boolean');
-    verify.currentParameterHelpArgumentNameIs("p2_o3");
-    verify.currentParameterSpanIs("p2_o3: boolean");
+verify.signatureHelp({
+    marker: test.markerNames(),
+    overloadsCount: 3,
+    text: "f(templateStrings: TemplateStringsArray, p1_o3: string, p2_o3: boolean, p3_o3: number): boolean",
+    argumentCount: 3,
+    parameterCount: 4,
+    parameterName: "p2_o3",
+    parameterSpan: "p2_o3: boolean",
 });

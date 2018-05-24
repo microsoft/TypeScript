@@ -84,7 +84,7 @@ function f7(x: 'a');
 function f7(x: Date);
 >f7 : Symbol(f7, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 21))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function f7(x: any) { }
 >f7 : Symbol(f7, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 21))

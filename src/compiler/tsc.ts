@@ -50,7 +50,7 @@ namespace ts {
         const commandLine = parseCommandLine(args);
 
         // Configuration file name (if any)
-        let configFileName: string;
+        let configFileName: string | undefined;
         if (commandLine.options.locale) {
             validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
         }
@@ -74,7 +74,7 @@ namespace ts {
 
         if (commandLine.options.help || commandLine.options.all) {
             printVersion();
-            printHelp(commandLine.options.all);
+            printHelp(!!commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -107,20 +107,20 @@ namespace ts {
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
-            printHelp(commandLine.options.all);
+            printHelp(!!commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
         const commandLineOptions = commandLine.options;
         if (configFileName) {
-            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic);
+            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             updateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
             else {
-                performCompilation(configParseResult.fileNames, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
+                performCompilation(configParseResult.fileNames, configParseResult.projectReferences, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
         }
         else {
@@ -130,7 +130,7 @@ namespace ts {
                 createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
             }
             else {
-                performCompilation(commandLine.fileNames, commandLineOptions);
+                performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
             }
         }
     }
@@ -142,11 +142,18 @@ namespace ts {
         }
     }
 
-    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
-        const compilerHost = createCompilerHost(compilerOptions);
-        enableStatistics(compilerOptions);
+    function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
+        const host = createCompilerHost(options);
+        enableStatistics(options);
 
-        const program = createProgram(rootFileNames, compilerOptions, compilerHost, /*oldProgram*/ undefined, configFileParsingDiagnostics);
+        const programOptions: CreateProgramOptions = {
+            rootNames,
+            options,
+            projectReferences,
+            host,
+            configFileParsingDiagnostics
+        };
+        const program = createProgram(programOptions);
         const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);
@@ -154,11 +161,14 @@ namespace ts {
 
     function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
         const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram) => {
-            enableStatistics(options);
-            return compileUsingBuilder(rootNames, options, host, oldProgram);
+        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics) => {
+            Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
+            if (options !== undefined) {
+                enableStatistics(options);
+            }
+            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
         };
-        const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate;
+        const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
             reportStatistics(builderProgram.getProgram());
@@ -170,7 +180,7 @@ namespace ts {
     }
 
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
-        const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
+        const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath!, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options)); // TODO: GH#18217
         updateWatchCompilationHost(watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
         createWatchProgram(watchCompilerHost);
@@ -292,7 +302,7 @@ namespace ts {
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         const optsList = showAllOptions ?
             sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-            filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
+            filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.

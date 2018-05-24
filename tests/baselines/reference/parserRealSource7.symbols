@@ -240,6 +240,7 @@ module TypeScript {
 >findTypeSymbolInScopeChain : Symbol(findTypeSymbolInScopeChain, Decl(parserRealSource7.ts, 85, 5))
 >name : Symbol(name, Decl(parserRealSource7.ts, 87, 40))
 >scopeChain : Symbol(scopeChain, Decl(parserRealSource7.ts, 87, 53))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         var symbol = scopeChain.scope.find(name, false, true);
 >symbol : Symbol(symbol, Decl(parserRealSource7.ts, 88, 11))
@@ -266,9 +267,11 @@ module TypeScript {
 >alias : Symbol(alias, Decl(parserRealSource7.ts, 97, 33))
 >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
 >IAliasScopeContext : Symbol(IAliasScopeContext, Decl(parserRealSource7.ts, 79, 34))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         var symbol: Symbol = null;
 >symbol : Symbol(symbol, Decl(parserRealSource7.ts, 98, 11))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         switch (alias.nodeType) {
 >alias : Symbol(alias, Decl(parserRealSource7.ts, 97, 33))

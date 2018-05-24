@@ -59,7 +59,7 @@ interface I1<T> {
 
     foo6: Date; // error
 >foo6 : Symbol(I1.foo6, Decl(subtypesOfUnion.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo7: RegExp; // error
 >foo7 : Symbol(I1.foo7, Decl(subtypesOfUnion.ts, 17, 15))
@@ -137,7 +137,7 @@ interface I2<T> {
 
     foo6: Date; // error
 >foo6 : Symbol(I2.foo6, Decl(subtypesOfUnion.ts, 37, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo7: RegExp; // error
 >foo7 : Symbol(I2.foo7, Decl(subtypesOfUnion.ts, 38, 15))

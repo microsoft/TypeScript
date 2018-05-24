@@ -74,6 +74,14 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
+interface Symbol {
+  /** Returns a string representation of an object. */
+  toString(): string;
+
+  /** Returns the primitive value of the specified object. */
+  valueOf(): symbol;
+}
+
 declare type PropertyKey = string | number | symbol;
 
 interface PropertyDescriptor {
