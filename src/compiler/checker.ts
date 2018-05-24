@@ -9228,7 +9228,7 @@ namespace ts {
             const skippedPrivateMembers = createUnderscoreEscapedMap<boolean>();
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
-            if (left === emptyObjectType) {
+            if (getObjectFlags(left) & ObjectFlags.EmptyObjectType) {
                 // for the first spread element, left === emptyObjectType, so take the right's string indexer
                 stringIndexInfo = getIndexInfoOfType(right, IndexKind.String);
                 numberIndexInfo = getIndexInfoOfType(right, IndexKind.Number);
@@ -12903,7 +12903,7 @@ namespace ts {
                     const instantiatedConstraint = instantiateType(constraint, context);
                     // If the inferred type is an empty object type we go with the constraint since it may
                     // be more, but never less, specific (e.g. an object type with only optional properties).
-                    if (inferredType === emptyObjectType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                    if (getObjectFlags(inferredType) & ObjectFlags.EmptyObjectType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                         inference.inferredType = inferredType = instantiatedConstraint;
                     }
                 }
@@ -16248,7 +16248,7 @@ namespace ts {
             if (typeToIntersect && spread !== emptyObjectType) {
                 return getIntersectionType([typeToIntersect, spread]);
             }
-            return typeToIntersect || (spread === emptyObjectType ? createJsxAttributesType() : spread);
+            return typeToIntersect || (getObjectFlags(spread) & ObjectFlags.EmptyObjectType ? createJsxAttributesType() : spread);
 
             /**
              * Create anonymous type from given attributes symbol table.
@@ -19402,7 +19402,7 @@ namespace ts {
                 const decl = parameter.valueDeclaration as ParameterDeclaration;
                 if (decl.name.kind !== SyntaxKind.Identifier) {
                     // if inference didn't come up with anything but {}, fall back to the binding pattern if present.
-                    if (links.type === emptyObjectType) {
+                    if (getObjectFlags(links.type) & ObjectFlags.EmptyObjectType) {
                         links.type = getTypeFromBindingPattern(decl.name);
                     }
                     assignBindingElementTypes(decl.name);
@@ -19424,7 +19424,7 @@ namespace ts {
 
         function createPromiseReturnType(func: FunctionLikeDeclaration | ImportCall, promisedType: Type) {
             const promiseType = createPromiseType(promisedType);
-            if (promiseType === emptyObjectType) {
+            if (getObjectFlags(promiseType) & ObjectFlags.EmptyObjectType) {
                 error(func, isImportCall(func) ?
                     Diagnostics.A_dynamic_import_call_returns_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
                     Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
