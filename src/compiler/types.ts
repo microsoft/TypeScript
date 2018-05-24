@@ -3813,6 +3813,7 @@ namespace ts {
         ReverseMapped    = 1 << 11, // Object contains a property from a reverse-mapped type
         JsxAttributes    = 1 << 12, // Jsx attributes type
         MarkerType       = 1 << 13, // Marker type used for variance probing
+        EmptyObjectType  = 1 << 14, // Type is known to be empty object type {}
         ClassOrInterface = Class | Interface
     }
 

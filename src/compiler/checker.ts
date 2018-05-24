@@ -372,11 +372,10 @@ namespace ts {
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
 
-        const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-
         const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         emptyTypeLiteralSymbol.members = createSymbolTable();
-        const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyObjectType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        emptyObjectType.objectFlags |= ObjectFlags.EmptyObjectType;
 
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = createMap<TypeReference>();
@@ -8299,6 +8298,9 @@ namespace ts {
                 else if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeFlags.NonWideningType;
                 }
+                else if (getObjectFlags(type) & ObjectFlags.EmptyObjectType) {
+                    includes |= TypeFlags.EmptyObject;
+                }
                 else {
                     const len = typeSet.length;
                     const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
@@ -8402,20 +8404,30 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            const typeSet: Type[] = [];
+            let typeSet: Type[] = [];
             const includes = addTypesToUnion(typeSet, 0, types);
             if (includes & TypeFlags.Any) {
                 return includes & TypeFlags.Wildcard ? wildcardType : anyType;
             }
-            switch (unionReduction) {
-                case UnionReduction.Literal:
-                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique) {
-                        removeRedundantLiteralTypes(typeSet, includes);
-                    }
-                    break;
-                case UnionReduction.Subtype:
-                    removeSubtypes(typeSet);
-                    break;
+            if (includes & TypeFlags.EmptyObject) {
+                if (!(strictNullChecks && includes & TypeFlags.Nullable)) {
+                    return emptyObjectType;
+                }
+                typeSet = !(includes & TypeFlags.Undefined) ? [nullType, emptyObjectType] :
+                    !(includes & TypeFlags.Null) ? [undefinedType, emptyObjectType] :
+                    [undefinedType, nullType, emptyObjectType];
+            }
+            else {
+                switch (unionReduction) {
+                    case UnionReduction.Literal:
+                        if (includes & TypeFlags.StringOrNumberLiteralOrUnique) {
+                            removeRedundantLiteralTypes(typeSet, includes);
+                        }
+                        break;
+                    case UnionReduction.Subtype:
+                        removeSubtypes(typeSet);
+                        break;
+                }
             }
             if (typeSet.length === 0) {
                 return includes & TypeFlags.Null ? includes & TypeFlags.NonWideningType ? nullType : nullWideningType :
@@ -9162,11 +9174,12 @@ namespace ts {
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                if (getMembersOfSymbol(node.symbol).size === 0 && !aliasSymbol) {
-                    links.resolvedType = emptyTypeLiteralType;
+                const isEmptyObjectLiteral = getMembersOfSymbol(node.symbol).size === 0;
+                if (isEmptyObjectLiteral && !aliasSymbol) {
+                    links.resolvedType = emptyObjectType;
                 }
                 else {
-                    let type = createObjectType(ObjectFlags.Anonymous, node.symbol);
+                    let type = createObjectType(ObjectFlags.Anonymous | (isEmptyObjectLiteral ? ObjectFlags.EmptyObjectType : 0), node.symbol);
                     type.aliasSymbol = aliasSymbol;
                     type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                     if (isJSDocTypeLiteral(node) && node.isArrayType) {
@@ -12888,7 +12901,9 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context);
-                    if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                    // If the inferred type is an empty object type we go with the constraint since it may
+                    // be more, but never less, specific (e.g. an object type with only optional properties).
+                    if (inferredType === emptyObjectType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                         inference.inferredType = inferredType = instantiatedConstraint;
                     }
                 }
