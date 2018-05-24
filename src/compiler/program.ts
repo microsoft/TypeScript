@@ -2667,6 +2667,11 @@ namespace ts {
                 return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
             }
 
+            // If declarationDir is specified, return if its a file in that directory
+            if (options.declarationDir && containsPath(options.declarationDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames())) {
+                return true;
+            }
+
             // If --outDir, check if file is in that directory
             if (options.outDir) {
                 return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
@@ -2675,8 +2680,8 @@ namespace ts {
             if (fileExtensionIsOneOf(filePath, supportedJavascriptExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
                 // Otherwise just check if sourceFile with the name exists
                 const filePathWithoutExtension = removeFileExtension(filePath);
-                return !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Ts) as Path) ||
-                    !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Tsx) as Path);
+                return !!getSourceFileByPath((filePathWithoutExtension + Extension.Ts) as Path) ||
+                    !!getSourceFileByPath((filePathWithoutExtension + Extension.Tsx) as Path);
             }
             return false;
         }
