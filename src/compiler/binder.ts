@@ -1409,6 +1409,7 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
+                case SyntaxKind.TypeParameter:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
                 case SyntaxKind.SourceFile:
@@ -1530,6 +1531,7 @@ namespace ts {
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
+                case SyntaxKind.TypeParameter:
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead,
                     // they're only accessed 'lexically' (i.e. from code that exists underneath
@@ -2712,12 +2714,6 @@ namespace ts {
                 else {
                     bindAnonymousDeclaration(node, SymbolFlags.TypeParameter, getDeclarationName(node)!); // TODO: GH#18217
                 }
-            }
-            else if (node.parent.kind === SyntaxKind.TypeParameter) {
-                if (!node.parent.locals) {
-                    node.parent.locals = createSymbolTable();
-                }
-                declareSymbol(node.parent.locals, node.parent.symbol, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);

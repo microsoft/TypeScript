@@ -1,25 +1,25 @@
 === tests/cases/compiler/higherKindedTypes.ts ===
 interface Functor<A, Container<_T>> {
->Functor : Functor<A, Container>
+>Functor : Functor<A, Container<_T>>
 >A : A
->Container : Container
+>Container : Container<_T>
 >_T : _T
 
     map<B>(f: (a: A) => B): Container<B>;
->map : <B>(f: (a: A) => B) => Container
+>map : <B>(f: (a: A) => B) => Container<B>
 >B : B
 >f : (a: A) => B
 >a : A
 >A : A
 >B : B
->Container : Container
+>Container : Container<_T>
 >B : B
 }
 
 interface FunctorX<A> extends Functor<A, FunctorX> {
 >FunctorX : FunctorX<A>
 >A : A
->Functor : Functor<A, Container>
+>Functor : Functor<A, Container<_T>>
 >A : A
 >FunctorX : FunctorX<A>
 
@@ -40,7 +40,7 @@ interface FunctorX<A> extends Functor<A, FunctorX> {
 interface FunctorY<A> extends Functor<A, FunctorY> {
 >FunctorY : FunctorY<A>
 >A : A
->Functor : Functor<A, Container>
+>Functor : Functor<A, Container<_T>>
 >A : A
 >FunctorY : FunctorY<A>
 
@@ -135,73 +135,73 @@ const expectY2: FunctorY<string[]> = resultY2;
     
 
 function staticMap<F<_T> extends Functor<_T, F>, A, B>(fa: F<A>, f: (a: A) => B): F<B> {
->staticMap : <F extends Functor<{}, F>, A, B>(fa: F, f: (a: A) => B) => F
->F : F
+>staticMap : <F extends Functor<_T, F<_T>>, A, B>(fa: F<A>, f: (a: A) => B) => F<B>
+>F : F<_T>
 >_T : _T
->Functor : Functor<A, Container>
+>Functor : Functor<A, Container<_T>>
 >_T : _T
->F : F
+>F : F<_T>
 >A : A
 >B : B
->fa : F
->F : F
+>fa : F<A>
+>F : F<_T>
 >A : A
 >f : (a: A) => B
 >a : A
 >A : A
 >B : B
->F : F
+>F : F<_T>
 >B : B
 
     const result = fa.map(f);
->result : F
->fa.map(f) : F
->fa.map : <B>(f: (a: A) => B) => F
->fa : F
->map : <B>(f: (a: A) => B) => F
+>result : F<B>
+>fa.map(f) : F<B>
+>fa.map : <B>(f: (a: A) => B) => F<B>
+>fa : F<A>
+>map : <B>(f: (a: A) => B) => F<B>
 >f : (a: A) => B
 
     return result;
->result : F
+>result : F<B>
 }
 
 function staticMapBadImplementation<F<_T> extends Functor<_T, F>, A, B>(fa: F<A>, f: (a: A) => B): F<B> {
->staticMapBadImplementation : <F extends Functor<{}, F>, A, B>(fa: F, f: (a: A) => B) => F
->F : F
+>staticMapBadImplementation : <F extends Functor<_T, F<_T>>, A, B>(fa: F<A>, f: (a: A) => B) => F<B>
+>F : F<_T>
 >_T : _T
->Functor : Functor<A, Container>
+>Functor : Functor<A, Container<_T>>
 >_T : _T
->F : F
+>F : F<_T>
 >A : A
 >B : B
->fa : F
->F : F
+>fa : F<A>
+>F : F<_T>
 >A : A
 >f : (a: A) => B
 >a : A
 >A : A
 >B : B
->F : F
+>F : F<_T>
 >B : B
 
     return fa;
->fa : F
+>fa : F<A>
 }
 
 function staticMapNoConstraint<F<_T>, A, B>(fa: F<A>, f: (a: A) => B): F<B> {
->staticMapNoConstraint : <F, A, B>(fa: F, f: (a: A) => B) => F
->F : F
+>staticMapNoConstraint : <F, A, B>(fa: F<A>, f: (a: A) => B) => F<B>
+>F : F<_T>
 >_T : _T
 >A : A
 >B : B
->fa : F
->F : F
+>fa : F<A>
+>F : F<_T>
 >A : A
 >f : (a: A) => B
 >a : A
 >A : A
 >B : B
->F : F
+>F : F<_T>
 >B : B
 
     // expect error here since F has no constraint so we have no idea what shape it will be
@@ -209,7 +209,7 @@ function staticMapNoConstraint<F<_T>, A, B>(fa: F<A>, f: (a: A) => B): F<B> {
 >result : any
 >fa.map(f) : any
 >fa.map : any
->fa : F
+>fa : F<A>
 >map : any
 >f : (a: A) => B
 
@@ -220,7 +220,7 @@ function staticMapNoConstraint<F<_T>, A, B>(fa: F<A>, f: (a: A) => B): F<B> {
 const resultX3 = staticMap(initialX, val => val.length);
 >resultX3 : FunctorX<number>
 >staticMap(initialX, val => val.length) : FunctorX<number>
->staticMap : <F extends Functor<{}, F>, A, B>(fa: F, f: (a: A) => B) => F
+>staticMap : <F extends Functor<_T, F<_T>>, A, B>(fa: F<A>, f: (a: A) => B) => F<B>
 >initialX : FunctorX<string>
 >val => val.length : (val: string) => number
 >val : string
@@ -236,7 +236,7 @@ const expectX3: FunctorX<number> = resultX3;
 const resultY3 = staticMap(initialY, val => val.length);
 >resultY3 : FunctorY<number>
 >staticMap(initialY, val => val.length) : FunctorY<number>
->staticMap : <F extends Functor<{}, F>, A, B>(fa: F, f: (a: A) => B) => F
+>staticMap : <F extends Functor<_T, F<_T>>, A, B>(fa: F<A>, f: (a: A) => B) => F<B>
 >initialY : FunctorY<string>
 >val => val.length : (val: string) => number
 >val : string
@@ -252,7 +252,7 @@ const expectY3: FunctorY<number> = resultY3;
 const resultX4 = staticMap(initialX, val => [val]);
 >resultX4 : FunctorX<string[]>
 >staticMap(initialX, val => [val]) : FunctorX<string[]>
->staticMap : <F extends Functor<{}, F>, A, B>(fa: F, f: (a: A) => B) => F
+>staticMap : <F extends Functor<_T, F<_T>>, A, B>(fa: F<A>, f: (a: A) => B) => F<B>
 >initialX : FunctorX<string>
 >val => [val] : (val: string) => string[]
 >val : string
@@ -267,7 +267,7 @@ const expectX4: FunctorX<string[]> = resultX4;
 const resultY4 = staticMap(initialY, val => [val]);
 >resultY4 : FunctorY<string[]>
 >staticMap(initialY, val => [val]) : FunctorY<string[]>
->staticMap : <F extends Functor<{}, F>, A, B>(fa: F, f: (a: A) => B) => F
+>staticMap : <F extends Functor<_T, F<_T>>, A, B>(fa: F<A>, f: (a: A) => B) => F<B>
 >initialY : FunctorY<string>
 >val => [val] : (val: string) => string[]
 >val : string

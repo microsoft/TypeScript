@@ -1,18 +1,18 @@
 === tests/cases/compiler/higherKindedTypesExpectedErrors.ts ===
 interface Functor<FX<_TX>, AX> {
->Functor : Functor<FX, AX>
->FX : FX
+>Functor : Functor<FX<_TX>, AX>
+>FX : FX<_TX>
 >_TX : _TX
 >AX : AX
 
     map<BX>(fmapx: (fmapxax: AX) => BX): FX<BX>;
->map : <BX>(fmapx: (fmapxax: AX) => BX) => FX
+>map : <BX>(fmapx: (fmapxax: AX) => BX) => FX<BX>
 >BX : BX
 >fmapx : (fmapxax: AX) => BX
 >fmapxax : AX
 >AX : AX
 >BX : BX
->FX : FX
+>FX : FX<_TX>
 >BX : BX
 }
 
@@ -20,7 +20,7 @@ interface Functor<FX<_TX>, AX> {
 interface FunctorX<A> extends Functor<FunctorX, A> {
 >FunctorX : FunctorX<A>
 >A : A
->Functor : Functor<FX, AX>
+>Functor : Functor<FX<_TX>, AX>
 >FunctorX : FunctorX<A>
 >A : A
 

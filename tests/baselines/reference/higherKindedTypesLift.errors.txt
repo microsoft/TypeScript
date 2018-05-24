@@ -1,15 +1,31 @@
-tests/cases/compiler/higherKindedTypesLift.ts(84,30): error TS2345: Argument of type '<C1 extends Functor<{}, C1>, A1, B1>(fa1: C1, fmap1: (a1: A1) => B1) => C1' is not assignable to parameter of type 'StaticFunctor<Functor<{}, any>>'.
-  Types of parameters 'fmap1' and 'fmapstatic' are incompatible.
-    Types of parameters 'as' and 'a1' are incompatible.
-      Type '{}' is not assignable to type 'AS'.
-tests/cases/compiler/higherKindedTypesLift.ts(85,30): error TS2345: Argument of type '<C1 extends Functor<{}, C1>, A1, B1>(fa1: C1, fmap1: (a1: A1) => B1) => C1' is not assignable to parameter of type '<AS, BS>(csas: Functor<{}, any>, fmapstatic: (as: AS) => BS) => Functor<{}, any>'.
-  Types of parameters 'fmap1' and 'fmapstatic' are incompatible.
-    Types of parameters 'as' and 'a1' are incompatible.
-      Type '{}' is not assignable to type 'AS'.
-tests/cases/compiler/higherKindedTypesLift.ts(86,30): error TS2345: Argument of type '<C1 extends Functor<{}, C1>, A1, B1>(fa1: C1, fmap1: (a1: A1) => B1) => C1' is not assignable to parameter of type 'StaticFunctor<Functor<{}, any>>'.
+tests/cases/compiler/higherKindedTypesLift.ts(100,43): error TS2345: Argument of type 'FunctorX<number>' is not assignable to parameter of type 'FunctorX<string>'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/higherKindedTypesLift.ts(101,43): error TS2345: Argument of type 'FunctorX<number>' is not assignable to parameter of type 'FunctorX<string>'.
+tests/cases/compiler/higherKindedTypesLift.ts(102,43): error TS2345: Argument of type 'FunctorX<number>' is not assignable to parameter of type 'FunctorX<string>'.
+tests/cases/compiler/higherKindedTypesLift.ts(113,48): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/higherKindedTypesLift.ts(114,48): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
+tests/cases/compiler/higherKindedTypesLift.ts(115,48): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
+tests/cases/compiler/higherKindedTypesLift.ts(120,43): error TS2345: Argument of type 'DiffFunctorY<string>' is not assignable to parameter of type 'Functor<string, DiffFunctorY<_TF>>'.
+  Property 'map' is missing in type 'DiffFunctorY<string>'.
+tests/cases/compiler/higherKindedTypesLift.ts(121,43): error TS2345: Argument of type 'DiffFunctorY<string>' is not assignable to parameter of type 'Functor<string, DiffFunctorY<_TF>>'.
+tests/cases/compiler/higherKindedTypesLift.ts(122,43): error TS2345: Argument of type 'DiffFunctorY<string>' is not assignable to parameter of type 'Functor<string, DiffFunctorY<_TF>>'.
+tests/cases/compiler/higherKindedTypesLift.ts(125,43): error TS2345: Argument of type 'InvalidFunctor<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor<_TF>>'.
+  Types of property 'map' are incompatible.
+    Type '<IB>(fi: (ia: string) => IB) => IB' is not assignable to type '<BF>(f: (a: string) => BF) => InvalidFunctor<BF>'.
+      Type 'BF' is not assignable to type 'InvalidFunctor<BF>'.
+tests/cases/compiler/higherKindedTypesLift.ts(126,43): error TS2345: Argument of type 'InvalidFunctor<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor<_TF>>'.
+tests/cases/compiler/higherKindedTypesLift.ts(127,43): error TS2345: Argument of type 'InvalidFunctor<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor<_TF>>'.
+tests/cases/compiler/higherKindedTypesLift.ts(130,43): error TS2345: Argument of type 'InvalidFunctor2<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor2<_TF>>'.
+  Types of property 'map' are incompatible.
+    Type '<IB2>(fi2: (ia2: string) => IB2) => FunctorX<IB2>' is not assignable to type '<BF>(f: (a: string) => BF) => InvalidFunctor2<BF>'.
+      Type 'FunctorX<BF>' is not assignable to type 'InvalidFunctor2<BF>'.
+        Property 'someUniqueMethod' is missing in type 'FunctorX<BF>'.
+tests/cases/compiler/higherKindedTypesLift.ts(131,43): error TS2345: Argument of type 'InvalidFunctor2<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor2<_TF>>'.
+tests/cases/compiler/higherKindedTypesLift.ts(132,43): error TS2345: Argument of type 'InvalidFunctor2<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor2<_TF>>'.
 
 
-==== tests/cases/compiler/higherKindedTypesLift.ts (3 errors) ====
+==== tests/cases/compiler/higherKindedTypesLift.ts (15 errors) ====
     declare function stringLength(strarg: string): number;
     
     export interface Functor<AF, Container<_TF>> {
@@ -94,20 +110,8 @@ tests/cases/compiler/higherKindedTypesLift.ts(86,30): error TS2345: Argument of 
     }
     
     const liftedFunctor1 = lift1(staticMap);
-                                 ~~~~~~~~~
-!!! error TS2345: Argument of type '<C1 extends Functor<{}, C1>, A1, B1>(fa1: C1, fmap1: (a1: A1) => B1) => C1' is not assignable to parameter of type 'StaticFunctor<Functor<{}, any>>'.
-!!! error TS2345:   Types of parameters 'fmap1' and 'fmapstatic' are incompatible.
-!!! error TS2345:     Types of parameters 'as' and 'a1' are incompatible.
-!!! error TS2345:       Type '{}' is not assignable to type 'AS'.
     const liftedFunctor2 = lift2(staticMap);
-                                 ~~~~~~~~~
-!!! error TS2345: Argument of type '<C1 extends Functor<{}, C1>, A1, B1>(fa1: C1, fmap1: (a1: A1) => B1) => C1' is not assignable to parameter of type '<AS, BS>(csas: Functor<{}, any>, fmapstatic: (as: AS) => BS) => Functor<{}, any>'.
-!!! error TS2345:   Types of parameters 'fmap1' and 'fmapstatic' are incompatible.
-!!! error TS2345:     Types of parameters 'as' and 'a1' are incompatible.
-!!! error TS2345:       Type '{}' is not assignable to type 'AS'.
     const liftedFunctor3 = lift3(staticMap);
-                                 ~~~~~~~~~
-!!! error TS2345: Argument of type '<C1 extends Functor<{}, C1>, A1, B1>(fa1: C1, fmap1: (a1: A1) => B1) => C1' is not assignable to parameter of type 'StaticFunctor<Functor<{}, any>>'.
     
     const liftedStringLength1 = liftedFunctor1(stringLength);
     const liftedStringLength2 = liftedFunctor2(stringLength);
@@ -122,8 +126,15 @@ tests/cases/compiler/higherKindedTypesLift.ts(86,30): error TS2345: Argument of 
     const expectedType3: FunctorX<number> = result3;
     
     const expectErrorA1 = liftedStringLength1(result1);
+                                              ~~~~~~~
+!!! error TS2345: Argument of type 'FunctorX<number>' is not assignable to parameter of type 'FunctorX<string>'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
     const expectErrorA2 = liftedStringLength2(result2);
+                                              ~~~~~~~
+!!! error TS2345: Argument of type 'FunctorX<number>' is not assignable to parameter of type 'FunctorX<string>'.
     const expectErrorA3 = liftedStringLength3(result3);
+                                              ~~~~~~~
+!!! error TS2345: Argument of type 'FunctorX<number>' is not assignable to parameter of type 'FunctorX<string>'.
     
     
     const stringArray = ["not explicitly declared to implement functor"];
@@ -135,23 +146,56 @@ tests/cases/compiler/higherKindedTypesLift.ts(86,30): error TS2345: Argument of 
     const arrayExpectedType3: Array<number> = arrayResult3;
     
     const arrayExpectErrorA1 = liftedStringLength1(arrayResult1);
+                                                   ~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
     const arrayExpectErrorA2 = liftedStringLength2(arrayResult2);
+                                                   ~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
     const arrayExpectErrorA3 = liftedStringLength3(arrayResult3);
+                                                   ~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
     
     
     
     // should have error because DiffFunctorY has diffMap function, not "map" as needed because liftedFunctor was created from staticMap which declared Functor
     const expectErrorB1 = liftedStringLength1(diffFunctorYString);
+                                              ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'DiffFunctorY<string>' is not assignable to parameter of type 'Functor<string, DiffFunctorY<_TF>>'.
+!!! error TS2345:   Property 'map' is missing in type 'DiffFunctorY<string>'.
     const expectErrorB2 = liftedStringLength2(diffFunctorYString);
+                                              ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'DiffFunctorY<string>' is not assignable to parameter of type 'Functor<string, DiffFunctorY<_TF>>'.
     const expectErrorB3 = liftedStringLength3(diffFunctorYString);
+                                              ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'DiffFunctorY<string>' is not assignable to parameter of type 'Functor<string, DiffFunctorY<_TF>>'.
     
     
     const expectErrorC1 = liftedStringLength1(invalidFunctor);
+                                              ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'InvalidFunctor<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor<_TF>>'.
+!!! error TS2345:   Types of property 'map' are incompatible.
+!!! error TS2345:     Type '<IB>(fi: (ia: string) => IB) => IB' is not assignable to type '<BF>(f: (a: string) => BF) => InvalidFunctor<BF>'.
+!!! error TS2345:       Type 'BF' is not assignable to type 'InvalidFunctor<BF>'.
     const expectErrorC2 = liftedStringLength2(invalidFunctor);
+                                              ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'InvalidFunctor<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor<_TF>>'.
     const expectErrorC3 = liftedStringLength3(invalidFunctor);
+                                              ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'InvalidFunctor<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor<_TF>>'.
     
     
     const expectErrorD1 = liftedStringLength1(invalidFunctor2);
+                                              ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'InvalidFunctor2<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor2<_TF>>'.
+!!! error TS2345:   Types of property 'map' are incompatible.
+!!! error TS2345:     Type '<IB2>(fi2: (ia2: string) => IB2) => FunctorX<IB2>' is not assignable to type '<BF>(f: (a: string) => BF) => InvalidFunctor2<BF>'.
+!!! error TS2345:       Type 'FunctorX<BF>' is not assignable to type 'InvalidFunctor2<BF>'.
+!!! error TS2345:         Property 'someUniqueMethod' is missing in type 'FunctorX<BF>'.
     const expectErrorD2 = liftedStringLength2(invalidFunctor2);
+                                              ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'InvalidFunctor2<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor2<_TF>>'.
     const expectErrorD3 = liftedStringLength3(invalidFunctor2);
+                                              ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'InvalidFunctor2<string>' is not assignable to parameter of type 'Functor<string, InvalidFunctor2<_TF>>'.
     
