@@ -139,7 +139,7 @@ namespace ts {
                 return (sourceFile: SourceFile) => {
                     const result = getMutableClone(sourceFile);
                     result.statements = createNodeArray([
-                        createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined),
+                        createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
                         createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
                     ]);
                     return result;
@@ -266,7 +266,7 @@ namespace ts {
         function baselineDeclarationTransform(text: string, opts: TranspileOptions) {
             const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
             const host = new fakes.CompilerHost(fs, opts.compilerOptions);
-            const program = createProgram(["/.src/index.ts"], opts.compilerOptions, host);
+            const program = createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
             program.emit(program.getSourceFiles()[1], (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*onlyDts*/ true, opts.transformers);
             return fs.readFileSync("/.src/index.d.ts").toString();
         }

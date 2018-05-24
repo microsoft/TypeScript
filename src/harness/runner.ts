@@ -65,7 +65,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
         case "dt":
             return new DefinitelyTypedRunner();
     }
-    ts.Debug.fail(`Unknown runner kind ${kind}`);
+    return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
 
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
@@ -76,10 +76,10 @@ const testconfigFileName = "test.config";
 const customConfig = tryGetConfig(Harness.IO.args());
 let testConfigContent =
     customConfig && Harness.IO.fileExists(customConfig)
-        ? Harness.IO.readFile(customConfig)
+        ? Harness.IO.readFile(customConfig)!
         : Harness.IO.fileExists(mytestconfigFileName)
-            ? Harness.IO.readFile(mytestconfigFileName)
-            : Harness.IO.fileExists(testconfigFileName) ? Harness.IO.readFile(testconfigFileName) : "";
+            ? Harness.IO.readFile(mytestconfigFileName)!
+            : Harness.IO.fileExists(testconfigFileName) ? Harness.IO.readFile(testconfigFileName)! : "";
 
 let taskConfigsFolder: string;
 let workerCount: number;
@@ -131,9 +131,9 @@ function handleTestConfig() {
             (<any>Error).stackTraceLimit = Infinity;
             stackTraceLimit = testConfig.stackTraceLimit;
         }
-        else if ((+testConfig.stackTraceLimit | 0) > 0) {
-            (<any>Error).stackTraceLimit = +testConfig.stackTraceLimit | 0;
-            stackTraceLimit = +testConfig.stackTraceLimit | 0;
+        else if ((+testConfig.stackTraceLimit! | 0) > 0) {
+            (<any>Error).stackTraceLimit = +testConfig.stackTraceLimit! | 0;
+            stackTraceLimit = +testConfig.stackTraceLimit! | 0;
         }
         if (testConfig.listenForWork) {
             return true;
@@ -222,6 +222,7 @@ function handleTestConfig() {
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
     }
+    return false;
 }
 
 function beginTests() {

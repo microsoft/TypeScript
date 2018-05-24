@@ -25,7 +25,7 @@ namespace ts.codefix {
     }
 
     interface ImportCodeFixContext extends SymbolContext {
-        symbolToken: Node;
+        symbolToken: Node | undefined;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -148,8 +148,8 @@ namespace ts.codefix {
             for (const { declaration } of existingImports) {
                 const namespace = getNamespaceImportName(declaration);
                 if (namespace) {
-                    const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace));
-                    if (moduleSymbol && moduleSymbol.exports.has(escapeLeadingUnderscores(context.symbolName))) {
+                    const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace)!);
+                    if (moduleSymbol && moduleSymbol.exports!.has(escapeLeadingUnderscores(context.symbolName))) {
                         useExisting.push(getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken));
                     }
                 }
@@ -211,7 +211,7 @@ namespace ts.codefix {
 
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
         // between the only import statement and user code. Otherwise just insert the statement because chances
-        // are there are already a new line seperating code and import statements.
+        // are there are already a new line separating code and import statements.
         return createCodeAction(Diagnostics.Import_0_from_module_1, [symbolName, moduleSpecifierWithoutQuotes], changes);
     }
 
@@ -263,7 +263,7 @@ namespace ts.codefix {
     ): void {
         const fromExistingImport = firstDefined(existingImports, ({ declaration, importKind }) => {
             if (declaration.kind === SyntaxKind.ImportDeclaration && declaration.importClause) {
-                const changes = tryUpdateExistingImport(ctx, isImportClause(declaration.importClause) && declaration.importClause || undefined, importKind);
+                const changes = tryUpdateExistingImport(ctx, (isImportClause(declaration.importClause) && declaration.importClause || undefined)!, importKind); // TODO: GH#18217
                 if (changes) {
                     const moduleSpecifierWithoutQuotes = stripQuotes(declaration.moduleSpecifier.getText());
                     return createCodeAction(Diagnostics.Add_0_to_existing_import_declaration_from_1, [ctx.symbolName, moduleSpecifierWithoutQuotes], changes);
@@ -296,7 +296,7 @@ namespace ts.codefix {
     function tryUpdateExistingImport(context: SymbolContext, importClause: ImportClause | ImportEqualsDeclaration, importKind: ImportKind): FileTextChanges[] | undefined {
         const { symbolName, sourceFile } = context;
         const { name } = importClause;
-        const { namedBindings } = importClause.kind !== SyntaxKind.ImportEqualsDeclaration && importClause;
+        const { namedBindings } = (importClause.kind !== SyntaxKind.ImportEqualsDeclaration && importClause) as ImportClause; // TODO: GH#18217
         switch (importKind) {
             case ImportKind.Default:
                 return name ? undefined : ChangeTracker.with(context, t =>
@@ -348,13 +348,13 @@ namespace ts.codefix {
         return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes);
     }
 
-    function getImportCodeActions(context: CodeFixContext): CodeFixAction[] {
+    function getImportCodeActions(context: CodeFixContext): CodeFixAction[] | undefined {
         return context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getActionsForUMDImport(context)
             : getActionsForNonUMDImport(context);
     }
 
-    function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] {
+    function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
@@ -376,10 +376,10 @@ namespace ts.codefix {
         }
 
         if (isUMDExportSymbol(umdSymbol)) {
-            const symbol = checker.getAliasedSymbol(umdSymbol);
+            const symbol = checker.getAliasedSymbol(umdSymbol!);
             if (symbol) {
                 return getCodeActionsForImport([{ moduleSymbol: symbol, importKind: getUmdImportKind(context.program.getCompilerOptions()) }],
-                    convertToImportCodeFixContext(context, token, umdSymbol.name));
+                    convertToImportCodeFixContext(context, token, umdSymbol!.name));
             }
         }
 
@@ -443,7 +443,7 @@ namespace ts.codefix {
                 if ((
                         localSymbol && localSymbol.escapedName === symbolName ||
                         getEscapedNameForExportDefault(defaultExport) === symbolName ||
-                        moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target) === symbolName
+                        moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!) === symbolName
                     ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }
@@ -456,7 +456,7 @@ namespace ts.codefix {
             }
 
             function getEscapedNameForExportDefault(symbol: Symbol): __String | undefined {
-                return firstDefined(symbol.declarations, declaration => {
+                return symbol.declarations && firstDefined(symbol.declarations, declaration => {
                     if (isExportAssignment(declaration)) {
                         if (isIdentifier(declaration.expression)) {
                             return declaration.expression.escapedText;

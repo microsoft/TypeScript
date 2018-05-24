@@ -16,6 +16,7 @@ namespace ts {
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldFilePath: string, newFilePath: string): void {
         const configFile = program.getCompilerOptions().configFile;
+        if (!configFile) return;
         const oldFile = getTsConfigPropArrayElementValue(configFile, "files", oldFilePath);
         if (oldFile) {
             changeTracker.replaceRangeWithText(configFile, createStringRange(oldFile, configFile), newFilePath);
@@ -31,23 +32,20 @@ namespace ts {
     }
 
     function getImportsToUpdate(program: Program, oldFilePath: string, host: LanguageServiceHost): ReadonlyArray<ToUpdate> {
-        const checker = program.getTypeChecker();
         const result: ToUpdate[] = [];
         for (const sourceFile of program.getSourceFiles()) {
             for (const ref of sourceFile.referencedFiles) {
-                if (!program.getSourceFileFromReference(sourceFile, ref) && resolveTripleslashReference(ref.fileName, sourceFile.fileName) === oldFilePath) {
+                if (resolveTripleslashReference(ref.fileName, sourceFile.fileName) === oldFilePath) {
                     result.push({ sourceFile, toUpdate: ref });
                 }
             }
 
             for (const importStringLiteral of sourceFile.imports) {
-                // If it resolved to something already, ignore.
-                if (checker.getSymbolAtLocation(importStringLiteral)) continue;
-
                 const resolved = host.resolveModuleNames
                     ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName)
                     : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
-                if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
+                // We may or may not have picked up on the file being renamed, so maybe successfully resolved to oldFilePath, or maybe that's in failedLookupLocations
+                if (resolved && contains(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }

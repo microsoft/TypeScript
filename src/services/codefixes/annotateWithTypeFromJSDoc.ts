@@ -12,8 +12,8 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const decl = getDeclaration(diag.file!, diag.start!);
-            if (decl) doChange(changes, diag.file!, decl);
+            const decl = getDeclaration(diag.file, diag.start);
+            if (decl) doChange(changes, diag.file, decl);
         }),
     });
 
@@ -73,7 +73,7 @@ namespace ts.codefix {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-    function transformJSDocType(node: TypeNode): TypeNode | undefined {
+    function transformJSDocType(node: TypeNode): TypeNode {
         switch (node.kind) {
             case SyntaxKind.JSDocAllType:
             case SyntaxKind.JSDocUnknownType:
@@ -91,7 +91,7 @@ namespace ts.codefix {
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
             default:
-                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined);
+                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined!); // TODO: GH#18217
                 setEmitFlags(visited, EmitFlags.SingleLine);
                 return visited;
         }
@@ -115,7 +115,7 @@ namespace ts.codefix {
 
     function transformJSDocParameter(node: ParameterDeclaration) {
         const index = node.parent.parameters.indexOf(node);
-        const isRest = node.type.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1;
+        const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1; // TODO: GH#18217
         const name = node.name || (isRest ? "rest" : "arg" + index);
         const dotdotdot = isRest ? createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
         return createParameter(node.decorators, node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
@@ -158,11 +158,11 @@ namespace ts.codefix {
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
-            node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
+            node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
             /*questionToken*/ undefined,
-            createTypeReferenceNode(node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
+            createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
             /*initializer*/ undefined);
-        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments[1])]);
+        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments![1])]);
         setEmitFlags(indexSignature, EmitFlags.SingleLine);
         return indexSignature;
     }

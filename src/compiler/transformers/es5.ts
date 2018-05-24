@@ -109,7 +109,7 @@ namespace ts {
          */
         function trySubstituteReservedName(name: Identifier) {
             const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(idText(name)) : undefined);
-            if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
+            if (token !== undefined && token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
                 return setTextRange(createLiteral(name), name);
             }
             return undefined;

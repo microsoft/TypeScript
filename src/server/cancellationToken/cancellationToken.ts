@@ -19,7 +19,7 @@ function pipeExists(name: string): boolean {
 }
 
 function createCancellationToken(args: string[]): ServerCancellationToken {
-    let cancellationPipeName: string;
+    let cancellationPipeName: string | undefined;
     for (let i = 0; i < args.length - 1; i++) {
         if (args[i] === "--cancellationPipeName") {
             cancellationPipeName = args[i + 1];
@@ -43,7 +43,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
         if (namePrefix.length === 0 || namePrefix.indexOf("*") >= 0) {
             throw new Error("Invalid name for template cancellation pipe: it should have length greater than 2 characters and contain only one '*'.");
         }
-        let perRequestPipeName: string;
+        let perRequestPipeName: string | undefined;
         let currentRequestId: number;
         return {
             isCancellationRequested: () => perRequestPipeName !== undefined && pipeExists(perRequestPipeName),
@@ -61,7 +61,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     }
     else {
         return {
-            isCancellationRequested: () => pipeExists(cancellationPipeName),
+            isCancellationRequested: () => pipeExists(cancellationPipeName!), // TODO: GH#18217
             setRequest: (_requestId: number): void => void 0,
             resetRequest: (_requestId: number): void => void 0
         };

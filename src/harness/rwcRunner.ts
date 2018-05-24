@@ -35,28 +35,30 @@ namespace RWC {
             const baseName = ts.getBaseFileName(jsonPath);
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
+            let caseSensitive: boolean;
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
                 inputFiles = [];
                 otherFiles = [];
                 tsconfigFiles = [];
-                compilerResult = undefined;
-                compilerOptions = undefined;
-                currentDirectory = undefined;
+                compilerResult = undefined!;
+                compilerOptions = undefined!;
+                currentDirectory = undefined!;
                 // useCustomLibraryFile is a flag specified in the json object to indicate whether to use built/local/lib.d.ts
                 // or to use lib.d.ts inside the json object. If the flag is true, use the lib.d.ts inside json file
                 // otherwise use the lib.d.ts from built/local
-                useCustomLibraryFile = undefined;
+                useCustomLibraryFile = false;
+                caseSensitive = false;
             });
 
             it("can compile", function(this: Mocha.ITestCallbackContext) {
                 this.timeout(800_000); // Allow long timeouts for RWC compilations
-                let opts: ts.ParsedCommandLine;
+                let opts!: ts.ParsedCommandLine;
 
-                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
+                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)!), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
-                useCustomLibraryFile = ioLog.useCustomLibraryFile;
+                useCustomLibraryFile = !!ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
                     opts = ts.parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
                     assert.equal(opts.errors.length, 0);
@@ -89,20 +91,20 @@ namespace RWC {
                     const uniqueNames = ts.createMap<true>();
                     for (const fileName of fileNames) {
                         // Must maintain order, build result list while checking map
-                        const normalized = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
+                        const normalized = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);
                         if (!uniqueNames.has(normalized)) {
                             uniqueNames.set(normalized, true);
                             // Load the file
-                            inputFiles.push(getHarnessCompilerInputUnit(normalized));
+                            inputFiles.push(getHarnessCompilerInputUnit(fileName));
                         }
                     }
 
                     // Add files to compilation
                     for (const fileRead of ioLog.filesRead) {
-                        const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path));
+                        const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path)!);
                         if (!uniqueNames.has(unitName) && !Harness.isDefaultLibraryFile(fileRead.path)) {
                             uniqueNames.set(unitName, true);
-                            otherFiles.push(getHarnessCompilerInputUnit(unitName));
+                            otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
                         else if (!opts.options.noLib && Harness.isDefaultLibraryFile(fileRead.path) && !uniqueNames.has(unitName) && useCustomLibraryFile) {
                             // If useCustomLibraryFile is true, we will use lib.d.ts from json object
@@ -111,7 +113,7 @@ namespace RWC {
                             // lib.d.ts inside json file. However, some RWC cases will still use
                             // their own version of lib.d.ts because they have customized lib.d.ts
                             uniqueNames.set(unitName, true);
-                            inputFiles.push(getHarnessCompilerInputUnit(unitName));
+                            inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
                     }
                 });
@@ -122,11 +124,12 @@ namespace RWC {
                     opts.options.noLib = true;
                 }
 
+                caseSensitive = ioLog.useCaseSensitiveFileNames || false;
                 // Emit the results
                 compilerResult = Harness.Compiler.compileFiles(
                     inputFiles,
                     otherFiles,
-                    { useCaseSensitiveFileNames: "" + (ioLog.useCaseSensitiveFileNames || false) },
+                    { useCaseSensitiveFileNames: "" + caseSensitive },
                     opts.options,
                     // Since each RWC json file specifies its current directory in its json file, we need
                     // to pass this information in explicitly instead of acquiring it from the process.
@@ -134,13 +137,13 @@ namespace RWC {
                 compilerOptions = compilerResult.options;
 
                 function getHarnessCompilerInputUnit(fileName: string): Harness.Compiler.TestFile {
-                    const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
+                    const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);
                     let content: string;
                     try {
-                        content = Harness.IO.readFile(unitName);
+                        content = Harness.IO.readFile(unitName)!;
                     }
                     catch (e) {
-                        content = Harness.IO.readFile(fileName);
+                        content = Harness.IO.readFile(fileName)!;
                     }
                     return { unitName, content };
                 }
@@ -182,7 +185,7 @@ namespace RWC {
                     // Do not include the library in the baselines to avoid noise
                     const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
                     const errors = compilerResult.diagnostics.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
-                    return Harness.Compiler.iterateErrorBaseline(baselineFiles, errors);
+                    return Harness.Compiler.iterateErrorBaseline(baselineFiles, errors, { caseSensitive, currentDirectory });
                 }, baselineOpts);
             });
 
@@ -196,13 +199,13 @@ namespace RWC {
                         }
 
                         const declContext = Harness.Compiler.prepareDeclarationCompilationContext(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined!, compilerOptions, currentDirectory // TODO: GH#18217
                         );
                         // Reset compilerResult before calling into `compileDeclarationFiles` so the memory from the original compilation can be freed
-                        compilerResult = undefined;
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext);
+                        compilerResult = undefined!;
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext)!;
 
-                        return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
+                        return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics, { caseSensitive, currentDirectory });
                     }, baselineOpts);
                 }
             });

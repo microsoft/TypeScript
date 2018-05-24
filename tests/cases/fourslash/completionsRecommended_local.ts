@@ -15,7 +15,7 @@
 ////enu = E/*let0*/;
 ////enu = E/*let1*/;
 
-goTo.eachMarker(["e0"], () => {//, "e1", "let0", "let1"
+goTo.eachMarker(["e0", "e1", "let0", "let1"], () => {
     verify.completionListContains("Enu", "enum Enu", "", "enum", undefined, undefined, { isRecommended: true });
 });
 

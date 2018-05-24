@@ -10,13 +10,13 @@ verify.getSuggestionDiagnostics([
         message: "'p' is declared but its value is never read.",
         range: r0,
         code: 6133,
-        unused: true,
+        reportsUnnecessary: true,
     },
     {
         message: "'x' is declared but its value is never read.",
         range: r1,
         code: 6133,
-        unused: true,
+        reportsUnnecessary: true,
     }
 ]);
 
