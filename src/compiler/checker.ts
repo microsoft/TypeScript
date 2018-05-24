@@ -20640,15 +20640,6 @@ namespace ts {
             return widened;
         }
 
-        function isTypeParameterWithKeyofConstraint(type: Type) {
-            if (type.flags & TypeFlags.TypeParameter) {
-                const constraintDeclaration = getConstraintDeclaration(<TypeParameter>type);
-                return constraintDeclaration && constraintDeclaration.kind === SyntaxKind.TypeOperator &&
-                    (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword;
-            }
-            return false;
-        }
-
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.UnionOrIntersection) {
@@ -20660,11 +20651,9 @@ namespace ts {
                     // this a literal context for literals of that primitive type. For example, given a
                     // type parameter 'T extends string', infer string literal types for T.
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    return isTypeParameterWithKeyofConstraint(contextualType) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol) ||
-                        constraint.flags & TypeFlags.String && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
-                        constraint.flags & TypeFlags.Number && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
-                        constraint.flags & TypeFlags.Boolean && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
-                        constraint.flags & TypeFlags.ESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol) ||
+                    return maybeTypeOfKind(constraint, TypeFlags.String) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                        maybeTypeOfKind(constraint, TypeFlags.Number) && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
+                        maybeTypeOfKind(constraint, TypeFlags.ESSymbol) && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol) ||
                         isLiteralOfContextualType(candidateType, constraint);
                 }
                 // If the contextual type is a literal of a particular primitive type, we consider this a
@@ -24763,7 +24752,11 @@ namespace ts {
                     case SyntaxKind.ParenthesizedExpression:
                         return evaluate((<ParenthesizedExpression>expr).expression);
                     case SyntaxKind.Identifier:
-                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), (<Identifier>expr).escapedText);
+                        const identifier = <Identifier>expr;
+                        if (isInfinityOrNaNString(identifier.escapedText)) {
+                            return +(identifier.escapedText);
+                        }
+                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), identifier.escapedText);
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
                         const ex = <PropertyAccessExpression | ElementAccessExpression>expr;
@@ -26736,7 +26729,7 @@ namespace ts {
 
             // We might not be able to resolve type symbol so use unknown type in that case (eg error case)
             if (!typeSymbol) {
-                return TypeReferenceSerializationKind.ObjectType;
+                return TypeReferenceSerializationKind.Unknown;
             }
             const type = getDeclaredTypeOfSymbol(typeSymbol);
             if (type === unknownType) {
@@ -27072,7 +27065,7 @@ namespace ts {
                 }
             }
 
-            // We do global augmentations seperately from module augmentations (and before creating global types) because they
+            // We do global augmentations separately from module augmentations (and before creating global types) because they
             //  1. Affect global types. We won't have the correct global types until global augmentations are merged. Also,
             //  2. Module augmentation instantiation requires creating the type of a module, which, in turn, can require
             //       checking for an export or property on the module (if export=) which, in turn, can fall back to the

@@ -4280,5 +4280,9 @@
     "Remove all unused labels": {
         "category": "Message",
         "code": 95054
+    },
+    "Convert '{0}' to mapped object type": {
+        "category": "Message",
+        "code": 95055
     }
 }

@@ -920,7 +920,11 @@ namespace ts {
         }
     }
 
-    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): boolean {
+    export interface PossibleTypeArgumentInfo {
+        readonly called: Identifier;
+        readonly nTypeArguments: number;
+    }
+    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         let token: Node | undefined = tokenIn;
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
@@ -928,15 +932,15 @@ namespace ts {
         // scanning of the previous identifier followed by "<" before current node would give us better result
         // Note that we also balance out the already provided type arguments, arrays, object literals while doing so
         let remainingLessThanTokens = 0;
+        let nTypeArguments = 0;
         while (token) {
             switch (token.kind) {
                 case SyntaxKind.LessThanToken:
                     // Found the beginning of the generic argument expression
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
-                    if (!token) return false;
-                    const tokenIsIdentifier = isIdentifier(token);
-                    if (!remainingLessThanTokens || !tokenIsIdentifier) {
-                        return tokenIsIdentifier;
+                    if (!token || !isIdentifier(token)) return undefined;
+                    if (!remainingLessThanTokens) {
+                        return { called: token, nTypeArguments };
                     }
                     remainingLessThanTokens--;
                     break;
@@ -957,25 +961,28 @@ namespace ts {
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 case SyntaxKind.CloseParenToken:
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 case SyntaxKind.CloseBracketToken:
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 // Valid tokens in a type name. Skip.
                 case SyntaxKind.CommaToken:
+                    nTypeArguments++;
+                    break;
+
                 case SyntaxKind.EqualsGreaterThanToken:
 
                 case SyntaxKind.Identifier:
@@ -999,13 +1006,13 @@ namespace ts {
                     }
 
                     // Invalid token in type
-                    return false;
+                    return undefined;
             }
 
             token = findPrecedingToken(token.getFullStart(), sourceFile);
         }
 
-        return false;
+        return undefined;
     }
 
     /**
@@ -1086,7 +1093,7 @@ namespace ts {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
 
-    export function isInsideTemplateLiteral(node: LiteralExpression, position: number) {
+    export function isInsideTemplateLiteral(node: LiteralExpression | TemplateHead, position: number) {
         return isTemplateLiteralKind(node.kind)
             && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
     }
@@ -1245,18 +1252,18 @@ namespace ts {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
     }
 
-    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration | undefined {
-        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier) : undefined;
+    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string, preferences: UserPreferences): ImportDeclaration | undefined {
+        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, preferences) : undefined;
     }
 
-    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression): ImportDeclaration {
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression, preferences: UserPreferences): ImportDeclaration {
         return createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
                 ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
                 : undefined,
-            typeof moduleSpecifier === "string" ? createLiteral(moduleSpecifier) : moduleSpecifier);
+            typeof moduleSpecifier === "string" ? createLiteral(moduleSpecifier, preferences.quotePreference === "single") : moduleSpecifier);
     }
 
     export function symbolNameNoDefault(symbol: Symbol): string | undefined {

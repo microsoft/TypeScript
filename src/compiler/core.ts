@@ -965,7 +965,8 @@ namespace ts {
     export function append<T>(to: T[], value: T | undefined): T[];
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
-    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    export function append<T>(to: Push<T>, value: T | undefined): void;
+    export function append<T>(to: T[], value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
         if (to === undefined) return [value];
         to.push(value);
@@ -2661,7 +2662,7 @@ namespace ts {
         /**
          * Matches any single directory segment unless it is the last segment and a .min.js file
          * Breakdown:
-         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  [^./]                   # matches everything up to the first . character (excluding directory separators)
          *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
          */
         singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",

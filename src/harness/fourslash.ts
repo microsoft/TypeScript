@@ -2998,30 +2998,11 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, info: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined) {
+        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined): void {
+            assert(!negative || !expected);
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
-
-            if (negative) {
-                if (codeFixes.length) {
-                    this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found ${codeFixes.map(c => c.description)}.`);
-                }
-                return;
-            }
-
-            if (!codeFixes.length) {
-                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
-            }
-            codeFixes.forEach(fix => fix.changes.forEach(change => {
-                assert.isObject(change, `Invalid change in code fix: ${JSON.stringify(fix)}`);
-                change.textChanges.forEach(textChange => assert.isObject(textChange, `Invalid textChange in codeFix: ${JSON.stringify(fix)}`));
-            }));
-            if (info) {
-                assert.equal(info.length, codeFixes.length);
-                ts.zipWith(codeFixes, info, (fix, info) => {
-                    assert.equal(fix.description, info.description);
-                    this.assertObjectsEqual(fix.commands, info.commands);
-                });
-            }
+            const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
+            this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
@@ -3149,7 +3130,7 @@ Actual: ${stringify(fullActual)}`);
             const action = ts.first(refactor.actions);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, ts.defaultPreferences)!;
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.defaultPreferences)!;
             for (const edit of editInfo.edits) {
                 const newContent = options.newFileContents[edit.fileName];
                 if (newContent === undefined) {
@@ -4855,5 +4836,6 @@ namespace FourSlashInterface {
 
     export interface MoveToNewFileOptions {
         readonly newFileContents: { readonly [fileName: string]: string };
+        readonly preferences?: ts.UserPreferences;
     }
 }

@@ -297,8 +297,8 @@ namespace ts.Completions.PathCompletions {
         // after the last '/' that appears in the fragment because that's where the replacement span
         // starts
         if (fragmentDirectory !== undefined) {
-            const moduleNameWithSeperator = ensureTrailingDirectorySeparator(fragmentDirectory);
-            return nonRelativeModuleNames.map(nonRelativeModuleName => removePrefix(nonRelativeModuleName, moduleNameWithSeperator));
+            const moduleNameWithSeparator = ensureTrailingDirectorySeparator(fragmentDirectory);
+            return nonRelativeModuleNames.map(nonRelativeModuleName => removePrefix(nonRelativeModuleName, moduleNameWithSeparator));
         }
         return nonRelativeModuleNames;
     }
@@ -410,7 +410,7 @@ namespace ts.Completions.PathCompletions {
         return result;
     }
 
-    // Replace everything after the last directory seperator that appears
+    // Replace everything after the last directory separator that appears
     function getDirectoryFragmentTextSpan(text: string, textStart: number): TextSpan | undefined {
         const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf("\\"));
         const offset = index !== -1 ? index + 1 : 0;
