@@ -69,9 +69,7 @@ declare module ts {
         writeByteOrderMark: boolean;
         text: string;
     }
-}
 
-declare namespace ts {
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
