@@ -8,8 +8,8 @@ export default function() {}
 
 //// [a.js]
 System.register([], function (exports_1, context_1) {
-    var default_1;
     "use strict";
+    var default_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

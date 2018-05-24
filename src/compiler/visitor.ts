@@ -1469,7 +1469,7 @@ namespace ts {
 
         return isNodeArray(statements)
             ? setTextRange(createNodeArray(concatenate(declarations, statements)), statements)
-            : prependRange(statements, declarations);
+            : prependStatements(statements, declarations);
     }
 
     /**
