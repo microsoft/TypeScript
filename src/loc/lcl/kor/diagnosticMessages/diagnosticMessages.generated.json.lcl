@@ -1107,6 +1107,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_destructured_elements_are_unused_6198" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All destructured elements are unused.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
@@ -1247,6 +1253,15 @@
           <Val><![CDATA[An async iterator must have a 'next()' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[비동기 반복기에는 'next()' 메서드가 있어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_element_access_expression_should_take_an_argument_1011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An element access expression should take an argument.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[요소 액세스 식은 인수를 사용해야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2034,6 +2049,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_prepend_project_0_because_it_does_not_have_outFile_set_6308" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot prepend project '{0}' because it does not have 'outFile' set]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided_1205" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot re-export a type when the '--isolatedModules' flag is provided.]]></Val>
@@ -2412,6 +2433,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Composite_projects_may_not_disable_declaration_emit_6304" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Composite projects may not disable declaration emit.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Computed_property_names_are_not_allowed_in_enums_1164" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Computed property names are not allowed in enums.]]></Val>
@@ -2511,6 +2538,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_all_require_to_import_95048" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all 'require' to 'import']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 'require'를 'import'로 변환]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_all_to_default_imports_95035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all to default imports]]></Val>
@@ -2534,6 +2570,15 @@
           <Val><![CDATA[Convert function to an ES2015 class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[함수를 ES2015 클래스로 변환]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_require_to_import_95047" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert 'require' to 'import']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['require'를 'import'로 변환]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3117,6 +3162,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enable_project_compilation_6302" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable project compilation]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enable_strict_checking_of_function_types_6186" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable strict checking of function types.]]></Val>
@@ -3669,6 +3720,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 파일은 모듈이 아닙니다.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern_6307" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File '{0}' is not in project file list. Projects must list all files or use an 'include' pattern.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4272,6 +4329,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['const' 열거형 선언에서 멤버 이니셜라이저는 상수 식이어야 합니다.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Include_modules_imported_with_json_extension_6197" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Include modules imported with '.json' extension]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5571,6 +5634,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy_5070" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Options_Colon_6027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Options:]]></Val>
@@ -5586,6 +5655,18 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[생성된 선언 파일의 출력 디렉터리입니다.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Output_file_0_from_project_1_does_not_exist_6309" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Output file '{0}' from project '{1}' does not exist]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Output_file_0_has_not_been_built_from_source_file_1_6305" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Output file '{0}' has not been built from source file '{1}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5982,6 +6063,18 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[이 메시지를 출력합니다.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0_6202" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project references may not form a circular graph. Cycle detected: {0}]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Projects_to_reference_6300" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Projects to reference]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6411,6 +6504,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Referenced_project_0_must_have_setting_composite_Colon_true_6306" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Referenced project '{0}' must have setting "composite": true.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove declaration for: '{0}']]></Val>
@@ -6420,6 +6519,12 @@
           <Prev Cat="Text">
             <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove destructuring]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6507,6 +6612,9 @@
       <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[문자열 값 속성 이름에 대해서만 'keyof'를 확인합니다(숫자나 기호 아님).]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7413,6 +7521,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[The global type 'JSX.{0}' may not have more than one property]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_option_1343" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['import.meta' 메타 속성은 'target' 및 'module' 컴파일러 옵션에 'ESNext'를 사용해야만 허용됩니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8760,6 +8877,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_declared_but_never_used_6196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is declared but never used.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'이(가) 선언되었지만 사용되지 않았습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
@@ -9341,6 +9467,15 @@
           <Val><![CDATA['readonly' modifier can only appear on a property declaration or index signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['readonly' 한정자는 속성 선언 또는 인덱스 시그니처에만 나타날 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";require_call_may_be_converted_to_an_import_80005" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['require' call may be converted to an import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['require' 호출이 가져오기로 변환될 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

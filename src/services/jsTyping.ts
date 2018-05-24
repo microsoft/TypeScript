@@ -39,7 +39,8 @@ namespace ts.JsTyping {
         "crypto", "stream", "util", "assert", "tty", "domain",
         "constants", "process", "v8", "timers", "console"];
 
-    const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+    /* @internal */
+    export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
     /**
      * A map of loose file names to library names that we are confident require typings

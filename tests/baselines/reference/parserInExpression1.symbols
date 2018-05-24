@@ -1,4 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/parserInExpression1.ts ===
 console.log("a" in { "a": true });
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >"a" : Symbol("a", Decl(parserInExpression1.ts, 0, 20))
 

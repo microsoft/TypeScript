@@ -6,13 +6,6 @@ namespace ts {
 
     export const externalHelpersModuleNameText = "tslib";
 
-    export interface ReferencePathMatchResult {
-        fileReference?: FileReference;
-        diagnosticMessage?: DiagnosticMessage;
-        isNoDefaultLib?: boolean;
-        isTypeReferenceDirective?: boolean;
-    }
-
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T {
         const declarations = symbol.declarations;
         if (declarations) {
@@ -549,6 +542,12 @@ namespace ts {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.VariableStatement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
                 return true;
             default:
                 return false;
@@ -688,6 +687,8 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
                 errorNode = (<NamedDeclaration>node).name;
                 break;
             case SyntaxKind.ArrowFunction:
@@ -720,6 +721,11 @@ namespace ts {
 
     export function isExternalOrCommonJsModule(file: SourceFile): boolean {
         return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
+    }
+
+
+    export function isJsonSourceFile(file: SourceFile): file is JsonSourceFile {
+        return file.scriptKind === ScriptKind.JSON;
     }
 
     export function isConstEnumDeclaration(node: Node): boolean {
@@ -1067,6 +1073,22 @@ namespace ts {
                 return key === propName || (key2 && key2 === propName);
             }
         });
+    }
+
+    export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile | undefined) {
+        if (tsConfigSourceFile && tsConfigSourceFile.statements.length) {
+            const expression = tsConfigSourceFile.statements[0].expression;
+            return isObjectLiteralExpression(expression) && expression;
+        }
+    }
+
+    export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
+        const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
+        return jsonObjectLiteral &&
+            firstDefined(getPropertyAssignment(jsonObjectLiteral, propKey), property =>
+                isArrayLiteralExpression(property.initializer) ?
+                    find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                    undefined);
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration {
@@ -1463,6 +1485,10 @@ namespace ts {
 
     export function isInJavaScriptFile(node: Node | undefined): boolean {
         return node && !!(node.flags & NodeFlags.JavaScriptFile);
+    }
+
+    export function isInJsonFile(node: Node | undefined): boolean {
+        return node && !!(node.flags & NodeFlags.JsonFile);
     }
 
     export function isInJSDoc(node: Node | undefined): boolean {
@@ -1889,7 +1915,13 @@ namespace ts {
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
         while (node.parent.kind === SyntaxKind.JSDocTypeLiteral) {
-            node = node.parent.parent.parent as JSDocParameterTag;
+            if (node.parent.parent.kind === SyntaxKind.JSDocTypedefTag) {
+                node = node.parent.parent as JSDocTypedefTag;
+            }
+            else {
+                // node.parent.parent is a type expression, child of a parameter type
+                node = node.parent.parent.parent as JSDocParameterTag;
+            }
         }
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         return node.parent!.parent!;
@@ -2076,8 +2108,14 @@ namespace ts {
                 if (isDeclaration(name.parent)) {
                     return name.parent.name === name;
                 }
-                const binExp = name.parent.parent;
-                return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                else if (isQualifiedName(name.parent)) {
+                    const tag = name.parent.parent;
+                    return isJSDocParameterTag(tag) && tag.name === name.parent;
+                }
+                else {
+                    const binExp = name.parent.parent;
+                    return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                }
             default:
                 return false;
         }
@@ -2883,6 +2921,7 @@ namespace ts {
         sourceMapFilePath: string | undefined;
         declarationFilePath: string | undefined;
         declarationMapPath: string | undefined;
+        bundleInfoPath: string | undefined;
     }
 
     /**
@@ -2973,13 +3012,6 @@ namespace ts {
 
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
-    }
-
-    export interface AllAccessorDeclarations {
-        firstAccessor: AccessorDeclaration;
-        secondAccessor: AccessorDeclaration;
-        getAccessor: AccessorDeclaration;
-        setAccessor: AccessorDeclaration;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
@@ -4025,12 +4057,14 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+    export function addToSeen(seen: Map<true>, key: string | number): boolean;
+    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T): boolean;
+    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T = true as any): boolean {
         key = String(key);
         if (seen.has(key)) {
             return false;
         }
-        seen.set(key, true);
+        seen.set(key, value);
         return true;
     }
 
@@ -4853,6 +4887,11 @@ namespace ts {
 
     export function isIndexSignatureDeclaration(node: Node): node is IndexSignatureDeclaration {
         return node.kind === SyntaxKind.IndexSignature;
+    }
+
+    /* @internal */
+    export function isGetOrSetAccessorDeclaration(node: Node): node is AccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor || node.kind === SyntaxKind.GetAccessor;
     }
 
     // Type
@@ -6055,7 +6094,8 @@ namespace ts {
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.TypeParameter
             || kind === SyntaxKind.VariableDeclaration
-            || kind === SyntaxKind.JSDocTypedefTag;
+            || kind === SyntaxKind.JSDocTypedefTag
+            || kind === SyntaxKind.JSDocPropertyTag;
     }
 
     function isDeclarationStatementKind(kind: SyntaxKind) {

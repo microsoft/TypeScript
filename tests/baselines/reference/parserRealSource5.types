@@ -28,8 +28,8 @@ module TypeScript {
 >0 : 0
 
         constructor (public outfile: ITextWriter, public parser: Parser) {
->outfile : any
->ITextWriter : No type information available!
+>outfile : ITextWriter
+>ITextWriter : ITextWriter
 >parser : any
 >Parser : No type information available!
         }
@@ -156,12 +156,12 @@ module TypeScript {
 >s : any
 
             this.outfile.WriteLine(this.builder);
->this.outfile.WriteLine(this.builder) : any
->this.outfile.WriteLine : any
->this.outfile : any
+>this.outfile.WriteLine(this.builder) : void
+>this.outfile.WriteLine : (s: string) => void
+>this.outfile : ITextWriter
 >this : this
->outfile : any
->WriteLine : any
+>outfile : ITextWriter
+>WriteLine : (s: string) => void
 >this.builder : string
 >this : this
 >builder : string

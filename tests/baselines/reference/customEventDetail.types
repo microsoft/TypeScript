@@ -1,14 +1,14 @@
 === tests/cases/compiler/customEventDetail.ts ===
 var x: CustomEvent;
->x : any
->CustomEvent : No type information available!
+>x : CustomEvent<any>
+>CustomEvent : CustomEvent<T>
 
 // valid since detail is any
 x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });
->x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' }) : any
->x.initCustomEvent : any
->x : any
->initCustomEvent : any
+>x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' }) : void
+>x.initCustomEvent : (typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: any) => void
+>x : CustomEvent<any>
+>initCustomEvent : (typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: any) => void
 >'hello' : "hello"
 >true : true
 >true : true
@@ -22,7 +22,7 @@ var y = x.detail.name;
 >y : any
 >x.detail.name : any
 >x.detail : any
->x : any
+>x : CustomEvent<any>
 >detail : any
 >name : any
 

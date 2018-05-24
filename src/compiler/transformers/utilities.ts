@@ -15,14 +15,6 @@ namespace ts {
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
 
-    function getNamedImportCount(node: ImportDeclaration) {
-        if (!(node.importClause && node.importClause.namedBindings)) return 0;
-        const names = node.importClause.namedBindings;
-        if (!names) return 0;
-        if (!isNamedImports(names)) return 0;
-        return names.elements.length;
-    }
-
     function containsDefaultReference(node: NamedImportBindings) {
         if (!node) return false;
         if (!isNamedImports(node)) return false;
@@ -33,12 +25,40 @@ namespace ts {
         return e.propertyName && e.propertyName.escapedText === InternalSymbolName.Default;
     }
 
+    export function chainBundle(transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
+        return transformSourceFileOrBundle;
+
+        function transformSourceFileOrBundle(node: SourceFile | Bundle) {
+            return node.kind === SyntaxKind.SourceFile ? transformSourceFile(node) : transformBundle(node);
+        }
+
+        function transformBundle(node: Bundle) {
+            return createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+        }
+    }
+
     export function getImportNeedsImportStarHelper(node: ImportDeclaration) {
-        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > 1 && containsDefaultReference(node.importClause.namedBindings));
+        if (!!getNamespaceDeclarationNode(node)) {
+            return true;
+        }
+        const bindings = node.importClause && node.importClause.namedBindings;
+        if (!bindings) {
+            return false;
+        }
+        if (!isNamedImports(bindings)) return false;
+        let defaultRefCount = 0;
+        for (const binding of bindings.elements) {
+            if (isNamedDefaultReference(binding)) {
+                defaultRefCount++;
+            }
+        }
+        // Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
+        return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
     }
 
     export function getImportNeedsImportDefaultHelper(node: ImportDeclaration) {
-        return isDefaultImport(node) || (getNamedImportCount(node) === 1 && containsDefaultReference(node.importClause.namedBindings));
+        // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
+        return !getImportNeedsImportStarHelper(node) && (isDefaultImport(node) || (node.importClause && isNamedImports(node.importClause.namedBindings) && containsDefaultReference(node.importClause.namedBindings)));
     }
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {

@@ -7,7 +7,7 @@
         "in2.d.ts"
     ],
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "decl.d.ts",
         "in1.d.ts",
         "in2.d.ts"

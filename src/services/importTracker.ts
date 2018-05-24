@@ -99,6 +99,9 @@ namespace ts.FindAllReferences {
                             }
                             break;
 
+                        case SyntaxKind.Identifier: // for 'const x = require("y");
+                            break; // TODO: GH#23879
+
                         case SyntaxKind.ImportEqualsDeclaration:
                             handleNamespaceImport(direct, direct.name, hasModifier(direct, ModifierFlags.Export));
                             break;
@@ -130,6 +133,19 @@ namespace ts.FindAllReferences {
                                 directImports.push(direct);
                             }
                             break;
+
+                        case SyntaxKind.ImportType:
+                            if (direct.qualifier) {
+                                // `import("foo").x` named import
+                                directImports.push(direct);
+                            }
+                            else {
+                                // TODO: GH#23879
+                            }
+                            break;
+
+                        default:
+                            Debug.assertNever(direct, `Unexpected import kind: ${Debug.showSyntaxKind(direct)}`);
                     }
                 }
             }
@@ -216,6 +232,9 @@ namespace ts.FindAllReferences {
             }
 
             if (decl.kind === SyntaxKind.ImportType) {
+                if (decl.qualifier) { // TODO: GH#23879
+                    singleReferences.push(decl.qualifier.kind === SyntaxKind.Identifier ? decl.qualifier : decl.qualifier.right);
+                }
                 return;
             }
 
@@ -313,16 +332,10 @@ namespace ts.FindAllReferences {
         const namespaceImportSymbol = checker.getSymbolAtLocation(name);
 
         return forEachPossibleImportOrExportStatement(sourceFileLike, statement => {
-            if (statement.kind !== SyntaxKind.ExportDeclaration) return;
-
-            const { exportClause, moduleSpecifier } = statement as ExportDeclaration;
-            if (moduleSpecifier || !exportClause) return;
-
-            for (const element of exportClause.elements) {
-                if (checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol) {
-                    return true;
-                }
-            }
+            if (!isExportDeclaration(statement)) return;
+            const { exportClause, moduleSpecifier } = statement;
+            return !moduleSpecifier && exportClause &&
+                exportClause.elements.some(element => checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol);
         });
     }
 
@@ -484,6 +497,9 @@ namespace ts.FindAllReferences {
                 }
                 else if (isBinaryExpression(parent.parent)) {
                     return getSpecialPropertyExport(parent.parent, /*useLhsSymbol*/ true);
+                }
+                else if (isJSDocTypedefTag(parent)) {
+                    return exportInfo(symbol, ExportKind.Named);
                 }
             }
 

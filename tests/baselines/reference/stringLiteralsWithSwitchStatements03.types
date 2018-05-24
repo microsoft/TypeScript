@@ -51,7 +51,7 @@ switch (x) {
 >"baz" : "baz"
 
         x;
->x : "foo"
+>x : never
 
         y;
 >y : "foo" | "bar"

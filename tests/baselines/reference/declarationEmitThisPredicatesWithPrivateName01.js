@@ -37,3 +37,12 @@ var D = /** @class */ (function (_super) {
     }
     return D;
 }(C));
+
+
+//// [declarationEmitThisPredicatesWithPrivateName01.d.ts]
+export declare class C {
+    m(): this is D;
+}
+declare class D extends C {
+}
+export {};

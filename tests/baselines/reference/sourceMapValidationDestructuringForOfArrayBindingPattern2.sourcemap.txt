@@ -460,13 +460,13 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 9 >Emitted(17, 63) Source(26, 25) + SourceIndex(0)
 10>Emitted(17, 65) Source(26, 27) + SourceIndex(0)
 ---
->>>    _a = robots_1[_i], nameA = _a[1];
-1 >^^^^^^^^^^^^^^^^^^^^^^^
-2 >                       ^^^^^^^^^^^^^
+>>>    _15 = robots_1[_i], nameA = _15[1];
+1 >^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                        ^^^^^^^^^^^^^^
 1 >
-2 >                       nameA
-1 >Emitted(18, 24) Source(26, 9) + SourceIndex(0)
-2 >Emitted(18, 37) Source(26, 14) + SourceIndex(0)
+2 >                        nameA
+1 >Emitted(18, 25) Source(26, 9) + SourceIndex(0)
+2 >Emitted(18, 39) Source(26, 14) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -502,7 +502,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(20, 2) Source(28, 2) + SourceIndex(0)
 ---
->>>for (var _b = 0, _c = getRobots(); _b < _c.length; _b++) {
+>>>for (var _a = 0, _b = getRobots(); _a < _b.length; _a++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -541,13 +541,13 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 11>Emitted(21, 56) Source(29, 30) + SourceIndex(0)
 12>Emitted(21, 58) Source(29, 32) + SourceIndex(0)
 ---
->>>    _d = _c[_b], nameA = _d[1];
-1 >^^^^^^^^^^^^^^^^^
-2 >                 ^^^^^^^^^^^^^
+>>>    _16 = _b[_a], nameA = _16[1];
+1 >^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^
 1 >
-2 >                 nameA
-1 >Emitted(22, 18) Source(29, 9) + SourceIndex(0)
-2 >Emitted(22, 31) Source(29, 14) + SourceIndex(0)
+2 >                  nameA
+1 >Emitted(22, 19) Source(29, 9) + SourceIndex(0)
+2 >Emitted(22, 33) Source(29, 14) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -583,7 +583,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(24, 2) Source(31, 2) + SourceIndex(0)
 ---
->>>for (var _e = 0, _f = [robotA, robotB]; _e < _f.length; _e++) {
+>>>for (var _c = 0, _d = [robotA, robotB]; _c < _d.length; _c++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -628,13 +628,13 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 13>Emitted(25, 61) Source(32, 35) + SourceIndex(0)
 14>Emitted(25, 63) Source(32, 37) + SourceIndex(0)
 ---
->>>    _g = _f[_e], nameA = _g[1];
-1 >^^^^^^^^^^^^^^^^^
-2 >                 ^^^^^^^^^^^^^
+>>>    _17 = _d[_c], nameA = _17[1];
+1 >^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^
 1 >
-2 >                 nameA
-1 >Emitted(26, 18) Source(32, 9) + SourceIndex(0)
-2 >Emitted(26, 31) Source(32, 14) + SourceIndex(0)
+2 >                  nameA
+1 >Emitted(26, 19) Source(32, 9) + SourceIndex(0)
+2 >Emitted(26, 33) Source(32, 14) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -670,7 +670,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(28, 2) Source(34, 2) + SourceIndex(0)
 ---
->>>for (var _h = 0, multiRobots_1 = multiRobots; _h < multiRobots_1.length; _h++) {
+>>>for (var _e = 0, multiRobots_1 = multiRobots; _e < multiRobots_1.length; _e++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -681,7 +681,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 8 >                                                                       ^^
 9 >                                                                         ^^^^
 10>                                                                             ^^
-11>                                                                               ^^^^^^^^^->
+11>                                                                               ^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([, [primarySkillA, secondarySkillA]] of 
@@ -704,25 +704,25 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 9 >Emitted(29, 78) Source(35, 57) + SourceIndex(0)
 10>Emitted(29, 80) Source(35, 59) + SourceIndex(0)
 ---
->>>    _j = multiRobots_1[_h], _k = _j[1], primarySkillA = _k[0], secondarySkillA = _k[1];
-1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                            ^^^^^^^^^^
-3 >                                      ^^
-4 >                                        ^^^^^^^^^^^^^^^^^^^^^
-5 >                                                             ^^
-6 >                                                               ^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _18 = multiRobots_1[_e], _19 = _18[1], primarySkillA = _19[0], secondarySkillA = _19[1];
+1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                             ^^^^^^^^^^^^
+3 >                                         ^^
+4 >                                           ^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                 ^^
+6 >                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                            [primarySkillA, secondarySkillA]
-3 >                                      
-4 >                                        primarySkillA
-5 >                                                             , 
-6 >                                                               secondarySkillA
-1->Emitted(30, 29) Source(35, 9) + SourceIndex(0)
-2 >Emitted(30, 39) Source(35, 41) + SourceIndex(0)
-3 >Emitted(30, 41) Source(35, 10) + SourceIndex(0)
-4 >Emitted(30, 62) Source(35, 23) + SourceIndex(0)
-5 >Emitted(30, 64) Source(35, 25) + SourceIndex(0)
-6 >Emitted(30, 87) Source(35, 40) + SourceIndex(0)
+2 >                             [primarySkillA, secondarySkillA]
+3 >                                         
+4 >                                           primarySkillA
+5 >                                                                 , 
+6 >                                                                   secondarySkillA
+1->Emitted(30, 30) Source(35, 9) + SourceIndex(0)
+2 >Emitted(30, 42) Source(35, 41) + SourceIndex(0)
+3 >Emitted(30, 44) Source(35, 10) + SourceIndex(0)
+4 >Emitted(30, 66) Source(35, 23) + SourceIndex(0)
+5 >Emitted(30, 68) Source(35, 25) + SourceIndex(0)
+6 >Emitted(30, 92) Source(35, 40) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -758,7 +758,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(32, 2) Source(37, 2) + SourceIndex(0)
 ---
->>>for (var _l = 0, _m = getMultiRobots(); _l < _m.length; _l++) {
+>>>for (var _f = 0, _g = getMultiRobots(); _f < _g.length; _f++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -771,7 +771,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 10>                                                      ^^
 11>                                                        ^^^^
 12>                                                            ^^
-13>                                                              ^^^^^^^^^^^^^^^->
+13>                                                              ^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([, [primarySkillA, secondarySkillA]] of 
@@ -798,25 +798,25 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 11>Emitted(33, 61) Source(38, 62) + SourceIndex(0)
 12>Emitted(33, 63) Source(38, 64) + SourceIndex(0)
 ---
->>>    _o = _m[_l], _p = _o[1], primarySkillA = _p[0], secondarySkillA = _p[1];
-1->^^^^^^^^^^^^^^^^^
-2 >                 ^^^^^^^^^^
-3 >                           ^^
-4 >                             ^^^^^^^^^^^^^^^^^^^^^
-5 >                                                  ^^
-6 >                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _20 = _g[_f], _21 = _20[1], primarySkillA = _21[0], secondarySkillA = _21[1];
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^
+3 >                              ^^
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                      ^^
+6 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                 [primarySkillA, secondarySkillA]
-3 >                           
-4 >                             primarySkillA
-5 >                                                  , 
-6 >                                                    secondarySkillA
-1->Emitted(34, 18) Source(38, 9) + SourceIndex(0)
-2 >Emitted(34, 28) Source(38, 41) + SourceIndex(0)
-3 >Emitted(34, 30) Source(38, 10) + SourceIndex(0)
-4 >Emitted(34, 51) Source(38, 23) + SourceIndex(0)
-5 >Emitted(34, 53) Source(38, 25) + SourceIndex(0)
-6 >Emitted(34, 76) Source(38, 40) + SourceIndex(0)
+2 >                  [primarySkillA, secondarySkillA]
+3 >                              
+4 >                                primarySkillA
+5 >                                                      , 
+6 >                                                        secondarySkillA
+1->Emitted(34, 19) Source(38, 9) + SourceIndex(0)
+2 >Emitted(34, 31) Source(38, 41) + SourceIndex(0)
+3 >Emitted(34, 33) Source(38, 10) + SourceIndex(0)
+4 >Emitted(34, 55) Source(38, 23) + SourceIndex(0)
+5 >Emitted(34, 57) Source(38, 25) + SourceIndex(0)
+6 >Emitted(34, 81) Source(38, 40) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -852,7 +852,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(36, 2) Source(40, 2) + SourceIndex(0)
 ---
->>>for (var _q = 0, _r = [multiRobotA, multiRobotB]; _q < _r.length; _q++) {
+>>>for (var _h = 0, _j = [multiRobotA, multiRobotB]; _h < _j.length; _h++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -867,7 +867,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 12>                                                                ^^
 13>                                                                  ^^^^
 14>                                                                      ^^
-15>                                                                        ^^^^^->
+15>                                                                        ^^^^^^^^^^->
 1->
   >
 2 >for ([, [primarySkillA, secondarySkillA]] of 
@@ -898,25 +898,25 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 13>Emitted(37, 71) Source(41, 72) + SourceIndex(0)
 14>Emitted(37, 73) Source(41, 74) + SourceIndex(0)
 ---
->>>    _s = _r[_q], _t = _s[1], primarySkillA = _t[0], secondarySkillA = _t[1];
-1->^^^^^^^^^^^^^^^^^
-2 >                 ^^^^^^^^^^
-3 >                           ^^
-4 >                             ^^^^^^^^^^^^^^^^^^^^^
-5 >                                                  ^^
-6 >                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _22 = _j[_h], _23 = _22[1], primarySkillA = _23[0], secondarySkillA = _23[1];
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^
+3 >                              ^^
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                      ^^
+6 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                 [primarySkillA, secondarySkillA]
-3 >                           
-4 >                             primarySkillA
-5 >                                                  , 
-6 >                                                    secondarySkillA
-1->Emitted(38, 18) Source(41, 9) + SourceIndex(0)
-2 >Emitted(38, 28) Source(41, 41) + SourceIndex(0)
-3 >Emitted(38, 30) Source(41, 10) + SourceIndex(0)
-4 >Emitted(38, 51) Source(41, 23) + SourceIndex(0)
-5 >Emitted(38, 53) Source(41, 25) + SourceIndex(0)
-6 >Emitted(38, 76) Source(41, 40) + SourceIndex(0)
+2 >                  [primarySkillA, secondarySkillA]
+3 >                              
+4 >                                primarySkillA
+5 >                                                      , 
+6 >                                                        secondarySkillA
+1->Emitted(38, 19) Source(41, 9) + SourceIndex(0)
+2 >Emitted(38, 31) Source(41, 41) + SourceIndex(0)
+3 >Emitted(38, 33) Source(41, 10) + SourceIndex(0)
+4 >Emitted(38, 55) Source(41, 23) + SourceIndex(0)
+5 >Emitted(38, 57) Source(41, 25) + SourceIndex(0)
+6 >Emitted(38, 81) Source(41, 40) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -952,7 +952,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(40, 2) Source(43, 2) + SourceIndex(0)
 ---
->>>for (var _u = 0, robots_2 = robots; _u < robots_2.length; _u++) {
+>>>for (var _k = 0, robots_2 = robots; _k < robots_2.length; _k++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -986,7 +986,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 9 >Emitted(41, 63) Source(45, 25) + SourceIndex(0)
 10>Emitted(41, 65) Source(45, 27) + SourceIndex(0)
 ---
->>>    numberB = robots_2[_u][0];
+>>>    numberB = robots_2[_k][0];
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
@@ -1028,7 +1028,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(44, 2) Source(47, 2) + SourceIndex(0)
 ---
->>>for (var _v = 0, _w = getRobots(); _v < _w.length; _v++) {
+>>>for (var _l = 0, _m = getRobots(); _l < _m.length; _l++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -1067,7 +1067,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 11>Emitted(45, 56) Source(48, 30) + SourceIndex(0)
 12>Emitted(45, 58) Source(48, 32) + SourceIndex(0)
 ---
->>>    numberB = _w[_v][0];
+>>>    numberB = _m[_l][0];
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^
 3 >                       ^^^->
@@ -1110,7 +1110,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(48, 2) Source(50, 2) + SourceIndex(0)
 ---
->>>for (var _x = 0, _y = [robotA, robotB]; _x < _y.length; _x++) {
+>>>for (var _o = 0, _p = [robotA, robotB]; _o < _p.length; _o++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -1155,7 +1155,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 13>Emitted(49, 61) Source(51, 35) + SourceIndex(0)
 14>Emitted(49, 63) Source(51, 37) + SourceIndex(0)
 ---
->>>    numberB = _y[_x][0];
+>>>    numberB = _p[_o][0];
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^
 3 >                       ^^^->
@@ -1198,7 +1198,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(52, 2) Source(53, 2) + SourceIndex(0)
 ---
->>>for (var _z = 0, multiRobots_2 = multiRobots; _z < multiRobots_2.length; _z++) {
+>>>for (var _q = 0, multiRobots_2 = multiRobots; _q < multiRobots_2.length; _q++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -1231,7 +1231,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 9 >Emitted(53, 78) Source(54, 28) + SourceIndex(0)
 10>Emitted(53, 80) Source(54, 30) + SourceIndex(0)
 ---
->>>    nameB = multiRobots_2[_z][0];
+>>>    nameB = multiRobots_2[_q][0];
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
@@ -1273,7 +1273,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(56, 2) Source(56, 2) + SourceIndex(0)
 ---
->>>for (var _0 = 0, _1 = getMultiRobots(); _0 < _1.length; _0++) {
+>>>for (var _r = 0, _s = getMultiRobots(); _r < _s.length; _r++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -1312,7 +1312,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 11>Emitted(57, 61) Source(57, 33) + SourceIndex(0)
 12>Emitted(57, 63) Source(57, 35) + SourceIndex(0)
 ---
->>>    nameB = _1[_0][0];
+>>>    nameB = _s[_r][0];
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^->
@@ -1355,7 +1355,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(60, 2) Source(59, 2) + SourceIndex(0)
 ---
->>>for (var _2 = 0, _3 = [multiRobotA, multiRobotB]; _2 < _3.length; _2++) {
+>>>for (var _t = 0, _u = [multiRobotA, multiRobotB]; _t < _u.length; _t++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -1400,7 +1400,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 13>Emitted(61, 71) Source(60, 43) + SourceIndex(0)
 14>Emitted(61, 73) Source(60, 45) + SourceIndex(0)
 ---
->>>    nameB = _3[_2][0];
+>>>    nameB = _u[_t][0];
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^->
@@ -1443,7 +1443,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(64, 2) Source(62, 2) + SourceIndex(0)
 ---
->>>for (var _4 = 0, robots_3 = robots; _4 < robots_3.length; _4++) {
+>>>for (var _v = 0, robots_3 = robots; _v < robots_3.length; _v++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -1454,7 +1454,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 8 >                                                        ^^
 9 >                                                          ^^^^
 10>                                                              ^^
-11>                                                                ^^^^^^^^^^->
+11>                                                                ^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -1478,25 +1478,25 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 9 >Emitted(65, 63) Source(64, 43) + SourceIndex(0)
 10>Emitted(65, 65) Source(64, 45) + SourceIndex(0)
 ---
->>>    _5 = robots_3[_4], numberA2 = _5[0], nameA2 = _5[1], skillA2 = _5[2];
-1->^^^^^^^^^^^^^^^^^^^^^^^
-2 >                       ^^^^^^^^^^^^^^^^
-3 >                                       ^^
-4 >                                         ^^^^^^^^^^^^^^
-5 >                                                       ^^
-6 >                                                         ^^^^^^^^^^^^^^^
+>>>    _24 = robots_3[_v], numberA2 = _24[0], nameA2 = _24[1], skillA2 = _24[2];
+1->^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                        ^^^^^^^^^^^^^^^^^
+3 >                                         ^^
+4 >                                           ^^^^^^^^^^^^^^^
+5 >                                                          ^^
+6 >                                                            ^^^^^^^^^^^^^^^^
 1->
-2 >                       numberA2
-3 >                                       , 
-4 >                                         nameA2
-5 >                                                       , 
-6 >                                                         skillA2
-1->Emitted(66, 24) Source(64, 7) + SourceIndex(0)
-2 >Emitted(66, 40) Source(64, 15) + SourceIndex(0)
-3 >Emitted(66, 42) Source(64, 17) + SourceIndex(0)
-4 >Emitted(66, 56) Source(64, 23) + SourceIndex(0)
-5 >Emitted(66, 58) Source(64, 25) + SourceIndex(0)
-6 >Emitted(66, 73) Source(64, 32) + SourceIndex(0)
+2 >                        numberA2
+3 >                                         , 
+4 >                                           nameA2
+5 >                                                          , 
+6 >                                                            skillA2
+1->Emitted(66, 25) Source(64, 7) + SourceIndex(0)
+2 >Emitted(66, 42) Source(64, 15) + SourceIndex(0)
+3 >Emitted(66, 44) Source(64, 17) + SourceIndex(0)
+4 >Emitted(66, 59) Source(64, 23) + SourceIndex(0)
+5 >Emitted(66, 61) Source(64, 25) + SourceIndex(0)
+6 >Emitted(66, 77) Source(64, 32) + SourceIndex(0)
 ---
 >>>    console.log(nameA2);
 1 >^^^^
@@ -1532,7 +1532,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(68, 2) Source(66, 2) + SourceIndex(0)
 ---
->>>for (var _6 = 0, _7 = getRobots(); _6 < _7.length; _6++) {
+>>>for (var _w = 0, _x = getRobots(); _w < _x.length; _w++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
@@ -1545,7 +1545,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 10>                                                 ^^
 11>                                                   ^^^^
 12>                                                       ^^
-13>                                                         ^^^^^^^^^^^->
+13>                                                         ^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([numberA2, nameA2, skillA2] of 
@@ -1572,25 +1572,25 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 11>Emitted(69, 56) Source(67, 48) + SourceIndex(0)
 12>Emitted(69, 58) Source(67, 50) + SourceIndex(0)
 ---
->>>    _8 = _7[_6], numberA2 = _8[0], nameA2 = _8[1], skillA2 = _8[2];
-1->^^^^^^^^^^^^^^^^^
-2 >                 ^^^^^^^^^^^^^^^^
-3 >                                 ^^
-4 >                                   ^^^^^^^^^^^^^^
-5 >                                                 ^^
-6 >                                                   ^^^^^^^^^^^^^^^
+>>>    _25 = _x[_w], numberA2 = _25[0], nameA2 = _25[1], skillA2 = _25[2];
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^^^^
+3 >                                   ^^
+4 >                                     ^^^^^^^^^^^^^^^
+5 >                                                    ^^
+6 >                                                      ^^^^^^^^^^^^^^^^
 1->
-2 >                 numberA2
-3 >                                 , 
-4 >                                   nameA2
-5 >                                                 , 
-6 >                                                   skillA2
-1->Emitted(70, 18) Source(67, 7) + SourceIndex(0)
-2 >Emitted(70, 34) Source(67, 15) + SourceIndex(0)
-3 >Emitted(70, 36) Source(67, 17) + SourceIndex(0)
-4 >Emitted(70, 50) Source(67, 23) + SourceIndex(0)
-5 >Emitted(70, 52) Source(67, 25) + SourceIndex(0)
-6 >Emitted(70, 67) Source(67, 32) + SourceIndex(0)
+2 >                  numberA2
+3 >                                   , 
+4 >                                     nameA2
+5 >                                                    , 
+6 >                                                      skillA2
+1->Emitted(70, 19) Source(67, 7) + SourceIndex(0)
+2 >Emitted(70, 36) Source(67, 15) + SourceIndex(0)
+3 >Emitted(70, 38) Source(67, 17) + SourceIndex(0)
+4 >Emitted(70, 53) Source(67, 23) + SourceIndex(0)
+5 >Emitted(70, 55) Source(67, 25) + SourceIndex(0)
+6 >Emitted(70, 71) Source(67, 32) + SourceIndex(0)
 ---
 >>>    console.log(nameA2);
 1 >^^^^
@@ -1621,76 +1621,76 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(72, 2) Source(69, 2) + SourceIndex(0)
 ---
->>>for (var _9 = 0, _10 = [robotA, robotB]; _9 < _10.length; _9++) {
+>>>for (var _y = 0, _z = [robotA, robotB]; _y < _z.length; _y++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^
 4 >               ^^
-5 >                 ^^^^^^^
-6 >                        ^^^^^^
-7 >                              ^^
-8 >                                ^^^^^^
-9 >                                      ^
-10>                                       ^^
-11>                                         ^^^^^^^^^^^^^^^
-12>                                                        ^^
-13>                                                          ^^^^
-14>                                                              ^^
-15>                                                                ^^^^^^^^^->
+5 >                 ^^^^^^
+6 >                       ^^^^^^
+7 >                             ^^
+8 >                               ^^^^^^
+9 >                                     ^
+10>                                      ^^
+11>                                        ^^^^^^^^^^^^^^
+12>                                                      ^^
+13>                                                        ^^^^
+14>                                                            ^^
+15>                                                              ^^^^^^^^^^->
 1->
   >
 2 >for ([numberA2, nameA2, skillA2] of 
 3 >     [robotA, robotB]
 4 >               
 5 >                 [
-6 >                        robotA
-7 >                              , 
-8 >                                robotB
-9 >                                      ]
-10>                                       
-11>                                         [robotA, robotB]
-12>                                                        
-13>                                                          [robotA, robotB]
-14>                                                              ) 
+6 >                       robotA
+7 >                             , 
+8 >                               robotB
+9 >                                     ]
+10>                                      
+11>                                        [robotA, robotB]
+12>                                                      
+13>                                                        [robotA, robotB]
+14>                                                            ) 
 1->Emitted(73, 1) Source(70, 1) + SourceIndex(0)
 2 >Emitted(73, 6) Source(70, 37) + SourceIndex(0)
 3 >Emitted(73, 16) Source(70, 53) + SourceIndex(0)
 4 >Emitted(73, 18) Source(70, 37) + SourceIndex(0)
-5 >Emitted(73, 25) Source(70, 38) + SourceIndex(0)
-6 >Emitted(73, 31) Source(70, 44) + SourceIndex(0)
-7 >Emitted(73, 33) Source(70, 46) + SourceIndex(0)
-8 >Emitted(73, 39) Source(70, 52) + SourceIndex(0)
-9 >Emitted(73, 40) Source(70, 53) + SourceIndex(0)
-10>Emitted(73, 42) Source(70, 37) + SourceIndex(0)
-11>Emitted(73, 57) Source(70, 53) + SourceIndex(0)
-12>Emitted(73, 59) Source(70, 37) + SourceIndex(0)
-13>Emitted(73, 63) Source(70, 53) + SourceIndex(0)
-14>Emitted(73, 65) Source(70, 55) + SourceIndex(0)
+5 >Emitted(73, 24) Source(70, 38) + SourceIndex(0)
+6 >Emitted(73, 30) Source(70, 44) + SourceIndex(0)
+7 >Emitted(73, 32) Source(70, 46) + SourceIndex(0)
+8 >Emitted(73, 38) Source(70, 52) + SourceIndex(0)
+9 >Emitted(73, 39) Source(70, 53) + SourceIndex(0)
+10>Emitted(73, 41) Source(70, 37) + SourceIndex(0)
+11>Emitted(73, 55) Source(70, 53) + SourceIndex(0)
+12>Emitted(73, 57) Source(70, 37) + SourceIndex(0)
+13>Emitted(73, 61) Source(70, 53) + SourceIndex(0)
+14>Emitted(73, 63) Source(70, 55) + SourceIndex(0)
 ---
->>>    _11 = _10[_9], numberA2 = _11[0], nameA2 = _11[1], skillA2 = _11[2];
-1->^^^^^^^^^^^^^^^^^^^
-2 >                   ^^^^^^^^^^^^^^^^^
-3 >                                    ^^
-4 >                                      ^^^^^^^^^^^^^^^
-5 >                                                     ^^
-6 >                                                       ^^^^^^^^^^^^^^^^
+>>>    _26 = _z[_y], numberA2 = _26[0], nameA2 = _26[1], skillA2 = _26[2];
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^^^^
+3 >                                   ^^
+4 >                                     ^^^^^^^^^^^^^^^
+5 >                                                    ^^
+6 >                                                      ^^^^^^^^^^^^^^^^
 1->
-2 >                   numberA2
-3 >                                    , 
-4 >                                      nameA2
-5 >                                                     , 
-6 >                                                       skillA2
-1->Emitted(74, 20) Source(70, 7) + SourceIndex(0)
-2 >Emitted(74, 37) Source(70, 15) + SourceIndex(0)
-3 >Emitted(74, 39) Source(70, 17) + SourceIndex(0)
-4 >Emitted(74, 54) Source(70, 23) + SourceIndex(0)
-5 >Emitted(74, 56) Source(70, 25) + SourceIndex(0)
-6 >Emitted(74, 72) Source(70, 32) + SourceIndex(0)
+2 >                  numberA2
+3 >                                   , 
+4 >                                     nameA2
+5 >                                                    , 
+6 >                                                      skillA2
+1->Emitted(74, 19) Source(70, 7) + SourceIndex(0)
+2 >Emitted(74, 36) Source(70, 15) + SourceIndex(0)
+3 >Emitted(74, 38) Source(70, 17) + SourceIndex(0)
+4 >Emitted(74, 53) Source(70, 23) + SourceIndex(0)
+5 >Emitted(74, 55) Source(70, 25) + SourceIndex(0)
+6 >Emitted(74, 71) Source(70, 32) + SourceIndex(0)
 ---
 >>>    console.log(nameA2);
 1 >^^^^
@@ -1721,70 +1721,70 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(76, 2) Source(72, 2) + SourceIndex(0)
 ---
->>>for (var _12 = 0, multiRobots_3 = multiRobots; _12 < multiRobots_3.length; _12++) {
+>>>for (var _0 = 0, multiRobots_3 = multiRobots; _0 < multiRobots_3.length; _0++) {
 1->
 2 >^^^^^
-3 >     ^^^^^^^^^^^
-4 >                ^^
-5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                             ^^
-7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                         ^^
-9 >                                                                           ^^^^^
-10>                                                                                ^^
-11>                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                            ^^
+7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                       ^^
+9 >                                                                         ^^^^
+10>                                                                             ^^
+11>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([nameMA, [primarySkillA, secondarySkillA]] of 
 3 >     multiRobots
-4 >                
-5 >                  multiRobots
-6 >                                             
-7 >                                               multiRobots
-8 >                                                                         
-9 >                                                                           multiRobots
-10>                                                                                ) 
+4 >               
+5 >                 multiRobots
+6 >                                            
+7 >                                              multiRobots
+8 >                                                                       
+9 >                                                                         multiRobots
+10>                                                                             ) 
 1->Emitted(77, 1) Source(73, 1) + SourceIndex(0)
 2 >Emitted(77, 6) Source(73, 52) + SourceIndex(0)
-3 >Emitted(77, 17) Source(73, 63) + SourceIndex(0)
-4 >Emitted(77, 19) Source(73, 52) + SourceIndex(0)
-5 >Emitted(77, 46) Source(73, 63) + SourceIndex(0)
-6 >Emitted(77, 48) Source(73, 52) + SourceIndex(0)
-7 >Emitted(77, 74) Source(73, 63) + SourceIndex(0)
-8 >Emitted(77, 76) Source(73, 52) + SourceIndex(0)
-9 >Emitted(77, 81) Source(73, 63) + SourceIndex(0)
-10>Emitted(77, 83) Source(73, 65) + SourceIndex(0)
+3 >Emitted(77, 16) Source(73, 63) + SourceIndex(0)
+4 >Emitted(77, 18) Source(73, 52) + SourceIndex(0)
+5 >Emitted(77, 45) Source(73, 63) + SourceIndex(0)
+6 >Emitted(77, 47) Source(73, 52) + SourceIndex(0)
+7 >Emitted(77, 72) Source(73, 63) + SourceIndex(0)
+8 >Emitted(77, 74) Source(73, 52) + SourceIndex(0)
+9 >Emitted(77, 78) Source(73, 63) + SourceIndex(0)
+10>Emitted(77, 80) Source(73, 65) + SourceIndex(0)
 ---
->>>    _13 = multiRobots_3[_12], nameMA = _13[0], _14 = _13[1], primarySkillA = _14[0], secondarySkillA = _14[1];
-1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                              ^^^^^^^^^^^^^^^
-3 >                                             ^^
-4 >                                               ^^^^^^^^^^^^
-5 >                                                           ^^
-6 >                                                             ^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                   ^^
-8 >                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _27 = multiRobots_3[_0], nameMA = _27[0], _28 = _27[1], primarySkillA = _28[0], secondarySkillA = _28[1];
+1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                             ^^^^^^^^^^^^^^^
+3 >                                            ^^
+4 >                                              ^^^^^^^^^^^^
+5 >                                                          ^^
+6 >                                                            ^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                                  ^^
+8 >                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                              nameMA
-3 >                                             , 
-4 >                                               [primarySkillA, secondarySkillA]
-5 >                                                           
-6 >                                                             primarySkillA
-7 >                                                                                   , 
-8 >                                                                                     secondarySkillA
-1->Emitted(78, 31) Source(73, 7) + SourceIndex(0)
-2 >Emitted(78, 46) Source(73, 13) + SourceIndex(0)
-3 >Emitted(78, 48) Source(73, 15) + SourceIndex(0)
-4 >Emitted(78, 60) Source(73, 47) + SourceIndex(0)
-5 >Emitted(78, 62) Source(73, 16) + SourceIndex(0)
-6 >Emitted(78, 84) Source(73, 29) + SourceIndex(0)
-7 >Emitted(78, 86) Source(73, 31) + SourceIndex(0)
-8 >Emitted(78, 110) Source(73, 46) + SourceIndex(0)
+2 >                             nameMA
+3 >                                            , 
+4 >                                              [primarySkillA, secondarySkillA]
+5 >                                                          
+6 >                                                            primarySkillA
+7 >                                                                                  , 
+8 >                                                                                    secondarySkillA
+1->Emitted(78, 30) Source(73, 7) + SourceIndex(0)
+2 >Emitted(78, 45) Source(73, 13) + SourceIndex(0)
+3 >Emitted(78, 47) Source(73, 15) + SourceIndex(0)
+4 >Emitted(78, 59) Source(73, 47) + SourceIndex(0)
+5 >Emitted(78, 61) Source(73, 16) + SourceIndex(0)
+6 >Emitted(78, 83) Source(73, 29) + SourceIndex(0)
+7 >Emitted(78, 85) Source(73, 31) + SourceIndex(0)
+8 >Emitted(78, 109) Source(73, 46) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -1815,76 +1815,76 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(80, 2) Source(75, 2) + SourceIndex(0)
 ---
->>>for (var _15 = 0, _16 = getMultiRobots(); _15 < _16.length; _15++) {
+>>>for (var _1 = 0, _2 = getMultiRobots(); _1 < _2.length; _1++) {
 1->
 2 >^^^^^
-3 >     ^^^^^^^^^^^
-4 >                ^^
-5 >                  ^^^^^^
-6 >                        ^^^^^^^^^^^^^^
-7 >                                      ^^
-8 >                                        ^^
-9 >                                          ^^^^^^^^^^^^^^^^
-10>                                                          ^^
-11>                                                            ^^^^^
-12>                                                                 ^^
-13>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^
+9 >                                        ^^^^^^^^^^^^^^
+10>                                                      ^^
+11>                                                        ^^^^
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([nameMA, [primarySkillA, secondarySkillA]] of 
 3 >     getMultiRobots()
-4 >                
-5 >                  
-6 >                        getMultiRobots
-7 >                                      ()
-8 >                                        
-9 >                                          getMultiRobots()
-10>                                                          
-11>                                                            getMultiRobots()
-12>                                                                 ) 
+4 >               
+5 >                 
+6 >                      getMultiRobots
+7 >                                    ()
+8 >                                      
+9 >                                        getMultiRobots()
+10>                                                      
+11>                                                        getMultiRobots()
+12>                                                            ) 
 1->Emitted(81, 1) Source(76, 1) + SourceIndex(0)
 2 >Emitted(81, 6) Source(76, 52) + SourceIndex(0)
-3 >Emitted(81, 17) Source(76, 68) + SourceIndex(0)
-4 >Emitted(81, 19) Source(76, 52) + SourceIndex(0)
-5 >Emitted(81, 25) Source(76, 52) + SourceIndex(0)
-6 >Emitted(81, 39) Source(76, 66) + SourceIndex(0)
-7 >Emitted(81, 41) Source(76, 68) + SourceIndex(0)
-8 >Emitted(81, 43) Source(76, 52) + SourceIndex(0)
-9 >Emitted(81, 59) Source(76, 68) + SourceIndex(0)
-10>Emitted(81, 61) Source(76, 52) + SourceIndex(0)
-11>Emitted(81, 66) Source(76, 68) + SourceIndex(0)
-12>Emitted(81, 68) Source(76, 70) + SourceIndex(0)
+3 >Emitted(81, 16) Source(76, 68) + SourceIndex(0)
+4 >Emitted(81, 18) Source(76, 52) + SourceIndex(0)
+5 >Emitted(81, 23) Source(76, 52) + SourceIndex(0)
+6 >Emitted(81, 37) Source(76, 66) + SourceIndex(0)
+7 >Emitted(81, 39) Source(76, 68) + SourceIndex(0)
+8 >Emitted(81, 41) Source(76, 52) + SourceIndex(0)
+9 >Emitted(81, 55) Source(76, 68) + SourceIndex(0)
+10>Emitted(81, 57) Source(76, 52) + SourceIndex(0)
+11>Emitted(81, 61) Source(76, 68) + SourceIndex(0)
+12>Emitted(81, 63) Source(76, 70) + SourceIndex(0)
 ---
->>>    _17 = _16[_15], nameMA = _17[0], _18 = _17[1], primarySkillA = _18[0], secondarySkillA = _18[1];
-1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^^
-3 >                                   ^^
-4 >                                     ^^^^^^^^^^^^
-5 >                                                 ^^
-6 >                                                   ^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                         ^^
-8 >                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _29 = _2[_1], nameMA = _29[0], _30 = _29[1], primarySkillA = _30[0], secondarySkillA = _30[1];
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^^
+3 >                                 ^^
+4 >                                   ^^^^^^^^^^^^
+5 >                                               ^^
+6 >                                                 ^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                       ^^
+8 >                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                    nameMA
-3 >                                   , 
-4 >                                     [primarySkillA, secondarySkillA]
-5 >                                                 
-6 >                                                   primarySkillA
-7 >                                                                         , 
-8 >                                                                           secondarySkillA
-1->Emitted(82, 21) Source(76, 7) + SourceIndex(0)
-2 >Emitted(82, 36) Source(76, 13) + SourceIndex(0)
-3 >Emitted(82, 38) Source(76, 15) + SourceIndex(0)
-4 >Emitted(82, 50) Source(76, 47) + SourceIndex(0)
-5 >Emitted(82, 52) Source(76, 16) + SourceIndex(0)
-6 >Emitted(82, 74) Source(76, 29) + SourceIndex(0)
-7 >Emitted(82, 76) Source(76, 31) + SourceIndex(0)
-8 >Emitted(82, 100) Source(76, 46) + SourceIndex(0)
+2 >                  nameMA
+3 >                                 , 
+4 >                                   [primarySkillA, secondarySkillA]
+5 >                                               
+6 >                                                 primarySkillA
+7 >                                                                       , 
+8 >                                                                         secondarySkillA
+1->Emitted(82, 19) Source(76, 7) + SourceIndex(0)
+2 >Emitted(82, 34) Source(76, 13) + SourceIndex(0)
+3 >Emitted(82, 36) Source(76, 15) + SourceIndex(0)
+4 >Emitted(82, 48) Source(76, 47) + SourceIndex(0)
+5 >Emitted(82, 50) Source(76, 16) + SourceIndex(0)
+6 >Emitted(82, 72) Source(76, 29) + SourceIndex(0)
+7 >Emitted(82, 74) Source(76, 31) + SourceIndex(0)
+8 >Emitted(82, 98) Source(76, 46) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -1915,82 +1915,82 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(84, 2) Source(78, 2) + SourceIndex(0)
 ---
->>>for (var _19 = 0, _20 = [multiRobotA, multiRobotB]; _19 < _20.length; _19++) {
+>>>for (var _3 = 0, _4 = [multiRobotA, multiRobotB]; _3 < _4.length; _3++) {
 1->
 2 >^^^^^
-3 >     ^^^^^^^^^^^
-4 >                ^^
-5 >                  ^^^^^^^
-6 >                         ^^^^^^^^^^^
-7 >                                    ^^
-8 >                                      ^^^^^^^^^^^
-9 >                                                 ^
-10>                                                  ^^
-11>                                                    ^^^^^^^^^^^^^^^^
-12>                                                                    ^^
-13>                                                                      ^^^^^
-14>                                                                           ^^
-15>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^^^^^^
+7 >                                  ^^
+8 >                                    ^^^^^^^^^^^
+9 >                                               ^
+10>                                                ^^
+11>                                                  ^^^^^^^^^^^^^^
+12>                                                                ^^
+13>                                                                  ^^^^
+14>                                                                      ^^
+15>                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([nameMA, [primarySkillA, secondarySkillA]] of 
 3 >     [multiRobotA, multiRobotB]
-4 >                
-5 >                  [
-6 >                         multiRobotA
-7 >                                    , 
-8 >                                      multiRobotB
-9 >                                                 ]
-10>                                                  
-11>                                                    [multiRobotA, multiRobotB]
-12>                                                                    
-13>                                                                      [multiRobotA, multiRobotB]
-14>                                                                           ) 
+4 >               
+5 >                 [
+6 >                       multiRobotA
+7 >                                  , 
+8 >                                    multiRobotB
+9 >                                               ]
+10>                                                
+11>                                                  [multiRobotA, multiRobotB]
+12>                                                                
+13>                                                                  [multiRobotA, multiRobotB]
+14>                                                                      ) 
 1->Emitted(85, 1) Source(79, 1) + SourceIndex(0)
 2 >Emitted(85, 6) Source(79, 52) + SourceIndex(0)
-3 >Emitted(85, 17) Source(79, 78) + SourceIndex(0)
-4 >Emitted(85, 19) Source(79, 52) + SourceIndex(0)
-5 >Emitted(85, 26) Source(79, 53) + SourceIndex(0)
-6 >Emitted(85, 37) Source(79, 64) + SourceIndex(0)
-7 >Emitted(85, 39) Source(79, 66) + SourceIndex(0)
-8 >Emitted(85, 50) Source(79, 77) + SourceIndex(0)
-9 >Emitted(85, 51) Source(79, 78) + SourceIndex(0)
-10>Emitted(85, 53) Source(79, 52) + SourceIndex(0)
-11>Emitted(85, 69) Source(79, 78) + SourceIndex(0)
-12>Emitted(85, 71) Source(79, 52) + SourceIndex(0)
-13>Emitted(85, 76) Source(79, 78) + SourceIndex(0)
-14>Emitted(85, 78) Source(79, 80) + SourceIndex(0)
+3 >Emitted(85, 16) Source(79, 78) + SourceIndex(0)
+4 >Emitted(85, 18) Source(79, 52) + SourceIndex(0)
+5 >Emitted(85, 24) Source(79, 53) + SourceIndex(0)
+6 >Emitted(85, 35) Source(79, 64) + SourceIndex(0)
+7 >Emitted(85, 37) Source(79, 66) + SourceIndex(0)
+8 >Emitted(85, 48) Source(79, 77) + SourceIndex(0)
+9 >Emitted(85, 49) Source(79, 78) + SourceIndex(0)
+10>Emitted(85, 51) Source(79, 52) + SourceIndex(0)
+11>Emitted(85, 65) Source(79, 78) + SourceIndex(0)
+12>Emitted(85, 67) Source(79, 52) + SourceIndex(0)
+13>Emitted(85, 71) Source(79, 78) + SourceIndex(0)
+14>Emitted(85, 73) Source(79, 80) + SourceIndex(0)
 ---
->>>    _21 = _20[_19], nameMA = _21[0], _22 = _21[1], primarySkillA = _22[0], secondarySkillA = _22[1];
-1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^^
-3 >                                   ^^
-4 >                                     ^^^^^^^^^^^^
-5 >                                                 ^^
-6 >                                                   ^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                         ^^
-8 >                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _31 = _4[_3], nameMA = _31[0], _32 = _31[1], primarySkillA = _32[0], secondarySkillA = _32[1];
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^^
+3 >                                 ^^
+4 >                                   ^^^^^^^^^^^^
+5 >                                               ^^
+6 >                                                 ^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                       ^^
+8 >                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                    nameMA
-3 >                                   , 
-4 >                                     [primarySkillA, secondarySkillA]
-5 >                                                 
-6 >                                                   primarySkillA
-7 >                                                                         , 
-8 >                                                                           secondarySkillA
-1->Emitted(86, 21) Source(79, 7) + SourceIndex(0)
-2 >Emitted(86, 36) Source(79, 13) + SourceIndex(0)
-3 >Emitted(86, 38) Source(79, 15) + SourceIndex(0)
-4 >Emitted(86, 50) Source(79, 47) + SourceIndex(0)
-5 >Emitted(86, 52) Source(79, 16) + SourceIndex(0)
-6 >Emitted(86, 74) Source(79, 29) + SourceIndex(0)
-7 >Emitted(86, 76) Source(79, 31) + SourceIndex(0)
-8 >Emitted(86, 100) Source(79, 46) + SourceIndex(0)
+2 >                  nameMA
+3 >                                 , 
+4 >                                   [primarySkillA, secondarySkillA]
+5 >                                               
+6 >                                                 primarySkillA
+7 >                                                                       , 
+8 >                                                                         secondarySkillA
+1->Emitted(86, 19) Source(79, 7) + SourceIndex(0)
+2 >Emitted(86, 34) Source(79, 13) + SourceIndex(0)
+3 >Emitted(86, 36) Source(79, 15) + SourceIndex(0)
+4 >Emitted(86, 48) Source(79, 47) + SourceIndex(0)
+5 >Emitted(86, 50) Source(79, 16) + SourceIndex(0)
+6 >Emitted(86, 72) Source(79, 29) + SourceIndex(0)
+7 >Emitted(86, 74) Source(79, 31) + SourceIndex(0)
+8 >Emitted(86, 98) Source(79, 46) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -2021,59 +2021,59 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(88, 2) Source(81, 2) + SourceIndex(0)
 ---
->>>for (var _23 = 0, robots_4 = robots; _23 < robots_4.length; _23++) {
+>>>for (var _5 = 0, robots_4 = robots; _5 < robots_4.length; _5++) {
 1->
 2 >^^^^^
-3 >     ^^^^^^^^^^^
-4 >                ^^
-5 >                  ^^^^^^^^^^^^^^^^^
-6 >                                   ^^
-7 >                                     ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                          ^^
-9 >                                                            ^^^^^
-10>                                                                 ^^
-11>                                                                   ^^^^->
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^
+6 >                                  ^^
+7 >                                    ^^^^^^^^^^^^^^^^^^^^
+8 >                                                        ^^
+9 >                                                          ^^^^
+10>                                                              ^^
+11>                                                                ^^^^^^->
 1->
   >
   >
 2 >for ([numberA3, ...robotAInfo] of 
 3 >     robots
-4 >                
-5 >                  robots
-6 >                                   
-7 >                                     robots
-8 >                                                          
-9 >                                                            robots
-10>                                                                 ) 
+4 >               
+5 >                 robots
+6 >                                  
+7 >                                    robots
+8 >                                                        
+9 >                                                          robots
+10>                                                              ) 
 1->Emitted(89, 1) Source(83, 1) + SourceIndex(0)
 2 >Emitted(89, 6) Source(83, 35) + SourceIndex(0)
-3 >Emitted(89, 17) Source(83, 41) + SourceIndex(0)
-4 >Emitted(89, 19) Source(83, 35) + SourceIndex(0)
-5 >Emitted(89, 36) Source(83, 41) + SourceIndex(0)
-6 >Emitted(89, 38) Source(83, 35) + SourceIndex(0)
-7 >Emitted(89, 59) Source(83, 41) + SourceIndex(0)
-8 >Emitted(89, 61) Source(83, 35) + SourceIndex(0)
-9 >Emitted(89, 66) Source(83, 41) + SourceIndex(0)
-10>Emitted(89, 68) Source(83, 43) + SourceIndex(0)
+3 >Emitted(89, 16) Source(83, 41) + SourceIndex(0)
+4 >Emitted(89, 18) Source(83, 35) + SourceIndex(0)
+5 >Emitted(89, 35) Source(83, 41) + SourceIndex(0)
+6 >Emitted(89, 37) Source(83, 35) + SourceIndex(0)
+7 >Emitted(89, 57) Source(83, 41) + SourceIndex(0)
+8 >Emitted(89, 59) Source(83, 35) + SourceIndex(0)
+9 >Emitted(89, 63) Source(83, 41) + SourceIndex(0)
+10>Emitted(89, 65) Source(83, 43) + SourceIndex(0)
 ---
->>>    _24 = robots_4[_23], numberA3 = _24[0], robotAInfo = _24.slice(1);
-1->^^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                         ^^^^^^^^^^^^^^^^^
-3 >                                          ^^
-4 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _33 = robots_4[_5], numberA3 = _33[0], robotAInfo = _33.slice(1);
+1->^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                        ^^^^^^^^^^^^^^^^^
+3 >                                         ^^
+4 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                         numberA3
-3 >                                          , 
-4 >                                            ...robotAInfo
-1->Emitted(90, 26) Source(83, 7) + SourceIndex(0)
-2 >Emitted(90, 43) Source(83, 15) + SourceIndex(0)
-3 >Emitted(90, 45) Source(83, 17) + SourceIndex(0)
-4 >Emitted(90, 70) Source(83, 30) + SourceIndex(0)
+2 >                        numberA3
+3 >                                         , 
+4 >                                           ...robotAInfo
+1->Emitted(90, 25) Source(83, 7) + SourceIndex(0)
+2 >Emitted(90, 42) Source(83, 15) + SourceIndex(0)
+3 >Emitted(90, 44) Source(83, 17) + SourceIndex(0)
+4 >Emitted(90, 69) Source(83, 30) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2104,64 +2104,64 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(92, 2) Source(85, 2) + SourceIndex(0)
 ---
->>>for (var _25 = 0, _26 = getRobots(); _25 < _26.length; _25++) {
+>>>for (var _6 = 0, _7 = getRobots(); _6 < _7.length; _6++) {
 1->
 2 >^^^^^
-3 >     ^^^^^^^^^^^
-4 >                ^^
-5 >                  ^^^^^^
-6 >                        ^^^^^^^^^
-7 >                                 ^^
-8 >                                   ^^
-9 >                                     ^^^^^^^^^^^^^^^^
-10>                                                     ^^
-11>                                                       ^^^^^
-12>                                                            ^^
-13>                                                              ^^^^->
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^
+7 >                               ^^
+8 >                                 ^^
+9 >                                   ^^^^^^^^^^^^^^
+10>                                                 ^^
+11>                                                   ^^^^
+12>                                                       ^^
+13>                                                         ^^^^^^^->
 1->
   >
 2 >for ([numberA3, ...robotAInfo] of 
 3 >     getRobots()
-4 >                
-5 >                  
-6 >                        getRobots
-7 >                                 ()
-8 >                                   
-9 >                                     getRobots()
-10>                                                     
-11>                                                       getRobots()
-12>                                                            ) 
+4 >               
+5 >                 
+6 >                      getRobots
+7 >                               ()
+8 >                                 
+9 >                                   getRobots()
+10>                                                 
+11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(93, 1) Source(86, 1) + SourceIndex(0)
 2 >Emitted(93, 6) Source(86, 35) + SourceIndex(0)
-3 >Emitted(93, 17) Source(86, 46) + SourceIndex(0)
-4 >Emitted(93, 19) Source(86, 35) + SourceIndex(0)
-5 >Emitted(93, 25) Source(86, 35) + SourceIndex(0)
-6 >Emitted(93, 34) Source(86, 44) + SourceIndex(0)
-7 >Emitted(93, 36) Source(86, 46) + SourceIndex(0)
-8 >Emitted(93, 38) Source(86, 35) + SourceIndex(0)
-9 >Emitted(93, 54) Source(86, 46) + SourceIndex(0)
-10>Emitted(93, 56) Source(86, 35) + SourceIndex(0)
-11>Emitted(93, 61) Source(86, 46) + SourceIndex(0)
-12>Emitted(93, 63) Source(86, 48) + SourceIndex(0)
+3 >Emitted(93, 16) Source(86, 46) + SourceIndex(0)
+4 >Emitted(93, 18) Source(86, 35) + SourceIndex(0)
+5 >Emitted(93, 23) Source(86, 35) + SourceIndex(0)
+6 >Emitted(93, 32) Source(86, 44) + SourceIndex(0)
+7 >Emitted(93, 34) Source(86, 46) + SourceIndex(0)
+8 >Emitted(93, 36) Source(86, 35) + SourceIndex(0)
+9 >Emitted(93, 50) Source(86, 46) + SourceIndex(0)
+10>Emitted(93, 52) Source(86, 35) + SourceIndex(0)
+11>Emitted(93, 56) Source(86, 46) + SourceIndex(0)
+12>Emitted(93, 58) Source(86, 48) + SourceIndex(0)
 ---
->>>    _27 = _26[_25], numberA3 = _27[0], robotAInfo = _27.slice(1);
-1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^^^^
-3 >                                     ^^
-4 >                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>    _34 = _7[_6], numberA3 = _34[0], robotAInfo = _34.slice(1);
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^^^^
+3 >                                   ^^
+4 >                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >                    numberA3
-3 >                                     , 
-4 >                                       ...robotAInfo
-1->Emitted(94, 21) Source(86, 7) + SourceIndex(0)
-2 >Emitted(94, 38) Source(86, 15) + SourceIndex(0)
-3 >Emitted(94, 40) Source(86, 17) + SourceIndex(0)
-4 >Emitted(94, 65) Source(86, 30) + SourceIndex(0)
+2 >                  numberA3
+3 >                                   , 
+4 >                                     ...robotAInfo
+1->Emitted(94, 19) Source(86, 7) + SourceIndex(0)
+2 >Emitted(94, 36) Source(86, 15) + SourceIndex(0)
+3 >Emitted(94, 38) Source(86, 17) + SourceIndex(0)
+4 >Emitted(94, 63) Source(86, 30) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2192,69 +2192,70 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(96, 2) Source(88, 2) + SourceIndex(0)
 ---
->>>for (var _28 = 0, _29 = [robotA, robotB]; _28 < _29.length; _28++) {
+>>>for (var _8 = 0, _9 = [robotA, robotB]; _8 < _9.length; _8++) {
 1->
 2 >^^^^^
-3 >     ^^^^^^^^^^^
-4 >                ^^
-5 >                  ^^^^^^^
-6 >                         ^^^^^^
-7 >                               ^^
-8 >                                 ^^^^^^
-9 >                                       ^
-10>                                        ^^
-11>                                          ^^^^^^^^^^^^^^^^
-12>                                                          ^^
-13>                                                            ^^^^^
-14>                                                                 ^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^
+7 >                             ^^
+8 >                               ^^^^^^
+9 >                                     ^
+10>                                      ^^
+11>                                        ^^^^^^^^^^^^^^
+12>                                                      ^^
+13>                                                        ^^^^
+14>                                                            ^^
+15>                                                              ^^->
 1->
   >
 2 >for ([numberA3, ...robotAInfo] of 
 3 >     [robotA, robotB]
-4 >                
-5 >                  [
-6 >                         robotA
-7 >                               , 
-8 >                                 robotB
-9 >                                       ]
-10>                                        
-11>                                          [robotA, robotB]
-12>                                                          
-13>                                                            [robotA, robotB]
-14>                                                                 ) 
+4 >               
+5 >                 [
+6 >                       robotA
+7 >                             , 
+8 >                               robotB
+9 >                                     ]
+10>                                      
+11>                                        [robotA, robotB]
+12>                                                      
+13>                                                        [robotA, robotB]
+14>                                                            ) 
 1->Emitted(97, 1) Source(89, 1) + SourceIndex(0)
 2 >Emitted(97, 6) Source(89, 35) + SourceIndex(0)
-3 >Emitted(97, 17) Source(89, 51) + SourceIndex(0)
-4 >Emitted(97, 19) Source(89, 35) + SourceIndex(0)
-5 >Emitted(97, 26) Source(89, 36) + SourceIndex(0)
-6 >Emitted(97, 32) Source(89, 42) + SourceIndex(0)
-7 >Emitted(97, 34) Source(89, 44) + SourceIndex(0)
-8 >Emitted(97, 40) Source(89, 50) + SourceIndex(0)
-9 >Emitted(97, 41) Source(89, 51) + SourceIndex(0)
-10>Emitted(97, 43) Source(89, 35) + SourceIndex(0)
-11>Emitted(97, 59) Source(89, 51) + SourceIndex(0)
-12>Emitted(97, 61) Source(89, 35) + SourceIndex(0)
-13>Emitted(97, 66) Source(89, 51) + SourceIndex(0)
-14>Emitted(97, 68) Source(89, 53) + SourceIndex(0)
+3 >Emitted(97, 16) Source(89, 51) + SourceIndex(0)
+4 >Emitted(97, 18) Source(89, 35) + SourceIndex(0)
+5 >Emitted(97, 24) Source(89, 36) + SourceIndex(0)
+6 >Emitted(97, 30) Source(89, 42) + SourceIndex(0)
+7 >Emitted(97, 32) Source(89, 44) + SourceIndex(0)
+8 >Emitted(97, 38) Source(89, 50) + SourceIndex(0)
+9 >Emitted(97, 39) Source(89, 51) + SourceIndex(0)
+10>Emitted(97, 41) Source(89, 35) + SourceIndex(0)
+11>Emitted(97, 55) Source(89, 51) + SourceIndex(0)
+12>Emitted(97, 57) Source(89, 35) + SourceIndex(0)
+13>Emitted(97, 61) Source(89, 51) + SourceIndex(0)
+14>Emitted(97, 63) Source(89, 53) + SourceIndex(0)
 ---
->>>    _30 = _29[_28], numberA3 = _30[0], robotAInfo = _30.slice(1);
-1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^^^^
-3 >                                     ^^
-4 >                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
-1 >
-2 >                    numberA3
-3 >                                     , 
-4 >                                       ...robotAInfo
-1 >Emitted(98, 21) Source(89, 7) + SourceIndex(0)
-2 >Emitted(98, 38) Source(89, 15) + SourceIndex(0)
-3 >Emitted(98, 40) Source(89, 17) + SourceIndex(0)
-4 >Emitted(98, 65) Source(89, 30) + SourceIndex(0)
+>>>    _35 = _9[_8], numberA3 = _35[0], robotAInfo = _35.slice(1);
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^^^^^^^^^^^
+3 >                                   ^^
+4 >                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >                  numberA3
+3 >                                   , 
+4 >                                     ...robotAInfo
+1->Emitted(98, 19) Source(89, 7) + SourceIndex(0)
+2 >Emitted(98, 36) Source(89, 15) + SourceIndex(0)
+3 >Emitted(98, 38) Source(89, 17) + SourceIndex(0)
+4 >Emitted(98, 63) Source(89, 30) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2290,7 +2291,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(100, 2) Source(91, 2) + SourceIndex(0)
 ---
->>>for (var _31 = 0, multiRobots_4 = multiRobots; _31 < multiRobots_4.length; _31++) {
+>>>for (var _10 = 0, multiRobots_4 = multiRobots; _10 < multiRobots_4.length; _10++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^^
@@ -2323,7 +2324,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 9 >Emitted(101, 81) Source(92, 41) + SourceIndex(0)
 10>Emitted(101, 83) Source(92, 43) + SourceIndex(0)
 ---
->>>    multiRobotAInfo = multiRobots_4[_31].slice(0);
+>>>    multiRobotAInfo = multiRobots_4[_10].slice(0);
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
@@ -2365,7 +2366,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(104, 2) Source(94, 2) + SourceIndex(0)
 ---
->>>for (var _32 = 0, _33 = getMultiRobots(); _32 < _33.length; _32++) {
+>>>for (var _11 = 0, _12 = getMultiRobots(); _11 < _12.length; _11++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^^
@@ -2404,7 +2405,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 11>Emitted(105, 66) Source(95, 46) + SourceIndex(0)
 12>Emitted(105, 68) Source(95, 48) + SourceIndex(0)
 ---
->>>    multiRobotAInfo = _33[_32].slice(0);
+>>>    multiRobotAInfo = _12[_11].slice(0);
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
@@ -2446,7 +2447,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
   >}
 1 >Emitted(108, 2) Source(97, 2) + SourceIndex(0)
 ---
->>>for (var _34 = 0, _35 = [multiRobotA, multiRobotB]; _34 < _35.length; _34++) {
+>>>for (var _13 = 0, _14 = [multiRobotA, multiRobotB]; _13 < _14.length; _13++) {
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^^
@@ -2491,7 +2492,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 13>Emitted(109, 76) Source(98, 56) + SourceIndex(0)
 14>Emitted(109, 78) Source(98, 58) + SourceIndex(0)
 ---
->>>    multiRobotAInfo = _35[_34].slice(0);
+>>>    multiRobotAInfo = _14[_13].slice(0);
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
@@ -2528,10 +2529,10 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(112, 2) Source(100, 2) + SourceIndex(0)
 ---
->>>var _a, _d, _g, _j, _k, _o, _p, _s, _t, _5, _8, _11, _13, _14, _17, _18, _21, _22, _24, _27, _30;
+>>>var _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35;
 >>>//# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPattern2.js.map

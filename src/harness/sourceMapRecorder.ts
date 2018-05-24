@@ -206,8 +206,8 @@ namespace Harness.SourceMapRecorder {
         let sourceMapSources: string[];
         let sourceMapNames: string[];
 
-        let jsFile: Compiler.GeneratedFile;
-        let jsLineMap: number[];
+        let jsFile: documents.TextDocument;
+        let jsLineMap: ReadonlyArray<number>;
         let tsCode: string;
         let tsLineMap: number[];
 
@@ -216,13 +216,13 @@ namespace Harness.SourceMapRecorder {
         let prevWrittenJsLine: number;
         let spanMarkerContinues: boolean;
 
-        export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMapData: ts.SourceMapData, currentJsFile: Compiler.GeneratedFile) {
+        export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMapData: ts.SourceMapData, currentJsFile: documents.TextDocument) {
             sourceMapRecorder = sourceMapRecordWriter;
             sourceMapSources = sourceMapData.sourceMapSources;
             sourceMapNames = sourceMapData.sourceMapNames;
 
             jsFile = currentJsFile;
-            jsLineMap = ts.computeLineStarts(jsFile.code);
+            jsLineMap = jsFile.lineStarts;
 
             spansOnSingleLine = [];
             prevWrittenSourcePos = 0;
@@ -290,7 +290,7 @@ namespace Harness.SourceMapRecorder {
 
             assert.isTrue(spansOnSingleLine.length === 1);
             sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
-            sourceMapRecorder.WriteLine("emittedFile:" + jsFile.fileName);
+            sourceMapRecorder.WriteLine("emittedFile:" + jsFile.file);
             sourceMapRecorder.WriteLine("sourceFile:" + sourceMapSources[spansOnSingleLine[0].sourceMapSpan.sourceIndex]);
             sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
 
@@ -313,15 +313,16 @@ namespace Harness.SourceMapRecorder {
             writeJsFileLines(jsLineMap.length);
         }
 
-        function getTextOfLine(line: number, lineMap: number[], code: string) {
+        function getTextOfLine(line: number, lineMap: ReadonlyArray<number>, code: string) {
             const startPos = lineMap[line];
             const endPos = lineMap[line + 1];
-            return code.substring(startPos, endPos);
+            const text = code.substring(startPos, endPos);
+            return line === 0 ? utils.removeByteOrderMark(text) : text;
         }
 
         function writeJsFileLines(endJsLine: number) {
             for (; prevWrittenJsLine < endJsLine; prevWrittenJsLine++) {
-                sourceMapRecorder.Write(">>>" + getTextOfLine(prevWrittenJsLine, jsLineMap, jsFile.code));
+                sourceMapRecorder.Write(">>>" + getTextOfLine(prevWrittenJsLine, jsLineMap, jsFile.text));
             }
         }
 
@@ -417,7 +418,7 @@ namespace Harness.SourceMapRecorder {
                 // Emit markers
                 iterateSpans(writeSourceMapMarker);
 
-                const jsFileText = getTextOfLine(currentJsLine, jsLineMap, jsFile.code);
+                const jsFileText = getTextOfLine(currentJsLine, jsLineMap, jsFile.text);
                 if (prevEmittedCol < jsFileText.length) {
                     // There is remaining text on this line that will be part of next source span so write marker that continues
                     writeSourceMapMarker(/*currentSpan*/ undefined, spansOnSingleLine.length, /*endColumn*/ jsFileText.length, /*endContinues*/ true);
@@ -434,13 +435,13 @@ namespace Harness.SourceMapRecorder {
         }
     }
 
-    export function getSourceMapRecord(sourceMapDataList: ts.SourceMapData[], program: ts.Program, jsFiles: Compiler.GeneratedFile[], declarationFiles: Compiler.GeneratedFile[]) {
+    export function getSourceMapRecord(sourceMapDataList: ReadonlyArray<ts.SourceMapData>, program: ts.Program, jsFiles: ReadonlyArray<documents.TextDocument>, declarationFiles: ReadonlyArray<documents.TextDocument>) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
 
         for (let i = 0; i < sourceMapDataList.length; i++) {
             const sourceMapData = sourceMapDataList[i];
             let prevSourceFile: ts.SourceFile;
-            let currentFile: Compiler.GeneratedFile;
+            let currentFile: documents.TextDocument;
             if (ts.endsWith(sourceMapData.sourceMapFile, ts.Extension.Dts)) {
                 if (sourceMapDataList.length > jsFiles.length) {
                     currentFile = declarationFiles[Math.floor(i / 2)]; // When both kinds of source map are present, they alternate js/dts

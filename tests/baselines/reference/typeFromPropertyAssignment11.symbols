@@ -3,9 +3,9 @@ var Inner = function() {}
 >Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
 
 Inner.prototype = {
->Inner.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Inner.prototype : Symbol(Function.prototype, Decl(lib.es6.d.ts, --, --))
 >Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es6.d.ts, --, --))
 
     m() { },
 >m : Symbol(m, Decl(module.js, 1, 19))
@@ -17,14 +17,14 @@ Inner.prototype = {
 Inner.prototype.j = 2
 >Inner.prototype : Symbol(Inner.j, Decl(module.js, 4, 1))
 >Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es6.d.ts, --, --))
 >j : Symbol(Inner.j, Decl(module.js, 4, 1))
 
 /** @type {string} */
 Inner.prototype.k;
->Inner.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Inner.prototype : Symbol(Function.prototype, Decl(lib.es6.d.ts, --, --))
 >Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es6.d.ts, --, --))
 
 var inner = new Inner()
 >inner : Symbol(inner, Decl(module.js, 9, 3))

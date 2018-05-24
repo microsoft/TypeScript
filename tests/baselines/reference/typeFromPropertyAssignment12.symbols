@@ -15,11 +15,11 @@ Outer.Pos = function (line, ch) {};
 
 /** @type {number} */
 Outer.Pos.prototype.line;
->Outer.Pos.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Outer.Pos.prototype : Symbol(Function.prototype, Decl(lib.es6.d.ts, --, --))
 >Outer.Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
 >Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(usage.js, 0, 0))
 >Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es6.d.ts, --, --))
 
 var pos = new Outer.Pos(1, 'x');
 >pos : Symbol(pos, Decl(usage.js, 4, 3))

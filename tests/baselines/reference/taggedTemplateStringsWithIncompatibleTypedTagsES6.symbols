@@ -4,7 +4,7 @@ interface I {
 
     (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
 >stringParts : Symbol(stringParts, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 1, 5))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >rest : Symbol(rest, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 1, 39))
 >I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
 

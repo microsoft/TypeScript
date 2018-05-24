@@ -5,7 +5,7 @@ declare var $;
 >$ : any
 
 declare function alert(x: string): void;
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >x : string
 
 _.each([1, 2, 3], (num) => alert(num.toString()));
@@ -20,7 +20,7 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >(num) => alert(num.toString()) : (num: number) => void
 >num : number
 >alert(num.toString()) : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >num.toString() : string
 >num.toString : (radix?: number) => string
 >num : number
@@ -42,7 +42,7 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >value : number
 >key : string
 >alert(value.toString()) : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >value.toString() : string
 >value.toString : (radix?: number) => string
 >value : number
@@ -824,7 +824,7 @@ var buttonView = {
 >onClick : () => void
 >function () { alert('clicked: ' + this.label); } : () => void
 >alert('clicked: ' + this.label) : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >'clicked: ' + this.label : string
 >'clicked: ' : "clicked: "
 >this.label : any
@@ -835,7 +835,7 @@ var buttonView = {
 >onHover : () => void
 >function () { alert('hovering: ' + this.label); } : () => void
 >alert('hovering: ' + this.label) : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >'hovering: ' + this.label : string
 >'hovering: ' : "hovering: "
 >this.label : any
@@ -918,14 +918,14 @@ _.defer(function () { alert('deferred'); });
 >defer : (func: Function, ...args: any[]) => number
 >function () { alert('deferred'); } : () => void
 >alert('deferred') : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >'deferred' : "deferred"
 
 var updatePosition = () => alert('updating position...');
 >updatePosition : () => void
 >() => alert('updating position...') : () => void
 >alert('updating position...') : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >'updating position...' : "updating position..."
 
 var throttled = _.throttle(updatePosition, 100);
@@ -950,7 +950,7 @@ var calculateLayout = () => alert('calculating layout...');
 >calculateLayout : () => void
 >() => alert('calculating layout...') : () => void
 >alert('calculating layout...') : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >'calculating layout...' : "calculating layout..."
 
 var lazyLayout = _.debounce(calculateLayout, 300);
@@ -975,7 +975,7 @@ var createApplication = () => alert('creating application...');
 >createApplication : () => void
 >() => alert('creating application...') : () => void
 >alert('creating application...') : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >'creating application...' : "creating application..."
 
 var initialize = _.once(createApplication);
@@ -1001,7 +1001,7 @@ var render = () => alert("rendering...");
 >render : () => void
 >() => alert("rendering...") : () => void
 >alert("rendering...") : void
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 >"rendering..." : "rendering..."
 
 var renderNotes = _.after(notes.length, render);
@@ -1254,7 +1254,7 @@ _.chain([1, 2, 3, 200])
     .tap(<any>alert)
 >tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>
 ><any>alert : any
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 
     .map(function (num) { return num * num })
 >map : <U>(iterator: Iterator_<number, U>, context?: any) => Underscore.ChainedArray<U>
@@ -1395,7 +1395,7 @@ _.isFunction(alert);
 >_.isFunction : (object: any) => boolean
 >_ : Underscore.Static
 >isFunction : (object: any) => boolean
->alert : (x: string) => void
+>alert : { (message?: any): void; (x: string): void; }
 
 _.isString("moe");
 >_.isString("moe") : boolean

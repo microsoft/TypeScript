@@ -878,6 +878,10 @@ namespace ts {
             return this._compilationSettings;
         }
 
+        public getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.host.getProjectReferences && this.host.getProjectReferences();
+        }
+
         private createEntry(fileName: string, path: Path) {
             let entry: CachedHostFileInformation;
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
@@ -912,9 +916,18 @@ namespace ts {
         }
 
         public getRootFileNames(): string[] {
-            return arrayFrom(this.fileNameToEntry.values(), entry => {
-                return isString(entry) ? entry : entry.hostFileName;
+            const names: string[] = [];
+            this.fileNameToEntry.forEach(entry => {
+                if (isString(entry)) {
+                    names.push(entry);
+                }
+                else {
+                    if (entry.scriptKind !== ScriptKind.JSON) {
+                        names.push(entry.hostFileName);
+                    }
+                }
             });
+            return names;
         }
 
         public getVersion(path: Path): string {
@@ -1241,7 +1254,14 @@ namespace ts {
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            program = createProgram(rootFileNames, newSettings, compilerHost, program);
+            const options: CreateProgramOptions = {
+                rootNames: rootFileNames,
+                options: newSettings,
+                host: compilerHost,
+                oldProgram: program,
+                projectReferences: hostCache.getProjectReferences()
+            };
+            program = createProgram(options);
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
@@ -1499,6 +1519,12 @@ namespace ts {
                 }
             }
             return checker.getSymbolAtLocation(node);
+        }
+
+        function toLineColumnOffset(fileName: string, position: number) {
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const file = program.getSourceFile(path) || sourcemappedFileCache.get(path);
+            return file.getLineAndCharacterOfPosition(position);
         }
 
         // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
@@ -2265,6 +2291,7 @@ namespace ts {
             getProgram,
             getApplicableRefactors,
             getEditsForRefactor,
+            toLineColumnOffset
         };
     }
 

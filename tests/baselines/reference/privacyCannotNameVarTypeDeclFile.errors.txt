@@ -1,12 +1,12 @@
-tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(3,5): error TS4026: Public static property 'myPublicStaticProperty' of exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(3,12): error TS4026: Public static property 'myPublicStaticProperty' of exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(5,5): error TS4029: Public property 'myPublicProperty' of exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(8,5): error TS4026: Public static property 'myPublicStaticProperty1' of exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(8,12): error TS4026: Public static property 'myPublicStaticProperty1' of exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(10,5): error TS4029: Public property 'myPublicProperty1' of exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(26,12): error TS4023: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(28,12): error TS4023: Exported variable 'publicVarWithPrivatePropertyTypes1' has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(32,5): error TS4026: Public static property 'myPublicStaticProperty' of exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(32,12): error TS4026: Public static property 'myPublicStaticProperty' of exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(33,5): error TS4029: Public property 'myPublicProperty' of exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(34,5): error TS4026: Public static property 'myPublicStaticProperty1' of exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(34,12): error TS4026: Public static property 'myPublicStaticProperty1' of exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(35,5): error TS4029: Public property 'myPublicProperty1' of exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(37,12): error TS4023: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
 tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(38,12): error TS4023: Exported variable 'publicVarWithPrivateModulePropertyTypes1' has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
@@ -16,20 +16,20 @@ tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(38,12): error 
     import exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
     export class publicClassWithWithPrivatePropertyTypes {
         static myPublicStaticProperty = exporter.createExportedWidget1(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4026: Public static property 'myPublicStaticProperty' of exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
         private static myPrivateStaticProperty = exporter.createExportedWidget1();
         myPublicProperty = exporter.createExportedWidget1(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~
 !!! error TS4029: Public property 'myPublicProperty' of exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
         private myPrivateProperty = exporter.createExportedWidget1();
     
         static myPublicStaticProperty1 = exporter.createExportedWidget3(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4026: Public static property 'myPublicStaticProperty1' of exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
         private static myPrivateStaticProperty1 = exporter.createExportedWidget3();
         myPublicProperty1 = exporter.createExportedWidget3(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~
 !!! error TS4029: Public property 'myPublicProperty1' of exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
         private myPrivateProperty1 = exporter.createExportedWidget3();
     }
@@ -57,16 +57,16 @@ tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(38,12): error 
     
     export class publicClassWithPrivateModulePropertyTypes {
         static myPublicStaticProperty= exporter.createExportedWidget2(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4026: Public static property 'myPublicStaticProperty' of exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
         myPublicProperty = exporter.createExportedWidget2(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~
 !!! error TS4029: Public property 'myPublicProperty' of exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets" but cannot be named.
         static myPublicStaticProperty1 = exporter.createExportedWidget4(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4026: Public static property 'myPublicStaticProperty1' of exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
         myPublicProperty1 = exporter.createExportedWidget4(); // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~
 !!! error TS4029: Public property 'myPublicProperty1' of exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
     }
     export var publicVarWithPrivateModulePropertyTypes= exporter.createExportedWidget2(); // Error

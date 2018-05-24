@@ -2,7 +2,7 @@
 declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
 >dec : Symbol(dec, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 0))
 >target : Symbol(target, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 21))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 36))
 >parameterIndex : Symbol(parameterIndex, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 66))
 

@@ -11,7 +11,7 @@ interface IData<T> {
 }
 
 type Data<T> = {
->Data : { get: <K extends keyof T>(prop: K) => T[K]; }
+>Data : Data<T>
 >T : T
 
     get: <K extends keyof T>(prop: K) => T[K];
@@ -30,19 +30,19 @@ class Parent<M> {
 >M : M
 
     constructor(private data: Data<M>) {}
->data : { get: <K extends keyof M>(prop: K) => M[K]; }
->Data : { get: <K extends keyof T>(prop: K) => T[K]; }
+>data : Data<M>
+>Data : Data<T>
 >M : M
 
     getData(): Data<M> {
->getData : () => { get: <K extends keyof M>(prop: K) => M[K]; }
->Data : { get: <K extends keyof T>(prop: K) => T[K]; }
+>getData : () => Data<M>
+>Data : Data<T>
 >M : M
 
         return this.data;
->this.data : { get: <K extends keyof M>(prop: K) => M[K]; }
+>this.data : Data<M>
 >this : this
->data : { get: <K extends keyof M>(prop: K) => M[K]; }
+>data : Data<M>
     }
 }
 
@@ -60,10 +60,10 @@ export class Foo<C> extends Parent<IData<C>> {
         return this.getData().get('content');
 >this.getData().get('content') : C
 >this.getData().get : <K extends "content">(prop: K) => IData<C>[K]
->this.getData() : { get: <K extends "content">(prop: K) => IData<C>[K]; }
->this.getData : () => { get: <K extends "content">(prop: K) => IData<C>[K]; }
+>this.getData() : Data<IData<C>>
+>this.getData : () => Data<IData<C>>
 >this : this
->getData : () => { get: <K extends "content">(prop: K) => IData<C>[K]; }
+>getData : () => Data<IData<C>>
 >get : <K extends "content">(prop: K) => IData<C>[K]
 >'content' : "content"
     }
@@ -85,10 +85,10 @@ export class Bar<C, T extends IData<C>> extends Parent<T> {
         return this.getData().get('content');
 >this.getData().get('content') : T["content"]
 >this.getData().get : <K extends keyof T>(prop: K) => T[K]
->this.getData() : { get: <K extends keyof T>(prop: K) => T[K]; }
->this.getData : () => { get: <K extends keyof T>(prop: K) => T[K]; }
+>this.getData() : Data<T>
+>this.getData : () => Data<T>
 >this : this
->getData : () => { get: <K extends keyof T>(prop: K) => T[K]; }
+>getData : () => Data<T>
 >get : <K extends keyof T>(prop: K) => T[K]
 >'content' : "content"
     }

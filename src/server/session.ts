@@ -699,12 +699,14 @@ namespace ts.server {
         }
 
         private toFileSpan(fileName: string, textSpan: TextSpan, project: Project): protocol.FileSpan {
-            const scriptInfo = project.getScriptInfo(fileName);
+            const ls = project.getLanguageService();
+            const start = ls.toLineColumnOffset(fileName, textSpan.start);
+            const end = ls.toLineColumnOffset(fileName, textSpanEnd(textSpan));
 
             return {
                 file: fileName,
-                start: scriptInfo.positionToLineOffset(textSpan.start),
-                end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
+                start: { line: start.line + 1, offset: start.character + 1 },
+                end: { line: end.line + 1, offset: end.character + 1 }
             };
         }
 
@@ -865,7 +867,7 @@ namespace ts.server {
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
-            projects = filter(projects, p => p.languageServiceEnabled);
+            projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
             if ((!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
@@ -1112,7 +1114,8 @@ namespace ts.server {
                     textSpan: this.toLocationTextSpan(s.textSpan, scriptInfo),
                     hintSpan: this.toLocationTextSpan(s.hintSpan, scriptInfo),
                     bannerText: s.bannerText,
-                    autoCollapse: s.autoCollapse
+                    autoCollapse: s.autoCollapse,
+                    kind: s.kind
                 }));
             }
             else {
@@ -1336,7 +1339,7 @@ namespace ts.server {
                 symLinkedProjects ? { projects, symLinkedProjects } : projects,
                 (project, info) => {
                     let result: protocol.CompileOnSaveAffectedFileListSingleProject;
-                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.getCompilationSettings().noEmit) {
+                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.isOrphan() && !project.getCompilationSettings().noEmit) {
                         result = {
                             projectFileName: project.getProjectName(),
                             fileNames: project.getCompileOnSaveAffectedFileList(info),

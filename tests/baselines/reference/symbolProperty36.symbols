@@ -4,13 +4,13 @@ var x = {
 
     [Symbol.isConcatSpreadable]: 0,
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolProperty36.ts, 0, 9), Decl(symbolProperty36.ts, 1, 35))
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
 
     [Symbol.isConcatSpreadable]: 1
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolProperty36.ts, 0, 9), Decl(symbolProperty36.ts, 1, 35))
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
 }

@@ -12,7 +12,7 @@ var { foo, baz } = foo;
 var foo = { foo: 1, bar: 2 };
 var bar;
 // reassignment in destructuring pattern
-(_a = foo, foo = _a.foo, bar = _a.bar);
+(_b = foo, foo = _b.foo, bar = _b.bar);
 // reassignment in subsequent var
-var _b = foo, foo = _b.foo, baz = _b.baz;
-var _a;
+var _a = foo, foo = _a.foo, baz = _a.baz;
+var _b;

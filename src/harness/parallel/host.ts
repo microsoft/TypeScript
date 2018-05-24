@@ -81,7 +81,8 @@ namespace Harness.Parallel.Host {
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
         const path: { join: (...args: string[]) => string } = require("path");
         for (const runner of runners) {
-            for (const file of runner.enumerateTestFiles()) {
+            for (const test of runner.enumerateTestFiles()) {
+                const file = typeof test === "string" ? test : test.file;
                 let size: number;
                 if (!perfData) {
                     try {

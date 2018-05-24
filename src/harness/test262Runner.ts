@@ -31,7 +31,7 @@ class Test262BaselineRunner extends RunnerBase {
             // Everything declared here should be cleared out in the "after" callback.
             let testState: {
                 filename: string;
-                compilerResult: Harness.Compiler.CompilerResult;
+                compilerResult: compiler.CompilationResult;
                 inputFiles: Harness.Compiler.TestFile[];
             };
 
@@ -52,14 +52,12 @@ class Test262BaselineRunner extends RunnerBase {
                     compilerResult: undefined,
                 };
 
-                const output = Harness.Compiler.compileFiles(
+                testState.compilerResult = Harness.Compiler.compileFiles(
                     [Test262BaselineRunner.helperFile].concat(inputFiles),
                     /*otherFiles*/ [],
                     /* harnessOptions */ undefined,
                     Test262BaselineRunner.options,
-                    /* currentDirectory */ undefined
-                    );
-                testState.compilerResult = output.result;
+                    /* currentDirectory */ undefined);
             });
 
             after(() => {
@@ -68,14 +66,14 @@ class Test262BaselineRunner extends RunnerBase {
 
             it("has the expected emitted code", () => {
                 Harness.Baseline.runBaseline(testState.filename + ".output.js", () => {
-                    const files = testState.compilerResult.files.filter(f => f.fileName !== Test262BaselineRunner.helpersFilePath);
+                    const files = Array.from(testState.compilerResult.js.values()).filter(f => f.file !== Test262BaselineRunner.helpersFilePath);
                     return Harness.Compiler.collateOutputs(files);
                 }, Test262BaselineRunner.baselineOptions);
             });
 
             it("has the expected errors", () => {
                 Harness.Baseline.runBaseline(testState.filename + ".errors.txt", () => {
-                    const errors = testState.compilerResult.errors;
+                    const errors = testState.compilerResult.diagnostics;
                     if (errors.length === 0) {
                         return null;
                     }
@@ -103,6 +101,7 @@ class Test262BaselineRunner extends RunnerBase {
     }
 
     public enumerateTestFiles() {
+        // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return ts.map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), ts.normalizePath);
     }
 
@@ -115,7 +114,7 @@ class Test262BaselineRunner extends RunnerBase {
             });
         }
         else {
-            this.tests.forEach(test => this.runTest(test));
+            this.tests.forEach(test => this.runTest(typeof test === "string" ? test : test.file));
         }
     }
 }

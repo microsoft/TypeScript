@@ -250,6 +250,26 @@ namespace ts {
                 }
             }
         });
+
+        testBaseline("transformDeclarationFile", () => {
+            return baselineDeclarationTransform(`var oldName = undefined;`, {
+                transformers: {
+                    afterDeclarations: [replaceIdentifiersNamedOldNameWithNewName]
+                },
+                compilerOptions: {
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                    declaration: true
+                }
+            });
+        });
+
+        function baselineDeclarationTransform(text: string, opts: TranspileOptions) {
+            const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
+            const host = new fakes.CompilerHost(fs, opts.compilerOptions);
+            const program = createProgram(["/.src/index.ts"], opts.compilerOptions, host);
+            program.emit(program.getSourceFiles()[1], (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*onlyDts*/ true, opts.transformers);
+            return fs.readFileSync("/.src/index.d.ts").toString();
+        }
     });
 }
 

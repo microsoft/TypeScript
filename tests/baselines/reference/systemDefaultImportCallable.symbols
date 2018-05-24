@@ -34,6 +34,6 @@ const _: string = repeat(new Date().toUTCString() + " ", 2);
 >_ : Symbol(_, Decl(greeter.ts, 2, 5))
 >repeat : Symbol(repeat, Decl(greeter.ts, 0, 6))
 >new Date().toUTCString : Symbol(Date.toUTCString, Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toUTCString : Symbol(Date.toUTCString, Decl(lib.d.ts, --, --))
 

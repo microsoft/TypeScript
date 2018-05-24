@@ -28,12 +28,14 @@ namespace Harness.Parallel.Worker {
         (global as any).describe = ((name, callback) => {
             testList.push({ name, callback, kind: "suite" });
         }) as Mocha.IContextDefinition;
+        (global as any).describe.skip = ts.noop;
         (global as any).it = ((name, callback) => {
             if (!testList) {
                 throw new Error("Tests must occur within a describe block");
             }
             testList.push({ name, callback, kind: "test" });
         }) as Mocha.ITestDefinition;
+        (global as any).it.skip = ts.noop;
     }
 
     function setTimeoutAndExecute(timeout: number | undefined, f: () => void) {

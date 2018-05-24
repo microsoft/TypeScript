@@ -455,11 +455,11 @@ module TypeScript {
     }
 
     function findTypeSymbolInScopeChain(name: string, scopeChain: ScopeChain): Symbol {
->findTypeSymbolInScopeChain : (name: string, scopeChain: any) => any
+>findTypeSymbolInScopeChain : (name: string, scopeChain: any) => Symbol
 >name : string
 >scopeChain : any
 >ScopeChain : No type information available!
->Symbol : No type information available!
+>Symbol : Symbol
 
         var symbol = scopeChain.scope.find(name, false, true);
 >symbol : any
@@ -483,10 +483,10 @@ module TypeScript {
 >previous : any
 
             symbol = findTypeSymbolInScopeChain(name, scopeChain.previous);
->symbol = findTypeSymbolInScopeChain(name, scopeChain.previous) : any
+>symbol = findTypeSymbolInScopeChain(name, scopeChain.previous) : Symbol
 >symbol : any
->findTypeSymbolInScopeChain(name, scopeChain.previous) : any
->findTypeSymbolInScopeChain : (name: string, scopeChain: any) => any
+>findTypeSymbolInScopeChain(name, scopeChain.previous) : Symbol
+>findTypeSymbolInScopeChain : (name: string, scopeChain: any) => Symbol
 >name : string
 >scopeChain.previous : any
 >scopeChain : any
@@ -498,16 +498,16 @@ module TypeScript {
     }
 
     function findSymbolFromAlias(alias: AST, context: IAliasScopeContext): Symbol {
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >alias : any
 >AST : No type information available!
 >context : IAliasScopeContext
 >IAliasScopeContext : IAliasScopeContext
->Symbol : No type information available!
+>Symbol : Symbol
 
         var symbol: Symbol = null;
->symbol : any
->Symbol : No type information available!
+>symbol : Symbol
+>Symbol : Symbol
 >null : null
 
         switch (alias.nodeType) {
@@ -556,8 +556,8 @@ module TypeScript {
                     }
                     else {
                         return findTypeSymbolInScopeChain(name, context.topLevelScope);
->findTypeSymbolInScopeChain(name, context.topLevelScope) : any
->findTypeSymbolInScopeChain : (name: string, scopeChain: any) => any
+>findTypeSymbolInScopeChain(name, context.topLevelScope) : Symbol
+>findTypeSymbolInScopeChain : (name: string, scopeChain: any) => Symbol
 >name : any
 >context.topLevelScope : any
 >context : IAliasScopeContext
@@ -570,7 +570,7 @@ module TypeScript {
 
                     symbol = context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym);
 >symbol = context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym) : any
->symbol : any
+>symbol : Symbol
 >context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym) : any
 >context.tcContext.checker.findSymbolForDynamicModule : any
 >context.tcContext.checker : any
@@ -594,7 +594,7 @@ module TypeScript {
                 else {
                     symbol = findSym(name);
 >symbol = findSym(name) : any
->symbol : any
+>symbol : Symbol
 >findSym(name) : any
 >findSym : (id: string) => any
 >name : any
@@ -614,9 +614,9 @@ module TypeScript {
 >alias : any
 
                 var op1Sym = findSymbolFromAlias(dottedExpr.operand1, context);
->op1Sym : any
->findSymbolFromAlias(dottedExpr.operand1, context) : any
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>op1Sym : Symbol
+>findSymbolFromAlias(dottedExpr.operand1, context) : Symbol
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >dottedExpr.operand1 : any
 >dottedExpr : any
 >operand1 : any
@@ -624,17 +624,17 @@ module TypeScript {
 
                 if (op1Sym && op1Sym.getType()) {
 >op1Sym && op1Sym.getType() : any
->op1Sym : any
+>op1Sym : Symbol
 >op1Sym.getType() : any
 >op1Sym.getType : any
->op1Sym : any
+>op1Sym : Symbol
 >getType : any
 
                     symbol = findSymbolFromAlias(dottedExpr.operand2, context);
->symbol = findSymbolFromAlias(dottedExpr.operand2, context) : any
->symbol : any
->findSymbolFromAlias(dottedExpr.operand2, context) : any
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>symbol = findSymbolFromAlias(dottedExpr.operand2, context) : Symbol
+>symbol : Symbol
+>findSymbolFromAlias(dottedExpr.operand2, context) : Symbol
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >dottedExpr.operand2 : any
 >dottedExpr : any
 >operand2 : any
@@ -648,13 +648,13 @@ module TypeScript {
         }
 
         if (symbol) {
->symbol : any
+>symbol : Symbol
 
             var symType = symbol.getType();
 >symType : any
 >symbol.getType() : any
 >symbol.getType : any
->symbol : any
+>symbol : Symbol
 >getType : any
 
             if (symType) {
@@ -682,7 +682,7 @@ module TypeScript {
         }
 
         return symbol;
->symbol : any
+>symbol : Symbol
     }
 
     export function preCollectImportTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
@@ -729,9 +729,9 @@ module TypeScript {
 
         // REVIEW: technically, this call isn't strictly necessary, since we'll find the type during the call to resolveTypeMembers
         var aliasedModSymbol = findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context });
->aliasedModSymbol : any
->findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context }) : any
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>aliasedModSymbol : Symbol
+>findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context }) : Symbol
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >importDecl.alias : any
 >importDecl : any
 >alias : any
@@ -758,13 +758,13 @@ module TypeScript {
 >gloMod : any
 
         if (aliasedModSymbol) {
->aliasedModSymbol : any
+>aliasedModSymbol : Symbol
 
             var aliasedModType = aliasedModSymbol.getType();
 >aliasedModType : any
 >aliasedModSymbol.getType() : any
 >aliasedModSymbol.getType : any
->aliasedModSymbol : any
+>aliasedModSymbol : Symbol
 >getType : any
 
             if (aliasedModType) {

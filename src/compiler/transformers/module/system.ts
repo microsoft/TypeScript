@@ -39,7 +39,7 @@ namespace ts {
         let enclosingBlockScopedContainer: Node;
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         /**
          * Transforms the module aspects of a SourceFile.

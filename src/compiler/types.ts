@@ -397,6 +397,8 @@ namespace ts {
         // Top-level nodes
         SourceFile,
         Bundle,
+        UnparsedSource,
+        InputFiles,
 
         // JSDoc nodes
         JSDocTypeExpression,
@@ -490,19 +492,22 @@ namespace ts {
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
-        // This flag will be set when the parser encounters a dynamic import expression so that module resolution
-        // will not have to walk the tree if the flag is not set. However, this flag is just a approximation because
-        // once it is set, the flag never gets cleared (hence why it's named "PossiblyContainsDynamicImport").
-        // During editing, if dynamic import is removed, incremental parsing will *NOT* update this flag. This means that the tree will always be traversed
-        // during module resolution. However, the removal operation should not occur often and in the case of the
+        // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
+        // walking the tree if the flags are not set. However, these flags are just a approximation
+        // (hence why it's named "PossiblyContainsDynamicImport") because once set, the flags never get cleared.
+        // During editing, if a dynamic import is removed, incremental parsing will *NOT* clear this flag.
+        // This means that the tree will always be traversed during module resolution, or when looking for external module indicators.
+        // However, the removal operation should not occur often and in the case of the
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */
-        PossiblyContainsDynamicImport = 1 << 19,
-        JSDoc =              1 << 20, // If node was parsed inside jsdoc
-        /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        /* @internal */ PossiblyContainsDynamicImport = 1 << 19,
+        /* @internal */ PossiblyContainsImportMeta    = 1 << 20,
+
+        JSDoc                                         = 1 << 21, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                       = 1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement               = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                      = 1 << 24, // If node was parsed in a Json
 
         BlockScoped = Let | Const,
 
@@ -514,6 +519,11 @@ namespace ts {
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
+
+        // Represents all flags that are potentially set once and
+        // never cleared on SourceFiles which get re-used in between incremental parses.
+        // See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
+        /* @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
     }
 
     export const enum ModifierFlags {
@@ -703,10 +713,9 @@ namespace ts {
         KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
 
         // Flags
-        SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
-        ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
-        Optimistic = 1 << 5,                // First instance won't use '_#' if there's no conflict
-        FileLevel = 1 << 6,                 // Use only the file identifiers list and not generated names to search for conflicts
+        ReservedInNestedScopes = 1 << 3,    // Reserve the generated name in nested scopes
+        Optimistic = 1 << 4,                // First instance won't use '_#' if there's no conflict
+        FileLevel = 1 << 5,                 // Use only the file identifiers list and not generated names to search for conflicts
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -1756,7 +1765,7 @@ namespace ts {
     //       for the same reasons we treat NewExpression as a PrimaryExpression.
     export interface MetaProperty extends PrimaryExpression {
         kind: SyntaxKind.MetaProperty;
-        keywordToken: SyntaxKind.NewKeyword;
+        keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
         name: Identifier;
     }
 
@@ -1870,7 +1879,7 @@ namespace ts {
     }
 
     /**
-     * A list of comma-seperated expressions. This node is only created by transformations.
+     * A list of comma-separated expressions. This node is only created by transformations.
      */
     export interface CommaListExpression extends Expression {
         kind: SyntaxKind.CommaListExpression;
@@ -2557,7 +2566,11 @@ namespace ts {
         languageVersion: ScriptTarget;
         /* @internal */ scriptKind: ScriptKind;
 
-        // The first node that causes this file to be an external module
+        /**
+         * The first "most obvious" node that makes a file an external module.
+         * This is intended to be the first top-level import/export,
+         * but could be arbitrarily nested (e.g. `import.meta`).
+         */
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
@@ -2590,6 +2603,12 @@ namespace ts {
         /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
+        /**
+         * When a file's references are redirected due to project reference directives,
+         * the original names of the references are stored in this array
+         */
+        /* @internal*/
+        redirectedReferences?: ReadonlyArray<string>;
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -2603,15 +2622,40 @@ namespace ts {
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
+        prepends: ReadonlyArray<InputFiles | UnparsedSource>;
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
         /* @internal */ hasNoDefaultLib?: boolean;
     }
 
+    export interface InputFiles extends Node {
+        kind: SyntaxKind.InputFiles;
+        javascriptText: string;
+        declarationText: string;
+    }
+
+    export interface UnparsedSource extends Node {
+        kind: SyntaxKind.UnparsedSource;
+        text: string;
+    }
+
     export interface JsonSourceFile extends SourceFile {
-        jsonObject?: ObjectLiteralExpression;
+        statements: NodeArray<JsonObjectExpressionStatement>;
+    }
+
+    export interface TsConfigSourceFile extends JsonSourceFile {
         extendedSourceFiles?: string[];
+    }
+
+    export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
+        kind: SyntaxKind.PrefixUnaryExpression;
+        operator: SyntaxKind.MinusToken;
+        operand: NumericLiteral;
+    }
+
+    export interface JsonObjectExpressionStatement extends ExpressionStatement {
+        expression: ObjectLiteralExpression | ArrayLiteralExpression | JsonMinusNumericLiteral | NumericLiteral | StringLiteral | BooleanLiteral | NullLiteral;
     }
 
     export interface ScriptReferenceHost {
@@ -2727,6 +2771,13 @@ namespace ts {
         /* @internal */ isEmittedFile(file: string): boolean;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
+
+        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+    }
+
+    export interface ResolvedProjectReference {
+        commandLine: ParsedCommandLine;
+        sourceFile: SourceFile;
     }
 
     /* @internal */
@@ -2737,10 +2788,12 @@ namespace ts {
     }
 
     export interface CustomTransformers {
-        /** Custom transformers to evaluate before built-in transformations. */
+        /** Custom transformers to evaluate before built-in .js transformations. */
         before?: TransformerFactory<SourceFile>[];
-        /** Custom transformers to evaluate after built-in transformations. */
+        /** Custom transformers to evaluate after built-in .js transformations. */
         after?: TransformerFactory<SourceFile>[];
+        /** Custom transformers to evaluate after built-in .d.ts transformations. */
+        afterDeclarations?: TransformerFactory<Bundle | SourceFile>[];
     }
 
     export interface SourceMapSpan {
@@ -3210,7 +3263,15 @@ namespace ts {
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
 
     /* @internal */
-    export type LateVisibilityPaintedStatement = AnyImportSyntax | VariableStatement;
+    export type LateVisibilityPaintedStatement =
+        | AnyImportSyntax
+        | VariableStatement
+        | ClassDeclaration
+        | FunctionDeclaration
+        | ModuleDeclaration
+        | TypeAliasDeclaration
+        | InterfaceDeclaration
+        | EnumDeclaration;
 
     /* @internal */
     export interface SymbolVisibilityResult {
@@ -3223,6 +3284,14 @@ namespace ts {
     /* @internal */
     export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
+    }
+
+    /* @internal */
+    export interface AllAccessorDeclarations {
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
     }
 
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
@@ -3281,6 +3350,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName;
+        getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     }
 
     export const enum SymbolFlags {
@@ -3620,6 +3690,9 @@ namespace ts {
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         ESSymbolLike = ESSymbol | UniqueESSymbol,
+        VoidLike = Void | Undefined,
+        /* @internal */
+        DisjointDomains = NonPrimitive | StringLike | NumberLike | BooleanLike | ESSymbolLike | VoidLike | Null,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
@@ -3636,7 +3709,15 @@ namespace ts {
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
+        // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
+        NonWideningType = ContainsWideningType,
+        /* @internal */
+        Wildcard = ContainsObjectLiteral,
+        /* @internal */
+        EmptyObject = ContainsAnyFunctionType,
+        /* @internal */
+        ConstructionFlags = NonWideningType | Wildcard | EmptyObject
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -4077,7 +4158,10 @@ namespace ts {
         Prototype,
     }
 
-    export interface JsFileExtensionInfo {
+    /** @deprecated Use FileExtensionInfo instead. */
+    export type JsFileExtensionInfo = FileExtensionInfo;
+
+    export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
@@ -4137,7 +4221,18 @@ namespace ts {
         name: string;
     }
 
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
+    export interface ProjectReference {
+        /** A normalized path on disk */
+        path: string;
+        /** The path as the user originally wrote it */
+        originalPath?: string;
+        /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
+        prepend?: boolean;
+        /** True if it is intended that this reference form a circularity */
+        circular?: boolean;
+    }
+
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
@@ -4152,7 +4247,7 @@ namespace ts {
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
-        /* @internal */ readonly configFile?: JsonSourceFile;
+        /* @internal */ readonly configFile?: TsConfigSourceFile;
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
@@ -4209,6 +4304,7 @@ namespace ts {
         /* @internal */ pretty?: boolean;
         reactNamespace?: string;
         jsxFactory?: string;
+        composite?: boolean;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -4226,6 +4322,7 @@ namespace ts {
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
@@ -4233,7 +4330,7 @@ namespace ts {
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;
 
-        [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
+        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
     export interface TypeAcquisition {
@@ -4285,7 +4382,12 @@ namespace ts {
         TS = 3,
         TSX = 4,
         External = 5,
-        JSON = 6
+        JSON = 6,
+        /**
+         * Used on extensions that doesn't define the ScriptKind but the content defines it.
+         * Deferred extensions are going to be included in all project contexts.
+         */
+        Deferred = 7
     }
 
     export const enum ScriptTarget {
@@ -4296,12 +4398,13 @@ namespace ts {
         ES2017 = 4,
         ES2018 = 5,
         ESNext = 6,
+        JSON = 100,
         Latest = ESNext,
     }
 
     export const enum LanguageVariant {
         Standard,
-        JSX,
+        JSX
     }
 
     /** Either a parsed command line or a parsed tsconfig.json */
@@ -4309,6 +4412,7 @@ namespace ts {
         options: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
+        projectReferences?: ReadonlyArray<ProjectReference>;
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
@@ -4324,6 +4428,7 @@ namespace ts {
     /* @internal */
     export interface ConfigFileSpecs {
         filesSpecs: ReadonlyArray<string>;
+        referencesSpecs: ReadonlyArray<ProjectReference> | undefined;
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
@@ -4339,8 +4444,18 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
+        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
         /* @internal */ spec: ConfigFileSpecs;
+    }
+
+    export interface CreateProgramOptions {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        oldProgram?: Program;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
     }
 
     /* @internal */
@@ -4629,6 +4744,7 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        readDirectory?(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
 
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
@@ -4867,6 +4983,8 @@ namespace ts {
 
         isEmitBlocked(emitFileName: string): boolean;
 
+        getPrependNodes(): ReadonlyArray<InputFiles>;
+
         writeFile: WriteFileCallback;
     }
 
@@ -5018,7 +5136,23 @@ namespace ts {
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T>, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
-        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
+        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter, info?: BundleInfo): void;
+    }
+
+    /**
+     * When a bundle contains prepended content, we store a file on disk indicating where the non-prepended
+     * content of that file starts. On a subsequent build where there are no upstream .d.ts changes, we
+     * read the bundle info file and the original .js file to quickly re-use portion of the file
+     * that didn't originate in prepended content.
+     */
+    /* @internal */
+    export interface BundleInfo {
+        // The offset (in characters, i.e. suitable for .substr) at which the
+        // non-prepended portion of the emitted file starts.
+        originalOffset: number;
+        // The total length of this bundle. Used to ensure we're pulling from
+        // the same source as we originally wrote.
+        totalLength: number;
     }
 
     export interface PrintHandlers {

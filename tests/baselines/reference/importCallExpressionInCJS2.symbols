@@ -10,7 +10,7 @@ export function backup() { return "backup"; }
 async function compute(promise: Promise<any>) {
 >compute : Symbol(compute, Decl(2.ts, 0, 0))
 >promise : Symbol(promise, Decl(2.ts, 0, 23))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2018.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
     let j = await promise;
 >j : Symbol(j, Decl(2.ts, 1, 7))

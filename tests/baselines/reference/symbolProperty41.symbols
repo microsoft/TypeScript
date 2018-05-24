@@ -4,26 +4,26 @@ class C {
 
     [Symbol.iterator](x: string): { x: string };
 >[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty41.ts, 0, 9), Decl(symbolProperty41.ts, 1, 48), Decl(symbolProperty41.ts, 2, 64))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty41.ts, 1, 22))
 >x : Symbol(x, Decl(symbolProperty41.ts, 1, 35))
 
     [Symbol.iterator](x: "hello"): { x: string; hello: string };
 >[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty41.ts, 0, 9), Decl(symbolProperty41.ts, 1, 48), Decl(symbolProperty41.ts, 2, 64))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty41.ts, 2, 22))
 >x : Symbol(x, Decl(symbolProperty41.ts, 2, 36))
 >hello : Symbol(hello, Decl(symbolProperty41.ts, 2, 47))
 
     [Symbol.iterator](x: any) {
 >[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty41.ts, 0, 9), Decl(symbolProperty41.ts, 1, 48), Decl(symbolProperty41.ts, 2, 64))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty41.ts, 3, 22))
 
         return undefined;
@@ -37,13 +37,13 @@ var c = new C;
 
 c[Symbol.iterator]("");
 >c : Symbol(c, Decl(symbolProperty41.ts, 8, 3))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 
 c[Symbol.iterator]("hello");
 >c : Symbol(c, Decl(symbolProperty41.ts, 8, 3))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 

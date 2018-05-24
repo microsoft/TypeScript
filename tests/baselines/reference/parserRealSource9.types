@@ -432,9 +432,9 @@ module TypeScript {
 
                     this.bindSymbol(scope, signature.parameters[j]);
 >this.bindSymbol(scope, signature.parameters[j]) : void
->this.bindSymbol : (scope: any, symbol: any) => void
+>this.bindSymbol : (scope: any, symbol: Symbol) => void
 >this : this
->bindSymbol : (scope: any, symbol: any) => void
+>bindSymbol : (scope: any, symbol: Symbol) => void
 >scope : any
 >signature.parameters[j] : any
 >signature.parameters : any
@@ -805,16 +805,16 @@ module TypeScript {
         }
 
         public bindSymbol(scope: SymbolScope, symbol: Symbol) {
->bindSymbol : (scope: any, symbol: any) => void
+>bindSymbol : (scope: any, symbol: Symbol) => void
 >scope : any
 >SymbolScope : No type information available!
->symbol : any
->Symbol : No type information available!
+>symbol : Symbol
+>Symbol : Symbol
 
             if (!symbol.bound) {
 >!symbol.bound : boolean
 >symbol.bound : any
->symbol : any
+>symbol : Symbol
 >bound : any
 
                 var prevLocationInfo = this.checker.locationInfo;
@@ -837,13 +837,13 @@ module TypeScript {
 >(symbol.unitIndex >= 0) : boolean
 >symbol.unitIndex >= 0 : boolean
 >symbol.unitIndex : any
->symbol : any
+>symbol : Symbol
 >unitIndex : any
 >0 : 0
 >(symbol.unitIndex < this.checker.units.length) : boolean
 >symbol.unitIndex < this.checker.units.length : boolean
 >symbol.unitIndex : any
->symbol : any
+>symbol : Symbol
 >unitIndex : any
 >this.checker.units.length : any
 >this.checker.units : any
@@ -867,13 +867,13 @@ module TypeScript {
 >checker : any
 >units : any
 >symbol.unitIndex : any
->symbol : any
+>symbol : Symbol
 >unitIndex : any
                 }
                 switch (symbol.kind()) {
 >symbol.kind() : any
 >symbol.kind : any
->symbol : any
+>symbol : Symbol
 >kind : any
 
                     case SymbolKind.Type:
@@ -884,7 +884,7 @@ module TypeScript {
                         if (symbol.flags & SymbolFlags.Bound) {
 >symbol.flags & SymbolFlags.Bound : number
 >symbol.flags : any
->symbol : any
+>symbol : Symbol
 >flags : any
 >SymbolFlags.Bound : any
 >SymbolFlags : any
@@ -897,7 +897,7 @@ module TypeScript {
 >typeSymbol : any
 ><TypeSymbol>symbol : any
 >TypeSymbol : No type information available!
->symbol : any
+>symbol : Symbol
 
                         typeSymbol.flags |= SymbolFlags.Bound;
 >typeSymbol.flags |= SymbolFlags.Bound : number
@@ -1075,7 +1075,7 @@ module TypeScript {
 >(<FieldSymbol>symbol) : any
 ><FieldSymbol>symbol : any
 >FieldSymbol : No type information available!
->symbol : any
+>symbol : Symbol
 >field : any
 >typeLink : any
 
@@ -1103,7 +1103,7 @@ module TypeScript {
 >(<ParameterSymbol>symbol) : any
 ><ParameterSymbol>symbol : any
 >ParameterSymbol : No type information available!
->symbol : any
+>symbol : Symbol
 >parameter : any
 >typeLink : any
 
@@ -1124,7 +1124,7 @@ module TypeScript {
             symbol.bound = true;
 >symbol.bound = true : true
 >symbol.bound : any
->symbol : any
+>symbol : Symbol
 >bound : any
 >true : true
         }

@@ -4,9 +4,9 @@ interface I {
 
     [Symbol.toPrimitive]: () => boolean;
 >[Symbol.toPrimitive] : Symbol(I[Symbol.toPrimitive], Decl(symbolProperty25.ts, 0, 13))
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.d.ts, --, --))
 }
 
 class C implements I {
@@ -15,9 +15,9 @@ class C implements I {
 
     [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : Symbol(C[Symbol.toStringTag], Decl(symbolProperty25.ts, 4, 22))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
 
         return "";
     }

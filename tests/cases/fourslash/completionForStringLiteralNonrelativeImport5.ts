@@ -16,24 +16,18 @@
 
 // @Filename: ambientModules.d.ts
 //// declare module "ambientModule" {}
-//// declare module "otherAmbientModule" {} /*dummy0*/
+//// declare module "otherAmbientModule" {}
 
 // @Filename: ambientModules2.d.ts
-//// declare module "otherOtherAmbientModule" {} /*dummy1*/
+//// declare module "otherOtherAmbientModule" {}
 
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-
-    verify.completionListContains("ambientModule");
-    verify.completionListContains("otherAmbientModule");
-    verify.completionListContains("otherOtherAmbientModule");
-    verify.not.completionListItemsCountIsGreaterThan(3);
-
-    goTo.marker(kind + "1");
-
-    verify.completionListContains("ambientModule");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-}
-
+verify.completions({
+    marker: test.markerNames().filter(k => k.endsWith("0")),
+    exact: ["ambientModule", "otherAmbientModule", "otherOtherAmbientModule"],
+    isNewIdentifierLocation: true,
+});
+verify.completions({
+    marker: test.markerNames().filter(k => !k.endsWith("0")),
+    exact: "ambientModule",
+    isNewIdentifierLocation: true,
+});

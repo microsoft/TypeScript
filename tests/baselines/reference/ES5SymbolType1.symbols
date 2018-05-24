@@ -3,7 +3,7 @@ var s: symbol;
 >s : Symbol(s, Decl(ES5SymbolType1.ts, 0, 3))
 
 s.toString();
->s.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>s.toString : Symbol(Symbol.toString, Decl(lib.d.ts, --, --))
 >s : Symbol(s, Decl(ES5SymbolType1.ts, 0, 3))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Symbol.toString, Decl(lib.d.ts, --, --))
 

@@ -30,7 +30,7 @@ namespace ts.projectSystem {
         }
     }
 
-    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: File[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
                 host.ensureFileOrFolder(file);
@@ -417,7 +417,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -460,7 +460,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -697,7 +697,7 @@ namespace ts.projectSystem {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
                 }
                 installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
-                    let typingFiles: (FileOrFolder & { typings: string })[] = [];
+                    let typingFiles: (File & { typings: string })[] = [];
                     if (args.indexOf(typingsName("commander")) >= 0) {
                         typingFiles = [commander, jquery, lodash, cordova];
                     }
@@ -1193,7 +1193,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -1656,12 +1656,12 @@ namespace ts.projectSystem {
             return foooResolution;
         }
 
-        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: FileOrFolder[]) {
-            const app: FileOrFolder = {
+        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: File[]) {
+            const app: File = {
                 path: appPath,
                 content: `${appContents}import * as x from "fooo";`
             };
-            const fooo: FileOrFolder = {
+            const fooo: File = {
                 path: foooPath,
                 content: `export var x: string;`
             };
@@ -1697,15 +1697,15 @@ namespace ts.projectSystem {
         });
 
         it("correctly invalidate the resolutions with typing names that are trimmed", () => {
-            const fooAA: FileOrFolder = {
+            const fooAA: File = {
                 path: `${globalTypingsCacheLocation}/node_modules/foo/a/a.d.ts`,
                 content: "export function a (): void;"
             };
-            const fooAB: FileOrFolder = {
+            const fooAB: File = {
                 path: `${globalTypingsCacheLocation}/node_modules/foo/a/b.d.ts`,
                 content: "export function b (): void;"
             };
-            const fooAC: FileOrFolder = {
+            const fooAC: File = {
                 path: `${globalTypingsCacheLocation}/node_modules/foo/a/c.d.ts`,
                 content: "export function c (): void;"
             };

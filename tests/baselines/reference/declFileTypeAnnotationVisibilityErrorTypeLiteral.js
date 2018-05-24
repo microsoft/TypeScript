@@ -61,3 +61,39 @@ var m;
     m.y2 = m.y;
     m.z2 = m.z;
 })(m || (m = {}));
+
+
+//// [declFileTypeAnnotationVisibilityErrorTypeLiteral.d.ts]
+declare module m {
+    class private1 {
+    }
+    module m2 {
+        class public1 {
+        }
+    }
+    var x: {
+        x: private1;
+        y: m2.public1;
+        (): m2.public1[];
+        method(): private1;
+        [n: number]: private1;
+        [s: string]: m2.public1;
+    };
+    var x2: {
+        x: private1;
+        y: m2.public1;
+        method(): private1;
+    };
+    var x3: {
+        (): m2.public1[];
+        [s: string]: m2.public1;
+        [n: number]: private1;
+        x: private1;
+        y: m2.public1;
+        method(): private1;
+    };
+    var y: (a: private1) => m2.public1;
+    var y2: (a: private1) => m2.public1;
+    var z: new (a: private1) => m2.public1;
+    var z2: new (a: private1) => m2.public1;
+}

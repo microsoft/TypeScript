@@ -47,9 +47,10 @@ function foo() {
     return __asyncGenerator(this, arguments, function foo_1() {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, "foo"];
-                case 1: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return require(_a.sent()); })])];
-                case 2:
+                case 0: return [4 /*yield*/, __await("foo")];
+                case 1: return [4 /*yield*/, _a.sent()];
+                case 2: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return require(_a.sent()); })])];
+                case 3:
                     Promise.resolve().then(function () { return require((_a.sent())["default"]); });
                     return [2 /*return*/];
             }

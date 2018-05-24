@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 type TextProps = { editable: false }
->TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
+>TextProps : TextProps
 >editable : false
 >false : false
 
@@ -15,10 +15,10 @@ type TextProps = { editable: false }
 
 class TextComponent extends React.Component<TextProps, {}> {
 >TextComponent : TextComponent
->React.Component : React.Component<{ editable: false; } | { editable: true; onEdit: (newText: string) => void; }, {}>
+>React.Component : React.Component<TextProps, {}>
 >React : typeof React
 >Component : typeof React.Component
->TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
+>TextProps : TextProps
 
     render() {
 >render : () => JSX.Element
@@ -32,8 +32,8 @@ class TextComponent extends React.Component<TextProps, {}> {
 
 // OK
 const textPropsFalse: TextProps = {
->textPropsFalse : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
->TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
+>textPropsFalse : TextProps
+>TextProps : TextProps
 >{    editable: false} : { editable: false; }
 
     editable: false
@@ -49,8 +49,8 @@ let y1 = <TextComponent {...textPropsFalse} />
 >textPropsFalse : { editable: false; }
 
 const textPropsTrue: TextProps = {
->textPropsTrue : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
->TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
+>textPropsTrue : TextProps
+>TextProps : TextProps
 >{    editable: true,    onEdit: () => {}} : { editable: true; onEdit: () => void; }
 
     editable: true,

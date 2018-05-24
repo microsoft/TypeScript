@@ -18,8 +18,13 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(103,39): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(104,31): error TS2304: Cannot find name 'SymbolAggregateScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(110,52): error TS2304: Cannot find name 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(145,34): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(145,55): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(146,25): error TS2339: Property 'bound' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(148,53): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(148,80): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(149,75): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(151,32): error TS2339: Property 'kind' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(152,26): error TS2304: Cannot find name 'SymbolKind'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(154,36): error TS2339: Property 'flags' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(154,44): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(158,43): error TS2304: Cannot find name 'TypeSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(159,45): error TS2304: Cannot find name 'SymbolFlags'.
@@ -29,11 +34,12 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(185,26): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(186,63): error TS2304: Cannot find name 'FieldSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(189,26): error TS2304: Cannot find name 'SymbolKind'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(191,51): error TS2304: Cannot find name 'ParameterSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(197,20): error TS2339: Property 'bound' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,28): error TS2304: Cannot find name 'SymbolScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts (33 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts (39 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -219,19 +225,29 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,48): error T
             public bindSymbol(scope: SymbolScope, symbol: Symbol) {
                                      ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScope'.
-                                                          ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
                 if (!symbol.bound) {
+                            ~~~~~
+!!! error TS2339: Property 'bound' does not exist on type 'Symbol'.
                     var prevLocationInfo = this.checker.locationInfo;
                     if ((this.checker.units) && (symbol.unitIndex >= 0) && (symbol.unitIndex < this.checker.units.length)) {
+                                                        ~~~~~~~~~
+!!! error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
+                                                                                   ~~~~~~~~~
+!!! error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
                         this.checker.locationInfo = this.checker.units[symbol.unitIndex];
+                                                                              ~~~~~~~~~
+!!! error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
                     }
                     switch (symbol.kind()) {
+                                   ~~~~
+!!! error TS2339: Property 'kind' does not exist on type 'Symbol'.
                         case SymbolKind.Type:
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolKind'.
     
                             if (symbol.flags & SymbolFlags.Bound) {
+                                       ~~~~~
+!!! error TS2339: Property 'flags' does not exist on type 'Symbol'.
                                                ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolFlags'.
                                 break;
@@ -293,6 +309,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,48): error T
                     this.checker.locationInfo = prevLocationInfo;
                 }
                 symbol.bound = true;
+                       ~~~~~
+!!! error TS2339: Property 'bound' does not exist on type 'Symbol'.
             }
     
             public bind(scope: SymbolScope, table: IHashTable) {

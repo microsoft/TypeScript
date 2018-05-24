@@ -63,7 +63,7 @@ namespace ts {
         }
 
         function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
-            return cachedReadDirectoryResult.get(rootDirPath);
+            return cachedReadDirectoryResult.get(ensureTrailingDirectorySeparator(rootDirPath));
         }
 
         function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
@@ -80,7 +80,7 @@ namespace ts {
                 directories: host.getDirectories(rootDir) || []
             };
 
-            cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
+            cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
             return resultFromHost;
         }
 
@@ -90,6 +90,7 @@ namespace ts {
          * The host request is done under try catch block to avoid caching incorrect result
          */
         function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
+            rootDirPath = ensureTrailingDirectorySeparator(rootDirPath);
             const cachedResult = getCachedFileSystemEntries(rootDirPath);
             if (cachedResult) {
                 return cachedResult;
@@ -100,7 +101,7 @@ namespace ts {
             }
             catch (_e) {
                 // If there is exception to read directories, dont cache the result and direct the calls to host
-                Debug.assert(!cachedReadDirectoryResult.has(rootDirPath));
+                Debug.assert(!cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(rootDirPath)));
                 return undefined;
             }
         }
@@ -142,7 +143,7 @@ namespace ts {
 
         function directoryExists(dirPath: string): boolean {
             const path = toPath(dirPath);
-            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
+            return cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(path)) || host.directoryExists(dirPath);
         }
 
         function createDirectory(dirPath: string) {
@@ -352,11 +353,11 @@ namespace ts {
         watchDirectory: WatchDirectory<X, Y>;
     }
 
-    export function getWatchFactory<X = undefined, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
+    export function getWatchFactory<X, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
         return getWatchFactoryWith(watchLogLevel, log, getDetailWatchInfo, watchFile, watchDirectory);
     }
 
-    function getWatchFactoryWith<X = undefined, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined,
+    function getWatchFactoryWith<X, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined,
         watchFile: (host: WatchFileHost, file: string, callback: FileWatcherCallback, watchPriority: PollingInterval) => FileWatcher,
         watchDirectory: (host: WatchDirectoryHost, directory: string, callback: DirectoryWatcherCallback, flags: WatchDirectoryFlags) => FileWatcher): WatchFactory<X, Y> {
         const createFileWatcher: CreateFileWatcher<WatchFileHost, PollingInterval, FileWatcherEventKind, undefined, X, Y> = getCreateFileWatcher(watchLogLevel, watchFile);
@@ -422,8 +423,8 @@ namespace ts {
         }, flags);
     }
 
-    function getWatchInfo<T, X, Y>(file: string, flags: T, detailInfo1: X | undefined, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
-        return `WatchInfo: ${file} ${flags} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : ""}`;
+    function getWatchInfo<T, X, Y>(file: string, flags: T, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
+        return `WatchInfo: ${file} ${flags} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo1}`;
     }
 
     export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {

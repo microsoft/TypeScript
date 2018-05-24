@@ -1250,6 +1250,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_element_access_expression_should_take_an_argument_1011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An element access expression should take an argument.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Выражение доступа к элементу должно принимать аргумент.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_enum_member_cannot_have_a_numeric_name_2452" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An enum member cannot have a numeric name.]]></Val>
@@ -2510,6 +2519,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_all_require_to_import_95048" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all 'require' to 'import']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать все "require" в "import"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_all_to_default_imports_95035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all to default imports]]></Val>
@@ -2533,6 +2551,15 @@
           <Val><![CDATA[Convert function to an ES2015 class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Преобразование функции в класс ES2015]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_require_to_import_95047" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert 'require' to 'import']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать "require" в "import"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4274,6 +4301,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Include_modules_imported_with_json_extension_6197" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Include modules imported with '.json' extension]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Index_signature_in_type_0_only_permits_reading_2542" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Index signature in type '{0}' only permits reading.]]></Val>
@@ -5570,6 +5603,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy_5070" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Options_Colon_6027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Options:]]></Val>
@@ -6506,6 +6545,9 @@
       <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Разрешать "keyof" только в имена свойств со строковым значением (не числа и не символы).]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7412,6 +7454,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[The global type 'JSX.{0}' may not have more than one property]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_option_1343" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Метасвойство "import.meta" разрешено только при использовании "ESNext" для параметров компилятора "target" и "module".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8759,6 +8810,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_declared_but_never_used_6196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is declared but never used.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" объявлен, но никогда не использовался.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
@@ -9340,6 +9400,15 @@
           <Val><![CDATA['readonly' modifier can only appear on a property declaration or index signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Модификатор readonly может отображаться только в объявлении свойства или сигнатуре индекса.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";require_call_may_be_converted_to_an_import_80005" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['require' call may be converted to an import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Вызов "require" можно преобразовать в "import".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

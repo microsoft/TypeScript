@@ -1,0 +1,34 @@
+=== tests/cases/compiler/unusedDestructuring.ts ===
+export {};
+declare const o: any;
+>o : Symbol(o, Decl(unusedDestructuring.ts, 1, 13))
+
+const { a, b } = o;
+>a : Symbol(a, Decl(unusedDestructuring.ts, 2, 7))
+>b : Symbol(b, Decl(unusedDestructuring.ts, 2, 10))
+>o : Symbol(o, Decl(unusedDestructuring.ts, 1, 13))
+
+const { c, d }  = o;
+>c : Symbol(c, Decl(unusedDestructuring.ts, 3, 7))
+>d : Symbol(d, Decl(unusedDestructuring.ts, 3, 10))
+>o : Symbol(o, Decl(unusedDestructuring.ts, 1, 13))
+
+d;
+>d : Symbol(d, Decl(unusedDestructuring.ts, 3, 10))
+
+const { e } = o;
+>e : Symbol(e, Decl(unusedDestructuring.ts, 5, 7))
+>o : Symbol(o, Decl(unusedDestructuring.ts, 1, 13))
+
+function f({ a, b }, { c, d }, { e }) {
+>f : Symbol(f, Decl(unusedDestructuring.ts, 5, 16))
+>a : Symbol(a, Decl(unusedDestructuring.ts, 7, 12))
+>b : Symbol(b, Decl(unusedDestructuring.ts, 7, 15))
+>c : Symbol(c, Decl(unusedDestructuring.ts, 7, 22))
+>d : Symbol(d, Decl(unusedDestructuring.ts, 7, 25))
+>e : Symbol(e, Decl(unusedDestructuring.ts, 7, 32))
+
+    d;
+>d : Symbol(d, Decl(unusedDestructuring.ts, 7, 25))
+}
+

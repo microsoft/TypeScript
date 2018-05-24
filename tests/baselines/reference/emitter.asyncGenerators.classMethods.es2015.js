@@ -95,7 +95,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 class C2 {
     f() {
         return __asyncGenerator(this, arguments, function* f_1() {
-            const x = yield;
+            const x = yield yield __await(void 0);
         });
     }
 }
@@ -115,7 +115,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 class C3 {
     f() {
         return __asyncGenerator(this, arguments, function* f_1() {
-            const x = yield 1;
+            const x = yield yield __await(1);
         });
     }
 }
@@ -175,7 +175,7 @@ var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
 class C5 {
     f() {
         return __asyncGenerator(this, arguments, function* f_1() {
-            const x = yield __await(yield* __asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function* () { yield 1; }); })())));
+            const x = yield __await(yield* __asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function* () { yield yield __await(1); }); })())));
         });
     }
 }

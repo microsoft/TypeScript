@@ -20,7 +20,7 @@ var c2 = new C(null); // error
 class D<T extends Date> {
 >D : Symbol(D, Decl(classWithoutExplicitConstructor.ts, 6, 21))
 >T : Symbol(T, Decl(classWithoutExplicitConstructor.ts, 8, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     x = 2
 >x : Symbol(D.x, Decl(classWithoutExplicitConstructor.ts, 8, 25))

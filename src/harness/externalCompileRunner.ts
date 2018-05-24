@@ -28,7 +28,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
 
         describe(`${this.kind()} code samples`, () => {
             for (const test of testList) {
-                this.runTest(test);
+                this.runTest(typeof test === "string" ? test : test.file);
             }
         });
     }
@@ -41,7 +41,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
             const cp = require("child_process");
 
             it("should build successfully", () => {
-                let cwd = path.join(__dirname, "../../", cls.testDir, directoryName);
+                let cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directoryName);
                 const stdio = isWorker ? "pipe" : "inherit";
                 let types: string[];
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
@@ -69,7 +69,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     const install = cp.spawnSync(`npm`, ["i", "--ignore-scripts"], { cwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
-                const args = [path.join(__dirname, "tsc.js")];
+                const args = [path.join(Harness.IO.getWorkspaceRoot(), "built/local/tsc.js")];
                 if (types) {
                     args.push("--types", types.join(","));
                 }

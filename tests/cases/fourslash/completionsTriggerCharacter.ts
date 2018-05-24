@@ -19,21 +19,19 @@
 ////const ctr = </*openTag*/
 ////const less = 1 </*lessThan*/
 
-verify.completionsAt("openQuote", ["a", "b"], { triggerCharacter: '"' });
-verify.completionsAt("closeQuote", undefined, { triggerCharacter: '"' });
+verify.completions(
+    { marker: "openQuote", exact: ["a", "b"], triggerCharacter: '"' },
+    { marker: "closeQuote", exact: undefined, triggerCharacter: '"' },
 
-verify.completionsAt("openSingleQuote", ["a", "b"], { triggerCharacter: "'" });
-verify.completionsAt("closeSingleQuote", undefined, { triggerCharacter: "'" });
+    { marker: "openSingleQuote", exact: ["a", "b"], triggerCharacter: "'" },
+    { marker: "closeSingleQuote", exact: undefined, triggerCharacter: "'" },
 
-verify.completionsAt("openTemplate", ["a", "b"], { triggerCharacter: "`" });
-verify.completionsAt("closeTemplate", undefined, { triggerCharacter: "`" });
+    { marker: "openTemplate", exact: ["a", "b"], triggerCharacter: "`" },
+    { marker: "closeTemplate", exact: undefined, triggerCharacter: "`" },
 
-verify.completionsAt("openTemplateInQuote", undefined, { triggerCharacter: '`' });
-verify.completionsAt("closeTemplateInQuote", undefined, { triggerCharacter: '`' });
+    { marker: "quoteInComment", exact: undefined, triggerCharacter: '"' },
+    { marker: "lessInComment", exact: undefined, triggerCharacter: "<" },
 
-verify.completionsAt("quoteInComment", undefined, { triggerCharacter: '"' });
-verify.completionsAt("lessInComment", undefined, { triggerCharacter: "<" });
-
-goTo.marker("openTag");
-verify.completionListContains("div", undefined, undefined, undefined, undefined, undefined, { triggerCharacter: "<" });
-verify.completionsAt("lessThan", undefined, { triggerCharacter: "<" });
+    { marker: "openTag", includes: "div", triggerCharacter: "<" },
+    { marker: "lessThan", exact: undefined, triggerCharacter: "<" },
+);
