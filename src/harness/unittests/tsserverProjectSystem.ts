@@ -8314,7 +8314,7 @@ new C();`
         });
     });
 
-    describe("watchDirectories implementation", () => {
+    describe("tsserverProjectSystem watchDirectories implementation", () => {
         function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";
             const projectSrcFolder = `${projectFolder}/src`;
@@ -8422,7 +8422,7 @@ new C();`
         });
     });
 
-    describe("document registry in project service", () => {
+    describe("tsserverProjectSystem document registry in project service", () => {
         const projectRootPath = "/user/username/projects/project";
         const importModuleContent = `import {a} from "./module1"`;
         const file: File = {
