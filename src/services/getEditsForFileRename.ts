@@ -66,16 +66,23 @@ namespace ts {
      */
     type InternalPathUpdater = (sourceFile: SourceFile, importText: string) => string | undefined;
     function getInternalPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string): InternalPathUpdater {
-        const relativeNewDirToOldDir = getRelativePathFromDirectory(toDirectory(newFileOrDirPath), toDirectory(oldFileOrDirPath), /*ignoreCase*/ false);
+        const relativeNewDirToOldDir = ensurePathIsNonModuleName(getRelativePathFromDirectory(toDirectory(newFileOrDirPath), toDirectory(oldFileOrDirPath), /*ignoreCase*/ false));
 
         if (relativeNewDirToOldDir === ".") return () => undefined;
 
-        return (sourceFile, importText) =>
-            !pathIsRelative(importText) ||
+        const relativeOldDirToNewDir = ensurePathIsNonModuleName(getRelativePathFromDirectory(toDirectory(oldFileOrDirPath), toDirectory(newFileOrDirPath), /*ignoreCase*/ false));
+
+        return (sourceFile, importText) => {
+            if (!pathIsRelative(importText) ||
                 importIsInternalToDirectory(oldFileOrDirPath, sourceFile.fileName, importText) ||
-                importIsInternalToDirectory(newFileOrDirPath, sourceFile.fileName, importText)
-                ? undefined
-                : combineNormal(relativeNewDirToOldDir, importText);
+                importIsInternalToDirectory(newFileOrDirPath, sourceFile.fileName, importText)) {
+                return undefined;
+            }
+            // If we're renaming "./a" to "./foo/a", an import from "./foo/z" can just import "./a".
+            const short = tryRemovePrefix(importText, relativeOldDirToNewDir + "/");
+            if (short !== undefined) return ensurePathIsNonModuleName(short);
+            return combineNormal(relativeNewDirToOldDir, importText);
+        };
     }
 
     function toDirectory(path: string): string {
