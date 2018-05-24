@@ -10,6 +10,10 @@
 ////}
 // @Filename: a.ts
 ////import { foob } from "./b";
-////const thing/*1*/ = foob();
+////const thing/*1*/ = foob(/*2*/);
 
 verify.quickInfoAt("1", "const thing: {\n    x: B;\n    y: B;\n}");
+verify.signatureHelp({
+    marker: "2",
+    text: "foob(): { x: B; y: B; }"
+});
