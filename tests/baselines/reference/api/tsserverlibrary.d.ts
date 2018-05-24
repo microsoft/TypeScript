@@ -532,6 +532,7 @@ declare namespace ts {
         kind: SyntaxKind.TypeParameter;
         parent: DeclarationWithTypeParameters | InferTypeNode;
         name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
         constraint?: TypeNode;
         default?: TypeNode;
         expression?: Expression;
@@ -1282,7 +1283,7 @@ declare namespace ts {
         block: Block;
     }
     type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
-    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | TypeParameterDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
     interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
@@ -2210,6 +2211,7 @@ declare namespace ts {
         ReverseMapped = 2048,
         JsxAttributes = 4096,
         MarkerType = 8192,
+        GenericTypeParameter = 16384,
         ClassOrInterface = 3
     }
     interface ObjectType extends Type {
@@ -2243,6 +2245,7 @@ declare namespace ts {
     interface TypeReference extends ObjectType {
         target: GenericType;
         typeArguments?: Type[];
+        typeParameterReference?: boolean;
     }
     interface GenericType extends InterfaceType, TypeReference {
     }
@@ -2261,6 +2264,9 @@ declare namespace ts {
     interface InstantiableType extends Type {
     }
     interface TypeParameter extends InstantiableType {
+    }
+    interface GenericTypeParameter extends GenericType, TypeParameter, InterfaceTypeWithDeclaredMembers {
+        localTypeParameters: TypeParameter[];
     }
     interface IndexedAccessType extends InstantiableType {
         objectType: Type;
