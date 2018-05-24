@@ -21,6 +21,7 @@ namespace ts {
             const host = new fakes.CompilerHost(fs);
             const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: false });
 
+            clearDiagnostics();
             fs.chdir("/src/tests");
             builder.buildProjects(["."]);
             assertDiagnosticMessages(/*empty*/);
