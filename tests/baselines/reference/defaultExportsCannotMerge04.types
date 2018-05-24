@@ -15,5 +15,5 @@ interface Foo {
 }
 
 export interface Foo {
->Foo : Foo
+>Foo : import("tests/cases/conformance/es6/modules/defaultExportsCannotMerge04").Foo
 }

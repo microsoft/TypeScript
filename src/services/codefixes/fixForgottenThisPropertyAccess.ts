@@ -19,7 +19,8 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            doChange(changes, context.sourceFile, getInfo(diag.file, diag.start!, diag.code));
+            const info = getInfo(diag.file, diag.start, diag.code);
+            if (info) doChange(changes, context.sourceFile, info);
         }),
     });
 
@@ -27,7 +28,7 @@ namespace ts.codefix {
     function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
         if (!isIdentifier(node)) return undefined;
-        return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node).name.text : undefined };
+        return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node, className }: Info): void {

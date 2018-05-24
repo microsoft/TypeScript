@@ -50,11 +50,11 @@ namespace ts {
 
     /* @internal */
     export function watchFileUsingPriorityPollingInterval(host: System, fileName: string, callback: FileWatcherCallback, watchPriority: PollingInterval): FileWatcher {
-        return host.watchFile(fileName, callback, pollingInterval(watchPriority));
+        return host.watchFile!(fileName, callback, pollingInterval(watchPriority));
     }
 
     /* @internal */
-    export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval) => FileWatcher;
+    export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval | undefined) => FileWatcher;
     /* @internal */
     export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive?: boolean) => FileWatcher;
 
@@ -119,7 +119,7 @@ namespace ts {
             return false;
 
             function setLevel(level: keyof Levels) {
-                levels[level] = customLevels[level] || levels[level];
+                levels[level] = customLevels![level] || levels[level];
             }
         }
 
@@ -171,7 +171,7 @@ namespace ts {
         }
 
         function createPollingIntervalQueue(pollingInterval: PollingInterval): PollingIntervalQueue {
-            const queue = [] as PollingIntervalQueue;
+            const queue = [] as WatchedFile[] as PollingIntervalQueue;
             queue.pollingInterval = pollingInterval;
             queue.pollIndex = 0;
             queue.pollScheduled = false;
@@ -203,7 +203,7 @@ namespace ts {
             }
         }
 
-        function pollQueue(queue: WatchedFile[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
+        function pollQueue(queue: (WatchedFile | undefined)[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
             // Max visit would be all elements of the queue
             let needsVisit = queue.length;
             let definedValueCopyToIndex = pollIndex;
@@ -300,11 +300,11 @@ namespace ts {
         }
 
         function scheduleNextPoll(pollingInterval: PollingInterval) {
-            pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
+            pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout!(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
         }
 
         function getModifiedTime(fileName: string) {
-            return host.getModifiedTime(fileName) || missingFileModifiedTime;
+            return host.getModifiedTime!(fileName) || missingFileModifiedTime;
         }
     }
 
@@ -369,7 +369,7 @@ namespace ts {
                 close: () => {
                     watcher.close();
                     result.childWatches.forEach(closeFileWatcher);
-                    result = undefined;
+                    result = undefined!;
                 },
                 dirName,
                 childWatches: emptyArray
@@ -423,6 +423,7 @@ namespace ts {
         }
     }
 
+    // TODO: GH#18217 Methods on System are often used as if they are certainly defined
     export interface System {
         args: string[];
         newLine: string;
@@ -451,10 +452,11 @@ namespace ts {
         setModifiedTime?(path: string, time: Date): void;
         deleteFile?(path: string): void;
         /**
-         * This should be cryptographically secure.
          * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
          */
         createHash?(data: string): string;
+        /** This must be cryptographically secure. Only implement this method using `crypto.createHash("sha256")`. */
+        createSHA256Hash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
@@ -482,7 +484,7 @@ namespace ts {
     declare const global: any;
     declare const __filename: string;
 
-    export function getNodeMajorVersion() {
+    export function getNodeMajorVersion(): number | undefined {
         if (typeof process === "undefined") {
             return undefined;
         }
@@ -519,6 +521,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
+    // TODO: this is used as if it's certainly defined in many places.
     export let sys: System = (() => {
         // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
         // byte order mark from the specified encoding. Using any other byte order mark does
@@ -530,7 +533,7 @@ namespace ts {
             const _path = require("path");
             const _os = require("os");
             // crypto can be absent on reduced node installations
-            let _crypto: any;
+            let _crypto: typeof import("crypto") | undefined;
             try {
               _crypto = require("crypto");
             }
@@ -544,7 +547,7 @@ namespace ts {
             } = require("buffer").Buffer;
 
             const nodeVersion = getNodeMajorVersion();
-            const isNode4OrLater = nodeVersion >= 4;
+            const isNode4OrLater = nodeVersion! >= 4;
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -595,6 +598,7 @@ namespace ts {
                 setModifiedTime,
                 deleteFile,
                 createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
+                createSHA256Hash: _crypto ? createSHA256Hash : undefined,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
@@ -635,12 +639,12 @@ namespace ts {
                     }
                 },
                 base64decode: Buffer.from ? input => {
-                    return Buffer.from(input, "base64").toString("utf8");
+                    return Buffer.from!(input, "base64").toString("utf8");
                 } : input => {
                     return new Buffer(input, "base64").toString("utf8");
                 },
                 base64encode: Buffer.from ? input => {
-                    return Buffer.from(input).toString("base64");
+                    return Buffer.from!(input).toString("base64");
                 } : input => {
                     return new Buffer(input).toString("base64");
                 }
@@ -715,6 +719,7 @@ namespace ts {
                         return watchDirectoryRecursively(directoryName, callback);
                     }
                     watchDirectory(directoryName, callback);
+                    return undefined!; // TODO: GH#18217
                 };
             }
 
@@ -751,7 +756,7 @@ namespace ts {
                         (_eventName: string, relativeFileName) => {
                             // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                             const fileName = !isString(relativeFileName)
-                                ? undefined
+                                ? undefined! // TODO: GH#18217
                                 : getNormalizedAbsolutePath(relativeFileName, dirName);
                             // Some applications save a working file via rename operations
                             const callbacks = fileWatcherCallbacks.get(toCanonicalName(fileName));
@@ -841,7 +846,7 @@ namespace ts {
                     close: () => {
                         // Close the watcher (either existing file system entry watcher or missing file system entry watcher)
                         watcher.close();
-                        watcher = undefined;
+                        watcher = undefined!;
                     }
                 };
 
@@ -973,7 +978,7 @@ namespace ts {
                     data = byteOrderMarkIndicator + data;
                 }
 
-                let fd: number;
+                let fd: number | undefined;
 
                 try {
                     fd = _fs.openSync(fileName, "w");
@@ -1031,6 +1036,7 @@ namespace ts {
                     switch (entryKind) {
                         case FileSystemEntryKind.File: return stat.isFile();
                         case FileSystemEntryKind.Directory: return stat.isDirectory();
+                        default: return false;
                     }
                 }
                 catch (e) {
@@ -1095,8 +1101,14 @@ namespace ts {
                 return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
             }
 
-            function createMD5HashUsingNativeCrypto(data: string) {
-                const hash = _crypto.createHash("md5");
+            function createMD5HashUsingNativeCrypto(data: string): string {
+                const hash = _crypto!.createHash("md5");
+                hash.update(data);
+                return hash.digest("hex");
+            }
+
+            function createSHA256Hash(data: string): string {
+                const hash = _crypto!.createHash("sha256");
                 hash.update(data);
                 return hash.digest("hex");
             }
@@ -1149,7 +1161,7 @@ namespace ts {
             }
         }
 
-        let sys: System;
+        let sys: System | undefined;
         if (typeof ChakraHost !== "undefined") {
             sys = getChakraSystem();
         }
@@ -1163,13 +1175,13 @@ namespace ts {
             const originalWriteFile = sys.writeFile;
             sys.writeFile = (path, data, writeBom) => {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
-                if (directoryPath && !sys.directoryExists(directoryPath)) {
-                    recursiveCreateDirectory(directoryPath, sys);
+                if (directoryPath && !sys!.directoryExists(directoryPath)) {
+                    recursiveCreateDirectory(directoryPath, sys!);
                 }
                 originalWriteFile.call(sys, path, data, writeBom);
             };
         }
-        return sys;
+        return sys!;
     })();
 
     if (sys && sys.getEnvironmentVariable) {

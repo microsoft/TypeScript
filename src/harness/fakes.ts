@@ -19,7 +19,7 @@ namespace fakes {
         public readonly output: string[] = [];
         public readonly newLine: string;
         public readonly useCaseSensitiveFileNames: boolean;
-        public exitCode: number;
+        public exitCode: number | undefined;
 
         private readonly _executingFilePath: string | undefined;
         private readonly _env: Record<string, string> | undefined;
@@ -132,7 +132,7 @@ namespace fakes {
 
         public getModifiedTime(path: string) {
             const stats = this._getStats(path);
-            return stats ? stats.mtime : undefined;
+            return stats ? stats.mtime : undefined!; // TODO: GH#18217
         }
 
         public setModifiedTime(path: string, time: Date) {
@@ -152,8 +152,8 @@ namespace fakes {
             }
         }
 
-        public getEnvironmentVariable(name: string): string | undefined {
-            return this._env && this._env[name];
+        public getEnvironmentVariable(name: string): string {
+            return (this._env && this._env[name])!; // TODO: GH#18217
         }
 
         private _getStats(path: string) {
@@ -295,7 +295,7 @@ namespace fakes {
                 this._outputsMap.set(document.file, this.outputs.length);
                 this.outputs.push(document);
             }
-            this.outputs[this._outputsMap.get(document.file)] = document;
+            this.outputs[this._outputsMap.get(document.file)!] = document;
         }
 
         public trace(s: string): void {
@@ -352,7 +352,7 @@ namespace fakes {
                 let fs = this.vfs;
                 while (fs.shadowRoot) {
                     try {
-                        const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) && fs.shadowRoot.statSync(canonicalFileName);
+                        const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
                         if (shadowRootStats.dev !== stats.dev ||
                             shadowRootStats.ino !== stats.ino ||
                             shadowRootStats.mtimeMs !== stats.mtimeMs) {

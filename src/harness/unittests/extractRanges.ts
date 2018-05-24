@@ -11,7 +11,7 @@ namespace ts {
             }
             const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromRange(selectionRange));
             assert(result.targetRange === undefined, "failure expected");
-            const sortedErrors = result.errors.map(e => <string>e.messageText).sort();
+            const sortedErrors = result.errors!.map(e => <string>e.messageText).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
         });
     }
@@ -27,13 +27,14 @@ namespace ts {
         const expectedRange = t.ranges.get("extracted");
         if (expectedRange) {
             let pos: number, end: number;
-            if (isArray(result.targetRange.range)) {
-                pos = result.targetRange.range[0].getStart(f);
-                end = lastOrUndefined(result.targetRange.range).getEnd();
+            const targetRange = result.targetRange!;
+            if (isArray(targetRange.range)) {
+                pos = targetRange.range[0].getStart(f);
+                end = last(targetRange.range).getEnd();
             }
             else {
-                pos = result.targetRange.range.getStart(f);
-                end = result.targetRange.range.getEnd();
+                pos = targetRange.range.getStart(f);
+                end = targetRange.range.getEnd();
             }
             assert.equal(pos, expectedRange.pos, "incorrect pos of range");
             assert.equal(end, expectedRange.end, "incorrect end of range");

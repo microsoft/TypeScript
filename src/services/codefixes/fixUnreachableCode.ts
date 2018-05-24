@@ -14,7 +14,7 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const statement = findAncestor(token, isStatement);
+        const statement = findAncestor(token, isStatement)!;
         Debug.assert(statement.getStart(sourceFile) === token.getStart(sourceFile));
 
         const container = (isBlock(statement.parent) ? statement.parent : statement).parent;
@@ -60,6 +60,8 @@ namespace ts.codefix {
                 return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
             case SyntaxKind.EnumDeclaration:
                 return hasModifier(s, ModifierFlags.Const);
+            default:
+                return false;
         }
     }
 
@@ -71,19 +73,6 @@ namespace ts.codefix {
 
     // Calls 'cb' with the start and end of each range where 'pred' is true.
     function split<T>(arr: ReadonlyArray<T>, pred: (t: T) => boolean, cb: (start: T, end: T) => void): void {
-        let start: T | undefined;
-        for (let i = 0; i < arr.length; i++) {
-            const value = arr[i];
-            if (pred(value)) {
-                start = start || value;
-            }
-            else {
-                if (start) {
-                    cb(start, arr[i - 1]);
-                    start = undefined;
-                }
-            }
-        }
-        if (start) cb(start, arr[arr.length - 1]);
+        getRangesWhere(arr, pred, (start, afterEnd) => cb(arr[start], arr[afterEnd - 1]));
     }
 }

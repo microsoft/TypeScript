@@ -4,7 +4,7 @@ namespace ts {
         const pathUpdater = getPathUpdater(oldFilePath, newFilePath, host);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldFilePath, newFilePath);
-            for (const { sourceFile, toUpdate } of getImportsToUpdate(program, oldFilePath)) {
+            for (const { sourceFile, toUpdate } of getImportsToUpdate(program, oldFilePath, host)) {
                 const newPath = pathUpdater(isRef(toUpdate) ? toUpdate.fileName : toUpdate.text);
                 if (newPath !== undefined) {
                     const range = isRef(toUpdate) ? toUpdate : createStringRange(toUpdate, sourceFile);
@@ -16,6 +16,7 @@ namespace ts {
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldFilePath: string, newFilePath: string): void {
         const configFile = program.getCompilerOptions().configFile;
+        if (!configFile) return;
         const oldFile = getTsConfigPropArrayElementValue(configFile, "files", oldFilePath);
         if (oldFile) {
             changeTracker.replaceRangeWithText(configFile, createStringRange(oldFile, configFile), newFilePath);
@@ -30,22 +31,21 @@ namespace ts {
         return "fileName" in toUpdate;
     }
 
-    function getImportsToUpdate(program: Program, oldFilePath: string): ReadonlyArray<ToUpdate> {
-        const checker = program.getTypeChecker();
+    function getImportsToUpdate(program: Program, oldFilePath: string, host: LanguageServiceHost): ReadonlyArray<ToUpdate> {
         const result: ToUpdate[] = [];
         for (const sourceFile of program.getSourceFiles()) {
             for (const ref of sourceFile.referencedFiles) {
-                if (!program.getSourceFileFromReference(sourceFile, ref) && resolveTripleslashReference(ref.fileName, sourceFile.fileName) === oldFilePath) {
+                if (resolveTripleslashReference(ref.fileName, sourceFile.fileName) === oldFilePath) {
                     result.push({ sourceFile, toUpdate: ref });
                 }
             }
 
             for (const importStringLiteral of sourceFile.imports) {
-                // If it resolved to something already, ignore.
-                if (checker.getSymbolAtLocation(importStringLiteral)) continue;
-
-                const resolved = program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
-                if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
+                const resolved = host.resolveModuleNames
+                    ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName)
+                    : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
+                // We may or may not have picked up on the file being renamed, so maybe successfully resolved to oldFilePath, or maybe that's in failedLookupLocations
+                if (resolved && contains(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }

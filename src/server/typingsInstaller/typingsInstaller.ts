@@ -17,7 +17,7 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
+    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
         try {
             const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
             return result.resolvedModule && result.resolvedModule.resolvedFileName;
@@ -154,7 +154,7 @@ namespace ts.server.typingsInstaller {
                 this.log.isEnabled() ? (s => this.log.writeLine(s)) : undefined,
                 req.fileNames,
                 req.projectRootPath,
-                this.safeList,
+                this.safeList!,
                 this.packageNameToTypingLocation,
                 req.typeAcquisition,
                 req.unresolvedImports,
@@ -209,8 +209,8 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
             }
             if (this.installTypingHost.fileExists(packageJson) && this.installTypingHost.fileExists(packageLockJson)) {
-                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson));
-                const npmLock = <NpmLock>JSON.parse(this.installTypingHost.readFile(packageLockJson));
+                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson)!); // TODO: GH#18217
+                const npmLock = <NpmLock>JSON.parse(this.installTypingHost.readFile(packageLockJson)!); // TODO: GH#18217
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
                     this.log.writeLine(`Loaded content of '${packageLockJson}'`);
@@ -246,7 +246,7 @@ namespace ts.server.typingsInstaller {
                         }
                         const info = getProperty(npmLock.dependencies, key);
                         const version = info && info.version;
-                        const semver = Semver.parse(version);
+                        const semver = Semver.parse(version!); // TODO: GH#18217
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: semver };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                     }
@@ -275,7 +275,7 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
                     return false;
                 }
-                if (this.packageNameToTypingLocation.get(typing) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typing), this.typesRegistry.get(typing))) {
+                if (this.packageNameToTypingLocation.get(typing) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typing)!, this.typesRegistry.get(typing)!)) {
                     if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has an up-to-date typing - skipping...`);
                     return false;
                 }
@@ -349,7 +349,7 @@ namespace ts.server.typingsInstaller {
                         }
 
                         // packageName is guaranteed to exist in typesRegistry by filterTypings
-                        const distTags = this.typesRegistry.get(packageName);
+                        const distTags = this.typesRegistry.get(packageName)!;
                         const newVersion = Semver.parse(distTags[`ts${versionMajorMinor}`] || distTags[latestDistTag]);
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
@@ -392,7 +392,7 @@ namespace ts.server.typingsInstaller {
                 return;
             }
 
-            let watchers = this.projectWatchers.get(projectName);
+            let watchers = this.projectWatchers.get(projectName)!;
             const toRemove = createMap<FileWatcher>();
             if (!watchers) {
                 watchers = createMap();
@@ -418,7 +418,7 @@ namespace ts.server.typingsInstaller {
                 if (isLoggingEnabled) {
                     this.log.writeLine(`FileWatcher:: Added:: WatchInfo: ${file}`);
                 }
-                const watcher = this.installTypingHost.watchFile(file, (f, eventKind) => {
+                const watcher = this.installTypingHost.watchFile!(file, (f, eventKind) => { // TODO: GH#18217
                     if (isLoggingEnabled) {
                         this.log.writeLine(`FileWatcher:: Triggered with ${f} eventKind: ${FileWatcherEventKind[eventKind]}:: WatchInfo: ${file}:: handler is already invoked '${watchers.isInvoked}'`);
                     }
@@ -439,7 +439,7 @@ namespace ts.server.typingsInstaller {
                 if (isLoggingEnabled) {
                     this.log.writeLine(`DirectoryWatcher:: Added:: WatchInfo: ${dir} recursive`);
                 }
-                const watcher = this.installTypingHost.watchDirectory(dir, f => {
+                const watcher = this.installTypingHost.watchDirectory!(dir, f => { // TODO: GH#18217
                     if (isLoggingEnabled) {
                         this.log.writeLine(`DirectoryWatcher:: Triggered with ${f} :: WatchInfo: ${dir} recursive :: handler is already invoked '${watchers.isInvoked}'`);
                     }
@@ -512,7 +512,7 @@ namespace ts.server.typingsInstaller {
         private executeWithThrottling() {
             while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
                 this.inFlightRequestCount++;
-                const request = this.pendingRunRequests.pop();
+                const request = this.pendingRunRequests.pop()!;
                 this.installWorker(request.requestId, request.packageNames, request.cwd, ok => {
                     this.inFlightRequestCount--;
                     request.onRequestCompleted(ok);

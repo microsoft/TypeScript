@@ -24,7 +24,7 @@ Please help us by doing the following steps before logging an issue:
 -->
 
 <!-- Please try to reproduce the issue with `typescript@next`. It may have already been fixed. -->
-**TypeScript Version:**  2.9.0-dev.201xxxxx
+**TypeScript Version:**  3.0.0-dev.201xxxxx
 
 <!-- Search terms you tried before logging this (so others can find this issue more easily) -->
 **Search Terms:** 

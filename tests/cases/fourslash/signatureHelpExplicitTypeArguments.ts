@@ -6,16 +6,11 @@
 ////f<number>(/*3*/);
 ////f<number, string, boolean>(/*4*/);
 
-goTo.marker("1");
-verify.currentSignatureHelpIs("f(x: number, y: string): number");
-
-goTo.marker("2");
-verify.currentSignatureHelpIs("f<T = boolean, U = string>(x: T, y: U): T");
-
-goTo.marker("3");
-// too few -- fill in rest with {}
-verify.currentSignatureHelpIs("f(x: number, y: {}): number");
-
-goTo.marker("4");
-// too many -- ignore extra type arguments
-verify.currentSignatureHelpIs("f(x: number, y: string): number");
+verify.signatureHelp(
+    { marker: "1", text: "f(x: number, y: string): number" },
+    { marker: "2", text: "f<T = boolean, U = string>(x: T, y: U): T" },
+    // too few -- fill in rest with {}
+    { marker: "3", text: "f(x: number, y: {}): number" },
+    // too many -- ignore extra type arguments
+    { marker: "4", text: "f(x: number, y: string): number" },
+);

@@ -952,7 +952,7 @@ namespace vfs {
                     this._applyFilesWorker(value.files, path, deferred);
                 }
                 else {
-                    deferred.push([value as Symlink | Link | Mount, path]);
+                    deferred.push([value, path]);
                 }
             }
         }
@@ -1015,7 +1015,7 @@ namespace vfs {
         directoryExists(path: string): boolean;
         fileExists(path: string): boolean;
         getFileSize(path: string): number;
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
         getWorkspaceRoot(): string;
     }
 
@@ -1037,7 +1037,7 @@ namespace vfs {
                 }
             },
             readFileSync(path: string): Buffer {
-                return Buffer.from(host.readFile(path), "utf8");
+                return Buffer.from(host.readFile(path)!, "utf8"); // TODO: GH#18217
             }
         };
     }
@@ -1258,7 +1258,7 @@ namespace vfs {
         ctimeMs: number; // status change time
         birthtimeMs: number; // creation time
         nlink: number; // number of hard links
-        symlink?: string;
+        symlink: string;
         shadowRoot?: SymlinkInode;
         meta?: collections.Metadata;
     }
@@ -1279,7 +1279,7 @@ namespace vfs {
         realpath: string;
         basename: string;
         parent: DirectoryInode | undefined;
-        links: collections.SortedMap<string, Inode> | undefined;
+        links: collections.SortedMap<string, Inode>;
         node: Inode | undefined;
     }
 
