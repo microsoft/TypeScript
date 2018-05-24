@@ -1,0 +1,16 @@
+tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts(8,7): error TS2339: Property 'test' does not exist on type 'never'.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts (1 errors) ====
+    declare const envVar: string | undefined;
+    if (typeof envVar === `string`) {
+      envVar.slice(0)
+    }
+    
+    declare const obj: {test: string} | {}
+    if (`test` in obj) {
+      obj.test.slice(0)
+          ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'never'.
+    }
+    

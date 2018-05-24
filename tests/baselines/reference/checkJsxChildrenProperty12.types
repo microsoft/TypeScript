@@ -35,18 +35,18 @@ class Button extends React.Component<ButtonProp, any> {
         	return <InnerButton {...this.props} />
 ><InnerButton {...this.props} /> : JSX.Element
 >InnerButton : typeof InnerButton
->this.props : ButtonProp & { children?: React.ReactNode; }
+>this.props : ButtonProp & { children?: {}; }
 >this : this
->props : ButtonProp & { children?: React.ReactNode; }
+>props : ButtonProp & { children?: {}; }
 		}
 		else {
 			return (<InnerButton {...this.props} >
 >(<InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton>) : JSX.Element
 ><InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton> : JSX.Element
 >InnerButton : typeof InnerButton
->this.props : ButtonProp & { children?: React.ReactNode; }
+>this.props : ButtonProp & { children?: {}; }
 >this : this
->props : ButtonProp & { children?: React.ReactNode; }
+>props : ButtonProp & { children?: {}; }
 
 				<div>Hello World</div>
 ><div>Hello World</div> : JSX.Element

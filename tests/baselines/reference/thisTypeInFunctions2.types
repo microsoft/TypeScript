@@ -58,7 +58,7 @@ declare function simple(arg: SimpleInterface): void;
 extend1({
 >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
 >extend1 : (args: IndexedWithThis) => void
->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
+>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(): void; }
 
     init() {
 >init : (this: IndexedWithThis) => void
@@ -78,17 +78,17 @@ extend1({
 >12 : 12
 
     foo() {
->foo : (this: any) => void
+>foo : () => void
 
         this.url; // this: any because 'foo' matches the string indexer
->this.url : any
->this : any
->url : any
+>this.url : {}
+>this : IndexedWithThis
+>url : {}
 
         this.willDestroy;
->this.willDestroy : any
->this : any
->willDestroy : any
+>this.willDestroy : (this: any) => void
+>this : IndexedWithThis
+>willDestroy : (this: any) => void
     }
 });
 extend2({

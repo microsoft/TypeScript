@@ -23,7 +23,7 @@ interface IAsyncEnumerator<T> {
 >AsyncEnumeratorDone : AsyncEnumeratorDone
 
     next3(): Promise<T | {}>;
->next3 : () => Promise<{} | T>
+>next3 : () => Promise<{}>
 >Promise : Promise<T>
 >T : T
 
@@ -59,12 +59,12 @@ async function main() {
 >next2 : () => Promise<AsyncEnumeratorDone> | Promise<number>
 
     let c = await x.next3();
->c : number | {}
->await x.next3() : number | {}
->x.next3() : Promise<number | {}>
->x.next3 : () => Promise<number | {}>
+>c : {}
+>await x.next3() : {}
+>x.next3() : Promise<{}>
+>x.next3 : () => Promise<{}>
 >x : IAsyncEnumerator<number>
->next3 : () => Promise<number | {}>
+>next3 : () => Promise<{}>
 
     let d = await x.next4();
 >d : number | { x: string; }

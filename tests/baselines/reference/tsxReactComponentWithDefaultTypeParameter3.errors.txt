@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(13,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(13,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: {}; }'.
   Type '{}' is not assignable to type 'Prop'.
     Property 'a' is missing in type '{}'.
 tests/cases/conformance/jsx/file.tsx(19,18): error TS2326: Types of property 'a' are incompatible.
@@ -20,7 +20,7 @@ tests/cases/conformance/jsx/file.tsx(19,18): error TS2326: Types of property 'a'
     // Error
     let x1 = <MyComp />
               ~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: {}; }'.
 !!! error TS2322:   Type '{}' is not assignable to type 'Prop'.
 !!! error TS2322:     Property 'a' is missing in type '{}'.
     

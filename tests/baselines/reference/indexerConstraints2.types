@@ -113,14 +113,14 @@ interface O {
 }
 
 type NonIndexableUnion = boolean | {};
->NonIndexableUnion : NonIndexableUnion
+>NonIndexableUnion : {}
 
 interface P {
 >P : P
 
     [u: NonIndexableUnion]: A;
->u : NonIndexableUnion
->NonIndexableUnion : NonIndexableUnion
+>u : {}
+>NonIndexableUnion : {}
 >A : A
 }
 

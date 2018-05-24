@@ -15,9 +15,9 @@ tests/cases/conformance/jsx/file.tsx(41,14): error TS2344: Type 'Prop' does not 
 tests/cases/conformance/jsx/file.tsx(41,20): error TS2326: Types of property 'a' are incompatible.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(47,14): error TS2558: Expected 1-2 type arguments, but got 3.
-tests/cases/conformance/jsx/file.tsx(47,53): error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(47,53): error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: {}; }'.
 tests/cases/conformance/jsx/file.tsx(49,14): error TS2558: Expected 1-2 type arguments, but got 3.
-tests/cases/conformance/jsx/file.tsx(49,53): error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(49,53): error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: {}; }'.
 tests/cases/conformance/jsx/file.tsx(51,47): error TS2326: Types of property 'b' are incompatible.
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/jsx/file.tsx(53,47): error TS2326: Types of property 'b' are incompatible.
@@ -101,13 +101,13 @@ tests/cases/conformance/jsx/file.tsx(53,47): error TS2326: Types of property 'b'
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2558: Expected 1-2 type arguments, but got 3.
                                                         ~~~~~~
-!!! error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: ReactNode; }'.
+!!! error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: {}; }'.
     
     x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2558: Expected 1-2 type arguments, but got 3.
                                                         ~~~~~~
-!!! error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: ReactNode; }'.
+!!! error TS2339: Property 'b' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, {}>> & { a: string; } & { children?: {}; }'.
     
     x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" />; // error
                                                   ~~~~~~

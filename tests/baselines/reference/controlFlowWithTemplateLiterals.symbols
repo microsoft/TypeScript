@@ -19,10 +19,6 @@ if (`test` in obj) {
 >obj : Symbol(obj, Decl(controlFlowWithTemplateLiterals.ts, 5, 13))
 
   obj.test.slice(0)
->obj.test.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
->obj.test : Symbol(test, Decl(controlFlowWithTemplateLiterals.ts, 5, 20))
 >obj : Symbol(obj, Decl(controlFlowWithTemplateLiterals.ts, 5, 13))
->test : Symbol(test, Decl(controlFlowWithTemplateLiterals.ts, 5, 20))
->slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
 }
 

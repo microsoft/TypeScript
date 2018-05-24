@@ -15,11 +15,11 @@ const decorator = function <T>(Component: React.StatelessComponent<T>): React.St
 >T : T
 
     return (props) => <Component {...props}></Component>
->(props) => <Component {...props}></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
->props : T & { children?: React.ReactNode; }
+>(props) => <Component {...props}></Component> : (props: T & { children?: {}; }) => JSX.Element
+>props : T & { children?: {}; }
 ><Component {...props}></Component> : JSX.Element
 >Component : React.StatelessComponent<T>
->props : T & { children?: React.ReactNode; }
+>props : T & { children?: {}; }
 >Component : React.StatelessComponent<T>
 
 };
@@ -38,11 +38,11 @@ const decorator2 = function <T extends { x: number }>(Component: React.Stateless
 >T : T
 
     return (props) => <Component {...props} x={2} ></Component>
->(props) => <Component {...props} x={2} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
->props : T & { children?: React.ReactNode; }
+>(props) => <Component {...props} x={2} ></Component> : (props: T & { children?: {}; }) => JSX.Element
+>props : T & { children?: {}; }
 ><Component {...props} x={2} ></Component> : JSX.Element
 >Component : React.StatelessComponent<T>
->props : T & { children?: React.ReactNode; }
+>props : T & { children?: {}; }
 >x : number
 >2 : 2
 >Component : React.StatelessComponent<T>
@@ -65,13 +65,13 @@ const decorator3 = function <T extends { x: number }, U extends { x: number } >(
 >T : T
 
     return (props) => <Component x={2} {...props} ></Component>
->(props) => <Component x={2} {...props} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
->props : T & { children?: React.ReactNode; }
+>(props) => <Component x={2} {...props} ></Component> : (props: T & { children?: {}; }) => JSX.Element
+>props : T & { children?: {}; }
 ><Component x={2} {...props} ></Component> : JSX.Element
 >Component : React.StatelessComponent<T>
 >x : number
 >2 : 2
->props : T & { children?: React.ReactNode; }
+>props : T & { children?: {}; }
 >Component : React.StatelessComponent<T>
 
 };

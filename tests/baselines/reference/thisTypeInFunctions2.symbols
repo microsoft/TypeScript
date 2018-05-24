@@ -77,10 +77,12 @@ extend1({
 >foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 26, 13))
 
         this.url; // this: any because 'foo' matches the string indexer
->this : Symbol(this, Decl(thisTypeInFunctions2.ts, 4, 87))
+>this : Symbol(IndexedWithThis, Decl(thisTypeInFunctions2.ts, 0, 0))
 
         this.willDestroy;
->this : Symbol(this, Decl(thisTypeInFunctions2.ts, 4, 87))
+>this.willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+>this : Symbol(IndexedWithThis, Decl(thisTypeInFunctions2.ts, 0, 0))
+>willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
     }
 });
 extend2({

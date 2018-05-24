@@ -1004,7 +1004,7 @@ declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
 
 // inference
 f11();
->f11() : [{}, {} | B]
+>f11() : [{}, {}]
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
 
 f11(a);
@@ -1607,7 +1607,7 @@ declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
 
 // inference
 f17();
->f17() : [{}, {} | B]
+>f17() : [{}, {}]
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
 
 f17(a);
@@ -1702,11 +1702,11 @@ declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
 
 // inference
 f18();
->f18() : [{}, {}, {} | C]
+>f18() : [{}, {}, {}]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 
 f18(a);
->f18(a) : [A, {}, {} | C]
+>f18(a) : [A, {}, {}]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >a : A
 
@@ -1732,25 +1732,25 @@ f18(a, b, c);
 
 // no inference, partially supplied
 f18<A>();
->f18<A>() : [A, {}, {} | C]
+>f18<A>() : [A, {}, {}]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 
 f18<A>(a);
->f18<A>(a) : [A, {}, {} | C]
+>f18<A>(a) : [A, {}, {}]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 
 f18<A>(a, b);
->f18<A>(a, b) : [A, {}, {} | C]
+>f18<A>(a, b) : [A, {}, {}]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 >b : B
 
 f18<A>(a, b, b);
->f18<A>(a, b, b) : [A, {}, {} | C]
+>f18<A>(a, b, b) : [A, {}, {}]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
@@ -1758,7 +1758,7 @@ f18<A>(a, b, b);
 >b : B
 
 f18<A>(a, b, c);
->f18<A>(a, b, c) : [A, {}, {} | C]
+>f18<A>(a, b, c) : [A, {}, {}]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
