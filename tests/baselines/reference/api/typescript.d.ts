@@ -2210,6 +2210,7 @@ declare namespace ts {
         ReverseMapped = 2048,
         JsxAttributes = 4096,
         MarkerType = 8192,
+        EmptyObjectType = 16384,
         ClassOrInterface = 3
     }
     interface ObjectType extends Type {
