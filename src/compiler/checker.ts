@@ -6905,6 +6905,10 @@ namespace ts {
             return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, /*apparentType*/ true));
         }
 
+        function getApparentTypeOfInstantiableType(type: InstantiableType) {
+            return isGenericTypeParameter(type) ? getApparentTypeOfGenericTypeParameter(type) : getBaseConstraintOfType(type);
+        }
+
         function getApparentTypeOfGenericTypeParameter(type: GenericTypeParameter) {
             const localTypeArgs = map(type.localTypeParameters, getApparentType);
             const outerTypeArgs = type.mapper && instantiateTypes(type.outerTypeParameters, type.mapper);
@@ -6964,8 +6968,7 @@ namespace ts {
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = isGenericTypeParameter(type) ? getApparentTypeOfGenericTypeParameter(type) :
-                type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || emptyObjectType : type;
+            const t = type.flags & TypeFlags.Instantiable ? getApparentTypeOfInstantiableType(type) || emptyObjectType : type;
             return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
@@ -7622,7 +7625,7 @@ namespace ts {
                 // for generic type parameters just erase the child type parameters, not the generic type parameter itself
                 // because generic type parameters are an object type that can be inferred
                 const typeEraser = createTypeEraser(flatMap(typeParameters, tp => isGenericTypeParameter(tp) ? tp.localTypeParameters : tp));
-                const baseConstraints = map(typeParameters, tp => instantiateType(getApparentType(tp), typeEraser) || emptyObjectType);
+                const baseConstraints = map(typeParameters, tp => instantiateType(getApparentTypeOfInstantiableType(tp), typeEraser) || emptyObjectType);
                 return instantiateSignature(signature, createTypeMapper(typeParameters, baseConstraints), /*eraseTypeParameters*/ true);
             }
             return signature;
