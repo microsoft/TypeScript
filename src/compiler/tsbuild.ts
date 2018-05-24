@@ -252,7 +252,6 @@ namespace ts {
     }
 
     function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
-        // TODO handle JSX: Preserve
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath), relativePath);
         return changeExtension(outputPath, (fileExtensionIs(inputFileName, ".tsx") && configFile.options.jsx === JsxEmit.Preserve) ? ".jsx" : ".js");
@@ -295,7 +294,7 @@ namespace ts {
         const cache = createFileMap<ParsedCommandLine>();
         const configParseHost = parseConfigHostFromCompilerHost(host);
 
-        // TODO: Cache invalidation under --watch!
+        // TODO: Cache invalidation under --watch
 
         function parseConfigFile(configFilePath: string) {
             const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
@@ -591,7 +590,6 @@ namespace ts {
 
             /**
              * Removes entries from arrays which appear in later arrays.
-             * TODO: Use a lookup object to optimize this a bit?
              */
             function removeDuplicatesFromBuildQueue(queue: string[][]): void {
                 // No need to check the last array
