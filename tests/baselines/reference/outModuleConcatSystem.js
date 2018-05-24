@@ -19,8 +19,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 System.register("ref/a", [], function (exports_1, context_1) {
-    var A;
     "use strict";
+    var A;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -35,8 +35,8 @@ System.register("ref/a", [], function (exports_1, context_1) {
     };
 });
 System.register("b", ["ref/a"], function (exports_2, context_2) {
-    var a_1, B;
     "use strict";
+    var a_1, B;
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [
