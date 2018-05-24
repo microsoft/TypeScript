@@ -965,7 +965,8 @@ namespace ts {
     export function append<T>(to: T[], value: T | undefined): T[];
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
-    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    export function append<T>(to: Push<T>, value: T | undefined): void;
+    export function append<T>(to: T[], value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
         if (to === undefined) return [value];
         to.push(value);
