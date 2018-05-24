@@ -5,5 +5,4 @@
 ////    for (/**/
 ////});
 
-goTo.marker();
-verify.not.signatureHelpPresent();
+verify.noSignatureHelp("");

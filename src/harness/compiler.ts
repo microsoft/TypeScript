@@ -182,8 +182,8 @@ namespace compiler {
         }
 
         public getSourceMapRecord(): string | undefined {
-            if (this.result.sourceMaps && this.result.sourceMaps.length > 0) {
-                return Harness.SourceMapRecorder.getSourceMapRecord(this.result.sourceMaps, this.program, Array.from(this.js.values()), Array.from(this.dts.values()));
+            if (this.result!.sourceMaps && this.result!.sourceMaps!.length > 0) {
+                return Harness.SourceMapRecorder.getSourceMapRecord(this.result!.sourceMaps!, this.program!, Array.from(this.js.values()), Array.from(this.dts.values()));
             }
         }
 

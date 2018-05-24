@@ -11,9 +11,9 @@ export class Foo {
 
 //// [a.js]
 System.register(["./b"], function (exports_1, context_1) {
+    var b_1, x;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var b_1, x;
     return {
         setters: [
             function (b_1_1) {

@@ -12,17 +12,21 @@
 ////someOptional(1, 2, 3);
 ////someOptional(); // no error here; x and y are optional in JS
 
-goTo.marker('1');
-verify.signatureHelpCountIs(1);
-verify.currentSignatureParameterCountIs(1);
-verify.currentSignatureHelpIs('allOptional(...args: any[]): void');
-verify.currentParameterHelpArgumentNameIs('args');
-verify.currentParameterSpanIs("...args: any[]");
-
-goTo.marker('2');
-verify.signatureHelpCountIs(1);
-verify.currentSignatureParameterCountIs(3);
-verify.currentSignatureHelpIs('someOptional(x: any, y: any, ...args: any[]): void');
-verify.currentParameterHelpArgumentNameIs('x');
-verify.currentParameterSpanIs("x: any");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
+verify.signatureHelp(
+    {
+        marker: "1",
+        text: "allOptional(...args: any[]): void",
+        parameterCount: 1,
+        parameterName: "args",
+        parameterSpan: "...args: any[]",
+        isVariadic: true,
+    },
+    {
+        marker: "2",
+        text: "someOptional(x: any, y: any, ...args: any[]): void",
+        parameterCount: 3,
+        parameterName: "x",
+        parameterSpan: "x: any",
+        isVariadic: true,
+    });

@@ -1,3 +1,5 @@
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
+
 if (typeof describe === "undefined") {
     (global as any).describe = undefined; // If launched without mocha for parallel mode, we still need a global describe visible to satisfy the parsing of the unit tests
     (global as any).it = undefined;
@@ -32,7 +34,7 @@ namespace Harness.Parallel.Host {
     function perfdataFileName(target?: string) {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
-    function readSavedPerfData(target?: string): {[testHash: string]: number} {
+    function readSavedPerfData(target?: string): {[testHash: string]: number} | undefined {
         const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
@@ -73,7 +75,7 @@ namespace Harness.Parallel.Host {
         setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
     }
 
-    function startDelayed(perfData: {[testHash: string]: number}, totalCost: number) {
+    function startDelayed(perfData: {[testHash: string]: number} | undefined, totalCost: number) {
         initializeProgressBarsDependencies();
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
@@ -127,6 +129,7 @@ namespace Harness.Parallel.Host {
         let passingFiles = 0;
         let failingFiles = 0;
         let errorResults: ErrorInfo[] = [];
+        let passingResults: { name: string[] }[] = [];
         let totalPassing = 0;
         const startTime = Date.now();
 
@@ -198,9 +201,11 @@ namespace Harness.Parallel.Host {
                         totalPassing += data.payload.passing;
                         if (data.payload.errors.length) {
                             errorResults = errorResults.concat(data.payload.errors);
+                            passingResults = passingResults.concat(data.payload.passes);
                             failingFiles++;
                         }
                         else {
+                            passingResults = passingResults.concat(data.payload.passes);
                             passingFiles++;
                         }
                         newPerfData[hashName(data.payload.runner, data.payload.file)] = data.payload.duration;
@@ -224,16 +229,16 @@ namespace Harness.Parallel.Host {
                                 return;
                             }
                             // Send tasks in blocks if the tasks are small
-                            const taskList = [tasks.pop()];
+                            const taskList = [tasks.pop()!];
                             while (tasks.length && taskList.reduce((p, c) => p + c.size, 0) < chunkSize) {
-                                taskList.push(tasks.pop());
+                                taskList.push(tasks.pop()!);
                             }
                             child.currentTasks = taskList;
                             if (taskList.length === 1) {
-                                child.send({ type: "test", payload: taskList[0] });
+                                child.send({ type: "test", payload: taskList[0] } as ParallelHostMessage); // TODO: GH#18217
                             }
                             else {
-                                child.send({ type: "batch", payload: taskList });
+                                child.send({ type: "batch", payload: taskList } as ParallelHostMessage); // TODO: GH#18217
                             }
                         }
                     }
@@ -265,7 +270,7 @@ namespace Harness.Parallel.Host {
                         doneBatching[i] = true;
                         continue;
                     }
-                    const task = tasks.pop();
+                    const task = tasks.pop()!;
                     batches[i].push(task);
                     scheduledTotal += task.size;
                 }
@@ -290,7 +295,7 @@ namespace Harness.Parallel.Host {
                     worker.send({ type: "batch", payload });
                 }
                 else { // Out of batches, send off just one test
-                    const payload = tasks.pop();
+                    const payload = tasks.pop()!;
                     ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
                     worker.currentTasks = [payload];
                     worker.send({ type: "test", payload });
@@ -299,7 +304,7 @@ namespace Harness.Parallel.Host {
         }
         else {
             for (let i = 0; i < workerCount; i++) {
-                const task = tasks.pop();
+                const task = tasks.pop()!;
                 workers[i].currentTasks = [task];
                 workers[i].send({ type: "test", payload: task });
             }
@@ -367,21 +372,55 @@ namespace Harness.Parallel.Host {
 
             IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
-            process.exit(errorResults.length);
+            if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.CI === "true") {
+                const xunitReport = new xunit({ on: ts.noop, once: ts.noop }, { reporterOptions: { output: "./TEST-results.xml" } });
+                xunitReport.stats = reporter.stats;
+                xunitReport.failures = reporter.failures;
+                const rootAttrs: {[index: string]: any} = {
+                    name: "Tests",
+                    tests: stats.tests,
+                    failures: stats.failures,
+                    errors: stats.failures,
+                    skipped: stats.tests - stats.failures - stats.passes,
+                    timestamp: (new Date()).toUTCString(),
+                    time: (stats.duration / 1000) || 0
+                };
+                xunitReport.write(`<?xml version="1.0" encoding="UTF-8"?>` + "\n");
+                xunitReport.write(`<testsuite ${Object.keys(rootAttrs).map(k => `${k}="${escape("" + rootAttrs[k])}"`).join(" ")}>`);
+                [...failures, ...ts.map(passingResults, makeMochaTest)].forEach(t => {
+                    xunitReport.test(t);
+                });
+                xunitReport.write("</testsuite>");
+                xunitReport.done(failures, (f: any[]) => {
+                    process.exit(f.length);
+                });
+            }
+            else {
+                process.exit(failures.length);
+            }
+
         }
 
-        function makeMochaTest(test: ErrorInfo) {
+        function makeMochaTest(test: ErrorInfo | TestInfo) {
             return {
+                state: (test as ErrorInfo).error ? "failed" : "passed",
+                parent: {
+                    fullTitle: () => {
+                        return test.name.slice(0, test.name.length - 1).join(" ");
+                    }
+                },
+                title: test.name[test.name.length - 1],
                 fullTitle: () => {
                     return test.name.join(" ");
                 },
                 titlePath: () => {
                     return test.name;
                 },
-                err: {
-                    message: test.error,
-                    stack: test.stack
-                }
+                isPending: () => false,
+                err: (test as ErrorInfo).error ? {
+                    message: (test as ErrorInfo).error,
+                    stack: (test as ErrorInfo).stack
+                } : undefined
             };
         }
 
@@ -392,6 +431,7 @@ namespace Harness.Parallel.Host {
 
     let mocha: any;
     let base: any;
+    let xunit: any;
     let color: any;
     let cursor: any;
     let readline: any;
@@ -434,6 +474,7 @@ namespace Harness.Parallel.Host {
     function initializeProgressBarsDependencies() {
         mocha = require("mocha");
         base = mocha.reporters.Base;
+        xunit = mocha.reporters.xunit;
         color = base.color;
         cursor = base.cursor;
         readline = require("readline");
@@ -480,7 +521,7 @@ namespace Harness.Parallel.Host {
                 this._enabled = false;
             }
         }
-        update(index: number, percentComplete: number, color: string, title: string, titleColor?: string) {
+        update(index: number, percentComplete: number, color: string, title: string | undefined, titleColor?: string) {
             percentComplete = minMax(percentComplete, 0, 1);
 
             const progressBar = this._progressBars[index] || (this._progressBars[index] = { });
@@ -516,7 +557,7 @@ namespace Harness.Parallel.Host {
             }
 
             cursor.hide();
-            readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
+            readline.moveCursor(process.stdout, -process.stdout.columns!, -this._lineCount);
             let lineCount = 0;
             const numProgressBars = this._progressBars.length;
             for (let i = 0; i < numProgressBars; i++) {
@@ -525,7 +566,7 @@ namespace Harness.Parallel.Host {
                     process.stdout.write(this._progressBars[i].text + os.EOL);
                 }
                 else {
-                    readline.moveCursor(process.stdout, -process.stdout.columns, +1);
+                    readline.moveCursor(process.stdout, -process.stdout.columns!, +1);
                 }
 
                 lineCount++;

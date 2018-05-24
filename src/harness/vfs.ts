@@ -385,6 +385,14 @@ namespace vfs {
         // POSIX API (aligns with NodeJS "fs" module API)
 
         /**
+         * Determines whether a path exists.
+         */
+        public existsSync(path: string) {
+            const result = this._walk(this._resolve(path), /*noFollow*/ true, () => "stop");
+            return result !== undefined && result.node !== undefined;
+        }
+
+        /**
          * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html
@@ -861,8 +869,8 @@ namespace vfs {
          */
         private _resolve(path: string) {
             return this._cwd
-                ? vpath.resolve(this._cwd, vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute))
-                : vpath.validate(path, vpath.ValidationFlags.Absolute);
+                ? vpath.resolve(this._cwd, vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute | vpath.ValidationFlags.AllowWildcard))
+                : vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
         }
 
         private _applyFiles(files: FileSet, dirname: string) {
@@ -927,7 +935,7 @@ namespace vfs {
                     this._applyFilesWorker(value.files, path, deferred);
                 }
                 else {
-                    deferred.push([value as Symlink | Link | Mount, path]);
+                    deferred.push([value, path]);
                 }
             }
         }
@@ -990,7 +998,7 @@ namespace vfs {
         directoryExists(path: string): boolean;
         fileExists(path: string): boolean;
         getFileSize(path: string): number;
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
         getWorkspaceRoot(): string;
     }
 
@@ -1012,7 +1020,7 @@ namespace vfs {
                 }
             },
             readFileSync(path: string): Buffer {
-                return Buffer.from(host.readFile(path), "utf8");
+                return Buffer.from(host.readFile(path)!, "utf8"); // TODO: GH#18217
             }
         };
     }
@@ -1233,7 +1241,7 @@ namespace vfs {
         ctimeMs: number; // status change time
         birthtimeMs: number; // creation time
         nlink: number; // number of hard links
-        symlink?: string;
+        symlink: string;
         shadowRoot?: SymlinkInode;
         meta?: collections.Metadata;
     }
@@ -1254,7 +1262,7 @@ namespace vfs {
         realpath: string;
         basename: string;
         parent: DirectoryInode | undefined;
-        links: collections.SortedMap<string, Inode> | undefined;
+        links: collections.SortedMap<string, Inode>;
         node: Inode | undefined;
     }
 

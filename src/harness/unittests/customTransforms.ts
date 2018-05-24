@@ -17,7 +17,7 @@ namespace ts {
                     useCaseSensitiveFileNames: () => true,
                     getNewLine: () => "\n",
                     fileExists: (fileName) => fileMap.has(fileName),
-                    readFile: (fileName) => fileMap.has(fileName) ? fileMap.get(fileName).text : undefined,
+                    readFile: (fileName) => fileMap.has(fileName) ? fileMap.get(fileName)!.text : undefined,
                     writeFile: (fileName, text) => outputs.set(fileName, text),
                 };
 

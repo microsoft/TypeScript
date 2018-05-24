@@ -8,7 +8,7 @@ class Test262BaselineRunner extends RunnerBase {
     private static readonly helpersFilePath = "tests/cases/test262-harness/helpers.d.ts";
     private static readonly helperFile: Harness.Compiler.TestFile = {
         unitName: Test262BaselineRunner.helpersFilePath,
-        content: Harness.IO.readFile(Test262BaselineRunner.helpersFilePath),
+        content: Harness.IO.readFile(Test262BaselineRunner.helpersFilePath)!,
     };
     private static readonly testFileExtensionRegex = /\.js$/;
     private static readonly options: ts.CompilerOptions = {
@@ -36,7 +36,7 @@ class Test262BaselineRunner extends RunnerBase {
             };
 
             before(() => {
-                const content = Harness.IO.readFile(filePath);
+                const content = Harness.IO.readFile(filePath)!;
                 const testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, testFilename);
 
@@ -49,7 +49,7 @@ class Test262BaselineRunner extends RunnerBase {
                 testState = {
                     filename: testFilename,
                     inputFiles,
-                    compilerResult: undefined,
+                    compilerResult: undefined!, // TODO: GH#18217
                 };
 
                 testState.compilerResult = Harness.Compiler.compileFiles(
@@ -61,7 +61,7 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             after(() => {
-                testState = undefined;
+                testState = undefined!;
             });
 
             it("has the expected emitted code", () => {
@@ -83,13 +83,13 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it("satisfies invariants", () => {
-                const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                const sourceFile = testState.compilerResult.program!.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                 Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it("has the expected AST", () => {
                 Harness.Baseline.runBaseline(testState.filename + ".AST.txt", () => {
-                    const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                    const sourceFile = testState.compilerResult.program!.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename))!;
                     return Utils.sourceFileToJSON(sourceFile);
                 }, Test262BaselineRunner.baselineOptions);
             });

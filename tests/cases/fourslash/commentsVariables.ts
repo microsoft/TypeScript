@@ -64,12 +64,10 @@ verify.completions(
     },
 )
 
-goTo.marker('5');
-verify.currentSignatureHelpDocCommentIs("foos comment");
+verify.signatureHelp({ marker: "5", docComment: "foos comment" });
 verify.quickInfoAt("5q", "function foo(): void", "foos comment");
 
-goTo.marker('6');
-verify.currentSignatureHelpDocCommentIs("fooVar comment");
+verify.signatureHelp({ marker: "6", docComment: "fooVar comment" });
 verify.quickInfoAt("6q", "var fooVar: () => void", "fooVar comment");
 
 verify.completions({
@@ -80,12 +78,10 @@ verify.completions({
     ],
 });
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("foos comment");
+verify.signatureHelp({ marker: "8", docComment: "foos comment" });
 verify.quickInfoAt("8q", "function foo(): void", "foos comment");
 
-goTo.marker('9');
-verify.currentSignatureHelpDocCommentIs("fooVar comment");
+verify.signatureHelp({ marker: "9", docComment: "fooVar comment" });
 verify.quickInfos({
     "9q": ["var fooVar: () => void", "fooVar comment"],
     "9aq": ["var fooVar: () => void", "fooVar comment"]

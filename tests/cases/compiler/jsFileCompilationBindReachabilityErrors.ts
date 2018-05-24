@@ -1,8 +1,11 @@
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
-// @filename: a.js
 // @noFallthroughCasesInSwitch: true
+// @allowUnreachableCode: false
+// @allowUnusedLabels: false
+
+// @filename: a.js
 function foo(a, b) {
     switch (a) {
         case 10:

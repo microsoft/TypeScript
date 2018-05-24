@@ -7,26 +7,26 @@ node_modules/debug/src/browser.js(48,47): error TS2339: Property 'process' does 
 node_modules/debug/src/browser.js(48,65): error TS2339: Property 'process' does not exist on type 'Window'.
 node_modules/debug/src/browser.js(59,139): error TS2551: Property 'WebkitAppearance' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitAppearance'?
 node_modules/debug/src/browser.js(61,73): error TS2339: Property 'firebug' does not exist on type 'Console'.
-node_modules/debug/src/browser.js(73,9): error TS2551: Property 'formatters' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser")'. Did you mean 'formatArgs'?
-node_modules/debug/src/browser.js(96,21): error TS2339: Property 'humanize' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser")'.
-node_modules/debug/src/browser.js(178,9): error TS2339: Property 'enable' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser")'.
+node_modules/debug/src/browser.js(73,9): error TS2551: Property 'formatters' does not exist on type 'typeof import("/debug/node_modules/debug/src/browser")'. Did you mean 'formatArgs'?
+node_modules/debug/src/browser.js(96,21): error TS2339: Property 'humanize' does not exist on type 'typeof import("/debug/node_modules/debug/src/browser")'.
+node_modules/debug/src/browser.js(178,9): error TS2339: Property 'enable' does not exist on type 'typeof import("/debug/node_modules/debug/src/browser")'.
 node_modules/debug/src/browser.js(187,13): error TS2304: Cannot find name 'LocalStorage'.
 node_modules/debug/src/debug.js(25,1): error TS2323: Cannot redeclare exported variable 'names'.
 node_modules/debug/src/debug.js(26,1): error TS2323: Cannot redeclare exported variable 'skips'.
 node_modules/debug/src/debug.js(46,13): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
 node_modules/debug/src/debug.js(47,57): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-node_modules/debug/src/debug.js(51,18): error TS2339: Property 'colors' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'.
-node_modules/debug/src/debug.js(51,50): error TS2339: Property 'colors' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'.
+node_modules/debug/src/debug.js(51,18): error TS2339: Property 'colors' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
+node_modules/debug/src/debug.js(51,50): error TS2339: Property 'colors' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
 node_modules/debug/src/debug.js(75,10): error TS2339: Property 'diff' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
 node_modules/debug/src/debug.js(76,10): error TS2339: Property 'prev' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
 node_modules/debug/src/debug.js(77,10): error TS2339: Property 'curr' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
-node_modules/debug/src/debug.js(112,13): error TS2551: Property 'formatArgs' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'. Did you mean 'formatters'?
+node_modules/debug/src/debug.js(112,13): error TS2551: Property 'formatArgs' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'. Did you mean 'formatters'?
 node_modules/debug/src/debug.js(114,23): error TS2339: Property 'log' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
-node_modules/debug/src/debug.js(114,38): error TS2339: Property 'log' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'.
-node_modules/debug/src/debug.js(120,29): error TS2339: Property 'useColors' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'.
-node_modules/debug/src/debug.js(125,37): error TS2339: Property 'init' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'.
-node_modules/debug/src/debug.js(126,13): error TS2339: Property 'init' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'.
-node_modules/debug/src/debug.js(153,11): error TS2339: Property 'save' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug")'.
+node_modules/debug/src/debug.js(114,38): error TS2339: Property 'log' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
+node_modules/debug/src/debug.js(120,29): error TS2339: Property 'useColors' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
+node_modules/debug/src/debug.js(125,37): error TS2339: Property 'init' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
+node_modules/debug/src/debug.js(126,13): error TS2339: Property 'init' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
+node_modules/debug/src/debug.js(153,11): error TS2339: Property 'save' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
 node_modules/debug/src/debug.js(155,3): error TS2323: Cannot redeclare exported variable 'names'.
 node_modules/debug/src/debug.js(156,3): error TS2323: Cannot redeclare exported variable 'skips'.
 node_modules/debug/src/debug.js(217,12): error TS2304: Cannot find name 'Mixed'.
@@ -44,13 +44,13 @@ node_modules/debug/src/node.js(62,28): error TS2322: Type 'null' is not assignab
 node_modules/debug/src/node.js(63,8): error TS2322: Type 'number' is not assignable to type 'string | undefined'.
 node_modules/debug/src/node.js(75,35): error TS2339: Property 'colors' does not exist on type 'never'.
 node_modules/debug/src/node.js(76,33): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
-node_modules/debug/src/node.js(83,9): error TS2551: Property 'formatters' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/node")'. Did you mean 'formatArgs'?
-node_modules/debug/src/node.js(95,9): error TS2551: Property 'formatters' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/node")'. Did you mean 'formatArgs'?
-node_modules/debug/src/node.js(116,42): error TS2339: Property 'humanize' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/node")'.
+node_modules/debug/src/node.js(83,9): error TS2551: Property 'formatters' does not exist on type 'typeof import("/debug/node_modules/debug/src/node")'. Did you mean 'formatArgs'?
+node_modules/debug/src/node.js(95,9): error TS2551: Property 'formatters' does not exist on type 'typeof import("/debug/node_modules/debug/src/node")'. Did you mean 'formatArgs'?
+node_modules/debug/src/node.js(116,42): error TS2339: Property 'humanize' does not exist on type 'typeof import("/debug/node_modules/debug/src/node")'.
 node_modules/debug/src/node.js(123,27): error TS2339: Property 'hideDate' does not exist on type '{}'.
 node_modules/debug/src/node.js(163,3): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/debug/src/node.js(186,9): error TS2339: Property 'enable' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/node")'.
+node_modules/debug/src/node.js(186,9): error TS2339: Property 'enable' does not exist on type 'typeof import("/debug/node_modules/debug/src/node")'.
 
 
 

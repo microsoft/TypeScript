@@ -32,9 +32,12 @@ namespace ts.Rename {
                 }
 
                 // Cannot rename `default` as in `import { default as foo } from "./someModule";
-                if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent.flags & SymbolFlags.Module) {
+                if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent!.flags & SymbolFlags.Module) {
                     return undefined;
                 }
+
+                // Can't rename a module name.
+                if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
 
                 const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
                 const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
@@ -66,14 +69,15 @@ namespace ts.Rename {
     }
 
     function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfo {
+        // TODO: GH#18217
         return {
             canRename: false,
             localizedErrorMessage: getLocaleSpecificMessage(diagnostic),
-            displayName: undefined,
-            fullDisplayName: undefined,
-            kind: undefined,
-            kindModifiers: undefined,
-            triggerSpan: undefined
+            displayName: undefined!,
+            fullDisplayName: undefined!,
+            kind: undefined!,
+            kindModifiers: undefined!,
+            triggerSpan: undefined!
         };
     }
 

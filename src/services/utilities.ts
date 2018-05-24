@@ -107,6 +107,10 @@ namespace ts {
             Debug.assert(isJSDocTemplateTag(node.parent.parent)); // Else would be handled by isDeclarationName
             return SemanticMeaning.Type;
         }
+        else if (isLiteralTypeNode(node.parent)) {
+            // This might be T["name"], which is actually referencing a property and not a type. So allow both meanings.
+            return SemanticMeaning.Type | SemanticMeaning.Value;
+        }
         else {
             return SemanticMeaning.Value;
         }
@@ -197,16 +201,16 @@ namespace ts {
         return isCallOrNewExpressionTarget(node, SyntaxKind.NewExpression);
     }
 
-    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind) {
+    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind): boolean {
         const target = climbPastPropertyAccess(node);
-        return target && target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
+        return !!target && !!target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
     }
 
     export function climbPastPropertyAccess(node: Node) {
         return isRightSideOfPropertyAccess(node) ? node.parent : node;
     }
 
-    export function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
+    export function getTargetLabel(referenceNode: Node, labelName: string): Identifier | undefined {
         while (referenceNode) {
             if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.escapedText === labelName) {
                 return (<LabeledStatement>referenceNode).label;
@@ -263,6 +267,8 @@ namespace ts {
                 return true;
             case SyntaxKind.LiteralType:
                 return node.parent.parent.kind === SyntaxKind.IndexedAccessType;
+            default:
+                return false;
         }
     }
 
@@ -271,8 +277,8 @@ namespace ts {
             getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
     }
 
-    export function getContainerNode(node: Node): Declaration {
-        if (node.kind === SyntaxKind.JSDocTypedefTag) {
+    export function getContainerNode(node: Node): Declaration | undefined {
+        if (isJSDocTypeAlias(node)) {
             // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
             // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
             // Then we get parent again in the loop.
@@ -311,7 +317,10 @@ namespace ts {
             case SyntaxKind.ClassExpression:
                 return ScriptElementKind.classElement;
             case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
-            case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+                return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
                 return getKindOfVariableDeclaration(<VariableDeclaration>node);
@@ -342,8 +351,6 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
-            case SyntaxKind.JSDocTypedefTag:
-                return ScriptElementKind.typeElement;
             case SyntaxKind.BinaryExpression:
                 const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
                 const { right } = node as BinaryExpression;
@@ -412,6 +419,10 @@ namespace ts {
         return startEndContainsRange(r1.pos, r1.end, r2);
     }
 
+    export function rangeContainsPosition(r: TextRange, pos: number): boolean {
+        return r.pos <= pos && pos <= r.end;
+    }
+
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
         return start <= range.pos && end >= range.end;
     }
@@ -438,8 +449,8 @@ namespace ts {
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
-    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
-        if (nodeIsMissing(n)) {
+    function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
+        if (n === undefined || nodeIsMissing(n)) {
             return false;
         }
 
@@ -495,7 +506,7 @@ namespace ts {
                 return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile);
 
             case SyntaxKind.ModuleDeclaration:
-                return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
+                return !!(<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
 
             case SyntaxKind.IfStatement:
                 if ((<IfStatement>n).elseStatement) {
@@ -579,18 +590,18 @@ namespace ts {
     function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
         const children = n.getChildren(sourceFile);
         if (children.length) {
-            const last = lastOrUndefined(children);
-            if (last.kind === expectedLastToken) {
+            const lastChild = last(children);
+            if (lastChild.kind === expectedLastToken) {
                 return true;
             }
-            else if (last.kind === SyntaxKind.SemicolonToken && children.length !== 1) {
+            else if (lastChild.kind === SyntaxKind.SemicolonToken && children.length !== 1) {
                 return children[children.length - 2].kind === expectedLastToken;
             }
         }
         return false;
     }
 
-    export function findListItemInfo(node: Node): ListItemInfo {
+    export function findListItemInfo(node: Node): ListItemInfo | undefined {
         const list = findContainingList(node);
 
         // It is possible at this point for syntaxList to be undefined, either if
@@ -646,12 +657,12 @@ namespace ts {
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition?: boolean): Node {
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition = false): Node {
         return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, includeEndPosition, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: (n: Node) => boolean, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -696,7 +707,7 @@ namespace ts {
      *   foo <comment> |bar -> will return foo
      *
      */
-    export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
+    export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node | undefined {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
         const tokenAtPosition = getTokenAtPosition(file, position, /*includeJsDocComment*/ false);
@@ -707,10 +718,10 @@ namespace ts {
         return findPrecedingToken(position, file);
     }
 
-    export function findNextToken(previousToken: Node, parent: Node): Node {
+    export function findNextToken(previousToken: Node, parent: Node, sourceFile: SourceFile): Node | undefined {
         return find(parent);
 
-        function find(n: Node): Node {
+        function find(n: Node): Node | undefined {
             if (isToken(n) && n.pos === previousToken.end) {
                 // this is token that starts at the end of previous token - return it
                 return n;
@@ -724,7 +735,7 @@ namespace ts {
                     // previous token ends exactly at the beginning of child
                     (child.pos === previousToken.end);
 
-                if (shouldDiveInChildNode && nodeHasTokens(child)) {
+                if (shouldDiveInChildNode && nodeHasTokens(child, sourceFile)) {
                     return find(child);
                 }
             }
@@ -759,12 +770,12 @@ namespace ts {
                     const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        !nodeHasTokens(child) ||
+                        !nodeHasTokens(child, sourceFile) ||
                         isWhiteSpaceOnlyJsxText(child);
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
-                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile);
                         return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
@@ -781,7 +792,7 @@ namespace ts {
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
-                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
                 return candidate && findRightmostToken(candidate, sourceFile);
             }
         }
@@ -797,21 +808,21 @@ namespace ts {
         }
 
         const children = n.getChildren(sourceFile);
-        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
 
     /**
      * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node | undefined {
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
             if (isWhiteSpaceOnlyJsxText(child)) {
                 Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
             }
-            else if (nodeHasTokens(children[i])) {
+            else if (nodeHasTokens(children[i], sourceFile)) {
                 return children[i];
             }
         }
@@ -890,10 +901,11 @@ namespace ts {
         const tokenKind = token.kind;
         let remainingMatchingTokens = 0;
         while (true) {
-            token = findPrecedingToken(token.getFullStart(), sourceFile);
-            if (!token) {
+            const preceding = findPrecedingToken(token.getFullStart(), sourceFile);
+            if (!preceding) {
                 return undefined;
             }
+            token = preceding;
 
             if (token.kind === matchingTokenKind) {
                 if (remainingMatchingTokens === 0) {
@@ -908,7 +920,8 @@ namespace ts {
         }
     }
 
-    export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile) {
+    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): boolean {
+        let token: Node | undefined = tokenIn;
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
         // the tree could be of any shape depending on the tokens parsed before current node,
@@ -920,7 +933,8 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                     // Found the beginning of the generic argument expression
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
-                    const tokenIsIdentifier = token && isIdentifier(token);
+                    if (!token) return false;
+                    const tokenIsIdentifier = isIdentifier(token);
                     if (!remainingLessThanTokens || !tokenIsIdentifier) {
                         return tokenIsIdentifier;
                     }
@@ -1022,10 +1036,10 @@ namespace ts {
         }
     }
 
-    function nodeHasTokens(n: Node): boolean {
+    function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note: getWidth() does not take trivia into account.
-        return n.getWidth() !== 0;
+        return n.getWidth(sourceFile) !== 0;
     }
 
     export function getNodeModifiers(node: Node): string {
@@ -1043,7 +1057,7 @@ namespace ts {
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
 
-    export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
+    export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> | undefined {
         if (node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.CallExpression) {
             return (<CallExpression>node).typeArguments;
         }
@@ -1146,6 +1160,10 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export function createTextRangeFromSpan(span: TextSpan): TextRange {
+        return createTextRange(span.start, span.start + span.length);
+    }
+
     export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
         return createTextChange(createTextSpan(start, length), newText);
     }
@@ -1180,7 +1198,8 @@ namespace ts {
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
-    export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
+    export type NodeSeenTracker<T = Node> = (node: T) => boolean;
+    export function nodeSeenTracker<T extends Node>(): NodeSeenTracker<T> {
         const seen: true[] = [];
         return node => {
             const id = getNodeId(node);
@@ -1201,7 +1220,7 @@ namespace ts {
     }
 
     export function skipConstraint(type: Type): Type {
-        return type.isTypeParameter() ? type.getConstraint() : type;
+        return type.isTypeParameter() ? type.getConstraint()! : type; // TODO: GH#18217
     }
 
     export function getNameFromPropertyName(name: PropertyName): string | undefined {
@@ -1215,7 +1234,7 @@ namespace ts {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
     export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
-        return !!compilerOptions.module || compilerOptions.target >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+        return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
     export function hostUsesCaseSensitiveFileNames(host: LanguageServiceHost): boolean {
@@ -1224,6 +1243,64 @@ namespace ts {
 
     export function hostGetCanonicalFileName(host: LanguageServiceHost): GetCanonicalFileName {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    }
+
+    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration | undefined {
+        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier) : undefined;
+    }
+
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression): ImportDeclaration {
+        return createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            defaultImport || namedImports
+                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
+                : undefined,
+            typeof moduleSpecifier === "string" ? createLiteral(moduleSpecifier) : moduleSpecifier);
+    }
+
+    export function symbolNameNoDefault(symbol: Symbol): string | undefined {
+        const escaped = symbolEscapedNameNoDefault(symbol);
+        return escaped === undefined ? undefined : unescapeLeadingUnderscores(escaped);
+    }
+
+    export function symbolEscapedNameNoDefault(symbol: Symbol): __String | undefined {
+        if (symbol.escapedName !== InternalSymbolName.Default) {
+            return symbol.escapedName;
+        }
+
+        return firstDefined(symbol.declarations, decl => {
+            const name = getNameOfDeclaration(decl);
+            return name && name.kind === SyntaxKind.Identifier ? name.escapedText : undefined;
+        });
+    }
+
+    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: BindingElement & { name: Identifier }) {
+        const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
+        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
+        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
+            // See GH#16922
+            Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
+            return (propSymbol as TransientSymbol).target;
+        }
+        return propSymbol;
+    }
+
+    export class NodeSet {
+        private map = createMap<Node>();
+
+        add(node: Node): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        has(node: Node): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: Node) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: Node) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
     }
 }
 
@@ -1340,15 +1417,15 @@ namespace ts {
     }
 
     export function keywordPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.keyword);
+        return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.keyword);
     }
 
     export function punctuationPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation);
+        return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.punctuation);
     }
 
     export function operatorPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
+        return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.operator);
     }
 
     export function textOrKeywordPart(text: string) {
@@ -1387,19 +1464,19 @@ namespace ts {
         }
     }
 
-    export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+    export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
             typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         });
     }
 
-    export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
+    export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.None): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
             typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
         });
     }
 
-    export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+    export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
         flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
             typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
@@ -1407,7 +1484,7 @@ namespace ts {
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
-        return location.parent &&
+        return !!location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
             (<ImportOrExportSpecifier>location.parent).propertyName === location;
     }
@@ -1431,7 +1508,7 @@ namespace ts {
 
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
         const scriptKind = getScriptKind(fileName, host);
-        return forEach(scriptKinds, k => k === scriptKind);
+        return some(scriptKinds, k => k === scriptKind);
     }
 
     export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
@@ -1457,13 +1534,13 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia = true): T | undefined {
-        const clone = node && getSynthesizedDeepCloneWorker(node);
+    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
+        const clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>);
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
         return clone;
     }
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T | undefined {
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {
         const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -1480,10 +1557,12 @@ namespace ts {
         // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
-        visited.parent = undefined;
+        visited.parent = undefined!;
         return visited;
     }
 
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
         return nodes && createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
     }
@@ -1513,7 +1592,7 @@ namespace ts {
         addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
     }
 
-    function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node) {
+    function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
         addEmitFlags(node, flag);
         const child = getChild(node);
         if (child) addEmitFlagsRecursively(child, flag, getChild);

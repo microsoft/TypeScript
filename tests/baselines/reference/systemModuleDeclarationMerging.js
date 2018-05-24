@@ -10,11 +10,11 @@ export module E { var x; }
 
 //// [systemModuleDeclarationMerging.js]
 System.register([], function (exports_1, context_1) {
+    var C, E;
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function F() { }
     exports_1("F", F);
-    var C, E;
     return {
         setters: [],
         execute: function () {

@@ -32,6 +32,6 @@ namespace ts.codefix {
         const { packageName } = getPackageName(moduleName);
         return diagCode === errorCodeCannotFindModule
             ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
-            : (host.isKnownTypesPackageName(packageName) ? getTypesPackageName(packageName) : undefined);
+            : (host.isKnownTypesPackageName!(packageName) ? getTypesPackageName(packageName) : undefined); // TODO: GH#18217
     }
 }

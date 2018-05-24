@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment5.ts ===
+function a () {
+>a : Symbol(a, Decl(destructuringObjectBindingPatternAndAssignment5.ts, 0, 0))
+
+    let x: number;
+>x : Symbol(x, Decl(destructuringObjectBindingPatternAndAssignment5.ts, 1, 7))
+
+    let y: any
+>y : Symbol(y, Decl(destructuringObjectBindingPatternAndAssignment5.ts, 2, 7))
+
+    ({ x, ...y } = ({ } as any));
+>x : Symbol(x, Decl(destructuringObjectBindingPatternAndAssignment5.ts, 3, 6))
+>y : Symbol(y, Decl(destructuringObjectBindingPatternAndAssignment5.ts, 2, 7))
+}
+

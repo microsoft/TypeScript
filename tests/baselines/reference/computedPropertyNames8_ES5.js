@@ -10,11 +10,11 @@ function f<T, U extends string>() {
 
 //// [computedPropertyNames8_ES5.js]
 function f() {
+    var _a;
     var t;
     var u;
     var v = (_a = {},
         _a[t] = 0,
         _a[u] = 1,
         _a);
-    var _a;
 }

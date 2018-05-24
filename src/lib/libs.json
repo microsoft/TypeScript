@@ -38,6 +38,7 @@
         "es2015.full",
         "es2016.full",
         "es2017.full",
+        "es2018.full",
         "esnext.full"
     ],
     "paths": {
