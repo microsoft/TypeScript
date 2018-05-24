@@ -8515,7 +8515,7 @@ namespace ts {
             if (flags & TypeFlags.Intersection) {
                 return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
+            if (getObjectFlags(type) & ObjectFlags.EmptyObjectType) {
                 includes |= TypeFlags.EmptyObject;
             }
             else {
