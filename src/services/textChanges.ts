@@ -687,7 +687,7 @@ namespace ts.textChanges {
             this.finishTrailingCommaAfterDeletingNodesInList();
             const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
             for (const { oldFile, fileName, statements } of this.newFiles) {
-                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter));
+                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
             }
             return changes;
         }
@@ -726,8 +726,12 @@ namespace ts.textChanges {
             });
         }
 
-        export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string): FileTextChanges {
-            const text = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+        export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+            // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
+            const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+            const sourceFile = createSourceFile(fileName, nonFormattedText, ScriptTarget.ESNext);
+            const changes = formatting.formatDocument(sourceFile, formatContext);
+            const text = applyChanges(nonFormattedText, changes);
             return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
         }
 
