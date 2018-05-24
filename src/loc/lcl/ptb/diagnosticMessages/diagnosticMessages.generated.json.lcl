@@ -1000,10 +1000,13 @@
       </Item>
       <Item ItemId=";Add_missing_typeof_95052" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add missing typeof]]></Val>
+          <Val><![CDATA[Add missing 'typeof']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicionar typeof ausente]]></Val>
+            <Val><![CDATA[Adicionar 'typeof' ausente]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add missing typeof]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1120,6 +1123,15 @@
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Nenhuma das importações na declaração de importação está sendo utilizada.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";All_variables_are_unused_6199" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All variables are unused.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nenhuma das variáveis está sendo utilizada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2534,6 +2546,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[O arquivo contido não foi especificado e o diretório raiz não pode ser determinado, ignorando a pesquisa na pasta 'node_modules'.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_0_to_mapped_object_type_95055" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6560,6 +6578,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Remove_all_unused_labels_95054" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove all unused labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Remover todos os rótulos não utilizados]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove declaration for: '{0}']]></Val>
@@ -6595,6 +6622,24 @@
           <Val><![CDATA[Remove unreachable code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Remover código inacessível]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_label_95053" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Remover rótulo não utilizado]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_variable_statement_90010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove variable statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Remover instrução de variável]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
