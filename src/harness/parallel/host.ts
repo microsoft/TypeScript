@@ -179,6 +179,7 @@ namespace Harness.Parallel.Host {
                 return process.exit(2);
             });
             child.on("exit", (code, _signal) => {
+                clearTimeout(timer);
                 if (code !== 0) {
                     console.error(`Test worker process exited with nonzero exit code! Output:
 ${child.accumulatedOutput}`);
@@ -237,6 +238,7 @@ ${child.accumulatedOutput}`);
                                 // No more tasks to distribute
                                 child.send({ type: "close" });
                                 closedWorkers++;
+                                clearTimeout(timer);
                                 if (closedWorkers === workerCount) {
                                     outputFinalResult();
                                 }
