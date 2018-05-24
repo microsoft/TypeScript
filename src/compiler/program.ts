@@ -190,9 +190,9 @@ namespace ts {
             getDirectories: (path: string) => sys.getDirectories(path),
             realpath,
             readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth),
-            getModifiedTime: path => sys.getModifiedTime(path),
-            setModifiedTime: (path, date) => sys.setModifiedTime(path, date),
-            deleteFile: path => sys.deleteFile(path)
+            getModifiedTime: sys.getModifiedTime && (path => sys.getModifiedTime!(path)),
+            setModifiedTime: sys.setModifiedTime && ((path, date) => sys.setModifiedTime!(path, date)),
+            deleteFile: sys.deleteFile && (path => sys.deleteFile!(path))
         };
     }
 

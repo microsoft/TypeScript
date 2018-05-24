@@ -415,6 +415,9 @@ namespace vfs {
          */
         public utimesSync(path: string, atime: Date, mtime: Date) {
             const entry = this._walk(this._resolve(path));
+            if (!entry || !entry.node) {
+                throw createIOError("ENOENT");
+            }
             entry.node.atimeMs = +atime;
             entry.node.mtimeMs = +mtime;
         }

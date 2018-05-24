@@ -7,7 +7,7 @@ namespace ts {
     const sampleRoot = resolvePath(__dirname, "../../tests/projects/sample1");
     loadFsMirror(bfs, sampleRoot, "/src");
     bfs.mkdirpSync("/lib");
-    bfs.writeFileSync("/lib/lib.d.ts", Harness.IO.readFile(combinePaths(Harness.libFolder, "lib.d.ts")));
+    bfs.writeFileSync("/lib/lib.d.ts", Harness.IO.readFile(combinePaths(Harness.libFolder, "lib.d.ts"))!);
     bfs.meta.set("defaultLibLocation", "/lib");
     bfs.makeReadonly();
     tick();
@@ -196,7 +196,7 @@ namespace ts {
     function assertDiagnosticMessages(...expected: DiagnosticMessage[]) {
         const actual = lastDiagnostics.slice();
         if (actual.length !== expected.length) {
-            assert.fail<any>(actual, expected, `Diagnostic arrays did not match - expected\r\n${actual.map(a => "  " + a.messageText).join("\r\n")}\r\ngot\r\n${expected.map(e => "  " + e.message).join("\r\n")}`);
+            assert.fail<any>(actual, expected, `Diagnostic arrays did not match - got\r\n${actual.map(a => "  " + a.messageText).join("\r\n")}\r\nexpected\r\n${expected.map(e => "  " + e.message).join("\r\n")}`);
         }
         for (let i = 0; i < actual.length; i++) {
             if (actual[i].code !== expected[i].code) {
@@ -229,7 +229,7 @@ namespace ts {
         vfs.mkdirpSync(virtualRoot);
         for (const path of Harness.IO.readDirectory(localRoot)) {
             const file = getBaseFileName(path);
-            vfs.writeFileSync(virtualRoot + "/" + file, Harness.IO.readFile(localRoot + "/" + file));
+            vfs.writeFileSync(virtualRoot + "/" + file, Harness.IO.readFile(localRoot + "/" + file)!);
         }
         for (const dir of Harness.IO.getDirectories(localRoot)) {
             loadFsMirror(vfs, localRoot + "/" + dir, virtualRoot + "/" + dir);

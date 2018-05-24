@@ -248,14 +248,14 @@ namespace ts {
     }
 
     function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, /*ignoreCase*/ true);
-        const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath), relativePath);
+        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
+        const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
         return changeExtension(outputPath, ".d.ts");
     }
 
     function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, /*ignoreCase*/ true);
-        const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath), relativePath);
+        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
+        const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
         return changeExtension(outputPath, (fileExtensionIs(inputFileName, ".tsx") && configFile.options.jsx === JsxEmit.Preserve) ? ".jsx" : ".js");
     }
 
@@ -276,7 +276,9 @@ namespace ts {
     }
 
     function getOutFileOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
-        Debug.assert(!!project.options.outFile, "outFile must be set");
+        if (!project.options.outFile) {
+            throw new Error("Assert - outFile must be set");
+        }
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
         if (project.options.declaration) {
@@ -328,9 +330,7 @@ namespace ts {
             options,
             projectStatus: createFileMap(),
             unchangedOutputs: createFileMap(),
-            verbose: options.verbose ? (diag, ...args) => {
-                verboseDiag(createCompilerDiagnostic(diag, ...args));
-            } : () => undefined
+            verbose: verboseDiag ? (diag, ...args) => verboseDiag(createCompilerDiagnostic(diag, ...args)) : () => undefined
         };
     }
 
@@ -379,6 +379,11 @@ namespace ts {
         function addProject(projectSpecification: string) {
             const fileName = resolvePath(host.getCurrentDirectory(), projectSpecification);
             const refPath = resolveProjectReferencePath(host, { path: fileName });
+            if (!refPath) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, projectSpecification));
+                return;
+            }
+
             if (!host.fileExists(refPath)) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
             }
@@ -388,6 +393,10 @@ namespace ts {
     }
 
     export function createSolutionBuilder(host: CompilerHost, reportDiagnostic: DiagnosticReporter, options: BuildOptions) {
+        if (!host.getModifiedTime || !host.setModifiedTime) {
+            throw new Error("Host must support timestamp APIs");
+        }
+
         const configFileCache = createConfigFileCache(host);
         let context = createBuildContext(options, reportDiagnostic);
 
@@ -407,13 +416,17 @@ namespace ts {
             return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
         }
 
-        function getUpToDateStatus(project: ParsedCommandLine): UpToDateStatus {
-            const prior = context.projectStatus.getValueOrUndefined(project.options.configFilePath);
+        function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
+            if (project === undefined) {
+                return { type: UpToDateStatusType.Unbuildable, reason: "File deleted mid-build" };
+            }
+
+            const prior = context.projectStatus.getValueOrUndefined(project.options.configFilePath!);
             if (prior !== undefined) {
                 return prior;
             }
             const actual = getUpToDateStatusWorker(project);
-            context.projectStatus.setValue(project.options.configFilePath, actual);
+            context.projectStatus.setValue(project.options.configFilePath!, actual);
             return actual;
         }
 
@@ -442,7 +455,7 @@ namespace ts {
                     };
                 }
 
-                const inputTime = host.getModifiedTime(inputFile);
+                const inputTime = host.getModifiedTime!(inputFile);
                 if (inputTime > newestInputFileTime) {
                     newestInputFileName = inputFile;
                     newestInputFileTime = inputTime;
@@ -466,7 +479,7 @@ namespace ts {
                     };
                 }
 
-                const outputTime = host.getModifiedTime(output);
+                const outputTime = host.getModifiedTime!(output);
                 // If an output is older than the newest input, we can stop checking
                 if (outputTime < newestInputFileTime) {
                     return {
@@ -492,7 +505,7 @@ namespace ts {
                         newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                     }
                     else {
-                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime(output));
+                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime!(output));
                     }
                 }
             }
@@ -609,10 +622,10 @@ namespace ts {
         }
 
         // TODO Accept parsedCommandLine instead?
-        function buildSingleProject(proj: ResolvedConfigFileName) {
+        function buildSingleProject(proj: ResolvedConfigFileName): BuildResultFlags {
             if (context.options.dry) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
-                return;
+                return BuildResultFlags.Success;
             }
 
             context.verbose(Diagnostics.Building_project_0, proj);
@@ -707,17 +720,17 @@ namespace ts {
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file));
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime!(file));
                 }
-                host.setModifiedTime(file, now);
+                host.setModifiedTime!(file, now);
             }
 
-            context.projectStatus.setValue(proj.options.configFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
+            context.projectStatus.setValue(proj.options.configFilePath!, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
         function getFilesToClean(configFileNames: ResolvedConfigFileName[]): string[] | undefined {
             const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return;
+            if (resolvedNames === undefined) return undefined;
 
             // Get the same graph for cleaning we'd use for building
             const graph = createDependencyGraph(resolvedNames);
@@ -726,6 +739,10 @@ namespace ts {
             for (const level of graph.buildQueue) {
                 for (const proj of level) {
                     const parsed = configFileCache.parseConfigFile(proj);
+                    if (parsed === undefined) {
+                        // File has gone missing; fine to ignore here
+                        continue;
+                    }
                     const outputs = getAllProjectOutputs(parsed);
                     for (const output of outputs) {
                         if (host.fileExists(output)) {
@@ -742,6 +759,9 @@ namespace ts {
             if (resolvedNames === undefined) return;
 
             const filesToDelete = getFilesToClean(resolvedNames);
+            if (filesToDelete === undefined) {
+                return;
+            }
 
             if (context.options.dry) {
                  reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join("")));
@@ -786,9 +806,13 @@ namespace ts {
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
 
-            let next: ResolvedConfigFileName;
+            let next: ResolvedConfigFileName | undefined;
             while (next = getNext()) {
                 const proj = configFileCache.parseConfigFile(next);
+                if (proj === undefined) {
+                    break;
+                }
+
                 const status = getUpToDateStatus(proj);
                 reportProjectStatus(next, status);
 
