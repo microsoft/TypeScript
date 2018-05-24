@@ -3634,6 +3634,10 @@
         "category": "Message",
         "code": 6359
     },
+    "Project '{0}' is up to date": {
+        "category": "Message",
+        "code": 6360
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

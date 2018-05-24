@@ -51,6 +51,10 @@ namespace fakes {
             this.vfs.writeFileSync(path, writeByteOrderMark ? utils.addUTF8ByteOrderMark(data) : data);
         }
 
+        public deleteFile(path: string) {
+            this.vfs.unlinkSync(path);
+        }
+
         public fileExists(path: string) {
             const stats = this._getStats(path);
             return stats ? stats.isFile() : false;
@@ -246,6 +250,10 @@ namespace fakes {
 
         public getCanonicalFileName(fileName: string): string {
             return this.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+        }
+
+        public deleteFile(fileName: string) {
+            this.sys.deleteFile(fileName);
         }
 
         public fileExists(fileName: string): boolean {

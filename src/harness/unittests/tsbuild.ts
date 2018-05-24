@@ -11,6 +11,9 @@ namespace ts {
     bfs.meta.set("defaultLibLocation", "/lib");
     bfs.makeReadonly();
     tick();
+    const allExpectedOutputs = ["/src/tests/index.js",
+        "/src/core/index.js", "/src/core/index.d.ts",
+        "/src/logic/index.js", "/src/logic/index.d.ts"];
 
     describe("tsbuild - sanity check of clean build of 'sample1' project", () => {
         it("can build the sample project 'sample1' without error", () => {
@@ -23,9 +26,91 @@ namespace ts {
             assertDiagnosticMessages(/*empty*/);
 
             // Check for outputs. Not an exhaustive list
-            const expectedOutputs = ["/src/tests/index.js", "/src/core/index.js", "/src/core/index.d.ts"];
-            for (const output of expectedOutputs) {
+            for (const output of allExpectedOutputs) {
                 assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
+        });
+    });
+
+    describe("tsbuild - dry builds", () => {
+        it("doesn't write any files in a dry build", () => {
+            clearDiagnostics();
+            const fs = bfs.shadow();
+            const host = new fakes.CompilerHost(fs);
+            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
+            fs.chdir("/src/tests");
+            builder.buildProjects(["."]);
+            assertDiagnosticMessages(Diagnostics.Would_build_project_0, Diagnostics.Would_build_project_0, Diagnostics.Would_build_project_0);
+
+            // Check for outputs to not be written. Not an exhaustive list
+            for (const output of allExpectedOutputs) {
+                assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
+            }
+        });
+
+        it("indicates that it would skip builds during a dry build", () => {
+            clearDiagnostics();
+            const fs = bfs.shadow();
+            const host = new fakes.CompilerHost(fs);
+
+            let builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: false });
+            fs.chdir("/src/tests");
+            builder.buildProjects(["."]);
+            tick();
+
+            clearDiagnostics();
+            builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
+            builder.buildProjects(["."]);
+            assertDiagnosticMessages(Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date);
+        });
+    });
+
+    describe("tsbuild - clean builds", () => {
+        it("removes all files it built", () => {
+            clearDiagnostics();
+            const fs = bfs.shadow();
+            const host = new fakes.CompilerHost(fs);
+
+            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: false });
+            fs.chdir("/src/tests");
+            builder.buildProjects(["."]);
+            // Verify they exist
+            for (const output of allExpectedOutputs) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
+            builder.cleanProjects(["."]);
+            // Verify they are gone
+            for (const output of allExpectedOutputs) {
+                assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
+            }
+            // Subsequent clean shouldn't throw / etc
+            builder.cleanProjects(["."]);
+        });
+    });
+
+    describe("tsbuild - force builds", () => {
+        it("always builds under --force", () => {
+            const fs = bfs.shadow();
+            const host = new fakes.CompilerHost(fs);
+
+            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: true, verbose: false });
+            fs.chdir("/src/tests");
+            builder.buildProjects(["."]);
+            let currentTime = time();
+            checkOutputTimestamps(currentTime);
+
+            tick();
+            Debug.assert(time() !== currentTime, "Time moves on");
+            currentTime = time();
+            builder.buildProjects(["."]);
+            checkOutputTimestamps(currentTime);
+
+            function checkOutputTimestamps(expected: number) {
+                // Check timestamps
+                for (const output of allExpectedOutputs) {
+                    const actual = fs.statSync(output).mtimeMs;
+                    assert(actual === expected, `File ${output} has timestamp ${actual}, expected ${expected}`);
+                }
             }
         });
     });
@@ -38,6 +123,7 @@ namespace ts {
         fs.chdir("/src/tests");
 
         it("Builds the project", () => {
+            clearDiagnostics();
             builder.resetBuildContext();
             builder.buildProjects(["."]);
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,

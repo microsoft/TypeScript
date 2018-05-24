@@ -608,10 +608,11 @@ namespace ts {
             }
         }
 
-        // TODO Accept parsedCommandLine
+        // TODO Accept parsedCommandLine instead?
         function buildSingleProject(proj: string) {
             if (context.options.dry) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
+                return;
             }
 
             context.verbose(Diagnostics.Building_project_0, proj);
@@ -714,34 +715,47 @@ namespace ts {
             context.projectStatus.setValue(proj.options.configFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
-        function cleanProjects(configFileNames: string[]) {
-            // Get the same graph for cleaning we'd use for building
-            const graph = createDependencyGraph(configFileNames);
+        function getFilesToClean(configFileNames: string[]): string[] | undefined {
+            const resolvedNames: string[] | undefined = resolveProjectNames(configFileNames);
+            if (resolvedNames === undefined) return;
 
-            const fileReport: string[] = [];
+            // Get the same graph for cleaning we'd use for building
+            const graph = createDependencyGraph(resolvedNames);
+
+            const filesToDelete: string[] = [];
             for (const level of graph.buildQueue) {
                 for (const proj of level) {
                     const parsed = configFileCache.parseConfigFile(proj);
                     const outputs = getAllProjectOutputs(parsed);
                     for (const output of outputs) {
                         if (host.fileExists(output)) {
-                            if (context.options.dry) {
-                                fileReport.push(output);
-                            }
-                            else {
-                                host.deleteFile(output);
-                            }
+                            filesToDelete.push(output);
                         }
                     }
                 }
             }
+            return filesToDelete;
+        }
+
+        function cleanProjects(configFileNames: string[]) {
+            const filesToDelete = getFilesToClean(configFileNames);
 
             if (context.options.dry) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, fileReport.map(f => `\r\n * ${f}`).join("")));
+                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join("")));
+            }
+            else {
+                if (!host.deleteFile) {
+                    throw new Error("Host does not support deleting files");
+                }
+
+                for (const output of filesToDelete) {
+                    host.deleteFile(output);
+                }
             }
         }
 
-        function buildProjects(configFileNames: string[]) {
+        // TODO add branding to resolved filenames
+        function resolveProjectNames(configFileNames: string[]): string[] | undefined {
             const resolvedNames: string[] = [];
             for (const name of configFileNames) {
                 let fullPath = resolvePath(host.getCurrentDirectory(), name);
@@ -755,8 +769,14 @@ namespace ts {
                     continue;
                 }
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, fullPath));
-                return;
+                return undefined;
             }
+            return resolvedNames;
+        }
+
+        function buildProjects(configFileNames: string[]) {
+            const resolvedNames: string[] | undefined = resolveProjectNames(configFileNames);
+            if (resolvedNames === undefined) return;
 
             // Establish what needs to be built
             const graph = createDependencyGraph(resolvedNames);
@@ -772,6 +792,10 @@ namespace ts {
 
                 if (status.type === UpToDateStatusType.UpToDate && !context.options.force) {
                     // Up to date, skip
+                    if (options.dry) {
+                        // In a dry build, inform the user of this fact
+                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Project_0_is_up_to_date));
+                    }
                     continue;
                 }
 
