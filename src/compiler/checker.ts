@@ -4883,6 +4883,8 @@ namespace ts {
                 else if (isJSDocPropertyLikeTag(declaration)
                     || isPropertyAccessExpression(declaration)
                     || isIdentifier(declaration)
+                    || isClassDeclaration(declaration)
+                    || isFunctionDeclaration(declaration)
                     || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
                     || isMethodSignature(declaration)) {
 
