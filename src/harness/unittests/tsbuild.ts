@@ -207,24 +207,48 @@ namespace ts {
     });
 
     describe("tsbuild - graph-ordering", () => {
-        it("orders the graph correctly", () => {
-            const fs = new vfs.FileSystem(false);
-            const host = new fakes.CompilerHost(fs);
-            const deps: [string, string][] = [
-                ["A", "B"],
-                ["B", "C"],
-                ["A", "C"],
-                ["B", "D"],
-                ["C", "D"],
-                ["C", "E"],
-                ["F", "E"]
-            ];
+        const fs = new vfs.FileSystem(false);
+        const host = new fakes.CompilerHost(fs);
+        const deps: [string, string][] = [
+            ["A", "B"],
+            ["B", "C"],
+            ["A", "C"],
+            ["B", "D"],
+            ["C", "D"],
+            ["C", "E"],
+            ["F", "E"]
+        ];
 
-            writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G"], deps);
-            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
-            builder.buildProjects(["/project/A", "/project/G"]);
-            printDiagnostics();
+        writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G"], deps);
+
+        const builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
+
+        it("orders the graph correctly - specify two roots", () => {
+            checkGraphOrdering(["A", "G"], ["A", "B", "C", "D", "E", "G"]);
         });
+
+        it("orders the graph correctly - multiple parts of the same graph in various orders", () => {
+            // TODO add cases here
+        });
+
+        function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {
+            const projFileNames = rootNames.map(getProjectFileName);
+            const graph = builder.getBuildGraph(projFileNames);
+            if (graph === undefined) throw new Error("Graph shouldn't be undefined");
+
+            assert.sameMembers(graph.buildQueue, expectedBuildSet.map(getProjectFileName));
+
+            for (const dep of deps) {
+                const child = getProjectFileName(dep[0]);
+                if (graph.buildQueue.indexOf(child) < 0) continue;
+                const parent = getProjectFileName(dep[1]);
+                assert.isAbove(graph.buildQueue.indexOf(child), graph.buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
+            }
+        }
+
+        function getProjectFileName(proj: string) {
+            return `/project/${proj}/tsconfig.json` as ResolvedConfigFileName;
+        }
 
         function writeProjects(fileSystem: vfs.FileSystem, projectNames: string[], deps: [string, string][]): string[] {
             const projFileNames: string[] = [];
@@ -235,7 +259,7 @@ namespace ts {
             for (const proj of projectNames) {
                 fileSystem.mkdirpSync(`/project/${proj}`);
                 fileSystem.writeFileSync(`/project/${proj}/${proj}.ts`, "export {}");
-                const configFileName = `/project/${proj}/tsconfig.json`;
+                const configFileName = getProjectFileName(proj);
                 const configContent = JSON.stringify({
                     compilerOptions: { composite: true },
                     files: [`./${proj}.ts`],

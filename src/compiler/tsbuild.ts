@@ -4,7 +4,7 @@ namespace ts {
      * specified like "./blah" to an absolute path to an actual
      * tsconfig file, e.g. "/root/blah/tsconfig.json"
      */
-    type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
+    export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
 
     const minimumDate = new Date(-8640000000000000);
     const maximumDate = new Date(8640000000000000);
@@ -42,7 +42,7 @@ namespace ts {
 
     type Mapper = ReturnType<typeof createDependencyMapper>;
     interface DependencyGraph {
-        buildQueue: ResolvedConfigFileName[][];
+        buildQueue: ResolvedConfigFileName[];
         dependencyMap: Mapper;
     }
 
@@ -409,7 +409,8 @@ namespace ts {
             getUpToDateStatusOfFile,
             buildProjects,
             cleanProjects,
-            resetBuildContext
+            resetBuildContext,
+            getBuildGraph
         };
 
         function resetBuildContext(opts = defaultOptions) {
@@ -418,6 +419,13 @@ namespace ts {
 
         function getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus {
             return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
+        }
+
+        function getBuildGraph(configFileNames: string[]) {
+            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
+            if (resolvedNames === undefined) return;
+
+            return createDependencyGraph(resolvedNames);
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
@@ -583,66 +591,62 @@ namespace ts {
             };
         }
 
-        // TODO: Use the better algorithm
-        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph {
-            // This is a list of list of projects that need to be built.
-            // The ordering here is "backwards", i.e. the first entry in the array is the last set of projects that need to be built;
-            //   and the last entry is the first set of projects to be built.
-            // Each subarray is effectively unordered.
-            // We traverse the reference graph from each root, then "clean" the list by removing
-            //   any entry that is duplicated to its right.
-            const buildQueue: ResolvedConfigFileName[][] = [];
-            const dependencyMap = createDependencyMapper();
-            let buildQueuePosition = 0;
+        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph | undefined {
+            const temporaryMarks: { [path: string]: true } = {};
+            const permanentMarks: { [path: string]: true } = {};
+            const circularityReportStack: string[] = [];
+            const buildOrder: ResolvedConfigFileName[] = [];
+            const graph = createDependencyMapper();
+
+            let hadError = false;
+
             for (const root of roots) {
-                const config = configFileCache.parseConfigFile(root);
-                if (config === undefined) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, root));
-                    continue;
-                }
-                enumerateReferences(normalizePath(root) as ResolvedConfigFileName, config);
+                visit(root);
             }
-            removeDuplicatesFromBuildQueue(buildQueue);
+
+            if (hadError) {
+                return undefined;
+            }
 
             return {
-                buildQueue,
-                dependencyMap
+                buildQueue: buildOrder,
+                dependencyMap: graph
             };
 
-            function enumerateReferences(fileName: ResolvedConfigFileName, root: ParsedCommandLine): void {
-                const myBuildLevel = buildQueue[buildQueuePosition] = buildQueue[buildQueuePosition] || [];
-                if (myBuildLevel.indexOf(fileName) < 0) {
-                    myBuildLevel.push(fileName);
-                }
-
-                const refs = root.projectReferences;
-                if (refs === undefined) return;
-                buildQueuePosition++;
-                for (const ref of refs) {
-                    const actualPath = resolveProjectReferencePath(host, ref) as ResolvedConfigFileName;
-                    dependencyMap.addReference(fileName, actualPath);
-                    const resolvedRef = configFileCache.parseConfigFile(actualPath);
-                    if (resolvedRef === undefined) continue;
-                    enumerateReferences(normalizePath(actualPath) as ResolvedConfigFileName, resolvedRef);
-                }
-                buildQueuePosition--;
-            }
-
-            /**
-             * Removes entries from arrays which appear in later arrays.
-             */
-            function removeDuplicatesFromBuildQueue(queue: string[][]): void {
-                // No need to check the last array
-                for (let i = 0; i < queue.length - 1; i++) {
-                    queue[i] = queue[i].filter(fn => !occursAfter(fn, i + 1));
-                }
-
-                function occursAfter(s: string, start: number) {
-                    for (let i = start; i < queue.length; i++) {
-                        if (queue[i].indexOf(s) >= 0) return true;
+            function visit(projPath: ResolvedConfigFileName, inCircularContext = false) {
+                // Already visited
+                if (permanentMarks[projPath]) return;
+                // Circular
+                if (temporaryMarks[projPath]) {
+                    if (!inCircularContext) {
+                        hadError = true;
+                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n")));
+                        return;
                     }
-                    return false;
                 }
+
+                temporaryMarks[projPath] = true;
+                circularityReportStack.push(projPath);
+                const parsed = configFileCache.parseConfigFile(projPath);
+                if (parsed === undefined) {
+                    hadError = true;
+                    return;
+                }
+                if (parsed.projectReferences) {
+                    for (const ref of parsed.projectReferences) {
+                        const resolvedRefPath = resolveProjectName(ref.path);
+                        if (resolvedRefPath === undefined) {
+                            hadError = true;
+                            break;
+                        }
+                        visit(resolvedRefPath, inCircularContext || ref.circular);
+                        graph.addReference(projPath, resolvedRefPath);
+                    }
+                }
+
+                circularityReportStack.pop();
+                permanentMarks[projPath] = true;
+                buildOrder.push(projPath);
             }
         }
 
@@ -762,20 +766,19 @@ namespace ts {
 
             // Get the same graph for cleaning we'd use for building
             const graph = createDependencyGraph(resolvedNames);
+            if (graph === undefined) return undefined;
 
             const filesToDelete: string[] = [];
-            for (const level of graph.buildQueue) {
-                for (const proj of level) {
-                    const parsed = configFileCache.parseConfigFile(proj);
-                    if (parsed === undefined) {
-                        // File has gone missing; fine to ignore here
-                        continue;
-                    }
-                    const outputs = getAllProjectOutputs(parsed);
-                    for (const output of outputs) {
-                        if (host.fileExists(output)) {
-                            filesToDelete.push(output);
-                        }
+            for (const proj of graph.buildQueue) {
+                const parsed = configFileCache.parseConfigFile(proj);
+                if (parsed === undefined) {
+                    // File has gone missing; fine to ignore here
+                    continue;
+                }
+                const outputs = getAllProjectOutputs(parsed);
+                for (const output of outputs) {
+                    if (host.fileExists(output)) {
+                        filesToDelete.push(output);
                     }
                 }
             }
@@ -805,21 +808,27 @@ namespace ts {
             }
         }
 
+        function resolveProjectName(name: string): ResolvedConfigFileName | undefined {
+            let fullPath = resolvePath(host.getCurrentDirectory(), name);
+            if (host.fileExists(fullPath)) {
+                return fullPath as ResolvedConfigFileName;
+            }
+            fullPath = combinePaths(fullPath, "tsconfig.json");
+            if (host.fileExists(fullPath)) {
+                return fullPath as ResolvedConfigFileName;
+            }
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, fullPath));
+            return undefined;
+        }
+
         function resolveProjectNames(configFileNames: string[]): ResolvedConfigFileName[] | undefined {
             const resolvedNames: ResolvedConfigFileName[] = [];
             for (const name of configFileNames) {
-                let fullPath = resolvePath(host.getCurrentDirectory(), name);
-                if (host.fileExists(fullPath)) {
-                    resolvedNames.push(fullPath as ResolvedConfigFileName);
-                    continue;
+                const resolved = resolveProjectName(name);
+                if (resolved === undefined) {
+                    return undefined;
                 }
-                fullPath = combinePaths(fullPath, "tsconfig.json");
-                if (host.fileExists(fullPath)) {
-                    resolvedNames.push(fullPath as ResolvedConfigFileName);
-                    continue;
-                }
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, fullPath));
-                return undefined;
+                resolvedNames.push(resolved);
             }
             return resolvedNames;
         }
@@ -830,12 +839,12 @@ namespace ts {
 
             // Establish what needs to be built
             const graph = createDependencyGraph(resolvedNames);
+            if (graph === undefined) return;
 
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
 
-            let next: ResolvedConfigFileName | undefined;
-            while (next = getNext()) {
+            for (const next of queue) {
                 const proj = configFileCache.parseConfigFile(next);
                 if (proj === undefined) {
                     break;
@@ -866,21 +875,6 @@ namespace ts {
 
                 buildSingleProject(next);
             }
-
-            function getNext(): ResolvedConfigFileName | undefined {
-                if (queue.length === 0) {
-                    return undefined;
-                }
-                while (queue.length > 0) {
-                    const last = queue[queue.length - 1];
-                    if (last.length === 0) {
-                        queue.pop();
-                        continue;
-                    }
-                    return last.pop()!;
-                }
-                return undefined;
-            }
         }
 
         /**
@@ -890,12 +884,9 @@ namespace ts {
             if (!context.options.verbose) return;
 
             const names: string[] = [];
-            for (const level of graph.buildQueue) {
-                for (const el of level) {
-                    names.push(el);
-                }
+            for (const name of graph.buildQueue) {
+                names.push(name);
             }
-            names.reverse();
             context.verbose(Diagnostics.Sorted_list_of_input_projects_Colon_0, names.map(s => "\r\n    * " + s).join(""));
         }
 
