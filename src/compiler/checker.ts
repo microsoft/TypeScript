@@ -447,6 +447,7 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
+        let deferredTopType: Type;
 
         let deferredNodes: Node[] | undefined;
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
@@ -8510,13 +8511,20 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTopType() {
+            return deferredTopType || (deferredTopType = getUnionType([emptyObjectType, nullType, undefinedType]));
+        }
+
         function addTypeToIntersection(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Intersection) {
                 return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            if (getObjectFlags(type) & ObjectFlags.EmptyObjectType) {
+            if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
                 includes |= TypeFlags.EmptyObject;
+            }
+            else if (type.flags & TypeFlags.Union && type === getTopType()) {
+                includes |= TypeFlags.TopUnion;
             }
             else {
                 includes |= flags & ~TypeFlags.ConstructionFlags;
@@ -8591,9 +8599,6 @@ namespace ts {
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
         // for intersections of types with signatures can be deterministic.
         function getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
-            if (types.length === 0) {
-                return emptyObjectType;
-            }
             const typeSet: Type[] = [];
             const includes = addTypesToIntersection(typeSet, 0, types);
             if (includes & TypeFlags.Never) {
@@ -8602,12 +8607,18 @@ namespace ts {
             if (includes & TypeFlags.Any) {
                 return includes & TypeFlags.Wildcard ? wildcardType : anyType;
             }
+            if (!strictNullChecks && includes & TypeFlags.Nullable) {
+                return includes & TypeFlags.Undefined ? undefinedType : nullType;
+            }
+            if (types.length === 0) {
+                return includes & TypeFlags.TopUnion ? getTopType() : emptyObjectType;
+            }
             if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
                 removeRedundantPrimitiveTypes(typeSet, includes);
             }
-            if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
+            if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object) && includes & TypeFlags.Nullable) {
                 typeSet.push(emptyObjectType);
             }
             if (typeSet.length === 1) {
