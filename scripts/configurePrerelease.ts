@@ -56,13 +56,13 @@ function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: st
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
     assert(majorMinorMatch !== null, `The file seems to no longer have a string matching '${majorMinorRgx}'.`);
-    const parsedMajorMinor = majorMinorMatch[1];
+    const parsedMajorMinor = majorMinorMatch![1];
     assert(parsedMajorMinor === majorMinor, `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
 
     const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)(-dev)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
     assert(patchMatch !== null, "The file seems to no longer have a string matching " + versionRgx.toString());
-    const parsedPatch = patchMatch[1];
+    const parsedPatch = patchMatch![1];
     if (parsedPatch !== patch) {
         throw new Error(`patch does not match. ${tsFilePath}: '${parsedPatch}; package.json: '${patch}'`);
     }
@@ -74,7 +74,7 @@ function parsePackageJsonVersion(versionString: string): { majorMinor: string, p
     const versionRgx = /(\d+\.\d+)\.(\d+)($|\-)/;
     const match = versionString.match(versionRgx);
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
-    return { majorMinor: match[1], patch: match[2] };
+    return { majorMinor: match![1], patch: match![2] };
 }
 
 /** e.g. 0-dev.20170707 */
