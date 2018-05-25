@@ -48,19 +48,19 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* explicitHtnl */ true);
+            copyComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
         else if (actionName === removeBracesActionName && returnStatement) {
             const actualExpression = expression || createVoidZero();
             body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* explicitHtnl */ false);
+            copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
             Debug.fail("invalid action");
         }
 
-        const edits = textChanges.ChangeTracker.with(context, t => updateBody(t, file, func, body));
+        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func.body, body));
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
@@ -68,14 +68,10 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
     }
 
-    function updateBody(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, body: ConciseBody) {
-        changeTracker.replaceNode(file, container.body, body);
-    }
-
     function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         const func = getContainingFunction(node);
-        if (!func || !isArrowFunction(func)) return undefined;
+        if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) return undefined;
 
         if (isExpression(func.body)) {
             return {
