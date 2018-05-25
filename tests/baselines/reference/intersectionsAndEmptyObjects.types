@@ -35,11 +35,11 @@ let x04: A & B & C;
 >C : C
 
 let x05: string & C;
->x05 : string & {}
+>x05 : string
 >C : C
 
 let x06: C & string;
->x06 : string & {}
+>x06 : string
 >C : C
 
 let x07: C;
