@@ -1116,34 +1116,53 @@ namespace ts.tscWatch {
             assert.equal(nowErrors[1].start, intialErrors[1].start! - configFileContentComment.length);
         });
 
-        it("should not trigger recompilation because of program emit", () => {
-            const proj = "/user/username/projects/myproject";
-            const file1: File = {
-                path: `${proj}/file1.ts`,
-                content: "export const c = 30;"
-            };
-            const file2: File = {
-                path: `${proj}/src/file2.ts`,
-                content: `import {c} from "file1"; export const d = 30;`
-            };
-            const tsconfig: File = {
-                path: `${proj}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        module: "amd",
-                        outDir: "build"
-                    }
-                })
-            };
-            const host = createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: proj });
-            const watch = createWatchOfConfigFile(tsconfig.path, host, /*maxNumberOfFilesToIterateForInvalidation*/1);
-            checkProgramActualFiles(watch(), [file1.path, file2.path, libFile.path]);
+        describe("should not trigger should not trigger recompilation because of program emit", () => {
+            function verifyWithOptions(options: CompilerOptions, outputFiles: ReadonlyArray<string>) {
+                const proj = "/user/username/projects/myproject";
+                const file1: File = {
+                    path: `${proj}/file1.ts`,
+                    content: "export const c = 30;"
+                };
+                const file2: File = {
+                    path: `${proj}/src/file2.ts`,
+                    content: `import {c} from "file1"; export const d = 30;`
+                };
+                const tsconfig: File = {
+                    path: `${proj}/tsconfig.json`,
+                    content: generateTSConfig(options, emptyArray, "\n")
+                };
+                const host = createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: proj });
+                const watch = createWatchOfConfigFile(tsconfig.path, host, /*maxNumberOfFilesToIterateForInvalidation*/1);
+                checkProgramActualFiles(watch(), [file1.path, file2.path, libFile.path]);
 
-            assert.isTrue(host.fileExists("build/file1.js"));
-            assert.isTrue(host.fileExists("build/src/file2.js"));
+                outputFiles.forEach(f => host.fileExists(f));
 
-            // This should be 0
-            host.checkTimeoutQueueLengthAndRun(0);
+                // This should be 0
+                host.checkTimeoutQueueLengthAndRun(0);
+            }
+
+            it("without outDir or outFile is specified", () => {
+                debugger;
+                verifyWithOptions({ module: ModuleKind.AMD }, ["file1.js", "src/file2.js"]);
+            });
+
+            it("with outFile", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, outFile: "build/outFile.js" }, ["build/outFile.js"]);
+            });
+
+            it("when outDir is specified", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, outDir: "build" }, ["build/file1.js", "build/src/file2.js"]);
+            });
+
+            it("when outDir and declarationDir is specified", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, outDir: "build", declaration: true, declarationDir: "decls" },
+                    ["build/file1.js", "build/src/file2.js", "decls/file1.d.ts", "decls/src/file2.d.ts"]);
+            });
+
+            it("declarationDir is specified", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, declaration: true, declarationDir: "decls" },
+                    ["file1.js", "src/file2.js", "decls/file1.d.ts", "decls/src/file2.d.ts"]);
+            });
         });
 
         it("shouldnt report error about unused function incorrectly when file changes from global to module", () => {

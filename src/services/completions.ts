@@ -895,6 +895,7 @@ namespace ts.Completions {
                         node = (parent as QualifiedName).left;
                         break;
                     case SyntaxKind.ImportType:
+                    case SyntaxKind.MetaProperty:
                         node = parent;
                         break;
                     default:
@@ -1059,6 +1060,12 @@ namespace ts.Completions {
                         return;
                     }
                 }
+            }
+
+            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword)) {
+                const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
+                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
+                return;
             }
 
             if (!isTypeLocation) {

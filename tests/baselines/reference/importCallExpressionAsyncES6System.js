@@ -30,6 +30,7 @@ export const l = async () => {
 
 //// [test.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
         return new (P || (P = Promise))(function (resolve, reject) {
             function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -39,7 +40,6 @@ System.register([], function (exports_1, context_1) {
         });
     };
     var cl1, obj, cl2, l;
-    "use strict";
     var __moduleName = context_1 && context_1.id;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {

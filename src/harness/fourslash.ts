@@ -3130,7 +3130,7 @@ Actual: ${stringify(fullActual)}`);
             const action = ts.first(refactor.actions);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, ts.defaultPreferences)!;
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.defaultPreferences)!;
             for (const edit of editInfo.edits) {
                 const newContent = options.newFileContents[edit.fileName];
                 if (newContent === undefined) {
@@ -4836,5 +4836,6 @@ namespace FourSlashInterface {
 
     export interface MoveToNewFileOptions {
         readonly newFileContents: { readonly [fileName: string]: string };
+        readonly preferences?: ts.UserPreferences;
     }
 }
