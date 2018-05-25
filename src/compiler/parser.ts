@@ -1609,7 +1609,8 @@ namespace ts {
                     return isVariableDeclaratorListTerminator();
                 case ParsingContext.TypeParameters:
                     // Tokens other than '>' are here for better error recovery
-                    return token() === SyntaxKind.GreaterThanToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword;
+                    return token() === SyntaxKind.GreaterThanToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.OpenBraceToken ||
+                        token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword || token() === SyntaxKind.SemicolonToken;
                 case ParsingContext.ArgumentExpressions:
                     // Tokens other than ')' are here for better error recovery
                     return token() === SyntaxKind.CloseParenToken || token() === SyntaxKind.SemicolonToken;
