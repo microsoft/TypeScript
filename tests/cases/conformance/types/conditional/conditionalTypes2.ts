@@ -1,4 +1,5 @@
 // @strict: true
+// @strictAny: false
 // @declaration: true
 
 interface Covariant<T> {

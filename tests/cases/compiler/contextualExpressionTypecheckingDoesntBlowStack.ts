@@ -1,6 +1,7 @@
 // @target: es5
 // @lib: es6
 // @strict: true
+// @strictAny: false
 
 // repro for: https://github.com/Microsoft/TypeScript/issues/23661
 export interface IValidationError {

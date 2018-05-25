@@ -1,4 +1,5 @@
 // @strict: true
+// @strictAny: false
 
 function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
     let a1: Partial<T> = p;
