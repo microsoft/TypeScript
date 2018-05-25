@@ -24294,7 +24294,6 @@ namespace ts {
                 }
             }
             checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
-            checkTypeParameters(node.typeParameters);
             checkExportsOnMergedDeclarations(node);
             const symbol = getSymbolOfNode(node);
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
