@@ -24,6 +24,12 @@ const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`
 >200 : 200
 >300 : 300
 
+const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
+>z : string
+>tag`\u{hello} \xtraordinary wonderful \uworld` : string
+>tag : (str: any, ...args: any[]) => string
+>`\u{hello} \xtraordinary wonderful \uworld` : "\\u{hello} \\xtraordinary wonderful \\uworld"
+
 const a1 = tag`${ 100 }\0` // \0
 >a1 : string
 >tag`${ 100 }\0` : string

@@ -1095,8 +1095,8 @@ namespace ts {
             return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
         }
 
-        function reScanTemplateHead(): SyntaxKind {
-            return currentToken = scanner.reScanTemplateHead();
+        function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+            return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
         }
 
         function scanJsxIdentifier(): SyntaxKind {
@@ -2168,6 +2168,13 @@ namespace ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
+        function parseNoSubstitutionTemplate(isTaggedTemplate?: boolean) {
+            if (isTaggedTemplate) {
+                reScanTemplateHeadOrNoSubstitutionTemplate();
+            }
+            return <NoSubstitutionTemplateLiteral>parseLiteralNode();
+        }
+
         function parseTemplateExpression(isTaggedTemplate?: boolean): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
@@ -2210,7 +2217,7 @@ namespace ts {
 
         function parseTemplateHead(isTaggedTemplate?: boolean): TemplateHead {
             if (isTaggedTemplate) {
-                reScanTemplateHead();
+                reScanTemplateHeadOrNoSubstitutionTemplate();
             }
             const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
@@ -2246,8 +2253,8 @@ namespace ts {
                 (<NumericLiteral>node).numericLiteralFlags = scanner.getTokenFlags() & TokenFlags.NumericLiteralFlags;
             }
 
-            if (node.kind === SyntaxKind.TemplateHead || node.kind === SyntaxKind.TemplateMiddle || node.kind === SyntaxKind.TemplateTail) {
-                (<TemplateHead | TemplateMiddle | TemplateTail>node).notEscapeFlags = scanner.getTokenFlags() & TokenFlags.NotEscape;
+            if (isTemplateLiteralKind(node.kind)) {
+                (<TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral>node).templateFlags = scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape;
             }
 
             nextToken();
@@ -4498,7 +4505,7 @@ namespace ts {
             tagExpression.tag = tag;
             tagExpression.typeArguments = typeArguments;
             tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
-                ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
+                ? parseNoSubstitutionTemplate(/*isTaggedTemplate*/ true)
                 : parseTemplateExpression(/*isTaggedTemplate*/ true);
             return finishNode(tagExpression);
         }

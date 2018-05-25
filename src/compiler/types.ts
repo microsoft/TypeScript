@@ -1582,6 +1582,8 @@ namespace ts {
 
     export interface NoSubstitutionTemplateLiteral extends LiteralExpression {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     /* @internal */
@@ -1591,13 +1593,13 @@ namespace ts {
         PrecedingJSDocComment = 1 << 1,
         Unterminated = 1 << 2,
         ExtendedUnicodeEscape = 1 << 3,
-        Scientific = 1 << 4,        // e.g. `10e2`
-        Octal = 1 << 5,             // e.g. `0777`
-        HexSpecifier = 1 << 6,      // e.g. `0x00000000`
-        BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
-        OctalSpecifier = 1 << 8,    // e.g. `0o777`
-        ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
-        NotEscape = 1 << 10,        // e.g. `\uhello`
+        Scientific = 1 << 4,                // e.g. `10e2`
+        Octal = 1 << 5,                     // e.g. `0777`
+        HexSpecifier = 1 << 6,              // e.g. `0x00000000`
+        BinarySpecifier = 1 << 7,           // e.g. `0b0110010000000000`
+        OctalSpecifier = 1 << 8,            // e.g. `0o777`
+        ContainsSeparator = 1 << 9,         // e.g. `0b1100_0101`
+        ContainsInvalidEscape = 1 << 10,    // e.g. `\uhello`
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier | ContainsSeparator
     }
@@ -1612,21 +1614,21 @@ namespace ts {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
         /* @internal */
-        notEscapeFlags?: TokenFlags;
+        templateFlags?: TokenFlags;
     }
 
     export interface TemplateMiddle extends LiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
         /* @internal */
-        notEscapeFlags?: TokenFlags;
+        templateFlags?: TokenFlags;
     }
 
     export interface TemplateTail extends LiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
         /* @internal */
-        notEscapeFlags?: TokenFlags;
+        templateFlags?: TokenFlags;
     }
 
     export type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;

@@ -28,7 +28,7 @@ namespace ts {
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind;
-        reScanTemplateHead(): SyntaxKind;
+        reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
@@ -424,19 +424,17 @@ namespace ts {
           return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
       }
 
+      function isHexDigit(ch: number): boolean {
+        return isDigit(ch) || ch >= CharacterCodes.A && ch <= CharacterCodes.F || ch >= CharacterCodes.a && ch <= CharacterCodes.f;
+      }
+
+      function isCodePoint(code: number): boolean {
+        return code <= 0x10FFFF;
+      }
+
       /* @internal */
       export function isOctalDigit(ch: number): boolean {
           return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
-      }
-
-      /* @internal */
-      export function isHexDigit(ch: number): boolean {
-          return isDigit(ch) || ch >= CharacterCodes.A && ch <= CharacterCodes.F || ch >= CharacterCodes.a && ch <= CharacterCodes.f;
-      }
-
-      /* @internal */
-      export function isCodePoint(code: number): boolean {
-          return code <= 0x10FFFF;
       }
 
       export function couldStartTrivia(text: string, pos: number): boolean {
@@ -852,7 +850,7 @@ namespace ts {
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
-            reScanTemplateHead,
+            reScanTemplateHeadOrNoSubstitutionTemplate,
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
@@ -1150,7 +1148,7 @@ namespace ts {
                     // '\01'
                     if (isTaggedTemplate && pos < end && isDigit(text.charCodeAt(pos))) {
                         pos++;
-                        tokenFlags |= TokenFlags.NotEscape;
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
                         return text.substring(start, pos);
                     }
                     return "\0";
@@ -1174,7 +1172,7 @@ namespace ts {
                     if (isTaggedTemplate) {
                         // '\u'
                         if (pos < end && !isHexDigit(text.charCodeAt(pos)) && text.charCodeAt(pos) !== CharacterCodes.openBrace) {
-                            tokenFlags |= TokenFlags.NotEscape;
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
                             return text.substring(start, pos);
                         }
 
@@ -1182,7 +1180,7 @@ namespace ts {
                         for (let i = 0; i < 3; i++) {
                             if (pos + i + 1 < end && isHexDigit(text.charCodeAt(pos + i)) &&  !isHexDigit(text.charCodeAt(pos + i + 1)) && text.charCodeAt(pos + i + 1) !== CharacterCodes.openBrace) {
                                 pos += i;
-                                tokenFlags |= TokenFlags.NotEscape;
+                                tokenFlags |= TokenFlags.ContainsInvalidEscape;
                                 return text.substring(start, pos);
                             }
                         }
@@ -1193,7 +1191,7 @@ namespace ts {
 
                         // '\u{'
                         if (isTaggedTemplate && !isHexDigit(text.charCodeAt(pos))) {
-                            tokenFlags |= TokenFlags.NotEscape;
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
                             return text.substring(start, pos);
                         }
 
@@ -1201,7 +1199,7 @@ namespace ts {
                         if (isTaggedTemplate) {
                             // '\u{Not Code Point' or '\u{CodePoint'
                             if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
-                                tokenFlags |= TokenFlags.NotEscape;
+                                tokenFlags |= TokenFlags.ContainsInvalidEscape;
                                 return text.substring(start, pos);
                             }
                         }
@@ -1215,12 +1213,12 @@ namespace ts {
                 case CharacterCodes.x:
                     if (isTaggedTemplate) {
                         if (!isHexDigit(text.charCodeAt(pos))) {
-                            tokenFlags |= TokenFlags.NotEscape;
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
                             return text.substring(start, pos);
                         }
                         else if (!isHexDigit(text.charCodeAt(pos + 1))) {
                             pos++;
-                            tokenFlags |= TokenFlags.NotEscape;
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
                             return text.substring(start, pos);
                         }
                     }
@@ -1894,7 +1892,7 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
         }
 
-        function reScanTemplateHead(): SyntaxKind {
+        function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
             pos = tokenPos;
             return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }

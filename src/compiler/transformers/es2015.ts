@@ -3654,14 +3654,14 @@ namespace ts {
             const rawStrings: Expression[] = [];
             const template = node.template;
             if (isNoSubstitutionTemplateLiteral(template)) {
-                cookedStrings.push(createLiteral(template.text));
+                cookedStrings.push(template.templateFlags ? createIdentifier("undefined") : createLiteral(template.text));
                 rawStrings.push(getRawLiteral(template));
             }
             else {
-                cookedStrings.push(template.head.notEscapeFlags ? createIdentifier("undefined") : createLiteral(template.head.text));
+                cookedStrings.push(template.head.templateFlags ? createIdentifier("undefined") : createLiteral(template.head.text));
                 rawStrings.push(getRawLiteral(template.head));
                 for (const templateSpan of template.templateSpans) {
-                    cookedStrings.push(templateSpan.literal.notEscapeFlags ? createIdentifier("undefined") : createLiteral(templateSpan.literal.text));
+                    cookedStrings.push(templateSpan.literal.templateFlags ? createIdentifier("undefined") : createLiteral(templateSpan.literal.text));
                     rawStrings.push(getRawLiteral(templateSpan.literal));
                     templateArguments.push(visitNode(templateSpan.expression, visitor, isExpression));
                 }
