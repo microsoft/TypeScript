@@ -15561,8 +15561,9 @@ namespace ts {
             return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromClassType(t, isJs, context, /*reportErrors*/ false) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
         }
 
-        function getJsxPropsTypeFromCallSignature(sig: Signature, context: Node) {
+        function getJsxPropsTypeFromCallSignature(sig: Signature, context: JsxOpeningLikeElement) {
             let propsType = getTypeOfFirstParameterOfSignatureWithFallback(sig, emptyObjectType);
+            propsType = getJsxManagedAttributesFromLocatedAttributes(context, getJsxNamespaceAt(context), propsType);
             const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
             if (intrinsicAttribs !== unknownType) {
                 propsType = intersectTypes(intrinsicAttribs, propsType);
@@ -15575,9 +15576,22 @@ namespace ts {
             return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
         }
 
+        function getJsxManagedAttributesFromLocatedAttributes(context: JsxOpeningLikeElement, ns: Symbol, attributesType: Type) {
+            const managedSym = getJsxLibraryManagedAttributes(ns);
+            if (managedSym) {
+                const declaredManagedType = getDeclaredTypeOfSymbol(managedSym);
+                if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
+                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJavaScriptFile(context));
+                    return createTypeReference((declaredManagedType as GenericType), args);
+                }
+            }
+            return attributesType;
+        }
+
         function getJsxPropsTypeFromClassType(sig: Signature, isJs: boolean, context: JsxOpeningLikeElement, reportErrors: boolean) {
-            const forcedLookupLocation = getJsxElementPropertiesName(getJsxNamespaceAt(context));
-            const attributesType = forcedLookupLocation === undefined
+            const ns = getJsxNamespaceAt(context);
+            const forcedLookupLocation = getJsxElementPropertiesName(ns);
+            let attributesType = forcedLookupLocation === undefined
                 // If there is no type ElementAttributesProperty, return the type of the first parameter of the signature, which should be the props type
                 ? getTypeOfFirstParameterOfSignatureWithFallback(sig, emptyObjectType)
                 : forcedLookupLocation === ""
@@ -15593,7 +15607,10 @@ namespace ts {
                 }
                 return emptyObjectType;
             }
-            else if (isTypeAny(attributesType)) {
+
+            attributesType = getJsxManagedAttributesFromLocatedAttributes(context, ns, attributesType);
+
+            if (isTypeAny(attributesType)) {
                 // Props is of type 'any' or unknown
                 return attributesType;
             }
@@ -16415,6 +16432,11 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function getJsxLibraryManagedAttributes(jsxNamespace: Symbol) {
+            // JSX.LibraryManagedAttributes [symbol]
+            return jsxNamespace && getSymbol(jsxNamespace.exports!, JsxNames.LibraryManagedAttributes, SymbolFlags.Type);
         }
 
         /// e.g. "props" for React.d.ts,
@@ -28546,6 +28568,7 @@ namespace ts {
         export const Element = "Element" as __String;
         export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
         export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
+        export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
         // tslint:enable variable-name
     }
 }
