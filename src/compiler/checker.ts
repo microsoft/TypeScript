@@ -8610,7 +8610,7 @@ namespace ts {
             if (!strictNullChecks && includes & TypeFlags.Nullable) {
                 return includes & TypeFlags.Undefined ? undefinedType : nullType;
             }
-            if (types.length === 0) {
+            if (typeSet.length === 0) {
                 return includes & TypeFlags.TopUnion ? getTopType() : emptyObjectType;
             }
             if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
