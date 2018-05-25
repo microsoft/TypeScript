@@ -25,6 +25,9 @@ install:
   - npm uninstall tslint --no-save
   - npm install
 
+script:
+- travis_retry npm test
+
 cache:
   directories:
     - node_modules
