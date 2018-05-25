@@ -206,6 +206,48 @@ namespace ts {
         });
     });
 
+    describe("tsbuild - graph-ordering", () => {
+        it("orders the graph correctly", () => {
+            const fs = new vfs.FileSystem(false);
+            const host = new fakes.CompilerHost(fs);
+            const deps: [string, string][] = [
+                ["A", "B"],
+                ["B", "C"],
+                ["A", "C"],
+                ["B", "D"],
+                ["C", "D"],
+                ["C", "E"],
+                ["F", "E"]
+            ];
+
+            writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G"], deps);
+            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
+            builder.buildProjects(["/project/A", "/project/G"]);
+            printDiagnostics();
+        });
+
+        function writeProjects(fileSystem: vfs.FileSystem, projectNames: string[], deps: [string, string][]): string[] {
+            const projFileNames: string[] = [];
+            for (const dep of deps) {
+                if (projectNames.indexOf(dep[0]) < 0) throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
+                if (projectNames.indexOf(dep[1]) < 0) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
+            }
+            for (const proj of projectNames) {
+                fileSystem.mkdirpSync(`/project/${proj}`);
+                fileSystem.writeFileSync(`/project/${proj}/${proj}.ts`, "export {}");
+                const configFileName = `/project/${proj}/tsconfig.json`;
+                const configContent = JSON.stringify({
+                    compilerOptions: { composite: true },
+                    files: [`./${proj}.ts`],
+                    references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` }))
+                }, undefined, 2);
+                fileSystem.writeFileSync(configFileName, configContent);
+                projFileNames.push(configFileName);
+            }
+            return projFileNames;
+        }
+    });
+
     function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string) {
         if (!fs.statSync(path).isFile()) {
             throw new Error(`File ${path} does not exist`);
