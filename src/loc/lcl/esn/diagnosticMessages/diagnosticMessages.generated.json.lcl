@@ -1020,8 +1020,8 @@
       <Item ItemId=";Add_missing_typeof_95052" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'typeof']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Agregar el objeto typeof que falta]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Agregar el elemento "typeof" que falta]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Add missing typeof]]></Val>
@@ -1149,6 +1149,9 @@
       <Item ItemId=";All_variables_are_unused_6199" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All variables are unused.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Todas las variables son no utilizadas.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6648,12 +6651,18 @@
       <Item ItemId=";Remove_unused_label_95053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove unused label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Quitar etiqueta no utilizada]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Remove_variable_statement_90010" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove variable statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Quitar la declaración de variable]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
