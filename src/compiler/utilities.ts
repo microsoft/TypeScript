@@ -1541,25 +1541,25 @@ namespace ts {
     }
 
     export function getDeclarationOfJSInitializer(node: Node): Node | undefined {
-        if (!node.parent) {
+        if (!isInJavaScriptFile(node) || !node.parent) {
             return undefined;
         }
         let name: Expression | BindingName | undefined;
         let decl: Node | undefined;
-        if (isVariableDeclaration(node.parent)) {
+        if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
             name = node.parent.name;
             decl = node.parent;
         }
-        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.right === node) {
             name = node.parent.left;
             decl = name;
         }
         else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken) {
-            if (isVariableDeclaration(node.parent.parent)) {
+            if (isVariableDeclaration(node.parent.parent) && node.parent.parent.initializer === node.parent) {
                 name = node.parent.parent.name;
                 decl = node.parent.parent;
             }
-            else if (isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            else if (isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.parent.right === node.parent) {
                 name = node.parent.parent.left;
                 decl = name;
             }
