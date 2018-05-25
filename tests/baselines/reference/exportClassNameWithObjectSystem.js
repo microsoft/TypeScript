@@ -4,8 +4,8 @@ export class Object {}
 
 //// [exportClassNameWithObjectSystem.js]
 System.register([], function (exports_1, context_1) {
-    var Object;
     "use strict";
+    var Object;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
