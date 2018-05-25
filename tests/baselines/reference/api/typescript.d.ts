@@ -2150,7 +2150,7 @@ declare namespace ts {
         IndexedAccess = 1048576,
         Conditional = 2097152,
         Substitution = 4194304,
-        NonPrimitive = 134217728,
+        NonPrimitive = 8388608,
         Literal = 224,
         Unit = 13536,
         StringOrNumberLiteral = 96,
@@ -2168,8 +2168,8 @@ declare namespace ts {
         InstantiablePrimitive = 524288,
         Instantiable = 7897088,
         StructuredOrInstantiable = 8355840,
-        Narrowable = 142575359,
-        NotUnionOrUnit = 134283777
+        Narrowable = 16746239,
+        NotUnionOrUnit = 8454657
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
