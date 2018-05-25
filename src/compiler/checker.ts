@@ -5018,7 +5018,7 @@ namespace ts {
             if (!links.type) {
                 const jsDeclaration = getDeclarationOfJSInitializer(symbol.valueDeclaration);
                 if (jsDeclaration) {
-                    const jsSymbol = getMergedSymbol(jsDeclaration.symbol);
+                    const jsSymbol = getSymbolOfNode(jsDeclaration);
                     if (jsSymbol && (jsSymbol.exports && jsSymbol.exports.size || jsSymbol.members && jsSymbol.members.size)) {
                         symbol = cloneSymbol(symbol);
                         // note:we overwrite links because we just cloned the symbol
