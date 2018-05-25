@@ -8984,6 +8984,9 @@ namespace ts {
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
+            if (extendsType === getTopType()) {
+                return instantiateType(root.trueType, mapper);
+            }
             // If this is a distributive conditional type and the check type is generic we need to defer
             // resolution of the conditional type such that a later instantiation will properly distribute
             // over union types.
