@@ -2454,6 +2454,7 @@ declare namespace ts {
         sourceMap?: boolean;
         sourceRoot?: string;
         strict?: boolean;
+        strictAny?: boolean;
         strictFunctionTypes?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
