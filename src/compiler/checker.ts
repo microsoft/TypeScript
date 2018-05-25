@@ -15584,6 +15584,10 @@ namespace ts {
                     const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJavaScriptFile(context));
                     return createTypeReference((declaredManagedType as GenericType), args);
                 }
+                else if (length(declaredManagedType.aliasTypeArguments) >= 2) {
+                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], declaredManagedType.aliasTypeArguments!, 2, isInJavaScriptFile(context));
+                    return getTypeAliasInstantiation(declaredManagedType.aliasSymbol!, args);
+                }
             }
             return attributesType;
         }
