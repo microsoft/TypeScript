@@ -124,6 +124,7 @@ namespace ts {
         "typeof": SyntaxKind.TypeOfKeyword,
         "undefined": SyntaxKind.UndefinedKeyword,
         "unique": SyntaxKind.UniqueKeyword,
+        "unknown": SyntaxKind.UnknownKeyword,
         "var": SyntaxKind.VarKeyword,
         "void": SyntaxKind.VoidKeyword,
         "while": SyntaxKind.WhileKeyword,
