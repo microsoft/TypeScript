@@ -8592,6 +8592,9 @@ namespace ts {
             if (includes & TypeFlags.Any) {
                 return includes & TypeFlags.Wildcard ? wildcardType : anyType;
             }
+            if (!strictNullChecks && includes & TypeFlags.Nullable) {
+                return includes & TypeFlags.Undefined ? undefinedType : nullType;
+            }
             if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
