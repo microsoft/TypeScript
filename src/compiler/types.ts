@@ -3687,19 +3687,17 @@ namespace ts {
         IndexedAccess           = 1 << 20,  // T[K]
         Conditional             = 1 << 21,  // T extends U ? X : Y
         Substitution            = 1 << 22,  // Type parameter substitution
+        NonPrimitive            = 1 << 23,  // intrinsic object type
         /* @internal */
-        FreshLiteral            = 1 << 23,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 24,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
+        UnionOfUnitTypes        = 1 << 25,  // Type is union of unit types
         /* @internal */
-        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
+        ContainsWideningType    = 1 << 26,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 27,  // intrinsic object type
+        ContainsObjectLiteral   = 1 << 27,  // Type is or contains object literal type
         /* @internal */
-        UnionOfUnitTypes        = 1 << 28,  // Type is union of unit types
-        /* @internal */
-        GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
+        ContainsAnyFunctionType = 1 << 28,  // Type is or contains the anyFunctionType
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3749,7 +3747,10 @@ namespace ts {
         /* @internal */
         EmptyObject = ContainsAnyFunctionType,
         /* @internal */
-        ConstructionFlags = NonWideningType | Wildcard | EmptyObject
+        ConstructionFlags = NonWideningType | Wildcard | EmptyObject,
+        // The following flag is used for different purposes by maybeTypeOfKind
+        /* @internal */
+        GenericMappedType = ContainsWideningType
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
