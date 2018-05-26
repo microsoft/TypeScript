@@ -6433,4 +6433,11 @@ namespace ts {
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
+
+    /** @internal */
+    export function hasInvalidEscape(template: TemplateLiteral): boolean {
+        return template && !!(isNoSubstitutionTemplateLiteral(template)
+            ? template.templateFlags
+            : (template.head.templateFlags || some(template.templateSpans, span => !!span.literal.templateFlags)));
+    }
 }

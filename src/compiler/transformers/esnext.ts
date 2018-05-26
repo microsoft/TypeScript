@@ -25,16 +25,27 @@ namespace ts {
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+        let currentSourceFile: SourceFile;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
 
         return chainBundle(transformSourceFile);
+
+        function recordTaggedTemplateString(temp: Identifier) {
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                createVariableDeclaration(temp));
+        }
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
                 return node;
             }
-
-            const visited = visitEachChild(node, visitor, context);
+            currentSourceFile = node;
+            const visited = visitSourceFile(node);
             addEmitHelpers(visited, context.readEmitHelpers());
+
+            currentSourceFile = undefined!;
+            taggedTemplateStringDeclarations = undefined!;
             return visited;
         }
 
@@ -99,6 +110,8 @@ namespace ts {
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
                 case SyntaxKind.CatchClause:
                     return visitCatchClause(node as CatchClause);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -635,6 +648,26 @@ namespace ts {
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
             return updated;
+        }
+
+        function visitSourceFile(node: SourceFile): SourceFile {
+            const visited = visitEachChild(node, visitor, context);
+            const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
+                createVariableStatement(/*modifiers*/ undefined,
+                    createVariableDeclarationList(taggedTemplateStringDeclarations))
+            ]);
+            return updateSourceFileNode(visited, setTextRange(createNodeArray(statement), node.statements));
+        }
+
+        function visitTaggedTemplateExpression (node: TaggedTemplateExpression) {
+            return processTaggedTemplateExpression(
+                context,
+                node,
+                visitor,
+                currentSourceFile,
+                recordTaggedTemplateString,
+                ProcessLevel.LiftRestriction
+            );
         }
 
         function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {

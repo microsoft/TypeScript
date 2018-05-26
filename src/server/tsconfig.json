@@ -25,6 +25,7 @@
         "../compiler/visitor.ts",
         "../compiler/transformers/utilities.ts",
         "../compiler/transformers/destructuring.ts",
+        "../compiler/transformers/taggedTemplate.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/es2017.ts",
         "../compiler/transformers/esnext.ts",
