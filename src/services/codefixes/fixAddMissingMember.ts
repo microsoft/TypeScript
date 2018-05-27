@@ -199,6 +199,34 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): void {
         const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, preferences);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        const currentMethod = getNodeToInsertMethodAfter(classDeclaration, callExpression);
+
+        if (currentMethod) {
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, currentMethod, methodDeclaration);
+        }
+        else {
+            changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        }
+    }
+
+    // Gets the MethodDeclaration of a method of the cls class that contains the node, or undefined if the node is not in a method or that method is not in the cls class.
+    function getNodeToInsertMethodAfter(cls: ClassLikeDeclaration, node: Node): MethodDeclaration | undefined {
+        const nodeMethod = getParentMethodDeclaration(node);
+        if (nodeMethod) {
+            const isClsMethod = contains(cls.members, nodeMethod);
+            if (isClsMethod) {
+                return nodeMethod;
+            }
+        }
+        return undefined;
+    }
+
+    // Gets the MethodDeclaration of the method that contains the node, or undefined if the node is not in a method.
+    function getParentMethodDeclaration(node: Node): MethodDeclaration | undefined {
+        while (node) {
+            if (isMethodDeclaration(node)) break;
+            node = node.parent;
+        }
+        return node;
     }
 }
