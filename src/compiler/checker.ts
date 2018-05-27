@@ -569,9 +569,7 @@ namespace ts {
             number: numberType,
             boolean: booleanType,
             symbol: esSymbolType,
-            undefined: undefinedType,
-            object: nonPrimitiveType,
-            function: nonPrimitiveType
+            undefined: undefinedType
         });
         const typeofType = createTypeofType();
 
@@ -4399,7 +4397,7 @@ namespace ts {
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (!isValidSpreadType(parentType)) {
+                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
@@ -14064,11 +14062,9 @@ namespace ts {
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
-                    // to one of the primitive types. Only 'unknown' and type parameters narrow to the
-                    // 'object' type since those are the only types for which this narrowing provides
-                    // additional capabilities.
+                    // to one of the primitive types.
                     const targetType = typeofTypesByName.get(literal.text);
-                    if (targetType && (type.flags & (TypeFlags.Unknown | TypeFlags.Instantiable) || targetType !== nonPrimitiveType)) {
+                    if (targetType) {
                         if (isTypeSubtypeOf(targetType, type)) {
                             return targetType;
                         }
@@ -17098,6 +17094,10 @@ namespace ts {
             undefinedDiagnostic?: DiagnosticMessage,
             nullOrUndefinedDiagnostic?: DiagnosticMessage
         ): Type {
+            if (type.flags & TypeFlags.Unknown) {
+                error(node, Diagnostics.Object_is_of_type_unknown);
+                return errorType;
+            }
             const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
             if (kind) {
                 error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
