@@ -569,7 +569,9 @@ namespace ts {
             number: numberType,
             boolean: booleanType,
             symbol: esSymbolType,
-            undefined: undefinedType
+            undefined: undefinedType,
+            object: nonPrimitiveType,
+            function: nonPrimitiveType
         });
         const typeofType = createTypeofType();
 
@@ -8690,7 +8692,7 @@ namespace ts {
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
-                type.flags & TypeFlags.Any ? keyofConstraintType :
+                type.flags & TypeFlags.AnyOrUnknown ? keyofConstraintType :
                 stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
                 getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.UniqueESSymbol)]) :
                 getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
@@ -14062,9 +14064,11 @@ namespace ts {
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
-                    // to one of the primitive types.
+                    // to one of the primitive types. Only 'unknown' and type parameters narrow to the
+                    // 'object' type since those are the only types for which this narrowing provides
+                    // additional capabilities.
                     const targetType = typeofTypesByName.get(literal.text);
-                    if (targetType) {
+                    if (targetType && (type.flags & (TypeFlags.Unknown | TypeFlags.Instantiable) || targetType !== nonPrimitiveType)) {
                         if (isTypeSubtypeOf(targetType, type)) {
                             return targetType;
                         }
