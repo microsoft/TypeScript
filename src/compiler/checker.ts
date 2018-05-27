@@ -6431,7 +6431,7 @@ namespace ts {
                 for (const prop of getPropertiesOfType(modifiersType)) {
                     addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include), /*_index*/ undefined, prop);
                 }
-                if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
+                if (modifiersType.flags & TypeFlags.AnyOrUnknown || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
                 }
                 if (!keyofStringsOnly && getIndexInfoOfType(modifiersType, IndexKind.Number)) {
