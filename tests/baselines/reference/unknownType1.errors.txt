@@ -1,15 +1,28 @@
-tests/cases/conformance/types/unknown/unknownType1.ts(87,9): error TS2322: Type 'unknown' is not assignable to type 'object'.
-tests/cases/conformance/types/unknown/unknownType1.ts(88,9): error TS2322: Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/unknown/unknownType1.ts(89,9): error TS2322: Type 'unknown' is not assignable to type 'string[]'.
-tests/cases/conformance/types/unknown/unknownType1.ts(90,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
-tests/cases/conformance/types/unknown/unknownType1.ts(91,9): error TS2322: Type 'unknown' is not assignable to type '{} | null | undefined'.
+tests/cases/conformance/types/unknown/unknownType1.ts(45,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(46,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(47,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(48,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(49,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(50,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(51,6): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(52,6): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(58,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(59,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(60,5): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(61,9): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(105,9): error TS2322: Type 'unknown' is not assignable to type 'object'.
+tests/cases/conformance/types/unknown/unknownType1.ts(106,9): error TS2322: Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/unknown/unknownType1.ts(107,9): error TS2322: Type 'unknown' is not assignable to type 'string[]'.
+tests/cases/conformance/types/unknown/unknownType1.ts(108,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
+tests/cases/conformance/types/unknown/unknownType1.ts(109,9): error TS2322: Type 'unknown' is not assignable to type '{} | null | undefined'.
   Type 'unknown' is not assignable to type '{}'.
-tests/cases/conformance/types/unknown/unknownType1.ts(97,9): error TS2322: Type 'T' is not assignable to type 'object'.
-tests/cases/conformance/types/unknown/unknownType1.ts(106,5): error TS2322: Type '123' is not assignable to type '{ [x: string]: unknown; }'.
-tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/types/unknown/unknownType1.ts(115,9): error TS2322: Type 'T' is not assignable to type 'object'.
+tests/cases/conformance/types/unknown/unknownType1.ts(124,5): error TS2322: Type '123' is not assignable to type '{ [x: string]: unknown; }'.
+tests/cases/conformance/types/unknown/unknownType1.ts(150,14): error TS2700: Rest types may only be created from object types.
+tests/cases/conformance/types/unknown/unknownType1.ts(156,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 
 
-==== tests/cases/conformance/types/unknown/unknownType1.ts (8 errors) ====
+==== tests/cases/conformance/types/unknown/unknownType1.ts (21 errors) ====
     // In an intersection everything absorbs unknown
     
     type T00 = unknown & null;  // null
@@ -49,19 +62,61 @@ tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Prop
     type T40 = keyof any;  // string | number | symbol
     type T41 = keyof unknown;  // string | number | symbol
     
+    // Only equality operators are allowed with unknown
+    
+    function f10(x: unknown) {
+        x == 5;
+        x !== 10;
+        x >= 0;  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        x.foo;  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        x[10];  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        x();  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        x + 1;  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        x * 2;  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        -x;  // Error
+         ~
+!!! error TS2571: Object is of type 'unknown'.
+        +x;  // Error
+         ~
+!!! error TS2571: Object is of type 'unknown'.
+    }
+    
+    // No property accesses, element accesses, or function calls
+    
+    function f11(x: unknown) {
+        x.foo;  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        x[5];  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        x();  // Error
+        ~
+!!! error TS2571: Object is of type 'unknown'.
+        new x();  // Error
+            ~
+!!! error TS2571: Object is of type 'unknown'.
+    }
+    
     // typeof, instanceof, and user defined type predicates
     
     declare function isFunction(x: unknown): x is Function;
     
-    function f1(x: unknown) {
+    function f20(x: unknown) {
         if (typeof x === "string" || typeof x === "number") {
             x;  // string | number
-        }
-        if (typeof x === "object") {
-            x;  // object
-        }
-        if (typeof x === "function") {
-            x;  // object
         }
         if (x instanceof Error) {
             x;  // Error
@@ -79,7 +134,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Prop
     
     // Anything is assignable to unknown
     
-    function f2<T>(pAny: any, pNever: never, pT: T) {
+    function f21<T>(pAny: any, pNever: never, pT: T) {
         let x: unknown;
         x = 123;
         x = "hello";
@@ -93,7 +148,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Prop
     
     // unknown assignable only to itself and any
     
-    function f3(x: unknown) {
+    function f22(x: unknown) {
         let v1: any = x;
         let v2: unknown = x;
         let v3: object = x;  // Error
@@ -116,7 +171,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Prop
     
     // Type parameter 'T extends unknown' not related to object
     
-    function f4<T extends unknown>(x: T) {
+    function f23<T extends unknown>(x: T) {
         let y: object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
@@ -124,7 +179,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Prop
     
     // Anything but primitive assignable to { [x: string]: unknown }
     
-    function f5(x: { [x: string]: unknown }) {
+    function f24(x: { [x: string]: unknown }) {
         x = {};
         x = { a: 5 };
         x = [1, 2, 3];
@@ -135,14 +190,14 @@ tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Prop
     
     // Locals of type unknown always considered initialized
     
-    function f6() {
+    function f25() {
         let x: unknown;
         let y = x;
     }
     
     // Spread of unknown causes result to be unknown
     
-    function f7(x: {}, y: unknown, z: any) {
+    function f26(x: {}, y: unknown, z: any) {
         let o1 = { a: 42, ...x };  // { a: number }
         let o2 = { a: 42, ...x, ...y };  // unknown
         let o3 = { a: 42, ...x, ...y, ...z };  // any
@@ -150,7 +205,15 @@ tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Prop
     
     // Functions with unknown return type don't need return expressions
     
-    function f8(): unknown {
+    function f27(): unknown {
+    }
+    
+    // Rest type cannot be created from unknown
+    
+    function f28(x: unknown) {
+        let { ...a } = x;  // Error
+                 ~
+!!! error TS2700: Rest types may only be created from object types.
     }
     
     // Class properties of type unknown don't need definite assignment
