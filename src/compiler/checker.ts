@@ -8581,16 +8581,19 @@ namespace ts {
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
         // for intersections of types with signatures can be deterministic.
         function getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
-            if (types.length === 0) {
-                return emptyObjectType;
-            }
             const typeSet: Type[] = [];
             const includes = addTypesToIntersection(typeSet, 0, types);
             if (includes & TypeFlags.Never) {
                 return neverType;
             }
-            if (includes & TypeFlags.Any) {
-                return includes & TypeFlags.Wildcard ? wildcardType : anyType;
+            if (includes & TypeFlags.Wildcard) {
+                return wildcardType;
+            }
+            if (!strictAny && includes & TypeFlags.Any) {
+                return anyType;
+            }
+            if (!strictNullChecks && includes & TypeFlags.Nullable) {
+                return includes & TypeFlags.Undefined ? undefinedType : nullType;
             }
             if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
@@ -8599,6 +8602,9 @@ namespace ts {
             }
             if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
                 typeSet.push(emptyObjectType);
+            }
+            if (typeSet.length === 0) {
+                return anyType;
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
