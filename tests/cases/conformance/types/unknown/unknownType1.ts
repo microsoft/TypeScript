@@ -39,19 +39,37 @@ type T33<T> = T extends never ? true : false;  // Deferred
 type T40 = keyof any;  // string | number | symbol
 type T41 = keyof unknown;  // string | number | symbol
 
+// Only equality operators are allowed with unknown
+
+function f10(x: unknown) {
+    x == 5;
+    x !== 10;
+    x >= 0;  // Error
+    x.foo;  // Error
+    x[10];  // Error
+    x();  // Error
+    x + 1;  // Error
+    x * 2;  // Error
+    -x;  // Error
+    +x;  // Error
+}
+
+// No property accesses, element accesses, or function calls
+
+function f11(x: unknown) {
+    x.foo;  // Error
+    x[5];  // Error
+    x();  // Error
+    new x();  // Error
+}
+
 // typeof, instanceof, and user defined type predicates
 
 declare function isFunction(x: unknown): x is Function;
 
-function f1(x: unknown) {
+function f20(x: unknown) {
     if (typeof x === "string" || typeof x === "number") {
         x;  // string | number
-    }
-    if (typeof x === "object") {
-        x;  // object
-    }
-    if (typeof x === "function") {
-        x;  // object
     }
     if (x instanceof Error) {
         x;  // Error
@@ -69,7 +87,7 @@ type T52 = T50<any>;  // { [x: string]: number }
 
 // Anything is assignable to unknown
 
-function f2<T>(pAny: any, pNever: never, pT: T) {
+function f21<T>(pAny: any, pNever: never, pT: T) {
     let x: unknown;
     x = 123;
     x = "hello";
@@ -83,7 +101,7 @@ function f2<T>(pAny: any, pNever: never, pT: T) {
 
 // unknown assignable only to itself and any
 
-function f3(x: unknown) {
+function f22(x: unknown) {
     let v1: any = x;
     let v2: unknown = x;
     let v3: object = x;  // Error
@@ -95,13 +113,13 @@ function f3(x: unknown) {
 
 // Type parameter 'T extends unknown' not related to object
 
-function f4<T extends unknown>(x: T) {
+function f23<T extends unknown>(x: T) {
     let y: object = x;  // Error
 }
 
 // Anything but primitive assignable to { [x: string]: unknown }
 
-function f5(x: { [x: string]: unknown }) {
+function f24(x: { [x: string]: unknown }) {
     x = {};
     x = { a: 5 };
     x = [1, 2, 3];
@@ -110,14 +128,14 @@ function f5(x: { [x: string]: unknown }) {
 
 // Locals of type unknown always considered initialized
 
-function f6() {
+function f25() {
     let x: unknown;
     let y = x;
 }
 
 // Spread of unknown causes result to be unknown
 
-function f7(x: {}, y: unknown, z: any) {
+function f26(x: {}, y: unknown, z: any) {
     let o1 = { a: 42, ...x };  // { a: number }
     let o2 = { a: 42, ...x, ...y };  // unknown
     let o3 = { a: 42, ...x, ...y, ...z };  // any
@@ -125,7 +143,13 @@ function f7(x: {}, y: unknown, z: any) {
 
 // Functions with unknown return type don't need return expressions
 
-function f8(): unknown {
+function f27(): unknown {
+}
+
+// Rest type cannot be created from unknown
+
+function f28(x: unknown) {
+    let { ...a } = x;  // Error
 }
 
 // Class properties of type unknown don't need definite assignment
