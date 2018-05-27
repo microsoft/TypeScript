@@ -1,0 +1,165 @@
+tests/cases/conformance/types/unknown/unknownType1.ts(87,9): error TS2322: Type 'unknown' is not assignable to type 'object'.
+tests/cases/conformance/types/unknown/unknownType1.ts(88,9): error TS2322: Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/unknown/unknownType1.ts(89,9): error TS2322: Type 'unknown' is not assignable to type 'string[]'.
+tests/cases/conformance/types/unknown/unknownType1.ts(90,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
+tests/cases/conformance/types/unknown/unknownType1.ts(91,9): error TS2322: Type 'unknown' is not assignable to type '{} | null | undefined'.
+  Type 'unknown' is not assignable to type '{}'.
+tests/cases/conformance/types/unknown/unknownType1.ts(97,9): error TS2322: Type 'T' is not assignable to type 'object'.
+tests/cases/conformance/types/unknown/unknownType1.ts(106,5): error TS2322: Type '123' is not assignable to type '{ [x: string]: unknown; }'.
+tests/cases/conformance/types/unknown/unknownType1.ts(132,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+
+
+==== tests/cases/conformance/types/unknown/unknownType1.ts (8 errors) ====
+    // In an intersection everything absorbs unknown
+    
+    type T00 = unknown & null;  // null
+    type T01 = unknown & undefined;  // undefined
+    type T02 = unknown & null & undefined;  // null & undefined (which becomes never in union)
+    type T03 = unknown & string;  // string
+    type T04 = unknown & string[];  // string[]
+    type T05 = unknown & unknown;  // unknown
+    type T06 = unknown & any;  // any
+    
+    // In a union an unknown absorbs everything
+    
+    type T10 = unknown | null;  // unknown
+    type T11 = unknown | undefined;  // unknown
+    type T12 = unknown | null | undefined;  // unknown
+    type T13 = unknown | string;  // unknown
+    type T14 = unknown | string[];  // unknown
+    type T15 = unknown | unknown;  // unknown
+    type T16 = unknown | any;  // any
+    
+    // Type variable and unknown in union and intersection
+    
+    type T20<T> = T & {};  // T & {}
+    type T21<T> = T | {};  // T | {}
+    type T22<T> = T & unknown;  // T
+    type T23<T> = T | unknown;  // unknown
+    
+    // unknown in conditional types
+    
+    type T30<T> = unknown extends T ? true : false;  // Deferred
+    type T31<T> = T extends unknown ? true : false;  // true
+    type T32<T> = never extends T ? true : false;  // true
+    type T33<T> = T extends never ? true : false;  // Deferred
+    
+    // keyof unknown
+    
+    type T40 = keyof any;  // string | number | symbol
+    type T41 = keyof unknown;  // string | number | symbol
+    
+    // typeof, instanceof, and user defined type predicates
+    
+    declare function isFunction(x: unknown): x is Function;
+    
+    function f1(x: unknown) {
+        if (typeof x === "string" || typeof x === "number") {
+            x;  // string | number
+        }
+        if (typeof x === "object") {
+            x;  // object
+        }
+        if (typeof x === "function") {
+            x;  // object
+        }
+        if (x instanceof Error) {
+            x;  // Error
+        }
+        if (isFunction(x)) {
+            x;  // Function
+        }
+    }
+    
+    // Homomorphic mapped type over unknown
+    
+    type T50<T> = { [P in keyof T]: number };
+    type T51 = T50<unknown>;  // { [x: string]: number }
+    type T52 = T50<any>;  // { [x: string]: number }
+    
+    // Anything is assignable to unknown
+    
+    function f2<T>(pAny: any, pNever: never, pT: T) {
+        let x: unknown;
+        x = 123;
+        x = "hello";
+        x = [1, 2, 3];
+        x = new Error();
+        x = x;
+        x = pAny;
+        x = pNever;
+        x = pT;
+    }
+    
+    // unknown assignable only to itself and any
+    
+    function f3(x: unknown) {
+        let v1: any = x;
+        let v2: unknown = x;
+        let v3: object = x;  // Error
+            ~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'object'.
+        let v4: string = x;  // Error
+            ~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string'.
+        let v5: string[] = x;  // Error
+            ~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'string[]'.
+        let v6: {} = x;  // Error
+            ~~
+!!! error TS2322: Type 'unknown' is not assignable to type '{}'.
+        let v7: {} | null | undefined = x;  // Error
+            ~~
+!!! error TS2322: Type 'unknown' is not assignable to type '{} | null | undefined'.
+!!! error TS2322:   Type 'unknown' is not assignable to type '{}'.
+    }
+    
+    // Type parameter 'T extends unknown' not related to object
+    
+    function f4<T extends unknown>(x: T) {
+        let y: object = x;  // Error
+            ~
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+    }
+    
+    // Anything but primitive assignable to { [x: string]: unknown }
+    
+    function f5(x: { [x: string]: unknown }) {
+        x = {};
+        x = { a: 5 };
+        x = [1, 2, 3];
+        x = 123;  // Error
+        ~
+!!! error TS2322: Type '123' is not assignable to type '{ [x: string]: unknown; }'.
+    }
+    
+    // Locals of type unknown always considered initialized
+    
+    function f6() {
+        let x: unknown;
+        let y = x;
+    }
+    
+    // Spread of unknown causes result to be unknown
+    
+    function f7(x: {}, y: unknown, z: any) {
+        let o1 = { a: 42, ...x };  // { a: number }
+        let o2 = { a: 42, ...x, ...y };  // unknown
+        let o3 = { a: 42, ...x, ...y, ...z };  // any
+    }
+    
+    // Functions with unknown return type don't need return expressions
+    
+    function f8(): unknown {
+    }
+    
+    // Class properties of type unknown don't need definite assignment
+    
+    class C1 {
+        a: string;  // Error
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        b: unknown;
+        c: any;
+    }
+    
