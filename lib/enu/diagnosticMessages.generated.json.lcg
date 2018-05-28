@@ -735,6 +735,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";All_variables_are_unused_6199" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[All variables are unused.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typech_6011" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Allow default imports from modules with no default export. This does not affect code emit, just typechecking.]]></Val>
@@ -1659,6 +1665,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Convert_0_to_mapped_object_type_95055" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Convert_all_constructor_functions_to_classes_95045" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Convert all constructor functions to classes]]></Val>
@@ -2070,6 +2082,12 @@
             <Item ItemId=";Enable_project_compilation_6302" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Enable project compilation]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Enable_strict_checking_of_any_type_6200" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Enable strict checking of 'any' type.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4302,6 +4320,12 @@
             <Item ItemId=";Remove_unused_label_95053" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Remove unused label]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Remove_variable_statement_90010" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove variable statement]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
