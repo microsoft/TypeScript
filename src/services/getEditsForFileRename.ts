@@ -20,18 +20,32 @@ namespace ts {
     }
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater): void {
-        const configFile = program.getCompilerOptions().configFile;
+        const { configFile } = program.getCompilerOptions();
         if (!configFile) return;
-        for (const property of getTsConfigPropArray(configFile, "files")) {
-            if (!isArrayLiteralExpression(property.initializer)) continue;
+        const jsonObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
+        if (!jsonObjectLiteral) return;
 
-            for (const element of property.initializer.elements) {
-                if (!isStringLiteral(element)) continue;
+        for (const property of jsonObjectLiteral.properties) {
+            if (!isPropertyAssignment(property) || !isStringLiteral(property.name)) continue;
+            switch (property.name.text) {
+                case "files":
+                case "include":
+                case "exclude":
+                case "baseUrl":
+                case "typeRoots":
+                case "mapRoot":
+                case "rootDir":
+                case "rootDirs":
+                    const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+                    for (const element of elements) {
+                        if (!isStringLiteral(element)) continue;
 
-                const updated = oldToNew(element.text);
-                if (updated !== undefined) {
-                    changeTracker.replaceRangeWithText(configFile, createStringRange(element, configFile), updated);
-                }
+                        const updated = oldToNew(element.text);
+                        if (updated !== undefined) {
+                            changeTracker.replaceRangeWithText(configFile, createStringRange(element, configFile), updated);
+                        }
+                    }
+
             }
         }
     }
