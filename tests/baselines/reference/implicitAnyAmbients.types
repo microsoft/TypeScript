@@ -51,13 +51,13 @@ declare module m {
     }
 
     module n {
->n : typeof m2
+>n : typeof n
 
         var y; // error
 >y : any
     }
 
     import m2 = n;
->m2 : typeof m2
->n : typeof m2
+>m2 : typeof n
+>n : typeof n
 }

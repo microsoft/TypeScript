@@ -21,6 +21,11 @@
 ////f((x, y) => {});
 ////f((x, y) => { x; });
 ////f((x, y) => { y; });
+////
+////{
+////    let a, b;
+////}
+////for (let i = 0, j = 0; ;) {}
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
@@ -42,5 +47,9 @@ class C implements I {
 declare function f(cb: (x: number, y: string) => void): void;
 f(() => {});
 f((x) => { x; });
-f((x, y) => { y; });`,
+f((x, y) => { y; });
+
+{
+}
+for (; ;) {}`,
 });

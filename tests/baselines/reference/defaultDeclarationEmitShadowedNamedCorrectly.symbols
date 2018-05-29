@@ -16,7 +16,7 @@ export interface Things<P, T> {
 >T : Symbol(T, Decl(this.ts, 1, 26))
 }
 export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
->make : Symbol(me.make, Decl(this.ts, 4, 1))
+>make : Symbol(make, Decl(this.ts, 4, 1))
 >P : Symbol(P, Decl(this.ts, 5, 21))
 >CTor : Symbol(CTor, Decl(this.ts, 5, 23))
 >x : Symbol(x, Decl(this.ts, 5, 30))
@@ -49,7 +49,7 @@ export namespace Something {
 
     export const create = make(me.default);
 >create : Symbol(create, Decl(this.ts, 17, 16))
->make : Symbol(me.make, Decl(this.ts, 4, 1))
+>make : Symbol(make, Decl(this.ts, 4, 1))
 >me.default : Symbol(me.default, Decl(this.ts, 10, 1))
 >me : Symbol(me, Decl(this.ts, 0, 6))
 >default : Symbol(me.default, Decl(this.ts, 10, 1))

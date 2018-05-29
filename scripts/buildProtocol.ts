@@ -8,7 +8,7 @@ function endsWith(s: string, suffix: string) {
 }
 
 function isStringEnum(declaration: ts.EnumDeclaration) {
-    return declaration.members.length && declaration.members.every(m => m.initializer && m.initializer.kind === ts.SyntaxKind.StringLiteral);
+    return declaration.members.length && declaration.members.every(m => !!m.initializer && m.initializer.kind === ts.SyntaxKind.StringLiteral);
 }
 
 class DeclarationsWalker {
@@ -30,7 +30,7 @@ class DeclarationsWalker {
             text += "\ndeclare namespace ts {\n";
             text += "    // these types are empty stubs for types from services and should not be used directly\n"
             for (const type of walker.removedTypes) {
-                text += `    export type ${type.symbol.name} = never;\n`;
+                text += `    export type ${type.symbol!.name} = never;\n`;
             }
             text += "}"
         }
@@ -130,7 +130,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
     function getInitialDtsFileForProtocol() {
         const program = ts.createProgram([protocolTs, typeScriptServicesDts], options);
 
-        let protocolDts: string;
+        let protocolDts: string | undefined;
         program.emit(program.getSourceFile(protocolTs), (file, content) => {
             if (endsWith(file, ".d.ts")) {
                 protocolDts = content;
@@ -162,7 +162,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
     let protocolDts = getInitialDtsFileForProtocol();
     const program = getProgramWithProtocolText(protocolDts, /*includeTypeScriptServices*/ true);
 
-    const protocolFile = program.getSourceFile("protocol.d.ts");
+    const protocolFile = program.getSourceFile("protocol.d.ts")!;
     const extraDeclarations = DeclarationsWalker.getExtraDeclarations(program.getTypeChecker(), protocolFile);
     if (extraDeclarations) {
         protocolDts += extraDeclarations;

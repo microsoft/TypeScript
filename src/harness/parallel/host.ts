@@ -1,3 +1,5 @@
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
+
 if (typeof describe === "undefined") {
     (global as any).describe = undefined; // If launched without mocha for parallel mode, we still need a global describe visible to satisfy the parsing of the unit tests
     (global as any).it = undefined;
@@ -11,6 +13,13 @@ namespace Harness.Parallel.Host {
         on(event: "message", listener: (message: ParallelClientMessage) => void): this;
         kill(signal?: string): void;
         currentTasks?: {file: string}[]; // Custom monkeypatch onto child process handle
+        accumulatedOutput: string; // Custom monkeypatch with process output
+        stderr: PartialStream;
+        stdout: PartialStream;
+    }
+
+    interface PartialStream {
+        on(event: "data", listener: (chunk: Buffer) => void): this;
     }
 
     interface ProgressBarsOptions {
@@ -32,7 +41,7 @@ namespace Harness.Parallel.Host {
     function perfdataFileName(target?: string) {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
-    function readSavedPerfData(target?: string): {[testHash: string]: number} {
+    function readSavedPerfData(target?: string): {[testHash: string]: number} | undefined {
         const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
@@ -73,7 +82,7 @@ namespace Harness.Parallel.Host {
         setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
     }
 
-    function startDelayed(perfData: {[testHash: string]: number}, totalCost: number) {
+    function startDelayed(perfData: {[testHash: string]: number} | undefined, totalCost: number) {
         initializeProgressBarsDependencies();
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
@@ -149,7 +158,13 @@ namespace Harness.Parallel.Host {
             const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests, stackTraceLimit };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             IO.writeFile(configPath, JSON.stringify(config));
-            const child = fork(__filename, [`--config="${configPath}"`]);
+            const child = fork(__filename, [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] });
+            child.accumulatedOutput = "";
+            const appendOutput = (d: Buffer) => {
+                child.accumulatedOutput += d.toString();
+            };
+            child.stderr.on("data", appendOutput);
+            child.stdout.on("data", appendOutput);
             let currentTimeout = defaultTimeout;
             const killChild = () => {
                 child.kill();
@@ -164,8 +179,10 @@ namespace Harness.Parallel.Host {
                 return process.exit(2);
             });
             child.on("exit", (code, _signal) => {
+                clearTimeout(timer);
                 if (code !== 0) {
-                    console.error("Test worker process exited with nonzero exit code!");
+                    console.error(`Test worker process exited with nonzero exit code! Output:
+${child.accumulatedOutput}`);
                     return process.exit(2);
                 }
             });
@@ -221,22 +238,23 @@ namespace Harness.Parallel.Host {
                                 // No more tasks to distribute
                                 child.send({ type: "close" });
                                 closedWorkers++;
+                                clearTimeout(timer);
                                 if (closedWorkers === workerCount) {
                                     outputFinalResult();
                                 }
                                 return;
                             }
                             // Send tasks in blocks if the tasks are small
-                            const taskList = [tasks.pop()];
+                            const taskList = [tasks.pop()!];
                             while (tasks.length && taskList.reduce((p, c) => p + c.size, 0) < chunkSize) {
-                                taskList.push(tasks.pop());
+                                taskList.push(tasks.pop()!);
                             }
                             child.currentTasks = taskList;
                             if (taskList.length === 1) {
-                                child.send({ type: "test", payload: taskList[0] });
+                                child.send({ type: "test", payload: taskList[0] } as ParallelHostMessage); // TODO: GH#18217
                             }
                             else {
-                                child.send({ type: "batch", payload: taskList });
+                                child.send({ type: "batch", payload: taskList } as ParallelHostMessage); // TODO: GH#18217
                             }
                         }
                     }
@@ -268,7 +286,7 @@ namespace Harness.Parallel.Host {
                         doneBatching[i] = true;
                         continue;
                     }
-                    const task = tasks.pop();
+                    const task = tasks.pop()!;
                     batches[i].push(task);
                     scheduledTotal += task.size;
                 }
@@ -293,7 +311,7 @@ namespace Harness.Parallel.Host {
                     worker.send({ type: "batch", payload });
                 }
                 else { // Out of batches, send off just one test
-                    const payload = tasks.pop();
+                    const payload = tasks.pop()!;
                     ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
                     worker.currentTasks = [payload];
                     worker.send({ type: "test", payload });
@@ -302,7 +320,7 @@ namespace Harness.Parallel.Host {
         }
         else {
             for (let i = 0; i < workerCount; i++) {
-                const task = tasks.pop();
+                const task = tasks.pop()!;
                 workers[i].currentTasks = [task];
                 workers[i].send({ type: "test", payload: task });
             }
@@ -519,7 +537,7 @@ namespace Harness.Parallel.Host {
                 this._enabled = false;
             }
         }
-        update(index: number, percentComplete: number, color: string, title: string, titleColor?: string) {
+        update(index: number, percentComplete: number, color: string, title: string | undefined, titleColor?: string) {
             percentComplete = minMax(percentComplete, 0, 1);
 
             const progressBar = this._progressBars[index] || (this._progressBars[index] = { });
@@ -555,7 +573,7 @@ namespace Harness.Parallel.Host {
             }
 
             cursor.hide();
-            readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
+            readline.moveCursor(process.stdout, -process.stdout.columns!, -this._lineCount);
             let lineCount = 0;
             const numProgressBars = this._progressBars.length;
             for (let i = 0; i < numProgressBars; i++) {
@@ -564,7 +582,7 @@ namespace Harness.Parallel.Host {
                     process.stdout.write(this._progressBars[i].text + os.EOL);
                 }
                 else {
-                    readline.moveCursor(process.stdout, -process.stdout.columns, +1);
+                    readline.moveCursor(process.stdout, -process.stdout.columns!, +1);
                 }
 
                 lineCount++;

@@ -39,7 +39,7 @@ function f() {
     }
     catch (e) {
         x++;
-    }    
+    }
     finally {
         x+=3;
     }

@@ -11,14 +11,14 @@ function run(configuration: commands.IConfiguration) {
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 >absoluteWorkspacePath : string
 >configuration.workspace.toAbsolutePath(configuration.server) : string
->configuration.workspace.toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
->configuration.workspace : IWorkspace
+>configuration.workspace.toAbsolutePath : (server: import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+>configuration.workspace : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IWorkspace
 >configuration : commands.IConfiguration
->workspace : IWorkspace
->toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
->configuration.server : IServer
+>workspace : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IWorkspace
+>toAbsolutePath : (server: import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+>configuration.server : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer
 >configuration : commands.IConfiguration
->server : IServer
+>server : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer
 }
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands.ts ===
 //visibilityOfCrossModuleTypeUsage

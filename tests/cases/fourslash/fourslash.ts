@@ -69,9 +69,7 @@ declare module ts {
         writeByteOrderMark: boolean;
         text: string;
     }
-}
 
-declare namespace ts {
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -340,6 +338,7 @@ declare namespace FourSlashInterface {
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
     }
@@ -516,7 +515,7 @@ declare namespace FourSlashInterface {
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
-        unused?: true;
+        reportsUnnecessary?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
@@ -537,6 +536,7 @@ declare namespace FourSlashInterface {
         readonly insertText?: string,
         readonly replacementSpan?: Range,
         readonly hasAction?: boolean,
+        readonly isRecommended?: boolean,
         readonly kind?: string,
 
         // details

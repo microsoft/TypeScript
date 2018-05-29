@@ -59,6 +59,18 @@ function f5() {
     let v4 = c4;
 }
 
+declare function widening<T>(x: T): T;
+declare function nonWidening<T extends string | number | symbol>(x: T): T;
+
+function f6(cond: boolean) {
+    let x1 = widening('a');
+    let x2 = widening(10);
+    let x3 = widening(cond ? 'a' : 10);
+    let y1 = nonWidening('a');
+    let y2 = nonWidening(10);
+    let y3 = nonWidening(cond ? 'a' : 10);
+}
+
 // Repro from #10898
 
 type FAILURE = "FAILURE";
@@ -95,3 +107,23 @@ type TestEvent = "onmouseover" | "onmouseout";
 function onMouseOver(): TestEvent { return "onmouseover"; }
 
 let x = onMouseOver();
+
+// Repro from #23649
+
+export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
+  const result = {} as Record<K, true | undefined>
+  keys.forEach(key => result[key] = true)
+  return result
+}
+
+export function keys<K extends string, V>(obj: Record<K, V>): K[] {
+  return Object.keys(obj) as K[]
+}
+
+type Obj = { code: LangCode }
+
+const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
+export type LangCode = keyof typeof langCodeSet
+export const langCodes = keys(langCodeSet)
+
+const arr: Obj[] = langCodes.map(code => ({ code }))

@@ -9,8 +9,8 @@ export function bar() {
 
 //// [dottedNamesInSystem.js]
 System.register([], function (exports_1, context_1) {
-    var A;
     "use strict";
+    var A;
     var __moduleName = context_1 && context_1.id;
     function bar() {
         return A.B.C.foo();
