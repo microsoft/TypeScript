@@ -3,6 +3,7 @@
         "lib": ["es5"],
         "noEmitOnError": true,
         "strictNullChecks": true,
+        "strictAny": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noUnusedLocals": true,
