@@ -106,8 +106,8 @@ type T33<T> = T extends never ? true : false;  // Deferred
 type T40 = keyof any;  // string | number | symbol
 >T40 : string | number | symbol
 
-type T41 = keyof unknown;  // string | number | symbol
->T41 : string | number | symbol
+type T41 = keyof unknown;  // never
+>T41 : never
 
 // Only equality operators are allowed with unknown
 
@@ -240,12 +240,12 @@ type T50<T> = { [P in keyof T]: number };
 >P : P
 >T : T
 
-type T51 = T50<unknown>;  // { [x: string]: number }
->T51 : T50<unknown>
+type T51 = T50<any>;  // { [x: string]: number }
+>T51 : T50<any>
 >T50 : T50<T>
 
-type T52 = T50<any>;  // { [x: string]: number }
->T52 : T50<any>
+type T52 = T50<unknown>;  // {}
+>T52 : T50<unknown>
 >T50 : T50<T>
 
 // Anything is assignable to unknown

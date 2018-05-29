@@ -36,7 +36,7 @@ type T33<T> = T extends never ? true : false;  // Deferred
 // keyof unknown
 
 type T40 = keyof any;  // string | number | symbol
-type T41 = keyof unknown;  // string | number | symbol
+type T41 = keyof unknown;  // never
 
 // Only equality operators are allowed with unknown
 
@@ -81,8 +81,8 @@ function f20(x: unknown) {
 // Homomorphic mapped type over unknown
 
 type T50<T> = { [P in keyof T]: number };
-type T51 = T50<unknown>;  // { [x: string]: number }
-type T52 = T50<any>;  // { [x: string]: number }
+type T51 = T50<any>;  // { [x: string]: number }
+type T52 = T50<unknown>;  // {}
 
 // Anything is assignable to unknown
 

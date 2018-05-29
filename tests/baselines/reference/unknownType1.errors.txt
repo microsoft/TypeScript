@@ -60,7 +60,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(156,5): error TS2564: Prop
     // keyof unknown
     
     type T40 = keyof any;  // string | number | symbol
-    type T41 = keyof unknown;  // string | number | symbol
+    type T41 = keyof unknown;  // never
     
     // Only equality operators are allowed with unknown
     
@@ -129,8 +129,8 @@ tests/cases/conformance/types/unknown/unknownType1.ts(156,5): error TS2564: Prop
     // Homomorphic mapped type over unknown
     
     type T50<T> = { [P in keyof T]: number };
-    type T51 = T50<unknown>;  // { [x: string]: number }
-    type T52 = T50<any>;  // { [x: string]: number }
+    type T51 = T50<any>;  // { [x: string]: number }
+    type T52 = T50<unknown>;  // {}
     
     // Anything is assignable to unknown
     
