@@ -2993,7 +2993,7 @@ namespace ts {
             }
         }
 
-        function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType, writer: EmitTextWriter = createTextWriter("")): string {
+        function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
             if (typeNode === undefined) return Debug.fail("should always get typenode");
             const options = { removeComments: true };
@@ -3941,7 +3941,7 @@ namespace ts {
             }
         }
 
-        function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string {
+        function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer?: EmitTextWriter): string {
             return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
 
             function typePredicateToStringWorker(writer: EmitTextWriter) {
@@ -24154,6 +24154,16 @@ namespace ts {
         }
 
         /**
+         * The name cannot be used as 'Object' of user defined types with special target.
+         */
+        function checkClassNameCollisionWithObject(name: Identifier): void {
+            if (languageVersion === ScriptTarget.ES5 && name.escapedText === "Object"
+                && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext) {
+                error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
+            }
+        }
+
+        /**
          * Check each type parameter and check that type parameters have no duplicate type parameter declarations
          */
         function checkTypeParameters(typeParameterDeclarations: ReadonlyArray<TypeParameterDeclaration> | undefined) {
@@ -24279,6 +24289,9 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+                if (!(node.flags & NodeFlags.Ambient)) {
+                    checkClassNameCollisionWithObject(node.name);
+                }
             }
             checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
             checkExportsOnMergedDeclarations(node);
@@ -24489,7 +24502,7 @@ namespace ts {
                             continue;
                         }
 
-                        if (isPrototypeProperty(base) && isPrototypeProperty(derived) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
+                        if (isPrototypeProperty(base) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                             // method is overridden with method or property/accessor is overridden with property/accessor - correct case
                             continue;
                         }

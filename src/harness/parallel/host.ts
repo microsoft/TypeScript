@@ -13,6 +13,13 @@ namespace Harness.Parallel.Host {
         on(event: "message", listener: (message: ParallelClientMessage) => void): this;
         kill(signal?: string): void;
         currentTasks?: {file: string}[]; // Custom monkeypatch onto child process handle
+        accumulatedOutput: string; // Custom monkeypatch with process output
+        stderr: PartialStream;
+        stdout: PartialStream;
+    }
+
+    interface PartialStream {
+        on(event: "data", listener: (chunk: Buffer) => void): this;
     }
 
     interface ProgressBarsOptions {
@@ -151,7 +158,13 @@ namespace Harness.Parallel.Host {
             const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests, stackTraceLimit };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             IO.writeFile(configPath, JSON.stringify(config));
-            const child = fork(__filename, [`--config="${configPath}"`]);
+            const child = fork(__filename, [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] });
+            child.accumulatedOutput = "";
+            const appendOutput = (d: Buffer) => {
+                child.accumulatedOutput += d.toString();
+            };
+            child.stderr.on("data", appendOutput);
+            child.stdout.on("data", appendOutput);
             let currentTimeout = defaultTimeout;
             const killChild = () => {
                 child.kill();
@@ -166,8 +179,10 @@ namespace Harness.Parallel.Host {
                 return process.exit(2);
             });
             child.on("exit", (code, _signal) => {
+                clearTimeout(timer);
                 if (code !== 0) {
-                    console.error("Test worker process exited with nonzero exit code!");
+                    console.error(`Test worker process exited with nonzero exit code! Output:
+${child.accumulatedOutput}`);
                     return process.exit(2);
                 }
             });
@@ -223,6 +238,7 @@ namespace Harness.Parallel.Host {
                                 // No more tasks to distribute
                                 child.send({ type: "close" });
                                 closedWorkers++;
+                                clearTimeout(timer);
                                 if (closedWorkers === workerCount) {
                                     outputFinalResult();
                                 }

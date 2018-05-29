@@ -14,6 +14,7 @@ export default class {}
 
 //// [a.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,7 +22,6 @@ System.register([], function (exports_1, context_1) {
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var decorator, Foo;
-    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -37,6 +37,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [b.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -44,7 +45,6 @@ System.register([], function (exports_1, context_1) {
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var decorator, default_1;
-    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

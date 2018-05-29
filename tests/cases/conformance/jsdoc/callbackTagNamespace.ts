@@ -4,8 +4,8 @@
 // @Filename: namespaced.js
 /**
  * @callback NS.Nested.Inner
- * @param {string} space - spaaaaaaaaace
- * @param {string} peace - peaaaaaaaaace
+ * @param {Object} space - spaaaaaaaaace
+ * @param {Object} peace - peaaaaaaaaace
  * @return {string | number}
  */
 var x = 1;

@@ -529,7 +529,7 @@ namespace ts {
                     createVariableStatement(/*modifiers*/ undefined,
                         createVariableDeclarationList(taggedTemplateStringDeclarations)));
             }
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
@@ -837,7 +837,7 @@ namespace ts {
             setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
 
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
 
             const block = createBlock(setTextRange(createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
             setEmitFlags(block, EmitFlags.NoComments);
@@ -980,7 +980,7 @@ namespace ts {
                 );
             }
 
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
 
             if (constructor) {
                 prependCaptureNewTargetIfNeeded(statements, constructor, /*copyOnWrite*/ false);
@@ -1896,7 +1896,7 @@ namespace ts {
             }
 
             const lexicalEnvironment = context.endLexicalEnvironment();
-            prependRange(statements, lexicalEnvironment);
+            prependStatements(statements, lexicalEnvironment);
 
             prependCaptureNewTargetIfNeeded(statements, node, /*copyOnWrite*/ false);
 
@@ -2712,7 +2712,7 @@ namespace ts {
                 if (loopOutParameters.length) {
                     copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
                 }
-                prependRange(statements, lexicalEnvironment);
+                prependStatements(statements, lexicalEnvironment);
                 loopBody = createBlock(statements, /*multiline*/ true);
             }
 
