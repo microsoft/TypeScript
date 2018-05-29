@@ -7839,7 +7839,7 @@ new C();`
                     const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
                     const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, withPathMapping ? packages : recognizersDateTime, ...getTypeRootsFromLocation(recognizersDateTime)];
-                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...(withPathMapping ? [recognizersText] : emptyArray), ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
                         const projectService = session.getProjectService();
