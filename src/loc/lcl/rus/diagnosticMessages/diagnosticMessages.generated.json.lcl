@@ -2393,6 +2393,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Класс не может иметь имя "Object" при выборе ES5 с модулем {0} в качестве целевого.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_static_side_0_incorrectly_extends_base_class_static_side_1_2417" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class static side '{0}' incorrectly extends base class static side '{1}'.]]></Val>
@@ -2551,6 +2560,15 @@
           <Val><![CDATA[Containing file is not specified and root directory cannot be determined, skipping lookup in 'node_modules' folder.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Содержащий файл не указан, корневой каталог невозможно определить. Выполняется пропуск поиска в папке node_modules.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_0_to_mapped_object_type_95055" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать "{0}" в тип сопоставленного объекта]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
