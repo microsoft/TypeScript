@@ -42,8 +42,8 @@ export class D {
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
-    var B;
     "use strict";
+    var B;
     var __moduleName = context_1 && context_1.id;
     function foo() { return "foo"; }
     exports_1("foo", foo);
@@ -71,8 +71,8 @@ System.register([], function (exports_1, context_1) {
 });
 //// [2.js]
 System.register([], function (exports_1, context_1) {
-    var C, D;
     "use strict";
+    var C, D;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

@@ -13,8 +13,8 @@ export class Bar extends Foo {
 
 //// [foo.js]
 System.register([], function (exports_1, context_1) {
-    var Foo;
     "use strict";
+    var Foo;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -30,6 +30,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [bar.js]
 System.register(["./foo"], function (exports_1, context_1) {
+    "use strict";
     var __extends = (this && this.__extends) || (function () {
         var extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -41,7 +42,6 @@ System.register(["./foo"], function (exports_1, context_1) {
         };
     })();
     var foo_1, Bar;
-    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [

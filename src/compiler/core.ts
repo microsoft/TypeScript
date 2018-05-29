@@ -965,7 +965,8 @@ namespace ts {
     export function append<T>(to: T[], value: T | undefined): T[];
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
-    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    export function append<T>(to: Push<T>, value: T | undefined): void;
+    export function append<T>(to: T[], value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
         if (to === undefined) return [value];
         to.push(value);
@@ -1002,21 +1003,6 @@ namespace ts {
                 to.push(from[i]);
             }
         }
-        return to;
-    }
-
-    /**
-     * Appends a range of value to begin of an array, returning the array.
-     *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
-     * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
-     * appended. If an element of `from` is `undefined`, that element is not appended.
-     */
-    export function prependRange<T>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
-        if (from === undefined || from.length === 0) return to;
-        if (to === undefined) return from.slice();
-        to.unshift(...from);
         return to;
     }
 
@@ -2653,7 +2639,7 @@ namespace ts {
         /**
          * Matches any single directory segment unless it is the last segment and a .min.js file
          * Breakdown:
-         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  [^./]                   # matches everything up to the first . character (excluding directory separators)
          *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
          */
         singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
