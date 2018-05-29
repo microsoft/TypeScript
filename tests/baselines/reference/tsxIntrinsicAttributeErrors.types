@@ -60,7 +60,7 @@ var E: I;
 >E : I
 >I : I
 
-    <E x={10} />
+<E x={10} />
 ><E x={10} /> : JSX.Element
 >E : I
 >x : number

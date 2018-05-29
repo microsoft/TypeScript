@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,6): error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,2): error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes'.
   Property 'key' is missing in type '{ x: number; }'.
 
 
@@ -31,8 +31,8 @@ tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,6): error TS2322:
         }
     }
     var E: I;
-        <E x={10} />
-         ~
+    <E x={10} />
+     ~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2322:   Property 'key' is missing in type '{ x: number; }'.
     

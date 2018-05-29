@@ -60,7 +60,7 @@ var E: I;
 >E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 3))
 >I : Symbol(I, Decl(tsxIntrinsicAttributeErrors.tsx, 19, 1))
 
-    <E x={10} />
+<E x={10} />
 >E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 3))
->x : Symbol(x, Decl(tsxIntrinsicAttributeErrors.tsx, 28, 6))
+>x : Symbol(x, Decl(tsxIntrinsicAttributeErrors.tsx, 28, 2))
 

@@ -27,7 +27,7 @@ interface I {
     }
 }
 var E: I;
-    <E x={10} />
+<E x={10} />
 
 
 //// [tsxIntrinsicAttributeErrors.jsx]
