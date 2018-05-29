@@ -414,12 +414,16 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public utimesSync(path: string, atime: Date, mtime: Date) {
+            if (this.isReadonly) throw createIOError("EROFS");
+            if (!isFinite(+atime) || !isFinite(+mtime)) throw createIOError("EINVAL");
+
             const entry = this._walk(this._resolve(path));
             if (!entry || !entry.node) {
                 throw createIOError("ENOENT");
             }
             entry.node.atimeMs = +atime;
             entry.node.mtimeMs = +mtime;
+            entry.node.ctimeMs = this.time();
         }
 
         /**
