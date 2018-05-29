@@ -180,7 +180,7 @@ namespace ts.DocumentHighlights {
                 default:
                     // Don't cross function boundaries.
                     // TODO: GH#20090
-                    return (isFunctionLike(node) && "quit") as false | "quit";
+                    return isFunctionLike(node) && "quit";
             }
         });
     }
