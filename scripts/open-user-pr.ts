@@ -19,7 +19,7 @@ const userName = process.env.GH_USERNAME;
 const reviewers = ["weswigham", "sandersn", "mhegazy"]
 const now = new Date();
 const branchName = `user-update-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}`;
-const remoteUrl = `https://github.com/${userName}/TypeScript.git`;
+const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 runSequence([
     ["git", ["checkout", "."]], // reset any changes
     ["node", ["./node_modules/jake/bin/cli.js", "baseline-accept"]], // accept baselines
@@ -27,7 +27,7 @@ runSequence([
     ["git", ["add", "."]], // Add all changes
     ["git", ["commit", "-m", `"Update user baselines"`]], // Commit all changes
     ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
-    ["git", ["push", "--set-upstream", "fork", branchName]] // push the branch
+    ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
 ]);
 
 const gh = new Octokit();
@@ -44,6 +44,7 @@ gh.pullRequests.create({
     base: "master",
     body:
 `Please review the diff and merge if no changes are unexpected.
+You can view the build log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
 cc ${reviewers.map(r => "@" + r).join(" ")}`,
 }).then(r => {

@@ -38,8 +38,8 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenLines = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                if (textChanges.isValidLocationToAddComment(diag.file!, diag.start!)) {
-                    makeChange(changes, diag.file!, diag.start!, seenLines);
+                if (textChanges.isValidLocationToAddComment(diag.file, diag.start)) {
+                    makeChange(changes, diag.file, diag.start, seenLines);
                 }
             });
         },

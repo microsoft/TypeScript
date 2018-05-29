@@ -134,7 +134,7 @@ namespace project {
             this.compilerOptions = createCompilerOptions(testCase, moduleKind);
             this.sys = new fakes.System(vfs);
 
-            let configFileName: string;
+            let configFileName: string | undefined;
             let inputFiles = testCase.inputFiles;
             if (this.compilerOptions.project) {
                 // Parse project
@@ -145,7 +145,7 @@ namespace project {
                 configFileName = ts.findConfigFile("", path => this.sys.fileExists(path));
             }
 
-            let errors: ts.Diagnostic[];
+            let errors: ts.Diagnostic[] | undefined;
             const configFileSourceFiles: ts.SourceFile[] = [];
             if (configFileName) {
                 const result = ts.readJsonConfigFile(configFileName, path => this.sys.readFile(path));
@@ -154,7 +154,7 @@ namespace project {
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
                 inputFiles = configParseResult.fileNames;
                 this.compilerOptions = configParseResult.options;
-                errors = result.parseDiagnostics.concat(configParseResult.errors);
+                errors = [...result.parseDiagnostics, ...configParseResult.errors];
             }
 
             const compilerHost = new ProjectCompilerHost(this.sys, this.compilerOptions, this.testCaseJustName, this.testCase, moduleKind);
@@ -178,7 +178,7 @@ namespace project {
         public static getConfigurations(testCaseFileName: string): ProjectTestConfiguration[] {
             let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
-            let testFileText: string;
+            let testFileText: string | undefined;
             try {
                 testFileText = Harness.IO.readFile(testCaseFileName);
             }
@@ -187,10 +187,10 @@ namespace project {
             }
 
             try {
-                testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText);
+                testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText!);
             }
             catch (e) {
-                assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
+                throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
             }
 
             const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
@@ -209,12 +209,12 @@ namespace project {
             const cwd = this.vfs.cwd();
             const ignoreCase = this.vfs.ignoreCase;
             const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
-            resolutionInfo.resolvedInputFiles = this.compilerResult.program.getSourceFiles()
+            resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
                 .map(({ fileName: input }) => vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? utils.removeTestPathPrefixes(input) :
                     vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
                     input);
 
-            resolutionInfo.emittedFiles = this.compilerResult.outputFiles
+            resolutionInfo.emittedFiles = this.compilerResult.outputFiles!
                 .map(output => output.meta.get("fileName") || output.file)
                 .map(output => utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
 
@@ -234,7 +234,7 @@ namespace project {
             if (this.testCase.baselineCheck) {
                 const errs: Error[] = [];
                 let nonSubfolderDiskFiles = 0;
-                for (const output of this.compilerResult.outputFiles) {
+                for (const output of this.compilerResult.outputFiles!) {
                     try {
                         // convert file name to rooted name
                         // if filename is not rooted - concat it with project root and then expand project root relative to current directory
@@ -252,7 +252,7 @@ namespace project {
                         }
 
                         const content = utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                        Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, () => content);
+                        Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, () => content as string | null); // TODO: GH#18217
                     }
                     catch (e) {
                         errs.push(e);
@@ -292,7 +292,7 @@ namespace project {
         }
 
         private cleanProjectUrl(url: string) {
-            let diskProjectPath = ts.normalizeSlashes(Harness.IO.resolvePath(this.testCase.projectRoot));
+            let diskProjectPath = ts.normalizeSlashes(Harness.IO.resolvePath(this.testCase.projectRoot)!);
             let projectRootUrl = "file:///" + diskProjectPath;
             const normalizedProjectRoot = ts.normalizeSlashes(this.testCase.projectRoot);
             diskProjectPath = diskProjectPath.substr(0, diskProjectPath.lastIndexOf(normalizedProjectRoot));
@@ -362,10 +362,10 @@ namespace project {
                     rootFiles.unshift(sourceFile.fileName);
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {
-                    let emitOutputFilePathWithoutExtension: string;
+                    let emitOutputFilePathWithoutExtension: string | undefined;
                     if (compilerOptions.outDir) {
-                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
-                        sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
+                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
+                        sourceFilePath = sourceFilePath.replace(compilerResult.program!.getCommonSourceDirectory(), "");
                         emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
                     }
                     else {
@@ -380,8 +380,8 @@ namespace project {
                     }
                 }
                 else {
-                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ts.Extension.Dts;
-                    const outputDtsFile = findOutputDtsFile(outputDtsFileName);
+                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + ts.Extension.Dts;
+                    const outputDtsFile = findOutputDtsFile(outputDtsFileName)!;
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
                         rootFiles.unshift(outputDtsFile.meta.get("fileName") || outputDtsFile.file);
@@ -395,8 +395,8 @@ namespace project {
             });
 
             // Dont allow config files since we are compiling existing source options
-            const compilerHost = new ProjectCompilerHost(_vfs, compilerResult.compilerOptions, this.testCaseJustName, this.testCase, compilerResult.moduleKind);
-            return this.compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, () => rootFiles, compilerHost, compilerResult.compilerOptions);
+            const compilerHost = new ProjectCompilerHost(_vfs, compilerResult.compilerOptions!, this.testCaseJustName, this.testCase, compilerResult.moduleKind);
+            return this.compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, () => rootFiles, compilerHost, compilerResult.compilerOptions!);
 
             function findOutputDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.meta.get("fileName") === fileName ? outputFile : undefined);

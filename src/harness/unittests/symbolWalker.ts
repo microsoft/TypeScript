@@ -8,8 +8,8 @@ namespace ts {
                     unitName: "main.ts",
                     content: source
                 }], [], {}, {}, "/");
-                const file = result.program.getSourceFile("main.ts");
-                const checker = result.program.getTypeChecker();
+                const file = result.program!.getSourceFile("main.ts")!;
+                const checker = result.program!.getTypeChecker();
                 verifier(file, checker);
             });
         }

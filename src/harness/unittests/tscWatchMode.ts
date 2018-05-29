@@ -171,7 +171,7 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    function getDiagnosticOfFileFrom(file: SourceFile, text: string, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+    function getDiagnosticOfFileFrom(file: SourceFile | undefined, text: string, start: number | undefined, length: number | undefined, message: DiagnosticMessage): Diagnostic {
         return {
             file,
             start,
@@ -205,7 +205,7 @@ namespace ts.tscWatch {
 
     function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
         const quotedOption = `"${option}"`;
-        return getDiagnosticOfFile(program.getCompilerOptions().configFile, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
     }
 
     function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
@@ -215,7 +215,7 @@ namespace ts.tscWatch {
             text = formatStringFromArgs(text, arguments, 5);
         }
 
-        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())),
+        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
             text, start, length, message);
     }
 
@@ -1101,8 +1101,8 @@ namespace ts.tscWatch {
             const host = createWatchedSystem(files);
             const watch = createWatchOfConfigFile(configFile.path, host);
             const errors = () => [
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"allowJs"'), '"allowJs"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"),
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"declaration"'), '"declaration"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration")
+                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"allowJs"'), '"allowJs"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"),
+                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"declaration"'), '"declaration"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration")
             ];
             const intialErrors = errors();
             checkOutputErrorsInitial(host, intialErrors);
@@ -1112,38 +1112,57 @@ namespace ts.tscWatch {
             host.runQueuedTimeoutCallbacks();
             const nowErrors = errors();
             checkOutputErrorsIncremental(host, nowErrors);
-            assert.equal(nowErrors[0].start, intialErrors[0].start - configFileContentComment.length);
-            assert.equal(nowErrors[1].start, intialErrors[1].start - configFileContentComment.length);
+            assert.equal(nowErrors[0].start, intialErrors[0].start! - configFileContentComment.length);
+            assert.equal(nowErrors[1].start, intialErrors[1].start! - configFileContentComment.length);
         });
 
-        it("should not trigger recompilation because of program emit", () => {
-            const proj = "/user/username/projects/myproject";
-            const file1: File = {
-                path: `${proj}/file1.ts`,
-                content: "export const c = 30;"
-            };
-            const file2: File = {
-                path: `${proj}/src/file2.ts`,
-                content: `import {c} from "file1"; export const d = 30;`
-            };
-            const tsconfig: File = {
-                path: `${proj}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        module: "amd",
-                        outDir: "build"
-                    }
-                })
-            };
-            const host = createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: proj });
-            const watch = createWatchOfConfigFile(tsconfig.path, host, /*maxNumberOfFilesToIterateForInvalidation*/1);
-            checkProgramActualFiles(watch(), [file1.path, file2.path, libFile.path]);
+        describe("should not trigger should not trigger recompilation because of program emit", () => {
+            function verifyWithOptions(options: CompilerOptions, outputFiles: ReadonlyArray<string>) {
+                const proj = "/user/username/projects/myproject";
+                const file1: File = {
+                    path: `${proj}/file1.ts`,
+                    content: "export const c = 30;"
+                };
+                const file2: File = {
+                    path: `${proj}/src/file2.ts`,
+                    content: `import {c} from "file1"; export const d = 30;`
+                };
+                const tsconfig: File = {
+                    path: `${proj}/tsconfig.json`,
+                    content: generateTSConfig(options, emptyArray, "\n")
+                };
+                const host = createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: proj });
+                const watch = createWatchOfConfigFile(tsconfig.path, host, /*maxNumberOfFilesToIterateForInvalidation*/1);
+                checkProgramActualFiles(watch(), [file1.path, file2.path, libFile.path]);
 
-            assert.isTrue(host.fileExists("build/file1.js"));
-            assert.isTrue(host.fileExists("build/src/file2.js"));
+                outputFiles.forEach(f => host.fileExists(f));
 
-            // This should be 0
-            host.checkTimeoutQueueLengthAndRun(0);
+                // This should be 0
+                host.checkTimeoutQueueLengthAndRun(0);
+            }
+
+            it("without outDir or outFile is specified", () => {
+                debugger;
+                verifyWithOptions({ module: ModuleKind.AMD }, ["file1.js", "src/file2.js"]);
+            });
+
+            it("with outFile", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, outFile: "build/outFile.js" }, ["build/outFile.js"]);
+            });
+
+            it("when outDir is specified", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, outDir: "build" }, ["build/file1.js", "build/src/file2.js"]);
+            });
+
+            it("when outDir and declarationDir is specified", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, outDir: "build", declaration: true, declarationDir: "decls" },
+                    ["build/file1.js", "build/src/file2.js", "decls/file1.d.ts", "decls/src/file2.d.ts"]);
+            });
+
+            it("declarationDir is specified", () => {
+                verifyWithOptions({ module: ModuleKind.AMD, declaration: true, declarationDir: "decls" },
+                    ["file1.js", "src/file2.js", "decls/file1.d.ts", "decls/src/file2.d.ts"]);
+            });
         });
 
         it("shouldnt report error about unused function incorrectly when file changes from global to module", () => {
@@ -1409,7 +1428,7 @@ namespace ts.tscWatch {
             }
 
             function getFile(fileName: string) {
-                return find(files, file => file.path === fileName);
+                return find(files, file => file.path === fileName)!;
             }
 
             function verifyAffectedAllFiles() {
@@ -2252,7 +2271,7 @@ declare module "fs" {
             const disableConsoleClear = options.diagnostics || options.extendedDiagnostics || options.preserveWatchOutput;
             const host = createWatchedSystem(files);
             createWatchOfFilesAndCompilerOptions([file.path], host, options);
-            checkOutputErrorsInitial(host, emptyArray, disableConsoleClear, options.extendedDiagnostics && [
+            checkOutputErrorsInitial(host, emptyArray, disableConsoleClear, options.extendedDiagnostics ? [
                 "Current directory: / CaseSensitiveFileNames: false\n",
                 "Synchronizing program\n",
                 "CreatingProgramWith::\n",
@@ -2260,21 +2279,21 @@ declare module "fs" {
                 "  options: {\"extendedDiagnostics\":true}\n",
                 "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
                 "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
-            ]);
+            ] : undefined);
 
             file.content = "//";
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
-            checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, options.extendedDiagnostics && [
+            checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, options.extendedDiagnostics ? [
                 "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n",
                 "Scheduling update\n",
                 "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n"
-            ], options.extendedDiagnostics && [
+            ] : undefined, options.extendedDiagnostics ? [
                 "Synchronizing program\n",
                 "CreatingProgramWith::\n",
                 "  roots: [\"f.ts\"]\n",
                 "  options: {\"extendedDiagnostics\":true}\n"
-            ]);
+            ] : undefined);
         }
 
         it("without --diagnostics or --extendedDiagnostics", () => {

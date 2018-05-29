@@ -40,6 +40,7 @@
     "File '/node_modules/a/node_modules/@foo/bar.d.ts' does not exist.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' does not have a 'types' field.",
+    "'package.json' does not have a 'main' field.",
     "File '/node_modules/a/node_modules/@foo/bar/index.ts' does not exist.",
     "File '/node_modules/a/node_modules/@foo/bar/index.tsx' does not exist.",
     "File '/node_modules/a/node_modules/@foo/bar/index.d.ts' exist - use it as a name resolution result.",

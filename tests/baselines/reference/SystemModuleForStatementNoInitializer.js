@@ -19,8 +19,8 @@ for (; ;) {
 
 //// [SystemModuleForStatementNoInitializer.js]
 System.register([], function (exports_1, context_1) {
-    var i, limit;
     "use strict";
+    var i, limit;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

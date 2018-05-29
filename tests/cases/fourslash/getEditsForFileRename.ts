@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// See also `getEditsForFileRename_oldFileStillPresent.ts`
+
 // @Filename: /a.ts
 /////// <reference path="./src/old.ts" />
 ////import old from "./src/old";

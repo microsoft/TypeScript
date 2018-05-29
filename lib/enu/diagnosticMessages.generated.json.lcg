@@ -651,6 +651,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Add_missing_typeof_95052" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add missing 'typeof']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
@@ -714,6 +720,12 @@
             <Item ItemId=";All_declarations_of_an_abstract_method_must_be_consecutive_2516" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[All declarations of an abstract method must be consecutive.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";All_destructured_elements_are_unused_6198" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[All destructured elements are unused.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1335,6 +1347,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Cannot_prepend_project_0_because_it_does_not_have_outFile_set_6308" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Cannot prepend project '{0}' because it does not have 'outFile' set]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided_1205" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Cannot re-export a type when the '--isolatedModules' flag is provided.]]></Val>
@@ -1572,6 +1590,12 @@
             <Item ItemId=";Compiler_option_0_requires_a_value_of_type_1_5024" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Compiler option '{0}' requires a value of type {1}.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Composite_projects_may_not_disable_declaration_emit_6304" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Composite projects may not disable declaration emit.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1983,15 +2007,15 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules_1323" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[Dynamic import cannot be used when targeting ECMAScript 2015 modules.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
             <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Dynamic_import_is_only_supported_when_module_flag_is_commonjs_or_esNext_1323" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2040,6 +2064,12 @@
             <Item ItemId=";Enable_all_strict_type_checking_options_6180" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Enable all strict type-checking options.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Enable_project_compilation_6302" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Enable project compilation]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2406,6 +2436,12 @@
             <Item ItemId=";File_0_is_not_a_module_2306" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[File '{0}' is not a module.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern_6307" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[File '{0}' is not in project file list. Projects must list all files or use an 'include' pattern.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2790,6 +2826,12 @@
             <Item ItemId=";In_const_enum_declarations_member_initializer_must_be_constant_expression_2474" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[In 'const' enum declarations member initializer must be constant expression.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Include_modules_imported_with_json_extension_6197" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Include modules imported with '.json' extension]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3381,6 +3423,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Move_to_a_new_file_95049" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Move to a new file]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
@@ -3627,6 +3675,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy_5070" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Options_Colon_6027" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Options:]]></Val>
@@ -3636,6 +3690,18 @@
             <Item ItemId=";Output_directory_for_generated_declaration_files_6166" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Output directory for generated declaration files.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Output_file_0_from_project_1_does_not_exist_6309" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Output file '{0}' from project '{1}' does not exist]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Output_file_0_has_not_been_built_from_source_file_1_6305" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Output file '{0}' has not been built from source file '{1}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3894,6 +3960,18 @@
             <Item ItemId=";Print_this_message_6017" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Print this message.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0_6202" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Project references may not form a circular graph. Cycle detected: {0}]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Projects_to_reference_6300" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Projects to reference]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4179,15 +4257,51 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Referenced_project_0_must_have_setting_composite_Colon_true_6306" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Referenced project '{0}' must have setting "composite": true.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Remove_all_unreachable_code_95051" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove all unreachable code]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Remove_all_unused_labels_95054" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove all unused labels]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Remove declaration for: '{0}']]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove destructuring]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Remove import from '{0}']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Remove_unreachable_code_95050" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove unreachable code]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Remove_unused_label_95053" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove unused label]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>

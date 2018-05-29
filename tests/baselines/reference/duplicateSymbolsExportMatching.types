@@ -131,5 +131,5 @@ interface D { }
 >D : D
 
 export interface D { }
->D : D
+>D : import("tests/cases/compiler/duplicateSymbolsExportMatching").D
 

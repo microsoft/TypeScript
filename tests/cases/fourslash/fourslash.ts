@@ -69,9 +69,7 @@ declare module ts {
         writeByteOrderMark: boolean;
         text: string;
     }
-}
 
-declare namespace ts {
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -169,7 +167,6 @@ declare namespace FourSlashInterface {
         completionListContainsClassElementKeywords(): void;
         completionListContainsConstructorParameterKeywords(): void;
         completionListAllowsNewIdentifier(): void;
-        signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
@@ -180,7 +177,7 @@ declare namespace FourSlashInterface {
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
-            newFileContent?: string,
+            newFileContent?: string | { readonly [fileName: string]: string },
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
@@ -263,17 +260,8 @@ declare namespace FourSlashInterface {
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
-        currentParameterHelpArgumentNameIs(name: string): void;
-        currentParameterSpanIs(parameter: string): void;
-        currentParameterHelpArgumentDocCommentIs(docComment: string): void;
-        currentSignatureHelpDocCommentIs(docComment: string): void;
-        currentSignatureHelpTagsAre(tags: ts.JSDocTagInfo[]): void;
-        signatureHelpCountIs(expected: number): void;
-        signatureHelpArgumentCountIs(expected: number): void;
-        signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
-        currentSignatureParameterCountIs(expected: number): void;
-        currentSignatureTypeParameterCountIs(expected: number): void;
-        currentSignatureHelpIs(expected: string): void;
+        noSignatureHelp(...markers: string[]): void;
+        signatureHelp(...options: VerifySignatureHelpOptions[]): void;
         // Checks that there are no compile errors.
         noErrors(): void;
         numberOfErrorsInCurrentFile(expected: number): void;
@@ -350,6 +338,7 @@ declare namespace FourSlashInterface {
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
     }
@@ -526,7 +515,7 @@ declare namespace FourSlashInterface {
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
-        unused?: true;
+        reportsUnnecessary?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
@@ -547,6 +536,7 @@ declare namespace FourSlashInterface {
         readonly insertText?: string,
         readonly replacementSpan?: Range,
         readonly hasAction?: boolean,
+        readonly isRecommended?: boolean,
         readonly kind?: string,
 
         // details
@@ -554,6 +544,27 @@ declare namespace FourSlashInterface {
         readonly documentation?: string,
         readonly sourceDisplay?: string,
     };
+
+    interface VerifySignatureHelpOptions {
+        marker?: ArrayOrSingle<string>;
+        /** @default 1 */
+        overloadsCount?: number;
+        docComment?: string;
+        text?: string;
+        name?: string;
+        parameterName?: string;
+        parameterSpan?: string;
+        parameterDocComment?: string;
+        parameterCount?: number;
+        argumentCount?: number;
+        isVariadic?: boolean;
+        tags?: ReadonlyArray<JSDocTagInfo>;
+    }
+
+    interface JSDocTagInfo {
+        name: string;
+        text: string | undefined;
+    }
 
     type ArrayOrSingle<T> = T | ReadonlyArray<T>;
 }

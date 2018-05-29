@@ -35,4 +35,11 @@ edit.insert('y.');
 verify.completionListContains("toUpperCase", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
 edit.backspace(2);
 edit.insert('z(');
-verify.currentSignatureHelpIs("z(a: number | boolean, b: string[]): string");
+verify.signatureHelp({
+    text: "z(a: number | boolean, b: string[]): string",
+    parameterDocComment: "The first param",
+    tags: [
+        { name: "param", text: "a The first param" },
+        { name: "param", text: "b The second param" },
+    ],
+});
