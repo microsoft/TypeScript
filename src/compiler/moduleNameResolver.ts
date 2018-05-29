@@ -2,7 +2,7 @@ namespace ts {
     /* @internal */
     export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
     export function trace(host: ModuleResolutionHost): void {
-        host.trace!(formatMessage.apply(undefined, arguments));
+        host.trace!(formatMessage.apply(undefined, arguments) as string);
     }
 
     /* @internal */
@@ -124,7 +124,7 @@ namespace ts {
             if (result.error) {
                 return {};
             }
-            return result.config;
+            return result.config as object;
         }
         catch (e) {
             // gracefully handle if readFile fails or returns not JSON

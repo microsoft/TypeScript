@@ -609,7 +609,7 @@ namespace ts {
             case SyntaxKind.ComputedPropertyName:
                 return isStringOrNumericLiteral(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -4116,7 +4116,7 @@ namespace ts {
     /** Add a value to a set, and return true if it wasn't already present. */
     export function addToSeen(seen: Map<true>, key: string | number): boolean;
     export function addToSeen<T>(seen: Map<T>, key: string | number, value: T): boolean;
-    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T = true as any): boolean {
+    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T = true as never): boolean {
         key = String(key);
         if (seen.has(key)) {
             return false;
@@ -4500,7 +4500,7 @@ namespace ts {
             }
             try {
                 // tslint:disable-next-line no-unnecessary-qualifier (making clear this is a global mutation!)
-                ts.localizedDiagnosticMessages = JSON.parse(fileContents!);
+                ts.localizedDiagnosticMessages = JSON.parse(fileContents!) as MapLike<string>;
             }
             catch {
                 if (errors) {

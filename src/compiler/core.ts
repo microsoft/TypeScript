@@ -36,7 +36,7 @@ namespace ts {
         map.__ = undefined;
         delete map.__;
 
-        return map;
+        return map as MapLike<T>;
     }
 
     /** Create a new map. If a template object is provided, the map will copy entries from it. */
@@ -1232,7 +1232,7 @@ namespace ts {
      * @param key A property key.
      */
     export function hasProperty(map: MapLike<any>, key: string): boolean {
-        return hasOwnProperty.call(map, key);
+        return hasOwnProperty.call(map, key) as boolean;
     }
 
     /**
@@ -1397,8 +1397,8 @@ namespace ts {
     export function arrayToSet(array: ReadonlyArray<string>): Map<true>;
     export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<true>;
     export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
-    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
-        return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
+    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | undefined): Map<true> | UnderscoreEscapedMap<true> {
+        return arrayToMap<any, true>(array, makeKey || (s => s as string), () => true);
     }
 
     export function arrayToMultiMap<T>(values: ReadonlyArray<T>, makeKey: (value: T) => string): MultiMap<T>;
@@ -1425,30 +1425,30 @@ namespace ts {
     }
 
     export function clone<T>(object: T): T {
-        const result: any = {};
+        const result = {} as any;
         for (const id in object) {
             if (hasOwnProperty.call(object, id)) {
-                result[id] = (<any>object)[id];
+                result[id] = object[id];
             }
         }
-        return result;
+        return result as T;
     }
 
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
+        const result = {} as any;
         for (const id in second) {
             if (hasOwnProperty.call(second, id)) {
-                (result as any)[id] = (second as any)[id];
+                result[id] = second[id];
             }
         }
 
         for (const id in first) {
             if (hasOwnProperty.call(first, id)) {
-                (result as any)[id] = (first as any)[id];
+                result[id] = first[id];
             }
         }
 
-        return result;
+        return result as T1 & T2;
     }
 
     export interface MultiMap<T> extends Map<T[]> {
@@ -1568,7 +1568,7 @@ namespace ts {
         if (e) {
             const args: ((t: T) => (u: U) => U)[] = [];
             for (let i = 0; i < arguments.length; i++) {
-                args[i] = arguments[i];
+                args[i] = arguments[i] as (t: T) => (u: U) => U;
             }
 
             return t => compose(...map(args, f => f(t)));
@@ -1601,7 +1601,7 @@ namespace ts {
         if (e) {
             const args: ((t: T) => T)[] = [];
             for (let i = 0; i < arguments.length; i++) {
-                args[i] = arguments[i];
+                args[i] = arguments[i] as (t: T) => T;
             }
 
             return t => reduceLeft(args, (u, f) => f(u), t);
@@ -1646,7 +1646,7 @@ namespace ts {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 4) {
-            text = formatStringFromArgs(text, arguments, 4);
+            text = formatStringFromArgs(text, arguments as ArrayLike<string>, 4);
         }
 
         return {
@@ -1666,7 +1666,7 @@ namespace ts {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
-            text = formatStringFromArgs(text, arguments, 2);
+            text = formatStringFromArgs(text, arguments as ArrayLike<string>, 2);
         }
 
         return text;
@@ -1677,7 +1677,7 @@ namespace ts {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 1) {
-            text = formatStringFromArgs(text, arguments, 1);
+            text = formatStringFromArgs(text, arguments as ArrayLike<string>, 1);
         }
 
         return {
@@ -1709,7 +1709,7 @@ namespace ts {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
-            text = formatStringFromArgs(text, arguments, 2);
+            text = formatStringFromArgs(text, arguments as ArrayLike<string>, 2);
         }
 
         return {
@@ -3130,14 +3130,14 @@ namespace ts {
     }
 
     export let objectAllocator: ObjectAllocator = {
-        getNodeConstructor: () => <any>Node,
-        getTokenConstructor: () => <any>Node,
-        getIdentifierConstructor: () => <any>Node,
-        getSourceFileConstructor: () => <any>Node,
-        getSymbolConstructor: () => <any>Symbol,
-        getTypeConstructor: () => <any>Type,
-        getSignatureConstructor: () => <any>Signature,
-        getSourceMapSourceConstructor: () => <any>SourceMapSource,
+        getNodeConstructor: (() => Node) as never,
+        getTokenConstructor: (() => Node) as never,
+        getIdentifierConstructor: (() => Node) as never,
+        getSourceFileConstructor: (() => Node) as never,
+        getSymbolConstructor: (() => Symbol) as never,
+        getTypeConstructor: (() => Type) as never,
+        getSignatureConstructor: (() => Signature) as never,
+        getSourceMapSourceConstructor: (() => SourceMapSource) as never,
     };
 
     export const enum AssertionLevel {
@@ -3228,14 +3228,14 @@ namespace ts {
                 return (<any>func).name;
             }
             else {
-                const text = Function.prototype.toString.call(func);
+                const text = Function.prototype.toString.call(func) as string;
                 const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
                 return match ? match[1] : "";
             }
         }
 
         export function showSymbol(symbol: Symbol): string {
-            const symbolFlags = (ts as any).SymbolFlags;
+            const symbolFlags = (ts as any).SymbolFlags as { [x: number]: string };
             return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
         }
 
@@ -3251,7 +3251,7 @@ namespace ts {
         }
 
         export function showSyntaxKind(node: Node): string {
-            const syntaxKind = (ts as any).SyntaxKind;
+            const syntaxKind = (ts as any).SyntaxKind as { [x: number]: string };
             return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
         }
     }

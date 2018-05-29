@@ -85,7 +85,7 @@ namespace ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.message);
+                    onError(e.message as string);
                 }
                 text = "";
             }
@@ -135,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const mtimeAfter = sys.getModifiedTime!(fileName)!; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
@@ -161,7 +161,7 @@ namespace ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.message);
+                    onError(e.message as string);
                 }
             }
         }
@@ -812,7 +812,7 @@ namespace ts {
             let result: ResolvedModuleFull[] | undefined;
             let reusedNames: string[] | undefined;
             /** A transient placeholder used to mark predicted resolution in the result list. */
-            const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
+            const predictedToResolveToAmbientModuleMarker = {} as ResolvedModuleFull;
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
@@ -823,7 +823,7 @@ namespace ts {
                         if (isTraceEnabled(options, host)) {
                             trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
                         }
-                        (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
+                        (result || (result = new Array<ResolvedModuleFull>(moduleNames.length)))[i] = oldResolvedModule;
                         (reusedNames || (reusedNames = [])).push(moduleName);
                         continue;
                     }
@@ -844,7 +844,7 @@ namespace ts {
                 }
 
                 if (resolvesToAmbientModuleInNonModifiedFile) {
-                    (result || (result = new Array(moduleNames.length)))[i] = predictedToResolveToAmbientModuleMarker;
+                    (result || (result = new Array<ResolvedModuleFull>(moduleNames.length)))[i] = predictedToResolveToAmbientModuleMarker;
                 }
                 else {
                     // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
@@ -1887,7 +1887,7 @@ namespace ts {
         }
 
         function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path): SourceFile {
-            const redirect: SourceFile = Object.create(redirectTarget);
+            const redirect = Object.create(redirectTarget) as SourceFile;
             redirect.fileName = fileName;
             redirect.path = path;
             redirect.redirectInfo = { redirectTarget, unredirected };
@@ -2093,8 +2093,8 @@ namespace ts {
                                 fileProcessingDiagnostics.add(createDiagnostic(refFile!, refPos!, refEnd!, // TODO: GH#18217
                                     Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
                                     typeReferenceDirective,
-                                    resolvedTypeReferenceDirective.resolvedFileName,
-                                    previousResolution.resolvedFileName
+                                    resolvedTypeReferenceDirective.resolvedFileName!, // TODO: GH#18217
+                                    previousResolution.resolvedFileName! // TODO: GH#18217
                                 ));
                             }
                         }
@@ -2116,7 +2116,7 @@ namespace ts {
             }
         }
 
-        function createDiagnostic(refFile: SourceFile, refPos: number, refEnd: number, message: DiagnosticMessage, ...args: any[]): Diagnostic {
+        function createDiagnostic(refFile: SourceFile, refPos: number, refEnd: number, message: DiagnosticMessage, ...args: string[]): Diagnostic {
             if (refFile === undefined || refPos === undefined || refEnd === undefined) {
                 return createCompilerDiagnostic(message, ...args);
             }

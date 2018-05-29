@@ -1337,7 +1337,7 @@ namespace ts {
                     const parameter = parameters[i];
                     if (decorators || parameter.decorators) {
                         if (!decorators) {
-                            decorators = new Array(parameters.length);
+                            decorators = new Array<ReadonlyArray<Decorator>>(parameters.length);
                         }
 
                         decorators[i] = parameter.decorators;

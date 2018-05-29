@@ -1,6 +1,3 @@
-declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
-declare function clearTimeout(handle: any): void;
-
 namespace ts {
     /**
      * Set a high stack trace limit to provide more information in case of an error.
@@ -300,7 +297,7 @@ namespace ts {
         }
 
         function scheduleNextPoll(pollingInterval: PollingInterval) {
-            pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout!(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
+            pollingIntervalQueue(pollingInterval).pollScheduled = !!host.setTimeout!(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
         }
 
         function getModifiedTime(fileName: string) {
@@ -447,7 +444,7 @@ namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        getModifiedTime?(path: string): Date;
+        getModifiedTime?(path: string): Date | undefined;
         /**
          * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
          */
@@ -476,16 +473,11 @@ namespace ts {
         referenceCount: number;
     }
 
-    declare const require: any;
-    declare const process: any;
-    declare const global: any;
-    declare const __filename: string;
-
     export function getNodeMajorVersion(): number | undefined {
         if (typeof process === "undefined") {
             return undefined;
         }
-        const version: string = process.version;
+        const version = process.version as string;
         if (!version) {
             return undefined;
         }
@@ -526,22 +518,19 @@ namespace ts {
         const byteOrderMarkIndicator = "\uFEFF";
 
         function getNodeSystem(): System {
-            const _fs = require("fs");
-            const _path = require("path");
-            const _os = require("os");
+            const _fs = require("fs") as typeof import("fs");
+            const _path = require("path") as typeof import ("path");
+            const _os = require("os") as typeof import("os");
             // crypto can be absent on reduced node installations
             let _crypto: typeof import("crypto") | undefined;
             try {
-              _crypto = require("crypto");
+              _crypto = require("crypto") as typeof import("crypto");
             }
             catch {
               _crypto = undefined;
             }
 
-            const Buffer: {
-                new (input: string, encoding?: string): any;
-                from?(input: string, encoding?: string): any;
-            } = require("buffer").Buffer;
+            const Buffer = (require("buffer") as typeof import("buffer")).Buffer;
 
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion! >= 4;
@@ -566,7 +555,7 @@ namespace ts {
                     process.stdout.write(s);
                 },
                 writeOutputIsTTY() {
-                    return process.stdout.isTTY;
+                    return !!process.stdout.isTTY;
                 },
                 readFile,
                 writeFile,
@@ -629,8 +618,8 @@ namespace ts {
                     process.stdout.write("\x1Bc");
                 },
                 setBlocking: () => {
-                    if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
-                        process.stdout._handle.setBlocking(true);
+                    if (process.stdout && (process.stdout as any)._handle && (process.stdout as any)._handle.setBlocking) {
+                        (process.stdout as any)._handle.setBlocking(true);
                     }
                 },
                 base64decode: Buffer.from ? input => {
@@ -832,7 +821,7 @@ namespace ts {
             }
 
             function fsWatch(fileOrDirectory: string, entryKind: FileSystemEntryKind.File | FileSystemEntryKind.Directory, callback: FsWatchCallback, recursive: boolean, fallbackPollingWatchFile: HostWatchFile, pollingInterval?: number): FileWatcher {
-                let options: any;
+                let options: { persistent?: boolean, recursive?: boolean };
                 /** Watcher for the file system entry depending on whether it is missing or present */
                 let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                     watchMissingFileSystemEntry() :
@@ -999,7 +988,7 @@ namespace ts {
                         }
                         const name = combinePaths(path, entry);
 
-                        let stat: any;
+                        let stat;
                         try {
                             stat = _fs.statSync(name);
                         }
@@ -1142,7 +1131,7 @@ namespace ts {
         if (typeof ChakraHost !== "undefined") {
             sys = getChakraSystem();
         }
-        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
+        else if (typeof process !== "undefined" && process.nextTick && !(process as any).browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
             sys = getNodeSystem();

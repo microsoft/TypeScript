@@ -977,7 +977,7 @@ namespace ts {
             configFileText = host.readFile(configFileName);
         }
         catch (e) {
-            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
+            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message as string);
             host.onUnRecoverableConfigFileDiagnostic(error);
             return undefined;
         }
@@ -1029,7 +1029,7 @@ namespace ts {
             text = readFile(fileName);
         }
         catch (e) {
-            return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
+            return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message as string);
         }
         return text === undefined ? createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, fileName) : text;
     }
@@ -1188,7 +1188,7 @@ namespace ts {
                 if (extraKeyDiagnosticMessage && !option) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
                 }
-                const value = convertPropertyValueToJson(element.initializer, option);
+                const value = convertPropertyValueToJson(element.initializer, option) as CompilerOptionsValue;
                 if (typeof keyText !== "undefined") {
                     if (returnValue) {
                         result[keyText] = value;
@@ -1224,7 +1224,7 @@ namespace ts {
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
         ): any[] | void {
-            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
+            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption)) as any[] | void;
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
@@ -1510,7 +1510,7 @@ namespace ts {
      *    file to. e.g. outDir
      */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
+        return parseJsonConfigFileContentWorker(json as MapLike<any>, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
     }
 
     /**
@@ -1552,7 +1552,7 @@ namespace ts {
      * @param resolutionStack Only present for backwards-compatibility. Should be empty.
      */
     function parseJsonConfigFileContentWorker(
-        json: any,
+        json: MapLike<any> | undefined,
         sourceFile: TsConfigSourceFile | undefined,
         host: ParseConfigHost,
         basePath: string,
@@ -1616,8 +1616,8 @@ namespace ts {
                 }
             }
             else if (raw.compilerOptions) {
-                const outDir = raw.compilerOptions.outDir;
-                const declarationDir = raw.compilerOptions.declarationDir;
+                const outDir = raw.compilerOptions.outDir as string;
+                const declarationDir = raw.compilerOptions.declarationDir as string;
 
                 if (outDir || declarationDir) {
                     excludeSpecs = [outDir, declarationDir].filter(d => !!d);
@@ -1636,16 +1636,16 @@ namespace ts {
             if (hasProperty(raw, "references") && !isNullOrUndefined(raw.references)) {
                 if (isArray(raw.references)) {
                     const references: ProjectReference[] = [];
-                    for (const ref of raw.references) {
+                    for (const ref of raw.references as any[]) {
                         if (typeof ref.path !== "string") {
                             createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
                         }
                         else {
                             references.push({
-                                path: getNormalizedAbsolutePath(ref.path, basePath),
-                                originalPath: ref.path,
-                                prepend: ref.prepend,
-                                circular: ref.circular
+                                path: getNormalizedAbsolutePath((ref as ProjectReference).path, basePath),
+                                originalPath: (ref as ProjectReference).path,
+                                prepend: (ref as ProjectReference).prepend,
+                                circular: (ref as ProjectReference).circular
                             });
                         }
                     }
@@ -1681,7 +1681,7 @@ namespace ts {
     }
 
     interface ParsedTsconfig {
-        raw: any;
+        raw: MapLike<any>;
         options?: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
         /**
@@ -1699,7 +1699,7 @@ namespace ts {
      * It does *not* resolve the included files.
      */
     function parseConfig(
-            json: any,
+            json: MapLike<any> | undefined,
             sourceFile: TsConfigSourceFile | undefined,
             host: ParseConfigHost,
             basePath: string,
@@ -1712,7 +1712,7 @@ namespace ts {
 
         if (resolutionStack.indexOf(resolvedPath) >= 0) {
             errors.push(createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> ")));
-            return { raw: json || convertToObject(sourceFile!, errors) };
+            return { raw: json as MapLike<any> || convertToObject(sourceFile!, errors) };
         }
 
         const ownConfig = json ?
@@ -1747,7 +1747,7 @@ namespace ts {
     }
 
     function parseOwnConfigOfJson(
-        json: any,
+        json: MapLike<any>,
         host: ParseConfigHost,
         basePath: string,
         configFileName: string | undefined,
@@ -1770,7 +1770,7 @@ namespace ts {
             }
             else {
                 const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                extendedConfigPath = getExtendsConfigPath(json.extends, host, newBase, errors, createCompilerDiagnostic);
+                extendedConfigPath = getExtendsConfigPath(json.extends as string, host, newBase, errors, createCompilerDiagnostic);
             }
         }
         return { raw: json, options, typeAcquisition, extendedConfigPath };
@@ -1824,7 +1824,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
+        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator) as MapLike<any>;
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
                 typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
@@ -1896,7 +1896,7 @@ namespace ts {
             const updatePath = (path: string) => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
             const mapPropertiesInRawIfNotUndefined = (propertyName: string) => {
                 if (raw[propertyName]) {
-                    raw[propertyName] = map(raw[propertyName], updatePath);
+                    raw[propertyName] = map(raw[propertyName] as ReadonlyArray<string>, updatePath);
                 }
             };
 
@@ -1909,7 +1909,7 @@ namespace ts {
         return extendedConfig;
     }
 
-    function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Push<Diagnostic>): boolean {
+    function convertCompileOnSaveOptionFromJson(jsonOption: MapLike<any>, basePath: string, errors: Push<Diagnostic>): boolean {
         if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
             return false;
         }
@@ -1955,7 +1955,7 @@ namespace ts {
         basePath: string, errors: Push<Diagnostic>, configFileName?: string): TypeAcquisition {
 
         const options = getDefaultTypeAcquisition(configFileName);
-        const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
+        const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions as TypeAcquisition);
         convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, Diagnostics.Unknown_type_acquisition_option_0, errors);
 
         return options;
@@ -1985,7 +1985,7 @@ namespace ts {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
-                return convertJsonOptionOfListType(<CommandLineOptionOfListType>opt, value, basePath, errors);
+                return convertJsonOptionOfListType(<CommandLineOptionOfListType>opt, value, basePath, errors) as CompilerOptionsValue;
             }
             else if (!isString(optType)) {
                 return convertJsonOptionOfCustomType(<CommandLineOptionOfCustomType>opt, <string>value, errors);
@@ -2002,24 +2002,24 @@ namespace ts {
         if (option.type === "list") {
             const listOption = <CommandLineOptionOfListType>option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
+                return <CompilerOptionsValue>filter(map(value as any[], v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
             }
-            return value;
+            return value as CompilerOptionsValue;
         }
         else if (!isString(option.type)) {
-            return option.type.get(isString(value) ? value.toLowerCase() : value);
+            return option.type.get(isString(value) ? value.toLowerCase() : "" + value);
         }
         return normalizeNonListOptionValue(option, basePath, value);
     }
 
     function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (option.isFilePath) {
-            value = normalizePath(combinePaths(basePath, value));
+            value = normalizePath(combinePaths(basePath, value as string));
             if (value === "") {
                 value = ".";
             }
         }
-        return value;
+        return value as CompilerOptionsValue;
     }
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Push<Diagnostic>) {
@@ -2034,7 +2034,7 @@ namespace ts {
         }
     }
 
-    function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: ReadonlyArray<any>, basePath: string, errors: Push<Diagnostic>): any[] {
+    function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: ReadonlyArray<any>, basePath: string, errors: Push<Diagnostic>) {
         return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 

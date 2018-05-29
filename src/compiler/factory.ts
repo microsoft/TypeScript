@@ -1309,11 +1309,11 @@ namespace ts {
         whenFalse: Expression): ConditionalExpression;
     export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
         if (args.length === 2) {
-            const [whenTrue, whenFalse] = args;
+            const [whenTrue, whenFalse] = args as [Expression, Expression];
             return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
         }
         Debug.assert(args.length === 4);
-        const [questionToken, whenTrue, colonToken, whenFalse] = args;
+        const [questionToken, whenTrue, colonToken, whenFalse] = args as [Token<SyntaxKind.QuestionToken>, Expression, Token<SyntaxKind.ColonToken>, Expression];
         return node.condition !== condition
             || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue

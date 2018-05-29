@@ -1037,11 +1037,11 @@ namespace ts {
             return inContext(NodeFlags.AwaitContext);
         }
 
-        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: string): void {
             parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
         }
 
-        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
+        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: string): void {
             // Don't report another error if it would just be at the same position as the last error.
             const lastError = lastOrUndefined(parseDiagnostics);
             if (!lastError || start !== lastError.start) {
@@ -1053,11 +1053,11 @@ namespace ts {
             parseErrorBeforeNextFinishedNode = true;
         }
 
-        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): void {
+        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: string): void {
             parseErrorAtPosition(start, end - start, message, arg0);
         }
 
-        function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: any): void {
+        function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: string): void {
             parseErrorAt(range.pos, range.end, message, arg0);
         }
 
@@ -1204,7 +1204,7 @@ namespace ts {
             return false;
         }
 
-        function parseOptionalToken<TKind extends SyntaxKind>(t: TKind): Token<TKind>;
+        function parseOptionalToken<TKind extends SyntaxKind>(t: TKind): Token<TKind> | undefined;
         function parseOptionalToken(t: SyntaxKind): Node | undefined {
             if (token() === t) {
                 return parseTokenNode();
@@ -1212,8 +1212,8 @@ namespace ts {
             return undefined;
         }
 
-        function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
-        function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
+        function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: string): Token<TKind>;
+        function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: string): Node {
             return parseOptionalToken(t) ||
                 createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t));
         }
@@ -1293,7 +1293,7 @@ namespace ts {
             return node;
         }
 
-        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T {
+        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: string): T {
             if (reportAtCurrentPosition) {
                 parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
             }
@@ -3241,7 +3241,7 @@ namespace ts {
             }
 
             let expr = parseAssignmentExpressionOrHigher();
-            let operatorToken: BinaryOperatorToken;
+            let operatorToken;
             while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
                 expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
             }
@@ -5571,7 +5571,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseMethodDeclaration(node: MethodDeclaration, asteriskToken: AsteriskToken, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
+        function parseMethodDeclaration(node: MethodDeclaration, asteriskToken: AsteriskToken | undefined, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
             node.kind = SyntaxKind.MethodDeclaration;
             node.asteriskToken = asteriskToken;
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
@@ -7723,7 +7723,7 @@ namespace ts {
             if (context.pragmas.has(pragma!.name)) { // TODO: GH#18217
                 const currentValue = context.pragmas.get(pragma!.name);
                 if (currentValue instanceof Array) {
-                    currentValue.push(pragma!.args);
+                    currentValue.push(pragma!.args!);
                 }
                 else {
                     context.pragmas.set(pragma!.name, [currentValue, pragma!.args]);

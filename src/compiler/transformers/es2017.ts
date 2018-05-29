@@ -123,7 +123,7 @@ namespace ts {
             catchClauseNames.forEach((_, escapedName) => {
                 if (enclosingFunctionParameterNames.has(escapedName)) {
                     if (!catchClauseUnshadowedNames) {
-                        catchClauseUnshadowedNames = cloneMap(enclosingFunctionParameterNames);
+                        catchClauseUnshadowedNames = cloneMap(enclosingFunctionParameterNames) as UnderscoreEscapedMap<true>;
                     }
                     catchClauseUnshadowedNames.delete(escapedName);
                 }

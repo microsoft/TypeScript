@@ -19,7 +19,7 @@ namespace ts {
             return diagnostic => system.write(formatDiagnostic(diagnostic, host));
         }
 
-        const diagnostics: Diagnostic[] = new Array(1);
+        const diagnostics = new Array<Diagnostic>(1);
         return diagnostic => {
             diagnostics[0] = diagnostic;
             system.write(formatDiagnosticsWithColorAndContext(diagnostics, host) + host.getNewLine());
@@ -88,7 +88,7 @@ namespace ts {
 
     /** Parses config file using System interface */
     export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter) {
-        const host: ParseConfigFileHost = <any>system;
+        const host: ParseConfigFileHost = system as never;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(sys, reportDiagnostic, diagnostic);
         const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
         host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
@@ -724,7 +724,7 @@ namespace ts {
                 }
                 catch (e) {
                     if (onError) {
-                        onError(e.message);
+                        onError(e.message as string);
                     }
                 }
 
@@ -963,7 +963,7 @@ namespace ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.message);
+                    onError(e.message as string);
                 }
             }
         }

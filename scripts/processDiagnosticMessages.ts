@@ -24,7 +24,7 @@ function main(): void {
     const inputFilePath = sys.args[0].replace(/\\/g, "/");
     const inputStr = sys.readFile(inputFilePath)!;
 
-    const diagnosticMessagesJson: { [key: string]: DiagnosticDetails } = JSON.parse(inputStr);
+    const diagnosticMessagesJson = JSON.parse(inputStr) as { [key: string]: DiagnosticDetails };
 
     const diagnosticMessages: InputDiagnosticMessageTable = ts.createMapFromTemplate(diagnosticMessagesJson);
 

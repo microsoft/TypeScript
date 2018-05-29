@@ -788,7 +788,7 @@ namespace ts {
                     }
                     const jsxPragma = file.pragmas.get("jsx");
                     if (jsxPragma) {
-                        const chosenpragma: any = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma; // TODO: GH#18217
+                        const chosenpragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
                         file.localJsxFactory = parseIsolatedEntityName(chosenpragma.arguments.factory, languageVersion);
                         if (file.localJsxFactory) {
                             return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
@@ -17348,8 +17348,8 @@ namespace ts {
         }
 
         function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
-            let previous = new Array(s2.length + 1);
-            let current = new Array(s2.length + 1);
+            let previous = new Array<number>(s2.length + 1);
+            let current = new Array<number>(s2.length + 1);
             /** Represents any value > max. We don't care about the particular value. */
             const big = max + 1;
 
@@ -18378,7 +18378,7 @@ namespace ts {
                 for (let i = isTaggedTemplate ? 1 : 0; i < args!.length; i++) {
                     if (isContextSensitive(args![i])) {
                         if (!excludeArgument) {
-                            excludeArgument = new Array(args!.length);
+                            excludeArgument = new Array<boolean>(args!.length);
                         }
                         excludeArgument[i] = true;
                         excludeCount++;
@@ -28298,7 +28298,7 @@ namespace ts {
             return sourceFile.parseDiagnostics.length > 0;
         }
 
-        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): boolean {
             const sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
                 const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
@@ -28308,7 +28308,7 @@ namespace ts {
             return false;
         }
 
-        function grammarErrorAtPos(nodeForSourceFile: Node, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+        function grammarErrorAtPos(nodeForSourceFile: Node, start: number, length: number, message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): boolean {
             const sourceFile = getSourceFileOfNode(nodeForSourceFile);
             if (!hasParseDiagnostics(sourceFile)) {
                 diagnostics.add(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
@@ -28317,7 +28317,7 @@ namespace ts {
             return false;
         }
 
-        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): boolean {
             const sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
                 diagnostics.add(createDiagnosticForNode(node, message, arg0, arg1, arg2));
@@ -28472,7 +28472,7 @@ namespace ts {
             return false;
         }
 
-        function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+        function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): boolean {
             const sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
                 const span = getSpanOfTokenAtPosition(sourceFile, node.pos);

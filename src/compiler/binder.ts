@@ -1911,12 +1911,12 @@ namespace ts {
             }
         }
 
-        function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
+        function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string) {
             const span = getSpanOfTokenAtPosition(file, node.pos);
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function errorOrSuggestionOnFirstToken(isError: boolean, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
+        function errorOrSuggestionOnFirstToken(isError: boolean, node: Node, message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string) {
             const span = getSpanOfTokenAtPosition(file, node.pos);
             const diag = createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2);
             if (isError) {

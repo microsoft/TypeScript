@@ -3574,13 +3574,8 @@ namespace ts {
 
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
-     * The shape of this brand is rather unique compared to others we've used.
-     * Instead of just an intersection of a string and an object, it is that union-ed
-     * with an intersection of void and an object. This makes it wholly incompatible
-     * with a normal string (which is good, it cannot be misused on assignment or on usage),
-     * while still being comparable with a normal string via === (also good) and castable from a string.
      */
-    export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
+    export type __String = string & { __escapedIdentifier: void } | InternalSymbolName;
 
     /** ReadonlyMap where keys are `__String`s. */
     export interface ReadonlyUnderscoreEscapedMap<T> {
@@ -5243,8 +5238,8 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node | undefined, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
-        /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any> | undefined) => void;
-        /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any> | undefined) => void;
+        /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<Node> | undefined) => void;
+        /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<Node> | undefined) => void;
         /*@internal*/ onBeforeEmitToken?: (node: Node) => void;
         /*@internal*/ onAfterEmitToken?: (node: Node) => void;
     }
@@ -5535,7 +5530,7 @@ namespace ts {
     /* @internal */
     export interface PragmaMap extends Map<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]> {
         set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
-        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
+        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | NonNullable<PragmaPsuedoMap[TKey]>[];
         forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
     }
 }
