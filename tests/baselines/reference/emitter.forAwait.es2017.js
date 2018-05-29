@@ -54,7 +54,7 @@ async function f1() {
     let y;
     try {
         for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), !y_1_1.done;) {
-            const x = await y_1_1.value;
+            const x = y_1_1.value;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -78,7 +78,7 @@ async function f2() {
     let x, y;
     try {
         for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), !y_1_1.done;) {
-            x = await y_1_1.value;
+            x = y_1_1.value;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -115,7 +115,7 @@ function f3() {
         let y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
-                const x = yield yield __await(__await(y_1_1.value));
+                const x = y_1_1.value;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -153,7 +153,7 @@ function f4() {
         let x, y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
-                x = yield yield __await(__await(y_1_1.value));
+                x = y_1_1.value;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -179,7 +179,7 @@ async function f5() {
     let y;
     try {
         outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), !y_1_1.done;) {
-            const x = await y_1_1.value;
+            const x = y_1_1.value;
             continue outer;
         }
     }
@@ -218,7 +218,7 @@ function f6() {
         let y;
         try {
             outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
-                const x = yield yield __await(__await(y_1_1.value));
+                const x = y_1_1.value;
                 continue outer;
             }
         }

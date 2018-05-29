@@ -416,7 +416,7 @@ namespace ts {
                             createLogicalNot(getDone)
                         ),
                         /*incrementor*/ undefined,
-                        /*statement*/ convertForOfStatementHead(node, createDownlevelAwait(getValue))
+                        /*statement*/ convertForOfStatementHead(node, getValue)
                     ),
                     /*location*/ node
                 ),
