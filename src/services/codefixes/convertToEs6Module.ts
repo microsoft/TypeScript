@@ -437,25 +437,8 @@ namespace ts.codefix {
     type FreeIdentifiers = ReadonlyMap<ReadonlyArray<Identifier>>;
     function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
         const map = createMultiMap<Identifier>();
-        file.forEachChild(function recur(node) {
-            if (isIdentifier(node) && isFreeIdentifier(node)) {
-                map.add(node.text, node);
-            }
-            node.forEachChild(recur);
-        });
+        forEachFreeIdentifier(file, id => map.add(id.text, id));
         return map;
-    }
-
-    function isFreeIdentifier(node: Identifier): boolean {
-        const { parent } = node;
-        switch (parent.kind) {
-            case SyntaxKind.PropertyAccessExpression:
-                return (parent as PropertyAccessExpression).name !== node;
-            case SyntaxKind.BindingElement:
-                return (parent as BindingElement).propertyName !== node;
-            default:
-                return true;
-        }
     }
 
     // Node helpers

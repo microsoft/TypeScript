@@ -1309,6 +1309,42 @@ namespace ts {
             return forEachEntry(this.map, pred) || false;
         }
     }
+
+    export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {
+        if (!node) return undefined;
+
+        while (node.parent) {
+            if (isSourceFile(node.parent) || !spanContainsNode(span, node.parent, file)) {
+                return node;
+            }
+
+            node = node.parent;
+        }
+    }
+
+    function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
+        return textSpanContainsPosition(span, node.getStart(file)) &&
+            node.getEnd() <= textSpanEnd(span);
+    }
+
+    export function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
+        if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
+        node.forEachChild(child => forEachFreeIdentifier(child, cb));
+    }
+
+    function isFreeIdentifier(node: Identifier): boolean {
+        const { parent } = node;
+        switch (parent.kind) {
+            case SyntaxKind.PropertyAccessExpression:
+                return (parent as PropertyAccessExpression).name !== node;
+            case SyntaxKind.BindingElement:
+                return (parent as BindingElement).propertyName !== node;
+            case SyntaxKind.ImportSpecifier:
+                return (parent as ImportSpecifier).propertyName !== node;
+            default:
+                return true;
+        }
+    }
 }
 
 // Display-part writer helpers

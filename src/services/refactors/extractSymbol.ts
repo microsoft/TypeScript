@@ -1744,23 +1744,6 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {
-        if (!node) return undefined;
-
-        while (node.parent) {
-            if (isSourceFile(node.parent) || !spanContainsNode(span, node.parent, file)) {
-                return node;
-            }
-
-            node = node.parent;
-        }
-    }
-
-    function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
-        return textSpanContainsPosition(span, node.getStart(file)) &&
-            node.getEnd() <= textSpanEnd(span);
-    }
-
     /**
      * Computes whether or not a node represents an expression in a position where it could
      * be extracted.
