@@ -20418,7 +20418,7 @@ namespace ts {
                         if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
                             const name = prop.escapedName;
                             const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
-                            if (symbol) {
+                            if (symbol && propType.symbol !== symbol) {
                                 grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
                                 return grammarErrorOnNode(prop.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
                             }
