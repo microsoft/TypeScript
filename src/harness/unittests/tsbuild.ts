@@ -228,7 +228,15 @@ namespace ts {
         });
 
         it("orders the graph correctly - multiple parts of the same graph in various orders", () => {
-            // TODO add cases here
+            checkGraphOrdering(["A"], ["A", "B", "C", "D", "E"]);
+            checkGraphOrdering(["A", "C", "D"], ["A", "B", "C", "D", "E"]);
+            checkGraphOrdering(["D", "C", "A"], ["A", "B", "C", "D", "E"]);
+        });
+
+        it("orders the graph correctly - other orderings", () => {
+            checkGraphOrdering(["F"], ["F", "E"]);
+            checkGraphOrdering(["E"], ["E"]);
+            checkGraphOrdering(["F", "C", "A"], ["A", "B", "C", "D", "E", "F"]);
         });
 
         function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {

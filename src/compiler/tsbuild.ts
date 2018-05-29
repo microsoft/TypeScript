@@ -650,7 +650,6 @@ namespace ts {
             }
         }
 
-        // TODO Accept parsedCommandLine instead?
         function buildSingleProject(proj: ResolvedConfigFileName): BuildResultFlags {
             if (context.options.dry) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
