@@ -31,8 +31,8 @@ if (++y) {
 
 //// [prefixUnaryOperatorsOnExportedVariables.js]
 System.register([], function (exports_1, context_1) {
-    var x, y;
     "use strict";
+    var x, y;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

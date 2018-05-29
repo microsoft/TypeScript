@@ -1469,7 +1469,14 @@ namespace Harness {
 
                 // Verify we didn't miss any errors in this file
                 assert.equal(markedErrorCount, fileErrors.length, "count of errors in " + inputFile.unitName);
+                const isDupe = dupeCase.has(sanitizeTestFilePath(inputFile.unitName));
                 yield [checkDuplicatedFileName(inputFile.unitName, dupeCase), outputLines, errorsReported];
+                if (isDupe && !(options && options.caseSensitive)) {
+                    // Case-duplicated files on a case-insensitive build will have errors reported in both the dupe and the original
+                    // thanks to the canse-insensitive path comparison on the error file path - We only want to count those errors once
+                    // for the assert below, so we subtract them here.
+                    totalErrorsReportedInNonLibraryFiles -= errorsReported;
+                }
                 outputLines = "";
                 errorsReported = 0;
             }
