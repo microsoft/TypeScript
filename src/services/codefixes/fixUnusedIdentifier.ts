@@ -20,7 +20,7 @@ namespace ts.codefix {
                 const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, importDecl));
                 return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
-            const delDestructure = textChanges.ChangeTracker.with(context, t => tryDeleteFullDestructure(t, sourceFile, context.span.start, /*deleted*/ undefined, checker));
+            const delDestructure = textChanges.ChangeTracker.with(context, t => tryDeleteFullDestructure(t, sourceFile, context.span.start, /*deleted*/ undefined, checker, /*isFixAll*/ false));
             if (delDestructure.length) {
                 return [createCodeFixAction(fixName, delDestructure, Diagnostics.Remove_destructuring, fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
@@ -28,7 +28,7 @@ namespace ts.codefix {
             const token = getToken(sourceFile, textSpanEnd(context.span));
             const result: CodeFixAction[] = [];
 
-            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token, /*deleted*/ undefined, checker));
+            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token, /*deleted*/ undefined, checker, /*isFixAll*/ false));
             if (deletion.length) {
                 result.push(createCodeFixAction(fixName, deletion, [Diagnostics.Remove_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDelete, Diagnostics.Delete_all_unused_declarations));
             }
@@ -63,8 +63,8 @@ namespace ts.codefix {
                             changes.deleteNode(sourceFile, importDecl);
                         }
                         else {
-                            if (!tryDeleteFullDestructure(changes, sourceFile, diag.start!, deleted, checker)) {
-                                tryDeleteDeclaration(changes, sourceFile, token, deleted, checker);
+                            if (!tryDeleteFullDestructure(changes, sourceFile, diag.start!, deleted, checker, /*isFixAll*/ true)) {
+                                tryDeleteDeclaration(changes, sourceFile, token, deleted, checker, /*isFixAll*/ true);
                             }
                         }
                         break;
@@ -81,7 +81,7 @@ namespace ts.codefix {
         return startToken.kind === SyntaxKind.ImportKeyword ? tryCast(startToken.parent, isImportDeclaration) : undefined;
     }
 
-    function tryDeleteFullDestructure(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, deletedAncestors: NodeSet | undefined, checker: TypeChecker): boolean {
+    function tryDeleteFullDestructure(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): boolean {
         const startToken = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
         if (startToken.kind !== SyntaxKind.OpenBraceToken || !isObjectBindingPattern(startToken.parent)) return false;
         const decl = startToken.parent.parent;
@@ -90,7 +90,7 @@ namespace ts.codefix {
                 tryDeleteVariableDeclaration(changes, sourceFile, decl, deletedAncestors);
                 break;
             case SyntaxKind.Parameter:
-                if (!mayDeleteParameter(decl, checker)) break;
+                if (!mayDeleteParameter(decl, checker, isFixAll)) break;
                 if (deletedAncestors) deletedAncestors.add(decl);
                 changes.deleteNodeInList(sourceFile, decl);
                 break;
@@ -133,10 +133,10 @@ namespace ts.codefix {
         return false;
     }
 
-    function tryDeleteDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker): void {
+    function tryDeleteDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): void {
         switch (token.kind) {
             case SyntaxKind.Identifier:
-                tryDeleteIdentifier(changes, sourceFile, <Identifier>token, deletedAncestors, checker);
+                tryDeleteIdentifier(changes, sourceFile, <Identifier>token, deletedAncestors, checker, isFixAll);
                 break;
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.NamespaceImport:
@@ -159,7 +159,7 @@ namespace ts.codefix {
         }
     }
 
-    function tryDeleteIdentifier(changes: textChanges.ChangeTracker, sourceFile: SourceFile, identifier: Identifier, deletedAncestors: NodeSet | undefined, checker: TypeChecker): void {
+    function tryDeleteIdentifier(changes: textChanges.ChangeTracker, sourceFile: SourceFile, identifier: Identifier, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): void {
         const parent = identifier.parent;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -183,7 +183,7 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.Parameter:
-                if (!mayDeleteParameter(parent as ParameterDeclaration, checker)) break;
+                if (!mayDeleteParameter(parent as ParameterDeclaration, checker, isFixAll)) break;
                 const oldFunction = parent.parent;
 
                 if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
@@ -334,28 +334,31 @@ namespace ts.codefix {
         }
     }
 
-    function mayDeleteParameter(p: ParameterDeclaration, checker: TypeChecker) {
+    function mayDeleteParameter(p: ParameterDeclaration, checker: TypeChecker, isFixAll: boolean) {
         const parent = p.parent;
         switch (parent.kind) {
+            case SyntaxKind.MethodDeclaration:
+                // Don't remove a parameter if this overrides something
+                const symbol = checker.getSymbolAtLocation(parent.name);
+                if (isMemberSymbolInBaseType(symbol, checker)) return false;
+                // falls through
+
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionDeclaration:
-                return true;
-
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
-                // Can't remove a non-last parameter in a callback. (Can if future parameters are also unused.)
-                const index = parent.parameters.indexOf(p);
+            case SyntaxKind.ArrowFunction: {
+                // Can't remove a non-last parameter. Can remove a parameter in code-fix-all if future parameters are also unused.
+                const { parameters } = parent;
+                const index = parameters.indexOf(p);
                 Debug.assert(index !== -1);
-                return parent.parameters.slice(index).every(p => p.name.kind === SyntaxKind.Identifier && !p.symbol.isReferenced) || !checker.getContextualType(parent);
+                return isFixAll
+                    ? parameters.slice(index + 1).every(p => p.name.kind === SyntaxKind.Identifier && !p.symbol.isReferenced)
+                    : index === parameters.length - 1;
+            }
 
             case SyntaxKind.SetAccessor:
                 // Setter must have a parameter
                 return false;
-
-            case SyntaxKind.MethodDeclaration:
-                // Don't remove a parameter if this overrides something
-                const symbol = checker.getSymbolAtLocation(parent.name);
-                return !isMemberSymbolInBaseType(symbol, checker);
 
             default:
                 return Debug.failBadSyntaxKind(parent);
