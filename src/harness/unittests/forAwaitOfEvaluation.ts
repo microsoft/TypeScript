@@ -18,13 +18,17 @@ namespace ts {
             throw new Error(`Module '${id}' could not be found.`);
         }
 
+        // Define a custom "Symbol" constructor to attach missing built-in symbols without
+        // modifying the global "Symbol" constructor
         // tslint:disable-next-line:variable-name
         const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
         (<any>FakeSymbol).prototype = Symbol.prototype;
         for (const key of Object.getOwnPropertyNames(Symbol)) {
             Object.defineProperty(FakeSymbol, key, Object.getOwnPropertyDescriptor(Symbol, key)!);
         }
-        (<any>FakeSymbol).asyncIterator = (<any>FakeSymbol).asyncIterator || Symbol.for("Symbol.asyncIterator");
+
+        // Add "asyncIterator" if missing
+        if (!hasProperty(FakeSymbol, "asyncIterator")) Object.defineProperty(FakeSymbol, "asyncIterator", { value: Symbol.for("Symbol.asyncIterator"), configurable: true });
 
         function evaluate(result: compiler.CompilationResult) {
             const output = result.getOutput(sourceFile, "js")!;
