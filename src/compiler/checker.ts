@@ -8969,9 +8969,6 @@ namespace ts {
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
-            if (extendsType.flags & TypeFlags.AnyOrUnknown) {
-                return instantiateType(root.trueType, mapper);
-            }
             // If this is a distributive conditional type and the check type is generic we need to defer
             // resolution of the conditional type such that a later instantiation will properly distribute
             // over union types.
@@ -8988,6 +8985,9 @@ namespace ts {
                 combinedMapper = combineTypeMappers(mapper, context);
             }
             if (!isDeferred) {
+                if (extendsType.flags & TypeFlags.AnyOrUnknown) {
+                    return instantiateType(root.trueType, mapper);
+                }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
                     return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
