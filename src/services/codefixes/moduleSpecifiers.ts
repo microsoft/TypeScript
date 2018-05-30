@@ -16,15 +16,18 @@ namespace ts.moduleSpecifiers {
         const getCanonicalFileName = hostGetCanonicalFileName(host);
         const sourceDirectory = getDirectoryPath(importingSourceFile.fileName);
 
-        return getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
-            const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
-                || tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addJsExtension)
-                || tryGetModuleNameAsNodeModule(compilerOptions, moduleFileName, host, getCanonicalFileName, sourceDirectory)
-                || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
-            if (global) {
-                return [global];
-            }
+        const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
+        if (ambient) return [[ambient]];
 
+        const modulePaths = getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile());
+
+        const global = mapDefined(modulePaths, moduleFileName =>
+            tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addJsExtension) ||
+            tryGetModuleNameAsNodeModule(compilerOptions, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
+            rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName));
+        if (global.length) return global.map(g => [g]);
+
+        return modulePaths.map(moduleFileName => {
             const relativePath = removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
             if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
                 return [relativePath];
@@ -191,11 +194,12 @@ namespace ts.moduleSpecifiers {
         // Simplify the full file path to something that can be resolved by Node.
 
         // If the module could be imported by a directory name, use that directory's name
-        let moduleSpecifier = getDirectoryOrExtensionlessFileName(moduleFileName);
+        const moduleSpecifier = getDirectoryOrExtensionlessFileName(moduleFileName);
         // Get a path that's relative to node_modules or the importing file's path
-        moduleSpecifier = getNodeResolvablePath(moduleSpecifier);
+        // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
+        if (!startsWith(sourceDirectory, moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex))) return undefined;
         // If the module was found in @types, get the actual Node package name
-        return getPackageNameFromAtTypesDirectory(moduleSpecifier);
+        return getPackageNameFromAtTypesDirectory(moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1));
 
         function getDirectoryOrExtensionlessFileName(path: string): string {
             // If the file is the main module, it can be imported by the package name
@@ -223,17 +227,6 @@ namespace ts.moduleSpecifiers {
             }
 
             return fullModulePathWithoutExtension;
-        }
-
-        function getNodeResolvablePath(path: string): string {
-            const basePath = path.substring(0, parts.topLevelNodeModulesIndex);
-            if (sourceDirectory.indexOf(basePath) === 0) {
-                // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
-                return path.substring(parts.topLevelPackageNameIndex + 1);
-            }
-            else {
-                return ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, path, getCanonicalFileName));
-            }
         }
     }
 

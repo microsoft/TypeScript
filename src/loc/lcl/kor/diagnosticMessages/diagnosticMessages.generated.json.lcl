@@ -2394,6 +2394,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_name_cannot_be_Object_when_targeting_ES5_with_module_0_2725" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 with module {0}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} 모듈을 사용하는 ES5를 대상으로 하는 경우 클래스 이름은 'Object'일 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_static_side_0_incorrectly_extends_base_class_static_side_1_2417" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class static side '{0}' incorrectly extends base class static side '{1}'.]]></Val>
@@ -2559,6 +2568,9 @@
       <Item ItemId=";Convert_0_to_mapped_object_type_95055" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'을(를) 매핑된 개체 형식으로 변환]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
