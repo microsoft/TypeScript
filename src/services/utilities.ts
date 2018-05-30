@@ -1671,6 +1671,7 @@ namespace ts {
         if (startsWith(change, name)) return 0;
         // Add a " " to avoid references inside words
         let idx = change.indexOf(" " + name);
+        if (idx === -1) idx = change.indexOf("." + name);
         if (idx === -1) idx = change.indexOf('"' + name);
         return idx === -1 ? -1 : idx + 1;
     }
