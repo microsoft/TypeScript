@@ -30,9 +30,14 @@ type T23<T> = T | unknown;  // unknown
 // unknown in conditional types
 
 type T30<T> = unknown extends T ? true : false;  // Deferred
-type T31<T> = T extends unknown ? true : false;  // true
+type T31<T> = T extends unknown ? true : false;  // Deferred (so it distributes)
 type T32<T> = never extends T ? true : false;  // true
 type T33<T> = T extends never ? true : false;  // Deferred
+
+type T35<T> = T extends unknown ? { x: T } : false;
+type T36 = T35<string | number>;  // { x: string } | { x: number }
+type T37 = T35<any>;  // { x: any }
+type T38 = T35<unknown>;  // { x: unknown }
 
 // keyof unknown
 
