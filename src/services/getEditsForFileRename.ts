@@ -1,21 +1,24 @@
 /* @internal */
 namespace ts {
     export function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): ReadonlyArray<FileTextChanges> {
-        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath);
-        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath);
+        const getCanonicalFileName = hostGetCanonicalFileName(host);
+        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName);
+        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew);
-            updateImports(program, changeTracker, oldToNew, newToOld, host, preferences);
+            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
         });
     }
 
     /** If 'path' refers to an old directory, returns path in the new directory. */
     type PathUpdater = (path: string) => string | undefined;
-    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string): PathUpdater {
+    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
+        const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            if (path === oldFileOrDirPath) return newFileOrDirPath;
-            const suffix = tryRemovePrefix(path, oldFileOrDirPath);
-            return suffix === undefined ? undefined : newFileOrDirPath + suffix;
+            const canonicalPath = getCanonicalFileName(path);
+            if (canonicalPath === canonicalOldPath) return newFileOrDirPath;
+            const suffix = tryRemoveDirectoryPrefix(canonicalPath, canonicalOldPath);
+            return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
         };
     }
 
@@ -50,9 +53,15 @@ namespace ts {
         }
     }
 
-    function updateImports(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, newToOld: PathUpdater, host: LanguageServiceHost, preferences: UserPreferences): void {
-        const getCanonicalFileName = hostGetCanonicalFileName(host);
-
+    function updateImports(
+        program: Program,
+        changeTracker: textChanges.ChangeTracker,
+        oldToNew: PathUpdater,
+        newToOld: PathUpdater,
+        host: LanguageServiceHost,
+        getCanonicalFileName: GetCanonicalFileName,
+        preferences: UserPreferences,
+    ): void {
         for (const sourceFile of program.getSourceFiles()) {
             const newImportFromPath = oldToNew(sourceFile.fileName) || sourceFile.fileName;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);

@@ -2592,6 +2592,18 @@ namespace ts {
         return startsWith(str, prefix) ? str.substring(prefix.length) : undefined;
     }
 
+    export function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined {
+        const a = tryRemovePrefix(path, dirPath);
+        if (a === undefined) return undefined;
+        switch (a.charCodeAt(0)) {
+            case CharacterCodes.slash:
+            case CharacterCodes.backslash:
+                return a.slice(1);
+            default:
+                return undefined;
+        }
+    }
+
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
