@@ -63,6 +63,8 @@ namespace ts {
                     return visitAwaitExpression(node as AwaitExpression);
                 case SyntaxKind.YieldExpression:
                     return visitYieldExpression(node as YieldExpression);
+                case SyntaxKind.ReturnStatement:
+                    return visitReturnStatement(node as ReturnStatement);
                 case SyntaxKind.LabeledStatement:
                     return visitLabeledStatement(node as LabeledStatement);
                 case SyntaxKind.ObjectLiteralExpression:
@@ -156,6 +158,16 @@ namespace ts {
                     ),
                     node
                 );
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitReturnStatement(node: ReturnStatement) {
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                return updateReturn(node, createDownlevelAwait(
+                    node.expression ? visitNode(node.expression, visitor, isExpression) : createVoidZero()
+                ));
             }
 
             return visitEachChild(node, visitor, context);

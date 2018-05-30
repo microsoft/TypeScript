@@ -3710,6 +3710,10 @@ namespace ts {
                 break;
 
             case SyntaxKind.ReturnStatement:
+                // Return statements may require an `await` in ESNext.
+                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion | TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;

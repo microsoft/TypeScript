@@ -175,6 +175,6 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function f7() {
     return __asyncGenerator(this, arguments, function* f7_1() {
-        return 1;
+        return yield __await(1);
     });
 }
