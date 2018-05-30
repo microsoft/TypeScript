@@ -3657,6 +3657,34 @@
         "category": "Message",
         "code": 6362
     },
+    "Build one or more projects and their dependencies, if out-of-date": {
+        "category": "Message",
+        "code": 6363
+    },
+    "Delete the outputs of all projects": {
+        "category": "Message",
+        "code": 6364
+    },
+    "Enable verbose logging": {
+        "category": "Message",
+        "code": 6365
+    },
+    "Show what would be built (or deleted, if specified with --clean)": {
+        "category": "Message",
+        "code": 6366
+    },
+    "Build all projects, including those that appear to be up-to-date": {
+        "category": "Message",
+        "code": 6367
+    },
+    "Option '--build' must be the first command line argument.": {
+        "category": "Error",
+        "code": 6368
+    },
+    "Options '{0}' and '{1}' cannot be combined.": {
+        "category": "Error",
+        "code": 6369
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

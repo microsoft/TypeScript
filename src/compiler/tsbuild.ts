@@ -338,11 +338,48 @@ namespace ts {
         };
     }
 
+    const buildOpts: CommandLineOption[] = [
+        {
+            name: "verbose",
+            shortName: "v",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Enable_verbose_logging,
+            type: "boolean"
+        },
+        {
+            name: "dry",
+            shortName: "d",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
+            type: "boolean"
+        },
+        {
+            name: "force",
+            shortName: "f",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
+            type: "boolean"
+        },
+        {
+            name: "clean",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Delete_the_outputs_of_all_projects,
+            type: "boolean"
+        },
+        {
+            name: "watch",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Watch_input_files,
+            type: "boolean"
+        }
+    ];
+
     export function performBuild(host: CompilerHost, reportDiagnostic: DiagnosticReporter, args: string[]) {
         let verbose = false;
         let dry = false;
         let force = false;
         let clean = false;
+        let watch = false;
 
         const projects: string[] = [];
         for (const arg of args) {
@@ -362,9 +399,36 @@ namespace ts {
                 case "--clean":
                     clean = true;
                     continue;
+                case "--watch":
+                case "-w":
+                    watch = true;
+                    continue;
+
+                case "--?":
+                case "-?":
+                case "--help":
+                    return printHelp(buildOpts, "--build ");
             }
             // Not a flag, parse as filename
             addProject(arg);
+        }
+
+        // Nonsensical combinations
+        if (clean && force) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force"));
+            return;
+        }
+        if (clean && verbose) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose"));
+            return;
+        }
+        if (clean && watch) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch"));
+            return;
+        }
+        if (watch && dry) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry"));
+            return;
         }
 
         if (projects.length === 0) {

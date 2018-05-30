@@ -4281,6 +4281,9 @@ namespace ts {
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
+        /** An error if set - this should only go through the -b pipeline and not actually be observed */
+        /*@internal*/
+        build?: boolean;
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;

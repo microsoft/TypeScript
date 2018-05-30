@@ -12,11 +12,6 @@ namespace ts {
         return count;
     }
 
-    function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
-        const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return <string>diagnostic.messageText;
-    }
-
     let reportDiagnostic = createDiagnosticReporter(sys);
     function updateReportDiagnostic(options: CompilerOptions) {
         if (shouldBePretty(options)) {
@@ -46,12 +41,24 @@ namespace ts {
         return s;
     }
 
+    function getOptionsForHelp(commandLine: ParsedCommandLine) {
+        // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
+        return !!commandLine.options.all ?
+            sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
+            filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
+    }
+
     export function executeCommandLine(args: string[]): void {
         if ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b")) {
             return performBuild(createCompilerHost({}), createDiagnosticReporter(sys), args.slice(1));
         }
 
         const commandLine = parseCommandLine(args);
+
+        if (commandLine.options.build) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
 
         // Configuration file name (if any)
         let configFileName: string | undefined;
@@ -78,7 +85,7 @@ namespace ts {
 
         if (commandLine.options.help || commandLine.options.all) {
             printVersion();
-            printHelp(!!commandLine.options.all);
+            printHelp(getOptionsForHelp(commandLine));
             return sys.exit(ExitStatus.Success);
         }
 
@@ -111,7 +118,7 @@ namespace ts {
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
-            printHelp(!!commandLine.options.all);
+            printHelp(getOptionsForHelp(commandLine));
             return sys.exit(ExitStatus.Success);
         }
 
@@ -272,122 +279,6 @@ namespace ts {
 
         function reportTimeStatistic(name: string, time: number) {
             reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
-        }
-    }
-
-    function printVersion() {
-        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
-    }
-
-    function printHelp(showAllOptions: boolean) {
-        const output: string[] = [];
-
-        // We want to align our "syntax" and "examples" commands to a certain margin.
-        const syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
-        const examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length;
-        let marginLength = Math.max(syntaxLength, examplesLength);
-
-        // Build up the syntactic skeleton.
-        let syntax = makePadding(marginLength - syntaxLength);
-        syntax += "tsc [" + getDiagnosticText(Diagnostics.options) + "] [" + getDiagnosticText(Diagnostics.file) + " ...]";
-
-        output.push(getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax));
-        output.push(sys.newLine + sys.newLine);
-
-        // Build up the list of examples.
-        const padding = makePadding(marginLength);
-        output.push(getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine);
-        output.push(padding + "tsc --outFile file.js file.ts" + sys.newLine);
-        output.push(padding + "tsc @args.txt" + sys.newLine);
-        output.push(sys.newLine);
-
-        output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
-
-        // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        const optsList = showAllOptions ?
-            sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-            filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
-
-        // We want our descriptions to align at the same column in our output,
-        // so we keep track of the longest option usage string.
-        marginLength = 0;
-        const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
-        const descriptionColumn: string[] = [];
-
-        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
-
-        for (const option of optsList) {
-            // If an option lacks a description,
-            // it is not officially supported.
-            if (!option.description) {
-                continue;
-            }
-
-            let usageText = " ";
-            if (option.shortName) {
-                usageText += "-" + option.shortName;
-                usageText += getParamType(option);
-                usageText += ", ";
-            }
-
-            usageText += "--" + option.name;
-            usageText += getParamType(option);
-
-            usageColumn.push(usageText);
-            let description: string;
-
-            if (option.name === "lib") {
-                description = getDiagnosticText(option.description);
-                const element = (<CommandLineOptionOfListType>option).element;
-                const typeMap = <Map<number | string>>element.type;
-                optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
-            }
-            else {
-                description = getDiagnosticText(option.description);
-            }
-
-            descriptionColumn.push(description);
-
-            // Set the new margin for the description column if necessary.
-            marginLength = Math.max(usageText.length, marginLength);
-        }
-
-        // Special case that can't fit in the loop.
-        const usageText = " @<" + getDiagnosticText(Diagnostics.file) + ">";
-        usageColumn.push(usageText);
-        descriptionColumn.push(getDiagnosticText(Diagnostics.Insert_command_line_options_and_files_from_a_file));
-        marginLength = Math.max(usageText.length, marginLength);
-
-        // Print out each row, aligning all the descriptions on the same column.
-        for (let i = 0; i < usageColumn.length; i++) {
-            const usage = usageColumn[i];
-            const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap.get(description);
-            output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
-
-            if (kindsList) {
-                output.push(makePadding(marginLength + 4));
-                for (const kind of kindsList) {
-                    output.push(kind + " ");
-                }
-                output.push(sys.newLine);
-            }
-        }
-
-        for (const line of output) {
-            sys.write(line);
-        }
-        return;
-
-        function getParamType(option: CommandLineOption) {
-            if (option.paramType !== undefined) {
-                return " " + getDiagnosticText(option.paramType);
-            }
-            return "";
-        }
-
-        function makePadding(paddingLength: number): string {
-            return Array(paddingLength + 1).join(" ");
         }
     }
 
