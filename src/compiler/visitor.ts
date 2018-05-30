@@ -1,6 +1,4 @@
 namespace ts {
-    const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
-
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
@@ -220,7 +218,9 @@ namespace ts {
             // Names
 
             case SyntaxKind.Identifier:
-                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration));
+                return updateIdentifier(<Identifier>node,
+                    nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeArgument),
+                    nodesVisitor((<Identifier>node).typeParameters, visitor, isTypeParameterDeclaration));
 
             case SyntaxKind.QualifiedName:
                 return updateQualifiedName(<QualifiedName>node,
@@ -328,6 +328,11 @@ namespace ts {
                     nodesVisitor((<ConstructSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<ConstructSignatureDeclaration>node).type, visitor, isTypeNode));
 
+            case SyntaxKind.NamedTypeArgument:
+                    return updateNamedTypeArgument(<NamedTypeArgument>node,
+                        visitNode((<NamedTypeArgument>node).name, visitor, isIdentifier),
+                        visitNode((<NamedTypeArgument>node).type, visitor, isTypeNode));
+
             case SyntaxKind.IndexSignature:
                 return updateIndexSignature(<IndexSignatureDeclaration>node,
                     nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
@@ -345,7 +350,7 @@ namespace ts {
             case SyntaxKind.TypeReference:
                 return updateTypeReferenceNode(<TypeReferenceNode>node,
                     visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName),
-                    nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode));
+                    nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeArgument));
 
             case SyntaxKind.FunctionType:
                 return updateFunctionTypeNode(<FunctionTypeNode>node,
@@ -398,7 +403,7 @@ namespace ts {
                 return updateImportTypeNode(<ImportTypeNode>node,
                     visitNode((<ImportTypeNode>node).argument, visitor, isTypeNode),
                     visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),
-                    visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
+                    visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeArgument),
                     (<ImportTypeNode>node).isTypeOf
                 );
 
@@ -466,19 +471,19 @@ namespace ts {
             case SyntaxKind.CallExpression:
                 return updateCall(<CallExpression>node,
                     visitNode((<CallExpression>node).expression, visitor, isExpression),
-                    nodesVisitor((<CallExpression>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<CallExpression>node).typeArguments, visitor, isTypeArgument),
                     nodesVisitor((<CallExpression>node).arguments, visitor, isExpression));
 
             case SyntaxKind.NewExpression:
                 return updateNew(<NewExpression>node,
                     visitNode((<NewExpression>node).expression, visitor, isExpression),
-                    nodesVisitor((<NewExpression>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<NewExpression>node).typeArguments, visitor, isTypeArgument),
                     nodesVisitor((<NewExpression>node).arguments, visitor, isExpression));
 
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
-                    visitNodes((<TaggedTemplateExpression>node).typeArguments, visitor, isExpression),
+                    visitNodes((<TaggedTemplateExpression>node).typeArguments, visitor, isTypeArgument),
                     visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
             case SyntaxKind.TypeAssertionExpression:
@@ -571,7 +576,7 @@ namespace ts {
 
             case SyntaxKind.ExpressionWithTypeArguments:
                 return updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node,
-                    nodesVisitor((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeArgument),
                     visitNode((<ExpressionWithTypeArguments>node).expression, visitor, isExpression));
 
             case SyntaxKind.AsExpression:
@@ -826,13 +831,13 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
                 return updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
                     visitNode((<JsxSelfClosingElement>node).tagName, visitor, isJsxTagNameExpression),
-                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeArgument),
                     visitNode((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxOpeningElement:
                 return updateJsxOpeningElement(<JsxOpeningElement>node,
                     visitNode((<JsxOpeningElement>node).tagName, visitor, isJsxTagNameExpression),
-                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeArgument),
                     visitNode((<JsxOpeningElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxClosingElement:

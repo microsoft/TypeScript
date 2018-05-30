@@ -1,0 +1,41 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListWithNamedTypeArgumentsAndDefaults.ts ===
+class Foo<A extends {x: string} = {x: string, y: number}, B = number> {
+>Foo : Foo<A, B>
+>A : A
+>x : string
+>x : string
+>y : number
+>B : B
+
+    constructor(public a?: A, public b?: B) {}
+>a : A
+>A : A
+>b : B
+>B : B
+}
+
+const x = new Foo<B = string>();
+>x : Foo<{ x: string; y: number; }, string>
+>new Foo<B = string>() : Foo<{ x: string; y: number; }, string>
+>Foo : typeof Foo
+>B : any
+
+x.a.x;
+>x.a.x : string
+>x.a : { x: string; y: number; }
+>x : Foo<{ x: string; y: number; }, string>
+>a : { x: string; y: number; }
+>x : string
+
+x.a.y;
+>x.a.y : number
+>x.a : { x: string; y: number; }
+>x : Foo<{ x: string; y: number; }, string>
+>a : { x: string; y: number; }
+>y : number
+
+x.b;
+>x.b : string
+>x : Foo<{ x: string; y: number; }, string>
+>b : string
+

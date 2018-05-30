@@ -221,152 +221,153 @@ declare namespace ts {
         SetAccessor = 156,
         CallSignature = 157,
         ConstructSignature = 158,
-        IndexSignature = 159,
-        TypePredicate = 160,
-        TypeReference = 161,
-        FunctionType = 162,
-        ConstructorType = 163,
-        TypeQuery = 164,
-        TypeLiteral = 165,
-        ArrayType = 166,
-        TupleType = 167,
-        UnionType = 168,
-        IntersectionType = 169,
-        ConditionalType = 170,
-        InferType = 171,
-        ParenthesizedType = 172,
-        ThisType = 173,
-        TypeOperator = 174,
-        IndexedAccessType = 175,
-        MappedType = 176,
-        LiteralType = 177,
-        ImportType = 178,
-        ObjectBindingPattern = 179,
-        ArrayBindingPattern = 180,
-        BindingElement = 181,
-        ArrayLiteralExpression = 182,
-        ObjectLiteralExpression = 183,
-        PropertyAccessExpression = 184,
-        ElementAccessExpression = 185,
-        CallExpression = 186,
-        NewExpression = 187,
-        TaggedTemplateExpression = 188,
-        TypeAssertionExpression = 189,
-        ParenthesizedExpression = 190,
-        FunctionExpression = 191,
-        ArrowFunction = 192,
-        DeleteExpression = 193,
-        TypeOfExpression = 194,
-        VoidExpression = 195,
-        AwaitExpression = 196,
-        PrefixUnaryExpression = 197,
-        PostfixUnaryExpression = 198,
-        BinaryExpression = 199,
-        ConditionalExpression = 200,
-        TemplateExpression = 201,
-        YieldExpression = 202,
-        SpreadElement = 203,
-        ClassExpression = 204,
-        OmittedExpression = 205,
-        ExpressionWithTypeArguments = 206,
-        AsExpression = 207,
-        NonNullExpression = 208,
-        MetaProperty = 209,
-        TemplateSpan = 210,
-        SemicolonClassElement = 211,
-        Block = 212,
-        VariableStatement = 213,
-        EmptyStatement = 214,
-        ExpressionStatement = 215,
-        IfStatement = 216,
-        DoStatement = 217,
-        WhileStatement = 218,
-        ForStatement = 219,
-        ForInStatement = 220,
-        ForOfStatement = 221,
-        ContinueStatement = 222,
-        BreakStatement = 223,
-        ReturnStatement = 224,
-        WithStatement = 225,
-        SwitchStatement = 226,
-        LabeledStatement = 227,
-        ThrowStatement = 228,
-        TryStatement = 229,
-        DebuggerStatement = 230,
-        VariableDeclaration = 231,
-        VariableDeclarationList = 232,
-        FunctionDeclaration = 233,
-        ClassDeclaration = 234,
-        InterfaceDeclaration = 235,
-        TypeAliasDeclaration = 236,
-        EnumDeclaration = 237,
-        ModuleDeclaration = 238,
-        ModuleBlock = 239,
-        CaseBlock = 240,
-        NamespaceExportDeclaration = 241,
-        ImportEqualsDeclaration = 242,
-        ImportDeclaration = 243,
-        ImportClause = 244,
-        NamespaceImport = 245,
-        NamedImports = 246,
-        ImportSpecifier = 247,
-        ExportAssignment = 248,
-        ExportDeclaration = 249,
-        NamedExports = 250,
-        ExportSpecifier = 251,
-        MissingDeclaration = 252,
-        ExternalModuleReference = 253,
-        JsxElement = 254,
-        JsxSelfClosingElement = 255,
-        JsxOpeningElement = 256,
-        JsxClosingElement = 257,
-        JsxFragment = 258,
-        JsxOpeningFragment = 259,
-        JsxClosingFragment = 260,
-        JsxAttribute = 261,
-        JsxAttributes = 262,
-        JsxSpreadAttribute = 263,
-        JsxExpression = 264,
-        CaseClause = 265,
-        DefaultClause = 266,
-        HeritageClause = 267,
-        CatchClause = 268,
-        PropertyAssignment = 269,
-        ShorthandPropertyAssignment = 270,
-        SpreadAssignment = 271,
-        EnumMember = 272,
-        SourceFile = 273,
-        Bundle = 274,
-        UnparsedSource = 275,
-        InputFiles = 276,
-        JSDocTypeExpression = 277,
-        JSDocAllType = 278,
-        JSDocUnknownType = 279,
-        JSDocNullableType = 280,
-        JSDocNonNullableType = 281,
-        JSDocOptionalType = 282,
-        JSDocFunctionType = 283,
-        JSDocVariadicType = 284,
-        JSDocComment = 285,
-        JSDocTypeLiteral = 286,
-        JSDocSignature = 287,
-        JSDocTag = 288,
-        JSDocAugmentsTag = 289,
-        JSDocClassTag = 290,
-        JSDocCallbackTag = 291,
-        JSDocParameterTag = 292,
-        JSDocReturnTag = 293,
-        JSDocTypeTag = 294,
-        JSDocTemplateTag = 295,
-        JSDocTypedefTag = 296,
-        JSDocPropertyTag = 297,
-        SyntaxList = 298,
-        NotEmittedStatement = 299,
-        PartiallyEmittedExpression = 300,
-        CommaListExpression = 301,
-        MergeDeclarationMarker = 302,
-        EndOfDeclarationMarker = 303,
-        Count = 304,
+        NamedTypeArgument = 159,
+        IndexSignature = 160,
+        TypePredicate = 161,
+        TypeReference = 162,
+        FunctionType = 163,
+        ConstructorType = 164,
+        TypeQuery = 165,
+        TypeLiteral = 166,
+        ArrayType = 167,
+        TupleType = 168,
+        UnionType = 169,
+        IntersectionType = 170,
+        ConditionalType = 171,
+        InferType = 172,
+        ParenthesizedType = 173,
+        ThisType = 174,
+        TypeOperator = 175,
+        IndexedAccessType = 176,
+        MappedType = 177,
+        LiteralType = 178,
+        ImportType = 179,
+        ObjectBindingPattern = 180,
+        ArrayBindingPattern = 181,
+        BindingElement = 182,
+        ArrayLiteralExpression = 183,
+        ObjectLiteralExpression = 184,
+        PropertyAccessExpression = 185,
+        ElementAccessExpression = 186,
+        CallExpression = 187,
+        NewExpression = 188,
+        TaggedTemplateExpression = 189,
+        TypeAssertionExpression = 190,
+        ParenthesizedExpression = 191,
+        FunctionExpression = 192,
+        ArrowFunction = 193,
+        DeleteExpression = 194,
+        TypeOfExpression = 195,
+        VoidExpression = 196,
+        AwaitExpression = 197,
+        PrefixUnaryExpression = 198,
+        PostfixUnaryExpression = 199,
+        BinaryExpression = 200,
+        ConditionalExpression = 201,
+        TemplateExpression = 202,
+        YieldExpression = 203,
+        SpreadElement = 204,
+        ClassExpression = 205,
+        OmittedExpression = 206,
+        ExpressionWithTypeArguments = 207,
+        AsExpression = 208,
+        NonNullExpression = 209,
+        MetaProperty = 210,
+        TemplateSpan = 211,
+        SemicolonClassElement = 212,
+        Block = 213,
+        VariableStatement = 214,
+        EmptyStatement = 215,
+        ExpressionStatement = 216,
+        IfStatement = 217,
+        DoStatement = 218,
+        WhileStatement = 219,
+        ForStatement = 220,
+        ForInStatement = 221,
+        ForOfStatement = 222,
+        ContinueStatement = 223,
+        BreakStatement = 224,
+        ReturnStatement = 225,
+        WithStatement = 226,
+        SwitchStatement = 227,
+        LabeledStatement = 228,
+        ThrowStatement = 229,
+        TryStatement = 230,
+        DebuggerStatement = 231,
+        VariableDeclaration = 232,
+        VariableDeclarationList = 233,
+        FunctionDeclaration = 234,
+        ClassDeclaration = 235,
+        InterfaceDeclaration = 236,
+        TypeAliasDeclaration = 237,
+        EnumDeclaration = 238,
+        ModuleDeclaration = 239,
+        ModuleBlock = 240,
+        CaseBlock = 241,
+        NamespaceExportDeclaration = 242,
+        ImportEqualsDeclaration = 243,
+        ImportDeclaration = 244,
+        ImportClause = 245,
+        NamespaceImport = 246,
+        NamedImports = 247,
+        ImportSpecifier = 248,
+        ExportAssignment = 249,
+        ExportDeclaration = 250,
+        NamedExports = 251,
+        ExportSpecifier = 252,
+        MissingDeclaration = 253,
+        ExternalModuleReference = 254,
+        JsxElement = 255,
+        JsxSelfClosingElement = 256,
+        JsxOpeningElement = 257,
+        JsxClosingElement = 258,
+        JsxFragment = 259,
+        JsxOpeningFragment = 260,
+        JsxClosingFragment = 261,
+        JsxAttribute = 262,
+        JsxAttributes = 263,
+        JsxSpreadAttribute = 264,
+        JsxExpression = 265,
+        CaseClause = 266,
+        DefaultClause = 267,
+        HeritageClause = 268,
+        CatchClause = 269,
+        PropertyAssignment = 270,
+        ShorthandPropertyAssignment = 271,
+        SpreadAssignment = 272,
+        EnumMember = 273,
+        SourceFile = 274,
+        Bundle = 275,
+        UnparsedSource = 276,
+        InputFiles = 277,
+        JSDocTypeExpression = 278,
+        JSDocAllType = 279,
+        JSDocUnknownType = 280,
+        JSDocNullableType = 281,
+        JSDocNonNullableType = 282,
+        JSDocOptionalType = 283,
+        JSDocFunctionType = 284,
+        JSDocVariadicType = 285,
+        JSDocComment = 286,
+        JSDocTypeLiteral = 287,
+        JSDocSignature = 288,
+        JSDocTag = 289,
+        JSDocAugmentsTag = 290,
+        JSDocClassTag = 291,
+        JSDocCallbackTag = 292,
+        JSDocParameterTag = 293,
+        JSDocReturnTag = 294,
+        JSDocTypeTag = 295,
+        JSDocTemplateTag = 296,
+        JSDocTypedefTag = 297,
+        JSDocPropertyTag = 298,
+        SyntaxList = 299,
+        NotEmittedStatement = 300,
+        PartiallyEmittedExpression = 301,
+        CommaListExpression = 302,
+        MergeDeclarationMarker = 303,
+        EndOfDeclarationMarker = 304,
+        Count = 305,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -377,8 +378,8 @@ declare namespace ts {
         LastKeyword = 144,
         FirstFutureReservedWord = 108,
         LastFutureReservedWord = 116,
-        FirstTypeNode = 160,
-        LastTypeNode = 178,
+        FirstTypeNode = 161,
+        LastTypeNode = 179,
         FirstPunctuation = 17,
         LastPunctuation = 70,
         FirstToken = 0,
@@ -392,10 +393,10 @@ declare namespace ts {
         FirstBinaryOperator = 27,
         LastBinaryOperator = 70,
         FirstNode = 145,
-        FirstJSDocNode = 277,
-        LastJSDocNode = 297,
-        FirstJSDocTagNode = 288,
-        LastJSDocTagNode = 297
+        FirstJSDocNode = 278,
+        LastJSDocNode = 298,
+        FirstJSDocTagNode = 289,
+        LastJSDocTagNode = 298
     }
     enum NodeFlags {
         None = 0,
@@ -701,6 +702,12 @@ declare namespace ts {
     interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
+    interface NamedTypeArgument extends Node {
+        kind: SyntaxKind.NamedTypeArgument;
+        name: Identifier;
+        type: TypeNode;
+    }
+    type TypeArgument = TypeNode | NamedTypeArgument;
     interface KeywordTypeNode extends TypeNode {
         kind: SyntaxKind.AnyKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.VoidKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.NullKeyword | SyntaxKind.NeverKeyword;
     }
@@ -721,7 +728,7 @@ declare namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
     interface NodeWithTypeArguments extends TypeNode {
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
     }
     type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
     interface TypeReferenceNode extends NodeWithTypeArguments {
@@ -1033,7 +1040,7 @@ declare namespace ts {
     interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         arguments: NodeArray<Expression>;
     }
     interface SuperCall extends CallExpression {
@@ -1050,13 +1057,13 @@ declare namespace ts {
     interface NewExpression extends PrimaryExpression, Declaration {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         arguments?: NodeArray<Expression>;
     }
     interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         template: TemplateLiteral;
     }
     type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
@@ -1096,13 +1103,13 @@ declare namespace ts {
         kind: SyntaxKind.JsxOpeningElement;
         parent: JsxElement;
         tagName: JsxTagNameExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         attributes: JsxAttributes;
     }
     interface JsxSelfClosingElement extends PrimaryExpression {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         attributes: JsxAttributes;
     }
     interface JsxFragment extends PrimaryExpression {
@@ -1814,7 +1821,7 @@ declare namespace ts {
         typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode | undefined;
         /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): (SignatureDeclaration & {
-            typeArguments?: NodeArray<TypeNode>;
+            typeArguments?: NodeArray<TypeArgument>;
         }) | undefined;
         /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
@@ -3250,6 +3257,7 @@ declare namespace ts {
     function isSetAccessorDeclaration(node: Node): node is SetAccessorDeclaration;
     function isCallSignatureDeclaration(node: Node): node is CallSignatureDeclaration;
     function isConstructSignatureDeclaration(node: Node): node is ConstructSignatureDeclaration;
+    function isNamedTypeArgument(node: Node): node is NamedTypeArgument;
     function isIndexSignatureDeclaration(node: Node): node is IndexSignatureDeclaration;
     function isTypePredicateNode(node: Node): node is TypePredicateNode;
     function isTypeReferenceNode(node: Node): node is TypeReferenceNode;
@@ -3418,6 +3426,7 @@ declare namespace ts {
      * of a TypeNode.
      */
     function isTypeNode(node: Node): node is TypeNode;
+    function isTypeArgument(node: Node): node is TypeArgument;
     function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
     function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
     function isCallLikeExpression(node: Node): node is CallLikeExpression;
@@ -3567,13 +3576,15 @@ declare namespace ts {
     function updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
     function createConstructSignature(typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
     function updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
+    function createNamedTypeArgument(name: string | Identifier, type: TypeNode): NamedTypeArgument;
+    function updateNamedTypeArgument(node: NamedTypeArgument, name: Identifier, type: TypeNode): NamedTypeArgument;
     function createIndexSignature(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration;
     function updateIndexSignature(node: IndexSignatureDeclaration, decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration;
     function createKeywordTypeNode(kind: KeywordTypeNode["kind"]): KeywordTypeNode;
     function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode): TypePredicateNode;
     function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode): TypePredicateNode;
-    function createTypeReferenceNode(typeName: string | EntityName, typeArguments: ReadonlyArray<TypeNode> | undefined): TypeReferenceNode;
-    function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined): TypeReferenceNode;
+    function createTypeReferenceNode(typeName: string | EntityName, typeArguments: ReadonlyArray<TypeArgument> | undefined): TypeReferenceNode;
+    function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeArgument> | undefined): TypeReferenceNode;
     function createFunctionTypeNode(typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined): FunctionTypeNode;
     function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): FunctionTypeNode;
     function createConstructorTypeNode(typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructorTypeNode;
@@ -3595,8 +3606,8 @@ declare namespace ts {
     function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
     function createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
     function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-    function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeNode>, isTypeOf?: boolean): ImportTypeNode;
-    function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeNode>, isTypeOf?: boolean): ImportTypeNode;
+    function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeArgument>, isTypeOf?: boolean): ImportTypeNode;
+    function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeArgument>, isTypeOf?: boolean): ImportTypeNode;
     function createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
     function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
     function createThisTypeNode(): ThisTypeNode;
@@ -3623,14 +3634,14 @@ declare namespace ts {
     function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier): PropertyAccessExpression;
     function createElementAccess(expression: Expression, index: number | Expression): ElementAccessExpression;
     function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
-    function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): CallExpression;
-    function updateCall(node: CallExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>): CallExpression;
-    function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
-    function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
+    function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): CallExpression;
+    function updateCall(node: CallExpression, expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression>): CallExpression;
+    function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
+    function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
     function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
-    function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
+    function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
-    function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
+    function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
     function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion;
     function createParen(expression: Expression): ParenthesizedExpression;
@@ -3672,8 +3683,8 @@ declare namespace ts {
     function createClassExpression(modifiers: ReadonlyArray<Modifier> | undefined, name: string | Identifier | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, heritageClauses: ReadonlyArray<HeritageClause> | undefined, members: ReadonlyArray<ClassElement>): ClassExpression;
     function updateClassExpression(node: ClassExpression, modifiers: ReadonlyArray<Modifier> | undefined, name: Identifier | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, heritageClauses: ReadonlyArray<HeritageClause> | undefined, members: ReadonlyArray<ClassElement>): ClassExpression;
     function createOmittedExpression(): OmittedExpression;
-    function createExpressionWithTypeArguments(typeArguments: ReadonlyArray<TypeNode> | undefined, expression: Expression): ExpressionWithTypeArguments;
-    function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: ReadonlyArray<TypeNode> | undefined, expression: Expression): ExpressionWithTypeArguments;
+    function createExpressionWithTypeArguments(typeArguments: ReadonlyArray<TypeArgument> | undefined, expression: Expression): ExpressionWithTypeArguments;
+    function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: ReadonlyArray<TypeArgument> | undefined, expression: Expression): ExpressionWithTypeArguments;
     function createAsExpression(expression: Expression, type: TypeNode): AsExpression;
     function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression;
     function createNonNullExpression(expression: Expression): NonNullExpression;
@@ -3765,10 +3776,10 @@ declare namespace ts {
     function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
     function createJsxElement(openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement): JsxElement;
     function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement): JsxElement;
-    function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxSelfClosingElement;
-    function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxSelfClosingElement;
-    function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxOpeningElement;
-    function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxOpeningElement;
+    function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes): JsxSelfClosingElement;
+    function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes): JsxSelfClosingElement;
+    function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes): JsxOpeningElement;
+    function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes): JsxOpeningElement;
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
     function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;

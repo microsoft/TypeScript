@@ -1,0 +1,258 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts ===
+declare function testNamingOtherParameters<A = any, B = any>(arg: { a?: A, b?: B }): { a: A, b: B };
+>testNamingOtherParameters : <A = any, B = any>(arg: { a?: A; b?: B; }) => { a: A; b: B; }
+>A : A
+>B : B
+>arg : { a?: A; b?: B; }
+>a : A
+>A : A
+>b : B
+>B : B
+>a : A
+>A : A
+>b : B
+>B : B
+
+const assumingNotAllowed = testNamingOtherParameters<B = A>({ a: "test" }); // Error, cannot find `A`
+>assumingNotAllowed : { a: string; b: any; }
+>testNamingOtherParameters<B = A>({ a: "test" }) : { a: string; b: any; }
+>testNamingOtherParameters : <A = any, B = any>(arg: { a?: A; b?: B; }) => { a: A; b: B; }
+>B : any
+>A : No type information available!
+>{ a: "test" } : { a: string; }
+>a : string
+>"test" : "test"
+
+declare function stillDefaultsIfNoInference<X, A = string, B= number, C=boolean>(arg: { a?: A, b?: B, c?: C, x?: X}): { a: A, b: B, c: C, x: X };
+>stillDefaultsIfNoInference : <X, A = string, B = number, C = boolean>(arg: { a?: A; b?: B; c?: C; x?: X; }) => { a: A; b: B; c: C; x: X; }
+>X : X
+>A : A
+>B : B
+>C : C
+>arg : { a?: A; b?: B; c?: C; x?: X; }
+>a : A
+>A : A
+>b : B
+>B : B
+>c : C
+>C : C
+>x : X
+>X : X
+>a : A
+>A : A
+>b : B
+>B : B
+>c : C
+>C : C
+>x : X
+>X : X
+
+const result1 = stillDefaultsIfNoInference<C = object> ({ b: "test" }); // expect result1 type is {a: string, b: string, c: object, x: {}}
+>result1 : { a: string; b: string; c: object; x: {}; }
+>stillDefaultsIfNoInference<C = object> ({ b: "test" }) : { a: string; b: string; c: object; x: {}; }
+>stillDefaultsIfNoInference : <X, A = string, B = number, C = boolean>(arg: { a?: A; b?: B; c?: C; x?: X; }) => { a: A; b: B; c: C; x: X; }
+>C : any
+>{ b: "test" } : { b: string; }
+>b : string
+>"test" : "test"
+
+declare function testConstraints1<A extends B, B extends string>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints1 : <A extends B, B extends string>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>A : A
+>B : B
+>B : B
+>arg : { a?: A[]; b?: B[]; }
+>a : A[]
+>A : A
+>b : B[]
+>B : B
+>a : A[]
+>A : A
+>b : B[]
+>B : B
+
+const expectError1 = testConstraints1<B = "z"> ({ a: ["x", "y"] });
+>expectError1 : any
+>testConstraints1<B = "z"> ({ a: ["x", "y"] }) : any
+>testConstraints1 : <A extends B, B extends string>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>B : any
+>{ a: ["x", "y"] } : { a: string[]; }
+>a : string[]
+>["x", "y"] : string[]
+>"x" : "x"
+>"y" : "y"
+
+declare function testConstraints2<A extends string, B extends A>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>A : A
+>B : B
+>A : A
+>arg : { a?: A[]; b?: B[]; }
+>a : A[]
+>A : A
+>b : B[]
+>B : B
+>a : A[]
+>A : A
+>b : B[]
+>B : B
+
+const expectAllowed1 = testConstraints2<B = "x"> ({ a: ["x", "y"] }); // OK { a: string[], b: "x"[] }
+>expectAllowed1 : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2<B = "x"> ({ a: ["x", "y"] }) : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>B : any
+>{ a: ["x", "y"] } : { a: ("x" | "y")[]; }
+>a : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+const expectAllowed2 = testConstraints2<A = "x" | "y"> ({ b: ["x"] }); // OK { a: ("x" | "y")[], b: ("x" | "y")[] }
+>expectAllowed2 : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2<A = "x" | "y"> ({ b: ["x"] }) : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>A : any
+>{ b: ["x"] } : { b: "x"[]; }
+>b : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+
+const expectAllowed3 = testConstraints2<B = "z"> ({ a: ["x", "y"] }); // OK - inference fails, but that just makes A = string, whcih still passes
+>expectAllowed3 : { a: string[]; b: "z"[]; }
+>testConstraints2<B = "z"> ({ a: ["x", "y"] }) : { a: string[]; b: "z"[]; }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>B : any
+>{ a: ["x", "y"] } : { a: string[]; }
+>a : string[]
+>["x", "y"] : string[]
+>"x" : "x"
+>"y" : "y"
+
+const expectError2 = testConstraints2<A = "x" | "y"> ({ b: ["x", "y", "z"] }); // error "z" not in "x" | "y"
+>expectError2 : any
+>testConstraints2<A = "x" | "y"> ({ b: ["x", "y", "z"] }) : any
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>A : any
+>{ b: ["x", "y", "z"] } : { b: string[]; }
+>b : string[]
+>["x", "y", "z"] : string[]
+>"x" : "x"
+>"y" : "y"
+>"z" : "z"
+
+declare function complexConstraints<A extends string, B extends A, C extends B>(arg: { a?: A[], b?: B[], c?: C[] }): { a: A[], b: B[], c: C[] };
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: { a?: A[]; b?: B[]; c?: C[]; }) => { a: A[]; b: B[]; c: C[]; }
+>A : A
+>B : B
+>A : A
+>C : C
+>B : B
+>arg : { a?: A[]; b?: B[]; c?: C[]; }
+>a : A[]
+>A : A
+>b : B[]
+>B : B
+>c : C[]
+>C : C
+>a : A[]
+>A : A
+>b : B[]
+>B : B
+>c : C[]
+>C : C
+
+const expectAllowed4 = complexConstraints<A = "x" | "y" | "z"> ({ a: ["x"], c: ["x", "y"] }); // OK { a: ("x" | "y" | "z")[], b: ("x" | "y" | "z")[], c: ("x" | "y")[] }
+>expectAllowed4 : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints<A = "x" | "y" | "z"> ({ a: ["x"], c: ["x", "y"] }) : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: { a?: A[]; b?: B[]; c?: C[]; }) => { a: A[]; b: B[]; c: C[]; }
+>A : any
+>{ a: ["x"], c: ["x", "y"] } : { a: "x"[]; c: ("x" | "y")[]; }
+>a : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+>c : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+// OK because B inferred to be "x" but that conflicts with C as "x" | "y" so inference fails - A and C are provided,
+// B becomes its constraint, A, or "x" | "y" | "z", and the call successfully resolves
+const expectAlllowed5 = complexConstraints<A = "x" | "y" | "z", C = "x" | "y">({b: ["x"]});
+>expectAlllowed5 : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints<A = "x" | "y" | "z", C = "x" | "y">({b: ["x"]}) : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: { a?: A[]; b?: B[]; c?: C[]; }) => { a: A[]; b: B[]; c: C[]; }
+>A : any
+>C : any
+>{b: ["x"]} : { b: "x"[]; }
+>b : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+
+const expectError3 = complexConstraints<A = "x">({c: ["y"]}); // error "y" does not extend "x"
+>expectError3 : any
+>complexConstraints<A = "x">({c: ["y"]}) : any
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: { a?: A[]; b?: B[]; c?: C[]; }) => { a: A[]; b: B[]; c: C[]; }
+>A : any
+>{c: ["y"]} : { c: string[]; }
+>c : string[]
+>["y"] : string[]
+>"y" : "y"
+
+type ExampleDefaults<T = any, U = any, V extends string = string> = { t: T, u: U, v: V };
+>ExampleDefaults : ExampleDefaults<T, U, V>
+>T : T
+>U : U
+>V : V
+>t : T
+>T : T
+>u : U
+>U : U
+>v : V
+>V : V
+
+type ShouldBeAllowed<S extends string, V extends S = S> = ExampleDefaults<U = string, V = V>;
+>ShouldBeAllowed : ExampleDefaults<any, string, V>
+>S : S
+>V : V
+>S : S
+>S : S
+>ExampleDefaults : ExampleDefaults<T, U, V>
+>U : any
+>V : any
+>V : V
+
+type NoInferenceReturnPosition<F extends (...args: any[]) => R, R = any> = R;
+>NoInferenceReturnPosition : R
+>F : F
+>args : any[]
+>R : R
+>R : R
+>R : R
+
+const expectAllowed6: NoInferenceReturnPosition<F = () => string> = "test"; // R defaults to any, so this is fine
+>expectAllowed6 : any
+>NoInferenceReturnPosition : R
+>F : any
+>"test" : "test"
+
+const expectAllowed7: NoInferenceReturnPosition<F = () => string> = 35; // As is this
+>expectAllowed7 : any
+>NoInferenceReturnPosition : R
+>F : any
+>35 : 35
+
+type InferredReturnType2<R, F extends (...args: any[]) => R = any> = R;
+>InferredReturnType2 : R
+>R : R
+>F : F
+>args : any[]
+>R : R
+>R : R
+
+const expectError4: InferredReturnType2<F = () => string> = "test"; // Didn't fulfill R, issues error
+>expectError4 : {}
+>InferredReturnType2 : R
+>F : any
+>"test" : "test"
+

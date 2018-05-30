@@ -618,6 +618,8 @@ namespace ts {
                         return emitCallSignature(<CallSignatureDeclaration>node);
                     case SyntaxKind.ConstructSignature:
                         return emitConstructSignature(<ConstructSignatureDeclaration>node);
+                    case SyntaxKind.NamedTypeArgument:
+                        return emitNamedTypeArgument(<NamedTypeArgument>node);
                     case SyntaxKind.IndexSignature:
                         return emitIndexSignature(<IndexSignatureDeclaration>node);
 
@@ -1036,7 +1038,7 @@ namespace ts {
         function emitIdentifier(node: Identifier) {
             const writeText = node.symbol ? writeSymbol : write;
             writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
-            emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
+            emitTypeParameters(node, node.typeParameters);
         }
 
         //
@@ -1188,6 +1190,14 @@ namespace ts {
             emitTypeAnnotation(node.type);
             writeSemicolon();
             popNameGenerationScope(node);
+        }
+
+        function emitNamedTypeArgument(node: NamedTypeArgument) {
+            emit(node.name);
+            writeSpace();
+            writePunctuation("=");
+            writeSpace();
+            emit(node.type);
         }
 
         function emitIndexSignature(node: IndexSignatureDeclaration) {
@@ -2760,12 +2770,12 @@ namespace ts {
             emitList(parentNode, decorators, ListFormat.Decorators);
         }
 
-        function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeNode> | undefined) {
+        function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeArgument> | undefined) {
             emitList(parentNode, typeArguments, ListFormat.TypeArguments);
         }
 
-        function emitTypeParameters(parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression, typeParameters: NodeArray<TypeParameterDeclaration> | undefined) {
-            if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
+        function emitTypeParameters(parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression | Identifier, typeParameters: NodeArray<TypeParameterDeclaration> | undefined) {
+            if ((isFunctionLike(parentNode) || isIdentifier(parentNode)) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
                 return emitTypeArguments(parentNode, parentNode.typeArguments);
             }
             emitList(parentNode, typeParameters, ListFormat.TypeParameters);

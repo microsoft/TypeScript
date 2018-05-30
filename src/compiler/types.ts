@@ -264,6 +264,7 @@ namespace ts {
         SetAccessor,
         CallSignature,
         ConstructSignature,
+        NamedTypeArgument,
         IndexSignature,
         // Type
         TypePredicate,
@@ -731,7 +732,8 @@ namespace ts {
         /*@internal*/ autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
-        /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
+        /*@internal*/ typeArguments?: NodeArray<TypeArgument>;    // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
+        /*@internal*/ typeParameters?: NodeArray<TypeParameterDeclaration>; // Same as above, but for parameters
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
     }
 
@@ -815,7 +817,7 @@ namespace ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
         type?: TypeNode;
-        /* @internal */ typeArguments?: NodeArray<TypeNode>; // Used for quick info, replaces typeParameters for instantiated signatures
+        /* @internal */ typeArguments?: NodeArray<TypeArgument>; // Used for quick info, replaces typeParameters for instantiated signatures
     }
 
     export type SignatureDeclaration =
@@ -1066,6 +1068,14 @@ namespace ts {
         _typeNodeBrand: any;
     }
 
+    export interface NamedTypeArgument extends Node {
+        kind: SyntaxKind.NamedTypeArgument;
+        name: Identifier;
+        type: TypeNode;
+    }
+
+    export type TypeArgument = TypeNode | NamedTypeArgument;
+
     export interface KeywordTypeNode extends TypeNode {
         kind: SyntaxKind.AnyKeyword
             | SyntaxKind.NumberKeyword
@@ -1105,7 +1115,7 @@ namespace ts {
     }
 
     export interface NodeWithTypeArguments extends TypeNode {
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
     }
 
     export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
@@ -1709,7 +1719,7 @@ namespace ts {
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         arguments: NodeArray<Expression>;
     }
 
@@ -1731,14 +1741,14 @@ namespace ts {
     export interface NewExpression extends PrimaryExpression, Declaration {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         arguments?: NodeArray<Expression>;
     }
 
     export interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         template: TemplateLiteral;
     }
 
@@ -1795,7 +1805,7 @@ namespace ts {
         kind: SyntaxKind.JsxOpeningElement;
         parent: JsxElement;
         tagName: JsxTagNameExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         attributes: JsxAttributes;
     }
 
@@ -1803,7 +1813,7 @@ namespace ts {
     export interface JsxSelfClosingElement extends PrimaryExpression {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments?: NodeArray<TypeArgument>;
         attributes: JsxAttributes;
     }
 
@@ -2900,7 +2910,7 @@ namespace ts {
         typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode | undefined;
         /* @internal */ typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined; // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration & {typeArguments?: NodeArray<TypeArgument>} | undefined;
         /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -3538,6 +3548,7 @@ namespace ts {
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
         ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
+        ImpliedInferDecl  = 1 << 12,        // Transitent symbol is for an implied `infer` type
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 

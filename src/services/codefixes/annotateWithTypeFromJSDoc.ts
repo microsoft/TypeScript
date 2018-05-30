@@ -162,7 +162,8 @@ namespace ts.codefix {
             /*questionToken*/ undefined,
             createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
             /*initializer*/ undefined);
-        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments![1])]);
+        Debug.assert(!node.typeArguments![1] || isTypeNode(node.typeArguments![1]));
+        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments![1] as TypeNode)]);
         setEmitFlags(indexSignature, EmitFlags.SingleLine);
         return indexSignature;
     }

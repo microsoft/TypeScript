@@ -1,0 +1,192 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts ===
+declare function testNamingOtherParameters<A = any, B = any>(arg: { a?: A, b?: B }): { a: A, b: B };
+>testNamingOtherParameters : Symbol(testNamingOtherParameters, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 0))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 43))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 51))
+>arg : Symbol(arg, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 61))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 67))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 43))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 74))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 51))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 86))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 43))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 92))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 51))
+
+const assumingNotAllowed = testNamingOtherParameters<B = A>({ a: "test" }); // Error, cannot find `A`
+>assumingNotAllowed : Symbol(assumingNotAllowed, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 1, 5))
+>testNamingOtherParameters : Symbol(testNamingOtherParameters, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 0, 0))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 1, 61))
+
+declare function stillDefaultsIfNoInference<X, A = string, B= number, C=boolean>(arg: { a?: A, b?: B, c?: C, x?: X}): { a: A, b: B, c: C, x: X };
+>stillDefaultsIfNoInference : Symbol(stillDefaultsIfNoInference, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 1, 75))
+>X : Symbol(X, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 44))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 46))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 58))
+>C : Symbol(C, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 69))
+>arg : Symbol(arg, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 81))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 87))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 46))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 94))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 58))
+>c : Symbol(c, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 101))
+>C : Symbol(C, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 69))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 108))
+>X : Symbol(X, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 44))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 119))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 46))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 125))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 58))
+>c : Symbol(c, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 131))
+>C : Symbol(C, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 69))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 137))
+>X : Symbol(X, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 3, 44))
+
+const result1 = stillDefaultsIfNoInference<C = object> ({ b: "test" }); // expect result1 type is {a: string, b: string, c: object, x: {}}
+>result1 : Symbol(result1, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 4, 5))
+>stillDefaultsIfNoInference : Symbol(stillDefaultsIfNoInference, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 1, 75))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 4, 57))
+
+declare function testConstraints1<A extends B, B extends string>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints1 : Symbol(testConstraints1, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 4, 71))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 34))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 46))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 46))
+>arg : Symbol(arg, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 65))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 72))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 34))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 81))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 46))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 95))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 34))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 103))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 6, 46))
+
+const expectError1 = testConstraints1<B = "z"> ({ a: ["x", "y"] });
+>expectError1 : Symbol(expectError1, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 7, 5))
+>testConstraints1 : Symbol(testConstraints1, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 4, 71))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 7, 49))
+
+declare function testConstraints2<A extends string, B extends A>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints2 : Symbol(testConstraints2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 7, 67))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 34))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 51))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 34))
+>arg : Symbol(arg, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 65))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 72))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 34))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 81))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 51))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 95))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 34))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 103))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 9, 51))
+
+const expectAllowed1 = testConstraints2<B = "x"> ({ a: ["x", "y"] }); // OK { a: string[], b: "x"[] }
+>expectAllowed1 : Symbol(expectAllowed1, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 10, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 7, 67))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 10, 51))
+
+const expectAllowed2 = testConstraints2<A = "x" | "y"> ({ b: ["x"] }); // OK { a: ("x" | "y")[], b: ("x" | "y")[] }
+>expectAllowed2 : Symbol(expectAllowed2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 11, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 7, 67))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 11, 57))
+
+const expectAllowed3 = testConstraints2<B = "z"> ({ a: ["x", "y"] }); // OK - inference fails, but that just makes A = string, whcih still passes
+>expectAllowed3 : Symbol(expectAllowed3, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 12, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 7, 67))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 12, 51))
+
+const expectError2 = testConstraints2<A = "x" | "y"> ({ b: ["x", "y", "z"] }); // error "z" not in "x" | "y"
+>expectError2 : Symbol(expectError2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 13, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 7, 67))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 13, 55))
+
+declare function complexConstraints<A extends string, B extends A, C extends B>(arg: { a?: A[], b?: B[], c?: C[] }): { a: A[], b: B[], c: C[] };
+>complexConstraints : Symbol(complexConstraints, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 13, 78))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 36))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 53))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 36))
+>C : Symbol(C, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 66))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 53))
+>arg : Symbol(arg, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 80))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 86))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 36))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 95))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 53))
+>c : Symbol(c, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 104))
+>C : Symbol(C, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 66))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 118))
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 36))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 126))
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 53))
+>c : Symbol(c, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 134))
+>C : Symbol(C, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 15, 66))
+
+const expectAllowed4 = complexConstraints<A = "x" | "y" | "z"> ({ a: ["x"], c: ["x", "y"] }); // OK { a: ("x" | "y" | "z")[], b: ("x" | "y" | "z")[], c: ("x" | "y")[] }
+>expectAllowed4 : Symbol(expectAllowed4, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 16, 5))
+>complexConstraints : Symbol(complexConstraints, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 13, 78))
+>a : Symbol(a, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 16, 65))
+>c : Symbol(c, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 16, 75))
+
+// OK because B inferred to be "x" but that conflicts with C as "x" | "y" so inference fails - A and C are provided,
+// B becomes its constraint, A, or "x" | "y" | "z", and the call successfully resolves
+const expectAlllowed5 = complexConstraints<A = "x" | "y" | "z", C = "x" | "y">({b: ["x"]});
+>expectAlllowed5 : Symbol(expectAlllowed5, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 20, 5))
+>complexConstraints : Symbol(complexConstraints, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 13, 78))
+>b : Symbol(b, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 20, 80))
+
+const expectError3 = complexConstraints<A = "x">({c: ["y"]}); // error "y" does not extend "x"
+>expectError3 : Symbol(expectError3, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 21, 5))
+>complexConstraints : Symbol(complexConstraints, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 13, 78))
+>c : Symbol(c, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 21, 50))
+
+type ExampleDefaults<T = any, U = any, V extends string = string> = { t: T, u: U, v: V };
+>ExampleDefaults : Symbol(ExampleDefaults, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 21, 61))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 21))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 29))
+>V : Symbol(V, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 38))
+>t : Symbol(t, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 69))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 21))
+>u : Symbol(u, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 75))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 29))
+>v : Symbol(v, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 81))
+>V : Symbol(V, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 38))
+
+type ShouldBeAllowed<S extends string, V extends S = S> = ExampleDefaults<U = string, V = V>;
+>ShouldBeAllowed : Symbol(ShouldBeAllowed, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 23, 89))
+>S : Symbol(S, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 21))
+>V : Symbol(V, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 38))
+>S : Symbol(S, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 21))
+>S : Symbol(S, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 21))
+>ExampleDefaults : Symbol(ExampleDefaults, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 21, 61))
+>V : Symbol(V, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 38))
+
+type NoInferenceReturnPosition<F extends (...args: any[]) => R, R = any> = R;
+>NoInferenceReturnPosition : Symbol(NoInferenceReturnPosition, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 93))
+>F : Symbol(F, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 26, 31))
+>args : Symbol(args, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 26, 42))
+>R : Symbol(R, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 26, 63))
+>R : Symbol(R, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 26, 63))
+>R : Symbol(R, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 26, 63))
+
+const expectAllowed6: NoInferenceReturnPosition<F = () => string> = "test"; // R defaults to any, so this is fine
+>expectAllowed6 : Symbol(expectAllowed6, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 27, 5))
+>NoInferenceReturnPosition : Symbol(NoInferenceReturnPosition, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 93))
+
+const expectAllowed7: NoInferenceReturnPosition<F = () => string> = 35; // As is this
+>expectAllowed7 : Symbol(expectAllowed7, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 28, 5))
+>NoInferenceReturnPosition : Symbol(NoInferenceReturnPosition, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 24, 93))
+
+type InferredReturnType2<R, F extends (...args: any[]) => R = any> = R;
+>InferredReturnType2 : Symbol(InferredReturnType2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 28, 71))
+>R : Symbol(R, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 30, 25))
+>F : Symbol(F, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 30, 27))
+>args : Symbol(args, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 30, 39))
+>R : Symbol(R, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 30, 25))
+>R : Symbol(R, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 30, 25))
+
+const expectError4: InferredReturnType2<F = () => string> = "test"; // Didn't fulfill R, issues error
+>expectError4 : Symbol(expectError4, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 31, 5))
+>InferredReturnType2 : Symbol(InferredReturnType2, Decl(typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts, 28, 71))
+

@@ -116,26 +116,30 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
-    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
-    export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode | TypeParameterDeclaration>): Identifier {
+    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeArgument> | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
+    export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeArgument>, typeParameters?: ReadonlyArray<TypeParameterDeclaration>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.escapedText = escapeLeadingUnderscores(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateFlags = GeneratedIdentifierFlags.None;
         node.autoGenerateId = 0;
         if (typeArguments) {
-            node.typeArguments = createNodeArray(typeArguments as ReadonlyArray<TypeNode>);
+            node.typeArguments = createNodeArray(typeArguments);
+        }
+        if (typeParameters) {
+            node.typeParameters = createNodeArray(typeParameters);
         }
         return node;
     }
 
     export function updateIdentifier(node: Identifier): Identifier;
     /* @internal */
-    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
-    export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
-        return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(idText(node), typeArguments), node)
-        : node;
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeArgument> | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
+    export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeArgument> | undefined, typeParameters?: NodeArray<TypeParameterDeclaration> | undefined): Identifier {
+        return node.typeArguments !== typeArguments ||
+            node.typeParameters !== typeParameters
+            ? updateNode(createIdentifier(idText(node), typeArguments, typeParameters), node)
+            : node;
     }
 
     let nextAutoGenerateId = 0;
@@ -608,6 +612,20 @@ namespace ts {
         return updateSignatureDeclaration(node, typeParameters, parameters, type);
     }
 
+    export function createNamedTypeArgument(name: string | Identifier, type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.NamedTypeArgument) as NamedTypeArgument;
+        node.name = asName(name);
+        node.type = type;
+        return node;
+    }
+
+    export function updateNamedTypeArgument(node: NamedTypeArgument, name: Identifier, type: TypeNode) {
+        return node.name !== name ||
+            node.type !== type
+            ? updateNode(createNamedTypeArgument(name, type), node)
+            : node;
+    }
+
     export function createIndexSignature(
         decorators: ReadonlyArray<Decorator> | undefined,
         modifiers: ReadonlyArray<Modifier> | undefined,
@@ -673,14 +691,14 @@ namespace ts {
             : node;
     }
 
-    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: ReadonlyArray<TypeNode> | undefined) {
+    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: ReadonlyArray<TypeArgument> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
         node.typeName = asName(typeName);
         node.typeArguments = typeArguments && parenthesizeTypeParameters(typeArguments);
         return node;
     }
 
-    export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
+    export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeArgument> | undefined) {
         return node.typeName !== typeName
             || node.typeArguments !== typeArguments
             ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
@@ -809,7 +827,7 @@ namespace ts {
             : node;
     }
 
-    export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeNode>, isTypeOf?: boolean) {
+    export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeArgument>, isTypeOf?: boolean) {
         const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportType);
         node.argument = argument;
         node.qualifier = qualifier;
@@ -818,7 +836,7 @@ namespace ts {
         return node;
     }
 
-    export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeNode>, isTypeOf?: boolean) {
+    export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeArgument>, isTypeOf?: boolean) {
         return node.argument !== argument
             || node.qualifier !== qualifier
             || node.typeArguments !== typeArguments
@@ -1003,7 +1021,7 @@ namespace ts {
             : node;
     }
 
-    export function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
+    export function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
         const node = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
         node.expression = parenthesizeForAccess(expression);
         node.typeArguments = asNodeArray(typeArguments);
@@ -1011,7 +1029,7 @@ namespace ts {
         return node;
     }
 
-    export function updateCall(node: CallExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>) {
+    export function updateCall(node: CallExpression, expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression>) {
         return node.expression !== expression
             || node.typeArguments !== typeArguments
             || node.arguments !== argumentsArray
@@ -1019,7 +1037,7 @@ namespace ts {
             : node;
     }
 
-    export function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
+    export function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
         const node = <NewExpression>createSynthesizedNode(SyntaxKind.NewExpression);
         node.expression = parenthesizeForNew(expression);
         node.typeArguments = asNodeArray(typeArguments);
@@ -1027,7 +1045,7 @@ namespace ts {
         return node;
     }
 
-    export function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
+    export function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
         return node.expression !== expression
             || node.typeArguments !== typeArguments
             || node.arguments !== argumentsArray
@@ -1036,14 +1054,14 @@ namespace ts {
     }
 
     export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
-    export function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
+    export function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     /** @internal */
-    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral | undefined, template?: TemplateLiteral): TaggedTemplateExpression;
-    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral | undefined, template?: TemplateLiteral) {
+    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeArgument> | TemplateLiteral | undefined, template?: TemplateLiteral): TaggedTemplateExpression;
+    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeArgument> | TemplateLiteral | undefined, template?: TemplateLiteral) {
         const node = <TaggedTemplateExpression>createSynthesizedNode(SyntaxKind.TaggedTemplateExpression);
         node.tag = parenthesizeForAccess(tag);
         if (template) {
-            node.typeArguments = asNodeArray(typeArgumentsOrTemplate as ReadonlyArray<TypeNode>);
+            node.typeArguments = asNodeArray(typeArgumentsOrTemplate as ReadonlyArray<TypeArgument>);
             node.template = template;
         }
         else {
@@ -1054,8 +1072,8 @@ namespace ts {
     }
 
     export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral | undefined, template?: TemplateLiteral) {
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeArgument> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeArgument> | TemplateLiteral | undefined, template?: TemplateLiteral) {
         return node.tag !== tag
             || (template
                 ? node.typeArguments !== typeArgumentsOrTemplate || node.template !== template
@@ -1425,14 +1443,14 @@ namespace ts {
         return <OmittedExpression>createSynthesizedNode(SyntaxKind.OmittedExpression);
     }
 
-    export function createExpressionWithTypeArguments(typeArguments: ReadonlyArray<TypeNode> | undefined, expression: Expression) {
+    export function createExpressionWithTypeArguments(typeArguments: ReadonlyArray<TypeArgument> | undefined, expression: Expression) {
         const node = <ExpressionWithTypeArguments>createSynthesizedNode(SyntaxKind.ExpressionWithTypeArguments);
         node.expression = parenthesizeForAccess(expression);
         node.typeArguments = asNodeArray(typeArguments);
         return node;
     }
 
-    export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: ReadonlyArray<TypeNode> | undefined, expression: Expression) {
+    export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: ReadonlyArray<TypeArgument> | undefined, expression: Expression) {
         return node.typeArguments !== typeArguments
             || node.expression !== expression
             ? updateNode(createExpressionWithTypeArguments(typeArguments, expression), node)
@@ -2205,7 +2223,7 @@ namespace ts {
             : node;
     }
 
-    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
+    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes) {
         const node = <JsxSelfClosingElement>createSynthesizedNode(SyntaxKind.JsxSelfClosingElement);
         node.tagName = tagName;
         node.typeArguments = typeArguments && createNodeArray(typeArguments);
@@ -2213,7 +2231,7 @@ namespace ts {
         return node;
     }
 
-    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
+    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes) {
         return node.tagName !== tagName
             || node.typeArguments !== typeArguments
             || node.attributes !== attributes
@@ -2221,7 +2239,7 @@ namespace ts {
             : node;
     }
 
-    export function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
+    export function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes) {
         const node = <JsxOpeningElement>createSynthesizedNode(SyntaxKind.JsxOpeningElement);
         node.tagName = tagName;
         node.typeArguments = typeArguments && createNodeArray(typeArguments);
@@ -2229,7 +2247,7 @@ namespace ts {
         return node;
     }
 
-    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
+    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeArgument> | undefined, attributes: JsxAttributes) {
         return node.tagName !== tagName
             || node.typeArguments !== typeArguments
             || node.attributes !== attributes
@@ -4274,11 +4292,17 @@ namespace ts {
         return createNodeArray(sameMap(members, parenthesizeElementTypeMember));
     }
 
-    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode> | undefined) {
+    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode> | undefined): MutableNodeArray<TypeNode> | undefined;
+    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeArgument> | undefined): MutableNodeArray<TypeArgument> | undefined;
+    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode> | ReadonlyArray<TypeArgument> | undefined): MutableNodeArray<TypeNode> | MutableNodeArray<TypeArgument> | undefined {
         if (some(typeParameters)) {
-            const params: TypeNode[] = [];
+            const params: TypeArgument[] = [];
             for (let i = 0; i < typeParameters.length; ++i) {
                 const entry = typeParameters[i];
+                if (isNamedTypeArgument(entry)) {
+                    params.push(entry);
+                    continue;
+                }
                 params.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
                     createParenthesizedType(entry) :
                     entry);

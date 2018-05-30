@@ -1,0 +1,313 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithnamedTypeArguments.tsx ===
+declare module JSX {
+>JSX : any
+
+    interface Element {}
+>Element : Element
+}
+declare namespace React {
+>React : typeof React
+
+    export function createElement(x: any, p: any, ...children: any[]): JSX.Element;
+>createElement : (x: any, p: any, ...children: any[]) => JSX.Element
+>x : any
+>p : any
+>children : any[]
+>JSX : any
+>Element : JSX.Element
+}
+
+class Foo<T, U> {
+>Foo : Foo<T, U>
+>T : T
+>U : U
+
+    constructor(public prop1: T, public prop2: U) {}
+>prop1 : T
+>T : T
+>prop2 : U
+>U : U
+}
+
+function foo<T, U>(x: T, y: U): [T, U] { return [x, y]; }
+>foo : <T, U>(x: T, y: U) => [T, U]
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>T : T
+>U : U
+>[x, y] : [T, U]
+>x : T
+>y : U
+
+function tag<T, U>(x: TemplateStringsArray, ...args: (T | U)[]) { return args; }
+>tag : <T, U>(x: TemplateStringsArray, ...args: (T | U)[]) => (T | U)[]
+>T : T
+>U : U
+>x : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>args : (T | U)[]
+>T : T
+>U : U
+>args : (T | U)[]
+
+interface ComponentProps<T, U> {
+>ComponentProps : ComponentProps<T, U>
+>T : T
+>U : U
+
+    x: T;
+>x : T
+>T : T
+
+    y: U;
+>y : U
+>U : U
+
+    cb(props: this): void;
+>cb : (props: this) => void
+>props : this
+}
+
+function Component<T, U>(x: ComponentProps<T, U>) {
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+>T : T
+>U : U
+>x : ComponentProps<T, U>
+>ComponentProps : ComponentProps<T, U>
+>T : T
+>U : U
+
+    return <h></h>;
+><h></h> : JSX.Element
+>h : any
+>h : any
+}
+
+// In order
+
+const instance1 = new Foo<T = number, U = string>(0, "");
+>instance1 : Foo<number, string>
+>new Foo<T = number, U = string>(0, "") : Foo<number, string>
+>Foo : typeof Foo
+>T : any
+>U : any
+>0 : 0
+>"" : ""
+
+const result1 = foo<T = number, U = string>(0, "");
+>result1 : [number, string]
+>foo<T = number, U = string>(0, "") : [number, string]
+>foo : <T, U>(x: T, y: U) => [T, U]
+>T : any
+>U : any
+>0 : 0
+>"" : ""
+
+const tagged1 = tag<T = number, U = string>`tags ${12} ${""}`;
+>tagged1 : (string | number)[]
+>tag<T = number, U = string>`tags ${12} ${""}` : (string | number)[]
+>tag : <T, U>(x: TemplateStringsArray, ...args: (T | U)[]) => (T | U)[]
+>T : any
+>U : any
+>`tags ${12} ${""}` : string
+>12 : 12
+>"" : ""
+
+const jsx1 = <Component<T = number, U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx1 : JSX.Element
+><Component<T = number, U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} /> : JSX.Element
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+>T : any
+>U : any
+>x : number
+>12 : 12
+>y : string
+>cb : (props: ComponentProps<number, string>) => any
+>props => void (props.x.toFixed() + props.y.toUpperCase()) : (props: ComponentProps<number, string>) => any
+>props : ComponentProps<number, string>
+>void (props.x.toFixed() + props.y.toUpperCase()) : undefined
+>(props.x.toFixed() + props.y.toUpperCase()) : string
+>props.x.toFixed() + props.y.toUpperCase() : string
+>props.x.toFixed() : string
+>props.x.toFixed : (fractionDigits?: number) => string
+>props.x : number
+>props : ComponentProps<number, string>
+>x : number
+>toFixed : (fractionDigits?: number) => string
+>props.y.toUpperCase() : string
+>props.y.toUpperCase : () => string
+>props.y : string
+>props : ComponentProps<number, string>
+>y : string
+>toUpperCase : () => string
+
+// Out of order
+
+const instance2 = new Foo<U = string, T = number>(0, "");
+>instance2 : Foo<number, string>
+>new Foo<U = string, T = number>(0, "") : Foo<number, string>
+>Foo : typeof Foo
+>U : any
+>T : any
+>0 : 0
+>"" : ""
+
+const result2 = foo<U = string, T = number>(0, "");
+>result2 : [number, string]
+>foo<U = string, T = number>(0, "") : [number, string]
+>foo : <T, U>(x: T, y: U) => [T, U]
+>U : any
+>T : any
+>0 : 0
+>"" : ""
+
+const tagged2 = tag<U = string, T = number>`tags ${12} ${""}`;
+>tagged2 : (string | number)[]
+>tag<U = string, T = number>`tags ${12} ${""}` : (string | number)[]
+>tag : <T, U>(x: TemplateStringsArray, ...args: (T | U)[]) => (T | U)[]
+>U : any
+>T : any
+>`tags ${12} ${""}` : string
+>12 : 12
+>"" : ""
+
+const jsx2 = <Component<U = string, T = number> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx2 : JSX.Element
+><Component<U = string, T = number> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} /> : JSX.Element
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+>U : any
+>T : any
+>x : number
+>12 : 12
+>y : string
+>cb : (props: ComponentProps<number, string>) => any
+>props => void (props.x.toFixed() + props.y.toUpperCase()) : (props: ComponentProps<number, string>) => any
+>props : ComponentProps<number, string>
+>void (props.x.toFixed() + props.y.toUpperCase()) : undefined
+>(props.x.toFixed() + props.y.toUpperCase()) : string
+>props.x.toFixed() + props.y.toUpperCase() : string
+>props.x.toFixed() : string
+>props.x.toFixed : (fractionDigits?: number) => string
+>props.x : number
+>props : ComponentProps<number, string>
+>x : number
+>toFixed : (fractionDigits?: number) => string
+>props.y.toUpperCase() : string
+>props.y.toUpperCase : () => string
+>props.y : string
+>props : ComponentProps<number, string>
+>y : string
+>toUpperCase : () => string
+
+// With positional
+
+const instance3 = new Foo<number, U = string>(0, "");
+>instance3 : Foo<number, string>
+>new Foo<number, U = string>(0, "") : Foo<number, string>
+>Foo : typeof Foo
+>U : any
+>0 : 0
+>"" : ""
+
+const result3 = foo<number, U = string>(0, "");
+>result3 : [number, string]
+>foo<number, U = string>(0, "") : [number, string]
+>foo : <T, U>(x: T, y: U) => [T, U]
+>U : any
+>0 : 0
+>"" : ""
+
+const tagged3 = tag<number, U = string>`tags ${12} ${""}`;
+>tagged3 : (string | number)[]
+>tag<number, U = string>`tags ${12} ${""}` : (string | number)[]
+>tag : <T, U>(x: TemplateStringsArray, ...args: (T | U)[]) => (T | U)[]
+>U : any
+>`tags ${12} ${""}` : string
+>12 : 12
+>"" : ""
+
+const jsx3 = <Component<number, U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx3 : JSX.Element
+><Component<number, U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} /> : JSX.Element
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+>U : any
+>x : number
+>12 : 12
+>y : string
+>cb : (props: ComponentProps<number, string>) => any
+>props => void (props.x.toFixed() + props.y.toUpperCase()) : (props: ComponentProps<number, string>) => any
+>props : ComponentProps<number, string>
+>void (props.x.toFixed() + props.y.toUpperCase()) : undefined
+>(props.x.toFixed() + props.y.toUpperCase()) : string
+>props.x.toFixed() + props.y.toUpperCase() : string
+>props.x.toFixed() : string
+>props.x.toFixed : (fractionDigits?: number) => string
+>props.x : number
+>props : ComponentProps<number, string>
+>x : number
+>toFixed : (fractionDigits?: number) => string
+>props.y.toUpperCase() : string
+>props.y.toUpperCase : () => string
+>props.y : string
+>props : ComponentProps<number, string>
+>y : string
+>toUpperCase : () => string
+
+// With partial inference
+
+const instance4 = new Foo<U = string>(0, "");
+>instance4 : Foo<number, string>
+>new Foo<U = string>(0, "") : Foo<number, string>
+>Foo : typeof Foo
+>U : any
+>0 : 0
+>"" : ""
+
+const result4 = foo<U = string>(0, "");
+>result4 : [number, string]
+>foo<U = string>(0, "") : [number, string]
+>foo : <T, U>(x: T, y: U) => [T, U]
+>U : any
+>0 : 0
+>"" : ""
+
+const tagged4 = tag<U = string>`tags ${12} ${""}`;
+>tagged4 : (string | number)[]
+>tag<U = string>`tags ${12} ${""}` : (string | number)[]
+>tag : <T, U>(x: TemplateStringsArray, ...args: (T | U)[]) => (T | U)[]
+>U : any
+>`tags ${12} ${""}` : string
+>12 : 12
+>"" : ""
+
+const jsx4 = <Component<U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx4 : JSX.Element
+><Component<U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} /> : JSX.Element
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+>U : any
+>x : number
+>12 : 12
+>y : string
+>cb : (props: ComponentProps<number, string>) => any
+>props => void (props.x.toFixed() + props.y.toUpperCase()) : (props: ComponentProps<number, string>) => any
+>props : ComponentProps<number, string>
+>void (props.x.toFixed() + props.y.toUpperCase()) : undefined
+>(props.x.toFixed() + props.y.toUpperCase()) : string
+>props.x.toFixed() + props.y.toUpperCase() : string
+>props.x.toFixed() : string
+>props.x.toFixed : (fractionDigits?: number) => string
+>props.x : number
+>props : ComponentProps<number, string>
+>x : number
+>toFixed : (fractionDigits?: number) => string
+>props.y.toUpperCase() : string
+>props.y.toUpperCase : () => string
+>props.y : string
+>props : ComponentProps<number, string>
+>y : string
+>toUpperCase : () => string
+

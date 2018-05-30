@@ -1,0 +1,202 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(28,35): error TS1347: Signature has no type argument named 'Q'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(29,29): error TS1347: Signature has no type argument named 'Q'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(30,29): error TS1347: Signature has no type argument named 'Q'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(31,33): error TS1347: Signature has no type argument named 'Q'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(32,14): error TS1351: No value provided for required type argument 'U'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(32,22): error TS1347: Signature has no type argument named 'Q'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(36,27): error TS1346: Positional type argument conflicts with named type argument 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(36,35): error TS1345: Named type argument conflicts with positional type argument at index '0'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(37,21): error TS1346: Positional type argument conflicts with named type argument 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(37,29): error TS1345: Named type argument conflicts with positional type argument at index '0'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(38,21): error TS1346: Positional type argument conflicts with named type argument 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(38,29): error TS1345: Named type argument conflicts with positional type argument at index '0'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(39,25): error TS1346: Positional type argument conflicts with named type argument 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(39,33): error TS1345: Named type argument conflicts with positional type argument at index '0'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(40,14): error TS1346: Positional type argument conflicts with named type argument 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(40,14): error TS1351: No value provided for required type argument 'U'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(40,22): error TS1345: Named type argument conflicts with positional type argument at index '0'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(44,27): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(44,39): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(44,51): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(45,21): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(45,33): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(45,45): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(46,21): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(46,33): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,25): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,37): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,49): error TS2326: Types of property 'x' are incompatible.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,88): error TS2339: Property 'toFixed' does not exist on type 'string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,14): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,14): error TS1351: No value provided for required type argument 'U'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,26): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(52,27): error TS2558: Expected 0-2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(53,21): error TS2558: Expected 0-2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(54,21): error TS2558: Expected 0-2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(55,25): error TS2558: Expected 0-2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(56,10): error TS2314: Generic type 'Foo<T, U>' requires 2 type argument(s).
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(60,39): error TS1344: Positional type arguments cannot follow named type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(61,33): error TS1344: Positional type arguments cannot follow named type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(62,33): error TS1344: Positional type arguments cannot follow named type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(63,37): error TS1344: Positional type arguments cannot follow named type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(64,26): error TS1344: Positional type arguments cannot follow named type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(67,10): error TS2314: Generic type 'Foo<T, U>' requires 2 type argument(s).
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx (43 errors) ====
+    declare module JSX {
+        interface Element {}
+    }
+    declare namespace React {
+        export function createElement(x: any, p: any, ...children: any[]): JSX.Element;
+    }
+    
+    class Foo<T, U> {
+        constructor(public prop1: T, public prop2: U) {}
+    }
+    
+    function foo<T, U>(x: T, y: U): [T, U] { return [x, y]; }
+    
+    function tag<T, U>(x: TemplateStringsArray, ...args: (T | U)[]) { return args; }
+    
+    interface ComponentProps<T, U> {
+        x: T;
+        y: U;
+        cb(props: this): void;
+    }
+    
+    function Component<T, U>(x: ComponentProps<T, U>) {
+        return <h></h>;
+    }
+    
+    // Does not reference valid param
+    
+    const instance1 = new Foo<number, Q = string>(0, "");
+                                      ~
+!!! error TS1347: Signature has no type argument named 'Q'.
+    const result1 = foo<number, Q = string>(0, "");
+                                ~
+!!! error TS1347: Signature has no type argument named 'Q'.
+    const tagged1 = tag<number, Q = string>`tags ${12} ${""}`;
+                                ~
+!!! error TS1347: Signature has no type argument named 'Q'.
+    const jsx1 = <Component<number, Q = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+                                    ~
+!!! error TS1347: Signature has no type argument named 'Q'.
+    type A = Foo<number, Q = string>;
+                 ~~~~~~~~~~~~~~~~~~
+!!! error TS1351: No value provided for required type argument 'U'.
+                         ~
+!!! error TS1347: Signature has no type argument named 'Q'.
+    
+    // Duplicates positional
+    
+    const instance2 = new Foo<number, T = string>(0, "");
+                              ~~~~~~
+!!! error TS1346: Positional type argument conflicts with named type argument 'T'.
+                                      ~
+!!! error TS1345: Named type argument conflicts with positional type argument at index '0'.
+    const result2 = foo<number, T = string>(0, "");
+                        ~~~~~~
+!!! error TS1346: Positional type argument conflicts with named type argument 'T'.
+                                ~
+!!! error TS1345: Named type argument conflicts with positional type argument at index '0'.
+    const tagged2 = tag<number, T = string>`tags ${12} ${""}`;
+                        ~~~~~~
+!!! error TS1346: Positional type argument conflicts with named type argument 'T'.
+                                ~
+!!! error TS1345: Named type argument conflicts with positional type argument at index '0'.
+    const jsx2 = <Component<number, T = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+                            ~~~~~~
+!!! error TS1346: Positional type argument conflicts with named type argument 'T'.
+                                    ~
+!!! error TS1345: Named type argument conflicts with positional type argument at index '0'.
+    type B = Foo<number, T = string>;
+                 ~~~~~~
+!!! error TS1346: Positional type argument conflicts with named type argument 'T'.
+                 ~~~~~~~~~~~~~~~~~~
+!!! error TS1351: No value provided for required type argument 'U'.
+                         ~
+!!! error TS1345: Named type argument conflicts with positional type argument at index '0'.
+    
+    // Duplicates other named
+    
+    const instance3 = new Foo<T = number, T = string>(0, "");
+                              ~
+!!! error TS2300: Duplicate identifier 'T'.
+                                          ~
+!!! error TS2300: Duplicate identifier 'T'.
+                                                      ~
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
+    const result3 = foo<T = number, T = string>(0, "");
+                        ~
+!!! error TS2300: Duplicate identifier 'T'.
+                                    ~
+!!! error TS2300: Duplicate identifier 'T'.
+                                                ~
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
+    const tagged3 = tag<T = number, T = string>`tags ${12} ${""}`;
+                        ~
+!!! error TS2300: Duplicate identifier 'T'.
+                                    ~
+!!! error TS2300: Duplicate identifier 'T'.
+    const jsx3 = <Component<T = number, T = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+                            ~
+!!! error TS2300: Duplicate identifier 'T'.
+                                        ~
+!!! error TS2300: Duplicate identifier 'T'.
+                                                    ~~~~~~
+!!! error TS2326: Types of property 'x' are incompatible.
+!!! error TS2326:   Type 'number' is not assignable to type 'string'.
+                                                                                           ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+    type C = Foo<T = number, T = string>;
+                 ~
+!!! error TS2300: Duplicate identifier 'T'.
+                 ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1351: No value provided for required type argument 'U'.
+                             ~
+!!! error TS2300: Duplicate identifier 'T'.
+    
+    // Too many arguments
+    
+    const instance4 = new Foo<T = number, U = string, W = never>(0, "");
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0-2 type arguments, but got 3.
+    const result4 = foo<T = number, U = string, W = never>(0, "");
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0-2 type arguments, but got 3.
+    const tagged4 = tag<T = number, U = string, W = never>`tags ${12} ${""}`;
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0-2 type arguments, but got 3.
+    const jsx4 = <Component<T = number, U = string, W = never> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0-2 type arguments, but got 3.
+    type D = Foo<T = number, U = string, W = never>;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'Foo<T, U>' requires 2 type argument(s).
+    
+    // Positional after named
+    
+    const instance5 = new Foo<U = string, number>(0, "");
+                                          ~~~~~~
+!!! error TS1344: Positional type arguments cannot follow named type arguments.
+    const result5 = foo<U = string, number>(0, "");
+                                    ~~~~~~
+!!! error TS1344: Positional type arguments cannot follow named type arguments.
+    const tagged5 = tag<U = string, number>`tags ${12} ${""}`;
+                                    ~~~~~~
+!!! error TS1344: Positional type arguments cannot follow named type arguments.
+    const jsx5 = <Component<U = string, number> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+                                        ~~~~~~
+!!! error TS1344: Positional type arguments cannot follow named type arguments.
+    type E = Foo<U = string, number>;
+                             ~~~~~~
+!!! error TS1344: Positional type arguments cannot follow named type arguments.
+    
+    // Typespace only - does not provide enough arguments
+    type F = Foo<U = number>;
+             ~~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'Foo<T, U>' requires 2 type argument(s).
+    

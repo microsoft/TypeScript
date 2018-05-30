@@ -1,0 +1,73 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts(2,58): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts(8,49): error TS2345: Argument of type '{ a: ("x" | "y")[]; }' is not assignable to parameter of type '{ a?: "z"[]; b?: "z"[]; }'.
+  Types of property 'a' are incompatible.
+    Type '("x" | "y")[]' is not assignable to type '"z"[]'.
+      Type '"x" | "y"' is not assignable to type '"z"'.
+        Type '"x"' is not assignable to type '"z"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts(14,55): error TS2345: Argument of type '{ b: ("z" | "x" | "y")[]; }' is not assignable to parameter of type '{ a?: ("x" | "y")[]; b?: ("x" | "y")[]; }'.
+  Types of property 'b' are incompatible.
+    Type '("z" | "x" | "y")[]' is not assignable to type '("x" | "y")[]'.
+      Type '"z" | "x" | "y"' is not assignable to type '"x" | "y"'.
+        Type '"z"' is not assignable to type '"x" | "y"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts(22,50): error TS2345: Argument of type '{ c: "y"[]; }' is not assignable to parameter of type '{ a?: "x"[]; b?: "x"[]; c?: "x"[]; }'.
+  Types of property 'c' are incompatible.
+    Type '"y"[]' is not assignable to type '"x"[]'.
+      Type '"y"' is not assignable to type '"x"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts(32,41): error TS1351: No value provided for required type argument 'R'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts (5 errors) ====
+    declare function testNamingOtherParameters<A = any, B = any>(arg: { a?: A, b?: B }): { a: A, b: B };
+    const assumingNotAllowed = testNamingOtherParameters<B = A>({ a: "test" }); // Error, cannot find `A`
+                                                             ~
+!!! error TS2304: Cannot find name 'A'.
+    
+    declare function stillDefaultsIfNoInference<X, A = string, B= number, C=boolean>(arg: { a?: A, b?: B, c?: C, x?: X}): { a: A, b: B, c: C, x: X };
+    const result1 = stillDefaultsIfNoInference<C = object> ({ b: "test" }); // expect result1 type is {a: string, b: string, c: object, x: {}}
+    
+    declare function testConstraints1<A extends B, B extends string>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+    const expectError1 = testConstraints1<B = "z"> ({ a: ["x", "y"] });
+                                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ a: ("x" | "y")[]; }' is not assignable to parameter of type '{ a?: "z"[]; b?: "z"[]; }'.
+!!! error TS2345:   Types of property 'a' are incompatible.
+!!! error TS2345:     Type '("x" | "y")[]' is not assignable to type '"z"[]'.
+!!! error TS2345:       Type '"x" | "y"' is not assignable to type '"z"'.
+!!! error TS2345:         Type '"x"' is not assignable to type '"z"'.
+    
+    declare function testConstraints2<A extends string, B extends A>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+    const expectAllowed1 = testConstraints2<B = "x"> ({ a: ["x", "y"] }); // OK { a: string[], b: "x"[] }
+    const expectAllowed2 = testConstraints2<A = "x" | "y"> ({ b: ["x"] }); // OK { a: ("x" | "y")[], b: ("x" | "y")[] }
+    const expectAllowed3 = testConstraints2<B = "z"> ({ a: ["x", "y"] }); // OK - inference fails, but that just makes A = string, whcih still passes
+    const expectError2 = testConstraints2<A = "x" | "y"> ({ b: ["x", "y", "z"] }); // error "z" not in "x" | "y"
+                                                          ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ b: ("z" | "x" | "y")[]; }' is not assignable to parameter of type '{ a?: ("x" | "y")[]; b?: ("x" | "y")[]; }'.
+!!! error TS2345:   Types of property 'b' are incompatible.
+!!! error TS2345:     Type '("z" | "x" | "y")[]' is not assignable to type '("x" | "y")[]'.
+!!! error TS2345:       Type '"z" | "x" | "y"' is not assignable to type '"x" | "y"'.
+!!! error TS2345:         Type '"z"' is not assignable to type '"x" | "y"'.
+    
+    declare function complexConstraints<A extends string, B extends A, C extends B>(arg: { a?: A[], b?: B[], c?: C[] }): { a: A[], b: B[], c: C[] };
+    const expectAllowed4 = complexConstraints<A = "x" | "y" | "z"> ({ a: ["x"], c: ["x", "y"] }); // OK { a: ("x" | "y" | "z")[], b: ("x" | "y" | "z")[], c: ("x" | "y")[] }
+    
+    // OK because B inferred to be "x" but that conflicts with C as "x" | "y" so inference fails - A and C are provided,
+    // B becomes its constraint, A, or "x" | "y" | "z", and the call successfully resolves
+    const expectAlllowed5 = complexConstraints<A = "x" | "y" | "z", C = "x" | "y">({b: ["x"]});
+    const expectError3 = complexConstraints<A = "x">({c: ["y"]}); // error "y" does not extend "x"
+                                                     ~~~~~~~~~~
+!!! error TS2345: Argument of type '{ c: "y"[]; }' is not assignable to parameter of type '{ a?: "x"[]; b?: "x"[]; c?: "x"[]; }'.
+!!! error TS2345:   Types of property 'c' are incompatible.
+!!! error TS2345:     Type '"y"[]' is not assignable to type '"x"[]'.
+!!! error TS2345:       Type '"y"' is not assignable to type '"x"'.
+    
+    type ExampleDefaults<T = any, U = any, V extends string = string> = { t: T, u: U, v: V };
+    type ShouldBeAllowed<S extends string, V extends S = S> = ExampleDefaults<U = string, V = V>;
+    
+    type NoInferenceReturnPosition<F extends (...args: any[]) => R, R = any> = R;
+    const expectAllowed6: NoInferenceReturnPosition<F = () => string> = "test"; // R defaults to any, so this is fine
+    const expectAllowed7: NoInferenceReturnPosition<F = () => string> = 35; // As is this
+    
+    type InferredReturnType2<R, F extends (...args: any[]) => R = any> = R;
+    const expectError4: InferredReturnType2<F = () => string> = "test"; // Didn't fulfill R, issues error
+                                            ~~~~~~~~~~~~~~~~
+!!! error TS1351: No value provided for required type argument 'R'.
+    
