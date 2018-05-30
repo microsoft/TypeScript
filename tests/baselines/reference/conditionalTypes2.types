@@ -403,7 +403,7 @@ interface B1<T> extends A1<T> {
 >T : T
 
     boom: T extends any ? true : true
->boom : true
+>boom : T extends any ? true : true
 >T : T
 >true : true
 >true : true
