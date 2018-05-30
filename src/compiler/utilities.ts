@@ -5594,13 +5594,18 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
+    export type TemplateLiteralToken = NoSubstitutionTemplateLiteral | TemplateHead | TemplateMiddle | TemplateTail;
+    export function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken {
+        return isTemplateLiteralKind(node.kind);
+    }
+
     export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail {
         const kind = node.kind;
         return kind === SyntaxKind.TemplateMiddle
             || kind === SyntaxKind.TemplateTail;
     }
 
-    export function isStringTextContainingNode(node: Node) {
+    export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
 
