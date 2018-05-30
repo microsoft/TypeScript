@@ -9003,6 +9003,20 @@ declare var MediaQueryList: {
     new(): MediaQueryList;
 };
 
+interface MediaQueryListEvent extends Event {
+    readonly matches: boolean;
+    readonly media: string;
+}
+
+declare var MediaQueryListEvent: {
+    prototype: MediaQueryListEvent;
+    new(init: {matches: boolean, media: string}): MediaQueryListEvent;
+};
+
+interface MediaQueryListListener {
+    (mql: MediaQueryListEvent): void;
+}
+
 interface MediaSource extends EventTarget {
     readonly activeSourceBuffers: SourceBufferList;
     duration: number;
@@ -15478,10 +15492,6 @@ interface IntersectionObserverCallback {
 
 interface MSLaunchUriCallback {
     (): void;
-}
-
-interface MediaQueryListListener {
-    (mql: MediaQueryList): void;
 }
 
 interface MutationCallback {
