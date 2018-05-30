@@ -202,7 +202,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 const o7 = {
     f() {
         return __asyncGenerator(this, arguments, function* f_1() {
-            return 1;
+            return yield __await(1);
         });
     }
 };

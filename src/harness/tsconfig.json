@@ -148,6 +148,7 @@
         "vpath.ts",
         "vfs.ts",
         "compiler.ts",
+        "evaluator.ts",
         "fakes.ts",
 
         "sourceMapRecorder.ts",
@@ -169,5 +170,5 @@
         "parallel/shared.ts",
         "runner.ts"
     ],
-    "include": ["unittests/**.ts"]
+    "include": ["unittests/**/*.ts"]
 }
