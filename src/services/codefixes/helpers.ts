@@ -7,23 +7,12 @@ namespace ts.codefix {
      * @returns Empty string iff there are no member insertions.
      */
     export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, preferences: UserPreferences, out: (node: ClassElement) => void): void {
-        const heritageClauseSymbolTable = getHeritageClauseSymbolTable(classDeclaration, checker);
-
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
-            if (!classMembers.has(symbol.escapedName) && !(heritageClauseSymbolTable && heritageClauseSymbolTable.has(symbol.escapedName))) {
+            if (!classMembers.has(symbol.escapedName)) {
                 addNewNodeForMemberSymbol(symbol, classDeclaration, checker, preferences, out);
             }
         }
-    }
-
-    function getHeritageClauseSymbolTable (classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable | undefined {
-        const heritageClauseNode = getClassExtendsHeritageClauseElement(classDeclaration);
-        if (!heritageClauseNode) return undefined;
-        const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as InterfaceType;
-        const heritageClauseTypeSymbols = checker.getPropertiesOfType(heritageClauseType);
-        const nonPrivateMembers = heritageClauseTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
-        return createSymbolTable(nonPrivateMembers);
     }
 
     /**
