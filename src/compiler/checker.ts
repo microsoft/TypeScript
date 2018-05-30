@@ -56,7 +56,6 @@ namespace ts {
         let symbolInstantiationDepth = 0;
 
         const emptySymbols = createSymbolTable();
-        const identityMapper: (type: Type) => Type = identity;
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -595,7 +594,7 @@ namespace ts {
         const enum CheckMode {
             Normal = 0,                // Normal type checking
             SkipContextSensitive = 1,  // Skip context sensitive function expressions
-            Inferential = 2,           // Inferential typing
+            Inferential = 2,           // Inferential typing (implies contextual type is an InferenceContext)
             Contextual = 3,            // Normal type checking informed by a contextual type, therefore not cacheable
         }
 
@@ -3588,7 +3587,7 @@ namespace ts {
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
-                    typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper!), context));
+                    typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper), context));
                 }
                 else {
                     typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
@@ -5107,7 +5106,7 @@ namespace ts {
                         return unknownType;
                     }
                     symbolInstantiationDepth++;
-                    let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper!);
+                    let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper);
                     symbolInstantiationDepth--;
                     if (!popTypeResolution()) {
                         type = reportCircularityError(symbol);
@@ -6057,14 +6056,13 @@ namespace ts {
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
-            let mapper: TypeMapper;
+            let mapper: TypeMapper | undefined;
             let members: SymbolTable;
             let callSignatures: Signature[];
             let constructSignatures: Signature[] | undefined;
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
             if (rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
-                mapper = identityMapper;
                 members = source.symbol ? getMembersOfSymbol(source.symbol) : createSymbolTable(source.declaredProperties);
                 callSignatures = source.declaredCallSignatures;
                 constructSignatures = source.declaredConstructSignatures;
@@ -6331,8 +6329,8 @@ namespace ts {
             const symbol = type.symbol;
             if (type.target) {
                 const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper!, /*mappingThisOnly*/ false);
-                const callSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper!);
-                const constructSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper!);
+                const callSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper);
+                const constructSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper);
                 const stringIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.String), type.mapper!);
                 const numberIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.Number), type.mapper!);
                 setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
@@ -6486,13 +6484,13 @@ namespace ts {
 
         function getConstraintTypeFromMappedType(type: MappedType) {
             return type.constraintType ||
-                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
+                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper) || unknownType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper || identityMapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper) :
                     unknownType);
         }
 
@@ -6512,7 +6510,7 @@ namespace ts {
                     // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
                     // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
                     // 'keyof T' to a literal union type and we can't recover T from that type.
-                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>getConstraintDeclarationForMappedType(type)).type), type.mapper || identityMapper);
+                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>getConstraintDeclarationForMappedType(type)).type), type.mapper);
                 }
                 else {
                     // Otherwise, get the declared constraint type, and if the constraint type is a type parameter,
@@ -6521,7 +6519,7 @@ namespace ts {
                     const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
                     const constraint = getConstraintTypeFromMappedType(declaredType);
                     const extendedConstraint = constraint && constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
-                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper) : emptyObjectType;
                 }
             }
             return type.modifiersType;
@@ -6848,7 +6846,7 @@ namespace ts {
             if (!typeParameter.default) {
                 if (typeParameter.target) {
                     const targetDefault = getResolvedTypeParameterDefault(typeParameter.target);
-                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper!) : noConstraintType;
+                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
                 }
                 else {
                     // To block recursion, set the initial value to the resolvingDefaultType.
@@ -7460,7 +7458,7 @@ namespace ts {
                 }
                 let type: Type;
                 if (signature.target) {
-                    type = instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper!);
+                    type = instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper);
                 }
                 else if (signature.unionSignatures) {
                     type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
@@ -7656,7 +7654,7 @@ namespace ts {
             if (!typeParameter.constraint) {
                 if (typeParameter.target) {
                     const targetConstraint = getConstraintOfTypeParameter(typeParameter.target);
-                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper!) : noConstraintType;
+                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper) : noConstraintType;
                 }
                 else {
                     const constraintDeclaration = getConstraintDeclaration(typeParameter);
@@ -9007,7 +9005,7 @@ namespace ts {
             result.mapper = mapper;
             result.combinedMapper = combinedMapper;
             result.aliasSymbol = root.aliasSymbol;
-            result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+            result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper);
             return result;
         }
 
@@ -9467,10 +9465,10 @@ namespace ts {
             }
         }
 
-        function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[];
-        function instantiateList<T>(items: T[] | undefined, mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] | undefined;
-        function instantiateList<T>(items: T[] | undefined, mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] | undefined {
-            if (items && items.length) {
+        function instantiateList<T>(items: T[], mapper: TypeMapper | undefined, instantiator: (item: T, mapper: TypeMapper) => T): T[];
+        function instantiateList<T>(items: T[] | undefined, mapper: TypeMapper | undefined, instantiator: (item: T, mapper: TypeMapper) => T): T[] | undefined;
+        function instantiateList<T>(items: T[] | undefined, mapper: TypeMapper | undefined, instantiator: (item: T, mapper: TypeMapper) => T): T[] | undefined {
+            if (items && items.length && mapper) {
                 for (let i = 0; i < items.length; i++) {
                     const item = items[i];
                     const mapped = instantiator(item, mapper);
@@ -9487,13 +9485,13 @@ namespace ts {
             return items;
         }
 
-        function instantiateTypes(types: Type[], mapper: TypeMapper): Type[];
-        function instantiateTypes(types: Type[] | undefined, mapper: TypeMapper): Type[] | undefined;
-        function instantiateTypes(types: Type[] | undefined, mapper: TypeMapper) {
+        function instantiateTypes(types: Type[], mapper: TypeMapper | undefined): Type[];
+        function instantiateTypes(types: Type[] | undefined, mapper: TypeMapper | undefined): Type[] | undefined;
+        function instantiateTypes(types: Type[] | undefined, mapper: TypeMapper | undefined) {
             return instantiateList(types, mapper, instantiateType);
         }
 
-        function instantiateSignatures(signatures: Signature[], mapper: TypeMapper): Signature[] {
+        function instantiateSignatures(signatures: Signature[], mapper: TypeMapper | undefined): Signature[] {
             return instantiateList(signatures, mapper, instantiateSignature);
         }
 
@@ -9539,22 +9537,23 @@ namespace ts {
             return !!(<InferenceContext>mapper).typeParameters;
         }
 
-        function cloneTypeMapper(mapper: TypeMapper): TypeMapper {
+        function cloneTypeMapper(mapper: TypeMapper | undefined): TypeMapper | undefined {
             return mapper && isInferenceContext(mapper) ?
                 createInferenceContext(mapper.typeParameters, mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.compareTypes, mapper.inferences) :
                 mapper;
         }
 
-        function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper | undefined): TypeMapper;
-        function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
+        function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
+        function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper | undefined): TypeMapper | undefined;
+        function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper | undefined): TypeMapper | undefined {
             if (!mapper1) return mapper2;
             if (!mapper2) return mapper1;
             return t => instantiateType(mapper1(t), mapper2);
         }
 
         function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper): TypeMapper {
-            return t => t === source ? target : baseMapper(t);
+            return t => t === source ? target : baseMapper ? baseMapper(t) : t;
         }
 
         function wildcardMapper(type: Type) {
@@ -9625,7 +9624,7 @@ namespace ts {
                 // type mappers. This ensures that original type identities are properly preserved and that aliases
                 // always reference a non-aliases.
                 symbol = links.target!;
-                mapper = combineTypeMappers(links.mapper!, mapper);
+                mapper = combineTypeMappers(links.mapper, mapper);
             }
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
@@ -9687,8 +9686,8 @@ namespace ts {
                 // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper!, mapper) : mapper;
-                const typeArguments: Type[] = map(typeParameters, combinedMapper);
+                const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper, mapper) : mapper;
+                const typeArguments: Type[] = instantiateTypes(typeParameters, combinedMapper);
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations!.get(id);
                 if (!result) {
@@ -9777,7 +9776,7 @@ namespace ts {
                 // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const typeArguments = map(root.outerTypeParameters, mapper);
+                const typeArguments = instantiateTypes(root.outerTypeParameters, mapper);
                 const id = getTypeListId(typeArguments);
                 let result = root.instantiations!.get(id);
                 if (!result) {
@@ -9796,7 +9795,7 @@ namespace ts {
             // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
             if (root.isDistributive) {
                 const checkType = <TypeParameter>root.checkType;
-                const instantiatedType = mapper(checkType);
+                const instantiatedType = instantiateType(checkType, mapper);
                 if (checkType !== instantiatedType && instantiatedType.flags & (TypeFlags.Union | TypeFlags.Never)) {
                     return mapType(instantiatedType, t => getConditionalType(root, createReplacementMapper(checkType, t, mapper)));
                 }
@@ -9807,7 +9806,7 @@ namespace ts {
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
-            if (type && mapper && mapper !== identityMapper) {
+            if (type && mapper) {
                 if (type.flags & TypeFlags.TypeParameter) {
                     return mapper(<TypeParameter>type);
                 }
@@ -15499,7 +15498,7 @@ namespace ts {
 
         function getContextualMapper(node: Node) {
             const ancestor = findAncestor(node, n => !!n.contextualMapper);
-            return ancestor ? ancestor.contextualMapper! : identityMapper;
+            return ancestor && ancestor.contextualMapper;
         }
 
         function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement) {
@@ -17776,7 +17775,7 @@ namespace ts {
             const context = createInferenceContext(signature.typeParameters!, signature, InferenceFlags.InferUnionTypes, compareTypes);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypes(context.inferences, instantiateType(source, contextualMapper || identityMapper), target);
+                inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
             });
             if (!contextualMapper) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
@@ -17787,12 +17786,12 @@ namespace ts {
         function inferJsxTypeArguments(signature: Signature, node: JsxOpeningLikeElement, context: InferenceContext): Type[] {
             // Skip context sensitive pass
             const skipContextParamType = getTypeAtPosition(signature, 0);
-            const checkAttrTypeSkipContextSensitive = checkExpressionWithContextualType(node.attributes, skipContextParamType, identityMapper);
+            const checkAttrTypeSkipContextSensitive = checkExpressionWithContextualType(node.attributes, CheckMode.SkipContextSensitive, skipContextParamType);
             inferTypes(context.inferences, checkAttrTypeSkipContextSensitive, skipContextParamType);
 
             // Standard pass
             const paramType = getTypeAtPosition(signature, 0);
-            const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, context);
+            const checkAttrType = checkExpressionWithContextualType(node.attributes, CheckMode.Inferential, paramType, context);
             inferTypes(context.inferences, checkAttrType, paramType);
 
             return getInferredTypes(context);
@@ -17860,8 +17859,8 @@ namespace ts {
                     if (argType === undefined) {
                         // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                         // context sensitive function expressions as wildcards
-                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
-                        argType = checkExpressionWithContextualType(arg!, paramType, mapper);
+                        const checkMode = excludeArgument && excludeArgument[i] !== undefined ? CheckMode.SkipContextSensitive : CheckMode.Inferential;
+                        argType = checkExpressionWithContextualType(arg!, checkMode, paramType, context);
                     }
 
                     inferTypes(context.inferences, argType, paramType);
@@ -17879,7 +17878,7 @@ namespace ts {
                     if (excludeArgument[i] === false) {
                         const arg = args[i];
                         const paramType = getTypeAtPosition(signature, i);
-                        inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, context), paramType);
+                        inferTypes(context.inferences, checkExpressionWithContextualType(arg, CheckMode.Inferential, paramType, context), paramType);
                     }
                 }
             }
@@ -17938,7 +17937,7 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getTypeAtPosition(signature, 0);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
+            const attributesType = checkExpressionWithContextualType(node.attributes, CheckMode.Contextual, paramType);
             const argProperties = getPropertiesOfType(attributesType);
             for (const arg of argProperties) {
                 if (!getPropertyOfType(paramType, arg.escapedName) && isUnhyphenatedJsxName(arg.escapedName)) {
@@ -17982,7 +17981,7 @@ namespace ts {
                     // If the effective argument type is undefined, there is no synthetic type for the argument.
                     // In that case, we should check the argument.
                     const argType = getEffectiveArgumentType(node, i) ||
-                        checkExpressionWithContextualType(arg!, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        checkExpressionWithContextualType(arg!, excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : CheckMode.Contextual, paramType);
                     // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
@@ -19333,14 +19332,14 @@ namespace ts {
             return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
         }
 
-        function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
+        function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: InferenceContext) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                 if (declaration.type) {
                     const typeNode = getEffectiveTypeAnnotationNode(declaration);
                     if (typeNode) {
-                        inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
+                        inferTypes(mapper.inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
                     }
                 }
             }
@@ -19708,10 +19707,9 @@ namespace ts {
                         if (isContextSensitive(node)) {
                             const contextualMapper = getContextualMapper(node);
                             if (checkMode === CheckMode.Inferential) {
-                                inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
+                                inferFromAnnotatedParameters(signature, contextualSignature, <InferenceContext>contextualMapper);
                             }
-                            const instantiatedContextualSignature = contextualMapper === identityMapper ?
-                                contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
+                            const instantiatedContextualSignature = contextualMapper ? instantiateSignature(contextualSignature, contextualMapper) : contextualSignature;
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
                         if (!getEffectiveReturnTypeNode(node) && !signature.resolvedReturnType) {
@@ -20590,14 +20588,12 @@ namespace ts {
             return node;
         }
 
-        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined): Type {
+        function checkExpressionWithContextualType(node: Expression, checkMode: CheckMode, contextualType: Type, contextualMapper?: TypeMapper): Type {
             const context = getContextNode(node);
             const saveContextualType = context.contextualType;
             const saveContextualMapper = context.contextualMapper;
             context.contextualType = contextualType;
             context.contextualMapper = contextualMapper;
-            const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
-                contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
             const result = checkExpression(node, checkMode);
             context.contextualType = saveContextualType;
             context.contextualMapper = saveContextualMapper;
@@ -21501,7 +21497,7 @@ namespace ts {
                     }
                     result = result && checkTypeAssignableTo(
                         typeArguments[i],
-                        instantiateType(constraint, mapper!),
+                        instantiateType(constraint, mapper),
                         node.typeArguments![i],
                         Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
