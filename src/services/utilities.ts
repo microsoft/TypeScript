@@ -1327,6 +1327,10 @@ namespace ts {
             node.getEnd() <= textSpanEnd(span);
     }
 
+    /**
+     * A free identifier is an identifier that can be accessed through name lookup as a local variable.
+     * In the expression `x.y`, `x` is a free identifier, but `y` is not.
+     */
     export function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
         if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
         node.forEachChild(child => forEachFreeIdentifier(child, cb));

@@ -1,9 +1,10 @@
 /// <reference path='fourslash.ts' />
 
-/////*a*/import { x, y as z } from "m";/*b*/
+/////*a*/import { x, y as z, T } from "m";/*b*/
 ////const m = 0;
 ////x;
 ////z;
+////const n: T = 0;
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -14,5 +15,6 @@ edit.applyRefactor({
 `import * as _m from "m";
 const m = 0;
 _m.x;
-_m.y;`,
+_m.y;
+const n: _m.T = 0;`,
 });
