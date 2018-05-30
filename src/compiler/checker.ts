@@ -17428,7 +17428,7 @@ namespace ts {
                 && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
         }
         function isValidMethodAccess(method: Symbol, actualThisType: Type): boolean {
-            const propType = getTypeOfFuncClassEnumModule(method);
+            const propType = getTypeOfPropertyOfType(actualThisType, method.escapedName)!;
             const signatures = getSignaturesOfType(getNonNullableType(propType), SignatureKind.Call);
             Debug.assert(signatures.length !== 0);
             return signatures.some(sig => {
