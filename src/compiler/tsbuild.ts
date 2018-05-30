@@ -286,7 +286,8 @@ namespace ts {
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
         if (project.options.declaration) {
-            const dts = outputs.push(changeExtension(project.options.outFile, ".d.ts"));
+            const dts = changeExtension(project.options.outFile, ".d.ts");
+            outputs.push(dts);
             if (project.options.declarationMap) {
                 outputs.push(dts + ".map");
             }
