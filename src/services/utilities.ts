@@ -898,7 +898,7 @@ namespace ts {
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-        return isTemplateLiteralToken(token) && position > token.getStart(sourceFile);
+        return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
     export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
@@ -1098,7 +1098,7 @@ namespace ts {
     }
 
     export function isInsideTemplateLiteral(node: TemplateLiteralToken, position: number, sourceFile: SourceFile): boolean {
-        return isTemplateLiteralToken(node)
+        return isTemplateLiteralKind(node.kind)
             && (node.getStart(sourceFile) < position && position < node.end) || (!!node.isUnterminated && position === node.end);
     }
 

@@ -5587,7 +5587,7 @@ namespace ts {
     }
 
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
-        return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralToken(node);
+        return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
 
     // Identifiers
