@@ -718,7 +718,7 @@ namespace ts.refactor.extractSymbol {
 
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();
-        const functionNameText = getUniqueName(isClassLike(scope) ? "newMethod" : "newFunction", file.text);
+        const functionNameText = getUniqueName(isClassLike(scope) ? "newMethod" : "newFunction", file);
         const isJS = isInJavaScriptFile(scope);
 
         const functionName = createIdentifier(functionNameText);
@@ -1005,7 +1005,7 @@ namespace ts.refactor.extractSymbol {
 
         // Make a unique name for the extracted variable
         const file = scope.getSourceFile();
-        const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file.text);
+        const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
         const isJS = isInJavaScriptFile(scope);
 
         const variableType = isJS || !checker.isContextSensitive(node)
@@ -1742,23 +1742,6 @@ namespace ts.refactor.extractSymbol {
                 ? createQualifiedName(<EntityName>prefix, createIdentifier(symbol.name))
                 : createPropertyAccess(<Expression>prefix, symbol.name);
         }
-    }
-
-    function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {
-        if (!node) return undefined;
-
-        while (node.parent) {
-            if (isSourceFile(node.parent) || !spanContainsNode(span, node.parent, file)) {
-                return node;
-            }
-
-            node = node.parent;
-        }
-    }
-
-    function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
-        return textSpanContainsPosition(span, node.getStart(file)) &&
-            node.getEnd() <= textSpanEnd(span);
     }
 
     /**

@@ -4293,5 +4293,13 @@
     "Convert '{0}' to mapped object type": {
         "category": "Message",
         "code": 95055
+    },
+    "Convert namespace import to named imports": {
+        "category": "Message",
+        "code": 95056
+    },
+    "Convert named imports to namespace import": {
+        "category": "Message",
+        "code": 95057
     }
 }
