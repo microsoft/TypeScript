@@ -1025,13 +1025,10 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
             if (simplifiedResult) {
                 const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
-                if (!nameInfo) {
-                    return undefined;
-                }
-                const displayString = displayPartsToString(nameInfo.displayParts);
-                const nameSpan = nameInfo.textSpan;
-                const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
-                const nameText = scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan));
+                const displayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
+                const nameSpan = nameInfo && nameInfo.textSpan;
+                const nameColStart = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
+                const nameText = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
                 const refs = combineProjectOutput<NormalizedPath, protocol.ReferencesResponseItem>(
                     file,
                     path => this.projectService.getScriptInfoForPath(path)!.fileName,
