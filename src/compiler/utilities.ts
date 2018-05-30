@@ -810,6 +810,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.AnyKeyword:
+            case SyntaxKind.UnknownKeyword:
             case SyntaxKind.NumberKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
@@ -5782,6 +5783,7 @@ namespace ts {
     function isTypeNodeKind(kind: SyntaxKind) {
         return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
             || kind === SyntaxKind.AnyKeyword
+            || kind === SyntaxKind.UnknownKeyword
             || kind === SyntaxKind.NumberKeyword
             || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.BooleanKeyword
