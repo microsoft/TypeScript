@@ -210,6 +210,200 @@ namespace collections {
         }
     }
 
+    export class SortedSet<T> {
+        private _comparer: (a: T, b: T) => number;
+        private _values: T[] = [];
+        private _order: number[] | undefined;
+        private _version = 0;
+        private _copyOnWrite = false;
+
+        constructor(comparer: ((a: T, b: T) => number) | SortOptions<T>, iterable?: Iterable<T>) {
+            this._comparer = typeof comparer === "object" ? comparer.comparer : comparer;
+            this._order = typeof comparer === "object" && comparer.sort === "insertion" ? [] : undefined;
+            if (iterable) {
+                const iterator = getIterator(iterable);
+                try {
+                    for (let i = nextResult(iterator); i; i = nextResult(iterator)) {
+                        const value = i.value;
+                        this.add(value);
+                    }
+                }
+                finally {
+                    closeIterator(iterator);
+                }
+            }
+        }
+
+        public get size() {
+            return this._values.length;
+        }
+
+        public get comparer() {
+            return this._comparer;
+        }
+
+        public get [Symbol.toStringTag]() {
+            return "SortedSet";
+        }
+
+        public has(key: T) {
+            return ts.binarySearch(this._values, key, ts.identity, this._comparer) >= 0;
+        }
+
+        public add(value: T) {
+            const index = ts.binarySearch(this._values, value, ts.identity, this._comparer);
+            if (index >= 0) {
+                this._values[index] = value;
+            }
+            else {
+                this.writePreamble();
+                insertAt(this._values, ~index, value);
+                if (this._order) insertAt(this._order, ~index, this._version);
+                this.writePostScript();
+            }
+            return this;
+        }
+
+        public delete(value: T) {
+            const index = ts.binarySearch(this._values, value, ts.identity, this._comparer);
+            if (index >= 0) {
+                this.writePreamble();
+                ts.orderedRemoveItemAt(this._values, index);
+                if (this._order) ts.orderedRemoveItemAt(this._order, index);
+                this.writePostScript();
+                return true;
+            }
+            return false;
+        }
+
+        public clear() {
+            if (this.size > 0) {
+                this.writePreamble();
+                this._values.length = 0;
+                if (this._order) this._order.length = 0;
+                this.writePostScript();
+            }
+        }
+
+        public forEach(callback: (value: T, key: T, collection: this) => void, thisArg?: any) {
+            const values = this._values;
+            const indices = this.getIterationOrder();
+            const version = this._version;
+            this._copyOnWrite = true;
+            try {
+                if (indices) {
+                    for (const i of indices) {
+                        callback.call(thisArg, values[i], values[i], this);
+                    }
+                }
+                else {
+                    for (const value of values) {
+                        callback.call(thisArg, value, value, this);
+                    }
+                }
+            }
+            finally {
+                if (version === this._version) {
+                    this._copyOnWrite = false;
+                }
+            }
+        }
+
+        public * keys() {
+            const values = this._values;
+            const indices = this.getIterationOrder();
+            const version = this._version;
+            this._copyOnWrite = true;
+            try {
+                if (indices) {
+                    for (const i of indices) {
+                        yield values[i];
+                    }
+                }
+                else {
+                    yield* values;
+                }
+            }
+            finally {
+                if (version === this._version) {
+                    this._copyOnWrite = false;
+                }
+            }
+        }
+
+        public * values() {
+            const values = this._values;
+            const indices = this.getIterationOrder();
+            const version = this._version;
+            this._copyOnWrite = true;
+            try {
+                if (indices) {
+                    for (const i of indices) {
+                        yield values[i];
+                    }
+                }
+                else {
+                    yield* values;
+                }
+            }
+            finally {
+                if (version === this._version) {
+                    this._copyOnWrite = false;
+                }
+            }
+        }
+
+        public * entries() {
+            const values = this._values;
+            const indices = this.getIterationOrder();
+            const version = this._version;
+            this._copyOnWrite = true;
+            try {
+                if (indices) {
+                    for (const i of indices) {
+                        yield [values[i], values[i]] as [T, T];
+                    }
+                }
+                else {
+                    for (const value of values) {
+                        yield [value, value] as [T, T];
+                    }
+                }
+            }
+            finally {
+                if (version === this._version) {
+                    this._copyOnWrite = false;
+                }
+            }
+        }
+
+        public [Symbol.iterator]() {
+            return this.values();
+        }
+
+        private writePreamble() {
+            if (this._copyOnWrite) {
+                this._values = this._values.slice();
+                if (this._order) this._order = this._order.slice();
+                this._copyOnWrite = false;
+            }
+        }
+
+        private writePostScript() {
+            this._version++;
+        }
+
+        private getIterationOrder() {
+            if (this._order) {
+                const order = this._order;
+                return this._order
+                    .map((_, i) => i)
+                    .sort((x, y) => order[x] - order[y]);
+            }
+            return undefined;
+        }
+    }
+
     export function insertAt<T>(array: T[], index: number, value: T): void {
         if (index === 0) {
             array.unshift(value);

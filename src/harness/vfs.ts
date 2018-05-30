@@ -43,18 +43,25 @@ namespace vfs {
             links?: collections.SortedMap<string, Inode>;
             shadows?: Map<number, Inode>;
             meta?: collections.Metadata;
+            watchedFiles?: collections.SortedMap<string, Set<WatchedFile>>;
+            watchers?: collections.SortedMap<string, FSWatcherEntrySet>;
         } = {};
 
         private _cwd: string; // current working directory
         private _time: number | Date | (() => number | Date);
         private _shadowRoot: FileSystem | undefined;
         private _dirStack: string[] | undefined;
+        private _timers: FileSystemTimers;
+        private _noRecursiveWatchers: boolean;
+        private _directoryStructureVersion = 0;
 
         constructor(ignoreCase: boolean, options: FileSystemOptions = {}) {
-            const { time = -1, files, meta } = options;
+            const { time = -1, files, meta, timers = { setInterval, clearInterval }, noRecursiveWatchers = false } = options;
             this.ignoreCase = ignoreCase;
             this.stringComparer = this.ignoreCase ? vpath.compareCaseInsensitive : vpath.compareCaseSensitive;
             this._time = time;
+            this._timers = timers;
+            this._noRecursiveWatchers = noRecursiveWatchers;
 
             if (meta) {
                 for (const key of Object.keys(meta)) {
@@ -641,6 +648,7 @@ namespace vfs {
             node.size = node.buffer.byteLength;
             node.mtimeMs = time;
             node.ctimeMs = time;
+            this._notifySelf(node, "change");
         }
 
         private _mknod(dev: number, type: typeof S_IFREG, mode: number, time?: number): FileInode;
@@ -655,7 +663,8 @@ namespace vfs {
                 mtimeMs: time,
                 ctimeMs: time,
                 birthtimeMs: time,
-                nlink: 0
+                nlink: 0,
+                incomingLinks: new Map<DirectoryInode, collections.SortedSet<string>>()
             };
         }
 
@@ -663,15 +672,40 @@ namespace vfs {
             links.set(name, node);
             node.nlink++;
             node.ctimeMs = time;
-            if (parent) parent.mtimeMs = time;
-            if (!parent && !this._cwd) this._cwd = name;
+            this._invalidatePaths();
+
+            let set = node.incomingLinks.get(parent);
+            if (!set) node.incomingLinks.set(parent, set = new collections.SortedSet(this.stringComparer));
+            set.add(name);
+
+            if (parent) {
+                parent.mtimeMs = time;
+                this._notifyChild(parent, "rename", name);
+                this._notifyAncestors(parent, "change");
+            }
+            else if (!this._cwd) {
+                this._cwd = name;
+            }
         }
 
         private _removeLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
             links.delete(name);
             node.nlink--;
             node.ctimeMs = time;
-            if (parent) parent.mtimeMs = time;
+            this._invalidatePaths();
+
+            const set = node.incomingLinks.get(parent);
+            if (set) {
+                set.delete(name);
+                if (set.size === 0) node.incomingLinks.delete(parent);
+            }
+
+            if (parent) {
+                parent.mtimeMs = time;
+                this._notifyChild(parent, "rename", name);
+                this._notifyAncestors(parent, "change");
+                this._removeWatchers(parent, name);
+            }
         }
 
         private _replaceLink(oldParent: DirectoryInode, oldLinks: collections.SortedMap<string, Inode>, oldName: string, newParent: DirectoryInode, newLinks: collections.SortedMap<string, Inode>, newName: string, node: Inode, time: number) {
@@ -684,6 +718,17 @@ namespace vfs {
                 oldLinks.set(newName, node);
                 oldParent.mtimeMs = time;
                 newParent.mtimeMs = time;
+                this._invalidatePaths();
+
+                const set = node.incomingLinks.get(oldParent);
+                if (set) {
+                    set.delete(oldName);
+                    set.add(newName);
+                }
+
+                this._notifyChild(oldParent, "rename", oldName);
+                this._notifyChild(newParent, "rename", newName);
+                this._notifyAncestors(newParent, "change");
             }
         }
 
@@ -797,6 +842,28 @@ namespace vfs {
                 }
             }
             return node.buffer;
+        }
+
+        private _invalidatePaths() {
+            this._directoryStructureVersion++;
+        }
+
+        private _getPaths(node: Inode): ReadonlyArray<string> {
+            if (!node.paths || node.pathsVersion !== this._directoryStructureVersion) {
+                const result: string[] = [];
+                node.incomingLinks.forEach((names, parent) => {
+                    if (parent) {
+                        for (const path of this._getPaths(parent)) {
+                            names.forEach(name => result.push(vpath.combine(path, name)));
+                        }
+                    }
+                    else {
+                        names.forEach(name => result.push(name));
+                    }
+                });
+                node.paths = result;
+            }
+            return node.paths;
         }
 
         /**
@@ -952,6 +1019,176 @@ namespace vfs {
             }
             return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);
         }
+
+        /**
+         * Watch a path for changes.
+         */
+        public watch(path: string, callback?: (eventType: string, filename: string) => void): FSWatcher;
+        /**
+         * Watch a path for changes.
+         */
+        public watch(path: string, options?: { recursive?: boolean }, callback?: (eventType: string, filename: string) => void): FSWatcher;
+        public watch(path: string, options?: { recursive?: boolean } | typeof callback, callback?: (eventType: string, filename: string) => void): FSWatcher {
+            if (typeof options === "function") callback = options, options = undefined;
+            if (options === undefined) options = {};
+            path = this._resolve(path);
+            const watcher = new FSWatcher(this);
+            const realpath = this.realpathSync(path);
+            const recursive = this._noRecursiveWatchers ? false : !!options.recursive;
+            const watchers = this._lazy.watchers || (this._lazy.watchers = new collections.SortedMap(this.stringComparer));
+
+            let pathWatchers = watchers.get(realpath);
+            if (!pathWatchers) {
+                pathWatchers = new FSWatcherEntrySet(realpath);
+                watchers.set(realpath, pathWatchers);
+            }
+
+            // tslint:disable-next-line:no-string-literal
+            pathWatchers.add(watcher["_entry"] = { watcher, path, recursive, container: pathWatchers });
+            return typeof callback === "function" ? watcher.on("change", callback) : watcher;
+        }
+
+        private _removeWatcher(entry: FSWatcherEntry) {
+            // tslint:disable-next-line:no-string-literal
+            entry.watcher["_entry"] = undefined;
+            entry.container.delete(entry);
+            if (entry.container.size === 0) {
+                const watchers = this._lazy.watchers;
+                if (watchers && entry.container === watchers.get(entry.container.path)) {
+                    watchers.delete(entry.container.path);
+                }
+            }
+        }
+
+        private _removeWatchers(parent: DirectoryInode | undefined, name: string) {
+            if (!this._lazy.watchers) return;
+            const paths = parent ? this._getPaths(parent).map(path => vpath.combine(path, name)) : [name];
+            for (const path of paths) {
+                const watchers = this._lazy.watchers.get(path);
+                if (watchers) {
+                    watchers.forEach(watcher => this._removeWatcher(watcher));
+                }
+            }
+        }
+
+        private _notifyChild(parent: DirectoryInode, eventType: "change" | "rename", name: string) {
+            this._notify(parent, eventType, name, /*noExactMatch*/ false);
+        }
+
+        private _notifySelf(node: Inode, eventType: "change" | "rename") {
+            this._notify(node, eventType, /*childPath*/ undefined, /*noExactMatch*/ false);
+        }
+
+        private _notifyAncestors(node: Inode, eventType: "change" | "rename") {
+            this._notify(node, eventType, /*childPath*/ undefined, /*noExactMatch*/ true);
+        }
+
+        private _notify(node: Inode, eventType: "change" | "rename", childPath: string | undefined, noExactMatch: boolean) {
+            if (!this._lazy.watchers) return;
+            for (const path of this._getPaths(node)) {
+                const fullPath = childPath ? vpath.combine(path, childPath) : path;
+                const dirname = vpath.dirname(fullPath);
+                this._lazy.watchers.forEach((watchers, watchedPath) => {
+                    const exactMatch = !noExactMatch && this.stringComparer(watchedPath, fullPath) === 0;
+                    const nonRecursiveMatch = watchers.nonRecursiveCount > 0 && this.stringComparer(watchedPath, dirname) === 0;
+                    const recursiveMatch = watchers.recursiveCount > 0 && vpath.beneath(watchedPath, dirname, this.ignoreCase);
+                    if (exactMatch || nonRecursiveMatch || recursiveMatch) {
+                        watchers.forEach(({ watcher, recursive }) => {
+                            if (exactMatch || (recursive ? recursiveMatch : nonRecursiveMatch)) {
+                                // tslint:disable-next-line:no-string-literal
+                                const entry = watcher["_entry"];
+                                const name = exactMatch ? vpath.basename(entry ? entry.path : fullPath) : vpath.relative(watchedPath, fullPath, this.ignoreCase);
+                                watcher.emit("change", eventType, name);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        /**
+         * Watch a path for changes using polling.
+         */
+        public watchFile(path: string, callback: (current: Stats, previous: Stats) => void): void;
+        /**
+         * Watch a path for changes using polling.
+         */
+        public watchFile(path: string, options: { interval?: number } | undefined, callback: (current: Stats, previous: Stats) => void): void;
+        public watchFile(path: string, options: { interval?: number } | typeof callback | undefined, callback?: (current: Stats, previous: Stats) => void): void {
+            if (typeof options === "function") callback = options, options = undefined;
+            if (options === undefined) options = {};
+            if (typeof callback !== "function") throw createIOError("EINVAL");
+            path = this._resolve(path);
+            const entry = this._walk(path, /*noFollow*/ undefined, () => "stop");
+            const { interval = 5000 } = options;
+            const watchedFiles = this._lazy.watchedFiles || (this._lazy.watchedFiles = new collections.SortedMap(this.stringComparer));
+            let watchedFileSet = watchedFiles.get(path);
+            if (!watchedFileSet) watchedFiles.set(path, watchedFileSet = new Set());
+            const watchedFile: WatchedFile = {
+                path,
+                handle: this._timers.setInterval(() => this._onWatchInterval(watchedFile), interval),
+                previous: entry ? this._stat(entry) : new Stats(),
+                listener: callback
+            };
+            watchedFileSet.add(watchedFile);
+            if (!entry) {
+                callback(watchedFile.previous, watchedFile.previous);
+            }
+        }
+
+        private _onWatchInterval(watchedFile: WatchedFile) {
+            if (watchedFile.handle === undefined) return;
+            const entry = this._walk(watchedFile.path, /*noFollow*/ undefined, () => "stop");
+            const previous = watchedFile.previous;
+            const current = entry ? this._stat(entry) : new Stats();
+            if (current.dev !== previous.dev ||
+                current.ino !== previous.ino ||
+                current.mode !== previous.mode ||
+                current.nlink !== previous.nlink ||
+                current.uid !== previous.uid ||
+                current.gid !== previous.gid ||
+                current.rdev !== previous.rdev ||
+                current.size !== previous.size ||
+                current.blksize !== previous.blksize ||
+                current.blocks !== previous.blocks ||
+                current.atimeMs !== previous.atimeMs ||
+                current.mtimeMs !== previous.mtimeMs ||
+                current.ctimeMs !== previous.ctimeMs ||
+                current.birthtimeMs !== previous.birthtimeMs) {
+                watchedFile.previous = current;
+                const callback = watchedFile.listener;
+                callback(current, previous);
+            }
+        }
+
+        /**
+         * Stop watching a path for changes.
+         */
+        public unwatchFile(path: string, callback?: (current: Stats, previous: Stats) => void) {
+            path = this._resolve(path);
+            const watchedFiles = this._lazy.watchedFiles;
+            if (!watchedFiles) return;
+
+            const watchedFileSet = watchedFiles.get(path);
+            if (!watchedFileSet) return;
+
+            const watchedFilesToDelete: WatchedFile[] = [];
+            watchedFileSet.forEach(watchedFile => {
+                if (!callback || watchedFile.listener === callback) {
+                    this._timers.clearInterval(watchedFile.handle);
+                    watchedFilesToDelete.push(watchedFile);
+                    watchedFile.handle = undefined;
+                }
+            });
+
+            for (const watchedFile of watchedFilesToDelete) {
+                watchedFileSet.delete(watchedFile);
+            }
+
+            if (watchedFileSet.size === 0) {
+                watchedFiles.delete(path);
+            }
+        }
     }
 
     export interface FileSystemOptions {
@@ -967,6 +1204,9 @@ namespace vfs {
 
         // Sets initial metadata attached to the file system.
         meta?: Record<string, any>;
+
+        timers?: FileSystemTimers;
+        noRecursiveWatchers?: boolean;
     }
 
     export interface FileSystemCreateOptions {
@@ -975,6 +1215,11 @@ namespace vfs {
 
         // Sets the initial working directory for the file system.
         cwd?: string;
+    }
+
+    export interface FileSystemTimers {
+        setInterval(callback: (...args: any[]) => void, timeout: number, ...args: any[]): any;
+        clearInterval(timeout: any): void;
     }
 
     export type Axis = "ancestors" | "ancestors-or-self" | "self" | "descendants-or-self" | "descendants";
@@ -1214,6 +1459,9 @@ namespace vfs {
         resolver?: FileSystemResolver;
         shadowRoot?: FileInode;
         meta?: collections.Metadata;
+        paths?: ReadonlyArray<string>;
+        pathsVersion?: number;
+        incomingLinks: Map<DirectoryInode | undefined, collections.SortedSet<string>>;
     }
 
     interface DirectoryInode {
@@ -1230,6 +1478,9 @@ namespace vfs {
         resolver?: FileSystemResolver;
         shadowRoot?: DirectoryInode;
         meta?: collections.Metadata;
+        paths?: ReadonlyArray<string>;
+        pathsVersion?: number;
+        incomingLinks: Map<DirectoryInode | undefined, collections.SortedSet<string>>;
     }
 
     interface SymlinkInode {
@@ -1244,6 +1495,9 @@ namespace vfs {
         symlink: string;
         shadowRoot?: SymlinkInode;
         meta?: collections.Metadata;
+        paths?: ReadonlyArray<string>;
+        pathsVersion?: number;
+        incomingLinks: Map<DirectoryInode | undefined, collections.SortedSet<string>>;
     }
 
     function isFile(node: Inode | undefined): node is FileInode {
@@ -1265,6 +1519,115 @@ namespace vfs {
         links: collections.SortedMap<string, Inode>;
         node: Inode | undefined;
     }
+
+    interface WatchedFile {
+        path: string;
+        handle: any;
+        previous: Stats;
+        listener: (current: Stats, previous: Stats) => void;
+    }
+
+    interface FSWatcherEntry {
+        watcher: FSWatcher;
+        path: string;
+        container: FSWatcherEntrySet;
+        recursive: boolean;
+    }
+
+    class FSWatcherEntrySet {
+        public readonly path: string;
+        private _recursiveCount = 0;
+        private _nonRecursiveCount = 0;
+        private _set = new Set<FSWatcherEntry>();
+        constructor(path: string) {
+            this.path = path;
+        }
+
+        public get size() { return this._set.size; }
+        public get recursiveCount() { return this._recursiveCount; }
+        public get nonRecursiveCount() { return this._nonRecursiveCount; }
+
+        public add(entry: FSWatcherEntry) {
+            const size = this.size;
+            this._set.add(entry);
+            if (this.size !== size) {
+                if (entry.recursive) {
+                    this._recursiveCount++;
+                }
+                else {
+                    this._nonRecursiveCount++;
+                }
+            }
+            return this;
+        }
+
+        public delete(entry: FSWatcherEntry) {
+            if (this._set.delete(entry)) {
+                if (entry.recursive) {
+                    this._recursiveCount--;
+                }
+                else {
+                    this._nonRecursiveCount--;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public clear() {
+            this._recursiveCount = 0;
+            this._nonRecursiveCount = 0;
+        }
+
+        public forEach(callback: (value: FSWatcherEntry, key: FSWatcherEntry) => void) {
+            this._set.forEach(callback);
+        }
+    }
+
+    // tslint:disable-next-line:variable-name
+    const events = require("events") as typeof import("events");
+
+    class FSWatcher extends events.EventEmitter {
+        private _fs: FileSystem;
+        private _entry: FSWatcherEntry | undefined;
+
+        constructor(fs: FileSystem) {
+            super();
+            this._fs = fs;
+        }
+
+        public close(): void {
+            if (this._entry) {
+                // tslint:disable-next-line:no-string-literal
+                this._fs["_removeWatcher"](this._entry);
+            }
+        }
+    }
+
+    // #region FSWatcher Event "change"
+
+    interface FSWatcher {
+        on(event: "change", listener: (eventType: string, filename: string) => void): this;
+        once(event: "change", listener: (eventType: string, filename: string) => void): this;
+        addListener(event: "change", listener: (eventType: string, filename: string) => void): this;
+        removeListener(event: "change", listener: (eventType: string, filename: string) => void): this;
+        prependListener(event: "change", listener: (eventType: string, filename: string) => void): this;
+        prependOnceListener(event: "change", listener: (eventType: string, filename: string) => void): this;
+        emit(name: "change", eventType: string, filename: string): boolean;
+    }
+    // #endregion FSWatcher Event "change"
+
+    // #region FSWatcher Event "error"
+    interface FSWatcher {
+        on(event: "error", listener: (error: Error) => void): this;
+        once(event: "error", listener: (error: Error) => void): this;
+        addListener(event: "error", listener: (error: Error) => void): this;
+        removeListener(event: "error", listener: (error: Error) => void): this;
+        prependListener(event: "error", listener: (error: Error) => void): this;
+        prependOnceListener(event: "error", listener: (error: Error) => void): this;
+        emit(name: "error", error: Error): boolean;
+    }
+    // #endregion FSWatcher Event "error"
 
     let builtLocalHost: FileSystemResolverHost | undefined;
     let builtLocalCI: FileSystem | undefined;
