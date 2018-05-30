@@ -1,0 +1,8 @@
+=== tests/cases/conformance/salsa/bug24492.js ===
+module.exports.D = class { }
+>module.exports : Symbol(D, Decl(bug24492.js, 0, 0))
+>module : Symbol(module)
+>D : Symbol(D, Decl(bug24492.js, 0, 0))
+
+new D()
+
