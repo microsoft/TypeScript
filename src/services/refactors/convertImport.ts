@@ -13,7 +13,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace);
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program.getTypeChecker(), t, Debug.assertDefined(getImportToConvert(context))));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.assertDefined(getImportToConvert(context))));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });
@@ -29,30 +29,27 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return importClause && importClause.namedBindings;
     }
 
-    function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamedImportBindings): void {
+    function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImportBindings): void {
         const usedIdentifiers = createMap<true>();
         forEachFreeIdentifier(sourceFile, id => usedIdentifiers.set(id.text, true));
+        const checker = program.getTypeChecker();
 
         if (toConvert.kind === SyntaxKind.NamespaceImport) {
-            doChangeNamespaceToNamed(sourceFile, checker, changes, toConvert, usedIdentifiers);
+            doChangeNamespaceToNamed(sourceFile, checker, changes, toConvert, usedIdentifiers, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
         }
         else {
             doChangeNamedToNamespace(sourceFile, checker, changes, toConvert, usedIdentifiers);
         }
     }
 
-    function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, usedIdentifiers: ReadonlyMap<true>): void {
-        const namespaceSymbol = checker.getSymbolAtLocation(toConvert.name)!;
-
+    function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, usedIdentifiers: ReadonlyMap<true>, allowSyntheticDefaultImports: boolean): void {
         // We may need to change `mod.x` to `_x` to avoid a name conflict.
         const exportNameToImportName = createMap<string>();
-        let usedAsNamespace = false;
+        let usedAsNamespaceOrDefault = false;
 
-        forEachFreeIdentifier(sourceFile, id => {
-            if (id === toConvert.name || checker.getSymbolAtLocation(id) !== namespaceSymbol) return;
-
+        FindAllReferences.Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
             if (!isPropertyAccessExpression(id.parent)) {
-                usedAsNamespace = true;
+                usedAsNamespaceOrDefault = true;
             }
             else {
                 const parent = cast(id.parent, isPropertyAccessExpression);
@@ -70,14 +67,16 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         exportNameToImportName.forEach((name, propertyName) => {
             elements.push(createImportSpecifier(name === propertyName ? undefined : createIdentifier(propertyName), createIdentifier(name)));
         });
-        const namedImports = createNamedImports(elements);
+        const makeImportDeclaration = (defaultImportName: Identifier | undefined) =>
+            createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
+                createImportClause(defaultImportName, elements.length ? createNamedImports(elements) : undefined),
+                toConvert.parent.parent.moduleSpecifier);
 
-        if (usedAsNamespace) {
-            changes.insertNodeAfter(sourceFile, toConvert.parent.parent,
-                createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(/*name*/ undefined, namedImports), toConvert.parent.parent.moduleSpecifier));
+        if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports) {
+            changes.insertNodeAfter(sourceFile, toConvert.parent.parent, makeImportDeclaration(/*defaultImportName*/ undefined));
         }
         else {
-            changes.replaceNode(sourceFile, toConvert, namedImports);
+            changes.replaceNode(sourceFile, toConvert.parent.parent, makeImportDeclaration(usedAsNamespaceOrDefault ? createIdentifier(toConvert.name.text) : undefined));
         }
     }
 
@@ -88,20 +87,12 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         changes.replaceNode(sourceFile, toConvert, createNamespaceImport(createIdentifier(namespaceImportName)));
 
-        const nameToPropertyName = createMap<string>();
         for (const element of toConvert.elements) {
-            if (element.propertyName) {
-                nameToPropertyName.set(element.name.text, element.propertyName.text);
-            }
+            const propertyName = (element.propertyName || element.name).text;
+            FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
+                changes.replaceNode(sourceFile, id, createPropertyAccess(createIdentifier(namespaceImportName), propertyName));
+            });
         }
-
-        const importedSymbols = toConvert.elements.map(e => checker.getSymbolAtLocation(e.name)!);
-
-        forEachFreeIdentifier(sourceFile, id => {
-            if (!toConvert.elements.some(e => e.name === id) && contains(importedSymbols, checker.getSymbolAtLocation(id))) {
-                changes.replaceNode(sourceFile, id, createPropertyAccess(createIdentifier(namespaceImportName), nameToPropertyName.get(id.text) || id.text));
-            }
-        });
     }
 
     function generateName(name: string, usedIdentifiers: ReadonlyMap<true>): string {
