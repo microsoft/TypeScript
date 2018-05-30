@@ -598,6 +598,7 @@ namespace ts {
             SkipContextSensitive = 1,  // Skip context sensitive function expressions
             Inferential = 2,           // Inferential typing
             Contextual = 3,            // Normal type checking informed by a contextual type, therefore not cacheable
+            NoDeferredCheck = 4,       // Don't add any nodes for deferred checking
         }
 
         const enum CallbackCheck {
@@ -4627,7 +4628,7 @@ namespace ts {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
-                return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
+                return getWidenedLiteralType(checkExpressionCached(specialDeclaration, CheckMode.NoDeferredCheck));
             }
             const types: Type[] = [];
             let constructorTypes: Type[] | undefined;
@@ -20878,7 +20879,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return checkParenthesizedExpression(<ParenthesizedExpression>node, checkMode);
                 case SyntaxKind.ClassExpression:
-                    return checkClassExpression(<ClassExpression>node);
+                    return checkClassExpression(<ClassExpression>node, checkMode);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, checkMode);
@@ -24298,9 +24299,11 @@ namespace ts {
             return true;
         }
 
-        function checkClassExpression(node: ClassExpression): Type {
+        function checkClassExpression(node: ClassExpression, checkMode: CheckMode | undefined): Type {
             checkClassLikeDeclaration(node);
-            checkNodeDeferred(node);
+            if (checkMode !== CheckMode.NoDeferredCheck) {
+                checkNodeDeferred(node);
+            }
             return getTypeOfSymbol(getSymbolOfNode(node));
         }
 
