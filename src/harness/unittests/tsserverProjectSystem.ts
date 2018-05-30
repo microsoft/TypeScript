@@ -19,6 +19,7 @@ namespace ts.projectSystem {
     export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
     export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     import safeList = TestFSWithWatch.safeList;
+    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
     export const customTypesMap = {
         path: <Path>"/typesMap.json",
@@ -6259,7 +6260,7 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: ReadonlyArray<string>, nTimes: number) {
-                TestFSWithWatch.checkMultiMapEachKeyWithCount(callback, calledMaps[callback], expectedKeys, nTimes);
+                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {
@@ -7813,14 +7814,10 @@ new C();`
                 checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
-            function createSingleWatchMap(paths: string[]) {
-                return arrayToMap(paths, p => p, () => 1);
-            }
-
             function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], directories: string[]) {
-                checkWatchedFilesDetailed(host, createSingleWatchMap(files.filter(f => f !== recognizersDateTimeSrcFile.path)));
+                checkWatchedFilesDetailed(host, files.filter(f => f !== recognizersDateTimeSrcFile.path), 1);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, createSingleWatchMap(directories), /*recursive*/ true);
+                checkWatchedDirectoriesDetailed(host, directories, 1, /*recursive*/ true);
             }
 
             function createSessionAndOpenFile(host: TestServerHost) {
@@ -7842,7 +7839,7 @@ new C();`
                     const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
                     const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, withPathMapping ? packages : recognizersDateTime, ...getTypeRootsFromLocation(recognizersDateTime)];
-                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...(withPathMapping ? [recognizersText] : emptyArray), ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
                         const projectService = session.getProjectService();
@@ -8315,7 +8312,7 @@ new C();`
     });
 
     describe("tsserverProjectSystem watchDirectories implementation", () => {
-        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
+        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
@@ -8336,9 +8333,9 @@ new C();`
             // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
             const expectedWatchedFiles = arrayToMap(fileNames.slice(1), s => s, () => 1);
             const expectedWatchedDirectories = createMap<number>();
-            const mapOfDirectories = tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
+            const mapOfDirectories = tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
                 expectedWatchedDirectories :
-                tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.WatchFile ?
+                tscWatchDirectory === Tsc_WatchDirectory.WatchFile ?
                     expectedWatchedFiles :
                     createMap();
             // For failed resolution lookup and tsconfig files
@@ -8385,15 +8382,15 @@ new C();`
         }
 
         it("uses watchFile when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.WatchFile);
+            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.WatchFile);
         });
 
         it("uses non recursive watchDirectory when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.NonRecursiveWatchDirectory);
         });
 
         it("uses dynamic polling when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
+            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.DynamicPolling);
         });
     });
 

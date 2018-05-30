@@ -10,9 +10,12 @@ namespace ts.tscWatch {
     import checkArray = TestFSWithWatch.checkArray;
     import libFile = TestFSWithWatch.libFile;
     import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
     import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     import checkOutputContains = TestFSWithWatch.checkOutputContains;
     import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
+    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
@@ -2379,7 +2382,7 @@ declare module "fs" {
         });
 
         describe("tsc-watch when watchDirectories implementation", () => {
-            function verifyRenamingFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
+            function verifyRenamingFileInSubFolder(tscWatchDirectory: Tsc_WatchDirectory) {
                 const projectFolder = "/a/username/project";
                 const projectSrcFolder = `${projectFolder}/src`;
                 const configFile: File = {
@@ -2399,8 +2402,8 @@ declare module "fs" {
                 const projectFolders = [projectFolder, projectSrcFolder, `${projectFolder}/node_modules/@types`];
                 // Watching files config file, file, lib file
                 const expectedWatchedFiles = files.map(f => f.path);
-                const expectedWatchedDirectories = tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory ? projectFolders : emptyArray;
-                if (tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.WatchFile) {
+                const expectedWatchedDirectories = tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory ? projectFolders : emptyArray;
+                if (tscWatchDirectory === Tsc_WatchDirectory.WatchFile) {
                     expectedWatchedFiles.push(...projectFolders);
                 }
 
@@ -2410,7 +2413,7 @@ declare module "fs" {
                 file.path = file.path.replace("file1.ts", "file2.ts");
                 expectedWatchedFiles[0] = file.path;
                 host.reloadFS(files);
-                if (tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling) {
+                if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
                     // With dynamic polling the fs change would be detected only by running timeouts
                     host.runQueuedTimeoutCallbacks();
                 }
@@ -2429,21 +2432,21 @@ declare module "fs" {
                     checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
 
                     // Watching config file, file, lib file and directories
-                    TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedFiles", host.watchedFiles, expectedWatchedFiles, 1);
-                    TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories, 1);
+                    checkWatchedFilesDetailed(host, expectedWatchedFiles, 1);
+                    checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, 1, /*recursive*/ false);
                 }
             }
 
             it("uses watchFile when renaming file in subfolder", () => {
-                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.WatchFile);
+                verifyRenamingFileInSubFolder(Tsc_WatchDirectory.WatchFile);
             });
 
             it("uses non recursive watchDirectory when renaming file in subfolder", () => {
-                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+                verifyRenamingFileInSubFolder(Tsc_WatchDirectory.NonRecursiveWatchDirectory);
             });
 
             it("uses non recursive dynamic polling when renaming file in subfolder", () => {
-                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
+                verifyRenamingFileInSubFolder(Tsc_WatchDirectory.DynamicPolling);
             });
 
             it("when there are symlinks to folders in recursive folders", () => {
@@ -2482,13 +2485,55 @@ declare module "fs" {
                 };
                 const files = [file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
                 const environmentVariables = createMap<string>();
-                environmentVariables.set("TSC_WATCHDIRECTORY", TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+                environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                 const host = createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
                 createWatchOfConfigFile("tsconfig.json", host);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
                 checkWatchedDirectories(host, [cwd, `${cwd}/node_modules`, `${cwd}/node_modules/@types`, `${cwd}/node_modules/reala`, `${cwd}/node_modules/realb`,
                     `${cwd}/node_modules/reala/node_modules`, `${cwd}/node_modules/realb/node_modules`, `${cwd}/src`], /*recursive*/ false);
             });
+        });
+    });
+
+    describe("tsc-watch with modules linked to sibling folder", () => {
+        const projectRoot = "/user/username/projects/project";
+        const mainPackageRoot = `${projectRoot}/main`;
+        const linkedPackageRoot = `${projectRoot}/linked-package`;
+        const mainFile: File = {
+            path: `${mainPackageRoot}/index.ts`,
+            content: "import { Foo } from '@scoped/linked-package'"
+        };
+        const config: File = {
+            path: `${mainPackageRoot}/tsconfig.json`,
+            content: JSON.stringify({
+                compilerOptions: { module: "commonjs", moduleResolution: "node", baseUrl: ".", rootDir: "." },
+                files: ["index.ts"]
+            })
+        };
+        const linkedPackageInMain: SymLink = {
+            path: `${mainPackageRoot}/node_modules/@scoped/linked-package`,
+            symLink: `${linkedPackageRoot}`
+        };
+        const linkedPackageJson: File = {
+            path: `${linkedPackageRoot}/package.json`,
+            content: JSON.stringify({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" })
+        };
+        const linkedPackageIndex: File = {
+            path: `${linkedPackageRoot}/dist/index.d.ts`,
+            content: "export * from './other';"
+        };
+        const linkedPackageOther: File = {
+            path: `${linkedPackageRoot}/dist/other.d.ts`,
+            content: 'export declare const Foo = "BAR";'
+        };
+
+        it("verify watched directories", () => {
+            const files = [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
+            const host = createWatchedSystem(files, { currentDirectory: mainPackageRoot });
+            createWatchOfConfigFile("tsconfig.json", host);
+            checkWatchedFilesDetailed(host, [libFile.path, mainFile.path, config.path, linkedPackageIndex.path, linkedPackageOther.path], 1);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, [mainPackageRoot, linkedPackageRoot, `${mainPackageRoot}/node_modules/@types`, `${projectRoot}/node_modules/@types`], 1, /*recursive*/ true);
         });
     });
 }
