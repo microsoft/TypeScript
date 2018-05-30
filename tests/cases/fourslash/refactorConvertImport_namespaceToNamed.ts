@@ -11,8 +11,8 @@ edit.applyRefactor({
     actionName: "Convert namespace import to named imports",
     actionDescription: "Convert namespace import to named imports",
     newContent:
-`import { a as _a, b } from "m";
+`import { a as a_1, b } from "m";
 const a = 0;
-_a;
+a_1;
 b;`,
 });

@@ -30,22 +30,20 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImportBindings): void {
-        const usedIdentifiers = createMap<true>();
-        forEachFreeIdentifier(sourceFile, id => usedIdentifiers.set(id.text, true));
         const checker = program.getTypeChecker();
-
         if (toConvert.kind === SyntaxKind.NamespaceImport) {
-            doChangeNamespaceToNamed(sourceFile, checker, changes, toConvert, usedIdentifiers, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
+            doChangeNamespaceToNamed(sourceFile, checker, changes, toConvert, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
         }
         else {
-            doChangeNamedToNamespace(sourceFile, checker, changes, toConvert, usedIdentifiers);
+            doChangeNamedToNamespace(sourceFile, checker, changes, toConvert);
         }
     }
 
-    function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, usedIdentifiers: ReadonlyMap<true>, allowSyntheticDefaultImports: boolean): void {
-        // We may need to change `mod.x` to `_x` to avoid a name conflict.
-        const exportNameToImportName = createMap<string>();
+    function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
         let usedAsNamespaceOrDefault = false;
+
+        const nodesToReplace: PropertyAccessExpression[] = [];
+        const conflictingNames = createMap<true>();
 
         FindAllReferences.Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
             if (!isPropertyAccessExpression(id.parent)) {
@@ -54,34 +52,50 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             else {
                 const parent = cast(id.parent, isPropertyAccessExpression);
                 const exportName = parent.name.text;
-                let name = exportNameToImportName.get(exportName);
-                if (name === undefined) {
-                    exportNameToImportName.set(exportName, name = generateName(exportName, usedIdentifiers));
+                if (checker.resolveName(exportName, id, SymbolFlags.All, /*excludeGlobals*/ true)) {
+                    conflictingNames.set(exportName, true);
                 }
                 Debug.assert(parent.expression === id);
-                changes.replaceNode(sourceFile, parent, createIdentifier(name));
+                nodesToReplace.push(parent);
             }
         });
 
-        const elements: ImportSpecifier[] = [];
+        // We may need to change `mod.x` to `_x` to avoid a name conflict.
+        const exportNameToImportName = createMap<string>();
+
+        for (const propertyAccess of nodesToReplace) {
+            const exportName = propertyAccess.name.text;
+            let importName = exportNameToImportName.get(exportName);
+            if (importName === undefined) {
+                exportNameToImportName.set(exportName, importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName);
+            }
+            changes.replaceNode(sourceFile, propertyAccess, createIdentifier(importName));
+        }
+
+        const importSpecifiers: ImportSpecifier[] = [];
         exportNameToImportName.forEach((name, propertyName) => {
-            elements.push(createImportSpecifier(name === propertyName ? undefined : createIdentifier(propertyName), createIdentifier(name)));
+            importSpecifiers.push(createImportSpecifier(name === propertyName ? undefined : createIdentifier(propertyName), createIdentifier(name)));
         });
 
         const importDecl = toConvert.parent.parent;
         if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports) {
             // Need to leave the namespace import alone
-            changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, elements));
+            changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
         }
         else {
-            changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? createIdentifier(toConvert.name.text) : undefined, elements));
+            changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
         }
     }
 
-    function doChangeNamedToNamespace(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamedImports, usedIdentifiers: ReadonlyMap<true>): void {
-        const { moduleSpecifier } = toConvert.parent.parent;
-        // We know the user is using at least ScriptTarget.ES6, and moduleSpecifierToValidIdentifier only cares if we're using ES5+, so just set ScriptTarget.ESNext
-        const namespaceImportName = generateName(moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module", usedIdentifiers);
+    function doChangeNamedToNamespace(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamedImports): void {
+        const importDecl = toConvert.parent.parent;
+        const { moduleSpecifier } = importDecl;
+
+        const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
+        const namespaceNameConflicts = toConvert.elements.some(element =>
+            FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id =>
+                !!checker.resolveName(preferredName, id, SymbolFlags.All, /*excludeGlobals*/ true)) || false);
+        const namespaceImportName = namespaceNameConflicts ? getUniqueName(preferredName, sourceFile) : preferredName;
 
         const neededNamedImports: ImportSpecifier[] = [];
 
@@ -105,7 +119,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         changes.replaceNode(sourceFile, toConvert, createNamespaceImport(createIdentifier(namespaceImportName)));
         if (neededNamedImports.length) {
-            const importDecl = toConvert.parent.parent;
             changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, neededNamedImports));
         }
     }
@@ -113,12 +126,5 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: ReadonlyArray<ImportSpecifier> | undefined): ImportDeclaration {
         return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
             createImportClause(defaultImportName, elements && elements.length ? createNamedImports(elements) : undefined), old.moduleSpecifier);
-    }
-
-    function generateName(name: string, usedIdentifiers: ReadonlyMap<true>): string {
-        while (usedIdentifiers.has(name)) {
-            name = `_${name}`;
-        }
-        return name;
     }
 }

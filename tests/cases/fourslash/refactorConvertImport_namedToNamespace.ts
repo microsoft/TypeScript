@@ -13,12 +13,12 @@ edit.applyRefactor({
     actionName: "Convert named imports to namespace import",
     actionDescription: "Convert named imports to namespace import",
     newContent:
-// TODO: GH#23781 (_m.y shouldn't be indented)
-`import * as _m from "m";
+// TODO: GH#23781 (m_1.y shouldn't be indented)
+`import * as m_1 from "m";
 import { x } from "m";
 const m = 0;
-const o = { x: _m.x };
+const o = { x: m_1.x };
 export { x }; // Need a named import for this
-    _m.y;
-const n: _m.T = 0;`,
+    m_1.y;
+const n: m_1.T = 0;`,
 });

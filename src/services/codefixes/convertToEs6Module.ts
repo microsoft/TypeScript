@@ -441,6 +441,29 @@ namespace ts.codefix {
         return map;
     }
 
+    /**
+     * A free identifier is an identifier that can be accessed through name lookup as a local variable.
+     * In the expression `x.y`, `x` is a free identifier, but `y` is not.
+     */
+    function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
+        if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
+        node.forEachChild(child => forEachFreeIdentifier(child, cb));
+    }
+
+    function isFreeIdentifier(node: Identifier): boolean {
+        const { parent } = node;
+        switch (parent.kind) {
+            case SyntaxKind.PropertyAccessExpression:
+                return (parent as PropertyAccessExpression).name !== node;
+            case SyntaxKind.BindingElement:
+                return (parent as BindingElement).propertyName !== node;
+            case SyntaxKind.ImportSpecifier:
+                return (parent as ImportSpecifier).propertyName !== node;
+            default:
+                return true;
+        }
+    }
+
     // Node helpers
 
     function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, fn: FunctionExpression | ArrowFunction | MethodDeclaration): FunctionDeclaration {
