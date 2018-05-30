@@ -1322,8 +1322,14 @@ namespace ts {
                             }
                         }
 
+                        // ES6 exports are also visible locally (except for 'default'), but commonjs exports are not (except typedefs)
                         if (name !== InternalSymbolName.Default && (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember))) {
-                            break loop;
+                            if ((location as SourceFile).commonJsModuleIndicator && !result.declarations.some(d => d.kind === SyntaxKind.JSDocTypedefTag)) {
+                                result = undefined;
+                            }
+                            else {
+                                break loop;
+                            }
                         }
                         break;
                     case SyntaxKind.EnumDeclaration:
