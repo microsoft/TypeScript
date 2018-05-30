@@ -67,16 +67,14 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         exportNameToImportName.forEach((name, propertyName) => {
             elements.push(createImportSpecifier(name === propertyName ? undefined : createIdentifier(propertyName), createIdentifier(name)));
         });
-        const makeImportDeclaration = (defaultImportName: Identifier | undefined) =>
-            createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
-                createImportClause(defaultImportName, elements.length ? createNamedImports(elements) : undefined),
-                toConvert.parent.parent.moduleSpecifier);
 
+        const importDecl = toConvert.parent.parent;
         if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports) {
-            changes.insertNodeAfter(sourceFile, toConvert.parent.parent, makeImportDeclaration(/*defaultImportName*/ undefined));
+            // Need to leave the namespace import alone
+            changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, elements));
         }
         else {
-            changes.replaceNode(sourceFile, toConvert.parent.parent, makeImportDeclaration(usedAsNamespaceOrDefault ? createIdentifier(toConvert.name.text) : undefined));
+            changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? createIdentifier(toConvert.name.text) : undefined, elements));
         }
     }
 
@@ -85,14 +83,36 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         // We know the user is using at least ScriptTarget.ES6, and moduleSpecifierToValidIdentifier only cares if we're using ES5+, so just set ScriptTarget.ESNext
         const namespaceImportName = generateName(moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module", usedIdentifiers);
 
-        changes.replaceNode(sourceFile, toConvert, createNamespaceImport(createIdentifier(namespaceImportName)));
+        const neededNamedImports: ImportSpecifier[] = [];
 
         for (const element of toConvert.elements) {
             const propertyName = (element.propertyName || element.name).text;
             FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
-                changes.replaceNode(sourceFile, id, createPropertyAccess(createIdentifier(namespaceImportName), propertyName));
+                const access = createPropertyAccess(createIdentifier(namespaceImportName), propertyName);
+                if (isShorthandPropertyAssignment(id.parent)) {
+                    changes.replaceNode(sourceFile, id.parent, createPropertyAssignment(id.text, access));
+                }
+                else if (isExportSpecifier(id.parent) && !id.parent.propertyName) {
+                    if (!neededNamedImports.some(n => n.name === element.name)) {
+                        neededNamedImports.push(createImportSpecifier(element.propertyName && createIdentifier(element.propertyName.text), createIdentifier(element.name.text)));
+                    }
+                }
+                else {
+                    changes.replaceNode(sourceFile, id, access);
+                }
             });
         }
+
+        changes.replaceNode(sourceFile, toConvert, createNamespaceImport(createIdentifier(namespaceImportName)));
+        if (neededNamedImports.length) {
+            const importDecl = toConvert.parent.parent;
+            changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, neededNamedImports));
+        }
+    }
+
+    function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: ReadonlyArray<ImportSpecifier> | undefined): ImportDeclaration {
+        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
+            createImportClause(defaultImportName, elements && elements.length ? createNamedImports(elements) : undefined), old.moduleSpecifier);
     }
 
     function generateName(name: string, usedIdentifiers: ReadonlyMap<true>): string {

@@ -2,7 +2,8 @@
 
 /////*a*/import { x, y as z, T } from "m";/*b*/
 ////const m = 0;
-////x;
+////const o = { x };
+////export { x }; // Need a named import for this
 ////z;
 ////const n: T = 0;
 
@@ -12,9 +13,12 @@ edit.applyRefactor({
     actionName: "Convert named imports to namespace import",
     actionDescription: "Convert named imports to namespace import",
     newContent:
+// TODO: GH#23781 (_m.y shouldn't be indented)
 `import * as _m from "m";
+import { x } from "m";
 const m = 0;
-_m.x;
-_m.y;
+const o = { x: _m.x };
+export { x }; // Need a named import for this
+    _m.y;
 const n: _m.T = 0;`,
 });
