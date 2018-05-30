@@ -1,4 +1,5 @@
 // @strict: true
+// @strictAny: false
 
 // Repro from #19746
 

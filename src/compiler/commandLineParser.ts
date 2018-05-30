@@ -291,6 +291,13 @@ namespace ts {
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
+            name: "strictAny",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_any_type
+        },
+        {
             name: "strictNullChecks",
             type: "boolean",
             showInSimplifiedHelpView: true,

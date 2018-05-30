@@ -2,6 +2,7 @@
 // @skipLibCheck: true
 // @includebuiltfile: typescript_standalone.d.ts
 // @strict:true
+// @strictAny:false
 
 /*
  * Note: This test is a public API sample. The original sources can be found
