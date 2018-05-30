@@ -248,6 +248,12 @@ namespace ts.textChanges {
             return this;
         }
 
+        public deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options: ConfigurableStartEnd = {}): void {
+            const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
+            const endPosition = afterEndNode === undefined ? sourceFile.text.length : getAdjustedStartPosition(sourceFile, afterEndNode, options, Position.FullStart);
+            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
+        }
+
         public deleteNodeInList(sourceFile: SourceFile, node: Node) {
             const containingList = formatting.SmartIndenter.getContainingList(node, sourceFile);
             if (!containingList) {
