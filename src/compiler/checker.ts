@@ -10612,7 +10612,7 @@ namespace ts {
                         const targetTypes = (target as IntersectionType).types;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
-                        if (intrinsicAttributes !== unknownType && intrinsicClassAttributes !== unknownType &&
+                        if (intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
                             (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
                             // do not report top error
                             return result;
