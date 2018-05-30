@@ -29,7 +29,7 @@ namespace ts.codefix {
             }
             const delVar = textChanges.ChangeTracker.with(context, t => tryDeleteFullVariableStatement(t, sourceFile, startToken, /*deleted*/ undefined));
             if (delVar.length) {
-                return [createCodeFixAction(fixName, delDestructure, Diagnostics.Remove_variable_statement, fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
+                return [createCodeFixAction(fixName, delVar, Diagnostics.Remove_variable_statement, fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
 
             const token = getToken(sourceFile, textSpanEnd(context.span));
