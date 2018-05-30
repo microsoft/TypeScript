@@ -1291,7 +1291,7 @@ namespace ts {
                         isInExternalModule = true;
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        const moduleExports = getSymbolOfNode(location as ModuleDeclaration).exports!;
+                        const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration).exports!;
                         if (location.kind === SyntaxKind.SourceFile || isAmbientModule(location)) {
 
                             // It's an external module. First see if the module has an export default and if the local
