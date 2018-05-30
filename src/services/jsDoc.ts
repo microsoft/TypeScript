@@ -243,7 +243,7 @@ namespace ts.JsDoc {
         }
 
         const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-        const tokenStart = tokenAtPos.getStart();
+        const tokenStart = tokenAtPos.getStart(sourceFile);
         if (!tokenAtPos || tokenStart < position) {
             return undefined;
         }
@@ -253,7 +253,7 @@ namespace ts.JsDoc {
             return undefined;
         }
         const { commentOwner, parameters } = commentOwnerInfo;
-        if (commentOwner.getStart() < position) {
+        if (commentOwner.getStart(sourceFile) < position) {
             return undefined;
         }
 
@@ -268,19 +268,6 @@ namespace ts.JsDoc {
 
         // replace non-whitespace characters in prefix with spaces.
         const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).replace(/\S/i, () => " ");
-        const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
-
-        let docParams = "";
-        for (let i = 0; i < parameters.length; i++) {
-            const currentName = parameters[i].name;
-            const paramName = currentName.kind === SyntaxKind.Identifier ? currentName.escapedText : "param" + i;
-            if (isJavaScriptFile) {
-                docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
-            }
-            else {
-                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
-            }
-        }
 
         // A doc comment consists of the following
         // * The opening comment line
@@ -293,11 +280,19 @@ namespace ts.JsDoc {
             indentationStr + " * ";
         const result =
             preamble + newLine +
-            docParams +
+            parameterDocComments(parameters, hasJavaScriptFileExtension(sourceFile.fileName), indentationStr, newLine) +
             indentationStr + " */" +
             (tokenStart === position ? newLine + indentationStr : "");
 
         return { newText: result, caretOffset: preamble.length };
+    }
+
+    function parameterDocComments(parameters: ReadonlyArray<ParameterDeclaration>, isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
+        return parameters.map(({ name, dotDotDotToken }, i) => {
+            const paramName = name.kind === SyntaxKind.Identifier ? name.text : "param" + i;
+            const type = isJavaScriptFile ? (dotDotDotToken ? "{...any} " : "{any} ") : "";
+            return `${indentationStr} * @param ${type}${paramName}${newLine}`;
+        }).join("");
     }
 
     interface CommentOwnerInfo {

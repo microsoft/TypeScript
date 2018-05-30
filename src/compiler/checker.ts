@@ -10600,6 +10600,16 @@ namespace ts {
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
+                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes && target.flags & TypeFlags.Intersection) {
+                        const targetTypes = (target as IntersectionType).types;
+                        const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
+                        const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
+                        if (intrinsicAttributes !== unknownType && intrinsicClassAttributes !== unknownType &&
+                            (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
+                            // do not report top error
+                            return result;
+                        }
+                    }
                     reportRelationError(headMessage, source, target);
                 }
                 return result;
@@ -16282,7 +16292,7 @@ namespace ts {
             return createJsxAttributesTypeFromAttributesProperty(node.parent, checkMode);
         }
 
-        function getJsxType(name: __String, location: Node) {
+        function getJsxType(name: __String, location: Node | undefined) {
             const namespace = getJsxNamespaceAt(location);
             const exports = namespace && getExportsOfSymbol(namespace);
             const typeSymbol = exports && getSymbol(exports, name, SymbolFlags.Type);
@@ -16380,7 +16390,7 @@ namespace ts {
             return getSignatureInstantiation(signature, args, isJavascript);
         }
 
-        function getJsxNamespaceAt(location: Node): Symbol {
+        function getJsxNamespaceAt(location: Node | undefined): Symbol {
             const namespaceName = getJsxNamespace(location);
             const resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
             if (resolvedNamespace) {
@@ -20426,7 +20436,7 @@ namespace ts {
                         if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
                             const name = prop.escapedName;
                             const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
-                            if (symbol) {
+                            if (symbol && propType.symbol !== symbol) {
                                 grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
                                 return grammarErrorOnNode(prop.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
                             }
@@ -24162,6 +24172,16 @@ namespace ts {
         }
 
         /**
+         * The name cannot be used as 'Object' of user defined types with special target.
+         */
+        function checkClassNameCollisionWithObject(name: Identifier): void {
+            if (languageVersion === ScriptTarget.ES5 && name.escapedText === "Object"
+                && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext) {
+                error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
+            }
+        }
+
+        /**
          * Check each type parameter and check that type parameters have no duplicate type parameter declarations
          */
         function checkTypeParameters(typeParameterDeclarations: ReadonlyArray<TypeParameterDeclaration> | undefined) {
@@ -24287,6 +24307,9 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+                if (!(node.flags & NodeFlags.Ambient)) {
+                    checkClassNameCollisionWithObject(node.name);
+                }
             }
             checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
             checkExportsOnMergedDeclarations(node);
