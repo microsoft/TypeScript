@@ -199,6 +199,13 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): void {
         const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, preferences);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
+
+        if (containingMethodDeclaration && containingMethodDeclaration.parent === classDeclaration) {
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, containingMethodDeclaration, methodDeclaration);
+        }
+        else {
+            changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        }
     }
 }

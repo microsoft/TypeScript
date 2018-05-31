@@ -66,9 +66,9 @@ export const x: import("./foo") = { x: 0, y: 0 };
 >0 : 0
 
 export let y: import("./foo2").Bar.I = { a: "", b: 0 };
->y : Bar.I
+>y : import("tests/cases/conformance/types/import/foo2").Bar.I
 >Bar : any
->I : Bar.I
+>I : import("tests/cases/conformance/types/import/foo2").Bar.I
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
 >"" : ""

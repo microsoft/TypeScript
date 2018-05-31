@@ -1320,9 +1320,17 @@ namespace ts.Completions {
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
 
+            const seenResolvedModules = createMap<true>();
+
             codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, program.getSourceFiles(), moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
+                    return;
+                }
+
+                const resolvedModuleSymbol = typeChecker.resolveExternalModuleSymbol(moduleSymbol);
+                // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
+                if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {
                     return;
                 }
 
@@ -1333,7 +1341,7 @@ namespace ts.Completions {
                     //
                     // If `symbol.parent !== ...`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
                     // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
-                    if (typeChecker.getMergedSymbol(symbol.parent!) !== typeChecker.resolveExternalModuleSymbol(moduleSymbol)
+                    if (typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol
                         || some(symbol.declarations, d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
                         continue;
                     }
@@ -1478,27 +1486,13 @@ namespace ts.Completions {
         }
 
         function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
-            if (contextToken.kind === SyntaxKind.StringLiteral
-                || contextToken.kind === SyntaxKind.RegularExpressionLiteral
-                || isTemplateLiteralKind(contextToken.kind)) {
-                const start = contextToken.getStart();
-                const end = contextToken.getEnd();
-
-                // To be "in" one of these literals, the position has to be:
-                //   1. entirely within the token text.
-                //   2. at the end position of an unterminated token.
-                //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
-                if (start < position && position < end) {
-                    return true;
-                }
-
-                if (position === end) {
-                    return !!(<LiteralExpression>contextToken).isUnterminated
-                        || contextToken.kind === SyntaxKind.RegularExpressionLiteral;
-                }
-            }
-
-            return false;
+            // To be "in" one of these literals, the position has to be:
+            //   1. entirely within the token text.
+            //   2. at the end position of an unterminated token.
+            //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
+            return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
+                rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
+                    position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
         }
 
         /**

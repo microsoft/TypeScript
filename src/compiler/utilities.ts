@@ -223,11 +223,11 @@ namespace ts {
     }
 
     /**
-     * Returns a value indicating whether a name is unique globally or within the current file
+     * Returns a value indicating whether a name is unique globally or within the current file.
+     * Note: This does not consider whether a name appears as a free identifier or not, so at the expression `x.y` this includes both `x` and `y`.
      */
-    export function isFileLevelUniqueName(currentSourceFile: SourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
-        return !(hasGlobalName && hasGlobalName(name))
-            && !currentSourceFile.identifiers.has(name);
+    export function isFileLevelUniqueName(sourceFile: SourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
+        return !(hasGlobalName && hasGlobalName(name)) && !sourceFile.identifiers.has(name);
     }
 
     // Returns true if this node is missing from the actual source code. A 'missing' node is different
@@ -810,6 +810,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.AnyKeyword:
+            case SyntaxKind.UnknownKeyword:
             case SyntaxKind.NumberKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
@@ -5594,13 +5595,18 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
+    export type TemplateLiteralToken = NoSubstitutionTemplateLiteral | TemplateHead | TemplateMiddle | TemplateTail;
+    export function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken {
+        return isTemplateLiteralKind(node.kind);
+    }
+
     export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail {
         const kind = node.kind;
         return kind === SyntaxKind.TemplateMiddle
             || kind === SyntaxKind.TemplateTail;
     }
 
-    export function isStringTextContainingNode(node: Node) {
+    export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
 
@@ -5777,6 +5783,7 @@ namespace ts {
     function isTypeNodeKind(kind: SyntaxKind) {
         return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
             || kind === SyntaxKind.AnyKeyword
+            || kind === SyntaxKind.UnknownKeyword
             || kind === SyntaxKind.NumberKeyword
             || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.BooleanKeyword
