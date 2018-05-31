@@ -76,7 +76,7 @@ namespace ts.FindAllReferences {
             // References to and accesses on the super keyword only have one possible implementation, so no
             // need to "Find all References"
             const symbol = checker.getSymbolAtLocation(node)!;
-            return symbol.valueDeclaration && [nodeEntry(symbol.valueDeclaration)];
+            return symbol.valueDeclaration && [nodeEntry((symbol.valueDeclaration as NamedDeclaration).name || symbol.valueDeclaration)];
         }
         else {
             // Perform "Find all References" and retrieve only those that are implementations
@@ -1096,7 +1096,7 @@ namespace ts.FindAllReferences.Core {
     function addImplementationReferences(refNode: Node, addReference: (node: Node) => void, state: State): void {
         // Check if we found a function/propertyAssignment/method with an implementation or initializer
         if (isDeclarationName(refNode) && isImplementation(refNode.parent)) {
-            addReference(refNode.parent);
+            addReference(refNode);
             return;
         }
 
@@ -1112,7 +1112,7 @@ namespace ts.FindAllReferences.Core {
         // Check if the node is within an extends or implements clause
         const containingClass = getContainingClassIfInHeritageClause(refNode);
         if (containingClass) {
-            addReference(containingClass);
+            addReference(containingClass.name || containingClass);
             return;
         }
 
