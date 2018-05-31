@@ -5454,6 +5454,10 @@ namespace ts {
         return node.kind === SyntaxKind.Bundle;
     }
 
+    export function isUnparsedSource(node: Node): node is UnparsedSource {
+        return node.kind === SyntaxKind.UnparsedSource;
+    }
+
     // JSDoc
 
     export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression {

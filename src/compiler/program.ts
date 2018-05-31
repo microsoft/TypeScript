@@ -1192,8 +1192,10 @@ namespace ts {
 
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
+                    const jsMap = host.readFile(resolvedRefOpts.options.outFile + ".map"); // TODO: try to read sourceMappingUrl comment from the js file
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const node = createInputFiles(js, dts);
+                    const dtsMap = host.readFile(dtsFilename + ".map");
+                    const node = createInputFiles(js, dts, jsMap, dtsMap);
                     nodes.push(node);
                 }
             }

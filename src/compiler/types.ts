@@ -2652,12 +2652,15 @@ namespace ts {
     export interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
         javascriptText: string;
+        javascriptMapText?: string;
         declarationText: string;
+        declarationMapText?: string;
     }
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
         text: string;
+        sourceMapText?: string;
     }
 
     export interface JsonSourceFile extends SourceFile {
