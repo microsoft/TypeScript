@@ -178,7 +178,7 @@ declare function isFunction(x: unknown): x is Function;
 >isFunction : Symbol(isFunction, Decl(unknownType1.ts, 66, 1))
 >x : Symbol(x, Decl(unknownType1.ts, 70, 28))
 >x : Symbol(x, Decl(unknownType1.ts, 70, 28))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function f20(x: unknown) {
 >f20 : Symbol(f20, Decl(unknownType1.ts, 70, 55))
@@ -193,7 +193,7 @@ function f20(x: unknown) {
     }
     if (x instanceof Error) {
 >x : Symbol(x, Decl(unknownType1.ts, 72, 13))
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         x;  // Error
 >x : Symbol(x, Decl(unknownType1.ts, 72, 13))
@@ -247,7 +247,7 @@ function f21<T>(pAny: any, pNever: never, pT: T) {
 
     x = new Error();
 >x : Symbol(x, Decl(unknownType1.ts, 93, 7))
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x = x;
 >x : Symbol(x, Decl(unknownType1.ts, 93, 7))

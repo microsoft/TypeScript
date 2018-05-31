@@ -4,14 +4,14 @@ interface IFooFn {
 
     (strings: TemplateStringsArray): Promise<{}>;
 >strings : Symbol(strings, Decl(genericTemplateOverloadResolution.ts, 1, 5))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
     <T>(strings: TemplateStringsArray): Promise<T>;
 >T : Symbol(T, Decl(genericTemplateOverloadResolution.ts, 2, 5))
 >strings : Symbol(strings, Decl(genericTemplateOverloadResolution.ts, 2, 8))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(genericTemplateOverloadResolution.ts, 2, 5))
 }
 
@@ -22,7 +22,7 @@ declare const fooFn: IFooFn;
 declare function expect(x: Promise<number>): void;
 >expect : Symbol(expect, Decl(genericTemplateOverloadResolution.ts, 5, 28))
 >x : Symbol(x, Decl(genericTemplateOverloadResolution.ts, 7, 24))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
 expect(fooFn<number>``);
 >expect : Symbol(expect, Decl(genericTemplateOverloadResolution.ts, 5, 28))
