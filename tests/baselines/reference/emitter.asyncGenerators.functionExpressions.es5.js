@@ -440,7 +440,10 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var f7 = function () {
     return __asyncGenerator(this, arguments, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, 1];
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, __await(1)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
         });
     });
 };

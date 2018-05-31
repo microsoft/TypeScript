@@ -1736,17 +1736,9 @@ namespace ts {
             synchronizeHostData();
 
             // Exclude default library when renaming as commonly user don't want to change that file.
-            let sourceFiles: SourceFile[] = [];
-            if (options && options.isForRename) {
-                for (const sourceFile of program.getSourceFiles()) {
-                    if (!program.isSourceFileDefaultLibrary(sourceFile)) {
-                        sourceFiles.push(sourceFile);
-                    }
-                }
-            }
-            else {
-                sourceFiles = program.getSourceFiles().slice();
-            }
+            const sourceFiles = options && options.isForRename
+                ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
+                : program.getSourceFiles();
 
             return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
         }

@@ -423,6 +423,10 @@ namespace ts {
         return r.pos <= pos && pos <= r.end;
     }
 
+    export function rangeContainsPositionExclusive(r: TextRange, pos: number) {
+        return r.pos < pos && pos < r.end;
+    }
+
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
         return start <= range.pos && end >= range.end;
     }
@@ -830,7 +834,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
         if (previousToken && isStringTextContainingNode(previousToken)) {
-            const start = previousToken.getStart();
+            const start = previousToken.getStart(sourceFile);
             const end = previousToken.getEnd();
 
             // To be "in" one of these literals, the position has to be:
@@ -1093,9 +1097,9 @@ namespace ts {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
 
-    export function isInsideTemplateLiteral(node: LiteralExpression | TemplateHead, position: number) {
+    export function isInsideTemplateLiteral(node: TemplateLiteralToken, position: number, sourceFile: SourceFile): boolean {
         return isTemplateLiteralKind(node.kind)
-            && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
+            && (node.getStart(sourceFile) < position && position < node.end) || (!!node.isUnterminated && position === node.end);
     }
 
     export function isAccessibilityModifier(kind: SyntaxKind) {
@@ -1340,6 +1344,23 @@ namespace ts {
         some(pred: (node: Node) => boolean): boolean {
             return forEachEntry(this.map, pred) || false;
         }
+    }
+
+    export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {
+        if (!node) return undefined;
+
+        while (node.parent) {
+            if (isSourceFile(node.parent) || !spanContainsNode(span, node.parent, file)) {
+                return node;
+            }
+
+            node = node.parent;
+        }
+    }
+
+    function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
+        return textSpanContainsPosition(span, node.getStart(file)) &&
+            node.getEnd() <= textSpanEnd(span);
     }
 }
 
@@ -1642,9 +1663,9 @@ namespace ts {
     }
 
     /* @internal */
-    export function getUniqueName(baseName: string, fileText: string): string {
+    export function getUniqueName(baseName: string, sourceFile: SourceFile): string {
         let nameText = baseName;
-        for (let i = 1; stringContains(fileText, nameText); i++) {
+        for (let i = 1; !isFileLevelUniqueName(sourceFile, nameText); i++) {
             nameText = `${baseName}_${i}`;
         }
         return nameText;
@@ -1663,7 +1684,7 @@ namespace ts {
             Debug.assert(fileName === renameFilename);
             for (const change of textChanges) {
                 const { span, newText } = change;
-                const index = newText.indexOf(name);
+                const index = indexInTextChange(newText, name);
                 if (index !== -1) {
                     lastPos = span.start + delta + index;
 
@@ -1680,5 +1701,14 @@ namespace ts {
         Debug.assert(preferLastLocation);
         Debug.assert(lastPos >= 0);
         return lastPos;
+    }
+
+    function indexInTextChange(change: string, name: string): number {
+        if (startsWith(change, name)) return 0;
+        // Add a " " to avoid references inside words
+        let idx = change.indexOf(" " + name);
+        if (idx === -1) idx = change.indexOf("." + name);
+        if (idx === -1) idx = change.indexOf('"' + name);
+        return idx === -1 ? -1 : idx + 1;
     }
 }

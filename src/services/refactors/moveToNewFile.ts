@@ -15,7 +15,8 @@ namespace ts.refactor {
         }
     });
 
-    function getRangeToMove(context: RefactorContext): ReadonlyArray<Statement> | undefined {
+    interface RangeToMove { readonly toMove: ReadonlyArray<Statement>; readonly afterLast: Statement | undefined; }
+    function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
         const { file } = context;
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
         const { statements } = file;
@@ -25,7 +26,7 @@ namespace ts.refactor {
 
         const startStatement = statements[startNodeIndex];
         if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
-            return [statements[startNodeIndex]];
+            return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
         }
 
         // Can't only partially include the start node or be partially into the next node
@@ -34,7 +35,10 @@ namespace ts.refactor {
         // Can't be partially into the next node
         if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
 
-        return statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex);
+        return {
+            toMove: statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex),
+            afterLast: afterEndNodeIndex === -1 ? undefined : statements[afterEndNodeIndex],
+        };
     }
 
     function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
@@ -47,14 +51,14 @@ namespace ts.refactor {
         const newFileNameWithExtension = newModuleName + extension;
 
         // If previous file was global, this is easy.
-        changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileNameWithExtension), getNewStatements(oldFile, usage, changes, toMove, program, newModuleName, preferences));
+        changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileNameWithExtension), getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, newModuleName, preferences));
 
         addNewFileToTsconfig(program, changes, oldFile.fileName, newFileNameWithExtension, hostGetCanonicalFileName(host));
     }
 
     interface StatementRange {
         readonly first: Statement;
-        readonly last: Statement;
+        readonly afterLast: Statement | undefined;
     }
     interface ToMove {
         readonly all: ReadonlyArray<Statement>;
@@ -67,9 +71,10 @@ namespace ts.refactor {
         if (rangeToMove === undefined) return undefined;
         const all: Statement[] = [];
         const ranges: StatementRange[] = [];
-        getRangesWhere(rangeToMove, s => !isPureImport(s), (start, afterEnd) => {
-            for (let i = start; i < afterEnd; i++) all.push(rangeToMove[i]);
-            ranges.push({ first: rangeToMove[start], last: rangeToMove[afterEnd - 1] });
+        const { toMove, afterLast } = rangeToMove;
+        getRangesWhere(toMove, s => !isPureImport(s), (start, afterEndIndex) => {
+            for (let i = start; i < afterEndIndex; i++) all.push(toMove[i]);
+            ranges.push({ first: toMove[start], afterLast });
         });
         return all.length === 0 ? undefined : { all, ranges };
     }
@@ -102,7 +107,7 @@ namespace ts.refactor {
         }
     }
 
-    function getNewStatements(
+    function getNewStatementsAndRemoveFromOldFile(
         oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
     ): ReadonlyArray<Statement> {
         const checker = program.getTypeChecker();
@@ -130,8 +135,8 @@ namespace ts.refactor {
     }
 
     function deleteMovedStatements(sourceFile: SourceFile, moved: ReadonlyArray<StatementRange>, changes: textChanges.ChangeTracker) {
-        for (const { first, last } of moved) {
-            changes.deleteNodeRange(sourceFile, first, last);
+        for (const { first, afterLast } of moved) {
+            changes.deleteNodeRangeExcludingEnd(sourceFile, first, afterLast);
         }
     }
 

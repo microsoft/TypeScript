@@ -219,7 +219,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 class C7 {
     f() {
         return __asyncGenerator(this, arguments, function* f_1() {
-            return 1;
+            return yield __await(1);
         });
     }
 }

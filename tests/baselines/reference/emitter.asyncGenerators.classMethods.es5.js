@@ -504,7 +504,10 @@ var C7 = /** @class */ (function () {
     C7.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
-                return [2 /*return*/, 1];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, __await(1)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
             });
         });
     };

@@ -2850,6 +2850,7 @@ namespace ts {
         function parseNonArrayType(): TypeNode {
             switch (token()) {
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.SymbolKeyword:
@@ -2907,6 +2908,7 @@ namespace ts {
         function isStartOfType(inStartOfParameter?: boolean): boolean {
             switch (token()) {
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
