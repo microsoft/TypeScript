@@ -707,6 +707,7 @@ namespace ts {
             isSourceFileDefaultLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
+            getLibFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
             isEmittedFile,
@@ -1839,6 +1840,14 @@ namespace ts {
 
             function collectDynamicImportOrRequireCallsForEachChild(node: Node) {
                 forEachChild(node, collectDynamicImportOrRequireCalls);
+            }
+        }
+
+        function getLibFileFromReference(ref: FileReference) {
+            const libName = ref.fileName.toLocaleLowerCase();
+            const libFileName = libMap.get(libName);
+            if (libFileName) {
+                return getSourceFile(combinePaths(defaultLibraryPath, libFileName));
             }
         }
 

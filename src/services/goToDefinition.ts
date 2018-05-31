@@ -89,6 +89,7 @@ namespace ts.GoToDefinition {
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
+        debugger;
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = tryResolveScriptReference(program, sourceFile, referencePath);
@@ -100,6 +101,12 @@ namespace ts.GoToDefinition {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
             return file && { fileName: typeReferenceDirective.fileName, file };
+        }
+
+        const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
+        if (libReferenceDirective) {
+            const file = program.getLibFileFromReference(libReferenceDirective);
+            return file && { fileName: libReferenceDirective.fileName, file };
         }
 
         return undefined;
@@ -133,7 +140,10 @@ namespace ts.GoToDefinition {
         }
 
         // Check if position is on triple slash reference.
-        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ||
+            findReferenceInPosition(sourceFile.typeReferenceDirectives, position) ||
+            findReferenceInPosition(sourceFile.libReferenceDirectives, position);
+
         if (comment) {
             return { definitions, textSpan: createTextSpanFromRange(comment) };
         }

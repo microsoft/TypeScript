@@ -2,8 +2,11 @@ namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
 
-    // NOTE: The order here is important to default lib ordering
-    const commandLineLibMap = createMapFromEntries([
+    // NOTE: The order here is important to default lib ordering as entries will have the same
+    //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
+    //       order also affects overload resolution when a type declared in one lib is
+    //       augmented in another lib.
+    const libEntries: [string, string][] = [
         // JavaScript only
         ["es5", "lib.es5.d.ts"],
         ["es6", "lib.es2015.d.ts"],
@@ -17,6 +20,7 @@ namespace ts {
         ["dom", "lib.dom.d.ts"],
         ["dom.iterable", "lib.dom.iterable.d.ts"],
         ["webworker", "lib.webworker.d.ts"],
+        ["webworker.importscripts", "lib.webworker.importscripts.d.ts"],
         ["scripthost", "lib.scripthost.d.ts"],
         // ES2015 Or ESNext By-feature options
         ["es2015.core", "lib.es2015.core.d.ts"],
@@ -39,16 +43,22 @@ namespace ts {
         ["es2018.regexp", "lib.es2018.regexp.d.ts"],
         ["esnext.array", "lib.esnext.array.d.ts"],
         ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
-    ]);
+    ];
 
-    // Internally we add some additional lib references that we only support when used as part of a
-    // "lib" reference directive. They are not available on the command line or in tsconfig.json.
+    /**
+     * An array of supported "lib" reference file names used to determine the order for inclusion
+     * when referenced, as well as for spelling suggestions. This ensures the correct ordering for
+     * overload resolution when a type declared in one lib is extended by another.
+     */
     /* @internal */
-    export const libMap = cloneMap(commandLineLibMap)
-        .set("webworker.importscripts", "lib.webworker.importscripts.d.ts");
+    export const libs = libEntries.map(entry => entry[0]);
 
+    /**
+     * A map of lib names to lib files. This map is used both for parsing the "lib" command line
+     * option as well as for resolving lib reference directives.
+     */
     /* @internal */
-    export const libs = arrayFrom(commandLineLibMap.keys());
+    export const libMap = createMapFromEntries(libEntries);
 
     /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
@@ -163,7 +173,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: commandLineLibMap
+                type: libMap
             },
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
