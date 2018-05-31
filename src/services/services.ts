@@ -1780,10 +1780,6 @@ namespace ts {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
-        function getSourceFile(fileName: string): SourceFile {
-            return getNonBoundSourceFile(fileName);
-        }
-
         function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
@@ -2291,7 +2287,6 @@ namespace ts {
             getEditsForFileRename,
             getEmitOutput,
             getNonBoundSourceFile,
-            getSourceFile,
             getProgram,
             getApplicableRefactors,
             getEditsForRefactor,
