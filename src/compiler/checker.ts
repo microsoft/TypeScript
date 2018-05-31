@@ -10658,11 +10658,11 @@ namespace ts {
                         const targetTypes = target.flags & TypeFlags.Intersection ? (target as IntersectionType).types : emptyArray;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
-                        if (intrinsicAttributes === errorType || intrinsicClassAttributes === errorType ||
-                            (!contains(targetTypes, intrinsicAttributes) && !contains(targetTypes, intrinsicClassAttributes))) {
+                        if ((intrinsicAttributes === errorType || !contains(targetTypes, intrinsicAttributes)) &&
+                            (intrinsicClassAttributes === errorType || !contains(targetTypes, intrinsicClassAttributes))) {
                             // only report an error when the target isn't the intersection type with Intrinsic[Class]Attributes
-                            const componentName = errorNode && isIdentifier(errorNode) ? unescapeLeadingUnderscores(errorNode.escapedText) : "the component";
-                            reportError(Diagnostics.The_attributes_provided_to_0_are_not_assignable_to_type_1, componentName, typeToString(target));
+                            Debug.assert(!!errorNode && isEntityNameExpression(errorNode));
+                            reportError(Diagnostics.The_attributes_provided_to_0_are_not_assignable_to_type_1, entityNameToString(errorNode! as EntityNameExpression), typeToString(target));
                         }
                         return result;
                     }

@@ -2,7 +2,7 @@ tests/cases/conformance/jsx/file.tsx(27,33): error TS2326: Types of property 'y'
   Type 'true' is not assignable to type 'false'.
 tests/cases/conformance/jsx/file.tsx(28,50): error TS2326: Types of property 'x' are incompatible.
   Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(30,11): error TS2610: The attributes provided to OverWriteAttr are not assignable to type 'Prop'
+tests/cases/conformance/jsx/file.tsx(30,11): error TS2610: The attributes provided to 'OverWriteAttr' are not assignable to type 'Prop'
   Types of property 'y' are incompatible.
     Type 'true' is not assignable to type 'false'.
 
@@ -45,7 +45,7 @@ tests/cases/conformance/jsx/file.tsx(30,11): error TS2610: The attributes provid
     let x2 = <OverWriteAttr {...anyobj} x={3} />
     let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
               ~~~~~~~~~~~~~
-!!! error TS2610: The attributes provided to OverWriteAttr are not assignable to type 'Prop'
+!!! error TS2610: The attributes provided to 'OverWriteAttr' are not assignable to type 'Prop'
 !!! error TS2610:   Types of property 'y' are incompatible.
 !!! error TS2610:     Type 'true' is not assignable to type 'false'.
     

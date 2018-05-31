@@ -1,9 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(25,11): error TS2610: The attributes provided to T are not assignable to type 'IntrinsicAttributes & { reqd: any; }'
-  The attributes provided to T are not assignable to type '{ reqd: any; }'
-    Property 'reqd' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(28,11): error TS2610: The attributes provided to the component are not assignable to type 'IntrinsicAttributes & { reqd: any; }'
-  The attributes provided to the component are not assignable to type '{ reqd: any; }'
-    Property 'reqd' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(25,11): error TS2610: The attributes provided to 'T' are not assignable to type '{ reqd: any; }'
+  Property 'reqd' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(28,11): error TS2610: The attributes provided to 'TestMod.Test' are not assignable to type '{ reqd: any; }'
+  Property 'reqd' is missing in type '{}'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
@@ -46,15 +44,13 @@ tests/cases/conformance/jsx/file.tsx(28,11): error TS2610: The attributes provid
     const T = TestMod.Test;
     var t1 = <T />;
               ~
-!!! error TS2610: The attributes provided to T are not assignable to type 'IntrinsicAttributes & { reqd: any; }'
-!!! error TS2610:   The attributes provided to T are not assignable to type '{ reqd: any; }'
-!!! error TS2610:     Property 'reqd' is missing in type '{}'.
+!!! error TS2610: The attributes provided to 'T' are not assignable to type '{ reqd: any; }'
+!!! error TS2610:   Property 'reqd' is missing in type '{}'.
     
     // Should error
     var t2 = <TestMod.Test />;
               ~~~~~~~~~~~~
-!!! error TS2610: The attributes provided to the component are not assignable to type 'IntrinsicAttributes & { reqd: any; }'
-!!! error TS2610:   The attributes provided to the component are not assignable to type '{ reqd: any; }'
-!!! error TS2610:     Property 'reqd' is missing in type '{}'.
+!!! error TS2610: The attributes provided to 'TestMod.Test' are not assignable to type '{ reqd: any; }'
+!!! error TS2610:   Property 'reqd' is missing in type '{}'.
     
     

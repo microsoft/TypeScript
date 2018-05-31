@@ -5,7 +5,7 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type 'T' is not assig
 tests/cases/conformance/jsx/file.tsx(25,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
   Type '{ y: string; }' is not assignable to type 'Attribs1'.
     Property 'x' is missing in type '{ y: string; }'.
-tests/cases/conformance/jsx/file.tsx(29,2): error TS2610: The attributes provided to test1 are not assignable to type 'Attribs1'
+tests/cases/conformance/jsx/file.tsx(29,2): error TS2610: The attributes provided to 'test1' are not assignable to type 'Attribs1'
   Property 'x' is missing in type '{}'.
 
 
@@ -49,7 +49,7 @@ tests/cases/conformance/jsx/file.tsx(29,2): error TS2610: The attributes provide
     
     <test1 {...{}} />; // Error, missing x
      ~~~~~
-!!! error TS2610: The attributes provided to test1 are not assignable to type 'Attribs1'
+!!! error TS2610: The attributes provided to 'test1' are not assignable to type 'Attribs1'
 !!! error TS2610:   Property 'x' is missing in type '{}'.
     <test2 {...{}} />; // Error, missing toString
     

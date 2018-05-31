@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(16,2): error TS2610: The attributes provided to span are not assignable to type '{ m: string; }'
+tests/cases/conformance/jsx/file.tsx(16,2): error TS2610: The attributes provided to 'span' are not assignable to type '{ m: string; }'
   Property 'm' is missing in type '{ q: string; }'.
 
 
@@ -20,6 +20,6 @@ tests/cases/conformance/jsx/file.tsx(16,2): error TS2610: The attributes provide
     // Error
     <span q='' />;
      ~~~~
-!!! error TS2610: The attributes provided to span are not assignable to type '{ m: string; }'
+!!! error TS2610: The attributes provided to 'span' are not assignable to type '{ m: string; }'
 !!! error TS2610:   Property 'm' is missing in type '{ q: string; }'.
     

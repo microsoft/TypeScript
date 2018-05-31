@@ -2068,7 +2068,7 @@
         "category": "Error",
         "code": 2609
     },
-    "The attributes provided to {0} are not assignable to type '{1}'": {
+    "The attributes provided to '{0}' are not assignable to type '{1}'": {
         "category": "Error",
         "code": 2610
     },

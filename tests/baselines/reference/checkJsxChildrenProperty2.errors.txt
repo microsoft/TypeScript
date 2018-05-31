@@ -1,22 +1,22 @@
-tests/cases/conformance/jsx/file.tsx(14,10): error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+tests/cases/conformance/jsx/file.tsx(14,10): error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
   Property 'children' is missing in type '{ a: number; b: string; }'.
 tests/cases/conformance/jsx/file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
-tests/cases/conformance/jsx/file.tsx(31,6): error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+tests/cases/conformance/jsx/file.tsx(31,6): error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
   Types of property 'children' are incompatible.
     Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string | Element'.
       Type '(Element | ((name: string) => Element))[]' is not assignable to type 'Element'.
         Property 'type' is missing in type '(Element | ((name: string) => Element))[]'.
-tests/cases/conformance/jsx/file.tsx(37,6): error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+tests/cases/conformance/jsx/file.tsx(37,6): error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
   Types of property 'children' are incompatible.
     Type '(number | Element)[]' is not assignable to type 'string | Element'.
       Type '(number | Element)[]' is not assignable to type 'Element'.
         Property 'type' is missing in type '(number | Element)[]'.
-tests/cases/conformance/jsx/file.tsx(43,6): error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+tests/cases/conformance/jsx/file.tsx(43,6): error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
   Types of property 'children' are incompatible.
     Type '(string | Element)[]' is not assignable to type 'string | Element'.
       Type '(string | Element)[]' is not assignable to type 'Element'.
         Property 'type' is missing in type '(string | Element)[]'.
-tests/cases/conformance/jsx/file.tsx(49,6): error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+tests/cases/conformance/jsx/file.tsx(49,6): error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
   Types of property 'children' are incompatible.
     Type 'Element[]' is not assignable to type 'string | Element'.
       Type 'Element[]' is not assignable to type 'Element'.
@@ -39,7 +39,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2610: The attributes provide
     // Error: missing children
     let k = <Comp a={10} b="hi" />;
              ~~~~
-!!! error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+!!! error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
 !!! error TS2610:   Property 'children' is missing in type '{ a: number; b: string; }'.
     
     let k0 =
@@ -61,7 +61,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2610: The attributes provide
     let k2 =
         <Comp a={10} b="hi">
          ~~~~
-!!! error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+!!! error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
 !!! error TS2610:   Types of property 'children' are incompatible.
 !!! error TS2610:     Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string | Element'.
 !!! error TS2610:       Type '(Element | ((name: string) => Element))[]' is not assignable to type 'Element'.
@@ -73,7 +73,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2610: The attributes provide
     let k3 =
         <Comp a={10} b="hi">
          ~~~~
-!!! error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+!!! error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
 !!! error TS2610:   Types of property 'children' are incompatible.
 !!! error TS2610:     Type '(number | Element)[]' is not assignable to type 'string | Element'.
 !!! error TS2610:       Type '(number | Element)[]' is not assignable to type 'Element'.
@@ -85,7 +85,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2610: The attributes provide
     let k4 =
         <Comp a={10} b="hi" >
          ~~~~
-!!! error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+!!! error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
 !!! error TS2610:   Types of property 'children' are incompatible.
 !!! error TS2610:     Type '(string | Element)[]' is not assignable to type 'string | Element'.
 !!! error TS2610:       Type '(string | Element)[]' is not assignable to type 'Element'.
@@ -97,7 +97,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2610: The attributes provide
     let k5 =
         <Comp a={10} b="hi" >
          ~~~~
-!!! error TS2610: The attributes provided to Comp are not assignable to type 'Prop'
+!!! error TS2610: The attributes provided to 'Comp' are not assignable to type 'Prop'
 !!! error TS2610:   Types of property 'children' are incompatible.
 !!! error TS2610:     Type 'Element[]' is not assignable to type 'string | Element'.
 !!! error TS2610:       Type 'Element[]' is not assignable to type 'Element'.

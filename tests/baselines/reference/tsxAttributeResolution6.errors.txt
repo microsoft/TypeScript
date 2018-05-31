@@ -2,7 +2,7 @@ tests/cases/conformance/jsx/file.tsx(10,8): error TS2326: Types of property 's' 
   Type 'true' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(11,8): error TS2326: Types of property 'n' are incompatible.
   Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(12,2): error TS2610: The attributes provided to test2 are not assignable to type '{ n: boolean; }'
+tests/cases/conformance/jsx/file.tsx(12,2): error TS2610: The attributes provided to 'test2' are not assignable to type '{ n: boolean; }'
   Property 'n' is missing in type '{}'.
 
 
@@ -26,7 +26,7 @@ tests/cases/conformance/jsx/file.tsx(12,2): error TS2610: The attributes provide
 !!! error TS2326:   Type 'string' is not assignable to type 'boolean'.
     <test2 />;
      ~~~~~
-!!! error TS2610: The attributes provided to test2 are not assignable to type '{ n: boolean; }'
+!!! error TS2610: The attributes provided to 'test2' are not assignable to type '{ n: boolean; }'
 !!! error TS2610:   Property 'n' is missing in type '{}'.
     
     // OK

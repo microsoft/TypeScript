@@ -1,5 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
-tests/cases/conformance/jsx/file.tsx(32,10): error TS2610: The attributes provided to FetchUser are not assignable to type 'IFetchUserProps'
+tests/cases/conformance/jsx/file.tsx(32,10): error TS2610: The attributes provided to 'FetchUser' are not assignable to type 'IFetchUserProps'
   Types of property 'children' are incompatible.
     Type '((user: IUser) => Element)[]' is not assignable to type '(user: IUser) => Element'.
       Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element'.
@@ -41,7 +41,7 @@ tests/cases/conformance/jsx/file.tsx(32,10): error TS2610: The attributes provid
         return (
             <FetchUser>
              ~~~~~~~~~
-!!! error TS2610: The attributes provided to FetchUser are not assignable to type 'IFetchUserProps'
+!!! error TS2610: The attributes provided to 'FetchUser' are not assignable to type 'IFetchUserProps'
 !!! error TS2610:   Types of property 'children' are incompatible.
 !!! error TS2610:     Type '((user: IUser) => Element)[]' is not assignable to type '(user: IUser) => Element'.
 !!! error TS2610:       Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element'.
