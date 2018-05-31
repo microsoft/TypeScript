@@ -2533,6 +2533,46 @@ namespace ts {
             return getMergedSymbol(symbol.parent && getLateBoundSymbol(symbol.parent));
         }
 
+        /**
+         * Attempts to find the symbol corresponding to the container a symbol is in - usually this
+         * is just its' `.parent`, but for locals, this value is `undefined`
+         */
+        function getContainerOfSymbol(symbol: Symbol): Symbol | undefined {
+            const container = getParentOfSymbol(symbol);
+            if (container) {
+                return container;
+            }
+            const candidate = forEach(symbol.declarations, d => !isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent) ? getSymbolOfNode(d.parent) : undefined);
+            if (!candidate) {
+                return undefined;
+            }
+            const alias = getAliasForSymbolInContainer(candidate, symbol);
+            return alias ? candidate : undefined;
+        }
+
+        function getAliasForSymbolInContainer(container: Symbol, symbol: Symbol) {
+            if (container === getParentOfSymbol(symbol)) {
+                // fast path, `symbol` is either already the alias or isn't aliased
+                return symbol;
+            }
+            const exports = getExportsOfSymbol(container);
+            const quick = exports.get(symbol.escapedName);
+            if (quick && symbolRefersToTarget(quick)) {
+                return quick;
+            }
+            return forEachEntry(exports, exported => {
+                if (symbolRefersToTarget(exported)) {
+                    return exported;
+                }
+            });
+
+            function symbolRefersToTarget(s: Symbol) {
+                if (s === symbol || resolveSymbol(s) === symbol || resolveSymbol(s) === resolveSymbol(symbol)) {
+                    return s;
+                }
+            }
+        }
+
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol): Symbol;
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol | undefined): Symbol | undefined;
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol | undefined): Symbol | undefined {
@@ -2838,7 +2878,7 @@ namespace ts {
                     // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
                     // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
                     meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = getParentOfSymbol(symbol);
+                    symbol = getContainerOfSymbol(symbol);
                 }
 
                 // This could be a symbol that is not exported in the external module
@@ -3729,12 +3769,12 @@ namespace ts {
                         needsQualification(accessibleSymbolChain[0], context.enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
                         // Go up and add our parent.
-                        const parent = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
+                        const parent = getContainerOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
                         if (parent) {
                             const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                             if (parentChain) {
                                 parentSymbol = parent;
-                                accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [symbol]);
+                                accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
                             }
                         }
                     }
