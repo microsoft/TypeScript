@@ -1,8 +1,7 @@
 /* @internal */
 namespace ts {
-    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): DiagnosticWithLocation[] {
-        program.getSemanticDiagnostics(sourceFile);
-        const checker = program.getDiagnosticsProducingTypeChecker();
+    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
+        program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
 
         if (sourceFile.commonJsModuleIndicator &&
@@ -23,6 +22,18 @@ namespace ts {
                         }
                     }
                     break;
+                case SyntaxKind.VariableStatement:
+                    if (!isJsFile && node.parent === sourceFile) {
+                        const statement = node as VariableStatement;
+                        if (statement.declarationList.flags & NodeFlags.Const &&
+                            statement.declarationList.declarations.length === 1) {
+                            const init = statement.declarationList.declarations[0].initializer;
+                            if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
+                                diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
+                            }
+                        }
+                    }
+                    break;
             }
 
             if (!isJsFile && codefix.parameterShouldGetTypeFromJSDoc(node)) {
@@ -32,19 +43,6 @@ namespace ts {
             node.forEachChild(check);
         }
         check(sourceFile);
-
-        if (!isJsFile) {
-            for (const statement of sourceFile.statements) {
-                if (isVariableStatement(statement) &&
-                    statement.declarationList.flags & NodeFlags.Const &&
-                    statement.declarationList.declarations.length === 1) {
-                    const init = statement.declarationList.declarations[0].initializer;
-                    if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
-                        diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
-                    }
-                }
-            }
-        }
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             for (const moduleSpecifier of sourceFile.imports) {
@@ -60,7 +58,8 @@ namespace ts {
         }
 
         addRange(diags, sourceFile.bindSuggestionDiagnostics);
-        return diags.concat(checker.getSuggestionDiagnostics(sourceFile)).sort((d1, d2) => d1.start - d2.start);
+        addRange(diags, program.getSuggestionDiagnostics(sourceFile, cancellationToken));
+        return diags.sort((d1, d2) => d1.start - d2.start);
     }
 
     // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
