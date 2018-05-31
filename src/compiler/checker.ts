@@ -10056,6 +10056,121 @@ namespace ts {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
         }
 
+        function checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
+            if (!isTypeAssignableTo(source, target) && !elaborateError(expr, source, target)) {
+                return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
+            }
+            return false;
+        }
+
+        function elaborateError(node: Expression | undefined, source: Type, target: Type): boolean {
+            if (!node) return false;
+            switch (node.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                    return elaborateError((node as ParenthesizedExpression).expression, source, target);
+                case SyntaxKind.BinaryExpression:
+                    switch ((node as BinaryExpression).operatorToken.kind) {
+                        case SyntaxKind.EqualsToken:
+                        case SyntaxKind.CommaToken:
+                            return elaborateError((node as BinaryExpression).right, source, target);
+                    }
+                    break;
+                case SyntaxKind.ObjectLiteralExpression:
+                    return elaborateObjectLiteral(node as ObjectLiteralExpression, source, target);
+                case SyntaxKind.ArrayLiteralExpression:
+                    return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target);
+                case SyntaxKind.JsxAttributes:
+                    return elaborateJsxAttributes(node as JsxAttributes, source, target);
+            }
+            return false;
+        }
+
+        type ElaborationIterator = IterableIterator<[Node, Expression | undefined, Type]>;
+        function elaborateElementwise(iterator: ElaborationIterator, source: Type, target: Type) {
+            // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
+            let reportedError = false;
+            for (let status = iterator.next(); !status.done; status = iterator.next()) {
+                const [prop, next, nameType] = status.value;
+                const sourcePropType = getIndexedAccessType(source, nameType);
+                const targetPropType = getIndexedAccessType(target, nameType);
+                //const rootChain = () => chainDiagnosticMessages(
+                //    /*details*/ undefined,
+                //    Diagnostics.Types_of_property_0_are_incompatible,
+                //    stripQuotes(typeToString(nameType)), // quotes removed from string literal names so they aren't double quoted in the output
+                //);
+                if (!isTypeAssignableTo(sourcePropType, targetPropType)) {
+                    const elaborated = next && elaborateError(next, sourcePropType, targetPropType);
+                    if (elaborated) {
+                        reportedError = true;
+                    }
+                    else {
+                        // Issue error on the prop itself, since the prop couldn't elaborate the error
+                        checkTypeAssignableTo(sourcePropType, targetPropType, prop);
+                        reportedError = true;
+                    }
+                }
+            }
+            return reportedError;
+        }
+
+        function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
+            if (!length(node.properties)) return;
+            for (const prop of node.properties) {
+                if (isJsxSpreadAttribute(prop)) continue;
+                yield [prop.name, prop.initializer, getLiteralType(idText(prop.name))];
+            }
+        }
+
+        function elaborateJsxAttributes(node: JsxAttributes, source: Type, target: Type) {
+            return elaborateElementwise(generateJsxAttributes(node), source, target);
+        }
+
+        function *generateArrayElements(node: ArrayLiteralExpression): ElaborationIterator {
+            const len = length(node.elements);
+            if (!len) return;
+            for (let i = 0; i < len; i++) {
+                const elem = node.elements[i];
+                if (isOmittedExpression(elem)) continue;
+                const nameType = getLiteralType(i);
+                yield [elem, elem, nameType];
+            }
+        }
+
+        function elaborateArrayLiteral(node: ArrayLiteralExpression, source: Type, target: Type) {
+            if (isTupleLikeType(source)) {
+                return elaborateElementwise(generateArrayElements(node), source, target);
+            }
+            return false;
+        }
+
+        function *generateObjectliteralElements(node: ObjectLiteralExpression): ElaborationIterator {
+            if (!length(node.properties)) return;
+            for (const prop of node.properties) {
+                if (isSpreadAssignment(prop)) continue;
+                const type = getLiteralTypeFromPropertyName(getSymbolOfNode(prop), TypeFlags.StringOrNumberLiteralOrUnique);
+                if (!type || (type.flags & TypeFlags.Never)) {
+                    continue;
+                }
+                switch (prop.kind) {
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        yield [prop.name, undefined, type];
+                        break;
+                    case SyntaxKind.PropertyAssignment:
+                        yield [prop.name, prop.initializer, type];
+                        break;
+                    default:
+                        Debug.assertNever(prop);
+                }
+            }
+        }
+
+        function elaborateObjectLiteral(node: ObjectLiteralExpression, source: Type, target: Type) {
+            return elaborateElementwise(generateObjectliteralElements(node), source, target);
+        }
+
         /**
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'isTypeComparableTo'.
@@ -16940,30 +17055,7 @@ namespace ts {
                 }
             }
             else if (!isSourceAttributeTypeAssignableToTarget) {
-                // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
-                if (length(openingLikeElement.attributes.properties)) {
-                    let reportedError = false;
-                    for (const prop of openingLikeElement.attributes.properties) {
-                        if (isJsxSpreadAttribute(prop)) continue;
-                        const name = idText(prop.name);
-                        const sourcePropType = getIndexedAccessType(sourceAttributesType, getLiteralType(name));
-                        const targetPropType = getIndexedAccessType(targetAttributesType, getLiteralType(name));
-                        const rootChain = () => chainDiagnosticMessages(
-                            /*details*/ undefined,
-                            Diagnostics.Types_of_property_0_are_incompatible,
-                            name,
-                        );
-                        if (!checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, rootChain)) {
-                            reportedError = true;
-                        }
-                    }
-
-                    if (reportedError) {
-                        return;
-                    }
-                }
-                // Report fallback error on just the component name
-                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.tagName);
+                checkTypeAssignableToAndOptionallyElaborate(sourceAttributesType, targetAttributesType, openingLikeElement.tagName, openingLikeElement.attributes);
             }
         }
 
@@ -23321,7 +23413,7 @@ namespace ts {
                 // Don't validate for-in initializer as it is already an error
                 const initializer = getEffectiveInitializer(node);
                 if (initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(initializer), type, node, /*headMessage*/ undefined);
+                    checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(initializer), type, node, initializer, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
             }
@@ -23336,7 +23428,7 @@ namespace ts {
                     errorNextVariableOrPropertyDeclarationMustHaveSameType(type, node, declarationType);
                 }
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
+                    checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(node.initializer), declarationType, node, node.initializer, /*headMessage*/ undefined);
                 }
                 if (!areDeclarationFlagsIdentical(node, symbol.valueDeclaration)) {
                     error(getNameOfDeclaration(symbol.valueDeclaration), Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));

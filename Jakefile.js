@@ -249,7 +249,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --lib " + opts.lib;
         }
         else {
-            options += " --lib es5";
+            options += " --lib es2015";
         }
         options += " --noUnusedLocals --noUnusedParameters --strictNullChecks";
 

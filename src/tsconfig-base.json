@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["es5"],
+        "lib": ["es2015"],
         "noEmitOnError": true,
         "strictNullChecks": true,
         "noImplicitAny": true,
