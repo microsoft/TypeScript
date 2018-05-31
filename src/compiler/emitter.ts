@@ -1458,7 +1458,7 @@ namespace ts {
             }
 
             const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-            const allowTrailingComma = currentSourceFile.languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
+            const allowTrailingComma = currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma : ListFormat.None;
             emitList(node, node.properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
 
             if (indentedFlag) {
