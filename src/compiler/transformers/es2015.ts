@@ -4072,7 +4072,7 @@ namespace ts {
         priority: 0,
         text: `
             var __extends = (this && this.__extends) || (function () {
-                function extendStatics(d, b) {
+                var extendStatics = function (d, b) {
                     extendStatics = Object.setPrototypeOf ||
                         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
                         function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
