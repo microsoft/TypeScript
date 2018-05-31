@@ -24,7 +24,7 @@ namespace ts.FindAllReferences {
         textSpan: TextSpan;
     }
     export function nodeEntry(node: Node, isInString?: true): NodeEntry {
-        return { type: "node", node, isInString };
+        return { type: "node", node: (node as NamedDeclaration).name || node, isInString };
     }
 
     export interface Options {
@@ -76,7 +76,7 @@ namespace ts.FindAllReferences {
             // References to and accesses on the super keyword only have one possible implementation, so no
             // need to "Find all References"
             const symbol = checker.getSymbolAtLocation(node)!;
-            return symbol.valueDeclaration && [nodeEntry((symbol.valueDeclaration as NamedDeclaration).name || symbol.valueDeclaration)];
+            return symbol.valueDeclaration && [nodeEntry(symbol.valueDeclaration)];
         }
         else {
             // Perform "Find all References" and retrieve only those that are implementations
@@ -1112,7 +1112,7 @@ namespace ts.FindAllReferences.Core {
         // Check if the node is within an extends or implements clause
         const containingClass = getContainingClassIfInHeritageClause(refNode);
         if (containingClass) {
-            addReference(containingClass.name || containingClass);
+            addReference(containingClass);
             return;
         }
 
