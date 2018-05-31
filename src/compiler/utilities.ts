@@ -2825,13 +2825,26 @@ namespace ts {
         let lineCount: number;
         let linePos: number;
 
+        function updateLineCountAndPosFor(s: string) {
+            const lineStartsOfS = computeLineStarts(s);
+            if (lineStartsOfS.length > 1) {
+                lineCount = lineCount + lineStartsOfS.length - 1;
+                linePos = output.length - s.length + last(lineStartsOfS);
+                lineStart = (linePos - output.length) === 0;
+            }
+            else {
+                lineStart = false;
+            }
+        }
+
         function write(s: string) {
             if (s && s.length) {
                 if (lineStart) {
-                    output += getIndentString(indent);
+                    s = getIndentString(indent) + s;
                     lineStart = false;
                 }
                 output += s;
+                updateLineCountAndPosFor(s);
             }
         }
 
@@ -2845,21 +2858,14 @@ namespace ts {
 
         function rawWrite(s: string) {
             if (s !== undefined) {
-                if (lineStart) {
-                    lineStart = false;
-                }
                 output += s;
+                updateLineCountAndPosFor(s);
             }
         }
 
         function writeLiteral(s: string) {
             if (s && s.length) {
                 write(s);
-                const lineStartsOfS = computeLineStarts(s);
-                if (lineStartsOfS.length > 1) {
-                    lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + last(lineStartsOfS);
-                }
             }
         }
 
@@ -2873,7 +2879,9 @@ namespace ts {
         }
 
         function writeTextOfNode(text: string, node: Node) {
-            write(getTextOfNodeFromSourceText(text, node));
+            const s = getTextOfNodeFromSourceText(text, node);
+            write(s);
+            updateLineCountAndPosFor(s);
         }
 
         reset();

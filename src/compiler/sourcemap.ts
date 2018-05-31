@@ -151,8 +151,8 @@ namespace ts {
 
             // Initialize source map data
             completedSections = [];
-            sectionStartLine = 0;
-            sectionStartColumn = 0;
+            sectionStartLine = 1;
+            sectionStartColumn = 1;
             sourceMapData = {
                 sourceMapFilePath,
                 jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined!, // TODO: GH#18217
@@ -270,14 +270,11 @@ namespace ts {
 
         function generateMap(): SourceMap {
             if (completedSections.length) {
-                const last = {
-                    offset: { line: sectionStartLine, column: sectionStartColumn },
-                    map: captureSection()
-                };
+                captureSectionalSpanIfNeeded(/*reset*/ false);
                 return {
                     version: 3,
-                    file: last.map.file,
-                    sections: [...completedSections, last]
+                    file: sourceMapData.sourceMapFile,
+                    sections: completedSections
                 };
             }
             else {
@@ -353,8 +350,8 @@ namespace ts {
             sourceLinePos.line++;
             sourceLinePos.character++;
 
-            const emittedLine = writer.getLine() - sectionStartLine;
-            const emittedColumn = emittedLine === 0 ? writer.getColumn() - sectionStartColumn : writer.getColumn();
+            const emittedLine = writer.getLine() - sectionStartLine + 1;
+            const emittedColumn = emittedLine === 0 ? (writer.getColumn() - sectionStartColumn + 1) : writer.getColumn();
 
             // If this location wasn't recorded or the location in source is going backwards, record the span
             if (!lastRecordedSourceMapSpan ||
@@ -389,6 +386,15 @@ namespace ts {
             }
         }
 
+        function captureSectionalSpanIfNeeded(reset: boolean) {
+            if (lastRecordedSourceMapSpan && lastRecordedSourceMapSpan === lastEncodedSourceMapSpan) { // If we've recorded some spans, save them
+                completedSections.push({ offset: { line: sectionStartLine - 1, column: sectionStartColumn - 1 }, map: captureSection() });
+                if (reset) {
+                    resetSectionalData();
+                }
+            }
+        }
+
         /**
          * Emits a node with possible leading and trailing source maps.
          *
@@ -403,10 +409,7 @@ namespace ts {
 
             if (node) {
                 if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
-                    if (lastRecordedSourceMapSpan && lastRecordedSourceMapSpan === lastEncodedSourceMapSpan) { // If we've recorded some spans, save them
-                        completedSections.push({ offset: { line: sectionStartLine, column: sectionStartColumn }, map: captureSection() });
-                        resetSectionalData();
-                    }
+                    captureSectionalSpanIfNeeded(/*reset*/ true);
                     const text = node.sourceMapText;
                     let parsed: {} | undefined;
                     try {
@@ -415,7 +418,7 @@ namespace ts {
                     catch {
                         // empty
                     }
-                    const offset = { line: writer.getLine(), column: writer.getColumn() };
+                    const offset = { line: writer.getLine() - 1, column: writer.getColumn() - 1 };
                     completedSections.push(parsed
                         ? {
                             offset,
@@ -431,7 +434,7 @@ namespace ts {
                     sectionStartLine = writer.getLine();
                     sectionStartColumn = writer.getColumn();
                     lastRecordedSourceMapSpan = undefined!;
-                    lastEncodedSourceMapSpan = undefined!;
+                    lastEncodedSourceMapSpan = defaultLastEncodedSourceMapSpan;
                     return emitResult;
                 }
                 const emitNode = node.emitNode;
