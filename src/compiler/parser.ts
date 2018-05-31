@@ -7014,14 +7014,33 @@ namespace ts {
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
                     if (some(tags, isJSDocTemplateTag)) {
+                        // TODO: Get rid of this restriction after making sure it's ok elsewhere
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
-                    // Type parameter list looks like '@template T,U,V'
+                    // Type parameter list looks like '@template {Constraint} T,U,V'
                     const typeParameters = [];
                     const typeParametersPos = getNodePos();
-
-                    while (true) {
+                    const nameOrConstraint = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
+                    skipWhitespace();
+                    let parseMore = true;
+                    const isConstraint = token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.Identifier;
+                    if (!isConstraint) {
+                        const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                        if (!ts.isIdentifier(nameOrConstraint.type)) { return Debug.fail(); }
+                        typeParameter.name = nameOrConstraint.type;
+                        finishNode(typeParameter);
+                        typeParameters.push(typeParameter);
+                        if (token() === SyntaxKind.CommaToken) {
+                            // need to look for more type parameters
+                            nextJSDocToken();
+                            skipWhitespace();
+                        }
+                        else {
+                            parseMore = false;
+                        }
+                    }
+                    while (parseMore) {
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         const name = parseJSDocIdentifierNameWithOptionalBraces();
                         skipWhitespace();
@@ -7042,6 +7061,11 @@ namespace ts {
                         else {
                             break;
                         }
+                    }
+
+                    if (isConstraint) {
+                        Debug.assert(!!typeParameters.length);
+                        typeParameters[0].constraint = nameOrConstraint.type;
                     }
 
                     const result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
