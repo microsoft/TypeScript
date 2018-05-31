@@ -902,11 +902,17 @@ namespace ts {
             return result;
         }
 
-        function mergeSymbol(target: Symbol, source: Symbol) {
+        /**
+         * Note: if target is transient, then it is mutable, and mergeSymbol with both mutate and return it.
+         * If target is not transient, mergeSymbol will produce a transient clone, mutate that and return it.
+         */
+        function mergeSymbol(target: Symbol, source: Symbol): Symbol {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
-                const targetValueDeclaration = target.valueDeclaration;
-                Debug.assert(!!(target.flags & SymbolFlags.Transient));
+                Debug.assert(source !== target);
+                if (!(target.flags & SymbolFlags.Transient)) {
+                    target = cloneSymbol(target);
+                }
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -928,18 +934,6 @@ namespace ts {
                     if (!target.exports) target.exports = createSymbolTable();
                     mergeSymbolTable(target.exports, source.exports);
                 }
-                if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
-                    const sourceInitializer = getJSInitializerSymbol(source)!;
-                    const init = getDeclaredJavascriptInitializer(targetValueDeclaration) || getAssignedJavascriptInitializer(targetValueDeclaration);
-                    let targetInitializer = init && init.symbol ? init.symbol : target;
-                    if (!(targetInitializer.flags & SymbolFlags.Transient)) {
-                        const mergedInitializer = getMergedSymbol(targetInitializer);
-                        targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
-                    }
-                    if (sourceInitializer !== source || targetInitializer !== target) {
-                        mergeSymbol(targetInitializer, sourceInitializer);
-                    }
-                }
                 recordMergedSymbol(target, source);
             }
             else if (target.flags & SymbolFlags.NamespaceModule) {
@@ -960,11 +954,12 @@ namespace ts {
                     error(errorNode, message, symbolToString(source));
                 });
             }
+            return target;
         }
 
         function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined {
-            if (!first || first.size === 0) return second;
-            if (!second || second.size === 0) return first;
+            if (!hasEntries(first)) return second;
+            if (!hasEntries(second)) return first;
             const combined = createSymbolTable();
             mergeSymbolTable(combined, first);
             mergeSymbolTable(combined, second);
@@ -973,17 +968,7 @@ namespace ts {
 
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             source.forEach((sourceSymbol, id) => {
-                let targetSymbol = target.get(id);
-                if (!targetSymbol) {
-                    target.set(id, sourceSymbol);
-                }
-                else {
-                    if (!(targetSymbol.flags & SymbolFlags.Transient)) {
-                        targetSymbol = cloneSymbol(targetSymbol);
-                        target.set(id, targetSymbol);
-                    }
-                    mergeSymbol(targetSymbol, sourceSymbol);
-                }
+                target.set(id, target.has(id) ? mergeSymbol(target.get(id)!, sourceSymbol) : sourceSymbol);
             });
         }
 
@@ -1013,10 +998,7 @@ namespace ts {
                 // obtain item referenced by 'export='
                 mainModule = resolveExternalModuleSymbol(mainModule);
                 if (mainModule.flags & SymbolFlags.Namespace) {
-                    // if module symbol has already been merged - it is safe to use it.
-                    // otherwise clone it
-                    mainModule = mainModule.flags & SymbolFlags.Transient ? mainModule : cloneSymbol(mainModule);
-                    mergeSymbol(mainModule, moduleAugmentation.symbol);
+                    mainModule = mergeSymbol(mainModule, moduleAugmentation.symbol);
                 }
                 else {
                     // moduleName will be a StringLiteral since this is not `declare global`.
@@ -2137,14 +2119,6 @@ namespace ts {
                     return namespace;
                 }
                 if (isInJavaScriptFile(name)) {
-                    const initializer = getDeclaredJavascriptInitializer(namespace.valueDeclaration) || getAssignedJavascriptInitializer(namespace.valueDeclaration);
-                    if (initializer) {
-                        namespace = getSymbolOfNode(initializer)!;
-                    }
-                    // Currently, IIFEs may not have a symbol and we don't know about their contents. Give up in this case.
-                    if (!namespace) {
-                        return undefined;
-                    }
                     if (namespace.valueDeclaration &&
                         isVariableDeclaration(namespace.valueDeclaration) &&
                         namespace.valueDeclaration.initializer &&
@@ -2337,14 +2311,7 @@ namespace ts {
             }
             moduleSymbol.exports!.forEach((s, name) => {
                 if (name === InternalSymbolName.ExportEquals) return;
-                if (!merged.exports!.has(name)) {
-                    merged.exports!.set(name, s);
-                }
-                else {
-                    const ms = cloneSymbol(merged.exports!.get(name)!);
-                    mergeSymbol(ms, s);
-                    merged.exports!.set(name, ms);
-                }
+                merged.exports!.set(name, merged.exports!.has(name) ? mergeSymbol(merged.exports!.get(name)!, s) : s);
             });
             return merged;
         }
@@ -4979,6 +4946,8 @@ namespace ts {
                 else if (isJSDocPropertyLikeTag(declaration)
                     || isPropertyAccessExpression(declaration)
                     || isIdentifier(declaration)
+                    || isClassDeclaration(declaration)
+                    || isFunctionDeclaration(declaration)
                     || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
                     || isMethodSignature(declaration)) {
 
@@ -5008,7 +4977,7 @@ namespace ts {
                     type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
                 }
                 else {
-                    return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration));
+                    return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
                 }
 
                 if (!popTypeResolution()) {
@@ -5110,8 +5079,25 @@ namespace ts {
         }
 
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
-            const links = getSymbolLinks(symbol);
+            let links = getSymbolLinks(symbol);
             if (!links.type) {
+                const jsDeclaration = getDeclarationOfJSInitializer(symbol.valueDeclaration);
+                if (jsDeclaration) {
+                    const jsSymbol = getSymbolOfNode(jsDeclaration);
+                    if (jsSymbol && (hasEntries(jsSymbol.exports) || hasEntries(jsSymbol.members))) {
+                        symbol = cloneSymbol(symbol);
+                        // note:we overwrite links because we just cloned the symbol
+                        links = symbol as TransientSymbol;
+                        if (hasEntries(jsSymbol.exports)) {
+                            symbol.exports = symbol.exports || createSymbolTable();
+                            mergeSymbolTable(symbol.exports, jsSymbol.exports);
+                        }
+                        if (hasEntries(jsSymbol.members)) {
+                            symbol.members = symbol.members || createSymbolTable();
+                            mergeSymbolTable(symbol.members, jsSymbol.members);
+                        }
+                    }
+                }
                 if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
@@ -7459,18 +7445,17 @@ namespace ts {
             const result: Signature[] = [];
             for (let i = 0; i < symbol.declarations.length; i++) {
                 const decl = symbol.declarations[i];
-                const node = isPropertyAccessExpression(decl) ? getAssignedJavascriptInitializer(decl)! : decl; // TODO: GH#18217
-                if (!isFunctionLike(node)) continue;
+                if (!isFunctionLike(decl)) continue;
                 // Don't include signature if node is the implementation of an overloaded function. A node is considered
                 // an implementation node if it has a body and the previous node is of the same kind and immediately
                 // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
-                if (i > 0 && (node as FunctionLikeDeclaration).body) {
+                if (i > 0 && (decl as FunctionLikeDeclaration).body) {
                     const previous = symbol.declarations[i - 1];
-                    if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
+                    if (decl.parent === previous.parent && decl.kind === previous.kind && decl.pos === previous.end) {
                         continue;
                     }
                 }
-                result.push(getSignatureFromDeclaration(node));
+                result.push(getSignatureFromDeclaration(decl));
             }
             return result;
         }
@@ -15312,7 +15297,7 @@ namespace ts {
                     // expression has no contextual type, the right operand is contextually typed by the type of the left operand,
                     // except for the special case of Javascript declarations of the form `namespace.prop = namespace.prop || {}`
                     const type = getContextualType(binaryExpression);
-                    return !type && node === right && !getDeclaredJavascriptInitializer(binaryExpression.parent) && !getAssignedJavascriptInitializer(binaryExpression) ?
+                    return !type && node === right && !isDefaultedJavascriptInitializer(binaryExpression) ?
                         getTypeOfExpression(left) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
@@ -15321,6 +15306,7 @@ namespace ts {
                     return undefined;
             }
         }
+
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for special property assignments to avoid circularity.
         function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
@@ -15988,13 +15974,16 @@ namespace ts {
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
 
-            if (isInJSFile && node.properties.length === 0) {
-                // an empty JS object literal that nonetheless has members is a JS namespace
-                const symbol = getSymbolOfNode(node);
-                if (symbol.exports) {
-                    propertiesTable = symbol.exports;
-                    symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
-                    return createObjectLiteralType();
+            if (isInJSFile) {
+                const decl = getDeclarationOfJSInitializer(node);
+                if (decl) {
+                    // a JS object literal whose declaration's symbol has exports is a JS namespace
+                    const symbol = getMergedSymbol(decl.symbol);
+                    if (symbol && hasEntries(symbol.exports)) {
+                        propertiesTable = symbol.exports;
+                        symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
+                        return createObjectLiteralType();
+                    }
                 }
             }
             propertiesTable = createSymbolTable();
@@ -19096,10 +19085,6 @@ namespace ts {
         }
 
         function getJavaScriptClassType(symbol: Symbol): Type | undefined {
-            const initializer = getDeclaredJavascriptInitializer(symbol.valueDeclaration);
-            if (initializer) {
-                symbol = getSymbolOfNode(initializer)!;
-            }
             let inferred: Type | undefined;
             if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                 inferred = getInferredClassType(symbol);
@@ -19210,7 +19195,17 @@ namespace ts {
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
                 return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
-            return returnType;
+            let jsAssignmentType: Type | undefined;
+            if (isInJavaScriptFile(node)) {
+                const decl = getDeclarationOfJSInitializer(node);
+                if (decl) {
+                    const jsSymbol = getSymbolOfNode(decl);
+                    if (jsSymbol && hasEntries(jsSymbol.exports)) {
+                        jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+                    }
+                }
+            }
+            return jsAssignmentType ? getIntersectionType([returnType, jsAssignmentType]) : returnType;
         }
 
         function isSymbolOrSymbolForCall(node: Node) {
@@ -20706,13 +20701,12 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
-            const inJs = isInJavaScriptFile(declaration);
-            const initializer = inJs && getDeclaredJavascriptInitializer(declaration) || declaration.initializer!;
+            const initializer = getEffectiveInitializer(declaration)!;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
-            if (inJs) {
+            if (isInJavaScriptFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     if (noImplicitAny) {
                         reportImplicitAnyError(declaration, anyType);
@@ -23338,8 +23332,8 @@ namespace ts {
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error
-                if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    const initializer = isInJavaScriptFile(node) && getDeclaredJavascriptInitializer(node) || node.initializer;
+                const initializer = getEffectiveInitializer(node);
+                if (initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     checkTypeAssignableTo(checkExpressionCached(initializer), type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }

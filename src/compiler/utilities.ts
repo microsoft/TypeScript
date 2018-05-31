@@ -1560,28 +1560,49 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    /**
-     * Given the symbol of a declaration, find the symbol of its Javascript container-like initializer,
-     * if it has one. Otherwise just return the original symbol.
-     *
-     * Container-like initializer behave like namespaces, so the binder needs to add contained symbols
-     * to their exports. An example is a function with assignments to `this` inside.
-     */
-    export function getJSInitializerSymbol(symbol: Symbol | undefined) {
-        if (!symbol || !symbol.valueDeclaration) {
-            return symbol;
+    export function getDeclarationOfJSInitializer(node: Node): Node | undefined {
+        if (!isInJavaScriptFile(node) || !node.parent) {
+            return undefined;
         }
-        const declaration = symbol.valueDeclaration;
-        const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration);
-        return e && e.symbol ? e.symbol : symbol;
+        let name: Expression | BindingName | undefined;
+        let decl: Node | undefined;
+        if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
+            name = node.parent.name;
+            decl = node.parent;
+        }
+        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.right === node) {
+            name = node.parent.left;
+            decl = name;
+        }
+        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken) {
+            if (isVariableDeclaration(node.parent.parent) && node.parent.parent.initializer === node.parent) {
+                name = node.parent.parent.name;
+                decl = node.parent.parent;
+            }
+            else if (isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.parent.right === node.parent) {
+                name = node.parent.parent.left;
+                decl = name;
+            }
+
+            if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
+                return undefined;
+            }
+        }
+
+        if (!name || !getJavascriptInitializer(node, isPrototypeAccess(name))) {
+            return undefined;
+        }
+        return decl;
     }
 
-    /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
-    export function getDeclaredJavascriptInitializer(node: Node) {
-        if (node && isVariableDeclaration(node) && node.initializer) {
-            return getJavascriptInitializer(node.initializer, /*isPrototypeAssignment*/ false) ||
-                isIdentifier(node.name) && getDefaultedJavascriptInitializer(node.name, node.initializer, /*isPrototypeAssignment*/ false);
+    /** Get the initializer, taking into account defaulted Javascript initializers */
+    export function getEffectiveInitializer(node: HasExpressionInitializer) {
+        if (isInJavaScriptFile(node) && node.initializer &&
+            isBinaryExpression(node.initializer) && node.initializer.operatorToken.kind === SyntaxKind.BarBarToken &&
+            node.name && isEntityNameExpression(node.name) && isSameEntityName(node.name, node.initializer.left)) {
+            return node.initializer.right;
         }
+        return node.initializer;
     }
 
     /**
@@ -1636,6 +1657,13 @@ namespace ts {
         }
     }
 
+    export function isDefaultedJavascriptInitializer(node: BinaryExpression) {
+        const name = isVariableDeclaration(node.parent) ? node.parent.name :
+            isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken ? node.parent.left :
+            undefined;
+        return name && getJavascriptInitializer(node.right, isPrototypeAccess(name)) && isEntityNameExpression(name) && isSameEntityName(name, node.left);
+    }
+
     /** Given a Javascript initializer, return the outer name. That is, the lhs of the assignment or the declaration name. */
     export function getOuterNameOfJsInitializer(node: Declaration): DeclarationName | undefined {
         if (isBinaryExpression(node.parent)) {
@@ -1658,7 +1686,7 @@ namespace ts {
      * var min = window.min || {}
      * my.app = self.my.app || class { }
      */
-    function isSameEntityName(name: EntityNameExpression, initializer: EntityNameExpression): boolean {
+    function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isIdentifier(name) && isIdentifier(initializer)) {
             return name.escapedText === initializer.escapedText;
         }
