@@ -683,6 +683,7 @@ namespace ts {
             getOptionsDiagnostics,
             getGlobalDiagnostics,
             getSemanticDiagnostics,
+            getSuggestionDiagnostics,
             getDeclarationDiagnostics,
             getTypeChecker,
             getClassifiableNames,
@@ -1419,6 +1420,12 @@ namespace ts {
                     }
                 }
                 return diagnostics;
+            });
+        }
+
+        function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+            return runWithCancellationToken(() => {
+                return getDiagnosticsProducingTypeChecker().getSuggestionDiagnostics(sourceFile, cancellationToken);
             });
         }
 

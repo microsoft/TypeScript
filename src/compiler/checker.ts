@@ -310,21 +310,34 @@ namespace ts {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
                 return node && getTypeArgumentConstraint(node);
             },
+            getSuggestionDiagnostics: (file, ct) => {
+                let diagnostics: DiagnosticWithLocation[] | undefined;
+                try {
+                    // Record the cancellation token so it can be checked later on during checkSourceElement.
+                    // Do this in a finally block so we can ensure that it gets reset back to nothing after
+                    // this call is done.
+                    cancellationToken = ct;
 
-            getSuggestionDiagnostics: file => {
-                return (suggestionDiagnostics.get(file.fileName) || emptyArray).concat(getUnusedDiagnostics());
-                function getUnusedDiagnostics(): ReadonlyArray<DiagnosticWithLocation> {
-                    if (file.isDeclarationFile) return emptyArray;
-
+                    // Ensure file is type checked
                     checkSourceFile(file);
-                    const diagnostics: DiagnosticWithLocation[] = [];
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
+
+                    diagnostics = addRange(diagnostics, suggestionDiagnostics.get(file.fileName));
+                    if (!file.isDeclarationFile && (!unusedIsError(UnusedKind.Local) || !unusedIsError(UnusedKind.Parameter))) {
+                        addUnusedDiagnostics();
+                    }
+                    return diagnostics || emptyArray;
+                }
+                finally {
+                    cancellationToken = undefined;
+                }
+
+                function addUnusedDiagnostics() {
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (kind, diag) => {
                         if (!unusedIsError(kind)) {
-                            diagnostics.push({ ...diag, category: DiagnosticCategory.Suggestion });
+                            (diagnostics || (diagnostics = [])).push({ ...diag, category: DiagnosticCategory.Suggestion });
                         }
                     });
-                    return diagnostics;
                 }
             },
 

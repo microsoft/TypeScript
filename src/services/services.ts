@@ -1415,7 +1415,7 @@ namespace ts {
 
         function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
-            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program);
+            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);
         }
 
         function getCompilerOptionsDiagnostics() {
