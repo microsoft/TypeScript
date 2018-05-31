@@ -2817,6 +2817,7 @@ namespace ts {
         basePaths: ReadonlyArray<string>;
     }
 
+    /** @param path directory of the tsconfig.json */
     export function getFileMatcherPatterns(path: string, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
@@ -2831,16 +2832,20 @@ namespace ts {
         };
     }
 
+    export function getRegexFromPattern(pattern: string, useCaseSensitiveFileNames: boolean): RegExp {
+        return new RegExp(pattern, useCaseSensitiveFileNames ? "" : "i");
+    }
+
+    /** @param path directory of the tsconfig.json */
     export function matchFiles(path: string, extensions: ReadonlyArray<string> | undefined, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
-        const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
-        const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
-        const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
+        const includeDirectoryRegex = patterns.includeDirectoryPattern && getRegexFromPattern(patterns.includeDirectoryPattern, useCaseSensitiveFileNames);
+        const excludeRegex = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, useCaseSensitiveFileNames);
 
         // Associate an array of results with each include regex. This keeps results in order of the "include" order.
         // If there are no "includes", then just put everything in results[0].

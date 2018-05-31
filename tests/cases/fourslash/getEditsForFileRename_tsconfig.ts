@@ -1,31 +1,37 @@
 /// <reference path='fourslash.ts' />
 
-// @Filename: /tsconfig.json
+// @Filename: /src/tsconfig.json
 ////{
-////    "files": ["/src/old/a.ts"],
-////    "include": ["/src/old"],
-////    "exclude": ["/src/old"],
-////    "baseUrl": "/src/old",
-////    "typeRoots": ["/src/old"],
-////    "mapRoot": ["/src/old"],
-////    "rootDir": "/src/old",
-////    "rootDirs": ["/src/old"],
+////    "files": ["old/a.ts"],
+////    "include": ["old/*.ts"],
+////    "exclude": ["old"],
+////    "baseUrl": "old",
+////    "typeRoots": ["old"],
+////    "mapRoot": ["old"],
+////    "rootDir": "old",
+////    "rootDirs": ["old"],
+////    "paths": {
+////        "foo": ["old"],
+////    },
 ////}
 
 verify.getEditsForFileRename({
     oldPath: "/src/old",
     newPath: "/src/new",
     newFileContents: {
-        "/tsconfig.json":
+        "/src/tsconfig.json":
 `{
-    "files": ["/src/new/a.ts"],
-    "include": ["/src/new"],
-    "exclude": ["/src/new"],
-    "baseUrl": "/src/new",
-    "typeRoots": ["/src/new"],
-    "mapRoot": ["/src/new"],
-    "rootDir": "/src/new",
-    "rootDirs": ["/src/new"],
+    "files": ["new/a.ts"],
+    "include": ["new/*.ts"],
+    "exclude": ["new"],
+    "baseUrl": "new",
+    "typeRoots": ["new"],
+    "mapRoot": ["new"],
+    "rootDir": "new",
+    "rootDirs": ["new"],
+    "paths": {
+        "foo": ["new"],
+    },
 }`,
     },
 });

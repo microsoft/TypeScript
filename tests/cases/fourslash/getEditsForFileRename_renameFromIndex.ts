@@ -19,7 +19,7 @@
 ////
 
 // @Filename: /tsconfig.json
-////{ "files": ["/a.ts", "/src/a.ts", "/src/foo/a.ts", "/src/index.ts"] }
+////{ "files": ["a.ts", "src/a.ts", "src/foo/a.ts", "src/index.ts"] }
 
 verify.getEditsForFileRename({
     oldPath: "/src/index.ts",
@@ -38,6 +38,6 @@ import old2 from "./new";`,
 import old from "../new";
 import old2 from "../new";`,
         "/tsconfig.json":
-'{ "files": ["/a.ts", "/src/a.ts", "/src/foo/a.ts", "/src/new.ts"] }',
+'{ "files": ["a.ts", "src/a.ts", "src/foo/a.ts", "src/new.ts"] }',
     },
 });

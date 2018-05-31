@@ -490,7 +490,7 @@ namespace ts.textChanges {
             else if (isStatement(node) || isClassOrTypeElement(node)) {
                 return { suffix: this.newLineCharacter };
             }
-            else if (isVariableDeclaration(node)) {
+            else if (isVariableDeclaration(node) || isStringLiteral(node)) {
                 return { prefix: ", " };
             }
             else if (isPropertyAssignment(node)) {

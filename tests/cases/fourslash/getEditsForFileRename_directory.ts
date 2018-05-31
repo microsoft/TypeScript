@@ -29,7 +29,7 @@
 ////
 
 // @Filename: /tsconfig.json
-////{ "files": ["/a.ts", "/src/b.ts", "/src/foo/c.ts", "/src/old/index.ts", "/src/old/file.ts"] }
+////{ "files": ["a.ts", "src/b.ts", "src/foo/c.ts", "src/old/index.ts", "src/old/file.ts"] }
 
 verify.getEditsForFileRename({
     oldPath: "/src/old",
@@ -56,6 +56,6 @@ export default 0;`,
         // No change to /src/new
 
         "/tsconfig.json":
-`{ "files": ["/a.ts", "/src/b.ts", "/src/foo/c.ts", "/src/new/index.ts", "/src/new/file.ts"] }`,
+`{ "files": ["a.ts", "src/b.ts", "src/foo/c.ts", "src/new/index.ts", "src/new/file.ts"] }`,
     },
 });

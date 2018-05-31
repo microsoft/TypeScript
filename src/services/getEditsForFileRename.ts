@@ -1,11 +1,12 @@
 /* @internal */
 namespace ts {
     export function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): ReadonlyArray<FileTextChanges> {
-        const getCanonicalFileName = hostGetCanonicalFileName(host);
+        const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName);
         const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
-            updateTsconfigFiles(program, changeTracker, oldToNew);
+            updateTsconfigFiles(program, changeTracker, oldToNew, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
             updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
         });
     }
@@ -22,34 +23,76 @@ namespace ts {
         };
     }
 
-    function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater): void {
+    function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
         const { configFile } = program.getCompilerOptions();
         if (!configFile) return;
+        const configDir = getDirectoryPath(configFile.fileName);
+
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
         if (!jsonObjectLiteral) return;
 
         for (const property of jsonObjectLiteral.properties) {
             if (!isPropertyAssignment(property) || !isStringLiteral(property.name)) continue;
-            switch (property.name.text) {
-                case "files":
-                case "include":
-                case "exclude":
-                case "baseUrl":
-                case "typeRoots":
-                case "mapRoot":
-                case "rootDir":
-                case "rootDirs":
-                    const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
-                    for (const element of elements) {
-                        if (!isStringLiteral(element)) continue;
+            const propertyName = property.name.text;
 
-                        const updated = oldToNew(element.text);
-                        if (updated !== undefined) {
-                            changeTracker.replaceRangeWithText(configFile, createStringRange(element, configFile), updated);
-                        }
+            if (isPathsPropertyName(propertyName)) {
+                // Type annotation needed due to #7294
+                const elements: ReadonlyArray<Expression> = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+                let foundExactMatch = false;
+                for (const element of elements) {
+                    foundExactMatch = tryUpdateString(element) || foundExactMatch;
+                }
+                if (!foundExactMatch && propertyName === "include") {
+                    const includes = mapDefined(elements, e => isStringLiteral(e) ? e.text : undefined);
+                    const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
+                    // If there isn't some include for this, add a new one.
+                    if (!getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
+                        changeTracker.insertNodeAfter(configFile, last(elements), createStringLiteral(relativePath(newFileOrDirPath)));
                     }
-
+                }
             }
+            else if (propertyName === "paths") {
+                if (!isObjectLiteralExpression(property.initializer)) continue;
+                for (const pathsProperty of property.initializer.properties) {
+                    if (!isPropertyAssignment(pathsProperty) || !isArrayLiteralExpression(pathsProperty.initializer)) continue;
+                    for (const e of pathsProperty.initializer.elements) {
+                        tryUpdateString(e);
+                    }
+                }
+            }
+        }
+
+        function tryUpdateString(element: Expression): boolean {
+            if (!isStringLiteral(element)) return false;
+            const elementFileName = combinePathsSafe(configDir, element.text);
+
+            const updated = oldToNew(elementFileName);
+            if (updated !== undefined) {
+                changeTracker.replaceRangeWithText(configFile!, createStringRange(element, configFile!), relativePath(updated));
+                return true;
+            }
+            return false;
+        }
+
+        function relativePath(path: string): string {
+            return getRelativePathFromDirectory(configDir, path, /*ignoreCase*/ !useCaseSensitiveFileNames);
+        }
+    }
+
+    function isPathsPropertyName(propertyName: string): boolean {
+        switch (propertyName) {
+            case "includes":
+            case "files":
+            case "include":
+            case "exclude":
+            case "baseUrl":
+            case "typeRoots":
+            case "mapRoot":
+            case "rootDir":
+            case "rootDirs":
+                return true;
+            default:
+                return false;
         }
     }
 

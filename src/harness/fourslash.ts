@@ -3131,8 +3131,12 @@ Actual: ${stringify(fullActual)}`);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.defaultPreferences)!;
-            for (const edit of editInfo.edits) {
-                const newContent = options.newFileContents[edit.fileName];
+            this.testNewFileContents(editInfo.edits, options.newFileContents);
+        }
+
+        private testNewFileContents(edits: ReadonlyArray<ts.FileTextChanges>, newFileContents: { [fileName: string]: string }): void {
+            for (const edit of edits) {
+                const newContent = newFileContents[edit.fileName];
                 if (newContent === undefined) {
                     this.raiseError(`There was an edit in ${edit.fileName} but new content was not specified.`);
                 }
@@ -3149,8 +3153,8 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
 
-            for (const fileName in options.newFileContents) {
-                assert(editInfo.edits.some(e => e.fileName === fileName));
+            for (const fileName in newFileContents) {
+                assert(edits.some(e => e.fileName === fileName));
             }
         }
 
@@ -3361,11 +3365,7 @@ Actual: ${stringify(fullActual)}`);
 
         public getEditsForFileRename(options: FourSlashInterface.GetEditsForFileRenameOptions): void {
             const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings, ts.defaultPreferences);
-            this.applyChanges(changes);
-            for (const fileName in options.newFileContents) {
-                this.openFile(fileName);
-                this.verifyCurrentFileContent(options.newFileContents[fileName]);
-            }
+            this.testNewFileContents(changes, options.newFileContents);
         }
 
         private getApplicableRefactors(positionOrRange: number | ts.TextRange, preferences = ts.defaultPreferences): ReadonlyArray<ts.ApplicableRefactorInfo> {

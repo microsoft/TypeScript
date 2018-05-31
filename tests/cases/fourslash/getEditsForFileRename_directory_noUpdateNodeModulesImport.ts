@@ -9,8 +9,5 @@
 verify.getEditsForFileRename({
     oldPath: "/a/b",
     newPath: "/a/d",
-    newFileContents: {
-        "/a/b/file1.ts":
-`import { foo } from "foo";`,
-    },
+    newFileContents: {},
 });
