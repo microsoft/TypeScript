@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(16,2): error TS2322: Type '{ q: string; }' is not assignable to type '{ m: string; }'.
+tests/cases/conformance/jsx/file.tsx(16,2): error TS2610: The attributes provided to span are not assignable to type '{ m: string; }'
   Property 'm' is missing in type '{ q: string; }'.
 
 
@@ -20,6 +20,6 @@ tests/cases/conformance/jsx/file.tsx(16,2): error TS2322: Type '{ q: string; }' 
     // Error
     <span q='' />;
      ~~~~
-!!! error TS2322: Type '{ q: string; }' is not assignable to type '{ m: string; }'.
-!!! error TS2322:   Property 'm' is missing in type '{ q: string; }'.
+!!! error TS2610: The attributes provided to span are not assignable to type '{ m: string; }'
+!!! error TS2610:   Property 'm' is missing in type '{ q: string; }'.
     

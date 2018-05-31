@@ -10654,15 +10654,17 @@ namespace ts {
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
-                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes && target.flags & TypeFlags.Intersection) {
-                        const targetTypes = (target as IntersectionType).types;
+                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes) {
+                        const targetTypes = target.flags & TypeFlags.Intersection ? (target as IntersectionType).types : emptyArray;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
-                        if (intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
-                            (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
-                            // do not report top error
-                            return result;
+                        if (intrinsicAttributes === errorType || intrinsicClassAttributes === errorType ||
+                            (!contains(targetTypes, intrinsicAttributes) && !contains(targetTypes, intrinsicClassAttributes))) {
+                            // only report an error when the target isn't the intersection type with Intrinsic[Class]Attributes
+                            const componentName = errorNode && isIdentifier(errorNode) ? unescapeLeadingUnderscores(errorNode.escapedText) : "the component";
+                            reportError(Diagnostics.The_attributes_provided_to_0_are_not_assignable_to_type_1, componentName, typeToString(target));
                         }
+                        return result;
                     }
                     reportRelationError(headMessage, source, target);
                 }
