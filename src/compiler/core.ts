@@ -169,6 +169,10 @@ namespace ts {
         return array ? array.length : 0;
     }
 
+    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
+        return !!map && !!map.size;
+    }
+
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.

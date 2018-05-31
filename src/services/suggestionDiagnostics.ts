@@ -14,15 +14,25 @@ namespace ts {
         const isJsFile = isSourceFileJavaScript(sourceFile);
 
         function check(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                    if (isJsFile) {
-                        if (node.symbol.members && (node.symbol.members.size > 0)) {
+            if (isJsFile) {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionExpression:
+                        const decl = getDeclarationOfJSInitializer(node);
+                        if (decl) {
+                            const symbol = decl.symbol;
+                            if (symbol && (symbol.exports && symbol.exports.size || symbol.members && symbol.members.size)) {
+                                diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
+                                break;
+                            }
+                        }
+                        // falls through if no diagnostic was created
+                    case SyntaxKind.FunctionDeclaration:
+                        const symbol = node.symbol;
+                        if (symbol.members && (symbol.members.size > 0)) {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
+                        break;
                     }
-                    break;
             }
 
             if (!isJsFile && codefix.parameterShouldGetTypeFromJSDoc(node)) {

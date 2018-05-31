@@ -28,8 +28,8 @@ var pos = new Outer.Pos(1, 'x');
 >Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
 
 pos.line;
->pos.line : Symbol(Pos.line, Decl(usage.js, 1, 35))
+>pos.line : Symbol(Outer.Pos.line, Decl(usage.js, 1, 35))
 >pos : Symbol(pos, Decl(usage.js, 4, 3))
->line : Symbol(Pos.line, Decl(usage.js, 1, 35))
+>line : Symbol(Outer.Pos.line, Decl(usage.js, 1, 35))
 
 

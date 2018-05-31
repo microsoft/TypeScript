@@ -1,22 +1,22 @@
 === tests/cases/conformance/salsa/module.js ===
 var Outer = {}
->Outer : { [x: string]: any; Inner(): void; }
->{} : { [x: string]: any; Inner(): void; }
+>Outer : { [x: string]: any; Inner: typeof Inner; }
+>{} : { [x: string]: any; Inner: typeof Inner; }
 
 Outer.Inner = function() {}
 >Outer.Inner = function() {} : typeof Inner
 >Outer.Inner : typeof Inner
->Outer : { [x: string]: any; Inner(): void; }
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
 >function() {} : typeof Inner
 
 Outer.Inner.prototype = {
 >Outer.Inner.prototype = {    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
->Outer.Inner.prototype : any
+>Outer.Inner.prototype : { [x: string]: any; m(): void; i: number; }
 >Outer.Inner : typeof Inner
->Outer : { [x: string]: any; Inner(): void; }
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
->prototype : any
+>prototype : { [x: string]: any; m(): void; i: number; }
 >{    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
 
     m() { },
@@ -30,29 +30,29 @@ Outer.Inner.prototype = {
 Outer.Inner.prototype.j = 2
 >Outer.Inner.prototype.j = 2 : 2
 >Outer.Inner.prototype.j : any
->Outer.Inner.prototype : any
+>Outer.Inner.prototype : { [x: string]: any; m(): void; i: number; }
 >Outer.Inner : typeof Inner
->Outer : { [x: string]: any; Inner(): void; }
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
->prototype : any
+>prototype : { [x: string]: any; m(): void; i: number; }
 >j : any
 >2 : 2
 
 /** @type {string} */
 Outer.Inner.prototype.k;
 >Outer.Inner.prototype.k : any
->Outer.Inner.prototype : any
+>Outer.Inner.prototype : { [x: string]: any; m(): void; i: number; }
 >Outer.Inner : typeof Inner
->Outer : { [x: string]: any; Inner(): void; }
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
->prototype : any
+>prototype : { [x: string]: any; m(): void; i: number; }
 >k : any
 
 var inner = new Outer.Inner()
 >inner : Inner & { [x: string]: any; m(): void; i: number; }
 >new Outer.Inner() : Inner & { [x: string]: any; m(): void; i: number; }
 >Outer.Inner : typeof Inner
->Outer : { [x: string]: any; Inner(): void; }
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
 
 inner.m()
