@@ -17,12 +17,28 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
+
                     if (isJsFile) {
                         const symbol = node.symbol;
                         if (symbol.members && (symbol.members.size > 0)) {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
                     }
+                    
+                    if(node.modifiers && containsAsync(node.modifiers)){
+                        break;
+                    }
+
+                    const returnType = checker.getReturnTypeOfSignature(checker.getSignatureFromDeclaration(<FunctionDeclaration | FunctionExpression> node))
+                    if(!returnType || !returnType.symbol){
+                        break;
+                    }
+
+                    debugger;
+                    if(returnType.flags === TypeFlags.Object && returnType.symbol.name === "Promise"){
+                        diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
+                    }
+                    
                     break;
             }
 
@@ -103,5 +119,15 @@ namespace ts {
 
     function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
+    }
+
+    function containsAsync(arr: NodeArray<Modifier>): boolean{
+        for(let modifier of arr){
+            if(modifier.kind === SyntaxKind.AsyncKeyword){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

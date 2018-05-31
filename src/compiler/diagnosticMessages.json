@@ -3964,6 +3964,10 @@
         "category": "Suggestion",
         "code": 80005
     },
+    "This may be converted to use async and await.": {
+        "category": "Suggestion",
+        "code": 80006
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -4280,5 +4284,13 @@
     "Remove all unused labels": {
         "category": "Message",
         "code": 95054
+    },
+    "Convert to use async and await":{
+        "category": "Message",
+         "code": 95055
+    },
+    "Convert all to use async and await": {
+        "category": "Message",
+        "code": 95056
     }
 }
