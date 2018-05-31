@@ -4628,7 +4628,7 @@ namespace ts {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
-                return getWidenedLiteralType(checkExpressionCached(specialDeclaration, CheckMode.NoDeferredCheck));
+                return getWidenedLiteralType(checkExpression(specialDeclaration, CheckMode.NoDeferredCheck));
             }
             const types: Type[] = [];
             let constructorTypes: Type[] | undefined;
