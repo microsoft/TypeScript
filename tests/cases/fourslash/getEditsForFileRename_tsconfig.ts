@@ -2,17 +2,19 @@
 
 // @Filename: /src/tsconfig.json
 ////{
+////    "compilerOptions": {
+////        "baseUrl": "./old",
+////        "mapRoot": "../src/old",
+////        "paths": {
+////            "foo": ["old"],
+////        },
+////        "rootDir": "old",
+////        "rootDirs": ["old"],
+////        "typeRoots": ["old"],
+////    },
 ////    "files": ["old/a.ts"],
 ////    "include": ["old/*.ts"],
 ////    "exclude": ["old"],
-////    "baseUrl": "old",
-////    "typeRoots": ["old"],
-////    "mapRoot": ["old"],
-////    "rootDir": "old",
-////    "rootDirs": ["old"],
-////    "paths": {
-////        "foo": ["old"],
-////    },
 ////}
 
 verify.getEditsForFileRename({
@@ -21,17 +23,19 @@ verify.getEditsForFileRename({
     newFileContents: {
         "/src/tsconfig.json":
 `{
+    "compilerOptions": {
+        "baseUrl": "new",
+        "mapRoot": "new",
+        "paths": {
+            "foo": ["new"],
+        },
+        "rootDir": "new",
+        "rootDirs": ["new"],
+        "typeRoots": ["new"],
+    },
     "files": ["new/a.ts"],
     "include": ["new/*.ts"],
     "exclude": ["new"],
-    "baseUrl": "new",
-    "typeRoots": ["new"],
-    "mapRoot": ["new"],
-    "rootDir": "new",
-    "rootDirs": ["new"],
-    "paths": {
-        "foo": ["new"],
-    },
 }`,
     },
 });
