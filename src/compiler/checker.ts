@@ -895,10 +895,10 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol): Symbol {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                Debug.assert(source !== target);
                 if (!(target.flags & SymbolFlags.Transient)) {
                     target = cloneSymbol(target);
                 }
-                Debug.assert(source !== target);
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -944,8 +944,8 @@ namespace ts {
         }
 
         function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined {
-            if (!first || first.size === 0) return second;
-            if (!second || second.size === 0) return first;
+            if (!hasEntries(first)) return second;
+            if (!hasEntries(second)) return first;
             const combined = createSymbolTable();
             mergeSymbolTable(combined, first);
             mergeSymbolTable(combined, second);
@@ -5021,15 +5021,15 @@ namespace ts {
                 const jsDeclaration = getDeclarationOfJSInitializer(symbol.valueDeclaration);
                 if (jsDeclaration) {
                     const jsSymbol = getSymbolOfNode(jsDeclaration);
-                    if (jsSymbol && (jsSymbol.exports && jsSymbol.exports.size || jsSymbol.members && jsSymbol.members.size)) {
+                    if (jsSymbol && (hasEntries(jsSymbol.exports) || hasEntries(jsSymbol.members))) {
                         symbol = cloneSymbol(symbol);
                         // note:we overwrite links because we just cloned the symbol
                         links = symbol as TransientSymbol;
-                        if (jsSymbol.exports && jsSymbol.exports.size) {
+                        if (hasEntries(jsSymbol.exports)) {
                             symbol.exports = symbol.exports || createSymbolTable();
                             mergeSymbolTable(symbol.exports, jsSymbol.exports);
                         }
-                        if (jsSymbol.members && jsSymbol.members.size) {
+                        if (hasEntries(jsSymbol.members)) {
                             symbol.members = symbol.members || createSymbolTable();
                             mergeSymbolTable(symbol.members, jsSymbol.members);
                         }
@@ -15894,7 +15894,7 @@ namespace ts {
                 if (decl) {
                     // a JS object literal whose declaration's symbol has exports is a JS namespace
                     const symbol = getMergedSymbol(decl.symbol);
-                    if (symbol && symbol.exports && symbol.exports.size) {
+                    if (symbol && hasEntries(symbol.exports)) {
                         propertiesTable = symbol.exports;
                         symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
                         return createObjectLiteralType();
@@ -19110,8 +19110,8 @@ namespace ts {
             if (isInJavaScriptFile(node)) {
                 const decl = getDeclarationOfJSInitializer(node);
                 if (decl) {
-                    const jsSymbol = getMergedSymbol(decl.symbol);
-                    if (jsSymbol && jsSymbol.exports && jsSymbol.exports.size) {
+                    const jsSymbol = getSymbolOfNode(decl);
+                    if (jsSymbol && hasEntries(jsSymbol.exports)) {
                         jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
                     }
                 }
