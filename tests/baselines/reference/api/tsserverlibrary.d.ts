@@ -4556,6 +4556,7 @@ declare namespace ts {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
+        getAutoCloseTagAtPosition(fileName: string, position: number): string | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
@@ -5506,6 +5507,7 @@ declare namespace ts.server {
  */
 declare namespace ts.server.protocol {
     enum CommandTypes {
+        AutoCloseTag = "autoCloseTag",
         Brace = "brace",
         BraceCompletion = "braceCompletion",
         GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -6174,6 +6176,15 @@ declare namespace ts.server.protocol {
          * Kind of opening brace
          */
         openingBrace: string;
+    }
+    interface AutoCloseTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.AutoCloseTag;
+        readonly arguments: AutoCloseTagRequestArgs;
+    }
+    interface AutoCloseTagRequestArgs extends FileLocationRequestArgs {
+    }
+    interface AutoCloseTagResponse extends Response {
+        readonly body: TextInsertion;
     }
     /**
      * @deprecated
@@ -8463,6 +8474,7 @@ declare namespace ts.server {
         private getSyntacticDiagnosticsSync;
         private getSemanticDiagnosticsSync;
         private getSuggestionDiagnosticsSync;
+        private getAutoCloseTag;
         private getDocumentHighlights;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;

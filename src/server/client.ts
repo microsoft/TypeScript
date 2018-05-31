@@ -552,6 +552,10 @@ namespace ts.server {
             return notImplemented();
         }
 
+        getAutoCloseTagAtPosition(_fileName: string, _position: number): string | undefined {
+            return notImplemented();
+        }
+
         getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
             return notImplemented();
         }

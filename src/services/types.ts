@@ -323,6 +323,7 @@ namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
+        getAutoCloseTagAtPosition(fileName: string, position: number): string | undefined;
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
 

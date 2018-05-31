@@ -4147,27 +4147,6 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {
-            if (lhs.kind !== rhs.kind) {
-                return false;
-            }
-
-            if (lhs.kind === SyntaxKind.Identifier) {
-                return (<Identifier>lhs).escapedText === (<Identifier>rhs).escapedText;
-            }
-
-            if (lhs.kind === SyntaxKind.ThisKeyword) {
-                return true;
-            }
-
-            // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
-            // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
-            // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
-            return (<PropertyAccessExpression>lhs).name.escapedText === (<PropertyAccessExpression>rhs).name.escapedText &&
-                tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
-        }
-
-
         function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement | JsxFragment {
             const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -7905,5 +7884,26 @@ namespace ts {
             argMap[argument.name] = args[i];
         }
         return argMap;
+    }
+
+    /** @internal */
+    export function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {
+        if (lhs.kind !== rhs.kind) {
+            return false;
+        }
+
+        if (lhs.kind === SyntaxKind.Identifier) {
+            return (<Identifier>lhs).escapedText === (<Identifier>rhs).escapedText;
+        }
+
+        if (lhs.kind === SyntaxKind.ThisKeyword) {
+            return true;
+        }
+
+        // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
+        // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
+        // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
+        return (<PropertyAccessExpression>lhs).name.escapedText === (<PropertyAccessExpression>rhs).name.escapedText &&
+            tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
     }
 }
