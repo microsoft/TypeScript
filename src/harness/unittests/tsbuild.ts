@@ -19,11 +19,10 @@ namespace ts {
         it("can build the sample project 'sample1' without error", () => {
             const fs = bfs.shadow();
             const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: false });
+            const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
 
             clearDiagnostics();
-            fs.chdir("/src/tests");
-            builder.buildProjects(["."]);
+            builder.buildAllProjects();
             assertDiagnosticMessages(/*empty*/);
 
             // Check for outputs. Not an exhaustive list
@@ -38,9 +37,8 @@ namespace ts {
             clearDiagnostics();
             const fs = bfs.shadow();
             const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
-            fs.chdir("/src/tests");
-            builder.buildProjects(["."]);
+            const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: true, force: false, verbose: false });
+            builder.buildAllProjects();
             assertDiagnosticMessages(Diagnostics.Would_build_project_0, Diagnostics.Would_build_project_0, Diagnostics.Would_build_project_0);
 
             // Check for outputs to not be written. Not an exhaustive list
@@ -54,14 +52,13 @@ namespace ts {
             const fs = bfs.shadow();
             const host = new fakes.CompilerHost(fs);
 
-            let builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: false });
-            fs.chdir("/src/tests");
-            builder.buildProjects(["."]);
+            let builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
+            builder.buildAllProjects();
             tick();
 
             clearDiagnostics();
-            builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
-            builder.buildProjects(["."]);
+            builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: true, force: false, verbose: false });
+            builder.buildAllProjects();
             assertDiagnosticMessages(Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date);
         });
     });
@@ -72,20 +69,19 @@ namespace ts {
             const fs = bfs.shadow();
             const host = new fakes.CompilerHost(fs);
 
-            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: false });
-            fs.chdir("/src/tests");
-            builder.buildProjects(["."]);
+            const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
+            builder.buildAllProjects();
             // Verify they exist
             for (const output of allExpectedOutputs) {
                 assert(fs.existsSync(output), `Expect file ${output} to exist`);
             }
-            builder.cleanProjects(["."]);
+            builder.cleanAllProjects();
             // Verify they are gone
             for (const output of allExpectedOutputs) {
                 assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
             }
             // Subsequent clean shouldn't throw / etc
-            builder.cleanProjects(["."]);
+            builder.cleanAllProjects();
         });
     });
 
@@ -94,16 +90,15 @@ namespace ts {
             const fs = bfs.shadow();
             const host = new fakes.CompilerHost(fs);
 
-            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: true, verbose: false });
-            fs.chdir("/src/tests");
-            builder.buildProjects(["."]);
+            const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: true, verbose: false });
+            builder.buildAllProjects();
             let currentTime = time();
             checkOutputTimestamps(currentTime);
 
             tick();
             Debug.assert(time() !== currentTime, "Time moves on");
             currentTime = time();
-            builder.buildProjects(["."]);
+            builder.buildAllProjects();
             checkOutputTimestamps(currentTime);
 
             function checkOutputTimestamps(expected: number) {
@@ -119,14 +114,12 @@ namespace ts {
     describe("tsbuild - can detect when and what to rebuild", () => {
         const fs = bfs.shadow();
         const host = new fakes.CompilerHost(fs);
-        const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: true });
-
-        fs.chdir("/src/tests");
+        const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: true });
 
         it("Builds the project", () => {
             clearDiagnostics();
             builder.resetBuildContext();
-            builder.buildProjects(["."]);
+            builder.buildAllProjects();
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
                 Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                 Diagnostics.Building_project_0,
@@ -141,7 +134,7 @@ namespace ts {
         it("Detects that all projects are up to date", () => {
             clearDiagnostics();
             builder.resetBuildContext();
-            builder.buildProjects(["."]);
+            builder.buildAllProjects();
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
                 Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                 Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
@@ -154,7 +147,7 @@ namespace ts {
             clearDiagnostics();
             fs.writeFileSync("/src/tests/index.ts", "const m = 10;");
             builder.resetBuildContext();
-            builder.buildProjects(["."]);
+            builder.buildAllProjects();
 
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
                 Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
@@ -169,7 +162,7 @@ namespace ts {
             clearDiagnostics();
             replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET");
             builder.resetBuildContext();
-            builder.buildProjects(["."]);
+            builder.buildAllProjects();
 
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
                 Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
@@ -185,14 +178,13 @@ namespace ts {
         it("won't build downstream projects if upstream projects have errors", () => {
             const fs = bfs.shadow();
             const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: true });
+            const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: true });
 
             clearDiagnostics();
 
             // Induce an error in the middle project
             replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`);
-            fs.chdir("/src/tests");
-            builder.buildProjects(["."]);
+            builder.buildAllProjects();
             assertDiagnosticMessages(
                 Diagnostics.Sorted_list_of_input_projects_Colon_0,
                 Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
@@ -221,8 +213,6 @@ namespace ts {
 
         writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G"], deps);
 
-        const builder = createSolutionBuilder(host, reportDiagnostic, { dry: true, force: false, verbose: false });
-
         it("orders the graph correctly - specify two roots", () => {
             checkGraphOrdering(["A", "G"], ["A", "B", "C", "D", "E", "G"]);
         });
@@ -240,6 +230,8 @@ namespace ts {
         });
 
         function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {
+            const builder = createSolutionBuilder(host, rootNames, reportDiagnostic, { dry: true, force: false, verbose: false });
+
             const projFileNames = rootNames.map(getProjectFileName);
             const graph = builder.getBuildGraph(projFileNames);
             if (graph === undefined) throw new Error("Graph shouldn't be undefined");
@@ -278,6 +270,39 @@ namespace ts {
             }
             return projFileNames;
         }
+    });
+
+    describe("tsbuild - project invalidation", () => {
+        it ("invalidates projects correctly", () => {
+            const fs = bfs.shadow();
+            const host = new fakes.CompilerHost(fs);
+            const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
+
+            clearDiagnostics();
+            builder.buildAllProjects();
+            assertDiagnosticMessages(/*empty*/);
+
+            // Update a timestamp in the middle project
+            tick();
+            touch(fs, "/src/logic/index.ts");
+            // Because we haven't reset the build context, the builder should assume there's nothing to do right now
+            const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic")!);
+            assert.equal(status.type, UpToDateStatusType.UpToDate, "Project should be assumed to be up-to-date");
+
+            // Rebuild this project
+            tick();
+            builder.invalidateProject("/src/logic");
+            builder.buildInvalidatedProjects();
+            // The file should be updated
+            assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
+            assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
+
+            // Build downstream projects should update 'tests', but not 'core'
+            tick();
+            builder.buildDependentInvalidatedProjects();
+            assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
+            assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
+        });
     });
 
     function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string) {
@@ -322,6 +347,13 @@ namespace ts {
 
     function time() {
         return currentTime;
+    }
+
+    function touch(fs: vfs.FileSystem, path: string) {
+        if (!fs.statSync(path).isFile()) {
+            throw new Error(`File ${path} does not exist`);
+        }
+        fs.utimesSync(path, new Date(time()), new Date(time()));
     }
 
     function loadFsMirror(vfs: vfs.FileSystem, localRoot: string, virtualRoot: string) {

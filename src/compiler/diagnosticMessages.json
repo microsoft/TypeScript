@@ -3685,6 +3685,10 @@
         "category": "Error",
         "code": 6369
     },
+    "Skipping clean because not all projects could be located": {
+        "category": "Error",
+        "code": 6340
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

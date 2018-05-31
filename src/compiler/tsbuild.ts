@@ -38,6 +38,10 @@ namespace ts {
          * Issue a verbose diagnostic message. No-ops when options.verbose is false.
          */
         verbose(diag: DiagnosticMessage, ...args: any[]): void;
+
+        invalidatedProjects: FileMap<true>;
+        queuedProjects: FileMap<true>;
+        missingRoots: Map<true>;
     }
 
     type Mapper = ReturnType<typeof createDependencyMapper>;
@@ -73,7 +77,7 @@ namespace ts {
         AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors
     }
 
-    enum UpToDateStatusType {
+    export enum UpToDateStatusType {
         Unbuildable,
         UpToDate,
         /**
@@ -89,7 +93,7 @@ namespace ts {
         UpstreamBlocked
     }
 
-    type UpToDateStatus =
+    export type UpToDateStatus =
         | Status.Unbuildable
         | Status.UpToDate
         | Status.OutputMissing
@@ -98,7 +102,7 @@ namespace ts {
         | Status.UpstreamOutOfDate
         | Status.UpstreamBlocked;
 
-    namespace Status {
+    export namespace Status {
         /**
          * The project can't be built at all in its current state. For example,
          * its config file cannot be parsed, or it has a syntax error or missing file
@@ -170,6 +174,9 @@ namespace ts {
         setValue(fileName: string, value: T): void;
         getValue(fileName: string): T | never;
         getValueOrUndefined(fileName: string): T | undefined;
+        hasKey(fileName: string): boolean;
+        removeKey(fileName: string): void;
+        getKeys(): string[];
     }
 
     /**
@@ -183,7 +190,22 @@ namespace ts {
             setValue,
             getValue,
             getValueOrUndefined,
+            removeKey,
+            getKeys,
+            hasKey
         };
+
+        function getKeys(): string[] {
+            return Object.keys(lookup);
+        }
+
+        function hasKey(fileName: string) {
+            return normalizePath(fileName) in lookup;
+        }
+
+        function removeKey(fileName: string) {
+            delete lookup[fileName];
+        }
 
         function setValue(fileName: string, value: T) {
             lookup[normalizePath(fileName)] = value;
@@ -211,30 +233,30 @@ namespace ts {
     }
 
     export function createDependencyMapper() {
-        const childToParents: { [key: string]: string[] } = {};
-        const parentToChildren: { [key: string]: string[] } = {};
-        const allKeys: string[] = [];
+        const childToParents: { [key: string]: ResolvedConfigFileName[] } = {};
+        const parentToChildren: { [key: string]: ResolvedConfigFileName[] } = {};
+        const allKeys: ResolvedConfigFileName[] = [];
 
-        function addReference(childConfigFileName: string, parentConfigFileName: string): void {
+        function addReference(childConfigFileName: ResolvedConfigFileName, parentConfigFileName: ResolvedConfigFileName): void {
             addEntry(childToParents, childConfigFileName, parentConfigFileName);
             addEntry(parentToChildren, parentConfigFileName, childConfigFileName);
         }
 
-        function getReferencesTo(parentConfigFileName: string): string[] {
+        function getReferencesTo(parentConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
             return parentToChildren[normalizePath(parentConfigFileName)] || [];
         }
 
-        function getReferencesOf(childConfigFileName: string): string[] {
+        function getReferencesOf(childConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
             return childToParents[normalizePath(childConfigFileName)] || [];
         }
 
-        function getKeys(): ReadonlyArray<string> {
+        function getKeys(): ReadonlyArray<ResolvedConfigFileName> {
             return allKeys;
         }
 
-        function addEntry(mapToAddTo: typeof childToParents | typeof parentToChildren, key: string, element: string) {
-            key = normalizePath(key);
-            element = normalizePath(element);
+        function addEntry(mapToAddTo: typeof childToParents | typeof parentToChildren, key: ResolvedConfigFileName, element: ResolvedConfigFileName) {
+            key = normalizePath(key) as ResolvedConfigFileName;
+            element = normalizePath(element) as ResolvedConfigFileName;
             const arr = (mapToAddTo[key] = mapToAddTo[key] || []);
             if (arr.indexOf(element) < 0) {
                 arr.push(element);
@@ -316,8 +338,13 @@ namespace ts {
             return parsed;
         }
 
+        function removeKey(configFilePath: ResolvedConfigFileName) {
+            cache.removeKey(configFilePath);
+        }
+
         return {
-            parseConfigFile
+            parseConfigFile,
+            removeKey
         };
     }
 
@@ -331,11 +358,19 @@ namespace ts {
 
     export function createBuildContext(options: BuildOptions, reportDiagnostic: DiagnosticReporter): BuildContext {
         const verboseDiag = options.verbose && reportDiagnostic;
+
+        const invalidatedProjects = createFileMap<true>();
+        const queuedProjects = createFileMap<true>();
+        const missingRoots = createMap<true>();
+
         return {
             options,
             projectStatus: createFileMap(),
             unchangedOutputs: createFileMap(),
-            verbose: verboseDiag ? (diag, ...args) => verboseDiag(createCompilerDiagnostic(diag, ...args)) : () => undefined
+            verbose: verboseDiag ? (diag, ...args) => verboseDiag(createCompilerDiagnostic(diag, ...args)) : () => undefined,
+            invalidatedProjects,
+            missingRoots,
+            queuedProjects
         };
     }
 
@@ -437,12 +472,12 @@ namespace ts {
             addProject(".");
         }
 
-        const builder = createSolutionBuilder(host, reportDiagnostic, { verbose, dry, force });
+        const builder = createSolutionBuilder(host, projects, reportDiagnostic, { verbose, dry, force });
         if (clean) {
-            builder.cleanProjects(projects);
+            builder.cleanAllProjects();
         }
         else {
-            builder.buildProjects(projects);
+            builder.buildAllProjects();
         }
 
         function addProject(projectSpecification: string) {
@@ -461,7 +496,11 @@ namespace ts {
         }
     }
 
-    export function createSolutionBuilder(host: CompilerHost, reportDiagnostic: DiagnosticReporter, defaultOptions: BuildOptions) {
+    /**
+     * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
+     * can dynamically add/remove other projects based on changes on the rootNames' references
+     */
+    export function createSolutionBuilder(host: CompilerHost, rootNames: ReadonlyArray<string>, reportDiagnostic: DiagnosticReporter, defaultOptions: BuildOptions) {
         if (!host.getModifiedTime || !host.setModifiedTime) {
             throw new Error("Host must support timestamp APIs");
         }
@@ -470,12 +509,18 @@ namespace ts {
         let context = createBuildContext(defaultOptions, reportDiagnostic);
 
         return {
+            buildAllProjects,
             getUpToDateStatus,
             getUpToDateStatusOfFile,
-            buildProjects,
-            cleanProjects,
+            cleanAllProjects,
             resetBuildContext,
-            getBuildGraph
+            getBuildGraph,
+
+            invalidateProject,
+            buildInvalidatedProjects,
+            buildDependentInvalidatedProjects,
+
+            resolveProjectName
         };
 
         function resetBuildContext(opts = defaultOptions) {
@@ -486,11 +531,15 @@ namespace ts {
             return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
         }
 
-        function getBuildGraph(configFileNames: string[]) {
+        function getBuildGraph(configFileNames: ReadonlyArray<string>) {
             const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return;
+            if (resolvedNames === undefined) return undefined;
 
             return createDependencyGraph(resolvedNames);
+        }
+
+        function getGlobalDependencyGraph() {
+            return getBuildGraph(rootNames);
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
@@ -505,6 +554,73 @@ namespace ts {
             const actual = getUpToDateStatusWorker(project);
             context.projectStatus.setValue(project.options.configFilePath!, actual);
             return actual;
+        }
+
+        function invalidateProject(configFileName: string) {
+            const resolved = resolveProjectName(configFileName);
+            if (resolved === undefined) {
+                // If this was a rootName, we need to track it as missing.
+                // Otherwise we can just ignore it and have it possibly surface as an error in any downstream projects,
+                // if they exist
+
+                // TODO: do those things
+                return;
+            }
+
+            configFileCache.removeKey(resolved);
+            context.invalidatedProjects.setValue(resolved, true);
+            context.projectStatus.removeKey(resolved);
+
+            const graph = getGlobalDependencyGraph()!;
+            if (graph) {
+                queueBuildForDownstreamReferences(resolved);
+            }
+
+            // Mark all downstream projects of this one needing to be built "later"
+            function queueBuildForDownstreamReferences(root: ResolvedConfigFileName) {
+                debugger;
+                const deps = graph.dependencyMap.getReferencesTo(root);
+                for (const ref of deps) {
+                    // Can skip circular references
+                    if (!context.queuedProjects.hasKey(ref)) {
+                        context.queuedProjects.setValue(ref, true);
+                        queueBuildForDownstreamReferences(ref);
+                    }
+                }
+            }
+        }
+
+        function buildInvalidatedProjects() {
+            buildSomeProjects(p => context.invalidatedProjects.hasKey(p));
+        }
+
+        function buildDependentInvalidatedProjects() {
+            buildSomeProjects(p => context.queuedProjects.hasKey(p));
+        }
+
+        function buildSomeProjects(predicate: (projName: ResolvedConfigFileName) => boolean) {
+            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(rootNames);
+            if (resolvedNames === undefined) return;
+
+            const graph = createDependencyGraph(resolvedNames)!;
+            for (const next of graph.buildQueue) {
+                if (!predicate(next)) continue;
+
+                const resolved = resolveProjectName(next);
+                if (!resolved) continue; // ??
+                const proj = configFileCache.parseConfigFile(resolved);
+                if (!proj) continue; // ?
+
+                const status = getUpToDateStatus(proj);
+                reportProjectStatus(next, status);
+
+                if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                    context.verbose(Diagnostics.Skipping_build_of_project_0_because_its_upstream_project_1_has_errors, resolved, status.upstreamProjectName);
+                    continue;
+                }
+
+                buildSingleProject(next);
+            }
         }
 
         function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
@@ -824,7 +940,7 @@ namespace ts {
             context.projectStatus.setValue(proj.options.configFilePath!, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
-        function getFilesToClean(configFileNames: ResolvedConfigFileName[]): string[] | undefined {
+        function getFilesToClean(configFileNames: ReadonlyArray<ResolvedConfigFileName>): string[] | undefined {
             const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
             if (resolvedNames === undefined) return undefined;
 
@@ -849,12 +965,24 @@ namespace ts {
             return filesToDelete;
         }
 
-        function cleanProjects(configFileNames: string[]) {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return;
+        function getAllProjectsInScope(): ReadonlyArray<ResolvedConfigFileName> | undefined {
+            const resolvedNames = resolveProjectNames(rootNames);
+            if (resolvedNames === undefined) return undefined;
+            const graph = createDependencyGraph(resolvedNames);
+            if (graph === undefined) return undefined;
+            return graph.buildQueue;
+        }
+
+        function cleanAllProjects() {
+            const resolvedNames: ReadonlyArray<ResolvedConfigFileName> | undefined = getAllProjectsInScope();
+            if (resolvedNames === undefined) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located));
+                return;
+            }
 
             const filesToDelete = getFilesToClean(resolvedNames);
             if (filesToDelete === undefined) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located));
                 return;
             }
 
@@ -885,7 +1013,7 @@ namespace ts {
             return undefined;
         }
 
-        function resolveProjectNames(configFileNames: string[]): ResolvedConfigFileName[] | undefined {
+        function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] | undefined {
             const resolvedNames: ResolvedConfigFileName[] = [];
             for (const name of configFileNames) {
                 const resolved = resolveProjectName(name);
@@ -897,12 +1025,8 @@ namespace ts {
             return resolvedNames;
         }
 
-        function buildProjects(configFileNames: string[]) {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return;
-
-            // Establish what needs to be built
-            const graph = createDependencyGraph(resolvedNames);
+        function buildAllProjects() {
+            const graph = getGlobalDependencyGraph();
             if (graph === undefined) return;
 
             const queue = graph.buildQueue;
