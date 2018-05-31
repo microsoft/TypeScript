@@ -49,22 +49,17 @@ namespace ts {
                 }
                 case "compilerOptions":
                     forEachProperty(property.initializer, (property, propertyName) => {
-                        switch (propertyName) {
-                            case "baseUrl":
-                            case "typeRoots":
-                            case "mapRoot":
-                            case "rootDir":
-                            case "rootDirs":
-                                updatePaths(property);
-                                break;
-                            case "paths":
-                                forEachProperty(property.initializer, (pathsProperty) => {
-                                    if (!isArrayLiteralExpression(pathsProperty.initializer)) return;
-                                    for (const e of pathsProperty.initializer.elements) {
-                                        tryUpdateString(e);
-                                    }
-                                });
-                                break;
+                        const option = getOptionFromName(propertyName);
+                        if (option && (option.isFilePath || option.type === "list" && (option as CommandLineOptionOfListType).element.isFilePath)) {
+                            updatePaths(property);
+                        }
+                        else if (propertyName === "paths") {
+                            forEachProperty(property.initializer, (pathsProperty) => {
+                                if (!isArrayLiteralExpression(pathsProperty.initializer)) return;
+                                for (const e of pathsProperty.initializer.elements) {
+                                    tryUpdateString(e);
+                                }
+                            });
                         }
                     });
                     break;
