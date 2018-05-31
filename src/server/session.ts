@@ -76,7 +76,24 @@ namespace ts.server {
             code: diag.code,
             category: diagnosticCategoryName(diag),
             reportsUnnecessary: diag.reportsUnnecessary,
-            source: diag.source
+            source: diag.source,
+            relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
+        };
+    }
+
+    function formatRelatedInformation(info: DiagnosticRelatedInformation): protocol.DiagnosticRelatedInformation {
+        if (!info.file) {
+            return {
+                message: flattenDiagnosticMessageText(info.messageText, "\n")
+            };
+        }
+        return {
+            span: {
+                start: convertToLocation(getLineAndCharacterOfPosition(info.file, info.start!)),
+                end: convertToLocation(getLineAndCharacterOfPosition(info.file, info.start! + info.length!)), // TODO: GH#18217
+                file: info.file.fileName
+            },
+            message: flattenDiagnosticMessageText(info.messageText, "\n")
         };
     }
 
@@ -92,8 +109,19 @@ namespace ts.server {
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
         const category = diagnosticCategoryName(diag);
-        return includeFileName ? { start, end, text, code, category, source, reportsUnnecessary: diag.reportsUnnecessary, fileName: diag.file && diag.file.fileName } :
-            { start, end, text, code, category, reportsUnnecessary: diag.reportsUnnecessary, source };
+        const common = {
+            start,
+            end,
+            text,
+            code,
+            category,
+            reportsUnnecessary: diag.reportsUnnecessary,
+            source,
+            relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
+        };
+        return includeFileName
+            ? { ...common, fileName: diag.file && diag.file.fileName }
+            : common;
     }
 
     export interface PendingErrorCheck {
@@ -610,7 +638,8 @@ namespace ts.server {
                 category: diagnosticCategoryName(d),
                 code: d.code,
                 startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
-                endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))! // TODO: GH#18217
+                endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
+                relatedInformation: map(d.relatedInformation, formatRelatedInformation)
             }));
         }
 
@@ -638,7 +667,8 @@ namespace ts.server {
                 source: d.source,
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start!), // TODO: GH#18217
                 endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!),
-                reportsUnnecessary: d.reportsUnnecessary
+                reportsUnnecessary: d.reportsUnnecessary,
+                relatedInformation: map(d.relatedInformation, formatRelatedInformation),
             });
         }
 

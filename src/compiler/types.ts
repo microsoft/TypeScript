@@ -4238,6 +4238,13 @@ namespace ts {
         reportsUnnecessary?: {};
         code: number;
         source?: string;
+        relatedInformation?: DiagnosticRelatedInformation[];
+    }
+    export interface DiagnosticRelatedInformation {
+        file: SourceFile | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string | DiagnosticMessageChain;
     }
     export interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
