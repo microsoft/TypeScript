@@ -2699,6 +2699,10 @@
         "category": "Error",
         "code": 4102
     },
+    "Keyword '{0}' cannot be used in binding element.": {
+        "category": "Error",
+        "code": 4103
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

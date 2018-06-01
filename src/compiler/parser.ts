@@ -5438,8 +5438,12 @@ namespace ts {
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const tokenIsIdentifier = isIdentifier();
+            const tokenIsKeyword = isKeyword(token());
             const propertyName = parsePropertyName();
-            if (tokenIsIdentifier && token() !== SyntaxKind.ColonToken) {
+            if ((tokenIsIdentifier || tokenIsKeyword) && token() !== SyntaxKind.ColonToken) {
+                if (!tokenIsIdentifier && tokenIsKeyword) {
+                    parseErrorAtRange(propertyName, Diagnostics.Keyword_0_cannot_be_used_in_binding_element, idText(<Identifier>propertyName));
+                }
                 node.name = <Identifier>propertyName;
             }
             else {
