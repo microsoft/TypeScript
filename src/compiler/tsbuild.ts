@@ -332,6 +332,7 @@ namespace ts {
             if (sourceFile === undefined) {
                 return undefined;
             }
+
             const parsed = parseJsonSourceFileConfigFileContent(sourceFile, configParseHost, getDirectoryPath(configFilePath));
             parsed.options.configFilePath = configFilePath;
             cache.setValue(configFilePath, parsed);
@@ -410,7 +411,7 @@ namespace ts {
         }
     ];
 
-    export function performBuild(host: CompilerHost, reportDiagnostic: DiagnosticReporter, args: string[]) {
+    export function performBuild(host: CompilerHost, reportDiagnostic: DiagnosticReporter, args: string[], system?: System) {
         let verbose = false;
         let dry = false;
         let force = false;
@@ -472,12 +473,16 @@ namespace ts {
             addProject(".");
         }
 
-        const builder = createSolutionBuilder(host, projects, reportDiagnostic, { verbose, dry, force });
+        const builder = createSolutionBuilder(host, projects, reportDiagnostic, { verbose, dry, force }, system);
         if (clean) {
             builder.cleanAllProjects();
         }
         else {
             builder.buildAllProjects();
+        }
+
+        if (watch) {
+            return builder.startWatching();
         }
 
         function addProject(projectSpecification: string) {
@@ -500,7 +505,7 @@ namespace ts {
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
-    export function createSolutionBuilder(host: CompilerHost, rootNames: ReadonlyArray<string>, reportDiagnostic: DiagnosticReporter, defaultOptions: BuildOptions) {
+    export function createSolutionBuilder(host: CompilerHost, rootNames: ReadonlyArray<string>, reportDiagnostic: DiagnosticReporter, defaultOptions: BuildOptions, system?: System) {
         if (!host.getModifiedTime || !host.setModifiedTime) {
             throw new Error("Host must support timestamp APIs");
         }
@@ -520,8 +525,29 @@ namespace ts {
             buildInvalidatedProjects,
             buildDependentInvalidatedProjects,
 
-            resolveProjectName
+            resolveProjectName,
+
+            startWatching
         };
+
+        function startWatching() {
+            if (!system) throw new Error("System host must be provided if using --watch");
+            if (!system.watchFile || !system.watchDirectory || !system.setTimeout) throw new Error("System host must support watchFile / watchDirectory / setTimeout if using --watch");
+
+            const graph = getGlobalDependencyGraph()!;
+            for (const resolved of graph.buildQueue) {
+                const cfg = configFileCache.parseConfigFile(resolved);
+                if (cfg) {
+                    for (const input of cfg.fileNames) {
+                        system.watchFile(input, () => {
+                            invalidateProject(resolved);
+                            system.setTimeout!(buildInvalidatedProjects, 100);
+                            system.setTimeout!(buildDependentInvalidatedProjects, 3000);
+                        });
+                    }
+                }
+            }
+        }
 
         function resetBuildContext(opts = defaultOptions) {
             context = createBuildContext(opts, reportDiagnostic);
