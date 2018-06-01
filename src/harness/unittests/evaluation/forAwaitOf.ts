@@ -9,7 +9,7 @@ describe("forAwaitOfEvaluation", () => {
                     case 0: return { value: 1, done: false };
                     case 1: return { value: Promise.resolve(2), done: false };
                     case 2: return { value: new Promise<number>(resolve => setTimeout(resolve, 100, 3)), done: false };
-                    default: return { value: undefined: done: true };
+                    default: return { value: undefined, done: true };
                 }
             }
         };
@@ -35,7 +35,7 @@ describe("forAwaitOfEvaluation", () => {
                     case 0: return { value: 1, done: false };
                     case 1: return { value: Promise.resolve(2), done: false };
                     case 2: return { value: new Promise<number>(resolve => setTimeout(resolve, 100, 3)), done: false };
-                    default: return { value: undefined: done: true };
+                    default: return { value: undefined, done: true };
                 }
             }
         };
@@ -61,7 +61,7 @@ describe("forAwaitOfEvaluation", () => {
                     case 0: return { value: 1, done: false };
                     case 1: return { value: Promise.resolve(2), done: false };
                     case 2: return { value: new Promise<number>(resolve => setTimeout(resolve, 100, 3)), done: false };
-                    default: return { value: undefined: done: true };
+                    default: return { value: undefined, done: true };
                 }
             }
         };
@@ -87,7 +87,7 @@ describe("forAwaitOfEvaluation", () => {
                     case 0: return { value: 1, done: false };
                     case 1: return { value: Promise.resolve(2), done: false };
                     case 2: return { value: new Promise<number>(resolve => setTimeout(resolve, 100, 3)), done: false };
-                    default: return { value: undefined: done: true };
+                    default: return { value: undefined, done: true };
                 }
             }
         };
