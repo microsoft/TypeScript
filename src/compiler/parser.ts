@@ -1256,8 +1256,8 @@ namespace ts {
                 new TokenConstructor(kind, p, p);
         }
 
-        function createNodeWithJSDoc(kind: SyntaxKind): Node {
-            const node = createNode(kind);
+        function createNodeWithJSDoc(kind: SyntaxKind, pos?: number): Node {
+            const node = createNode(kind, pos);
             if (scanner.getTokenFlags() & TokenFlags.PrecedingJSDocComment) {
                 addJSDocComment(<HasJSDoc>node);
             }
@@ -2782,16 +2782,13 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode | undefined {
-            const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind);
-            if (kind === SyntaxKind.ConstructorType) {
-                parseExpected(SyntaxKind.NewKeyword);
-            }
-            if (!fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type | (sourceFile.languageVariant === LanguageVariant.JSX ? SignatureFlags.RequireCompleteParameterList : 0), node)) {
-                return undefined;
-            }
-            if (!node.parameters) {
-                return undefined;
+        function parseFunctionOrConstructorType(): TypeNode {
+            const pos = getNodePos();
+            const kind = parseOptional(SyntaxKind.NewKeyword) ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType
+            const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind, pos);
+            if (!fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type | (sourceFile.languageVariant === LanguageVariant.JSX ? SignatureFlags.RequireCompleteParameterList : 0), node) ||
+                !node.parameters) { // TODO: ideally fillSignature would guarantee node.parameters to be defined
+                return parseTypeReference(); // This will fail with a diagnostic.
             }
             return finishNode(node);
         }
@@ -3134,8 +3131,7 @@ namespace ts {
 
         function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
             if (isStartOfFunctionType() || token() === SyntaxKind.NewKeyword) {
-                const fn = tryParse(() => parseFunctionOrConstructorType(token() === SyntaxKind.NewKeyword ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType));
-                return fn || parseTypeReference(); // If function parsing failed, parseTypeReference() will fail with a diagnostic
+                return parseFunctionOrConstructorType();
             }
             const type = parseUnionTypeOrHigher();
             if (!noConditionalTypes && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
