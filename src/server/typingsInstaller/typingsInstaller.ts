@@ -349,8 +349,8 @@ namespace ts.server.typingsInstaller {
                         }
 
                         // packageName is guaranteed to exist in typesRegistry by filterTypings
-                        const distTags = this.typesRegistry.get(packageName);
-                        const newVersion = Semver.parse(distTags[`ts${versionMajorMinor}`] || distTags[latestDistTag]);
+                        const distTags = this.typesRegistry.get(packageName)!;
+                        const newVersion = Semver.parse(distTags[`ts${versionMajorMinor}`] || distTags[this.latestDistTag]);
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                         installedTypingFiles.push(typingFile);
@@ -523,12 +523,12 @@ namespace ts.server.typingsInstaller {
 
         protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
+
+        protected latestDistTag = "latest";
     }
 
     /* @internal */
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
-
-    const latestDistTag = "latest";
 }
