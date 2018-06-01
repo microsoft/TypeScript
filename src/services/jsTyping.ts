@@ -160,7 +160,7 @@ namespace ts.JsTyping {
         }
         // Add the cached typing locations for inferred typings that are already installed
         packageNameToTypingLocation.forEach((typing, name) => {
-            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && isTypingUpToDate(typing, typesRegistry.get(name))) {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && typesRegistry.has(name) && isTypingUpToDate(typing, typesRegistry.get(name)!)) {
                 inferredTypings.set(name, typing.typingLocation);
             }
         });
