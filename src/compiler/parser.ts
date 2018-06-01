@@ -7013,62 +7013,32 @@ namespace ts {
                 }
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
-                    if (some(tags, isJSDocTemplateTag)) {
-                        // TODO: Get rid of this restriction after making sure it's ok elsewhere
-                        parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
-                    }
-
                     // Type parameter list looks like '@template {Constraint} T,U,V'
                     let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                     let typeParametersPos = getNodePos();
-                    const typeParameters = [];
+                    const typeParameters: TypeParameterDeclaration[] = [];
                     const firstBrace = token() === SyntaxKind.OpenBraceToken;
                     const nameOrConstraint = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
-                    let parseMore = true;
+                    let parseAnotherConstraint: boolean | undefined = true;
+
                     // nameOrConstraint is a constraint if (1) it started with a brace and (2) the next token does too, or is an identifier
                     const hasConstraint = firstBrace && (token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.Identifier);
                     if (hasConstraint) {
                         typeParametersPos = getNodePos();
                     }
                     else {
-                        if (!isTypeReferenceNode(nameOrConstraint.type) && !ts.isIdentifier((nameOrConstraint.type as TypeReferenceNode).typeName)) {
-                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                            return undefined;
-                        }
-                        typeParameter.name = (nameOrConstraint.type as TypeReferenceNode).typeName as Identifier;
-                        finishNode(typeParameter);
-                        typeParameters.push(typeParameter);
-                        if (token() === SyntaxKind.CommaToken) {
-                            // need to look for more type parameters
-                            nextJSDocToken();
-                            skipWhitespace();
-                        }
-                        else {
-                            parseMore = false;
-                        }
+                        const name = isTypeReferenceNode(nameOrConstraint.type) && ts.isIdentifier(nameOrConstraint.type.typeName) && nameOrConstraint.type.typeName;
+                        parseAnotherConstraint = finishTypeParameter(typeParameters, typeParameter, name);
                     }
-                    while (parseMore) {
+                    while (parseAnotherConstraint) {
                         typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         const name = parseJSDocIdentifierNameWithOptionalBraces();
                         skipWhitespace();
-                        if (!name) {
-                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                            return undefined;
-                        }
-
-                        typeParameter.name = name;
-                        finishNode(typeParameter);
-
-                        typeParameters.push(typeParameter);
-
-                        if (token() === SyntaxKind.CommaToken) {
-                            nextJSDocToken();
-                            skipWhitespace();
-                        }
-                        else {
-                            break;
-                        }
+                        parseAnotherConstraint = finishTypeParameter(typeParameters, typeParameter, name);
+                    }
+                    if (parseAnotherConstraint === undefined) {
+                        return undefined;
                     }
 
                     if (hasConstraint) {
@@ -7082,6 +7052,27 @@ namespace ts {
                     result.typeParameters = createNodeArray(typeParameters, typeParametersPos);
                     finishNode(result);
                     return result;
+                }
+
+                function finishTypeParameter(typeParameters: TypeParameterDeclaration[], typeParameter: TypeParameterDeclaration, name: Identifier | false | undefined): boolean | undefined {
+                    if (name) {
+                        typeParameter.name = name as Identifier;
+                    }
+                    else {
+                        parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                        return undefined;
+                    }
+                    finishNode(typeParameter);
+                    typeParameters.push(typeParameter);
+                    if (token() === SyntaxKind.CommaToken) {
+                        // need to look for more type parameters
+                        nextJSDocToken();
+                        skipWhitespace();
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
 
                 function parseJSDocIdentifierNameWithOptionalBraces(): Identifier | undefined {
