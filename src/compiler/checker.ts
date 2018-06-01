@@ -18604,6 +18604,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
+                    forEach(node.arguments, checkExpression); // Still visit arguments so they get marked for visibility, etc
                     return anySignature;
                 }
                 if (superType !== unknownType) {
