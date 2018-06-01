@@ -22784,7 +22784,7 @@ namespace ts {
         function errorUnusedLocal(declaration: Declaration, name: string, addDiagnostic: AddUnusedDiagnostic) {
             const node = getNameOfDeclaration(declaration) || declaration;
             const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_never_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
-            addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
+            addDiagnostic(UnusedKind.Local, createDiagnosticForNode(node, message, name));
         }
 
         function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {

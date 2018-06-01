@@ -641,11 +641,6 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeSpan(sourceFile: SourceFile, startNode: Node, endNode: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
-        const start = skipTrivia(sourceFile.text, startNode.pos);
-        return createFileDiagnostic(sourceFile, start, endNode.end - start, message, arg0, arg1, arg2, arg3);
-    }
-
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
