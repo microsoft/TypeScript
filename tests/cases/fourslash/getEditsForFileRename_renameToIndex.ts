@@ -1,7 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-// See also `getEditsForFileRename_oldFileStillPresent.ts`
-
 // @Filename: /a.ts
 /////// <reference path="./src/old.ts" />
 ////import old from "./src/old";
@@ -14,7 +12,7 @@
 /////// <reference path="../old.ts" />
 ////import old from "../old";
 
-// @Filename: /src/new.ts
+// @Filename: /src/old.ts
 ////
 
 // @Filename: /tsconfig.json
@@ -22,11 +20,18 @@
 
 verify.getEditsForFileRename({
     oldPath: "/src/old.ts",
-    newPath: "/src/new.ts",
+    newPath: "/src/index.ts",
     newFileContents: {
-        "/a.ts": '/// <reference path="./src/new.ts" />\nimport old from "./src/new";',
-        "/src/a.ts": '/// <reference path="./new.ts" />\nimport old from "./new";',
-        "/src/foo/a.ts": '/// <reference path="../new.ts" />\nimport old from "../new";',
-        "/tsconfig.json": '{ "files": ["a.ts", "src/a.ts", "src/foo/a.ts", "src/new.ts"] }',
+        "/a.ts":
+`/// <reference path="./src/index.ts" />
+import old from "./src";`,
+        "/src/a.ts":
+`/// <reference path="./index.ts" />
+import old from ".";`,
+        "/src/foo/a.ts":
+`/// <reference path="../index.ts" />
+import old from "..";`,
+        "/tsconfig.json":
+'{ "files": ["a.ts", "src/a.ts", "src/foo/a.ts", "src/index.ts"] }',
     },
 });

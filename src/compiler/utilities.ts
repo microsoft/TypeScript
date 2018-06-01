@@ -1088,7 +1088,7 @@ namespace ts {
     }
 
     export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): ReadonlyArray<PropertyAssignment> {
-        return filter(objectLiteral.properties, (property): property is PropertyAssignment => {
+        return objectLiteral.properties.filter((property): property is PropertyAssignment => {
             if (property.kind === SyntaxKind.PropertyAssignment) {
                 const propName = getTextOfPropertyName(property.name);
                 return key === propName || (!!key2 && key2 === propName);
@@ -1105,12 +1105,15 @@ namespace ts {
     }
 
     export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
+        return firstDefined(getTsConfigPropArray(tsConfigSourceFile, propKey), property =>
+            isArrayLiteralExpression(property.initializer) ?
+                find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                undefined);
+    }
+
+    export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): ReadonlyArray<PropertyAssignment> {
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-        return jsonObjectLiteral &&
-            firstDefined(getPropertyAssignment(jsonObjectLiteral, propKey), property =>
-                isArrayLiteralExpression(property.initializer) ?
-                    find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-                    undefined);
+        return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration | undefined {

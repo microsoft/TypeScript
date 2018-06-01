@@ -1692,7 +1692,7 @@ namespace ts.server {
 
         private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
             const { file, project } = this.getFileAndProject(args);
-            const changes = project.getLanguageService().getEditsForFileRename(args.oldFilePath, args.newFilePath, this.getFormatOptions(file));
+            const changes = project.getLanguageService().getEditsForFileRename(args.oldFilePath, args.newFilePath, this.getFormatOptions(file), this.getPreferences(file));
             return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
         }
 
