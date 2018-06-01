@@ -7013,7 +7013,7 @@ namespace ts {
                 }
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
-                    // Type parameter list looks like '@template {Constraint} T,U,V'
+                    // the template tag looks like '@template {Constraint} T,U,V'
                     let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                     let typeParametersPos = getNodePos();
                     const typeParameters: TypeParameterDeclaration[] = [];

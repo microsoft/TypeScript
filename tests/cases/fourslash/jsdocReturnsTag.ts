@@ -17,7 +17,6 @@ verify.signatureHelp({
     text: "find<T>(l: T[], x: T): T",
     docComment: "Find an item",
     tags: [
-        // TODO: GH#24130
         { name: "template", text: "T" },
         { name: "param", text: "l" },
         { name: "param", text: "x" },
