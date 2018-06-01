@@ -2342,7 +2342,7 @@ namespace ts {
             return finishNode(parameter);
         }
 
-        function parseJSDocType() {
+        function parseJSDocType(): TypeNode {
             const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
             let type = parseType();
             if (dotdotdot) {
@@ -3133,11 +3133,9 @@ namespace ts {
         }
 
         function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
-            if (isStartOfFunctionType()) {
-                return parseFunctionOrConstructorType(SyntaxKind.FunctionType)!; // TODO: GH#18217
-            }
-            if (token() === SyntaxKind.NewKeyword) {
-                return parseFunctionOrConstructorType(SyntaxKind.ConstructorType)!;
+            if (isStartOfFunctionType() || token() === SyntaxKind.NewKeyword) {
+                const fn = tryParse(() => parseFunctionOrConstructorType(token() === SyntaxKind.NewKeyword ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType));
+                return fn || parseTypeReference(); // If function parsing failed, parseTypeReference() will fail with a diagnostic
             }
             const type = parseUnionTypeOrHigher();
             if (!noConditionalTypes && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
