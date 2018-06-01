@@ -22,7 +22,7 @@
                 "0": {
                     "kind": "TypeParameter",
                     "pos": 18,
-                    "end": 19,
+                    "end": 20,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,

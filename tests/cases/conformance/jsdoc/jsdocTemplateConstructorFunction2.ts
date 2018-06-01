@@ -5,7 +5,7 @@
 
 /**
  * @param {T} t
- * @template {T}
+ * @template T
  */
 function Zet(t) {
     /** @type {T} */

@@ -7,7 +7,7 @@ tests/cases/conformance/jsdoc/test.ts(1,34): error TS2344: Type '{ a: number; }'
     /**
      * @template {{ a: number, b: string }} T,U A Comment
      * @template {{ c: boolean }} V uh ... are comments even supported??
-     * @template {W}
+     * @template W
      * @template X That last one had no comment
      * @typedef {{ t: T, u: U, v: V, w: W, x: X }} Everything
      */
