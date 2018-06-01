@@ -2256,6 +2256,16 @@ namespace ts {
             return finishNode(node);
         }
 
+        function createMissingType(): TypeReferenceNode {
+            const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
+            node.typeName = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Type_expected);
+            return finishNode(node);
+        }
+
+        function isMissingType(node: TypeNode): boolean {
+            return isTypeReferenceNode(node) && nodeIsMissing(node.typeName);
+        }
+
         function parseThisTypePredicate(lhs: ThisTypeNode): TypePredicateNode {
             nextToken();
             const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
@@ -2462,9 +2472,9 @@ namespace ts {
             signature.parameters = parseParameterList(flags)!; // TODO: GH#18217
             if (shouldParseReturnType(returnToken, !!(flags & SignatureFlags.Type))) {
                 signature.type = parseTypeOrTypePredicate();
-                return signature.type !== undefined;
+                if (isMissingType(signature.type)) return false;
             }
-            return true;
+            return signature.parameters !== undefined;
         }
 
         function shouldParseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): boolean {
@@ -2771,26 +2781,21 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseParenthesizedType(): ParenthesizedTypeNode {
+        function parseParenthesizedType(): TypeNode {
             const node = <ParenthesizedTypeNode>createNode(SyntaxKind.ParenthesizedType);
             parseExpected(SyntaxKind.OpenParenToken);
             node.type = parseType();
-            if (!node.type) {
-                return undefined!; // TODO: GH#18217
-            }
             parseExpected(SyntaxKind.CloseParenToken);
-            return finishNode(node);
+            return isMissingType(node.type) ? node.type : finishNode(node);
         }
 
         function parseFunctionOrConstructorType(): TypeNode {
             const pos = getNodePos();
             const kind = parseOptional(SyntaxKind.NewKeyword) ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType;
             const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind, pos);
-            if (!fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type | (sourceFile.languageVariant === LanguageVariant.JSX ? SignatureFlags.RequireCompleteParameterList : 0), node) ||
-                !node.parameters) { // TODO: ideally fillSignature would guarantee node.parameters to be defined
-                return parseTypeReference(); // This will fail with a diagnostic.
-            }
-            return finishNode(node);
+            return fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type | (sourceFile.languageVariant === LanguageVariant.JSX ? SignatureFlags.RequireCompleteParameterList : 0), node)
+                ? finishNode(node)
+                : createMissingType();
         }
 
         function parseKeywordAndNoDot(): TypeNode | undefined {
@@ -3620,11 +3625,6 @@ namespace ts {
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
             if (!fillSignature(SyntaxKind.ColonToken, isAsync | (allowAmbiguity ? SignatureFlags.None : SignatureFlags.RequireCompleteParameterList), node)) {
-                return undefined;
-            }
-
-            // If we couldn't get parameters, we definitely could not parse out an arrow function.
-            if (!node.parameters) {
                 return undefined;
             }
 
