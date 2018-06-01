@@ -1458,9 +1458,8 @@ namespace ts {
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
                         // js type aliases do not resolve names from their host, so skip past it
-                        lastLocation = location;
-                        location = getJSDocHost(location).parent;
-                        continue;
+                        location = getJSDocHost(location);
+                        break;
                 }
                 if (isSelfReferenceLocation(location)) {
                     lastSelfReferenceLocation = location;

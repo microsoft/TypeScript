@@ -1,0 +1,19 @@
+error TS5055: Cannot write file '/a.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+/a.js(7,14): error TS2304: Cannot find name 'CantResolveThis'.
+
+
+!!! error TS5055: Cannot write file '/a.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+==== /a.js (1 errors) ====
+    /**
+     * @param {Ty} x
+     */
+    function f(x) {}
+    
+    /**
+     * @typedef {CantResolveThis} Ty
+                 ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CantResolveThis'.
+     */
+    
