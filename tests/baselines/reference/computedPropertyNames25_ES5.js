@@ -38,11 +38,11 @@ var C = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     C.prototype.foo = function () {
+        var _a;
         var obj = (_a = {},
             _a[_super.prototype.bar.call(this)] = function () { },
             _a);
         return 0;
-        var _a;
     };
     return C;
 }(Base));

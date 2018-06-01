@@ -464,12 +464,12 @@ module ts {
 
    
     var hasOwnProperty = Object.prototype.hasOwnProperty;
->hasOwnProperty : (v: string) => boolean
->Object.prototype.hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
+>Object.prototype.hasOwnProperty : (v: string | number | symbol) => boolean
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 
     function getProperty<T>(map: Map<T>, key: string): T {
 >getProperty : <T>(map: Map<T>, key: string) => T
@@ -484,7 +484,7 @@ module ts {
 >!hasOwnProperty.call(map, key) : boolean
 >hasOwnProperty.call(map, key) : any
 >hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >map : Map<T>
 >key : string
@@ -507,7 +507,7 @@ module ts {
         return hasOwnProperty.call(map, key);
 >hasOwnProperty.call(map, key) : any
 >hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >map : Map<T>
 >key : string

@@ -23,7 +23,6 @@
 //// declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 //// declare function MainButton(linkProps: LinkProps): JSX.Element;
 //// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
-//// let opt = <MainButton [|wrong|] />;  // r1
+//// let opt = <MainButton [|{| "isWriteAccess": true, "isDefinition": true |}wrong|] />;
 
-const [r1] = test.ranges();
-verify.referencesOf(r1, [r1]);
+verify.singleReferenceGroup("(property) wrong: true");

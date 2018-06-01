@@ -478,6 +478,7 @@ module TypeScript {
 >bindSymbol : Symbol(Binder.bindSymbol, Decl(parserRealSource9.ts, 142, 9))
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
             if (!symbol.bound) {
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))

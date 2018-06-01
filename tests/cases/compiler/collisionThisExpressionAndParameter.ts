@@ -1,3 +1,4 @@
+// @lib: es5
 class Foo {
     x() {
         var _this = 10; // Local var. No this capture in x(), so no conflict.

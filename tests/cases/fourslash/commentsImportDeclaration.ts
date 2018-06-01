@@ -29,21 +29,27 @@ verify.quickInfos({
     3: ['import extMod = require("./commentsImportDeclaration_file0")', "Import declaration"]
 });
 
-goTo.marker('6');
-verify.completionListContains("m1", "namespace extMod.m1");
+verify.completions({ marker: "6", exact: [{ name: "m1", text: "namespace extMod.m1", documentation: "NamespaceComment" }] });
 
-goTo.marker('7');
-verify.completionListContains("b", "var extMod.m1.b: number", "b's comment");
-verify.completionListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
-verify.completionListContains("m2", "namespace extMod.m1.m2");
+verify.completions({
+    marker: "7",
+    exact: [
+        { name: "fooExport", text: "function extMod.m1.fooExport(): number", documentation: "exported function" },
+        { name: "b", text: "var extMod.m1.b: number", documentation: "b's comment" },
+        { name: "m2", text: "namespace extMod.m1.m2", documentation: "m2 comments" },
+    ]
+})
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("exported function");
+verify.signatureHelp({ marker: "8", docComment: "exported function" });
 verify.quickInfos({
     "8q": ["function extMod.m1.fooExport(): number", "exported function"],
     9: "var newVar: extMod.m1.m2.c"
 });
 
-goTo.marker('10');
-verify.completionListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
-verify.completionListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");
+verify.completions({
+    marker: "10",
+    exact:  [
+        { name: "c", text: "constructor extMod.m1.m2.c(): extMod.m1.m2.c" },
+        { name: "i", text: "var extMod.m1.m2.i: extMod.m1.m2.c", documentation: "i" },
+    ],
+});

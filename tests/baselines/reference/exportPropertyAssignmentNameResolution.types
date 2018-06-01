@@ -1,0 +1,14 @@
+=== tests/cases/conformance/salsa/bug24492.js ===
+module.exports.D = class { }
+>module.exports.D = class { } : typeof D
+>module.exports.D : any
+>module.exports : any
+>module : any
+>exports : any
+>D : any
+>class { } : typeof D
+
+new D()
+>new D() : any
+>D : any
+

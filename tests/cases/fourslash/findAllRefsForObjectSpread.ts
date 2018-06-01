@@ -12,12 +12,12 @@ const [r0, r1, r2, r3] = ranges;
 
 // members of spread types only refer to themselves and the resulting property
 verify.referenceGroups(r0, [{ definition: "(property) A1.a: string", ranges: [r0, r2, r3] }]);
-verify.referenceGroups(r1, [{ definition: "(property) A2.a: number", ranges: [r1, r2] }]);
+verify.referenceGroups(r1, [{ definition: "(property) A2.a?: number", ranges: [r1, r2] }]);
 
 // but the resulting property refers to everything
 verify.referenceGroups(r2, [
     { definition: "(property) A1.a: string", ranges: [r0, r2, r3] },
-    { definition: "(property) A2.a: number", ranges: [r1] },
+    { definition: "(property) A2.a?: number", ranges: [r1] },
 ]);
 
 verify.referenceGroups(r3, [{ definition: "(property) A1.a: string", ranges: [r0, r2, r3] }]);

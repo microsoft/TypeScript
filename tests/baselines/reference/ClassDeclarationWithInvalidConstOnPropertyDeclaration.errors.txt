@@ -1,9 +1,9 @@
-tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts(2,3): error TS1248: A class member cannot have the 'const' keyword.
+tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts(2,16): error TS1248: A class member cannot have the 'const' keyword.
 
 
 ==== tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts (1 errors) ====
     class AtomicNumbers {
       static const H = 1;
-      ~~~~~~~~~~~~~~~~~~~
+                   ~
 !!! error TS1248: A class member cannot have the 'const' keyword.
     }

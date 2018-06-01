@@ -76,7 +76,7 @@ function f3<T extends U, U extends Date>(x: T, y: U) {
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 12))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 24))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 24))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 12))
 >y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
@@ -96,22 +96,22 @@ function f3<T extends U, U extends Date>(x: T, y: U) {
     var r2 = true ? x : new Date(); 
 >r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 27, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 28, 7))
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     var r2 = true ? new Date() : x;
 >r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 27, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 28, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
 
     // ok
     var r3 = true ? y : new Date(); 
 >r3 : Symbol(r3, Decl(subtypesOfTypeParameterWithConstraints2.ts, 31, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 32, 7))
 >y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     var r3 = true ? new Date() : y;
 >r3 : Symbol(r3, Decl(subtypesOfTypeParameterWithConstraints2.ts, 31, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 32, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
 }
 
@@ -235,19 +235,19 @@ function f7<T extends Boolean>(x: T) {
 function f8<T extends Date>(x: T) {
 >f8 : Symbol(f8, Decl(subtypesOfTypeParameterWithConstraints2.ts, 71, 1))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 28))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 12))
 
     var r4 = true ? new Date() : x; // ok
 >r4 : Symbol(r4, Decl(subtypesOfTypeParameterWithConstraints2.ts, 74, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 75, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 28))
 
     var r4 = true ? x : new Date(); // ok
 >r4 : Symbol(r4, Decl(subtypesOfTypeParameterWithConstraints2.ts, 74, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 75, 7))
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 28))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 function f9<T extends RegExp>(x: T) {

@@ -321,7 +321,7 @@ describe("PatternMatcher", () => {
     });
 
     function assertSegmentMatch(candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
-        assert.deepEqual(ts.createPatternMatcher(pattern).getMatchForLastSegmentOfPattern(candidate), expected);
+        assert.deepEqual(ts.createPatternMatcher(pattern)!.getMatchForLastSegmentOfPattern(candidate), expected);
     }
 
     function assertInvalidPattern(pattern: string) {
@@ -329,7 +329,7 @@ describe("PatternMatcher", () => {
     }
 
     function assertFullMatch(dottedContainer: string, candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
-        assert.deepEqual(ts.createPatternMatcher(pattern).getFullMatch(dottedContainer.split("."), candidate), expected);
+        assert.deepEqual(ts.createPatternMatcher(pattern)!.getFullMatch(dottedContainer.split("."), candidate), expected);
     }
 
     function spanListToSubstrings(identifier: string, spans: ts.TextSpan[]) {

@@ -1,5 +1,5 @@
 === tests/cases/compiler/indexedAccessRetainsIndexSignature.ts ===
-type Diff<T extends string, U extends string> =
+type Diff<T extends keyof any, U extends keyof any> =
 >Diff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
 >T : T
 >U : U

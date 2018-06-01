@@ -6,5 +6,8 @@ for (var x of [1, 2, 3]) {
 >_a : Symbol(_a, Decl(ES5For-of23.ts, 1, 7))
 
     console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(ES5For-of23.ts, 0, 8))
 }

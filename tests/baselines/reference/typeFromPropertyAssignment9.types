@@ -147,7 +147,7 @@ var min = window.min || {};
 >min : { [x: string]: any; nest: { (): void; other: typeof other; }; property: { [x: string]: any; }; }
 >window.min || {} : any
 >window.min : any
->window : any
+>window : Window
 >min : any
 >{} : { [x: string]: any; nest: { (): void; other: typeof other; }; property: { [x: string]: any; }; }
 
@@ -175,7 +175,7 @@ min.nest.other = self.min.nest.other || class { };
 >self.min.nest.other : any
 >self.min.nest : any
 >self.min : any
->self : any
+>self : Window
 >min : any
 >nest : any
 >other : any

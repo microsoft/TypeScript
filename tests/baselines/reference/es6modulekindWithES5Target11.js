@@ -22,11 +22,11 @@ var C = /** @class */ (function () {
     C_1 = C;
     C.x = function () { return C_1.y; };
     C.prototype.method = function () { };
+    var C_1;
     C.y = 1;
     C = C_1 = __decorate([
         foo
     ], C);
     return C;
-    var C_1;
 }());
 export default C;

@@ -213,7 +213,7 @@ declare class T10 extends T9 {
 >T9 : T9
 }
 declare type T11 = {
->T11 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>T11 : T11
 
     [c4]: number;
 >[c4] : number
@@ -261,7 +261,7 @@ declare class T14 extends T13 {
 >T13 : T13
 }
 declare type T15 = {
->T15 : { a: number; 1: string; [s2]: boolean; }
+>T15 : T15
 
     a: number;
 >a : number
@@ -341,9 +341,9 @@ let t6: N.T6;
 >T6 : N.T6
 
 let t7: N.T7;
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >N : any
->T7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>T7 : N.T7
 
 let t8: T8;
 >t8 : T8
@@ -358,8 +358,8 @@ let t10: T10;
 >T10 : T10
 
 let t11: T11;
->t11 : { [c4]: number; [c5]: string; [s2]: boolean; }
->T11 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>t11 : T11
+>T11 : T11
 
 let t12: T12;
 >t12 : T12
@@ -374,8 +374,8 @@ let t14: T14;
 >T14 : T14
 
 let t15: T15;
->t15 : { a: number; 1: string; [s2]: boolean; }
->T15 : { a: number; 1: string; [s2]: boolean; }
+>t15 : T15
+>T15 : T15
 
 // assignability
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
@@ -431,13 +431,13 @@ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7,
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : N.T6
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : N.T5
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : N.T7
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : N.T5
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : N.T7
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : N.T6
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t5, t4 = t6, t4 = t7 : N.T7
 >t4 = t5, t4 = t6 : N.T6
 >t4 = t5 : N.T5
 >t4 : N.T4
@@ -445,35 +445,35 @@ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7,
 >t4 = t6 : N.T6
 >t4 : N.T4
 >t6 : N.T6
->t4 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t7 : N.T7
 >t4 : N.T4
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t5 = t4 : N.T4
 >t5 : N.T5
 >t4 : N.T4
 >t5 = t6 : N.T6
 >t5 : N.T5
 >t6 : N.T6
->t5 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t5 = t7 : N.T7
 >t5 : N.T5
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t6 = t4 : N.T4
 >t6 : N.T6
 >t4 : N.T4
 >t6 = t5 : N.T5
 >t6 : N.T6
 >t5 : N.T5
->t6 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t6 = t7 : N.T7
 >t6 : N.T6
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t7 = t4 : N.T4
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t4 : N.T4
 >t7 = t5 : N.T5
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t5 : N.T5
 >t7 = t6 : N.T6
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t6 : N.T6
 
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
@@ -481,7 +481,7 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0 : T0
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0 : T0
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0 : T0
->t0 = t12, t0 = t13, t0 = t14, t0 = t15 : { a: number; 1: string; [s2]: boolean; }
+>t0 = t12, t0 = t13, t0 = t14, t0 = t15 : T15
 >t0 = t12, t0 = t13, t0 = t14 : T14
 >t0 = t12, t0 = t13 : T13
 >t0 = t12 : T12
@@ -493,9 +493,9 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t0 = t14 : T14
 >t0 : T0
 >t14 : T14
->t0 = t15 : { a: number; 1: string; [s2]: boolean; }
+>t0 = t15 : T15
 >t0 : T0
->t15 : { a: number; 1: string; [s2]: boolean; }
+>t15 : T15
 >t12 = t0 : T0
 >t12 : T12
 >t0 : T0
@@ -506,7 +506,7 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t14 : T14
 >t0 : T0
 >t15 = t0 : T0
->t15 : { a: number; 1: string; [s2]: boolean; }
+>t15 : T15
 >t0 : T0
 
 t0 = C; // static side

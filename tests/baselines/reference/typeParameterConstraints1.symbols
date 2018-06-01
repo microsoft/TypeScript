@@ -20,7 +20,7 @@ function foo3<T extends string>(test: T) { }
 function foo4<T extends Date>(test: T) { } // valid
 >foo4 : Symbol(foo4, Decl(typeParameterConstraints1.ts, 2, 44))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 3, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >test : Symbol(test, Decl(typeParameterConstraints1.ts, 3, 30))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 3, 14))
 

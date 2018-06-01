@@ -42,7 +42,7 @@ namespace ts.projectSystem {
             const et = new TestServerEventManager([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
             et.assertProjectInfoTelemetryEvent({
-                fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 },
+                fileStats: fileStats({ ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }),
                 compilerOptions,
                 include: true,
             });
@@ -59,7 +59,6 @@ namespace ts.projectSystem {
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.mockHash("/hunter2/foo.csproj"),
                 compilerOptions: { strict: true },
                 compileOnSave: true,
                 // These properties can't be present for an external project, so they are undefined instead of false.
@@ -69,7 +68,7 @@ namespace ts.projectSystem {
                 exclude: undefined,
                 configFileName: "other",
                 projectType: "external",
-            });
+            }, "/hunter2/foo.csproj");
 
             // Also test that opening an external project only sends an event once.
 
@@ -202,7 +201,6 @@ namespace ts.projectSystem {
             const et = new TestServerEventManager([jsconfig, file]);
             et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 typeAcquisition: {
@@ -211,7 +209,7 @@ namespace ts.projectSystem {
                     exclude: false,
                 },
                 configFileName: "jsconfig.json",
-            });
+            }, "/jsconfig.json");
         });
 
         it("detects whether language service was disabled", () => {
@@ -222,7 +220,6 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent);
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 configFileName: "jsconfig.json",
@@ -232,11 +229,46 @@ namespace ts.projectSystem {
                     exclude: false,
                 },
                 languageServiceEnabled: false,
+            }, "/jsconfig.json");
+        });
+
+        describe("open files telemetry", () => {
+            it("sends event for inferred project", () => {
+                const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
+                const bjs = makeFile("/b.js");
+                const et = new TestServerEventManager([ajs, bjs]);
+
+                et.service.openClientFile(ajs.path);
+                et.assertOpenFileTelemetryEvent({ checkJs: true });
+
+                et.service.openClientFile(bjs.path);
+                et.assertOpenFileTelemetryEvent({ checkJs: false });
+
+                // No repeated send for opening a file seen before.
+                et.service.openClientFile(bjs.path);
+                et.assertNoOpenFilesTelemetryEvent();
+            });
+
+            it("not for '.ts' file", () => {
+                const ats = makeFile("/a.ts", "");
+                const et = new TestServerEventManager([ats]);
+
+                et.service.openClientFile(ats.path);
+                et.assertNoOpenFilesTelemetryEvent();
+            });
+
+            it("even for project with 'ts-check' in config", () => {
+                const file = makeFile("/a.js");
+                const compilerOptions: CompilerOptions = { checkJs: true };
+                const jsconfig = makeFile("/jsconfig.json", { compilerOptions });
+                const et = new TestServerEventManager([jsconfig, file]);
+                et.service.openClientFile(file.path);
+                et.assertOpenFileTelemetryEvent({ checkJs: false });
             });
         });
     });
 
-    function makeFile(path: string, content: {} = ""): FileOrFolder {
-        return { path, content: isString(content) ? "" : JSON.stringify(content) };
+    function makeFile(path: string, content: {} = ""): File {
+        return { path, content: isString(content) ? content : JSON.stringify(content) };
     }
 }

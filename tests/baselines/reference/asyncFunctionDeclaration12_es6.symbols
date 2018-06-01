@@ -2,5 +2,5 @@
 var v = async function await(): Promise<void> { }
 >v : Symbol(v, Decl(asyncFunctionDeclaration12_es6.ts, 0, 3))
 >await : Symbol(await, Decl(asyncFunctionDeclaration12_es6.ts, 0, 22))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 

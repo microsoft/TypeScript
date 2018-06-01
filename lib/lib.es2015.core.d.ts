@@ -18,8 +18,6 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-declare type PropertyKey = string | number | symbol;
-
 interface Array<T> {
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -224,29 +222,29 @@ interface NumberConstructor {
      * Returns true if passed value is finite.
      * Unlike the global isFinite, Number.isFinite doesn't forcibly convert the parameter to a
      * number. Only finite values of the type number, result in true.
-     * @param number A numeric value.
+     * @param value The value you want to test.
      */
-    isFinite(number: number): boolean;
+    isFinite(value: any): boolean;
 
     /**
      * Returns true if the value passed is an integer, false otherwise.
-     * @param number A numeric value.
+     * @param value The value you want to test.
      */
-    isInteger(number: number): boolean;
+    isInteger(value: any): boolean;
 
     /**
      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
      * number). Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter
      * to a number. Only values of the type number, that are also NaN, result in true.
-     * @param number A numeric value.
+     * @param value The value you want to test.
      */
-    isNaN(number: number): boolean;
+    isNaN(number: any): boolean;
 
     /**
      * Returns true if the value passed is a safe integer.
-     * @param number A numeric value.
+     * @param value The value you want to test
      */
-    isSafeInteger(number: number): boolean;
+    isSafeInteger(value: any): boolean;
 
     /**
      * The value of the largest integer n such that n and n + 1 are both exactly representable as
@@ -276,20 +274,6 @@ interface NumberConstructor {
      * All other strings are considered decimal.
      */
     parseInt(string: string, radix?: number): number;
-}
-
-interface Object {
-    /**
-     * Determines whether an object has a property with the specified name.
-     * @param v A property name.
-     */
-    hasOwnProperty(v: PropertyKey): boolean;
-
-    /**
-     * Determines whether a specified property is enumerable.
-     * @param v A property name.
-     */
-    propertyIsEnumerable(v: PropertyKey): boolean;
 }
 
 interface ObjectConstructor {
@@ -347,25 +331,6 @@ interface ObjectConstructor {
      * @param proto The value of the new prototype or null.
      */
     setPrototypeOf(o: any, proto: object | null): any;
-
-    /**
-     * Gets the own property descriptor of the specified object.
-     * An own property descriptor is one that is defined directly on the object and is not
-     * inherited from the object's prototype.
-     * @param o Object that contains the property.
-     * @param p Name of the property.
-     */
-    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor | undefined;
-
-    /**
-     * Adds a property to an object, or modifies attributes of an existing property.
-     * @param o Object on which to add or modify the property. This can be a native JavaScript
-     * object (that is, a user-defined object or a built in object) or a DOM object.
-     * @param p The property name.
-     * @param attributes Descriptor for the property. It can be for a data property or an accessor
-     *  property.
-     */
-    defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
 }
 
 interface ReadonlyArray<T> {

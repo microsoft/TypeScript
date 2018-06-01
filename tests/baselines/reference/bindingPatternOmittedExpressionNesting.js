@@ -4,8 +4,8 @@ export let [,,[,[],,[],]] = undefined as any;
 //// [bindingPatternOmittedExpressionNesting.js]
 "use strict";
 exports.__esModule = true;
-exports._a = (_b = undefined, _c = _b[2], _d = _c[1], _e = _c[3]);
-var _b, _c, _d, _e;
+var _a, _b, _c, _d;
+exports._e = (_a = undefined, _b = _a[2], _c = _b[1], _d = _b[3]);
 
 
 //// [bindingPatternOmittedExpressionNesting.d.ts]

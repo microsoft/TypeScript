@@ -12,7 +12,7 @@ tests/cases/compiler/implicitAnyDeclareMemberWithoutType.ts(7,5): error TS7013: 
     // this should be an error
     interface IFace {
         member1;  // error at "member1"
-        ~~~~~~~~
+        ~~~~~~~
 !!! error TS7008: Member 'member1' implicitly has an 'any' type.
         member2: string;
         constructor(c1, c2: string, c3);  // error at "c1, c3, "constructor"

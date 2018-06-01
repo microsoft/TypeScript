@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.9.0",
+    "version": "3.0.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -29,6 +29,7 @@
         "node": ">=4.2.0"
     },
     "devDependencies": {
+        "@octokit/rest": "latest",
         "@types/browserify": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",
@@ -39,6 +40,7 @@
         "@types/gulp-help": "latest",
         "@types/gulp-newer": "latest",
         "@types/gulp-sourcemaps": "latest",
+        "@types/jake": "latest",
         "@types/merge2": "latest",
         "@types/minimatch": "latest",
         "@types/minimist": "latest",
@@ -47,12 +49,14 @@
         "@types/node": "8.5.5",
         "@types/q": "latest",
         "@types/run-sequence": "latest",
+        "@types/source-map-support": "latest",
         "@types/through2": "latest",
+        "@types/travis-fold": "latest",
         "@types/xml2js": "^0.4.0",
-        "xml2js": "^0.4.19",
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
+        "chalk": "latest",
         "convert-source-map": "latest",
         "del": "latest",
         "gulp": "3.X",
@@ -76,11 +80,10 @@
         "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
-        "ts-node": "latest",
         "tslint": "latest",
+        "typescript": "next",
         "vinyl": "latest",
-        "chalk": "latest",
-        "typescript": "next"
+        "xml2js": "^0.4.19"
     },
     "scripts": {
         "pretest": "jake tests",

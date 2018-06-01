@@ -1,7 +1,7 @@
 === tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts ===
 var s = Symbol();
 >s : Symbol(s, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 0, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var t = {};
 >t : Symbol(t, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 1, 3))

@@ -3,7 +3,7 @@ var x = { name: "x", 0: new Date() };
 >x : Symbol(x, Decl(numericIndexerConstraint5.ts, 0, 3))
 >name : Symbol(name, Decl(numericIndexerConstraint5.ts, 0, 9))
 >0 : Symbol(0, Decl(numericIndexerConstraint5.ts, 0, 20))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var z: { [name: number]: string } = x;
 >z : Symbol(z, Decl(numericIndexerConstraint5.ts, 1, 3))

@@ -27,8 +27,7 @@ verify.quickInfoAt("2", "function foo(): void", "This comment should appear for 
 goTo.marker('3');
 verify.completionListContains('foo', 'function foo(): void', 'This comment should appear for foo');
 
-goTo.marker('4');
-verify.currentSignatureHelpDocCommentIs("This comment should appear for foo");
+verify.signatureHelp({ marker: "4", docComment: "This comment should appear for foo" });
 
 verify.quickInfoAt("5", "function fooWithParameters(a: string, b: number): void", "This is comment for function signature");
 
@@ -43,14 +42,13 @@ verify.quickInfoAt("8", "function fooWithParameters(a: string, b: number): void"
 goTo.marker('9');
 verify.completionListContains('fooWithParameters', 'function fooWithParameters(a: string, b: number): void', 'This is comment for function signature');
 
-goTo.marker('10');
-verify.currentSignatureHelpDocCommentIs("This is comment for function signature");
-verify.currentParameterHelpArgumentDocCommentIs("this is comment about a");
-
-goTo.marker('11');
-verify.currentSignatureHelpDocCommentIs("This is comment for function signature");
-verify.currentParameterHelpArgumentDocCommentIs("this is comment for b");
-
-goTo.marker('12');
-verify.currentSignatureHelpDocCommentIs("Does something");
-verify.currentParameterHelpArgumentDocCommentIs("a string");
+verify.signatureHelp(
+    { marker: "10", docComment: "This is comment for function signature", parameterDocComment: "this is comment about a" },
+    { marker: "11", docComment: "This is comment for function signature", parameterDocComment: "this is comment for b" },
+    {
+        marker: "12",
+        docComment: "Does something",
+        parameterDocComment: "a string",
+        tags: [{ name: "param", text: "a a string" }],
+    },
+);

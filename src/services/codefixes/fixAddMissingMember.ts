@@ -23,7 +23,7 @@ namespace ts.codefix {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { program, preferences } = context;
-                const info = getInfo(diag.file!, diag.start!, program.getTypeChecker());
+                const info = getInfo(diag.file, diag.start, program.getTypeChecker());
                 if (!info) return;
                 const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
                 if (!addToSeen(seenNames, token.text)) {
@@ -60,7 +60,7 @@ namespace ts.codefix {
         const { parent } = token;
         if (!isPropertyAccessExpression(parent)) return undefined;
 
-        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression));
+        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression)!);
         const { symbol } = leftExpressionType;
         const classDeclaration = symbol && symbol.declarations && find(symbol.declarations, isClassLike);
         if (!classDeclaration) return undefined;
@@ -84,7 +84,7 @@ namespace ts.codefix {
             if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                 return;
             }
-            const className = classDeclaration.name.getText();
+            const className = classDeclaration.name!.getText();
             const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
             changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization);
         }
@@ -109,11 +109,11 @@ namespace ts.codefix {
     }
 
     function getTypeNode(checker: TypeChecker, classDeclaration: ClassLikeDeclaration, token: Node) {
-        let typeNode: TypeNode;
+        let typeNode: TypeNode | undefined;
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
-            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
+            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)!)); // TODO: GH#18217
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
         }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -132,7 +132,24 @@ namespace ts.codefix {
             /*questionToken*/ undefined,
             typeNode,
             /*initializer*/ undefined);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property);
+
+        const lastProp = getNodeToInsertPropertyAfter(classDeclaration);
+        if (lastProp) {
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, lastProp, property);
+        }
+        else {
+            changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property);
+        }
+    }
+
+    // Gets the last of the first run of PropertyDeclarations, or undefined if the class does not start with a PropertyDeclaration.
+    function getNodeToInsertPropertyAfter(cls: ClassLikeDeclaration): PropertyDeclaration | undefined {
+        let res: PropertyDeclaration | undefined;
+        for (const member of cls.members) {
+            if (!isPropertyDeclaration(member)) break;
+            res = member;
+        }
+        return res;
     }
 
     function createAddIndexSignatureAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode): CodeFixAction {
@@ -182,6 +199,13 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): void {
         const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, preferences);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
+
+        if (containingMethodDeclaration && containingMethodDeclaration.parent === classDeclaration) {
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, containingMethodDeclaration, methodDeclaration);
+        }
+        else {
+            changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        }
     }
 }

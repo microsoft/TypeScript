@@ -4,7 +4,7 @@ interface I {
 
     [Symbol.unscopables](): string;
 >[Symbol.unscopables] : Symbol(I[Symbol.unscopables], Decl(parserSymbolProperty2.ts, 0, 13))
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
 }

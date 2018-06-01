@@ -2810,11 +2810,11 @@ module Harness {
 
                     if (this.fileCollection.hasOwnProperty(p)) {
 >this.fileCollection.hasOwnProperty(p) : boolean
->this.fileCollection.hasOwnProperty : (v: string) => boolean
+>this.fileCollection.hasOwnProperty : (v: string | number | symbol) => boolean
 >this.fileCollection : {}
 >this : this
 >fileCollection : {}
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >p : string
 
                         var current = <Harness.Compiler.WriterAggregator>this.fileCollection[p];

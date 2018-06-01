@@ -30,7 +30,7 @@ namespace ts.projectSystem {
         }
     }
 
-    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: File[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
                 host.ensureFileOrFolder(file);
@@ -141,7 +141,19 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
-            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
+
+            const expectedWatchedFiles = createMap<number>();
+            expectedWatchedFiles.set(tsconfig.path, 1); // tsserver
+            expectedWatchedFiles.set(libFile.path, 1); // tsserver
+            expectedWatchedFiles.set(packageJson.path, 1); // typing installer
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+
+            const expectedWatchedDirectoriesRecursive = createMap<number>();
+            expectedWatchedDirectoriesRecursive.set("/a/b", 2); // TypingInstaller and wild card
+            expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 
@@ -149,7 +161,9 @@ namespace ts.projectSystem {
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
             // should not watch jquery
-            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
         });
 
         it("inferred project (typings installed)", () => {
@@ -403,7 +417,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -446,7 +460,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -683,7 +697,7 @@ namespace ts.projectSystem {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
                 }
                 installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
-                    let typingFiles: (FileOrFolder & { typings: string })[] = [];
+                    let typingFiles: (File & { typings: string })[] = [];
                     if (args.indexOf(typingsName("commander")) >= 0) {
                         typingFiles = [commander, jquery, lodash, cordova];
                     }
@@ -827,7 +841,17 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
-            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
+
+            const watchedFilesExpected = createMap<number>();
+            watchedFilesExpected.set(jsconfig.path, 1); // project files
+            watchedFilesExpected.set(libFile.path, 1); // project files
+            checkWatchedFilesDetailed(host, watchedFilesExpected);
+
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+
+            const watchedRecursiveDirectoriesExpected = createMap<number>();
+            watchedRecursiveDirectoriesExpected.set("/", 2); // wild card + type installer
+            checkWatchedDirectoriesDetailed(host, watchedRecursiveDirectoriesExpected, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 
@@ -999,14 +1023,14 @@ namespace ts.projectSystem {
             proj.updateGraph();
 
             assert.deepEqual(
-                proj.getCachedUnresolvedImportsPerFile_TestOnly().get(<Path>f1.path),
+                proj.cachedUnresolvedImportsPerFile.get(<Path>f1.path),
                 ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
             );
 
             installer.installAll(/*expectedCount*/ 1);
         });
 
-        it("should recompute resolutions after typings are installed", () => {
+        it("cached unresolved typings are not recomputed if program structure did not change", () => {
             const host = createServerHost([]);
             const session = createSession(host);
             const f = {
@@ -1029,7 +1053,7 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const proj = projectService.inferredProjects[0];
-            const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+            const version1 = proj.lastCachedUnresolvedImportsList;
 
             // make a change that should not affect the structure of the program
             const changeRequest: server.protocol.ChangeRequest = {
@@ -1047,8 +1071,8 @@ namespace ts.projectSystem {
             };
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
-            const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.notEqual(version1, version2, "set of unresolved imports should change");
+            const version2 = proj.lastCachedUnresolvedImportsList;
+            assert.strictEqual(version1, version2, "set of unresolved imports should change");
         });
 
         it("expired cache entry (inferred project, should install typings)", () => {
@@ -1169,7 +1193,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -1423,7 +1447,7 @@ namespace ts.projectSystem {
                 commander: { typingLocation: commander.path, version: Semver.parse("1.3.0-next.0") }
             });
             const registry = createTypesRegistry("node", "commander");
-            registry.get("node")[`ts${versionMajorMinor}`] = "1.3.0-next.1";
+            registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
             assert.deepEqual(logger.finish(), [
@@ -1511,8 +1535,8 @@ namespace ts.projectSystem {
                 content: "export let x: number"
             };
             const host = createServerHost([f1, packageFile, packageLockFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent!: server.BeginInstallTypes;
+            let endEvent!: server.EndInstallTypes;
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1559,8 +1583,8 @@ namespace ts.projectSystem {
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent: server.BeginInstallTypes | undefined;
+            let endEvent: server.EndInstallTypes | undefined;
             const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1587,8 +1611,8 @@ namespace ts.projectSystem {
 
             assert.isTrue(!!beginEvent);
             assert.isTrue(!!endEvent);
-            assert.isTrue(beginEvent.eventId === endEvent.eventId);
-            assert.isFalse(endEvent.installSuccess);
+            assert.isTrue(beginEvent!.eventId === endEvent!.eventId);
+            assert.isFalse(endEvent!.installSuccess);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
         });
@@ -1619,6 +1643,77 @@ namespace ts.projectSystem {
             });
             assert.isTrue(hasError);
             assert.deepEqual(commands, expectedCommands, "commands");
+        });
+    });
+
+    describe("recomputing resolutions of unresolved imports", () => {
+        const globalTypingsCacheLocation = "/tmp";
+        const appPath = "/a/b/app.js" as Path;
+        const foooPath = "/a/b/node_modules/fooo/index.d.ts";
+        function verifyResolvedModuleOfFooo(project: server.Project) {
+            const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo")!;
+            assert.equal(foooResolution.resolvedFileName, foooPath);
+            return foooResolution;
+        }
+
+        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: File[]) {
+            const app: File = {
+                path: appPath,
+                content: `${appContents}import * as x from "fooo";`
+            };
+            const fooo: File = {
+                path: foooPath,
+                content: `export var x: string;`
+            };
+            const host = createServerHost([app, fooo]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("foo") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    executeCommand(this, host, typingNames, typingFiles, cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            checkProjectActualFiles(proj, [app.path, fooo.path]);
+            const foooResolution1 = verifyResolvedModuleOfFooo(proj);
+
+            installer.installAll(/*expectedCount*/ 1);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, typingFiles.map(f => f.path).concat(app.path, fooo.path));
+            const foooResolution2 = verifyResolvedModuleOfFooo(proj);
+            assert.strictEqual(foooResolution1, foooResolution2);
+        }
+
+        it("correctly invalidate the resolutions with typing names", () => {
+            verifyUnresolvedImportResolutions('import * as a from "foo";', ["foo"], [{
+                path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
+                content: "export function a(): void;"
+            }]);
+        });
+
+        it("correctly invalidate the resolutions with typing names that are trimmed", () => {
+            const fooAA: File = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/a.d.ts`,
+                content: "export function a (): void;"
+            };
+            const fooAB: File = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/b.d.ts`,
+                content: "export function b (): void;"
+            };
+            const fooAC: File = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/c.d.ts`,
+                content: "export function c (): void;"
+            };
+            verifyUnresolvedImportResolutions(`
+                    import * as a from "foo/a/a";
+                    import * as b from "foo/a/b";
+                    import * as c from "foo/a/c";
+            `, ["foo"], [fooAA, fooAB, fooAC]);
         });
     });
 }

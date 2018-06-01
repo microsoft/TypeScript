@@ -9,11 +9,11 @@
 //// }
 //// class MyClass {
 ////   props: {
-////     [|name|]?: string;
+////     [|{| "isWriteAccess": true, "isDefinition": true |}name|]?: string;
 ////     size?: number;
 //// }
-//// 
-//// 
-//// var x = <MyClass [|name|]='hello'/>;
+////
+////
+//// var x = <MyClass [|{| "isWriteAccess": true, "isDefinition": true |}name|]='hello'/>;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) name?: string");

@@ -1,7 +1,7 @@
 namespace ts {
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         const pragmaContext: PragmaContext = {
-            languageVersion: ScriptTarget.ES5, // controls weather the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
+            languageVersion: ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
             pragmas: undefined,
             checkJsDirective: undefined,
             referencedFiles: [],
@@ -11,21 +11,24 @@ namespace ts {
             moduleName: undefined
         };
         const importedFiles: FileReference[] = [];
-        let ambientExternalModules: { ref: FileReference, depth: number }[];
+        let ambientExternalModules: { ref: FileReference, depth: number }[] | undefined;
+        let lastToken: SyntaxKind;
+        let currentToken: SyntaxKind;
         let braceNesting = 0;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
         let externalModule = false;
 
         function nextToken() {
-            const token = scanner.scan();
-            if (token === SyntaxKind.OpenBraceToken) {
+            lastToken = currentToken;
+            currentToken = scanner.scan();
+            if (currentToken === SyntaxKind.OpenBraceToken) {
                 braceNesting++;
             }
-            else if (token === SyntaxKind.CloseBraceToken) {
+            else if (currentToken === SyntaxKind.CloseBraceToken) {
                 braceNesting--;
             }
-            return token;
+            return currentToken;
         }
 
         function getFileReference() {
@@ -77,6 +80,9 @@ namespace ts {
          * Returns true if at least one token was consumed from the stream
          */
         function tryConsumeImport(): boolean {
+            if (lastToken === SyntaxKind.DotToken) {
+                return false;
+            }
             let token = scanner.getToken();
             if (token === SyntaxKind.ImportKeyword) {
                 token = nextToken();
@@ -293,6 +299,10 @@ namespace ts {
             //    export import i = require("mod")
             //    (for JavaScript files) require("mod")
 
+            // Do not look for:
+            //    AnySymbol.import("mod")
+            //    AnySymbol.nested.import("mod")
+
             while (true) {
                 if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
                     break;
@@ -326,11 +336,11 @@ namespace ts {
                     importedFiles.push(decl.ref);
                 }
             }
-            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: pragmaContext.hasNoDefaultLib, ambientExternalModules: undefined };
+            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: undefined };
         }
         else {
             // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
-            let ambientModuleNames: string[];
+            let ambientModuleNames: string[] | undefined;
             if (ambientExternalModules) {
                 for (const decl of ambientExternalModules) {
                     if (decl.depth === 0) {
@@ -344,7 +354,7 @@ namespace ts {
                     }
                 }
             }
-            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
+            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
         }
     }
 }

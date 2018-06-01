@@ -12,7 +12,7 @@ tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts(20,16): er
     // these should be errors
     class GetAndSet {
         getAndSet = null;             // error at "getAndSet"
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~
 !!! error TS7008: Member 'getAndSet' implicitly has an 'any' type.
         public get haveGetAndSet() {  // this should not be an error
                    ~~~~~~~~~~~~~
