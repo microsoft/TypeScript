@@ -1,0 +1,17 @@
+tests/cases/compiler/importNotElidedWhenNotFound.ts(1,15): error TS2307: Cannot find module 'file'.
+tests/cases/compiler/importNotElidedWhenNotFound.ts(2,15): error TS2307: Cannot find module 'other_file'.
+
+
+==== tests/cases/compiler/importNotElidedWhenNotFound.ts (2 errors) ====
+    import X from 'file';
+                  ~~~~~~
+!!! error TS2307: Cannot find module 'file'.
+    import Z from 'other_file';
+                  ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'other_file'.
+    
+    class Y extends Z {
+      constructor() {
+        super(X);
+      }
+    }
