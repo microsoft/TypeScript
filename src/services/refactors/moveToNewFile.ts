@@ -153,6 +153,8 @@ namespace ts.refactor {
             if (sourceFile === oldFile) continue;
             for (const statement of sourceFile.statements) {
                 forEachImportInStatement(statement, importNode => {
+                    if (checker.getSymbolAtLocation(moduleSpecifierFromImport(importNode)) !== oldFile.symbol) return;
+
                     const shouldMove = (name: Identifier): boolean => {
                         const symbol = isBindingElement(name.parent)
                             ? getPropertySymbolFromBindingElement(checker, name.parent as BindingElement & { name: Identifier })
@@ -163,8 +165,73 @@ namespace ts.refactor {
                     const newModuleSpecifier = combinePaths(getDirectoryPath(moduleSpecifierFromImport(importNode).text), newModuleName);
                     const newImportDeclaration = filterImport(importNode, createLiteral(newModuleSpecifier), shouldMove);
                     if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
+
+                    const ns = getNamespaceLikeImport(importNode);
+                    if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleName, newModuleSpecifier, ns, importNode);
                 });
             }
+        }
+    }
+
+    function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                return node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
+                    node.importClause.namedBindings.name : undefined;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node.name;
+            case SyntaxKind.VariableDeclaration:
+                return tryCast(node.name, isIdentifier);
+            default:
+                return Debug.assertNever(node);
+        }
+    }
+
+    function updateNamespaceLikeImport(
+        changes: textChanges.ChangeTracker,
+        sourceFile: SourceFile,
+        checker: TypeChecker,
+        movedSymbols: ReadonlySymbolSet,
+        newModuleName: string,
+        newModuleSpecifier: string,
+        oldImportId: Identifier,
+        oldImportNode: SupportedImport,
+    ): void {
+        const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleName, ScriptTarget.ESNext);
+        let needUniqueName = false;
+        const toChange: Identifier[] = [];
+        FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
+            if (!isPropertyAccessExpression(ref.parent)) return;
+            needUniqueName = needUniqueName || !!checker.resolveName(preferredNewNamespaceName, ref, SymbolFlags.All, /*excludeGlobals*/ true);
+            if (movedSymbols.has(checker.getSymbolAtLocation(ref.parent.name)!)) {
+                toChange.push(ref);
+            }
+        });
+
+        if (toChange.length) {
+            const newNamespaceName = needUniqueName ? getUniqueName(preferredNewNamespaceName, sourceFile) : preferredNewNamespaceName;
+            for (const ref of toChange) {
+                changes.replaceNode(sourceFile, ref, createIdentifier(newNamespaceName));
+            }
+            changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, newModuleName, newModuleSpecifier));
+        }
+    }
+
+    function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string): Node {
+        const newNamespaceId = createIdentifier(newNamespaceName);
+        const newModuleString = createLiteral(newModuleSpecifier);
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                return createImportDeclaration(
+                    /*decorators*/ undefined, /*modifiers*/ undefined,
+                    createImportClause(/*name*/ undefined, createNamespaceImport(newNamespaceId)),
+                    newModuleString);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newNamespaceId, createExternalModuleReference(newModuleString));
+            case SyntaxKind.VariableDeclaration:
+                return createVariableDeclaration(newNamespaceId, /*type*/ undefined, createRequireCall(newModuleString));
+            default:
+                return Debug.assertNever(node);
         }
     }
 
