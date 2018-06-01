@@ -28417,8 +28417,8 @@ namespace ts {
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            if (isNodeArray(typeParameters)) {
-                const { pos, end } = typeParameters;
+            if (isNodeArray(typeParameters) || typeParameters.length) {
+                const { pos, end } = isNodeArray(typeParameters) ? typeParameters : typeParameters[0];
                 return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
