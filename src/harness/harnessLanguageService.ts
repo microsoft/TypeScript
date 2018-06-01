@@ -794,7 +794,7 @@ namespace Harness.LanguageService {
                                 const proxy = makeDefaultProxy(info);
                                 proxy.getSemanticDiagnostics = filename => {
                                     const prev = info.languageService.getSemanticDiagnostics(filename);
-                                    const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
+                                    const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
                                     prev.push({
                                         category: ts.DiagnosticCategory.Warning,
                                         file: sourceFile,
