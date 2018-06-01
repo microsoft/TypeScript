@@ -4085,7 +4085,7 @@ namespace ts {
                         // ambient module, just use declaration/symbol name (fallthrough)
                     }
                     else {
-                        return `"${getResolvedExternalModuleName(context!.tracker.moduleResolverHost!, file, getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration)))}"`;
+                        return `"${getResolvedExternalModuleNameForPossiblyExternalModule(context!.tracker.moduleResolverHost!, file, getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration)))}"`;
                     }
                 }
                 const declaration = symbol.declarations[0];

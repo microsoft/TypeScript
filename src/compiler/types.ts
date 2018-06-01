@@ -5287,6 +5287,7 @@ namespace ts {
         getCanonicalFileName(f: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
+        getCompilerOptions(): CompilerOptions;
     }
 
     /** @deprecated See comment on SymbolWriter */
