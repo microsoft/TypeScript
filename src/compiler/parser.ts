@@ -4,7 +4,6 @@ namespace ts {
         Yield = 1 << 0,
         Await = 1 << 1,
         Type  = 1 << 2,
-        RequireCompleteParameterList = 1 << 3,
         IgnoreMissingOpenBrace = 1 << 4,
         JSDoc = 1 << 5,
     }
@@ -2256,14 +2255,22 @@ namespace ts {
             return finishNode(node);
         }
 
-        function createMissingType(): TypeReferenceNode {
-            const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
-            node.typeName = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Type_expected);
-            return finishNode(node);
-        }
-
-        function isMissingType(node: TypeNode): boolean {
-            return isTypeReferenceNode(node) && nodeIsMissing(node.typeName);
+        // If true, we should abort parsing an error function.
+        function typeHasArrowFunctionBlockingParseError(node: TypeNode): boolean {
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    return nodeIsMissing((node as TypeReferenceNode).typeName);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType: {
+                    const { parameters, type } = node as FunctionOrConstructorTypeNode;
+                    // parameters.pos === parameters.end only if we used parseMissingList, else should contain at least `()`
+                    return parameters.pos === parameters.end || typeHasArrowFunctionBlockingParseError(type);
+                }
+                case SyntaxKind.ParenthesizedType:
+                    return typeHasArrowFunctionBlockingParseError((node as ParenthesizedTypeNode).type);
+                default:
+                    return false;
+            }
         }
 
         function parseThisTypePredicate(lhs: ThisTypeNode): TypePredicateNode {
@@ -2460,6 +2467,7 @@ namespace ts {
         }
 
         /**
+         * Note: If returnToken is EqualsGreaterThanToken, `signature.type` will always be defined.
          * @returns If return type parsing succeeds
          */
         function fillSignature(
@@ -2469,12 +2477,12 @@ namespace ts {
             if (!(flags & SignatureFlags.JSDoc)) {
                 signature.typeParameters = parseTypeParameters();
             }
-            signature.parameters = parseParameterList(flags)!; // TODO: GH#18217
+            const parsedParameters = parseParameterList(signature, flags); // TODO: GH#18217
             if (shouldParseReturnType(returnToken, !!(flags & SignatureFlags.Type))) {
                 signature.type = parseTypeOrTypePredicate();
-                if (isMissingType(signature.type)) return false;
+                if (typeHasArrowFunctionBlockingParseError(signature.type)) return false;
             }
-            return signature.parameters !== undefined;
+            return parsedParameters;
         }
 
         function shouldParseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): boolean {
@@ -2494,7 +2502,8 @@ namespace ts {
             return false;
         }
 
-        function parseParameterList(flags: SignatureFlags) {
+        // Returns true on success.
+        function parseParameterList(signature: SignatureDeclaration, flags: SignatureFlags): boolean {
             // FormalParameters [Yield,Await]: (modified)
             //      [empty]
             //      FormalParameterList[?Yield,Await]
@@ -2508,31 +2517,23 @@ namespace ts {
             //
             // SingleNameBinding [Yield,Await]:
             //      BindingIdentifier[?Yield,?Await]Initializer [In, ?Yield,?Await] opt
-            if (parseExpected(SyntaxKind.OpenParenToken)) {
-                const savedYieldContext = inYieldContext();
-                const savedAwaitContext = inAwaitContext();
-
-                setYieldContext(!!(flags & SignatureFlags.Yield));
-                setAwaitContext(!!(flags & SignatureFlags.Await));
-
-                const result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
-
-                setYieldContext(savedYieldContext);
-                setAwaitContext(savedAwaitContext);
-
-                if (!parseExpected(SyntaxKind.CloseParenToken) && (flags & SignatureFlags.RequireCompleteParameterList)) {
-                    // Caller insisted that we had to end with a )   We didn't.  So just return
-                    // undefined here.
-                    return undefined;
-                }
-
-                return result;
+            if (!parseExpected(SyntaxKind.OpenParenToken)) {
+                signature.parameters = createMissingList<ParameterDeclaration>();
+                return false;
             }
 
-            // We didn't even have an open paren.  If the caller requires a complete parameter list,
-            // we definitely can't provide that.  However, if they're ok with an incomplete one,
-            // then just return an empty set of parameters.
-            return (flags & SignatureFlags.RequireCompleteParameterList) ? undefined : createMissingList<ParameterDeclaration>();
+            const savedYieldContext = inYieldContext();
+            const savedAwaitContext = inAwaitContext();
+
+            setYieldContext(!!(flags & SignatureFlags.Yield));
+            setAwaitContext(!!(flags & SignatureFlags.Await));
+
+            signature.parameters = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
+
+            setYieldContext(savedYieldContext);
+            setAwaitContext(savedAwaitContext);
+
+            return parseExpected(SyntaxKind.CloseParenToken);
         }
 
         function parseTypeMemberSemicolon() {
@@ -2786,16 +2787,15 @@ namespace ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.type = parseType();
             parseExpected(SyntaxKind.CloseParenToken);
-            return isMissingType(node.type) ? node.type : finishNode(node);
+            return finishNode(node);
         }
 
         function parseFunctionOrConstructorType(): TypeNode {
             const pos = getNodePos();
             const kind = parseOptional(SyntaxKind.NewKeyword) ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType;
             const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind, pos);
-            return fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type | (sourceFile.languageVariant === LanguageVariant.JSX ? SignatureFlags.RequireCompleteParameterList : 0), node)
-                ? finishNode(node)
-                : createMissingType();
+            fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type, node);
+            return finishNode(node);
         }
 
         function parseKeywordAndNoDot(): TypeNode | undefined {
@@ -3624,7 +3624,7 @@ namespace ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            if (!fillSignature(SyntaxKind.ColonToken, isAsync | (allowAmbiguity ? SignatureFlags.None : SignatureFlags.RequireCompleteParameterList), node)) {
+            if (!fillSignature(SyntaxKind.ColonToken, isAsync, node) && !allowAmbiguity) {
                 return undefined;
             }
 
