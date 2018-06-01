@@ -18,7 +18,7 @@ verify.signatureHelp({
     docComment: "Find an item",
     tags: [
         // TODO: GH#24130
-        { name: "template", text: "T\n " },
+        { name: "template", text: "T" },
         { name: "param", text: "l" },
         { name: "param", text: "x" },
         { name: "returns", text: "The names of the found item(s)." },

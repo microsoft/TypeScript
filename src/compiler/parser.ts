@@ -7019,16 +7019,24 @@ namespace ts {
                     }
 
                     // Type parameter list looks like '@template {Constraint} T,U,V'
+                    let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                    let typeParametersPos = getNodePos();
                     const typeParameters = [];
-                    const typeParametersPos = getNodePos();
+                    const firstBrace = token() === SyntaxKind.OpenBraceToken;
                     const nameOrConstraint = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
                     let parseMore = true;
-                    const isConstraint = token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.Identifier;
-                    if (!isConstraint) {
-                        const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-                        if (!ts.isIdentifier(nameOrConstraint.type)) { return Debug.fail(); }
-                        typeParameter.name = nameOrConstraint.type;
+                    // nameOrConstraint is a constraint if (1) it started with a brace and (2) the next token does too, or is an identifier
+                    const hasConstraint = firstBrace && (token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.Identifier);
+                    if (hasConstraint) {
+                        typeParametersPos = getNodePos();
+                    }
+                    else {
+                        if (!isTypeReferenceNode(nameOrConstraint.type) && !ts.isIdentifier((nameOrConstraint.type as TypeReferenceNode).typeName)) {
+                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                            return undefined;
+                        }
+                        typeParameter.name = (nameOrConstraint.type as TypeReferenceNode).typeName as Identifier;
                         finishNode(typeParameter);
                         typeParameters.push(typeParameter);
                         if (token() === SyntaxKind.CommaToken) {
@@ -7041,7 +7049,7 @@ namespace ts {
                         }
                     }
                     while (parseMore) {
-                        const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                        typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         const name = parseJSDocIdentifierNameWithOptionalBraces();
                         skipWhitespace();
                         if (!name) {
@@ -7063,7 +7071,7 @@ namespace ts {
                         }
                     }
 
-                    if (isConstraint) {
+                    if (hasConstraint) {
                         Debug.assert(!!typeParameters.length);
                         typeParameters[0].constraint = nameOrConstraint.type;
                     }
