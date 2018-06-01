@@ -629,8 +629,8 @@ namespace ts.server {
                 return this.rootFiles;
             }
             return map(this.program.getSourceFiles(), sourceFile => {
-                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
-                Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' is missing.`);
+                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath || sourceFile.path);
+                Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
                 return scriptInfo!;
             });
         }
