@@ -524,7 +524,7 @@ namespace ts.server.typingsInstaller {
         protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
 
-        protected latestDistTag = "latest";
+        protected readonly latestDistTag = "latest";
     }
 
     /* @internal */
