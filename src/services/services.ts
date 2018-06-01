@@ -2051,15 +2051,14 @@ namespace ts {
             return true;
         }
 
-        function getAutoCloseTagAtPosition(fileName: string, position: number): string | undefined {
+        function getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const token = findPrecedingToken(position, sourceFile);
             if (!token) return undefined;
-            const element = token.kind === SyntaxKind.GreaterThanToken
-                ? isJsxOpeningElement(token.parent) ? token.parent.parent : undefined
+            const element = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent) ? token.parent.parent
                 : isJsxText(token) ? token.parent : undefined;
             if (element && !tagNamesAreEquivalent(element.openingElement.tagName, element.closingElement.tagName)) {
-                return `</${element.openingElement.tagName.getText(sourceFile)}>`;
+                return { newText: `</${element.openingElement.tagName.getText(sourceFile)}>` };
             }
         }
 
@@ -2295,7 +2294,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
-            getAutoCloseTagAtPosition,
+            getJsxClosingTagAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
             getCombinedCodeFix,

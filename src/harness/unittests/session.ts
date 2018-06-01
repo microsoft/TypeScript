@@ -188,7 +188,6 @@ namespace ts.server {
 
         describe("onMessage", () => {
             const allCommandNames: CommandNames[] = [
-                CommandNames.AutoCloseTag,
                 CommandNames.Brace,
                 CommandNames.BraceFull,
                 CommandNames.BraceCompletion,
@@ -225,6 +224,7 @@ namespace ts.server {
                 CommandNames.Occurrences,
                 CommandNames.DocumentHighlights,
                 CommandNames.DocumentHighlightsFull,
+                CommandNames.JsxClosingTag,
                 CommandNames.Open,
                 CommandNames.Quickinfo,
                 CommandNames.QuickinfoFull,

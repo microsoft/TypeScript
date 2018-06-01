@@ -818,11 +818,11 @@ namespace ts.server {
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSuggestionDiagnostics(file), !!args.includeLinePosition);
         }
 
-        private getAutoCloseTag(args: protocol.AutoCloseTagRequestArgs): TextInsertion | undefined {
+        private getJsxClosingTag(args: protocol.JsxClosingTagRequestArgs): TextInsertion | undefined {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const tag = project.getLanguageService().getAutoCloseTagAtPosition(file, position);
-            return tag === undefined ? undefined : { newText: tag, caretOffset: 0 };
+            const tag = project.getLanguageService().getJsxClosingTagAtPosition(file, position);
+            return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
         }
 
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DocumentHighlightsItem> | ReadonlyArray<DocumentHighlights> {
@@ -2137,8 +2137,8 @@ namespace ts.server {
                 this.projectService.reloadProjects();
                 return this.notRequired();
             },
-            [CommandNames.AutoCloseTag]: (request: protocol.AutoCloseTagRequest) => {
-                return this.requiredResponse(this.getAutoCloseTag(request.arguments));
+            [CommandNames.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
+                return this.requiredResponse(this.getJsxClosingTag(request.arguments));
             },
             [CommandNames.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));

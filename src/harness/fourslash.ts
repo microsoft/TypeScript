@@ -2743,11 +2743,11 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyAutoCloseTag(map: { [markerName: string]: string | undefined }): void {
+        public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
             for (const markerName in map) {
                 this.goToMarker(markerName);
-                const actual = this.languageService.getAutoCloseTagAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-                assert.equal(actual, map[markerName]);
+                const actual = this.languageService.getJsxClosingTagAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+                assert.deepEqual(actual, map[markerName]);
             }
         }
 
@@ -4087,8 +4087,8 @@ namespace FourSlashInterface {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
 
-        public autoCloseTag(map: { [markerName: string]: string | undefined }): void {
-            this.state.verifyAutoCloseTag(map);
+        public jsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
+            this.state.verifyJsxClosingTag(map);
         }
 
         public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {

@@ -552,7 +552,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getAutoCloseTagAtPosition(_fileName: string, _position: number): string | undefined {
+        getJsxClosingTagAtPosition(_fileName: string, _position: number): never {
             return notImplemented();
         }
 

@@ -11,10 +11,10 @@
 ////</p>;
 ////const x = <div> text /*5*/;
 
-verify.autoCloseTag({
-    0: "</div>",
+verify.jsxClosingTag({
+    0: { newText: "</div>" },
     1: undefined,
     2: undefined,
     3: undefined,
-    4: "</p>",
+    4: { newText: "</p>" },
 });

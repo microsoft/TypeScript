@@ -174,7 +174,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
-        autoCloseTag(map: { [markerName: string]: string | undefined }): void;
+        jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,

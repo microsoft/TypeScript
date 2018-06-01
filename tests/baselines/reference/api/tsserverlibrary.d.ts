@@ -4556,7 +4556,11 @@ declare namespace ts {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
-        getAutoCloseTagAtPosition(fileName: string, position: number): string | undefined;
+        /**
+         * This will return a defined result if the position is after the `>` of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
+         * Editors should call this after `>` is typed.
+         */
+        getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
@@ -4577,6 +4581,9 @@ declare namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program | undefined;
         dispose(): void;
+    }
+    interface JsxClosingTagInfo {
+        readonly newText: string;
     }
     interface CombinedCodeFixScope {
         type: "file";
@@ -5507,7 +5514,7 @@ declare namespace ts.server {
  */
 declare namespace ts.server.protocol {
     enum CommandTypes {
-        AutoCloseTag = "autoCloseTag",
+        JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         BraceCompletion = "braceCompletion",
         GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -6177,13 +6184,13 @@ declare namespace ts.server.protocol {
          */
         openingBrace: string;
     }
-    interface AutoCloseTagRequest extends FileLocationRequest {
-        readonly command: CommandTypes.AutoCloseTag;
-        readonly arguments: AutoCloseTagRequestArgs;
+    interface JsxClosingTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.JsxClosingTag;
+        readonly arguments: JsxClosingTagRequestArgs;
     }
-    interface AutoCloseTagRequestArgs extends FileLocationRequestArgs {
+    interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {
     }
-    interface AutoCloseTagResponse extends Response {
+    interface JsxClosingTagResponse extends Response {
         readonly body: TextInsertion;
     }
     /**
@@ -8474,7 +8481,7 @@ declare namespace ts.server {
         private getSyntacticDiagnosticsSync;
         private getSemanticDiagnosticsSync;
         private getSuggestionDiagnosticsSync;
-        private getAutoCloseTag;
+        private getJsxClosingTag;
         private getDocumentHighlights;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;
