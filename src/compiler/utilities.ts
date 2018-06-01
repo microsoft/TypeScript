@@ -3177,10 +3177,12 @@ namespace ts {
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        // template tags are only available when a typedef isn't already using them
-        const tag = find(getJSDocTags(node), (tag): tag is JSDocTemplateTag =>
-            isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias)));
-        return (tag && tag.typeParameters) || emptyArray;
+        return flatMap(filter(getJSDocTags(node), isNonTypeAliasTemplate), tag => tag.typeParameters);
+    }
+
+    /** template tags are only available when a typedef isn't already using them */
+    function isNonTypeAliasTemplate(tag: JSDocTag): tag is JSDocTemplateTag {
+        return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias));
     }
 
     /**
