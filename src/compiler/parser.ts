@@ -2784,7 +2784,7 @@ namespace ts {
 
         function parseFunctionOrConstructorType(): TypeNode {
             const pos = getNodePos();
-            const kind = parseOptional(SyntaxKind.NewKeyword) ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType
+            const kind = parseOptional(SyntaxKind.NewKeyword) ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType;
             const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind, pos);
             if (!fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type | (sourceFile.languageVariant === LanguageVariant.JSX ? SignatureFlags.RequireCompleteParameterList : 0), node) ||
                 !node.parameters) { // TODO: ideally fillSignature would guarantee node.parameters to be defined
