@@ -19681,7 +19681,7 @@ namespace ts {
                 const parameter = signature.parameters[i];
                 if (!getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
                     const contextualParameterType = getTypeAtPosition(context, i);
-                    const originalContextualParameterType = signature.isContextuallyTyped ? getTypeAtPosition(context.target!, i) : undefined;
+                    const originalContextualParameterType = signature.isContextuallyTyped && context.target ? getTypeAtPosition(context.target, i) : undefined;
                     assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, contextualParameterType === originalContextualParameterType);
                     for (const tp of getFreeTypeParameters(contextualParameterType)) {
                         node.contextualTypeParameters = appendIfUnique(node.contextualTypeParameters, tp);
@@ -19693,7 +19693,7 @@ namespace ts {
                 const parameter = last(signature.parameters);
                 if (isTransientSymbol(parameter) || !getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
                     const contextualParameterType = getTypeOfSymbol(last(context.parameters));
-                    const originalContextualParameterType = signature.isContextuallyTyped ? getTypeOfSymbol(last(context.target!.parameters)) : undefined;
+                    const originalContextualParameterType = signature.isContextuallyTyped && context.target ? getTypeOfSymbol(last(context.target.parameters)) : undefined;
                     assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, contextualParameterType === originalContextualParameterType);
                     for (const tp of getFreeTypeParameters(contextualParameterType)) {
                         node.contextualTypeParameters = appendIfUnique(node.contextualTypeParameters, tp);
