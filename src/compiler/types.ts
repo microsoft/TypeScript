@@ -589,6 +589,7 @@ namespace ts {
         /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
         /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
         /* @internal */ contextualMapper?: TypeMapper;        // Mapper for contextual type
+        /* @internal */ contextualTypeParameters?: TypeParameter[]; // Type parameters from contextual type. Not temporary like contextualType and contextualMapper.
     }
 
     export interface JSDocContainer {
@@ -1095,6 +1096,9 @@ namespace ts {
     export interface ThisTypeNode extends TypeNode {
         kind: SyntaxKind.ThisType;
     }
+
+    /* @internal */
+    export type MaybeContextSensitive = Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike;
 
     export type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
 
@@ -3643,6 +3647,7 @@ namespace ts {
         AssignmentsMarked                   = 0x00400000,  // Parameter assignments have been marked
         ClassWithConstructorReference       = 0x00800000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x01000000,  // Binding to a class constructor inside of the class's body.
+        ContextReset                        = 0x02000000,  // Contextual types were previously set but have been cleared. This means the node does not need to be added to deferredNodes again.
     }
 
     /* @internal */
@@ -3772,6 +3777,8 @@ namespace ts {
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
         /* @internal */
         wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
+        /* @internal */
+        freeTypeParameters?: TypeParameter[];
     }
 
     /* @internal */
@@ -3913,6 +3920,7 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+        typeArguments?: Type[];
     }
 
     /* @internal */
@@ -4098,6 +4106,10 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
+        /* @internal */
+        inferenceContext?: InferenceContext;
+        /* @internal */
+        isContextuallyTyped?: boolean;
     }
 
     export const enum IndexKind {
@@ -4143,6 +4155,7 @@ namespace ts {
         InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
         NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
+        AlwaysDefault   = 1 << 3,  // Infer the default type if there are no candidates or constraints (otherwise no inference is made and type parameter is returned)
     }
 
     /**
@@ -4171,6 +4184,7 @@ namespace ts {
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
         compareTypes: TypeComparer;         // Type comparer function
+        useEmptyObjectForNoInference?: boolean;
     }
 
     /* @internal */
