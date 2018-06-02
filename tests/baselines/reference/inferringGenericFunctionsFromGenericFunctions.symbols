@@ -1,0 +1,135 @@
+=== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions.ts ===
+export {}
+
+
+// example from https://github.com/Microsoft/TypeScript/issues/9366
+
+function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 0, 9))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 14))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 16))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 19))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 23))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 27))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 14))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 32))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 16))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 19))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 47))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 16))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 52))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 14))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 19))
+
+    return (b: b, a: a) => f(a, b);
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 6, 12))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 16))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 6, 17))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 14))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 5, 23))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 6, 17))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 6, 12))
+}
+function zip<T, U>(x: T, y: U): [T, U] {
+>zip : Symbol(zip, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 7, 1))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 13))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 15))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 19))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 13))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 24))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 15))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 13))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 15))
+
+    return [x, y];
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 19))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 8, 24))
+}
+
+const flipped = flip(zip);
+>flipped : Symbol(flipped, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 12, 5))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 0, 9))
+>zip : Symbol(zip, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 7, 1))
+
+var expected: <T, U>(y: U, x: T) => [T, U] = flipped;
+>expected : Symbol(expected, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 3))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 15))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 17))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 21))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 17))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 26))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 15))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 15))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 13, 17))
+>flipped : Symbol(flipped, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 12, 5))
+
+const actualCallResult = flipped("test", 1234)
+>actualCallResult : Symbol(actualCallResult, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 15, 5))
+>flipped : Symbol(flipped, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 12, 5))
+
+const expectedResult: [number, string] = actualCallResult;
+>expectedResult : Symbol(expectedResult, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 16, 5))
+>actualCallResult : Symbol(actualCallResult, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 15, 5))
+
+
+
+
+// from https://github.com/Microsoft/TypeScript/issues/16414
+
+declare function compose<A, B, C>(f: (x: A) => B, g: (y: B) => C): (x: A) => C;
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 16, 58))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 25))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 27))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 30))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 34))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 38))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 25))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 27))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 49))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 54))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 27))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 30))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 68))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 30))
+
+declare function box<T>(x: T): { value: T };
+>box : Symbol(box, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 79))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 24, 21))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 24, 24))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 24, 21))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 24, 32))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 24, 21))
+
+declare function list<U>(x: U): U[];
+>list : Symbol(list, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 24, 44))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 25, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 25, 25))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 25, 22))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 25, 22))
+
+const composed = compose(list, box);
+>composed : Symbol(composed, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 27, 5))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 16, 58))
+>list : Symbol(list, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 24, 44))
+>box : Symbol(box, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 23, 79))
+
+const expectedComposed: <U>(u: U) => { value: U[] } = composed;
+>expectedComposed : Symbol(expectedComposed, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 28, 5))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 28, 25))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 28, 28))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 28, 25))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 28, 38))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 28, 25))
+>composed : Symbol(composed, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 27, 5))
+
+
+const callComposed = composed("test");
+>callComposed : Symbol(callComposed, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 31, 5))
+>composed : Symbol(composed, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 27, 5))
+
+const expectedCallComposed: { value: string[] } = callComposed;
+>expectedCallComposed : Symbol(expectedCallComposed, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 32, 5))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 32, 29))
+>callComposed : Symbol(callComposed, Decl(inferringGenericFunctionsFromGenericFunctions.ts, 31, 5))
+

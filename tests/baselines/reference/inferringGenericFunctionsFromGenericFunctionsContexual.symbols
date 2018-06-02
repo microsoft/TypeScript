@@ -1,0 +1,386 @@
+=== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctionsContexual.ts ===
+export {}
+
+declare function identity1<T, U>(f: (t: T) => U): (t2: T) => U
+>identity1 : Symbol(identity1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 0, 9))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 27))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 29))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 33))
+>t : Symbol(t, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 37))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 27))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 29))
+>t2 : Symbol(t2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 51))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 27))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 2, 29))
+
+const id1 = identity1(x => x)
+>id1 : Symbol(id1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 3, 5))
+>identity1 : Symbol(identity1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 0, 9))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 3, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 3, 22))
+
+
+declare function identity2<T extends number, U>(f: (t: T) => U): (t2: T) => U
+>identity2 : Symbol(identity2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 3, 29))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 27))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 44))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 48))
+>t : Symbol(t, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 52))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 27))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 44))
+>t2 : Symbol(t2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 66))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 27))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 6, 44))
+
+const id2 = identity2(x => x)
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 5))
+>identity2 : Symbol(identity2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 3, 29))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 22))
+
+
+// compose<D, E extends string, F> is just something I put in to make sure the contextual types handle multiple signatures.
+declare function compose<D, E extends string, F>(f: (d: D) => E, g: (e: E) => F): (d2: D) => [D, F];
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 29), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 100))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 25))
+>E : Symbol(E, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 27))
+>F : Symbol(F, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 45))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 49))
+>d : Symbol(d, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 53))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 25))
+>E : Symbol(E, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 27))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 64))
+>e : Symbol(e, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 69))
+>E : Symbol(E, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 27))
+>F : Symbol(F, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 45))
+>d2 : Symbol(d2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 83))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 25))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 25))
+>F : Symbol(F, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 45))
+
+declare function compose<A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => C;
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 29), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 100))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 25))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 27))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 30))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 34))
+>a1 : Symbol(a1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 38))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 25))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 27))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 50))
+>b1 : Symbol(b1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 55))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 27))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 30))
+>a2 : Symbol(a2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 70))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 12, 30))
+
+{
+    let composed1 = compose(x => x, x2 => x2)
+>composed1 : Symbol(composed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 15, 7))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 29), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 100))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 15, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 15, 28))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 15, 35))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 15, 35))
+
+    const expectedComposed1: <U>(u: U) => U = composed1;
+>expectedComposed1 : Symbol(expectedComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 16, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 16, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 16, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 16, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 16, 30))
+>composed1 : Symbol(composed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 15, 7))
+
+    const callComposed1 = composed1("test");
+>callComposed1 : Symbol(callComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 17, 9))
+>composed1 : Symbol(composed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 15, 7))
+
+    const expectedCallComposed1 : string = callComposed1;
+>expectedCallComposed1 : Symbol(expectedCallComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 18, 9))
+>callComposed1 : Symbol(callComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 17, 9))
+}
+
+{
+    let composed2 = compose(x => x, x2 => [x2])
+>composed2 : Symbol(composed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 22, 7))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 29), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 100))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 22, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 22, 28))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 22, 35))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 22, 35))
+
+    const expectedComposed2: <U>(u: U) => U[] = composed2;
+>expectedComposed2 : Symbol(expectedComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 23, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 23, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 23, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 23, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 23, 30))
+>composed2 : Symbol(composed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 22, 7))
+
+    const callComposed2 = composed2("test");
+>callComposed2 : Symbol(callComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 24, 9))
+>composed2 : Symbol(composed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 22, 7))
+
+    const expectedCallComposed2: string[] = callComposed2;
+>expectedCallComposed2 : Symbol(expectedCallComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 25, 9))
+>callComposed2 : Symbol(callComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 24, 9))
+}
+
+{
+    let composed3 = compose(x => [x], x2 => x2)
+>composed3 : Symbol(composed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 29, 7))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 29), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 100))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 29, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 29, 28))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 29, 37))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 29, 37))
+
+    const expectedComposed3: <U>(u: U) => U[] = composed3;
+>expectedComposed3 : Symbol(expectedComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 30, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 30, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 30, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 30, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 30, 30))
+>composed3 : Symbol(composed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 29, 7))
+
+    const callComposed3 = composed3("test");
+>callComposed3 : Symbol(callComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 31, 9))
+>composed3 : Symbol(composed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 29, 7))
+
+    const expectedCallComposed3 : string[] = callComposed3;
+>expectedCallComposed3 : Symbol(expectedCallComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 32, 9))
+>callComposed3 : Symbol(callComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 31, 9))
+}
+
+{
+    let composed4 = compose(x => [x], x2 => ({ boxed: x2 }));
+>composed4 : Symbol(composed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 7))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 29), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 100))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 28))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 37))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 46))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 37))
+
+    const expectedComposed4: <U>(u: U) => {boxed: U[]} = composed4;
+>expectedComposed4 : Symbol(expectedComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 37, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 37, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 37, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 37, 30))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 37, 43))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 37, 30))
+>composed4 : Symbol(composed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 7))
+
+    const callComposed4 = composed4("test");
+>callComposed4 : Symbol(callComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 38, 9))
+>composed4 : Symbol(composed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 36, 7))
+
+    const expectedCallComposed4 : {boxed: string[]} = callComposed4;
+>expectedCallComposed4 : Symbol(expectedCallComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 39, 9))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 39, 35))
+>callComposed4 : Symbol(callComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 38, 9))
+}
+
+{
+    let composed5 = compose(x => "" + x, x2 => ({ boxed: x2 }));
+>composed5 : Symbol(composed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 7))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 7, 29), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 11, 100))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 28))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 40))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 49))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 40))
+
+    const expectedComposed5: <U>(u: U) => [U, {boxed: string}] = composed5;
+>expectedComposed5 : Symbol(expectedComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 44, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 44, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 44, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 44, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 44, 30))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 44, 47))
+>composed5 : Symbol(composed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 7))
+
+    const callComposed5 = composed5(123456);
+>callComposed5 : Symbol(callComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 45, 9))
+>composed5 : Symbol(composed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 43, 7))
+
+    const expectedCallComposed5 : [number, {boxed: string}] = callComposed5;
+>expectedCallComposed5 : Symbol(expectedCallComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 46, 9))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 46, 44))
+>callComposed5 : Symbol(callComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 45, 9))
+}
+
+
+declare function composeReverse<D, E extends string, F>(g: (e: E) => F, f: (d: D) => E): (d2: D) => [D, F];
+>composeReverse : Symbol(composeReverse, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 47, 1), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 107))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 32))
+>E : Symbol(E, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 34))
+>F : Symbol(F, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 52))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 56))
+>e : Symbol(e, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 60))
+>E : Symbol(E, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 34))
+>F : Symbol(F, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 52))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 71))
+>d : Symbol(d, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 76))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 32))
+>E : Symbol(E, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 34))
+>d2 : Symbol(d2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 90))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 32))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 32))
+>F : Symbol(F, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 52))
+
+declare function composeReverse<A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2: A) => C;
+>composeReverse : Symbol(composeReverse, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 47, 1), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 107))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 32))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 34))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 37))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 41))
+>b1 : Symbol(b1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 45))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 34))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 37))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 57))
+>a1 : Symbol(a1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 62))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 32))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 34))
+>a2 : Symbol(a2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 77))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 32))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 51, 37))
+
+
+{
+    let composed1 = composeReverse(x => x, x2 => x2)
+>composed1 : Symbol(composed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 55, 7))
+>composeReverse : Symbol(composeReverse, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 47, 1), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 107))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 55, 35))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 55, 35))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 55, 42))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 55, 42))
+
+    const expectedComposed1: <U>(u: U) => U = composed1;
+>expectedComposed1 : Symbol(expectedComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 56, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 56, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 56, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 56, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 56, 30))
+>composed1 : Symbol(composed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 55, 7))
+
+    const callComposed1 = composed1("test");
+>callComposed1 : Symbol(callComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 57, 9))
+>composed1 : Symbol(composed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 55, 7))
+
+    const expectedCallComposed1 : string = callComposed1;
+>expectedCallComposed1 : Symbol(expectedCallComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 58, 9))
+>callComposed1 : Symbol(callComposed1, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 57, 9))
+}
+
+{
+    let composed2 = composeReverse( x2 => [x2], x => x)
+>composed2 : Symbol(composed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 62, 7))
+>composeReverse : Symbol(composeReverse, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 47, 1), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 107))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 62, 35))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 62, 35))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 62, 47))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 62, 47))
+
+    const expectedComposed2: <U>(u: U) => U[] = composed2;
+>expectedComposed2 : Symbol(expectedComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 63, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 63, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 63, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 63, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 63, 30))
+>composed2 : Symbol(composed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 62, 7))
+
+    const callComposed2 = composed2("test");
+>callComposed2 : Symbol(callComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 64, 9))
+>composed2 : Symbol(composed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 62, 7))
+
+    const expectedCallComposed2: string[] = callComposed2;
+>expectedCallComposed2 : Symbol(expectedCallComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 65, 9))
+>callComposed2 : Symbol(callComposed2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 64, 9))
+}
+
+{
+    let composed3 = composeReverse( x2 => x2, x => [x])
+>composed3 : Symbol(composed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 69, 7))
+>composeReverse : Symbol(composeReverse, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 47, 1), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 107))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 69, 35))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 69, 35))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 69, 45))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 69, 45))
+
+    const expectedComposed3: <U>(u: U) => U[] = composed3;
+>expectedComposed3 : Symbol(expectedComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 70, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 70, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 70, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 70, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 70, 30))
+>composed3 : Symbol(composed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 69, 7))
+
+    const callComposed3 = composed3("test");
+>callComposed3 : Symbol(callComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 71, 9))
+>composed3 : Symbol(composed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 69, 7))
+
+    const expectedCallComposed3 : string[] = callComposed3;
+>expectedCallComposed3 : Symbol(expectedCallComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 72, 9))
+>callComposed3 : Symbol(callComposed3, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 71, 9))
+}
+
+{
+    let composed4 = composeReverse( x2 => ({ boxed: x2 }), x => [x]);
+>composed4 : Symbol(composed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 7))
+>composeReverse : Symbol(composeReverse, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 47, 1), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 107))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 35))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 44))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 35))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 58))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 58))
+
+    const expectedComposed4: <U>(u: U) => {boxed: U[]} = composed4;
+>expectedComposed4 : Symbol(expectedComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 77, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 77, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 77, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 77, 30))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 77, 43))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 77, 30))
+>composed4 : Symbol(composed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 7))
+
+    const callComposed4 = composed4("test");
+>callComposed4 : Symbol(callComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 78, 9))
+>composed4 : Symbol(composed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 76, 7))
+
+    const expectedCallComposed4 : {boxed: string[]} = callComposed4;
+>expectedCallComposed4 : Symbol(expectedCallComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 79, 9))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 79, 35))
+>callComposed4 : Symbol(callComposed4, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 78, 9))
+}
+
+{
+    let composed5 = composeReverse( x2 => ({ boxed: x2 }), x => "" + x);
+>composed5 : Symbol(composed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 7))
+>composeReverse : Symbol(composeReverse, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 47, 1), Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 50, 107))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 35))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 44))
+>x2 : Symbol(x2, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 35))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 58))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 58))
+
+    const expectedComposed5: <U>(u: U) => [U, {boxed: string}] = composed5;
+>expectedComposed5 : Symbol(expectedComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 84, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 84, 30))
+>u : Symbol(u, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 84, 33))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 84, 30))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 84, 30))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 84, 47))
+>composed5 : Symbol(composed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 7))
+
+    const callComposed5 = composed5(123456);
+>callComposed5 : Symbol(callComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 85, 9))
+>composed5 : Symbol(composed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 83, 7))
+
+    const expectedCallComposed5 : [number, {boxed: string}] = callComposed5;
+>expectedCallComposed5 : Symbol(expectedCallComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 86, 9))
+>boxed : Symbol(boxed, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 86, 44))
+>callComposed5 : Symbol(callComposed5, Decl(inferringGenericFunctionsFromGenericFunctionsContexual.ts, 85, 9))
+}
+

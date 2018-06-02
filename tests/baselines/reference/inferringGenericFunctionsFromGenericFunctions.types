@@ -1,0 +1,145 @@
+=== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions.ts ===
+export {}
+
+
+// example from https://github.com/Microsoft/TypeScript/issues/9366
+
+function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
+>flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
+>a : a
+>b : b
+>c : c
+>f : (a: a, b: b) => c
+>a : a
+>a : a
+>b : b
+>b : b
+>c : c
+>b : b
+>b : b
+>a : a
+>a : a
+>c : c
+
+    return (b: b, a: a) => f(a, b);
+>(b: b, a: a) => f(a, b) : (b: b, a: a) => c
+>b : b
+>b : b
+>a : a
+>a : a
+>f(a, b) : c
+>f : (a: a, b: b) => c
+>a : a
+>b : b
+}
+function zip<T, U>(x: T, y: U): [T, U] {
+>zip : <T, U>(x: T, y: U) => [T, U]
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>T : T
+>U : U
+
+    return [x, y];
+>[x, y] : [T, U]
+>x : T
+>y : U
+}
+
+const flipped = flip(zip);
+>flipped : (b: {}, a: {}) => [{}, {}]
+>flip(zip) : (b: {}, a: {}) => [{}, {}]
+>flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
+>zip : <T, U>(x: T, y: U) => [T, U]
+
+var expected: <T, U>(y: U, x: T) => [T, U] = flipped;
+>expected : <T, U>(y: U, x: T) => [T, U]
+>T : T
+>U : U
+>y : U
+>U : U
+>x : T
+>T : T
+>T : T
+>U : U
+>flipped : (b: {}, a: {}) => [{}, {}]
+
+const actualCallResult = flipped("test", 1234)
+>actualCallResult : [{}, {}]
+>flipped("test", 1234) : [{}, {}]
+>flipped : (b: {}, a: {}) => [{}, {}]
+>"test" : "test"
+>1234 : 1234
+
+const expectedResult: [number, string] = actualCallResult;
+>expectedResult : [number, string]
+>actualCallResult : [{}, {}]
+
+
+
+
+// from https://github.com/Microsoft/TypeScript/issues/16414
+
+declare function compose<A, B, C>(f: (x: A) => B, g: (y: B) => C): (x: A) => C;
+>compose : <A, B, C>(f: (x: A) => B, g: (y: B) => C) => (x: A) => C
+>A : A
+>B : B
+>C : C
+>f : (x: A) => B
+>x : A
+>A : A
+>B : B
+>g : (y: B) => C
+>y : B
+>B : B
+>C : C
+>x : A
+>A : A
+>C : C
+
+declare function box<T>(x: T): { value: T };
+>box : <T>(x: T) => { value: T; }
+>T : T
+>x : T
+>T : T
+>value : T
+>T : T
+
+declare function list<U>(x: U): U[];
+>list : <U>(x: U) => U[]
+>U : U
+>x : U
+>U : U
+>U : U
+
+const composed = compose(list, box);
+>composed : (x: {}) => { value: {}[]; }
+>compose(list, box) : (x: {}) => { value: {}[]; }
+>compose : <A, B, C>(f: (x: A) => B, g: (y: B) => C) => (x: A) => C
+>list : <U>(x: U) => U[]
+>box : <T>(x: T) => { value: T; }
+
+const expectedComposed: <U>(u: U) => { value: U[] } = composed;
+>expectedComposed : <U>(u: U) => { value: U[]; }
+>U : U
+>u : U
+>U : U
+>value : U[]
+>U : U
+>composed : (x: {}) => { value: {}[]; }
+
+
+const callComposed = composed("test");
+>callComposed : { value: {}[]; }
+>composed("test") : { value: {}[]; }
+>composed : (x: {}) => { value: {}[]; }
+>"test" : "test"
+
+const expectedCallComposed: { value: string[] } = callComposed;
+>expectedCallComposed : { value: string[]; }
+>value : string[]
+>callComposed : { value: {}[]; }
+

@@ -1,0 +1,1953 @@
+=== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts ===
+export {}
+
+// Borrowed from @gcnew at https://gist.github.com/gcnew/ad833bfa376e4b70fc50a780e3b2d883
+
+interface Collection<T> {
+>Collection : Collection<T>
+>T : T
+
+    length: number;
+>length : number
+
+    add(x: T): void;
+>add : (x: T) => void
+>x : T
+>T : T
+
+    remove(x: T): boolean;
+>remove : (x: T) => boolean
+>x : T
+>T : T
+}
+interface Combinators {
+>Combinators : Combinators
+
+    map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>T : T
+>U : U
+>c : Collection<T>
+>Collection : Collection<T>
+>T : T
+>f : (x: T) => U
+>x : T
+>T : T
+>U : U
+>Collection : Collection<T>
+>U : U
+
+    map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>T : T
+>c : Collection<T>
+>Collection : Collection<T>
+>T : T
+>f : (x: T) => any
+>x : T
+>T : T
+>Collection : Collection<T>
+
+    forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
+>forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>T : T
+>c : Collection<T>
+>Collection : Collection<T>
+>T : T
+>f : (x: T) => Date
+>x : T
+>T : T
+>Date : Date
+}
+
+declare var _: Combinators;
+>_ : Combinators
+>Combinators : Combinators
+
+declare var c2: Collection<number>;
+>c2 : Collection<number>
+>Collection : Collection<T>
+
+var rf1 = (x: number) => { return x.toFixed() };
+>rf1 : (x: number) => string
+>(x: number) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number | undefined) => string
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+var r1a = _.map(c2, (x) => { return x.toFixed() });
+>r1a : Collection<string>
+>_.map(c2, (x) => { return x.toFixed() }) : Collection<string>
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_ : Combinators
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>c2 : Collection<number>
+>(x) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number | undefined) => string
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+var r5 = _.forEach<number>(c2, rf1);  // Should error
+>r5 : any
+>_.forEach<number>(c2, rf1) : any
+>_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>_ : Combinators
+>forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>c2 : Collection<number>
+>rf1 : (x: number) => string
+
+var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); // Should error
+>r6 : any
+>_.forEach<number>(c2, (x) => { return x.toFixed() }) : any
+>_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>_ : Combinators
+>forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>c2 : Collection<number>
+>(x) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number | undefined) => string
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+declare const zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
+>zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
+>T : T
+>S : S
+>U : U
+>a : T[]
+>T : T
+>b : S[]
+>S : S
+>f : (x: T) => (y: S) => U
+>x : T
+>T : T
+>y : S
+>S : S
+>U : U
+>U : U
+
+declare const pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>T : T
+>S : S
+>x : T
+>T : T
+>y : S
+>S : S
+>x : T
+>T : T
+>y : S
+>S : S
+
+const zr = zipWith([1, 2], ['a', 'b'], pair);
+>zr : { x: number; y: {}; }[]
+>zipWith([1, 2], ['a', 'b'], pair) : { x: number; y: {}; }[]
+>zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+>['a', 'b'] : string[]
+>'a' : "a"
+>'b' : "b"
+>pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
+
+declare function lego1<A, B>(x: A, l: List<B>, y: A): A;
+>lego1 : <A, B>(x: A, l: List<B>, y: A) => A
+>A : A
+>B : B
+>x : A
+>A : A
+>l : List<B>
+>List : List<T>
+>B : B
+>y : A
+>A : A
+>A : A
+
+declare function lego2<C, D>(f: (l: List<C>, x: D, y: D) => D): void;
+>lego2 : <C, D>(f: (l: List<C>, x: D, y: D) => D) => void
+>C : C
+>D : D
+>f : (l: List<C>, x: D, y: D) => D
+>l : List<C>
+>List : List<T>
+>C : C
+>x : D
+>D : D
+>y : D
+>D : D
+>D : D
+
+lego2(lego1);
+>lego2(lego1) : any
+>lego2 : <C, D>(f: (l: List<C>, x: D, y: D) => D) => void
+>lego1 : <A, B>(x: A, l: List<B>, y: A) => A
+
+declare function bombastic<R>(f: (x: string, y: number) => R): R;
+>bombastic : <R>(f: (x: string, y: number) => R) => R
+>R : R
+>f : (x: string, y: number) => R
+>x : string
+>y : number
+>R : R
+>R : R
+
+declare function bombastic2(f: (x: string, y: number) => string): void;
+>bombastic2 : (f: (x: string, y: number) => string) => void
+>f : (x: string, y: number) => string
+>x : string
+>y : number
+
+declare function bombastic3<R>(f: (x: string, y: number, z: R) => R): R;
+>bombastic3 : <R>(f: (x: string, y: number, z: R) => R) => R
+>R : R
+>f : (x: string, y: number, z: R) => R
+>x : string
+>y : number
+>z : R
+>R : R
+>R : R
+>R : R
+
+declare function okay<R>(f: (x: 1, y: number) => R): R;
+>okay : <R>(f: (x: 1, y: number) => R) => R
+>R : R
+>f : (x: 1, y: number) => R
+>x : 1
+>y : number
+>R : R
+>R : R
+
+declare function transitive<T>(x: T, f: (x: T) => T): void;
+>transitive : <T>(x: T, f: (x: T) => T) => void
+>T : T
+>x : T
+>T : T
+>f : (x: T) => T
+>x : T
+>T : T
+>T : T
+
+bombastic(id2);  // Should be an error T = [string, number]
+>bombastic(id2) : any
+>bombastic : <R>(f: (x: string, y: number) => R) => R
+>id2 : <T, U extends T>(x: T, y: U) => U
+
+bombastic2(id2); // Should be an error T = [string, number]
+>bombastic2(id2) : void
+>bombastic2 : (f: (x: string, y: number) => string) => void
+>id2 : <T, U extends T>(x: T, y: U) => U
+
+bombastic<string|number>(id2); // should be an error because bombastic's callback is (x: string, y: number) => R and the explicit type argument here is setting `R`, not setting T and U from id2
+>bombastic<string|number>(id2) : any
+>bombastic : <R>(f: (x: string, y: number) => R) => R
+>id2 : <T, U extends T>(x: T, y: U) => U
+
+declare function id3<T, U extends T, V extends U>(x: T, y: U, z: V): V;
+>id3 : <T, U extends T, V extends U>(x: T, y: U, z: V) => V
+>T : T
+>U : U
+>T : T
+>V : V
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>z : V
+>V : V
+>V : V
+
+bombastic3(id3);  // Should be error
+>bombastic3(id3) : any
+>bombastic3 : <R>(f: (x: string, y: number, z: R) => R) => R
+>id3 : <T, U extends T, V extends U>(x: T, y: U, z: V) => V
+
+bombastic3<string|number>(id3);  // Should be error because of reason from bombastic<string|number>(id2)
+>bombastic3<string|number>(id3) : any
+>bombastic3 : <R>(f: (x: string, y: number, z: R) => R) => R
+>id3 : <T, U extends T, V extends U>(x: T, y: U, z: V) => V
+
+okay(id2);
+>okay(id2) : any
+>okay : <R>(f: (x: 1, y: number) => R) => R
+>id2 : <T, U extends T>(x: T, y: U) => U
+
+transitive(1, withNum);
+>transitive(1, withNum) : void
+>transitive : <T>(x: T, f: (x: T) => T) => void
+>1 : 1
+>withNum : <N extends number>(x: N) => N
+
+transitive('1', withNum);
+>transitive('1', withNum) : any
+>transitive : <T>(x: T, f: (x: T) => T) => void
+>'1' : "1"
+>withNum : <N extends number>(x: N) => N
+
+declare function occurs<R>(f: (x: number, xs: List<number>) => R): R;
+>occurs : <R>(f: (x: number, xs: List<number>) => R) => R
+>R : R
+>f : (x: number, xs: List<number>) => R
+>x : number
+>xs : List<number>
+>List : List<T>
+>R : R
+>R : R
+
+occurs(id2); // should be error
+>occurs(id2) : any
+>occurs : <R>(f: (x: number, xs: List<number>) => R) => R
+>id2 : <T, U extends T>(x: T, y: U) => U
+
+declare function f15<T extends number>(x: T, f: (x: T) => T): void;
+>f15 : <T extends number>(x: T, f: (x: T) => T) => void
+>T : T
+>x : T
+>T : T
+>f : (x: T) => T
+>x : T
+>T : T
+>T : T
+
+declare function g15(n: number): number;
+>g15 : (n: number) => number
+>n : number
+
+f15(5, g15);
+>f15(5, g15) : void
+>f15 : <T extends number>(x: T, f: (x: T) => T) => void
+>5 : 5
+>g15 : (n: number) => number
+
+interface J<T> {
+>J : J<T>
+>T : T
+
+    [s: string]: T;
+>s : string
+>T : T
+}
+
+declare function g1<T>(obj: J<T>): T;
+>g1 : <T>(obj: J<T>) => T
+>T : T
+>obj : J<T>
+>J : J<T>
+>T : T
+>T : T
+
+const rg1: string = g1({ p: "" });
+>rg1 : string
+>g1({ p: "" }) : string
+>g1 : <T>(obj: J<T>) => T
+>{ p: "" } : { p: string; }
+>p : string
+>"" : ""
+
+declare function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+>forEachChild : <T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>T : T
+>node : Node
+>Node : Node
+>cbNode : (node: Node) => T | undefined
+>node : Node
+>Node : Node
+>T : T
+>cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
+>nodes : NodeArray<Node>
+>NodeArray : NodeArray<T>
+>Node : Node
+>T : T
+>T : T
+
+class Node {
+>Node : Node
+
+    _node: any;
+>_node : any
+
+    forEachChild<C>(cbNode: (node: Node) => C, cbNodeArray?: (nodes: NodeArray<Node>) => C): C {
+>forEachChild : <C>(cbNode: (node: Node) => C, cbNodeArray?: ((nodes: NodeArray<Node>) => C) | undefined) => C
+>C : C
+>cbNode : (node: Node) => C
+>node : Node
+>Node : Node
+>C : C
+>cbNodeArray : ((nodes: NodeArray<Node>) => C) | undefined
+>nodes : NodeArray<Node>
+>NodeArray : NodeArray<T>
+>Node : Node
+>C : C
+>C : C
+
+        return forEachChild(this, cbNode, cbNodeArray);
+>forEachChild(this, cbNode, cbNodeArray) : C | undefined
+>forEachChild : <T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>this : this
+>cbNode : (node: Node) => C
+>cbNodeArray : ((nodes: NodeArray<Node>) => C) | undefined
+    }
+}
+
+interface NodeBrand { _nodearray: any }
+>NodeBrand : NodeBrand
+>_nodearray : any
+
+class Declaration extends Node { _declarationBrand: any; }
+>Declaration : Declaration
+>Node : Node
+>_declarationBrand : any
+
+class ParameterDeclaration extends Declaration { _paramdecl: any; }
+>ParameterDeclaration : ParameterDeclaration
+>Declaration : Declaration
+>_paramdecl : any
+
+interface Arr<T> {
+>Arr : Arr<T>
+>T : T
+
+    concat(...items: T[][]): T[];
+>concat : { (...items: T[][]): T[]; (...items: (T | T[])[]): T[]; }
+>items : T[][]
+>T : T
+>T : T
+
+    concat(...items: (T | T[])[]): T[];
+>concat : { (...items: T[][]): T[]; (...items: (T | T[])[]): T[]; }
+>items : (T | T[])[]
+>T : T
+>T : T
+>T : T
+}
+interface NodeArray<T extends Node> extends Arr<T>, NodeBrand { }
+>NodeArray : NodeArray<T>
+>T : T
+>Node : Node
+>Arr : Arr<T>
+>T : T
+>NodeBrand : NodeBrand
+
+declare function indexOf<T>(hay: Arr<T>, needle: T): number;
+>indexOf : <T>(hay: Arr<T>, needle: T) => number
+>T : T
+>hay : Arr<T>
+>Arr : Arr<T>
+>T : T
+>needle : T
+>T : T
+
+declare const fps: NodeArray<ParameterDeclaration>;
+>fps : NodeArray<ParameterDeclaration>
+>NodeArray : NodeArray<T>
+>ParameterDeclaration : ParameterDeclaration
+
+declare const node: Node;
+>node : Node
+>Node : Node
+
+indexOf(fps, node);
+>indexOf(fps, node) : number
+>indexOf : <T>(hay: Arr<T>, needle: T) => number
+>fps : NodeArray<ParameterDeclaration>
+>node : Node
+
+function selfRef<T>(n: number, callback: (n: number) => T): T {
+>selfRef : <T>(n: number, callback: (n: number) => T) => T
+>T : T
+>n : number
+>callback : (n: number) => T
+>n : number
+>T : T
+>T : T
+
+    return selfRef(n, callback);
+>selfRef(n, callback) : T
+>selfRef : <T>(n: number, callback: (n: number) => T) => T
+>n : number
+>callback : (n: number) => T
+}
+
+class A { x: any; }
+>A : A
+>x : any
+
+class B extends A { y: any; }
+>B : B
+>A : A
+>y : any
+
+class Chain<T extends A> {
+>Chain : Chain<T>
+>T : T
+>A : A
+
+    then<S extends T>(cb: (x: T) => S): Chain<S> {
+>then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>S : S
+>T : T
+>cb : (x: T) => S
+>x : T
+>T : T
+>S : S
+>Chain : Chain<T>
+>S : S
+
+        return null!;
+>null! : never
+>null : null
+    }
+}
+
+declare const chainB: Chain<B>;
+>chainB : Chain<B>
+>Chain : Chain<T>
+>B : B
+
+chainB.then(b => new A);
+>chainB.then(b => new A) : any
+>chainB.then : <S extends B>(cb: (x: B) => S) => Chain<S>
+>chainB : Chain<B>
+>then : <S extends B>(cb: (x: B) => S) => Chain<S>
+>b => new A : (b: B) => A
+>b : B
+>new A : A
+>A : typeof A
+
+
+declare function f16(f: (x: number) => 4): void;
+>f16 : (f: (x: number) => 4) => void
+>f : (x: number) => 4
+>x : number
+
+declare function g16(x: number): number;
+>g16 : (x: number) => number
+>x : number
+
+f16(g16);
+>f16(g16) : void
+>f16 : (f: (x: number) => 4) => void
+>g16 : (x: number) => number
+
+
+declare function trans<T>(f: (x: T) => string): number;
+>trans : <T>(f: (x: T) => string) => number
+>T : T
+>f : (x: T) => string
+>x : T
+>T : T
+
+// TODO: these should all be noImplicitAny / destructuring erros
+trans(({a}) => a);
+>trans(({a}) => a) : any
+>trans : <T>(f: (x: T) => string) => number
+>({a}) => a : ({ a }: { a: any; }) => any
+>a : any
+>a : any
+
+trans(([b,c]) => 'foo');
+>trans(([b,c]) => 'foo') : any
+>trans : <T>(f: (x: T) => string) => number
+>([b,c]) => 'foo' : ([b, c]: [any, any]) => string
+>b : any
+>c : any
+>'foo' : "foo"
+
+trans(({d: [e,f]}) => 'foo');
+>trans(({d: [e,f]}) => 'foo') : any
+>trans : <T>(f: (x: T) => string) => number
+>({d: [e,f]}) => 'foo' : ({ d: [e, f] }: { d: [any, any]; }) => string
+>d : any
+>e : any
+>f : any
+>'foo' : "foo"
+
+trans(([{g},{h}]) => 'foo');
+>trans(([{g},{h}]) => 'foo') : any
+>trans : <T>(f: (x: T) => string) => number
+>([{g},{h}]) => 'foo' : ([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string
+>g : any
+>h : any
+>'foo' : "foo"
+
+trans(({a, b = 10}) => a);
+>trans(({a, b = 10}) => a) : any
+>trans : <T>(f: (x: T) => string) => number
+>({a, b = 10}) => a : ({ a, b }: { a: any; b?: number; }) => any
+>a : any
+>b : number
+>10 : 10
+>a : any
+
+declare function idCreator<T>(f: (x: T|undefined) => T): T;
+>idCreator : <T>(f: (x: T | undefined) => T) => T
+>T : T
+>f : (x: T | undefined) => T
+>x : T | undefined
+>T : T
+>T : T
+>T : T
+
+const icn: number = idCreator(_ => 5); // ZZZ
+>icn : number
+>idCreator(_ => 5) : number
+>idCreator : <T>(f: (x: T | undefined) => T) => T
+>_ => 5 : (_: number | undefined) => number
+>_ : number | undefined
+>5 : 5
+
+declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>T : T
+>U : U
+>V : V
+>x : T
+>T : T
+>y : U
+>U : U
+>cb : (x: T, y: U) => V
+>x : T
+>T : T
+>y : U
+>U : U
+>V : V
+>V : V
+
+// having a second type parameter extend the first should prevent it from inferring a "string | number" union type from (x: string, y: number) => R
+declare function id2<T, U extends T>(x: T, y: U): U;
+>id2 : <T, U extends T>(x: T, y: U) => U
+>T : T
+>U : U
+>T : T
+>x : T
+>T : T
+>y : U
+>U : U
+>U : U
+
+var b2 = bar(1, "one", id2);  // Should be error
+>b2 : any
+>bar(1, "one", id2) : any
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>1 : 1
+>"one" : "one"
+>id2 : <T, U extends T>(x: T, y: U) => U
+
+
+declare function id2OneTypeParam<T>(x: T, y: T): T;
+>id2OneTypeParam : <T>(x: T, y: T) => T
+>T : T
+>x : T
+>T : T
+>y : T
+>T : T
+>T : T
+
+var b4 = bar(1, "one", id2OneTypeParam);  // Should be number | string
+>b4 : string | number
+>bar(1, "one", id2OneTypeParam) : string | number
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>1 : 1
+>"one" : "one"
+>id2OneTypeParam : <T>(x: T, y: T) => T
+
+
+
+declare function withNum<N extends number>(x: N): N;
+>withNum : <N extends number>(x: N) => N
+>N : N
+>x : N
+>N : N
+>N : N
+
+declare function withString<S extends string>(f: (x: S) => S): void;
+>withString : <S extends string>(f: (x: S) => S) => void
+>S : S
+>f : (x: S) => S
+>x : S
+>S : S
+>S : S
+
+declare function useString(f: (x: string) => string): void;
+>useString : (f: (x: string) => string) => void
+>f : (x: string) => string
+>x : string
+
+withString(withNum);  // Error
+>withString(withNum) : any
+>withString : <S extends string>(f: (x: S) => S) => void
+>withNum : <N extends number>(x: N) => N
+
+useString(withNum);   // Error
+>useString(withNum) : void
+>useString : (f: (x: string) => string) => void
+>withNum : <N extends number>(x: N) => N
+
+declare function f10<T>(x: T): T;
+>f10 : { <T>(x: T): T; <T>(x: T, y: number): T; }
+>T : T
+>x : T
+>T : T
+>T : T
+
+declare function f10<T>(x: T, y: number): T;
+>f10 : { <T>(x: T): T; <T>(x: T, y: number): T; }
+>T : T
+>x : T
+>T : T
+>y : number
+>T : T
+
+const a10: string[] = ["a", "b"];
+>a10 : string[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+
+const b10 = a10.map(f10);
+>b10 : {}[]
+>a10.map(f10) : {}[]
+>a10.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>a10 : string[]
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>f10 : { <T>(x: T): T; <T>(x: T, y: number): T; }
+
+declare function botox<X, Y>(idX: (x: X) => X, idY: (y: Y) => Y): (x: X, y: Y) => [X, Y];
+>botox : <X, Y>(idX: (x: X) => X, idY: (y: Y) => Y) => (x: X, y: Y) => [X, Y]
+>X : X
+>Y : Y
+>idX : (x: X) => X
+>x : X
+>X : X
+>X : X
+>idY : (y: Y) => Y
+>y : Y
+>Y : Y
+>Y : Y
+>x : X
+>X : X
+>y : Y
+>Y : Y
+>X : X
+>Y : Y
+
+const xyPair: [number, string] = botox(id, id)(3, 'str');
+>xyPair : [number, string]
+>botox(id, id)(3, 'str') : [{}, {}]
+>botox(id, id) : (x: {}, y: {}) => [{}, {}]
+>botox : <X, Y>(idX: (x: X) => X, idY: (y: Y) => Y) => (x: X, y: Y) => [X, Y]
+>id : <I>(x: I) => I
+>id : <I>(x: I) => I
+>3 : 3
+>'str' : "str"
+
+const testPair: { x: number, y: string } = pair(3)('str');
+>testPair : { x: number; y: string; }
+>x : number
+>y : string
+>pair(3)('str') : { x: number; y: {}; }
+>pair(3) : (y: {}) => { x: number; y: {}; }
+>pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>3 : 3
+>'str' : "str"
+
+declare function botox2<X, Y>(idX: { a: (x: X) => X }, idY: { a: (y: Y) => Y }): (x: X, y: Y) => [X, Y];
+>botox2 : <X, Y>(idX: { a: (x: X) => X; }, idY: { a: (y: Y) => Y; }) => (x: X, y: Y) => [X, Y]
+>X : X
+>Y : Y
+>idX : { a: (x: X) => X; }
+>a : (x: X) => X
+>x : X
+>X : X
+>X : X
+>idY : { a: (y: Y) => Y; }
+>a : (y: Y) => Y
+>y : Y
+>Y : Y
+>Y : Y
+>x : X
+>X : X
+>y : Y
+>Y : Y
+>X : X
+>Y : Y
+
+const bottoxObj = { a: id };
+>bottoxObj : { a: <I>(x: I) => I; }
+>{ a: id } : { a: <I>(x: I) => I; }
+>a : <I>(x: I) => I
+>id : <I>(x: I) => I
+
+const xyPair2: [number, string] = botox2(bottoxObj, bottoxObj)(3, 'str'); // ZZZ
+>xyPair2 : [number, string]
+>botox2(bottoxObj, bottoxObj)(3, 'str') : [{}, {}]
+>botox2(bottoxObj, bottoxObj) : (x: {}, y: {}) => [{}, {}]
+>botox2 : <X, Y>(idX: { a: (x: X) => X; }, idY: { a: (y: Y) => Y; }) => (x: X, y: Y) => [X, Y]
+>bottoxObj : { a: <I>(x: I) => I; }
+>bottoxObj : { a: <I>(x: I) => I; }
+>3 : 3
+>'str' : "str"
+
+const xyPair3: [number, string] = botox2({ a: id }, { a: id })(3, 'str');
+>xyPair3 : [number, string]
+>botox2({ a: id }, { a: id })(3, 'str') : [{}, {}]
+>botox2({ a: id }, { a: id }) : (x: {}, y: {}) => [{}, {}]
+>botox2 : <X, Y>(idX: { a: (x: X) => X; }, idY: { a: (y: Y) => Y; }) => (x: X, y: Y) => [X, Y]
+>{ a: id } : { a: <I>(x: I) => I; }
+>a : <I>(x: I) => I
+>id : <I>(x: I) => I
+>{ a: id } : { a: <I>(x: I) => I; }
+>a : <I>(x: I) => I
+>id : <I>(x: I) => I
+>3 : 3
+>'str' : "str"
+
+
+class GenericClass<T> {
+>GenericClass : GenericClass<T>
+>T : T
+
+    payload: T;
+>payload : T
+>T : T
+}
+
+var genericObject = new GenericClass<{ greeting: string }>();
+>genericObject : GenericClass<{ greeting: string; }>
+>new GenericClass<{ greeting: string }>() : GenericClass<{ greeting: string; }>
+>GenericClass : typeof GenericClass
+>greeting : string
+
+function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
+>genericFunction : <T>(object: GenericClass<T>, callback: (payload: T) => void) => void
+>T : T
+>object : GenericClass<T>
+>GenericClass : GenericClass<T>
+>T : T
+>callback : (payload: T) => void
+>payload : T
+>T : T
+
+    callback(object.payload);
+>callback(object.payload) : void
+>callback : (payload: T) => void
+>object.payload : T
+>object : GenericClass<T>
+>payload : T
+}
+
+genericFunction(genericObject, ({greeting}) => {
+>genericFunction(genericObject, ({greeting}) => {    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string}) : void
+>genericFunction : <T>(object: GenericClass<T>, callback: (payload: T) => void) => void
+>genericObject : GenericClass<{ greeting: string; }>
+>({greeting}) => {    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string} : ({ greeting }: { greeting: string; }) => void
+>greeting : string
+
+    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
+>s : string
+>greeting.toLocaleLowerCase() : string
+>greeting.toLocaleLowerCase : () => string
+>greeting : string
+>toLocaleLowerCase : () => string
+
+});
+
+class Foo<T extends {a: string; b:number;}>{
+>Foo : Foo<T>
+>T : T
+>a : string
+>b : number
+
+    test: T;
+>test : T
+>T : T
+
+    constructor(x: T){}
+>x : T
+>T : T
+}
+
+var x = new Foo(true); // Should error
+>x : any
+>new Foo(true) : any
+>Foo : typeof Foo
+>true : true
+
+var y = new Foo({a: "test", b: 42}); // Should be OK
+>y : Foo<{ a: string; b: number; }>
+>new Foo({a: "test", b: 42}) : Foo<{ a: string; b: number; }>
+>Foo : typeof Foo
+>{a: "test", b: 42} : { a: string; b: number; }
+>a : string
+>"test" : "test"
+>b : number
+>42 : 42
+
+var z: number = y.test.b;
+>z : number
+>y.test.b : number
+>y.test : { a: string; b: number; }
+>y : Foo<{ a: string; b: number; }>
+>test : { a: string; b: number; }
+>b : number
+
+declare function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r;
+>withFew : <a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r) => r
+>a : a
+>r : r
+>values : a[]
+>a : a
+>haveFew : (values: a[]) => r
+>values : a[]
+>a : a
+>r : r
+>haveNone : (reason: string) => r
+>reason : string
+>r : r
+>r : r
+
+function fail(message: string) : never { throw new Error(message); }
+>fail : (message: string) => never
+>message : string
+>new Error(message) : Error
+>Error : ErrorConstructor
+>message : string
+
+const result: number[] = withFew([1, 2, 3], id, fail); // expected result is number[]
+>result : number[]
+>withFew([1, 2, 3], id, fail) : number[]
+>withFew : <a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r) => r
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>id : <I>(x: I) => I
+>fail : (message: string) => never
+
+type List<T> = { kind: 'nil' }
+>List : List<T>
+>T : T
+>kind : "nil"
+
+             | { kind: 'cons', val: T, rest: List<T> }
+>kind : "cons"
+>val : T
+>T : T
+>rest : List<T>
+>List : List<T>
+>T : T
+
+const Nil = { kind: 'nil' as 'nil' }
+>Nil : { kind: "nil"; }
+>{ kind: 'nil' as 'nil' } : { kind: "nil"; }
+>kind : "nil"
+>'nil' as 'nil' : "nil"
+>'nil' : "nil"
+
+declare function cons<C>(x: C, xs: List<C>): List<C>;
+>cons : <C>(x: C, xs: List<C>) => List<C>
+>C : C
+>x : C
+>C : C
+>xs : List<C>
+>List : List<T>
+>C : C
+>List : List<T>
+>C : C
+
+declare function foldr<V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A): A;
+>foldr : <V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A) => A
+>V : V
+>A : A
+>list : List<V>
+>List : List<T>
+>V : V
+>initial : A
+>A : A
+>f : (x: V, acc: A) => A
+>x : V
+>V : V
+>acc : A
+>A : A
+>A : A
+>A : A
+
+function concat<C>(list: List<List<C>>): List<C> {
+>concat : <C>(list: List<List<C>>) => List<C>
+>C : C
+>list : List<List<C>>
+>List : List<T>
+>List : List<T>
+>C : C
+>List : List<T>
+>C : C
+
+    return foldr(list, Nil as List<C>, append);
+>foldr(list, Nil as List<C>, append) : List<C>
+>foldr : <V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A) => A
+>list : List<List<C>>
+>Nil as List<C> : List<C>
+>Nil : { kind: "nil"; }
+>List : List<T>
+>C : C
+>append : <L>(xs: List<L>, ys: List<L>) => List<L>
+}
+
+function append<L>(xs: List<L>, ys: List<L>): List<L> {
+>append : <L>(xs: List<L>, ys: List<L>) => List<L>
+>L : L
+>xs : List<L>
+>List : List<T>
+>L : L
+>ys : List<L>
+>List : List<T>
+>L : L
+>List : List<T>
+>L : L
+
+    return foldr(xs, ys, cons);
+>foldr(xs, ys, cons) : List<L>
+>foldr : <V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A) => A
+>xs : List<L>
+>ys : List<L>
+>cons : <C>(x: C, xs: List<C>) => List<C>
+}
+
+declare function zest<T>(x: T): void;
+>zest : <T>(x: T) => void
+>T : T
+>x : T
+>T : T
+
+zest(5); // should be number
+>zest(5) : void
+>zest : <T>(x: T) => void
+>5 : 5
+
+function append2<L>(xs: List<L>, ys: List<L>): List<L> {
+>append2 : <L>(xs: List<L>, ys: List<L>) => List<L>
+>L : L
+>xs : List<L>
+>List : List<T>
+>L : L
+>ys : List<L>
+>List : List<T>
+>L : L
+>List : List<T>
+>L : L
+
+    return foldr(xs, ys, flip(fconst)); // ZZZ
+>foldr(xs, ys, flip(fconst)) : List<L>
+>foldr : <V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A) => A
+>xs : List<L>
+>ys : List<L>
+>flip(fconst) : (b: L, a: List<L>) => List<L>
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>fconst : <X, Y>(x: X, y: Y) => X
+}
+
+function append3<L>(xs: List<L>, ys: List<L>) {
+>append3 : <L>(xs: List<L>, ys: List<L>) => List<L>
+>L : L
+>xs : List<L>
+>List : List<T>
+>L : L
+>ys : List<L>
+>List : List<T>
+>L : L
+
+    return foldr(xs, ys, flip(fconst));
+>foldr(xs, ys, flip(fconst)) : List<L>
+>foldr : <V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A) => A
+>xs : List<L>
+>ys : List<L>
+>flip(fconst) : (b: L, a: List<L>) => List<L>
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>fconst : <X, Y>(x: X, y: Y) => X
+}
+
+function append4<L>(xs: List<L>, ys: List<L>) {
+>append4 : <L>(xs: List<L>, ys: List<L>) => List<L>
+>L : L
+>xs : List<L>
+>List : List<T>
+>L : L
+>ys : List<L>
+>List : List<T>
+>L : L
+
+    return foldr(xs, ys, flip(flip(cons)));
+>foldr(xs, ys, flip(flip(cons))) : List<L>
+>foldr : <V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A) => A
+>xs : List<L>
+>ys : List<L>
+>flip(flip(cons)) : (b: L, a: List<L>) => List<L>
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>flip(cons) : (b: List<L>, a: L) => List<L>
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>cons : <C>(x: C, xs: List<C>) => List<C>
+}
+
+const infPowa: typeof append = append3; // ZZZ
+>infPowa : <L>(xs: List<L>, ys: List<L>) => List<L>
+>append : <L>(xs: List<L>, ys: List<L>) => List<L>
+>append3 : <L>(xs: List<L>, ys: List<L>) => List<L>
+
+let jj = <T>(n: T) => 'Error please?';
+>jj : <T>(n: T) => string
+><T>(n: T) => 'Error please?' : <T>(n: T) => string
+>T : T
+>n : T
+>T : T
+>'Error please?' : "Error please?"
+
+let myFunc: <T>(n: T) => T = jj;
+>myFunc : <T>(n: T) => T
+>T : T
+>n : T
+>T : T
+>T : T
+>jj : <T>(n: T) => string
+
+function foo<T extends Function>(x: T): T { return x; }
+>foo : <T extends Function>(x: T) => T
+>T : T
+>Function : Function
+>x : T
+>T : T
+>T : T
+>x : T
+
+const r1 = foo(function (x: string) { return x; });
+>r1 : (x: string) => string
+>foo(function (x: string) { return x; }) : (x: string) => string
+>foo : <T extends Function>(x: T) => T
+>function (x: string) { return x; } : (x: string) => string
+>x : string
+>x : string
+
+const r2 = foo((x: string) => x);
+>r2 : (x: string) => string
+>foo((x: string) => x) : (x: string) => string
+>foo : <T extends Function>(x: T) => T
+>(x: string) => x : (x: string) => string
+>x : string
+>x : string
+
+const r3 = foo(function (x: any) { return x; });
+>r3 : (x: any) => any
+>foo(function (x: any) { return x; }) : (x: any) => any
+>foo : <T extends Function>(x: T) => T
+>function (x: any) { return x; } : (x: any) => any
+>x : any
+>x : any
+
+
+declare const cb1: { new <T>(x: T): T };
+>cb1 : new <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+
+declare const cb2: { new<T>(x: T): number; new<T>(x: number): T; }
+>cb2 : { new <T>(x: T): number; new <T>(x: number): T; }
+>T : T
+>x : T
+>T : T
+>T : T
+>x : number
+>T : T
+
+declare const cb3: { new<T>(x: T): number; }
+>cb3 : new <T>(x: T) => number
+>T : T
+>x : T
+>T : T
+
+declare const cb4: { new<T>(x: number): T; }
+>cb4 : new <T>(x: number) => T
+>T : T
+>x : number
+>T : T
+
+declare function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }): void;
+>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => void
+>T : T
+>x : T
+>T : T
+>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+>x : T
+>T : T
+>x : T
+>T : T
+>y : T | undefined
+>T : T
+
+foo7(1, cb1); // Should error (but won't error because type parameters erased when comparing more than one signature)
+>foo7(1, cb1) : void
+>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => void
+>1 : 1
+>cb1 : new <T>(x: T) => T
+
+foo7(1, cb2);
+>foo7(1, cb2) : void
+>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => void
+>1 : 1
+>cb2 : { new <T>(x: T): number; new <T>(x: number): T; }
+
+foo7(1, cb3);
+>foo7(1, cb3) : any
+>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => void
+>1 : 1
+>cb3 : new <T>(x: T) => number
+
+foo7(1, cb4);
+>foo7(1, cb4) : void
+>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => void
+>1 : 1
+>cb4 : new <T>(x: number) => T
+
+declare function foo8<T>(x:T, cb: { new(x: T): string; }): void;
+>foo8 : <T>(x: T, cb: new (x: T) => string) => void
+>T : T
+>x : T
+>T : T
+>cb : new (x: T) => string
+>x : T
+>T : T
+
+foo8(1, cb1); // Should error
+>foo8(1, cb1) : any
+>foo8 : <T>(x: T, cb: new (x: T) => string) => void
+>1 : 1
+>cb1 : new <T>(x: T) => T
+
+foo8(1, cb2);
+>foo8(1, cb2) : void
+>foo8 : <T>(x: T, cb: new (x: T) => string) => void
+>1 : 1
+>cb2 : { new <T>(x: T): number; new <T>(x: number): T; }
+
+foo8(1, cb3);
+>foo8(1, cb3) : any
+>foo8 : <T>(x: T, cb: new (x: T) => string) => void
+>1 : 1
+>cb3 : new <T>(x: T) => number
+
+foo8(1, cb4);
+>foo8(1, cb4) : void
+>foo8 : <T>(x: T, cb: new (x: T) => string) => void
+>1 : 1
+>cb4 : new <T>(x: number) => T
+
+declare function foo9<T>(x:T, cb: { new(x: T, y?: T): string }): void;
+>foo9 : <T>(x: T, cb: new (x: T, y?: T | undefined) => string) => void
+>T : T
+>x : T
+>T : T
+>cb : new (x: T, y?: T | undefined) => string
+>x : T
+>T : T
+>y : T | undefined
+>T : T
+
+foo9(1, cb1); // Should error
+>foo9(1, cb1) : any
+>foo9 : <T>(x: T, cb: new (x: T, y?: T | undefined) => string) => void
+>1 : 1
+>cb1 : new <T>(x: T) => T
+
+foo9(1, cb2);
+>foo9(1, cb2) : void
+>foo9 : <T>(x: T, cb: new (x: T, y?: T | undefined) => string) => void
+>1 : 1
+>cb2 : { new <T>(x: T): number; new <T>(x: number): T; }
+
+foo9(1, cb3);
+>foo9(1, cb3) : any
+>foo9 : <T>(x: T, cb: new (x: T, y?: T | undefined) => string) => void
+>1 : 1
+>cb3 : new <T>(x: T) => number
+
+foo9(1, cb4);
+>foo9(1, cb4) : void
+>foo9 : <T>(x: T, cb: new (x: T, y?: T | undefined) => string) => void
+>1 : 1
+>cb4 : new <T>(x: number) => T
+
+function map<A, B>(items: A[], f: (x: A) => B): B[]{
+>map : <A, B>(items: A[], f: (x: A) => B) => B[]
+>A : A
+>B : B
+>items : A[]
+>A : A
+>f : (x: A) => B
+>x : A
+>A : A
+>B : B
+>B : B
+
+    return items.map(f);
+>items.map(f) : B[]
+>items.map : <U>(callbackfn: (value: A, index: number, array: A[]) => U, thisArg?: any) => U[]
+>items : A[]
+>map : <U>(callbackfn: (value: A, index: number, array: A[]) => U, thisArg?: any) => U[]
+>f : (x: A) => B
+}
+
+var v10: number[] = map([1, 2, 3], id);     // Error if not number[]
+>v10 : number[]
+>map([1, 2, 3], id) : number[]
+>map : <A, B>(items: A[], f: (x: A) => B) => B[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>id : <I>(x: I) => I
+
+function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
+>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>T : T
+>U : U
+>x : T
+>T : T
+>cb : (a: T) => U
+>a : T
+>T : T
+>U : U
+>y : U
+>U : U
+
+    return cb(x);
+>cb(x) : U
+>cb : (a: T) => U
+>x : T
+}
+
+var r7 = foo3(1, <Z>(a: Z) => '', ''); // string
+>r7 : string
+>foo3(1, <Z>(a: Z) => '', '') : string
+>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>1 : 1
+><Z>(a: Z) => '' : <Z>(a: Z) => string
+>Z : Z
+>a : Z
+>Z : Z
+>'' : ""
+>'' : ""
+
+declare var a: { new <T>(x: T): T; };
+>a : new <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+
+function foo2<T, U>(x: T, cb: new(a: T) => U) {
+>foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
+>T : T
+>U : U
+>x : T
+>T : T
+>cb : new (a: T) => U
+>a : T
+>T : T
+>U : U
+
+    return new cb(x);
+>new cb(x) : U
+>cb : new (a: T) => U
+>x : T
+}
+
+var r4b = foo2(1, a); // number
+>r4b : {}
+>foo2(1, a) : {}
+>foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
+>1 : 1
+>a : new <T>(x: T) => T
+
+function wf<N extends 5>(n: N, f: (x: 5) => N): N {
+>wf : <N extends 5>(n: N, f: (x: 5) => N) => N
+>N : N
+>n : N
+>N : N
+>f : (x: 5) => N
+>x : 5
+>N : N
+>N : N
+
+    return f(n);
+>f(n) : N
+>f : (x: 5) => N
+>n : N
+}
+const wfr: 5 = wf(5, id);
+>wfr : 5
+>wf(5, id) : 5
+>wf : <N extends 5>(n: N, f: (x: 5) => N) => N
+>5 : 5
+>id : <I>(x: I) => I
+
+const wfr2   = wf(4, id); // error
+>wfr2 : any
+>wf(4, id) : any
+>wf : <N extends 5>(n: N, f: (x: 5) => N) => N
+>4 : 4
+>id : <I>(x: I) => I
+
+declare function flip<A, B, R>(f: (a: A, b: B) => R): (b: B, a: A) => R;
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>A : A
+>B : B
+>R : R
+>f : (a: A, b: B) => R
+>a : A
+>A : A
+>b : B
+>B : B
+>R : R
+>b : B
+>B : B
+>a : A
+>A : A
+>R : R
+
+function id<I>(x: I): I {
+>id : <I>(x: I) => I
+>I : I
+>x : I
+>I : I
+>I : I
+
+    return x;
+>x : I
+}
+
+function fconst<X, Y>(x: X, y: Y): X {
+>fconst : <X, Y>(x: X, y: Y) => X
+>X : X
+>Y : Y
+>x : X
+>X : X
+>y : Y
+>Y : Y
+>X : X
+
+    return x;
+>x : X
+}
+
+function addStr(x: number, y: string) {
+>addStr : (x: number, y: string) => string
+>x : number
+>y : string
+
+    return x + y;
+>x + y : string
+>x : number
+>y : string
+}
+
+function tagged<T extends string, Q>(tag: T, value: Q): { tag: T, value: Q } {
+>tagged : <T extends string, Q>(tag: T, value: Q) => { tag: T; value: Q; }
+>T : T
+>Q : Q
+>tag : T
+>T : T
+>value : Q
+>Q : Q
+>tag : T
+>T : T
+>value : Q
+>Q : Q
+
+    return { tag, value };
+>{ tag, value } : { tag: T; value: Q; }
+>tag : T
+>value : Q
+}
+
+function fbound<T extends Q, Q>(tag: T, value: Q): { tag: T, value: Q } {
+>fbound : <T extends Q, Q>(tag: T, value: Q) => { tag: T; value: Q; }
+>T : T
+>Q : Q
+>Q : Q
+>tag : T
+>T : T
+>value : Q
+>Q : Q
+>tag : T
+>T : T
+>value : Q
+>Q : Q
+
+    return { tag, value };
+>{ tag, value } : { tag: T; value: Q; }
+>tag : T
+>value : Q
+}
+
+fbound(4, 4).tag;    // 4 (better) or number
+>fbound(4, 4).tag : number
+>fbound(4, 4) : { tag: number; value: number; }
+>fbound : <T extends Q, Q>(tag: T, value: Q) => { tag: T; value: Q; }
+>4 : 4
+>4 : 4
+>tag : number
+
+flip(fbound)(4, 4)   // OK
+>flip(fbound)(4, 4) : { tag: {}; value: {}; }
+>flip(fbound) : (b: {}, a: {}) => { tag: {}; value: {}; }
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>fbound : <T extends Q, Q>(tag: T, value: Q) => { tag: T; value: Q; }
+>4 : 4
+>4 : 4
+
+fbound(4, "4");      // Error
+>fbound(4, "4") : any
+>fbound : <T extends Q, Q>(tag: T, value: Q) => { tag: T; value: Q; }
+>4 : 4
+>"4" : "4"
+
+flip(fbound)("4", 4) // Error
+>flip(fbound)("4", 4) : { tag: {}; value: {}; }
+>flip(fbound) : (b: {}, a: {}) => { tag: {}; value: {}; }
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>fbound : <T extends Q, Q>(tag: T, value: Q) => { tag: T; value: Q; }
+>"4" : "4"
+>4 : 4
+
+function of2<a, b>(one: a, two: b): [a, b] {
+>of2 : <a, b>(one: a, two: b) => [a, b]
+>a : a
+>b : b
+>one : a
+>a : a
+>two : b
+>b : b
+>a : a
+>b : b
+
+    return [one, two];
+>[one, two] : [a, b]
+>one : a
+>two : b
+}
+const flipped = flip(of2);
+>flipped : (b: {}, a: {}) => [{}, {}]
+>flip(of2) : (b: {}, a: {}) => [{}, {}]
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>of2 : <a, b>(one: a, two: b) => [a, b]
+
+// it was working before
+const f1 = flip(addStr); // (b: string, a: number) => string
+>f1 : (b: string, a: number) => string
+>flip(addStr) : (b: string, a: number) => string
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>addStr : (x: number, y: string) => string
+
+const v1 = f1("hello", 3);
+>v1 : string
+>f1("hello", 3) : string
+>f1 : (b: string, a: number) => string
+>"hello" : "hello"
+>3 : 3
+
+const v2 = id(id)(3); // `3`
+>v2 : 3
+>id(id)(3) : 3
+>id(id) : <I>(x: I) => I
+>id : <I>(x: I) => I
+>id : <I>(x: I) => I
+>3 : 3
+
+// working now
+const f2 = flip(id);     // <T>(b: {}, a: T): T
+>f2 : (b: {}, a: {}) => {}
+>flip(id) : (b: {}, a: {}) => {}
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>id : <I>(x: I) => I
+
+const f3 = flip(fconst); // <Y, X>(b: Y, a: X) => X
+>f3 : (b: {}, a: {}) => {}
+>flip(fconst) : (b: {}, a: {}) => {}
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>fconst : <X, Y>(x: X, y: Y) => X
+
+const f4 = flip(tagged);   // <Q, T extends string>(b: Q, a: T) => { tag: T, value: Q }
+>f4 : any
+>flip(tagged) : any
+>flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
+>tagged : <T extends string, Q>(tag: T, value: Q) => { tag: T; value: Q; }
+
+const v3 = f3(1, "qw") // `"qw"`
+>v3 : {}
+>f3(1, "qw") : {}
+>f3 : (b: {}, a: {}) => {}
+>1 : 1
+>"qw" : "qw"
+
+const v4 = f3([], {})  // `{}`
+>v4 : {}
+>f3([], {}) : {}
+>f3 : (b: {}, a: {}) => {}
+>[] : never[]
+>{} : {}
+
+const v5 = f4(5, "hello"); // { tag: "hello", value: number }
+>v5 : any
+>f4(5, "hello") : any
+>f4 : any
+>5 : 5
+>"hello" : "hello"
+
+const v6 = f4(5, 5);       // Error as expected
+>v6 : any
+>f4(5, 5) : any
+>f4 : any
+>5 : 5
+>5 : 5
+
+declare function compose<A, B, C>(f: (b: B) => C, g: (a: A) => B): (a: A) => C;
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>A : A
+>B : B
+>C : C
+>f : (b: B) => C
+>b : B
+>B : B
+>C : C
+>g : (a: A) => B
+>a : A
+>A : A
+>B : B
+>a : A
+>A : A
+>C : C
+
+declare const f: <T>(x:number) => T;
+>f : <T>(x: number) => T
+>T : T
+>x : number
+>T : T
+
+declare const g: (x:boolean) => number;
+>g : (x: boolean) => number
+>x : boolean
+
+const f5 = compose(f, g)      // OUCH! this gets type `<T>(a: boolean) => T`
+>f5 : any
+>compose(f, g) : any
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>f : <T>(x: number) => T
+>g : (x: boolean) => number
+
+declare const g_2: <T>(x: T) => boolean;
+>g_2 : <T>(x: T) => boolean
+>T : T
+>x : T
+>T : T
+
+declare const f_2: (x: boolean) => number;
+>f_2 : (x: boolean) => number
+>x : boolean
+
+const f6 = compose(f_2, g_2)  // <T> (a: T) => number
+>f6 : (a: {}) => number
+>compose(f_2, g_2) : (a: {}) => number
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>f_2 : (x: boolean) => number
+>g_2 : <T>(x: T) => boolean
+
+const f7 = compose(id, x => String(x)) // (a: {}) => string
+>f7 : (a: {}) => {}
+>compose(id, x => String(x)) : (a: {}) => {}
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>id : <I>(x: I) => I
+>x => String(x) : (x: {}) => string
+>x : {}
+>String(x) : string
+>String : StringConstructor
+>x : {}
+
+declare function h<R>(f: (x: number) => R): R;
+>h : <R>(f: (x: number) => R) => R
+>R : R
+>f : (x: number) => R
+>x : number
+>R : R
+>R : R
+
+var z: number = h(id);
+>z : number
+>h(id) : number
+>h : <R>(f: (x: number) => R) => R
+>id : <I>(x: I) => I
+
+const arr: number[] = [1, 2, 3].map(id);
+>arr : number[]
+>[1, 2, 3].map(id) : number[]
+>[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>id : <I>(x: I) => I
+
+declare const val1: string | undefined;
+>val1 : string | undefined
+
+declare function cleanse<T>(x: T|undefined): x is T;
+>cleanse : <T>(x: T | undefined) => x is T
+>T : T
+>x : T | undefined
+>T : T
+>x : any
+>T : T
+
+cleanse(val1);
+>cleanse(val1) : boolean
+>cleanse : <T>(x: T | undefined) => x is T
+>val1 : string | undefined
+
+class MyClass
+>MyClass : MyClass
+{
+  one(c: boolean){};
+>one : (c: boolean) => void
+>c : boolean
+
+  two(){};
+>two : () => void
+}
+
+declare const test: PickPrototype<typeof MyClass, 'one'>;
+>test : PickPrototype<typeof MyClass, "one">
+>PickPrototype : PickPrototype<T, K>
+>MyClass : typeof MyClass
+
+type PickPrototype<T extends { prototype: any }, K extends keyof T['prototype']> = {
+>PickPrototype : PickPrototype<T, K>
+>T : T
+>prototype : any
+>K : K
+>T : T
+
+    [P in K]: T['prototype'][P];
+>P : P
+>K : K
+>T : T
+>P : P
+}
+
+
+function wrap<T>(innerFunc: (data: T) => any) {
+>wrap : <T>(innerFunc: (data: T) => any) => (data: T) => any
+>T : T
+>innerFunc : (data: T) => any
+>data : T
+>T : T
+
+    return (data:T) => innerFunc(data);
+>(data:T) => innerFunc(data) : (data: T) => any
+>data : T
+>T : T
+>innerFunc(data) : any
+>innerFunc : (data: T) => any
+>data : T
+}
+
+function inner(x:number) {};
+>inner : (x: number) => void
+>x : number
+
+inner(2);
+>inner(2) : void
+>inner : (x: number) => void
+>2 : 2
+
+let func = wrap(inner);
+>func : (data: number) => any
+>wrap(inner) : (data: number) => any
+>wrap : <T>(innerFunc: (data: T) => any) => (data: T) => any
+>inner : (x: number) => void
+
+func(2);
+>func(2) : any
+>func : (data: number) => any
+>2 : 2
+
+
+declare function union<A, B, C>(f: (a: A|B|C, b: A|B|C, c: A|B|C) => void): void;
+>union : <A, B, C>(f: (a: A | B | C, b: A | B | C, c: A | B | C) => void) => void
+>A : A
+>B : B
+>C : C
+>f : (a: A | B | C, b: A | B | C, c: A | B | C) => void
+>a : A | B | C
+>A : A
+>B : B
+>C : C
+>b : A | B | C
+>A : A
+>B : B
+>C : C
+>c : A | B | C
+>A : A
+>B : B
+>C : C
+
+union(<X, Y, Z>(x: X, y: Y, z: Z) => x)
+>union(<X, Y, Z>(x: X, y: Y, z: Z) => x) : void
+>union : <A, B, C>(f: (a: A | B | C, b: A | B | C, c: A | B | C) => void) => void
+><X, Y, Z>(x: X, y: Y, z: Z) => x : <X, Y, Z>(x: X, y: Y, z: Z) => X
+>X : X
+>Y : Y
+>Z : Z
+>x : X
+>X : X
+>y : Y
+>Y : Y
+>z : Z
+>Z : Z
+>x : X
+
+declare function union2<A, B, C>(f: (a: A, b: B, c: C) => void): void;
+>union2 : <A, B, C>(f: (a: A, b: B, c: C) => void) => void
+>A : A
+>B : B
+>C : C
+>f : (a: A, b: B, c: C) => void
+>a : A
+>A : A
+>b : B
+>B : B
+>c : C
+>C : C
+
+union2(<X, Y, Z>(x: X|Y|Z, y: X|Y|Z, z: X|Y|Z) => x);
+>union2(<X, Y, Z>(x: X|Y|Z, y: X|Y|Z, z: X|Y|Z) => x) : void
+>union2 : <A, B, C>(f: (a: A, b: B, c: C) => void) => void
+><X, Y, Z>(x: X|Y|Z, y: X|Y|Z, z: X|Y|Z) => x : <X, Y, Z>(x: X | Y | Z, y: X | Y | Z, z: X | Y | Z) => X | Y | Z
+>X : X
+>Y : Y
+>Z : Z
+>x : X | Y | Z
+>X : X
+>Y : Y
+>Z : Z
+>y : X | Y | Z
+>X : X
+>Y : Y
+>Z : Z
+>z : X | Y | Z
+>X : X
+>Y : Y
+>Z : Z
+>x : X | Y | Z
+
+declare function union3<A, B>(f: (a: A|string, b: A|number) => B): B;
+>union3 : <A, B>(f: (a: string | A, b: number | A) => B) => B
+>A : A
+>B : B
+>f : (a: string | A, b: number | A) => B
+>a : string | A
+>A : A
+>b : number | A
+>A : A
+>B : B
+>B : B
+
+declare function uParam31<X>(x: X|number, y: X|string): X;
+>uParam31 : <X>(x: number | X, y: string | X) => X
+>X : X
+>x : number | X
+>X : X
+>y : string | X
+>X : X
+>X : X
+
+declare function uParam32(x: number, y: number|string): void;
+>uParam32 : (x: number, y: string | number) => void
+>x : number
+>y : string | number
+
+declare function uParam33(x: string, y: number|string): void;
+>uParam33 : (x: string, y: string | number) => void
+>x : string
+>y : string | number
+
+union3(uParam31);  // error;  A,X = [number, string]
+>union3(uParam31) : {}
+>union3 : <A, B>(f: (a: string | A, b: number | A) => B) => B
+>uParam31 : <X>(x: number | X, y: string | X) => X
+
+union3(uParam32);  // error
+>union3(uParam32) : any
+>union3 : <A, B>(f: (a: string | A, b: number | A) => B) => B
+>uParam32 : (x: number, y: string | number) => void
+
+union3(uParam33);  // OK;     A = string; B = void
+>union3(uParam33) : void
+>union3 : <A, B>(f: (a: string | A, b: number | A) => B) => B
+>uParam33 : (x: string, y: string | number) => void
+
+declare function union4<A, B, C>(f: (b: A|B) => C, a: A): C;
+>union4 : <A, B, C>(f: (b: A | B) => C, a: A) => C
+>A : A
+>B : B
+>C : C
+>f : (b: A | B) => C
+>b : A | B
+>A : A
+>B : B
+>C : C
+>a : A
+>A : A
+>C : C
+
+declare function uParam41(y: number|string): void;
+>uParam41 : (y: string | number) => void
+>y : string | number
+
+declare function uParam42<X>(y: number|X): X;
+>uParam42 : <X>(y: number | X) => X
+>X : X
+>y : number | X
+>X : X
+>X : X
+
+declare function uParam43<X>(y: string|X): X;
+>uParam43 : <X>(y: string | X) => X
+>X : X
+>y : string | X
+>X : X
+>X : X
+
+union4(uParam41, 4); // A = number, B = string, C = void
+>union4(uParam41, 4) : any
+>union4 : <A, B, C>(f: (b: A | B) => C, a: A) => C
+>uParam41 : (y: string | number) => void
+>4 : 4
+
+union4(uParam42, 4); // A = number, B = X, C = X
+>union4(uParam42, 4) : {}
+>union4 : <A, B, C>(f: (b: A | B) => C, a: A) => C
+>uParam42 : <X>(y: number | X) => X
+>4 : 4
+
+union4(uParam43, 4); // A = number, B = string, C = number
+>union4(uParam43, 4) : {}
+>union4 : <A, B, C>(f: (b: A | B) => C, a: A) => C
+>uParam43 : <X>(y: string | X) => X
+>4 : 4
+

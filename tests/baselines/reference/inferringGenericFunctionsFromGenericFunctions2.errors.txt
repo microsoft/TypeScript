@@ -1,0 +1,627 @@
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(21,32): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+  Type 'string' is not assignable to type 'Date'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(22,32): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+  Type 'string' is not assignable to type 'Date'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(29,7): error TS2345: Argument of type '<A, B>(x: A, l: List<B>, y: A) => A' is not assignable to parameter of type '(l: List<{}>, x: {}, y: {}) => {}'.
+  Types of parameters 'l' and 'x' are incompatible.
+    Type '{}' is not assignable to type 'List<{}>'.
+      Type '{}' is not assignable to type '{ kind: "cons"; val: {}; rest: List<{}>; }'.
+        Property 'kind' is missing in type '{}'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(37,11): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(38,12): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(39,26): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string | number'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(41,12): error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: {}) => {}'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(42,27): error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: string | number) => string | number'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(43,6): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: 1, y: number) => 1'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'number' is not assignable to type '1'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(45,17): error TS2345: Argument of type '<N extends number>(x: N) => N' is not assignable to parameter of type '(x: string) => string'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(48,8): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: number, xs: List<number>) => number'.
+  Types of parameters 'y' and 'xs' are incompatible.
+    Type 'List<number>' is not assignable to type 'number'.
+      Type '{ kind: "nil"; }' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(67,9): error TS2322: Type 'C | undefined' is not assignable to type 'C'.
+  Type 'undefined' is not assignable to type 'C'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(99,13): error TS2345: Argument of type '(b: B) => A' is not assignable to parameter of type '(x: B) => B'.
+  Type 'A' is not assignable to type 'B'.
+    Property 'y' is missing in type 'A'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(104,5): error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: number) => 4'.
+  Type 'number' is not assignable to type '4'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(109,7): error TS2345: Argument of type '({ a }: { a: any; }) => any' is not assignable to parameter of type '(x: {}) => string'.
+  Types of parameters '__0' and 'x' are incompatible.
+    Type '{}' is not assignable to type '{ a: any; }'.
+      Property 'a' is missing in type '{}'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(110,7): error TS2345: Argument of type '([b, c]: [any, any]) => string' is not assignable to parameter of type '(x: {}) => string'.
+  Types of parameters '__0' and 'x' are incompatible.
+    Type '{}' is not assignable to type '[any, any]'.
+      Property '0' is missing in type '{}'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(111,7): error TS2345: Argument of type '({ d: [e, f] }: { d: [any, any]; }) => string' is not assignable to parameter of type '(x: {}) => string'.
+  Types of parameters '__0' and 'x' are incompatible.
+    Type '{}' is not assignable to type '{ d: [any, any]; }'.
+      Property 'd' is missing in type '{}'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(112,7): error TS2345: Argument of type '([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string' is not assignable to parameter of type '(x: {}) => string'.
+  Types of parameters '__0' and 'x' are incompatible.
+    Type '{}' is not assignable to type '[{ g: any; }, { h: any; }]'.
+      Property '0' is missing in type '{}'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(113,7): error TS2345: Argument of type '({ a, b }: { a: any; b?: number; }) => any' is not assignable to parameter of type '(x: {}) => string'.
+  Types of parameters '__0' and 'x' are incompatible.
+    Type '{}' is not assignable to type '{ a: any; b?: number; }'.
+      Property 'a' is missing in type '{}'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(120,24): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: number, y: string) => number'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(132,12): error TS2345: Argument of type '<N extends number>(x: N) => N' is not assignable to parameter of type '(x: string) => string'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(133,11): error TS2345: Argument of type '<N extends number>(x: N) => N' is not assignable to parameter of type '(x: string) => string'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(141,7): error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+  Type '{}' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(142,7): error TS2322: Type '{ x: number; y: {}; }' is not assignable to type '{ x: number; y: string; }'.
+  Types of property 'y' are incompatible.
+    Type '{}' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(147,7): error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(148,7): error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(152,5): error TS2564: Property 'payload' has no initializer and is not definitely assigned in the constructor.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(166,5): error TS2564: Property 'test' has no initializer and is not definitely assigned in the constructor.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(170,17): error TS2345: Argument of type 'true' is not assignable to parameter of type '{ a: string; b: number; }'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(209,5): error TS2322: Type '<T>(n: T) => string' is not assignable to type '<T>(n: T) => T'.
+  Type 'string' is not assignable to type 'T'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(225,9): error TS2345: Argument of type 'new <T>(x: T) => number' is not assignable to parameter of type '{ new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(229,9): error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type 'new (x: 1) => string'.
+  Type '1' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(231,9): error TS2345: Argument of type 'new <T>(x: T) => number' is not assignable to parameter of type 'new (x: 1) => string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(235,9): error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type 'new (x: 1, y?: 1 | undefined) => string'.
+  Type '1' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(237,9): error TS2345: Argument of type 'new <T>(x: T) => number' is not assignable to parameter of type 'new (x: 1, y?: 1 | undefined) => string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(261,19): error TS2345: Argument of type '4' is not assignable to parameter of type '5'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(286,8): error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(301,17): error TS2345: Argument of type '<T extends string, Q>(tag: T, value: Q) => { tag: T; value: Q; }' is not assignable to parameter of type '(a: {}, b: {}) => { tag: string; value: {}; }'.
+  Types of parameters 'tag' and 'a' are incompatible.
+    Type '{}' is not assignable to type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(310,20): error TS2345: Argument of type '<T>(x: number) => T' is not assignable to parameter of type '(b: {}) => {}'.
+  Types of parameters 'x' and 'b' are incompatible.
+    Type '{}' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(359,8): error TS2345: Argument of type '(x: number, y: string | number) => void' is not assignable to parameter of type '(a: string, b: string | number) => void'.
+  Types of parameters 'x' and 'a' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): error TS2345: Argument of type '(y: string | number) => void' is not assignable to parameter of type '(b: number | {}) => void'.
+  Types of parameters 'y' and 'b' are incompatible.
+    Type 'number | {}' is not assignable to type 'string | number'.
+      Type '{}' is not assignable to type 'string | number'.
+        Type '{}' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts (41 errors) ====
+    export {}
+    
+    // Borrowed from @gcnew at https://gist.github.com/gcnew/ad833bfa376e4b70fc50a780e3b2d883
+    
+    interface Collection<T> {
+        length: number;
+        add(x: T): void;
+        remove(x: T): boolean;
+    }
+    interface Combinators {
+        map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
+        map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
+        forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
+    }
+    
+    declare var _: Combinators;
+    declare var c2: Collection<number>;
+    
+    var rf1 = (x: number) => { return x.toFixed() };
+    var r1a = _.map(c2, (x) => { return x.toFixed() });
+    var r5 = _.forEach<number>(c2, rf1);  // Should error
+                                   ~~~
+!!! error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+!!! error TS2345:   Type 'string' is not assignable to type 'Date'.
+    var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); // Should error
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+!!! error TS2345:   Type 'string' is not assignable to type 'Date'.
+    declare const zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
+    declare const pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
+    const zr = zipWith([1, 2], ['a', 'b'], pair);
+    
+    declare function lego1<A, B>(x: A, l: List<B>, y: A): A;
+    declare function lego2<C, D>(f: (l: List<C>, x: D, y: D) => D): void;
+    lego2(lego1);
+          ~~~~~
+!!! error TS2345: Argument of type '<A, B>(x: A, l: List<B>, y: A) => A' is not assignable to parameter of type '(l: List<{}>, x: {}, y: {}) => {}'.
+!!! error TS2345:   Types of parameters 'l' and 'x' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type 'List<{}>'.
+!!! error TS2345:       Type '{}' is not assignable to type '{ kind: "cons"; val: {}; rest: List<{}>; }'.
+!!! error TS2345:         Property 'kind' is missing in type '{}'.
+    
+    declare function bombastic<R>(f: (x: string, y: number) => R): R;
+    declare function bombastic2(f: (x: string, y: number) => string): void;
+    declare function bombastic3<R>(f: (x: string, y: number, z: R) => R): R;
+    declare function okay<R>(f: (x: 1, y: number) => R): R;
+    declare function transitive<T>(x: T, f: (x: T) => T): void;
+    
+    bombastic(id2);  // Should be an error T = [string, number]
+              ~~~
+!!! error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string'.
+!!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    bombastic2(id2); // Should be an error T = [string, number]
+               ~~~
+!!! error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string'.
+!!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    bombastic<string|number>(id2); // should be an error because bombastic's callback is (x: string, y: number) => R and the explicit type argument here is setting `R`, not setting T and U from id2
+                             ~~~
+!!! error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string | number'.
+!!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    declare function id3<T, U extends T, V extends U>(x: T, y: U, z: V): V;
+    bombastic3(id3);  // Should be error
+               ~~~
+!!! error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: {}) => {}'.
+!!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    bombastic3<string|number>(id3);  // Should be error because of reason from bombastic<string|number>(id2)
+                              ~~~
+!!! error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: string | number) => string | number'.
+!!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    okay(id2);
+         ~~~
+!!! error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: 1, y: number) => 1'.
+!!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type '1'.
+    transitive(1, withNum);
+    transitive('1', withNum);
+                    ~~~~~~~
+!!! error TS2345: Argument of type '<N extends number>(x: N) => N' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    
+    declare function occurs<R>(f: (x: number, xs: List<number>) => R): R;
+    occurs(id2); // should be error
+           ~~~
+!!! error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: number, xs: List<number>) => number'.
+!!! error TS2345:   Types of parameters 'y' and 'xs' are incompatible.
+!!! error TS2345:     Type 'List<number>' is not assignable to type 'number'.
+!!! error TS2345:       Type '{ kind: "nil"; }' is not assignable to type 'number'.
+    
+    declare function f15<T extends number>(x: T, f: (x: T) => T): void;
+    declare function g15(n: number): number;
+    f15(5, g15);
+    
+    interface J<T> {
+        [s: string]: T;
+    }
+    
+    declare function g1<T>(obj: J<T>): T;
+    const rg1: string = g1({ p: "" });
+    
+    declare function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+    
+    class Node {
+        _node: any;
+    
+        forEachChild<C>(cbNode: (node: Node) => C, cbNodeArray?: (nodes: NodeArray<Node>) => C): C {
+            return forEachChild(this, cbNode, cbNodeArray);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'C | undefined' is not assignable to type 'C'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'C'.
+        }
+    }
+    
+    interface NodeBrand { _nodearray: any }
+    class Declaration extends Node { _declarationBrand: any; }
+    class ParameterDeclaration extends Declaration { _paramdecl: any; }
+    interface Arr<T> {
+        concat(...items: T[][]): T[];
+        concat(...items: (T | T[])[]): T[];
+    }
+    interface NodeArray<T extends Node> extends Arr<T>, NodeBrand { }
+    
+    declare function indexOf<T>(hay: Arr<T>, needle: T): number;
+    declare const fps: NodeArray<ParameterDeclaration>;
+    declare const node: Node;
+    
+    indexOf(fps, node);
+    
+    function selfRef<T>(n: number, callback: (n: number) => T): T {
+        return selfRef(n, callback);
+    }
+    
+    class A { x: any; }
+    class B extends A { y: any; }
+    class Chain<T extends A> {
+        then<S extends T>(cb: (x: T) => S): Chain<S> {
+            return null!;
+        }
+    }
+    
+    declare const chainB: Chain<B>;
+    chainB.then(b => new A);
+                ~~~~~~~~~~
+!!! error TS2345: Argument of type '(b: B) => A' is not assignable to parameter of type '(x: B) => B'.
+!!! error TS2345:   Type 'A' is not assignable to type 'B'.
+!!! error TS2345:     Property 'y' is missing in type 'A'.
+    
+    
+    declare function f16(f: (x: number) => 4): void;
+    declare function g16(x: number): number;
+    f16(g16);
+        ~~~
+!!! error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: number) => 4'.
+!!! error TS2345:   Type 'number' is not assignable to type '4'.
+    
+    
+    declare function trans<T>(f: (x: T) => string): number;
+    // TODO: these should all be noImplicitAny / destructuring erros
+    trans(({a}) => a);
+          ~~~~~~~~~~
+!!! error TS2345: Argument of type '({ a }: { a: any; }) => any' is not assignable to parameter of type '(x: {}) => string'.
+!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type '{ a: any; }'.
+!!! error TS2345:       Property 'a' is missing in type '{}'.
+    trans(([b,c]) => 'foo');
+          ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '([b, c]: [any, any]) => string' is not assignable to parameter of type '(x: {}) => string'.
+!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type '[any, any]'.
+!!! error TS2345:       Property '0' is missing in type '{}'.
+    trans(({d: [e,f]}) => 'foo');
+          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '({ d: [e, f] }: { d: [any, any]; }) => string' is not assignable to parameter of type '(x: {}) => string'.
+!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type '{ d: [any, any]; }'.
+!!! error TS2345:       Property 'd' is missing in type '{}'.
+    trans(([{g},{h}]) => 'foo');
+          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string' is not assignable to parameter of type '(x: {}) => string'.
+!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type '[{ g: any; }, { h: any; }]'.
+!!! error TS2345:       Property '0' is missing in type '{}'.
+    trans(({a, b = 10}) => a);
+          ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '({ a, b }: { a: any; b?: number; }) => any' is not assignable to parameter of type '(x: {}) => string'.
+!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type '{ a: any; b?: number; }'.
+!!! error TS2345:       Property 'a' is missing in type '{}'.
+    
+    declare function idCreator<T>(f: (x: T|undefined) => T): T;
+    const icn: number = idCreator(_ => 5); // ZZZ
+    declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
+    // having a second type parameter extend the first should prevent it from inferring a "string | number" union type from (x: string, y: number) => R
+    declare function id2<T, U extends T>(x: T, y: U): U;
+    var b2 = bar(1, "one", id2);  // Should be error
+                           ~~~
+!!! error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: number, y: string) => number'.
+!!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    
+    
+    declare function id2OneTypeParam<T>(x: T, y: T): T;
+    var b4 = bar(1, "one", id2OneTypeParam);  // Should be number | string
+    
+    
+    
+    declare function withNum<N extends number>(x: N): N;
+    declare function withString<S extends string>(f: (x: S) => S): void;
+    declare function useString(f: (x: string) => string): void;
+    
+    withString(withNum);  // Error
+               ~~~~~~~
+!!! error TS2345: Argument of type '<N extends number>(x: N) => N' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    useString(withNum);   // Error
+              ~~~~~~~
+!!! error TS2345: Argument of type '<N extends number>(x: N) => N' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    declare function f10<T>(x: T): T;
+    declare function f10<T>(x: T, y: number): T;
+    
+    const a10: string[] = ["a", "b"];
+    const b10 = a10.map(f10);
+    
+    declare function botox<X, Y>(idX: (x: X) => X, idY: (y: Y) => Y): (x: X, y: Y) => [X, Y];
+    const xyPair: [number, string] = botox(id, id)(3, 'str');
+          ~~~~~~
+!!! error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Type '{}' is not assignable to type 'number'.
+    const testPair: { x: number, y: string } = pair(3)('str');
+          ~~~~~~~~
+!!! error TS2322: Type '{ x: number; y: {}; }' is not assignable to type '{ x: number; y: string; }'.
+!!! error TS2322:   Types of property 'y' are incompatible.
+!!! error TS2322:     Type '{}' is not assignable to type 'string'.
+    
+    declare function botox2<X, Y>(idX: { a: (x: X) => X }, idY: { a: (y: Y) => Y }): (x: X, y: Y) => [X, Y];
+    
+    const bottoxObj = { a: id };
+    const xyPair2: [number, string] = botox2(bottoxObj, bottoxObj)(3, 'str'); // ZZZ
+          ~~~~~~~
+!!! error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+    const xyPair3: [number, string] = botox2({ a: id }, { a: id })(3, 'str');
+          ~~~~~~~
+!!! error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+    
+    
+    class GenericClass<T> {
+        payload: T;
+        ~~~~~~~
+!!! error TS2564: Property 'payload' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var genericObject = new GenericClass<{ greeting: string }>();
+    
+    function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
+        callback(object.payload);
+    }
+    
+    genericFunction(genericObject, ({greeting}) => {
+        var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
+    });
+    
+    class Foo<T extends {a: string; b:number;}>{
+        test: T;
+        ~~~~
+!!! error TS2564: Property 'test' has no initializer and is not definitely assigned in the constructor.
+        constructor(x: T){}
+    }
+    
+    var x = new Foo(true); // Should error
+                    ~~~~
+!!! error TS2345: Argument of type 'true' is not assignable to parameter of type '{ a: string; b: number; }'.
+    var y = new Foo({a: "test", b: 42}); // Should be OK
+    var z: number = y.test.b;
+    
+    declare function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r;
+    function fail(message: string) : never { throw new Error(message); }
+    const result: number[] = withFew([1, 2, 3], id, fail); // expected result is number[]
+    type List<T> = { kind: 'nil' }
+                 | { kind: 'cons', val: T, rest: List<T> }
+    
+    const Nil = { kind: 'nil' as 'nil' }
+    
+    declare function cons<C>(x: C, xs: List<C>): List<C>;
+    declare function foldr<V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A): A;
+    
+    function concat<C>(list: List<List<C>>): List<C> {
+        return foldr(list, Nil as List<C>, append);
+    }
+    
+    function append<L>(xs: List<L>, ys: List<L>): List<L> {
+        return foldr(xs, ys, cons);
+    }
+    
+    declare function zest<T>(x: T): void;
+    zest(5); // should be number
+    function append2<L>(xs: List<L>, ys: List<L>): List<L> {
+        return foldr(xs, ys, flip(fconst)); // ZZZ
+    }
+    
+    function append3<L>(xs: List<L>, ys: List<L>) {
+        return foldr(xs, ys, flip(fconst));
+    }
+    
+    function append4<L>(xs: List<L>, ys: List<L>) {
+        return foldr(xs, ys, flip(flip(cons)));
+    }
+    
+    const infPowa: typeof append = append3; // ZZZ
+    let jj = <T>(n: T) => 'Error please?';
+    let myFunc: <T>(n: T) => T = jj;
+        ~~~~~~
+!!! error TS2322: Type '<T>(n: T) => string' is not assignable to type '<T>(n: T) => T'.
+!!! error TS2322:   Type 'string' is not assignable to type 'T'.
+    
+    function foo<T extends Function>(x: T): T { return x; }
+    const r1 = foo(function (x: string) { return x; });
+    const r2 = foo((x: string) => x);
+    const r3 = foo(function (x: any) { return x; });
+    
+    
+    declare const cb1: { new <T>(x: T): T };
+    declare const cb2: { new<T>(x: T): number; new<T>(x: number): T; }
+    declare const cb3: { new<T>(x: T): number; }
+    declare const cb4: { new<T>(x: number): T; }
+    declare function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }): void;
+    
+    foo7(1, cb1); // Should error (but won't error because type parameters erased when comparing more than one signature)
+    foo7(1, cb2);
+    foo7(1, cb3);
+            ~~~
+!!! error TS2345: Argument of type 'new <T>(x: T) => number' is not assignable to parameter of type '{ new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+    foo7(1, cb4);
+    
+    declare function foo8<T>(x:T, cb: { new(x: T): string; }): void;
+    foo8(1, cb1); // Should error
+            ~~~
+!!! error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type 'new (x: 1) => string'.
+!!! error TS2345:   Type '1' is not assignable to type 'string'.
+    foo8(1, cb2);
+    foo8(1, cb3);
+            ~~~
+!!! error TS2345: Argument of type 'new <T>(x: T) => number' is not assignable to parameter of type 'new (x: 1) => string'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+    foo8(1, cb4);
+    
+    declare function foo9<T>(x:T, cb: { new(x: T, y?: T): string }): void;
+    foo9(1, cb1); // Should error
+            ~~~
+!!! error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type 'new (x: 1, y?: 1 | undefined) => string'.
+!!! error TS2345:   Type '1' is not assignable to type 'string'.
+    foo9(1, cb2);
+    foo9(1, cb3);
+            ~~~
+!!! error TS2345: Argument of type 'new <T>(x: T) => number' is not assignable to parameter of type 'new (x: 1, y?: 1 | undefined) => string'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+    foo9(1, cb4);
+    
+    function map<A, B>(items: A[], f: (x: A) => B): B[]{
+        return items.map(f);
+    }
+    
+    var v10: number[] = map([1, 2, 3], id);     // Error if not number[]
+    function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
+        return cb(x);
+    }
+    
+    var r7 = foo3(1, <Z>(a: Z) => '', ''); // string
+    declare var a: { new <T>(x: T): T; };
+    function foo2<T, U>(x: T, cb: new(a: T) => U) {
+        return new cb(x);
+    }
+    
+    var r4b = foo2(1, a); // number
+    
+    function wf<N extends 5>(n: N, f: (x: 5) => N): N {
+        return f(n);
+    }
+    const wfr: 5 = wf(5, id);
+    const wfr2   = wf(4, id); // error
+                      ~
+!!! error TS2345: Argument of type '4' is not assignable to parameter of type '5'.
+    declare function flip<A, B, R>(f: (a: A, b: B) => R): (b: B, a: A) => R;
+    
+    function id<I>(x: I): I {
+        return x;
+    }
+    
+    function fconst<X, Y>(x: X, y: Y): X {
+        return x;
+    }
+    
+    function addStr(x: number, y: string) {
+        return x + y;
+    }
+    
+    function tagged<T extends string, Q>(tag: T, value: Q): { tag: T, value: Q } {
+        return { tag, value };
+    }
+    
+    function fbound<T extends Q, Q>(tag: T, value: Q): { tag: T, value: Q } {
+        return { tag, value };
+    }
+    
+    fbound(4, 4).tag;    // 4 (better) or number
+    flip(fbound)(4, 4)   // OK
+    fbound(4, "4");      // Error
+           ~
+!!! error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.
+    flip(fbound)("4", 4) // Error
+    
+    function of2<a, b>(one: a, two: b): [a, b] {
+        return [one, two];
+    }
+    const flipped = flip(of2);
+    
+    // it was working before
+    const f1 = flip(addStr); // (b: string, a: number) => string
+    const v1 = f1("hello", 3);
+    const v2 = id(id)(3); // `3`
+    // working now
+    const f2 = flip(id);     // <T>(b: {}, a: T): T
+    const f3 = flip(fconst); // <Y, X>(b: Y, a: X) => X
+    const f4 = flip(tagged);   // <Q, T extends string>(b: Q, a: T) => { tag: T, value: Q }
+                    ~~~~~~
+!!! error TS2345: Argument of type '<T extends string, Q>(tag: T, value: Q) => { tag: T; value: Q; }' is not assignable to parameter of type '(a: {}, b: {}) => { tag: string; value: {}; }'.
+!!! error TS2345:   Types of parameters 'tag' and 'a' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type 'string'.
+    const v3 = f3(1, "qw") // `"qw"`
+    const v4 = f3([], {})  // `{}`
+    const v5 = f4(5, "hello"); // { tag: "hello", value: number }
+    const v6 = f4(5, 5);       // Error as expected
+    declare function compose<A, B, C>(f: (b: B) => C, g: (a: A) => B): (a: A) => C;
+    
+    declare const f: <T>(x:number) => T;
+    declare const g: (x:boolean) => number;
+    const f5 = compose(f, g)      // OUCH! this gets type `<T>(a: boolean) => T`
+                       ~
+!!! error TS2345: Argument of type '<T>(x: number) => T' is not assignable to parameter of type '(b: {}) => {}'.
+!!! error TS2345:   Types of parameters 'x' and 'b' are incompatible.
+!!! error TS2345:     Type '{}' is not assignable to type 'number'.
+    declare const g_2: <T>(x: T) => boolean;
+    declare const f_2: (x: boolean) => number;
+    const f6 = compose(f_2, g_2)  // <T> (a: T) => number
+    const f7 = compose(id, x => String(x)) // (a: {}) => string
+    declare function h<R>(f: (x: number) => R): R;
+    var z: number = h(id);
+    
+    const arr: number[] = [1, 2, 3].map(id);
+    
+    declare const val1: string | undefined;
+    declare function cleanse<T>(x: T|undefined): x is T;
+    
+    cleanse(val1);
+    
+    class MyClass
+    {
+      one(c: boolean){};
+      two(){};
+    }
+    
+    declare const test: PickPrototype<typeof MyClass, 'one'>;
+    type PickPrototype<T extends { prototype: any }, K extends keyof T['prototype']> = {
+        [P in K]: T['prototype'][P];
+    }
+    
+    
+    function wrap<T>(innerFunc: (data: T) => any) {
+        return (data:T) => innerFunc(data);
+    }
+    
+    function inner(x:number) {};
+    inner(2);
+    
+    let func = wrap(inner);
+    func(2);
+    
+    
+    declare function union<A, B, C>(f: (a: A|B|C, b: A|B|C, c: A|B|C) => void): void;
+    union(<X, Y, Z>(x: X, y: Y, z: Z) => x)
+    
+    declare function union2<A, B, C>(f: (a: A, b: B, c: C) => void): void;
+    union2(<X, Y, Z>(x: X|Y|Z, y: X|Y|Z, z: X|Y|Z) => x);
+    
+    declare function union3<A, B>(f: (a: A|string, b: A|number) => B): B;
+    declare function uParam31<X>(x: X|number, y: X|string): X;
+    declare function uParam32(x: number, y: number|string): void;
+    declare function uParam33(x: string, y: number|string): void;
+    union3(uParam31);  // error;  A,X = [number, string]
+    union3(uParam32);  // error
+           ~~~~~~~~
+!!! error TS2345: Argument of type '(x: number, y: string | number) => void' is not assignable to parameter of type '(a: string, b: string | number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    union3(uParam33);  // OK;     A = string; B = void
+    declare function union4<A, B, C>(f: (b: A|B) => C, a: A): C;
+    declare function uParam41(y: number|string): void;
+    declare function uParam42<X>(y: number|X): X;
+    declare function uParam43<X>(y: string|X): X;
+    union4(uParam41, 4); // A = number, B = string, C = void
+           ~~~~~~~~
+!!! error TS2345: Argument of type '(y: string | number) => void' is not assignable to parameter of type '(b: number | {}) => void'.
+!!! error TS2345:   Types of parameters 'y' and 'b' are incompatible.
+!!! error TS2345:     Type 'number | {}' is not assignable to type 'string | number'.
+!!! error TS2345:       Type '{}' is not assignable to type 'string | number'.
+!!! error TS2345:         Type '{}' is not assignable to type 'number'.
+    union4(uParam42, 4); // A = number, B = X, C = X
+    union4(uParam43, 4); // A = number, B = string, C = number

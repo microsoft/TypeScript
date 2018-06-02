@@ -1,0 +1,68 @@
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions.ts(14,5): error TS2322: Type '(b: {}, a: {}) => [{}, {}]' is not assignable to type '<T, U>(y: U, x: T) => [T, U]'.
+  Type '[{}, {}]' is not assignable to type '[T, U]'.
+    Type '{}' is not assignable to type 'T'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions.ts(17,7): error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+  Type '{}' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions.ts(29,7): error TS2322: Type '(x: {}) => { value: {}[]; }' is not assignable to type '<U>(u: U) => { value: U[]; }'.
+  Type '{ value: {}[]; }' is not assignable to type '{ value: U[]; }'.
+    Types of property 'value' are incompatible.
+      Type '{}[]' is not assignable to type 'U[]'.
+        Type '{}' is not assignable to type 'U'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions.ts(33,7): error TS2322: Type '{ value: {}[]; }' is not assignable to type '{ value: string[]; }'.
+  Types of property 'value' are incompatible.
+    Type '{}[]' is not assignable to type 'string[]'.
+      Type '{}' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions.ts (4 errors) ====
+    export {}
+    
+    
+    // example from https://github.com/Microsoft/TypeScript/issues/9366
+    
+    function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
+        return (b: b, a: a) => f(a, b);
+    }
+    function zip<T, U>(x: T, y: U): [T, U] {
+        return [x, y];
+    }
+    
+    const flipped = flip(zip);
+    var expected: <T, U>(y: U, x: T) => [T, U] = flipped;
+        ~~~~~~~~
+!!! error TS2322: Type '(b: {}, a: {}) => [{}, {}]' is not assignable to type '<T, U>(y: U, x: T) => [T, U]'.
+!!! error TS2322:   Type '[{}, {}]' is not assignable to type '[T, U]'.
+!!! error TS2322:     Type '{}' is not assignable to type 'T'.
+    
+    const actualCallResult = flipped("test", 1234)
+    const expectedResult: [number, string] = actualCallResult;
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Type '{}' is not assignable to type 'number'.
+    
+    
+    
+    
+    // from https://github.com/Microsoft/TypeScript/issues/16414
+    
+    declare function compose<A, B, C>(f: (x: A) => B, g: (y: B) => C): (x: A) => C;
+    declare function box<T>(x: T): { value: T };
+    declare function list<U>(x: U): U[];
+    
+    const composed = compose(list, box);
+    const expectedComposed: <U>(u: U) => { value: U[] } = composed;
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(x: {}) => { value: {}[]; }' is not assignable to type '<U>(u: U) => { value: U[]; }'.
+!!! error TS2322:   Type '{ value: {}[]; }' is not assignable to type '{ value: U[]; }'.
+!!! error TS2322:     Types of property 'value' are incompatible.
+!!! error TS2322:       Type '{}[]' is not assignable to type 'U[]'.
+!!! error TS2322:         Type '{}' is not assignable to type 'U'.
+    
+    
+    const callComposed = composed("test");
+    const expectedCallComposed: { value: string[] } = callComposed;
+          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ value: {}[]; }' is not assignable to type '{ value: string[]; }'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type '{}[]' is not assignable to type 'string[]'.
+!!! error TS2322:       Type '{}' is not assignable to type 'string'.

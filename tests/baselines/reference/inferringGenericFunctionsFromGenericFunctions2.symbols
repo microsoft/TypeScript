@@ -1,0 +1,1706 @@
+=== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts ===
+export {}
+
+// Borrowed from @gcnew at https://gist.github.com/gcnew/ad833bfa376e4b70fc50a780e3b2d883
+
+interface Collection<T> {
+>Collection : Symbol(Collection, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 0, 9))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 4, 21))
+
+    length: number;
+>length : Symbol(Collection.length, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 4, 25))
+
+    add(x: T): void;
+>add : Symbol(Collection.add, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 5, 19))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 6, 8))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 4, 21))
+
+    remove(x: T): boolean;
+>remove : Symbol(Collection.remove, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 6, 20))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 7, 11))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 4, 21))
+}
+interface Combinators {
+>Combinators : Symbol(Combinators, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 8, 1))
+
+    map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
+>map : Symbol(Combinators.map, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 9, 23), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 63))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 8))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 10))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 14))
+>Collection : Symbol(Collection, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 0, 9))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 8))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 31))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 36))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 8))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 10))
+>Collection : Symbol(Collection, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 0, 9))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 10))
+
+    map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
+>map : Symbol(Combinators.map, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 9, 23), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 63))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 8))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 11))
+>Collection : Symbol(Collection, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 0, 9))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 8))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 33))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 8))
+>Collection : Symbol(Collection, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 0, 9))
+
+    forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
+>forEach : Symbol(Combinators.forEach, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 64))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 12, 12))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 12, 15))
+>Collection : Symbol(Collection, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 0, 9))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 12, 12))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 12, 32))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 12, 37))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 12, 12))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+}
+
+declare var _: Combinators;
+>_ : Symbol(_, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 15, 11))
+>Combinators : Symbol(Combinators, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 8, 1))
+
+declare var c2: Collection<number>;
+>c2 : Symbol(c2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 16, 11))
+>Collection : Symbol(Collection, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 0, 9))
+
+var rf1 = (x: number) => { return x.toFixed() };
+>rf1 : Symbol(rf1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 18, 3))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 18, 11))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 18, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+
+var r1a = _.map(c2, (x) => { return x.toFixed() });
+>r1a : Symbol(r1a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 19, 3))
+>_.map : Symbol(Combinators.map, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 9, 23), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 63))
+>_ : Symbol(_, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 15, 11))
+>map : Symbol(Combinators.map, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 9, 23), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 10, 63))
+>c2 : Symbol(c2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 16, 11))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 19, 21))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 19, 21))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+
+var r5 = _.forEach<number>(c2, rf1);  // Should error
+>r5 : Symbol(r5, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 20, 3))
+>_.forEach : Symbol(Combinators.forEach, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 64))
+>_ : Symbol(_, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 15, 11))
+>forEach : Symbol(Combinators.forEach, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 64))
+>c2 : Symbol(c2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 16, 11))
+>rf1 : Symbol(rf1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 18, 3))
+
+var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); // Should error
+>r6 : Symbol(r6, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 21, 3))
+>_.forEach : Symbol(Combinators.forEach, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 64))
+>_ : Symbol(_, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 15, 11))
+>forEach : Symbol(Combinators.forEach, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 11, 64))
+>c2 : Symbol(c2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 16, 11))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 21, 32))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 21, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+
+declare const zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
+>zipWith : Symbol(zipWith, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 24))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 26))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 29))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 33))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 24))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 40))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 26))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 48))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 53))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 24))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 63))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 26))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 29))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 29))
+
+declare const pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>pair : Symbol(pair, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 21))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 23))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 27))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 21))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 37))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 23))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 47))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 21))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 53))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 23))
+
+const zr = zipWith([1, 2], ['a', 'b'], pair);
+>zr : Symbol(zr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 24, 5))
+>zipWith : Symbol(zipWith, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 22, 13))
+>pair : Symbol(pair, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 13))
+
+declare function lego1<A, B>(x: A, l: List<B>, y: A): A;
+>lego1 : Symbol(lego1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 24, 45))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 23))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 29))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 23))
+>l : Symbol(l, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 34))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 25))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 46))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 23))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 23))
+
+declare function lego2<C, D>(f: (l: List<C>, x: D, y: D) => D): void;
+>lego2 : Symbol(lego2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 56))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 23))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 25))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 29))
+>l : Symbol(l, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 33))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 23))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 44))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 25))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 50))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 25))
+>D : Symbol(D, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 27, 25))
+
+lego2(lego1);
+>lego2 : Symbol(lego2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 26, 56))
+>lego1 : Symbol(lego1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 24, 45))
+
+declare function bombastic<R>(f: (x: string, y: number) => R): R;
+>bombastic : Symbol(bombastic, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 28, 13))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 27))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 30))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 34))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 44))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 27))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 27))
+
+declare function bombastic2(f: (x: string, y: number) => string): void;
+>bombastic2 : Symbol(bombastic2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 65))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 31, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 31, 32))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 31, 42))
+
+declare function bombastic3<R>(f: (x: string, y: number, z: R) => R): R;
+>bombastic3 : Symbol(bombastic3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 31, 71))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 28))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 31))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 35))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 45))
+>z : Symbol(z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 56))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 28))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 28))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 28))
+
+declare function okay<R>(f: (x: 1, y: number) => R): R;
+>okay : Symbol(okay, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 72))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 22))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 29))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 34))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 22))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 22))
+
+declare function transitive<T>(x: T, f: (x: T) => T): void;
+>transitive : Symbol(transitive, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 55))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 34, 28))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 34, 31))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 34, 28))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 34, 36))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 34, 41))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 34, 28))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 34, 28))
+
+bombastic(id2);  // Should be an error T = [string, number]
+>bombastic : Symbol(bombastic, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 28, 13))
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 68))
+
+bombastic2(id2); // Should be an error T = [string, number]
+>bombastic2 : Symbol(bombastic2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 30, 65))
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 68))
+
+bombastic<string|number>(id2); // should be an error because bombastic's callback is (x: string, y: number) => R and the explicit type argument here is setting `R`, not setting T and U from id2
+>bombastic : Symbol(bombastic, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 28, 13))
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 68))
+
+declare function id3<T, U extends T, V extends U>(x: T, y: U, z: V): V;
+>id3 : Symbol(id3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 38, 30))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 21))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 23))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 21))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 36))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 23))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 50))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 21))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 55))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 23))
+>z : Symbol(z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 61))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 36))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 39, 36))
+
+bombastic3(id3);  // Should be error
+>bombastic3 : Symbol(bombastic3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 31, 71))
+>id3 : Symbol(id3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 38, 30))
+
+bombastic3<string|number>(id3);  // Should be error because of reason from bombastic<string|number>(id2)
+>bombastic3 : Symbol(bombastic3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 31, 71))
+>id3 : Symbol(id3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 38, 30))
+
+okay(id2);
+>okay : Symbol(okay, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 32, 72))
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 68))
+
+transitive(1, withNum);
+>transitive : Symbol(transitive, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 55))
+>withNum : Symbol(withNum, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 123, 40))
+
+transitive('1', withNum);
+>transitive : Symbol(transitive, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 33, 55))
+>withNum : Symbol(withNum, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 123, 40))
+
+declare function occurs<R>(f: (x: number, xs: List<number>) => R): R;
+>occurs : Symbol(occurs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 44, 25))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 46, 24))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 46, 27))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 46, 31))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 46, 41))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 46, 24))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 46, 24))
+
+occurs(id2); // should be error
+>occurs : Symbol(occurs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 44, 25))
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 68))
+
+declare function f15<T extends number>(x: T, f: (x: T) => T): void;
+>f15 : Symbol(f15, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 47, 12))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 21))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 39))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 21))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 44))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 49))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 21))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 21))
+
+declare function g15(n: number): number;
+>g15 : Symbol(g15, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 67))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 50, 21))
+
+f15(5, g15);
+>f15 : Symbol(f15, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 47, 12))
+>g15 : Symbol(g15, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 49, 67))
+
+interface J<T> {
+>J : Symbol(J, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 51, 12))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 53, 12))
+
+    [s: string]: T;
+>s : Symbol(s, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 54, 5))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 53, 12))
+}
+
+declare function g1<T>(obj: J<T>): T;
+>g1 : Symbol(g1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 55, 1))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 57, 20))
+>obj : Symbol(obj, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 57, 23))
+>J : Symbol(J, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 51, 12))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 57, 20))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 57, 20))
+
+const rg1: string = g1({ p: "" });
+>rg1 : Symbol(rg1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 58, 5))
+>g1 : Symbol(g1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 55, 1))
+>p : Symbol(p, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 58, 24))
+
+declare function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+>forEachChild : Symbol(forEachChild, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 58, 34))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 30))
+>node : Symbol(node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 33))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>cbNode : Symbol(cbNode, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 44))
+>node : Symbol(node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 54))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 30))
+>cbNodeArray : Symbol(cbNodeArray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 83))
+>nodes : Symbol(nodes, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 99))
+>NodeArray : Symbol(NodeArray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 76, 1))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 30))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 30))
+
+class Node {
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+
+    _node: any;
+>_node : Symbol(Node._node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 62, 12))
+
+    forEachChild<C>(cbNode: (node: Node) => C, cbNodeArray?: (nodes: NodeArray<Node>) => C): C {
+>forEachChild : Symbol(Node.forEachChild, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 63, 15))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 17))
+>cbNode : Symbol(cbNode, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 20))
+>node : Symbol(node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 29))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 17))
+>cbNodeArray : Symbol(cbNodeArray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 46))
+>nodes : Symbol(nodes, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 62))
+>NodeArray : Symbol(NodeArray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 76, 1))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 17))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 17))
+
+        return forEachChild(this, cbNode, cbNodeArray);
+>forEachChild : Symbol(forEachChild, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 58, 34))
+>this : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>cbNode : Symbol(cbNode, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 20))
+>cbNodeArray : Symbol(cbNodeArray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 65, 46))
+    }
+}
+
+interface NodeBrand { _nodearray: any }
+>NodeBrand : Symbol(NodeBrand, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 68, 1))
+>_nodearray : Symbol(NodeBrand._nodearray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 70, 21))
+
+class Declaration extends Node { _declarationBrand: any; }
+>Declaration : Symbol(Declaration, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 70, 39))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>_declarationBrand : Symbol(Declaration._declarationBrand, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 71, 32))
+
+class ParameterDeclaration extends Declaration { _paramdecl: any; }
+>ParameterDeclaration : Symbol(ParameterDeclaration, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 71, 58))
+>Declaration : Symbol(Declaration, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 70, 39))
+>_paramdecl : Symbol(ParameterDeclaration._paramdecl, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 72, 48))
+
+interface Arr<T> {
+>Arr : Symbol(Arr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 72, 67))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 14))
+
+    concat(...items: T[][]): T[];
+>concat : Symbol(Arr.concat, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 18), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 74, 33))
+>items : Symbol(items, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 74, 11))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 14))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 14))
+
+    concat(...items: (T | T[])[]): T[];
+>concat : Symbol(Arr.concat, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 18), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 74, 33))
+>items : Symbol(items, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 75, 11))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 14))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 14))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 73, 14))
+}
+interface NodeArray<T extends Node> extends Arr<T>, NodeBrand { }
+>NodeArray : Symbol(NodeArray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 76, 1))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 77, 20))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+>Arr : Symbol(Arr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 72, 67))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 77, 20))
+>NodeBrand : Symbol(NodeBrand, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 68, 1))
+
+declare function indexOf<T>(hay: Arr<T>, needle: T): number;
+>indexOf : Symbol(indexOf, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 77, 65))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 79, 25))
+>hay : Symbol(hay, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 79, 28))
+>Arr : Symbol(Arr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 72, 67))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 79, 25))
+>needle : Symbol(needle, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 79, 40))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 79, 25))
+
+declare const fps: NodeArray<ParameterDeclaration>;
+>fps : Symbol(fps, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 80, 13))
+>NodeArray : Symbol(NodeArray, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 76, 1))
+>ParameterDeclaration : Symbol(ParameterDeclaration, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 71, 58))
+
+declare const node: Node;
+>node : Symbol(node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 81, 13))
+>Node : Symbol(Node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 60, 156))
+
+indexOf(fps, node);
+>indexOf : Symbol(indexOf, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 77, 65))
+>fps : Symbol(fps, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 80, 13))
+>node : Symbol(node, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 81, 13))
+
+function selfRef<T>(n: number, callback: (n: number) => T): T {
+>selfRef : Symbol(selfRef, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 83, 19))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 17))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 20))
+>callback : Symbol(callback, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 30))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 42))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 17))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 17))
+
+    return selfRef(n, callback);
+>selfRef : Symbol(selfRef, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 83, 19))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 20))
+>callback : Symbol(callback, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 85, 30))
+}
+
+class A { x: any; }
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 87, 1))
+>x : Symbol(A.x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 89, 9))
+
+class B extends A { y: any; }
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 89, 19))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 87, 1))
+>y : Symbol(B.y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 90, 19))
+
+class Chain<T extends A> {
+>Chain : Symbol(Chain, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 90, 29))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 91, 12))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 87, 1))
+
+    then<S extends T>(cb: (x: T) => S): Chain<S> {
+>then : Symbol(Chain.then, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 91, 26))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 92, 9))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 91, 12))
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 92, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 92, 27))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 91, 12))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 92, 9))
+>Chain : Symbol(Chain, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 90, 29))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 92, 9))
+
+        return null!;
+    }
+}
+
+declare const chainB: Chain<B>;
+>chainB : Symbol(chainB, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 97, 13))
+>Chain : Symbol(Chain, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 90, 29))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 89, 19))
+
+chainB.then(b => new A);
+>chainB.then : Symbol(Chain.then, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 91, 26))
+>chainB : Symbol(chainB, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 97, 13))
+>then : Symbol(Chain.then, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 91, 26))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 98, 12))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 87, 1))
+
+
+declare function f16(f: (x: number) => 4): void;
+>f16 : Symbol(f16, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 98, 24))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 101, 21))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 101, 25))
+
+declare function g16(x: number): number;
+>g16 : Symbol(g16, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 101, 48))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 102, 21))
+
+f16(g16);
+>f16 : Symbol(f16, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 98, 24))
+>g16 : Symbol(g16, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 101, 48))
+
+
+declare function trans<T>(f: (x: T) => string): number;
+>trans : Symbol(trans, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 103, 9))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 106, 23))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 106, 26))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 106, 30))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 106, 23))
+
+// TODO: these should all be noImplicitAny / destructuring erros
+trans(({a}) => a);
+>trans : Symbol(trans, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 103, 9))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 108, 8))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 108, 8))
+
+trans(([b,c]) => 'foo');
+>trans : Symbol(trans, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 103, 9))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 109, 8))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 109, 10))
+
+trans(({d: [e,f]}) => 'foo');
+>trans : Symbol(trans, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 103, 9))
+>d : Symbol(d)
+>e : Symbol(e, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 110, 12))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 110, 14))
+
+trans(([{g},{h}]) => 'foo');
+>trans : Symbol(trans, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 103, 9))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 111, 9))
+>h : Symbol(h, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 111, 13))
+
+trans(({a, b = 10}) => a);
+>trans : Symbol(trans, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 103, 9))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 112, 8))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 112, 10))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 112, 8))
+
+declare function idCreator<T>(f: (x: T|undefined) => T): T;
+>idCreator : Symbol(idCreator, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 112, 26))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 114, 27))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 114, 30))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 114, 34))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 114, 27))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 114, 27))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 114, 27))
+
+const icn: number = idCreator(_ => 5); // ZZZ
+>icn : Symbol(icn, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 115, 5))
+>idCreator : Symbol(idCreator, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 112, 26))
+>_ : Symbol(_, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 115, 30))
+
+declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
+>bar : Symbol(bar, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 115, 38))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 21))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 23))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 26))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 30))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 21))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 35))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 23))
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 41))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 47))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 21))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 52))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 23))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 26))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 26))
+
+// having a second type parameter extend the first should prevent it from inferring a "string | number" union type from (x: string, y: number) => R
+declare function id2<T, U extends T>(x: T, y: U): U;
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 68))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 21))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 23))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 21))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 37))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 21))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 42))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 23))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 118, 23))
+
+var b2 = bar(1, "one", id2);  // Should be error
+>b2 : Symbol(b2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 119, 3))
+>bar : Symbol(bar, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 115, 38))
+>id2 : Symbol(id2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 116, 68))
+
+
+declare function id2OneTypeParam<T>(x: T, y: T): T;
+>id2OneTypeParam : Symbol(id2OneTypeParam, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 119, 28))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 122, 33))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 122, 36))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 122, 33))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 122, 41))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 122, 33))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 122, 33))
+
+var b4 = bar(1, "one", id2OneTypeParam);  // Should be number | string
+>b4 : Symbol(b4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 123, 3))
+>bar : Symbol(bar, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 115, 38))
+>id2OneTypeParam : Symbol(id2OneTypeParam, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 119, 28))
+
+
+
+declare function withNum<N extends number>(x: N): N;
+>withNum : Symbol(withNum, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 123, 40))
+>N : Symbol(N, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 127, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 127, 43))
+>N : Symbol(N, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 127, 25))
+>N : Symbol(N, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 127, 25))
+
+declare function withString<S extends string>(f: (x: S) => S): void;
+>withString : Symbol(withString, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 127, 52))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 128, 28))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 128, 46))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 128, 50))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 128, 28))
+>S : Symbol(S, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 128, 28))
+
+declare function useString(f: (x: string) => string): void;
+>useString : Symbol(useString, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 128, 68))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 129, 27))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 129, 31))
+
+withString(withNum);  // Error
+>withString : Symbol(withString, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 127, 52))
+>withNum : Symbol(withNum, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 123, 40))
+
+useString(withNum);   // Error
+>useString : Symbol(useString, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 128, 68))
+>withNum : Symbol(withNum, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 123, 40))
+
+declare function f10<T>(x: T): T;
+>f10 : Symbol(f10, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 132, 19), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 133, 33))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 133, 21))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 133, 24))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 133, 21))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 133, 21))
+
+declare function f10<T>(x: T, y: number): T;
+>f10 : Symbol(f10, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 132, 19), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 133, 33))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 134, 21))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 134, 24))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 134, 21))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 134, 29))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 134, 21))
+
+const a10: string[] = ["a", "b"];
+>a10 : Symbol(a10, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 136, 5))
+
+const b10 = a10.map(f10);
+>b10 : Symbol(b10, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 137, 5))
+>a10.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>a10 : Symbol(a10, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 136, 5))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>f10 : Symbol(f10, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 132, 19), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 133, 33))
+
+declare function botox<X, Y>(idX: (x: X) => X, idY: (y: Y) => Y): (x: X, y: Y) => [X, Y];
+>botox : Symbol(botox, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 137, 25))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 23))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 25))
+>idX : Symbol(idX, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 29))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 35))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 23))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 23))
+>idY : Symbol(idY, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 46))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 53))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 25))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 67))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 23))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 72))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 25))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 23))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 139, 25))
+
+const xyPair: [number, string] = botox(id, id)(3, 'str');
+>xyPair : Symbol(xyPair, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 140, 5))
+>botox : Symbol(botox, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 137, 25))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+const testPair: { x: number, y: string } = pair(3)('str');
+>testPair : Symbol(testPair, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 141, 5))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 141, 17))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 141, 28))
+>pair : Symbol(pair, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 23, 13))
+
+declare function botox2<X, Y>(idX: { a: (x: X) => X }, idY: { a: (y: Y) => Y }): (x: X, y: Y) => [X, Y];
+>botox2 : Symbol(botox2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 141, 58))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 24))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 26))
+>idX : Symbol(idX, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 30))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 36))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 41))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 24))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 24))
+>idY : Symbol(idY, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 54))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 61))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 66))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 26))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 26))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 82))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 24))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 87))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 26))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 24))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 143, 26))
+
+const bottoxObj = { a: id };
+>bottoxObj : Symbol(bottoxObj, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 145, 5))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 145, 19))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+const xyPair2: [number, string] = botox2(bottoxObj, bottoxObj)(3, 'str'); // ZZZ
+>xyPair2 : Symbol(xyPair2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 146, 5))
+>botox2 : Symbol(botox2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 141, 58))
+>bottoxObj : Symbol(bottoxObj, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 145, 5))
+>bottoxObj : Symbol(bottoxObj, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 145, 5))
+
+const xyPair3: [number, string] = botox2({ a: id }, { a: id })(3, 'str');
+>xyPair3 : Symbol(xyPair3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 147, 5))
+>botox2 : Symbol(botox2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 141, 58))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 147, 42))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 147, 53))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+
+class GenericClass<T> {
+>GenericClass : Symbol(GenericClass, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 147, 73))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 150, 19))
+
+    payload: T;
+>payload : Symbol(GenericClass.payload, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 150, 23))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 150, 19))
+}
+
+var genericObject = new GenericClass<{ greeting: string }>();
+>genericObject : Symbol(genericObject, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 154, 3))
+>GenericClass : Symbol(GenericClass, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 147, 73))
+>greeting : Symbol(greeting, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 154, 38))
+
+function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
+>genericFunction : Symbol(genericFunction, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 154, 61))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 25))
+>object : Symbol(object, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 28))
+>GenericClass : Symbol(GenericClass, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 147, 73))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 25))
+>callback : Symbol(callback, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 52))
+>payload : Symbol(payload, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 64))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 25))
+
+    callback(object.payload);
+>callback : Symbol(callback, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 52))
+>object.payload : Symbol(GenericClass.payload, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 150, 23))
+>object : Symbol(object, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 156, 28))
+>payload : Symbol(GenericClass.payload, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 150, 23))
+}
+
+genericFunction(genericObject, ({greeting}) => {
+>genericFunction : Symbol(genericFunction, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 154, 61))
+>genericObject : Symbol(genericObject, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 154, 3))
+>greeting : Symbol(greeting, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 160, 33))
+
+    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
+>s : Symbol(s, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 161, 7))
+>greeting.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.d.ts, --, --))
+>greeting : Symbol(greeting, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 160, 33))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.d.ts, --, --))
+
+});
+
+class Foo<T extends {a: string; b:number;}>{
+>Foo : Symbol(Foo, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 162, 3))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 10))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 21))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 31))
+
+    test: T;
+>test : Symbol(Foo.test, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 44))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 10))
+
+    constructor(x: T){}
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 166, 16))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 10))
+}
+
+var x = new Foo(true); // Should error
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 169, 3))
+>Foo : Symbol(Foo, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 162, 3))
+
+var y = new Foo({a: "test", b: 42}); // Should be OK
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 170, 3))
+>Foo : Symbol(Foo, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 162, 3))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 170, 17))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 170, 27))
+
+var z: number = y.test.b;
+>z : Symbol(z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 171, 3), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 315, 3))
+>y.test.b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 170, 27))
+>y.test : Symbol(Foo.test, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 44))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 170, 3))
+>test : Symbol(Foo.test, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 164, 44))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 170, 27))
+
+declare function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r;
+>withFew : Symbol(withFew, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 171, 25))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 25))
+>r : Symbol(r, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 27))
+>values : Symbol(values, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 31))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 25))
+>haveFew : Symbol(haveFew, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 43))
+>values : Symbol(values, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 54))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 25))
+>r : Symbol(r, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 27))
+>haveNone : Symbol(haveNone, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 72))
+>reason : Symbol(reason, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 84))
+>r : Symbol(r, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 27))
+>r : Symbol(r, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 27))
+
+function fail(message: string) : never { throw new Error(message); }
+>fail : Symbol(fail, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 109))
+>message : Symbol(message, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 174, 14))
+>Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>message : Symbol(message, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 174, 14))
+
+const result: number[] = withFew([1, 2, 3], id, fail); // expected result is number[]
+>result : Symbol(result, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 5))
+>withFew : Symbol(withFew, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 171, 25))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+>fail : Symbol(fail, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 173, 109))
+
+type List<T> = { kind: 'nil' }
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 176, 10))
+>kind : Symbol(kind, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 176, 16))
+
+             | { kind: 'cons', val: T, rest: List<T> }
+>kind : Symbol(kind, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 177, 16))
+>val : Symbol(val, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 177, 30))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 176, 10))
+>rest : Symbol(rest, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 177, 38))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 176, 10))
+
+const Nil = { kind: 'nil' as 'nil' }
+>Nil : Symbol(Nil, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 179, 5))
+>kind : Symbol(kind, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 179, 13))
+
+declare function cons<C>(x: C, xs: List<C>): List<C>;
+>cons : Symbol(cons, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 179, 36))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 22))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 30))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 22))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 22))
+
+declare function foldr<V, A>(list: List<V>, initial: A, f: (x: V, acc: A) => A): A;
+>foldr : Symbol(foldr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 53))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 23))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 25))
+>list : Symbol(list, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 29))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 23))
+>initial : Symbol(initial, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 43))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 25))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 55))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 60))
+>V : Symbol(V, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 23))
+>acc : Symbol(acc, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 65))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 25))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 25))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 25))
+
+function concat<C>(list: List<List<C>>): List<C> {
+>concat : Symbol(concat, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 182, 83))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 184, 16))
+>list : Symbol(list, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 184, 19))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 184, 16))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 184, 16))
+
+    return foldr(list, Nil as List<C>, append);
+>foldr : Symbol(foldr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 53))
+>list : Symbol(list, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 184, 19))
+>Nil : Symbol(Nil, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 179, 5))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 184, 16))
+>append : Symbol(append, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 186, 1))
+}
+
+function append<L>(xs: List<L>, ys: List<L>): List<L> {
+>append : Symbol(append, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 186, 1))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 16))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 19))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 16))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 31))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 16))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 16))
+
+    return foldr(xs, ys, cons);
+>foldr : Symbol(foldr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 53))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 19))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 188, 31))
+>cons : Symbol(cons, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 179, 36))
+}
+
+declare function zest<T>(x: T): void;
+>zest : Symbol(zest, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 190, 1))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 192, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 192, 25))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 192, 22))
+
+zest(5); // should be number
+>zest : Symbol(zest, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 190, 1))
+
+function append2<L>(xs: List<L>, ys: List<L>): List<L> {
+>append2 : Symbol(append2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 193, 8))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 17))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 20))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 17))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 32))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 17))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 17))
+
+    return foldr(xs, ys, flip(fconst)); // ZZZ
+>foldr : Symbol(foldr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 53))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 20))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 194, 32))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>fconst : Symbol(fconst, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 265, 1))
+}
+
+function append3<L>(xs: List<L>, ys: List<L>) {
+>append3 : Symbol(append3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 196, 1))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 198, 17))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 198, 20))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 198, 17))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 198, 32))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 198, 17))
+
+    return foldr(xs, ys, flip(fconst));
+>foldr : Symbol(foldr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 53))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 198, 20))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 198, 32))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>fconst : Symbol(fconst, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 265, 1))
+}
+
+function append4<L>(xs: List<L>, ys: List<L>) {
+>append4 : Symbol(append4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 200, 1))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 202, 17))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 202, 20))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 202, 17))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 202, 32))
+>List : Symbol(List, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 175, 54))
+>L : Symbol(L, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 202, 17))
+
+    return foldr(xs, ys, flip(flip(cons)));
+>foldr : Symbol(foldr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 181, 53))
+>xs : Symbol(xs, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 202, 20))
+>ys : Symbol(ys, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 202, 32))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>cons : Symbol(cons, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 179, 36))
+}
+
+const infPowa: typeof append = append3; // ZZZ
+>infPowa : Symbol(infPowa, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 206, 5))
+>append : Symbol(append, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 186, 1))
+>append3 : Symbol(append3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 196, 1))
+
+let jj = <T>(n: T) => 'Error please?';
+>jj : Symbol(jj, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 207, 3))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 207, 10))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 207, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 207, 10))
+
+let myFunc: <T>(n: T) => T = jj;
+>myFunc : Symbol(myFunc, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 3))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 13))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 16))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 13))
+>jj : Symbol(jj, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 207, 3))
+
+function foo<T extends Function>(x: T): T { return x; }
+>foo : Symbol(foo, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 32))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 210, 13))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 210, 33))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 210, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 210, 13))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 210, 33))
+
+const r1 = foo(function (x: string) { return x; });
+>r1 : Symbol(r1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 211, 5))
+>foo : Symbol(foo, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 32))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 211, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 211, 25))
+
+const r2 = foo((x: string) => x);
+>r2 : Symbol(r2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 212, 5))
+>foo : Symbol(foo, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 32))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 212, 16))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 212, 16))
+
+const r3 = foo(function (x: any) { return x; });
+>r3 : Symbol(r3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 213, 5))
+>foo : Symbol(foo, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 208, 32))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 213, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 213, 25))
+
+
+declare const cb1: { new <T>(x: T): T };
+>cb1 : Symbol(cb1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 26))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 29))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 26))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 26))
+
+declare const cb2: { new<T>(x: T): number; new<T>(x: number): T; }
+>cb2 : Symbol(cb2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 28))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 25))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 47))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 50))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 47))
+
+declare const cb3: { new<T>(x: T): number; }
+>cb3 : Symbol(cb3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 218, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 218, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 218, 28))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 218, 25))
+
+declare const cb4: { new<T>(x: number): T; }
+>cb4 : Symbol(cb4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 28))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 25))
+
+declare function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }): void;
+>foo7 : Symbol(foo7, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 44))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 25))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 22))
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 29))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 40))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 59))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 22))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 64))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 220, 22))
+
+foo7(1, cb1); // Should error (but won't error because type parameters erased when comparing more than one signature)
+>foo7 : Symbol(foo7, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 44))
+>cb1 : Symbol(cb1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 13))
+
+foo7(1, cb2);
+>foo7 : Symbol(foo7, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 44))
+>cb2 : Symbol(cb2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 13))
+
+foo7(1, cb3);
+>foo7 : Symbol(foo7, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 44))
+>cb3 : Symbol(cb3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 218, 13))
+
+foo7(1, cb4);
+>foo7 : Symbol(foo7, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 44))
+>cb4 : Symbol(cb4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 13))
+
+declare function foo8<T>(x:T, cb: { new(x: T): string; }): void;
+>foo8 : Symbol(foo8, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 225, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 227, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 227, 25))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 227, 22))
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 227, 29))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 227, 40))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 227, 22))
+
+foo8(1, cb1); // Should error
+>foo8 : Symbol(foo8, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 225, 13))
+>cb1 : Symbol(cb1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 13))
+
+foo8(1, cb2);
+>foo8 : Symbol(foo8, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 225, 13))
+>cb2 : Symbol(cb2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 13))
+
+foo8(1, cb3);
+>foo8 : Symbol(foo8, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 225, 13))
+>cb3 : Symbol(cb3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 218, 13))
+
+foo8(1, cb4);
+>foo8 : Symbol(foo8, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 225, 13))
+>cb4 : Symbol(cb4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 13))
+
+declare function foo9<T>(x:T, cb: { new(x: T, y?: T): string }): void;
+>foo9 : Symbol(foo9, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 231, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 25))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 22))
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 29))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 40))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 22))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 45))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 233, 22))
+
+foo9(1, cb1); // Should error
+>foo9 : Symbol(foo9, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 231, 13))
+>cb1 : Symbol(cb1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 216, 13))
+
+foo9(1, cb2);
+>foo9 : Symbol(foo9, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 231, 13))
+>cb2 : Symbol(cb2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 217, 13))
+
+foo9(1, cb3);
+>foo9 : Symbol(foo9, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 231, 13))
+>cb3 : Symbol(cb3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 218, 13))
+
+foo9(1, cb4);
+>foo9 : Symbol(foo9, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 231, 13))
+>cb4 : Symbol(cb4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 219, 13))
+
+function map<A, B>(items: A[], f: (x: A) => B): B[]{
+>map : Symbol(map, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 237, 13))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 13))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 15))
+>items : Symbol(items, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 19))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 13))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 30))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 35))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 13))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 15))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 15))
+
+    return items.map(f);
+>items.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>items : Symbol(items, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 19))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 239, 30))
+}
+
+var v10: number[] = map([1, 2, 3], id);     // Error if not number[]
+>v10 : Symbol(v10, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 243, 3))
+>map : Symbol(map, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 237, 13))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
+>foo3 : Symbol(foo3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 243, 39))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 14))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 16))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 20))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 14))
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 25))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 31))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 14))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 16))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 42))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 16))
+
+    return cb(x);
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 244, 20))
+}
+
+var r7 = foo3(1, <Z>(a: Z) => '', ''); // string
+>r7 : Symbol(r7, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 248, 3))
+>foo3 : Symbol(foo3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 243, 39))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 248, 18))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 248, 21))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 248, 18))
+
+declare var a: { new <T>(x: T): T; };
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 11))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 25))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 22))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 22))
+
+function foo2<T, U>(x: T, cb: new(a: T) => U) {
+>foo2 : Symbol(foo2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 37))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 14))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 16))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 20))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 14))
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 25))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 34))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 14))
+>U : Symbol(U, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 16))
+
+    return new cb(x);
+>cb : Symbol(cb, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 250, 20))
+}
+
+var r4b = foo2(1, a); // number
+>r4b : Symbol(r4b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 254, 3))
+>foo2 : Symbol(foo2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 37))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 249, 11))
+
+function wf<N extends 5>(n: N, f: (x: 5) => N): N {
+>wf : Symbol(wf, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 254, 21))
+>N : Symbol(N, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 12))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 25))
+>N : Symbol(N, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 12))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 30))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 35))
+>N : Symbol(N, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 12))
+>N : Symbol(N, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 12))
+
+    return f(n);
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 30))
+>n : Symbol(n, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 256, 25))
+}
+const wfr: 5 = wf(5, id);
+>wfr : Symbol(wfr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 259, 5))
+>wf : Symbol(wf, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 254, 21))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+const wfr2   = wf(4, id); // error
+>wfr2 : Symbol(wfr2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 5))
+>wf : Symbol(wf, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 254, 21))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+declare function flip<A, B, R>(f: (a: A, b: B) => R): (b: B, a: A) => R;
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 22))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 24))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 27))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 31))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 35))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 22))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 40))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 24))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 27))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 55))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 24))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 60))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 22))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 27))
+
+function id<I>(x: I): I {
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+>I : Symbol(I, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 263, 12))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 263, 15))
+>I : Symbol(I, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 263, 12))
+>I : Symbol(I, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 263, 12))
+
+    return x;
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 263, 15))
+}
+
+function fconst<X, Y>(x: X, y: Y): X {
+>fconst : Symbol(fconst, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 265, 1))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 16))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 18))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 22))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 16))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 27))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 18))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 16))
+
+    return x;
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 267, 22))
+}
+
+function addStr(x: number, y: string) {
+>addStr : Symbol(addStr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 269, 1))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 271, 16))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 271, 26))
+
+    return x + y;
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 271, 16))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 271, 26))
+}
+
+function tagged<T extends string, Q>(tag: T, value: Q): { tag: T, value: Q } {
+>tagged : Symbol(tagged, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 273, 1))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 16))
+>Q : Symbol(Q, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 33))
+>tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 37))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 16))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 44))
+>Q : Symbol(Q, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 33))
+>tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 57))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 16))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 65))
+>Q : Symbol(Q, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 275, 33))
+
+    return { tag, value };
+>tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 276, 12))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 276, 17))
+}
+
+function fbound<T extends Q, Q>(tag: T, value: Q): { tag: T, value: Q } {
+>fbound : Symbol(fbound, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 277, 1))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 16))
+>Q : Symbol(Q, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 28))
+>Q : Symbol(Q, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 28))
+>tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 32))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 16))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 39))
+>Q : Symbol(Q, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 28))
+>tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 52))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 16))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 60))
+>Q : Symbol(Q, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 28))
+
+    return { tag, value };
+>tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 280, 12))
+>value : Symbol(value, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 280, 17))
+}
+
+fbound(4, 4).tag;    // 4 (better) or number
+>fbound(4, 4).tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 52))
+>fbound : Symbol(fbound, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 277, 1))
+>tag : Symbol(tag, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 279, 52))
+
+flip(fbound)(4, 4)   // OK
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>fbound : Symbol(fbound, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 277, 1))
+
+fbound(4, "4");      // Error
+>fbound : Symbol(fbound, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 277, 1))
+
+flip(fbound)("4", 4) // Error
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>fbound : Symbol(fbound, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 277, 1))
+
+function of2<a, b>(one: a, two: b): [a, b] {
+>of2 : Symbol(of2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 286, 20))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 13))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 15))
+>one : Symbol(one, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 19))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 13))
+>two : Symbol(two, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 26))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 15))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 13))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 15))
+
+    return [one, two];
+>one : Symbol(one, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 19))
+>two : Symbol(two, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 288, 26))
+}
+const flipped = flip(of2);
+>flipped : Symbol(flipped, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 291, 5))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>of2 : Symbol(of2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 286, 20))
+
+// it was working before
+const f1 = flip(addStr); // (b: string, a: number) => string
+>f1 : Symbol(f1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 294, 5))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>addStr : Symbol(addStr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 269, 1))
+
+const v1 = f1("hello", 3);
+>v1 : Symbol(v1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 295, 5))
+>f1 : Symbol(f1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 294, 5))
+
+const v2 = id(id)(3); // `3`
+>v2 : Symbol(v2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 296, 5))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+// working now
+const f2 = flip(id);     // <T>(b: {}, a: T): T
+>f2 : Symbol(f2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 298, 5))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+const f3 = flip(fconst); // <Y, X>(b: Y, a: X) => X
+>f3 : Symbol(f3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 299, 5))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>fconst : Symbol(fconst, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 265, 1))
+
+const f4 = flip(tagged);   // <Q, T extends string>(b: Q, a: T) => { tag: T, value: Q }
+>f4 : Symbol(f4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 300, 5))
+>flip : Symbol(flip, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 260, 25))
+>tagged : Symbol(tagged, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 273, 1))
+
+const v3 = f3(1, "qw") // `"qw"`
+>v3 : Symbol(v3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 301, 5))
+>f3 : Symbol(f3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 299, 5))
+
+const v4 = f3([], {})  // `{}`
+>v4 : Symbol(v4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 302, 5))
+>f3 : Symbol(f3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 299, 5))
+
+const v5 = f4(5, "hello"); // { tag: "hello", value: number }
+>v5 : Symbol(v5, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 303, 5))
+>f4 : Symbol(f4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 300, 5))
+
+const v6 = f4(5, 5);       // Error as expected
+>v6 : Symbol(v6, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 304, 5))
+>f4 : Symbol(f4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 300, 5))
+
+declare function compose<A, B, C>(f: (b: B) => C, g: (a: A) => B): (a: A) => C;
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 304, 20))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 25))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 27))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 30))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 34))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 38))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 27))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 30))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 49))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 54))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 25))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 27))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 68))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 305, 30))
+
+declare const f: <T>(x:number) => T;
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 307, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 307, 18))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 307, 21))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 307, 18))
+
+declare const g: (x:boolean) => number;
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 308, 13))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 308, 18))
+
+const f5 = compose(f, g)      // OUCH! this gets type `<T>(a: boolean) => T`
+>f5 : Symbol(f5, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 309, 5))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 304, 20))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 307, 13))
+>g : Symbol(g, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 308, 13))
+
+declare const g_2: <T>(x: T) => boolean;
+>g_2 : Symbol(g_2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 310, 13))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 310, 20))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 310, 23))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 310, 20))
+
+declare const f_2: (x: boolean) => number;
+>f_2 : Symbol(f_2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 311, 13))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 311, 20))
+
+const f6 = compose(f_2, g_2)  // <T> (a: T) => number
+>f6 : Symbol(f6, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 312, 5))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 304, 20))
+>f_2 : Symbol(f_2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 311, 13))
+>g_2 : Symbol(g_2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 310, 13))
+
+const f7 = compose(id, x => String(x)) // (a: {}) => string
+>f7 : Symbol(f7, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 313, 5))
+>compose : Symbol(compose, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 304, 20))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 313, 22))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 313, 22))
+
+declare function h<R>(f: (x: number) => R): R;
+>h : Symbol(h, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 313, 38))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 314, 19))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 314, 22))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 314, 26))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 314, 19))
+>R : Symbol(R, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 314, 19))
+
+var z: number = h(id);
+>z : Symbol(z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 171, 3), Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 315, 3))
+>h : Symbol(h, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 313, 38))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+const arr: number[] = [1, 2, 3].map(id);
+>arr : Symbol(arr, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 317, 5))
+>[1, 2, 3].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>id : Symbol(id, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 261, 72))
+
+declare const val1: string | undefined;
+>val1 : Symbol(val1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 319, 13))
+
+declare function cleanse<T>(x: T|undefined): x is T;
+>cleanse : Symbol(cleanse, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 319, 39))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 320, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 320, 28))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 320, 25))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 320, 28))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 320, 25))
+
+cleanse(val1);
+>cleanse : Symbol(cleanse, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 319, 39))
+>val1 : Symbol(val1, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 319, 13))
+
+class MyClass
+>MyClass : Symbol(MyClass, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 322, 14))
+{
+  one(c: boolean){};
+>one : Symbol(MyClass.one, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 325, 1))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 326, 6))
+
+  two(){};
+>two : Symbol(MyClass.two, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 326, 20))
+}
+
+declare const test: PickPrototype<typeof MyClass, 'one'>;
+>test : Symbol(test, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 330, 13))
+>PickPrototype : Symbol(PickPrototype, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 330, 57))
+>MyClass : Symbol(MyClass, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 322, 14))
+
+type PickPrototype<T extends { prototype: any }, K extends keyof T['prototype']> = {
+>PickPrototype : Symbol(PickPrototype, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 330, 57))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 331, 19))
+>prototype : Symbol(prototype, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 331, 30))
+>K : Symbol(K, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 331, 48))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 331, 19))
+
+    [P in K]: T['prototype'][P];
+>P : Symbol(P, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 332, 5))
+>K : Symbol(K, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 331, 48))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 331, 19))
+>P : Symbol(P, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 332, 5))
+}
+
+
+function wrap<T>(innerFunc: (data: T) => any) {
+>wrap : Symbol(wrap, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 333, 1))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 336, 14))
+>innerFunc : Symbol(innerFunc, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 336, 17))
+>data : Symbol(data, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 336, 29))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 336, 14))
+
+    return (data:T) => innerFunc(data);
+>data : Symbol(data, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 337, 12))
+>T : Symbol(T, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 336, 14))
+>innerFunc : Symbol(innerFunc, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 336, 17))
+>data : Symbol(data, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 337, 12))
+}
+
+function inner(x:number) {};
+>inner : Symbol(inner, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 338, 1))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 340, 15))
+
+inner(2);
+>inner : Symbol(inner, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 338, 1))
+
+let func = wrap(inner);
+>func : Symbol(func, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 343, 3))
+>wrap : Symbol(wrap, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 333, 1))
+>inner : Symbol(inner, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 338, 1))
+
+func(2);
+>func : Symbol(func, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 343, 3))
+
+
+declare function union<A, B, C>(f: (a: A|B|C, b: A|B|C, c: A|B|C) => void): void;
+>union : Symbol(union, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 344, 8))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 23))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 28))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 32))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 36))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 23))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 28))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 45))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 23))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 28))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 55))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 23))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 25))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 347, 28))
+
+union(<X, Y, Z>(x: X, y: Y, z: Z) => x)
+>union : Symbol(union, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 344, 8))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 7))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 9))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 12))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 16))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 7))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 21))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 9))
+>z : Symbol(z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 27))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 12))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 16))
+
+declare function union2<A, B, C>(f: (a: A, b: B, c: C) => void): void;
+>union2 : Symbol(union2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 39))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 24))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 26))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 29))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 33))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 37))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 24))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 42))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 26))
+>c : Symbol(c, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 48))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 350, 29))
+
+union2(<X, Y, Z>(x: X|Y|Z, y: X|Y|Z, z: X|Y|Z) => x);
+>union2 : Symbol(union2, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 348, 39))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 8))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 10))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 13))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 17))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 8))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 10))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 13))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 26))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 8))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 10))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 13))
+>z : Symbol(z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 36))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 8))
+>Y : Symbol(Y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 10))
+>Z : Symbol(Z, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 13))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 17))
+
+declare function union3<A, B>(f: (a: A|string, b: A|number) => B): B;
+>union3 : Symbol(union3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 53))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 24))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 26))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 30))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 34))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 24))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 46))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 24))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 26))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 26))
+
+declare function uParam31<X>(x: X|number, y: X|string): X;
+>uParam31 : Symbol(uParam31, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 69))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 26))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 29))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 26))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 41))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 26))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 26))
+
+declare function uParam32(x: number, y: number|string): void;
+>uParam32 : Symbol(uParam32, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 58))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 355, 26))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 355, 36))
+
+declare function uParam33(x: string, y: number|string): void;
+>uParam33 : Symbol(uParam33, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 355, 61))
+>x : Symbol(x, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 356, 26))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 356, 36))
+
+union3(uParam31);  // error;  A,X = [number, string]
+>union3 : Symbol(union3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 53))
+>uParam31 : Symbol(uParam31, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 353, 69))
+
+union3(uParam32);  // error
+>union3 : Symbol(union3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 53))
+>uParam32 : Symbol(uParam32, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 354, 58))
+
+union3(uParam33);  // OK;     A = string; B = void
+>union3 : Symbol(union3, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 351, 53))
+>uParam33 : Symbol(uParam33, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 355, 61))
+
+declare function union4<A, B, C>(f: (b: A|B) => C, a: A): C;
+>union4 : Symbol(union4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 359, 17))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 24))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 26))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 29))
+>f : Symbol(f, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 33))
+>b : Symbol(b, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 37))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 24))
+>B : Symbol(B, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 26))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 29))
+>a : Symbol(a, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 50))
+>A : Symbol(A, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 24))
+>C : Symbol(C, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 29))
+
+declare function uParam41(y: number|string): void;
+>uParam41 : Symbol(uParam41, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 60))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 361, 26))
+
+declare function uParam42<X>(y: number|X): X;
+>uParam42 : Symbol(uParam42, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 361, 50))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 362, 26))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 362, 29))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 362, 26))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 362, 26))
+
+declare function uParam43<X>(y: string|X): X;
+>uParam43 : Symbol(uParam43, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 362, 45))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 363, 26))
+>y : Symbol(y, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 363, 29))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 363, 26))
+>X : Symbol(X, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 363, 26))
+
+union4(uParam41, 4); // A = number, B = string, C = void
+>union4 : Symbol(union4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 359, 17))
+>uParam41 : Symbol(uParam41, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 360, 60))
+
+union4(uParam42, 4); // A = number, B = X, C = X
+>union4 : Symbol(union4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 359, 17))
+>uParam42 : Symbol(uParam42, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 361, 50))
+
+union4(uParam43, 4); // A = number, B = string, C = number
+>union4 : Symbol(union4, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 359, 17))
+>uParam43 : Symbol(uParam43, Decl(inferringGenericFunctionsFromGenericFunctions2.ts, 362, 45))
+
