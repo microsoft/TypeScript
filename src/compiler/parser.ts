@@ -7024,13 +7024,12 @@ namespace ts {
                     const typeParametersPos = getNodePos();
                     while (true) {
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-                        const name = parseJSDocIdentifierName();
-                        skipWhitespace();
-                        if (!name) {
-                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                        if (!tokenIsIdentifierOrKeyword(token())) {
+                            parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                             return undefined;
                         }
-                        typeParameter.name = name;
+                        typeParameter.name = parseJSDocIdentifierName()!;
+                        skipWhitespace();
                         finishNode(typeParameter);
                         typeParameters.push(typeParameter);
                         if (token() === SyntaxKind.CommaToken) {

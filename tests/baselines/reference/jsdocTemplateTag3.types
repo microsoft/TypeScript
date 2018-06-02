@@ -2,7 +2,7 @@
 /**
  * @template {{ a: number, b: string }} T,U A Comment
  * @template {{ c: boolean }} V uh ... are comments even supported??
- * @template {W}
+ * @template W
  * @template X That last one had no comment
  * @param {T} t
  * @param {U} u
@@ -82,4 +82,14 @@ f({ a: 12  }, undefined, undefined, 101, 'nope');
 >undefined : undefined
 >101 : 101
 >'nope' : "nope"
+
+/**
+ * @template {NoLongerAllowed}
+ * @template T preceding line's syntax is no longer allowed
+ * @param {T} x
+ */
+function g(x) { }
+>g : <T>(x: T) => void
+>x : T
+
 

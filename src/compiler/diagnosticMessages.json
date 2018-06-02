@@ -219,6 +219,10 @@
         "category": "Error",
         "code": 1068
     },
+    "Unexpected token. A type parameter name was expected without curly braces.": {
+        "category": "Error",
+        "code": 1069
+    },
     "'{0}' modifier cannot appear on a type member.": {
         "category": "Error",
         "code": 1070
