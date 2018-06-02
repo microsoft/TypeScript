@@ -11,7 +11,7 @@ verify.codeFix({
     description: "Annotate with type from JSDoc",
     newFileContent:
 `/**
- * @template {T}
+ * @template T
  * @param {T} x
  * @returns {T}
  */

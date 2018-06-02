@@ -17,7 +17,7 @@ verify.signatureHelp({
     text: "find<T>(l: T[], x: T): T",
     docComment: "Find an item",
     tags: [
-        { name: "template", text: "T" },
+        { name: "template", text: "T\n " },
         { name: "param", text: "l" },
         { name: "param", text: "x" },
         { name: "returns", text: "The names of the found item(s)." },
