@@ -2,11 +2,6 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(21,32): e
   Type 'string' is not assignable to type 'Date'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(22,32): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
   Type 'string' is not assignable to type 'Date'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(29,7): error TS2345: Argument of type '<A, B>(x: A, l: List<B>, y: A) => A' is not assignable to parameter of type '(l: List<{}>, x: {}, y: {}) => {}'.
-  Types of parameters 'l' and 'x' are incompatible.
-    Type '{}' is not assignable to type 'List<{}>'.
-      Type '{}' is not assignable to type '{ kind: "cons"; val: {}; rest: List<{}>; }'.
-        Property 'kind' is missing in type '{}'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(37,11): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -16,7 +11,7 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(38,12): e
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(39,26): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: string, y: number) => string | number'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(41,12): error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: {}) => {}'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(41,12): error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: string) => string'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(42,27): error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: string | number) => string | number'.
@@ -39,26 +34,6 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(99,13): e
     Property 'y' is missing in type 'A'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(104,5): error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: number) => 4'.
   Type 'number' is not assignable to type '4'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(109,7): error TS2345: Argument of type '({ a }: { a: any; }) => any' is not assignable to parameter of type '(x: {}) => string'.
-  Types of parameters '__0' and 'x' are incompatible.
-    Type '{}' is not assignable to type '{ a: any; }'.
-      Property 'a' is missing in type '{}'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(110,7): error TS2345: Argument of type '([b, c]: [any, any]) => string' is not assignable to parameter of type '(x: {}) => string'.
-  Types of parameters '__0' and 'x' are incompatible.
-    Type '{}' is not assignable to type '[any, any]'.
-      Property '0' is missing in type '{}'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(111,7): error TS2345: Argument of type '({ d: [e, f] }: { d: [any, any]; }) => string' is not assignable to parameter of type '(x: {}) => string'.
-  Types of parameters '__0' and 'x' are incompatible.
-    Type '{}' is not assignable to type '{ d: [any, any]; }'.
-      Property 'd' is missing in type '{}'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(112,7): error TS2345: Argument of type '([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string' is not assignable to parameter of type '(x: {}) => string'.
-  Types of parameters '__0' and 'x' are incompatible.
-    Type '{}' is not assignable to type '[{ g: any; }, { h: any; }]'.
-      Property '0' is missing in type '{}'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(113,7): error TS2345: Argument of type '({ a, b }: { a: any; b?: number; }) => any' is not assignable to parameter of type '(x: {}) => string'.
-  Types of parameters '__0' and 'x' are incompatible.
-    Type '{}' is not assignable to type '{ a: any; b?: number; }'.
-      Property 'a' is missing in type '{}'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(120,24): error TS2345: Argument of type '<T, U extends T>(x: T, y: U) => U' is not assignable to parameter of type '(x: number, y: string) => number'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -68,13 +43,6 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(132,12): 
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(133,11): error TS2345: Argument of type '<N extends number>(x: N) => N' is not assignable to parameter of type '(x: string) => string'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(141,7): error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
-  Type '{}' is not assignable to type 'number'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(142,7): error TS2322: Type '{ x: number; y: {}; }' is not assignable to type '{ x: number; y: string; }'.
-  Types of property 'y' are incompatible.
-    Type '{}' is not assignable to type 'string'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(147,7): error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(148,7): error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(152,5): error TS2564: Property 'payload' has no initializer and is not definitely assigned in the constructor.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(166,5): error TS2564: Property 'test' has no initializer and is not definitely assigned in the constructor.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(170,17): error TS2345: Argument of type 'true' is not assignable to parameter of type '{ a: string; b: number; }'.
@@ -92,23 +60,14 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(237,9): e
   Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(261,19): error TS2345: Argument of type '4' is not assignable to parameter of type '5'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(286,8): error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(301,17): error TS2345: Argument of type '<T extends string, Q>(tag: T, value: Q) => { tag: T; value: Q; }' is not assignable to parameter of type '(a: {}, b: {}) => { tag: string; value: {}; }'.
-  Types of parameters 'tag' and 'a' are incompatible.
-    Type '{}' is not assignable to type 'string'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(310,20): error TS2345: Argument of type '<T>(x: number) => T' is not assignable to parameter of type '(b: {}) => {}'.
-  Types of parameters 'x' and 'b' are incompatible.
-    Type '{}' is not assignable to type 'number'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(287,19): error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.
+tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(305,18): error TS2345: Argument of type '5' is not assignable to parameter of type 'string'.
 tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(359,8): error TS2345: Argument of type '(x: number, y: string | number) => void' is not assignable to parameter of type '(a: string, b: string | number) => void'.
   Types of parameters 'x' and 'a' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): error TS2345: Argument of type '(y: string | number) => void' is not assignable to parameter of type '(b: number | {}) => void'.
-  Types of parameters 'y' and 'b' are incompatible.
-    Type 'number | {}' is not assignable to type 'string | number'.
-      Type '{}' is not assignable to type 'string | number'.
-        Type '{}' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts (41 errors) ====
+==== tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts (30 errors) ====
     export {}
     
     // Borrowed from @gcnew at https://gist.github.com/gcnew/ad833bfa376e4b70fc50a780e3b2d883
@@ -144,12 +103,6 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): e
     declare function lego1<A, B>(x: A, l: List<B>, y: A): A;
     declare function lego2<C, D>(f: (l: List<C>, x: D, y: D) => D): void;
     lego2(lego1);
-          ~~~~~
-!!! error TS2345: Argument of type '<A, B>(x: A, l: List<B>, y: A) => A' is not assignable to parameter of type '(l: List<{}>, x: {}, y: {}) => {}'.
-!!! error TS2345:   Types of parameters 'l' and 'x' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type 'List<{}>'.
-!!! error TS2345:       Type '{}' is not assignable to type '{ kind: "cons"; val: {}; rest: List<{}>; }'.
-!!! error TS2345:         Property 'kind' is missing in type '{}'.
     
     declare function bombastic<R>(f: (x: string, y: number) => R): R;
     declare function bombastic2(f: (x: string, y: number) => string): void;
@@ -175,7 +128,7 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): e
     declare function id3<T, U extends T, V extends U>(x: T, y: U, z: V): V;
     bombastic3(id3);  // Should be error
                ~~~
-!!! error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: {}) => {}'.
+!!! error TS2345: Argument of type '<T, U extends T, V extends U>(x: T, y: U, z: V) => V' is not assignable to parameter of type '(x: string, y: number, z: string) => string'.
 !!! error TS2345:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2345:     Type 'number' is not assignable to type 'string'.
     bombastic3<string|number>(id3);  // Should be error because of reason from bombastic<string|number>(id2)
@@ -273,35 +226,10 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): e
     declare function trans<T>(f: (x: T) => string): number;
     // TODO: these should all be noImplicitAny / destructuring erros
     trans(({a}) => a);
-          ~~~~~~~~~~
-!!! error TS2345: Argument of type '({ a }: { a: any; }) => any' is not assignable to parameter of type '(x: {}) => string'.
-!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type '{ a: any; }'.
-!!! error TS2345:       Property 'a' is missing in type '{}'.
     trans(([b,c]) => 'foo');
-          ~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '([b, c]: [any, any]) => string' is not assignable to parameter of type '(x: {}) => string'.
-!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type '[any, any]'.
-!!! error TS2345:       Property '0' is missing in type '{}'.
     trans(({d: [e,f]}) => 'foo');
-          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '({ d: [e, f] }: { d: [any, any]; }) => string' is not assignable to parameter of type '(x: {}) => string'.
-!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type '{ d: [any, any]; }'.
-!!! error TS2345:       Property 'd' is missing in type '{}'.
     trans(([{g},{h}]) => 'foo');
-          ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string' is not assignable to parameter of type '(x: {}) => string'.
-!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type '[{ g: any; }, { h: any; }]'.
-!!! error TS2345:       Property '0' is missing in type '{}'.
     trans(({a, b = 10}) => a);
-          ~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '({ a, b }: { a: any; b?: number; }) => any' is not assignable to parameter of type '(x: {}) => string'.
-!!! error TS2345:   Types of parameters '__0' and 'x' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type '{ a: any; b?: number; }'.
-!!! error TS2345:       Property 'a' is missing in type '{}'.
     
     declare function idCreator<T>(f: (x: T|undefined) => T): T;
     const icn: number = idCreator(_ => 5); // ZZZ
@@ -342,24 +270,13 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): e
     
     declare function botox<X, Y>(idX: (x: X) => X, idY: (y: Y) => Y): (x: X, y: Y) => [X, Y];
     const xyPair: [number, string] = botox(id, id)(3, 'str');
-          ~~~~~~
-!!! error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
-!!! error TS2322:   Type '{}' is not assignable to type 'number'.
     const testPair: { x: number, y: string } = pair(3)('str');
-          ~~~~~~~~
-!!! error TS2322: Type '{ x: number; y: {}; }' is not assignable to type '{ x: number; y: string; }'.
-!!! error TS2322:   Types of property 'y' are incompatible.
-!!! error TS2322:     Type '{}' is not assignable to type 'string'.
     
     declare function botox2<X, Y>(idX: { a: (x: X) => X }, idY: { a: (y: Y) => Y }): (x: X, y: Y) => [X, Y];
     
     const bottoxObj = { a: id };
     const xyPair2: [number, string] = botox2(bottoxObj, bottoxObj)(3, 'str'); // ZZZ
-          ~~~~~~~
-!!! error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
     const xyPair3: [number, string] = botox2({ a: id }, { a: id })(3, 'str');
-          ~~~~~~~
-!!! error TS2322: Type '[{}, {}]' is not assignable to type '[number, string]'.
     
     
     class GenericClass<T> {
@@ -527,6 +444,8 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): e
            ~
 !!! error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.
     flip(fbound)("4", 4) // Error
+                      ~
+!!! error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.
     
     function of2<a, b>(one: a, two: b): [a, b] {
         return [one, two];
@@ -541,23 +460,17 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): e
     const f2 = flip(id);     // <T>(b: {}, a: T): T
     const f3 = flip(fconst); // <Y, X>(b: Y, a: X) => X
     const f4 = flip(tagged);   // <Q, T extends string>(b: Q, a: T) => { tag: T, value: Q }
-                    ~~~~~~
-!!! error TS2345: Argument of type '<T extends string, Q>(tag: T, value: Q) => { tag: T; value: Q; }' is not assignable to parameter of type '(a: {}, b: {}) => { tag: string; value: {}; }'.
-!!! error TS2345:   Types of parameters 'tag' and 'a' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type 'string'.
     const v3 = f3(1, "qw") // `"qw"`
     const v4 = f3([], {})  // `{}`
     const v5 = f4(5, "hello"); // { tag: "hello", value: number }
     const v6 = f4(5, 5);       // Error as expected
+                     ~
+!!! error TS2345: Argument of type '5' is not assignable to parameter of type 'string'.
     declare function compose<A, B, C>(f: (b: B) => C, g: (a: A) => B): (a: A) => C;
     
     declare const f: <T>(x:number) => T;
     declare const g: (x:boolean) => number;
     const f5 = compose(f, g)      // OUCH! this gets type `<T>(a: boolean) => T`
-                       ~
-!!! error TS2345: Argument of type '<T>(x: number) => T' is not assignable to parameter of type '(b: {}) => {}'.
-!!! error TS2345:   Types of parameters 'x' and 'b' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type 'number'.
     declare const g_2: <T>(x: T) => boolean;
     declare const f_2: (x: boolean) => number;
     const f6 = compose(f_2, g_2)  // <T> (a: T) => number
@@ -617,11 +530,5 @@ tests/cases/compiler/inferringGenericFunctionsFromGenericFunctions2.ts(365,8): e
     declare function uParam42<X>(y: number|X): X;
     declare function uParam43<X>(y: string|X): X;
     union4(uParam41, 4); // A = number, B = string, C = void
-           ~~~~~~~~
-!!! error TS2345: Argument of type '(y: string | number) => void' is not assignable to parameter of type '(b: number | {}) => void'.
-!!! error TS2345:   Types of parameters 'y' and 'b' are incompatible.
-!!! error TS2345:     Type 'number | {}' is not assignable to type 'string | number'.
-!!! error TS2345:       Type '{}' is not assignable to type 'string | number'.
-!!! error TS2345:         Type '{}' is not assignable to type 'number'.
     union4(uParam42, 4); // A = number, B = X, C = X
     union4(uParam43, 4); // A = number, B = string, C = number

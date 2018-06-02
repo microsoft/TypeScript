@@ -94,7 +94,7 @@ type T12 = ReturnType<(<T>() => T)>;  // {}
 >T : T
 
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
->T13 : number[]
+>T13 : ReturnType<(<T extends U, U extends number[]>() => T)>
 >ReturnType : ReturnType<T>
 >T : T
 >U : U

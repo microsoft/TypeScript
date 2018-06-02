@@ -499,10 +499,9 @@ declare type T15 = Extract<Options, {
 declare function f5<T extends Options, K extends string>(p: K): Extract<T, {
     k: K;
 }>;
-declare let x0: {
+declare let x0: Extract<T, {
     k: "a";
-    a: number;
-};
+}>;
 declare type OptionsOfKind<K extends Options["k"]> = Extract<Options, {
     k: K;
 }>;

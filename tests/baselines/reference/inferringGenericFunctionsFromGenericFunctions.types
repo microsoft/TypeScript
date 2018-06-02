@@ -50,8 +50,8 @@ function zip<T, U>(x: T, y: U): [T, U] {
 }
 
 const flipped = flip(zip);
->flipped : (b: {}, a: {}) => [{}, {}]
->flip(zip) : (b: {}, a: {}) => [{}, {}]
+>flipped : <a, b>(b: b, a: a) => [a, b]
+>flip(zip) : <a, b>(b: b, a: a) => [a, b]
 >flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
 >zip : <T, U>(x: T, y: U) => [T, U]
 
@@ -65,18 +65,18 @@ var expected: <T, U>(y: U, x: T) => [T, U] = flipped;
 >T : T
 >T : T
 >U : U
->flipped : (b: {}, a: {}) => [{}, {}]
+>flipped : <a, b>(b: b, a: a) => [a, b]
 
 const actualCallResult = flipped("test", 1234)
->actualCallResult : [{}, {}]
->flipped("test", 1234) : [{}, {}]
->flipped : (b: {}, a: {}) => [{}, {}]
+>actualCallResult : [number, string]
+>flipped("test", 1234) : [number, string]
+>flipped : <a, b>(b: b, a: a) => [a, b]
 >"test" : "test"
 >1234 : 1234
 
 const expectedResult: [number, string] = actualCallResult;
 >expectedResult : [number, string]
->actualCallResult : [{}, {}]
+>actualCallResult : [number, string]
 
 
 
@@ -116,8 +116,8 @@ declare function list<U>(x: U): U[];
 >U : U
 
 const composed = compose(list, box);
->composed : (x: {}) => { value: {}[]; }
->compose(list, box) : (x: {}) => { value: {}[]; }
+>composed : <A>(x: A) => { value: A[]; }
+>compose(list, box) : <A>(x: A) => { value: A[]; }
 >compose : <A, B, C>(f: (x: A) => B, g: (y: B) => C) => (x: A) => C
 >list : <U>(x: U) => U[]
 >box : <T>(x: T) => { value: T; }
@@ -129,17 +129,17 @@ const expectedComposed: <U>(u: U) => { value: U[] } = composed;
 >U : U
 >value : U[]
 >U : U
->composed : (x: {}) => { value: {}[]; }
+>composed : <A>(x: A) => { value: A[]; }
 
 
 const callComposed = composed("test");
->callComposed : { value: {}[]; }
->composed("test") : { value: {}[]; }
->composed : (x: {}) => { value: {}[]; }
+>callComposed : { value: string[]; }
+>composed("test") : { value: string[]; }
+>composed : <A>(x: A) => { value: A[]; }
 >"test" : "test"
 
 const expectedCallComposed: { value: string[] } = callComposed;
 >expectedCallComposed : { value: string[]; }
 >value : string[]
->callComposed : { value: {}[]; }
+>callComposed : { value: string[]; }
 

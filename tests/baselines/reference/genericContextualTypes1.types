@@ -136,7 +136,7 @@ const f02: <A>(x: A) => A[] = wrap(list);
 >x : A
 >A : A
 >A : A
->wrap(list) : (a: A) => A[]
+>wrap(list) : <A>(a: A) => A[]
 >wrap : <A, B>(f: (a: A) => B) => (a: A) => B
 >list : <T>(a: T) => T[]
 
@@ -180,7 +180,7 @@ const f11: <T>(x: T) => Box<T[]> = compose(list, box);
 >T : T
 >Box : Box<T>
 >T : T
->compose(list, box) : (a: T) => Box<T[]>
+>compose(list, box) : <T>(a: T) => Box<T[]>
 >compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
 >list : <T>(a: T) => T[]
 >box : <V>(x: V) => Box<V>
@@ -212,7 +212,7 @@ const f13: <T>(x: Box<T[]>) => T = compose(unbox, unlist);
 >Box : Box<T>
 >T : T
 >T : T
->compose(unbox, unlist) : (a: Box<T[]>) => T
+>compose(unbox, unlist) : <T>(a: Box<T[]>) => T
 >compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
 >unbox : <W>(x: Box<W>) => W
 >unlist : <T>(a: T[]) => T
@@ -281,7 +281,7 @@ const f22: <A>(a: A[]) => A[] = arrayMap(identity);
 >a : A[]
 >A : A
 >A : A
->arrayMap(identity) : (a: A[]) => A[]
+>arrayMap(identity) : <A>(a: A[]) => A[]
 >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
 >identity : <T>(x: T) => T
 
@@ -340,7 +340,7 @@ const f40: <A, B>(b: B, a: A) => [A, B] = flip(zip);
 >A : A
 >A : A
 >B : B
->flip(zip) : (y: B, x: A) => [A, B]
+>flip(zip) : <A, B>(y: B, x: A) => [A, B]
 >flip : <X, Y, Z>(f: (x: X, y: Y) => Z) => (y: Y, x: X) => Z
 >zip : <A, B>(a: A, b: B) => [A, B]
 

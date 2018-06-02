@@ -145,8 +145,8 @@ declare const pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
 >S : S
 
 const zr = zipWith([1, 2], ['a', 'b'], pair);
->zr : { x: number; y: {}; }[]
->zipWith([1, 2], ['a', 'b'], pair) : { x: number; y: {}; }[]
+>zr : { x: number; y: string; }[]
+>zipWith([1, 2], ['a', 'b'], pair) : { x: number; y: string; }[]
 >zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
 >[1, 2] : number[]
 >1 : 1
@@ -184,7 +184,7 @@ declare function lego2<C, D>(f: (l: List<C>, x: D, y: D) => D): void;
 >D : D
 
 lego2(lego1);
->lego2(lego1) : any
+>lego2(lego1) : void
 >lego2 : <C, D>(f: (l: List<C>, x: D, y: D) => D) => void
 >lego1 : <A, B>(x: A, l: List<B>, y: A) => A
 
@@ -545,14 +545,14 @@ declare function trans<T>(f: (x: T) => string): number;
 
 // TODO: these should all be noImplicitAny / destructuring erros
 trans(({a}) => a);
->trans(({a}) => a) : any
+>trans(({a}) => a) : number
 >trans : <T>(f: (x: T) => string) => number
 >({a}) => a : ({ a }: { a: any; }) => any
 >a : any
 >a : any
 
 trans(([b,c]) => 'foo');
->trans(([b,c]) => 'foo') : any
+>trans(([b,c]) => 'foo') : number
 >trans : <T>(f: (x: T) => string) => number
 >([b,c]) => 'foo' : ([b, c]: [any, any]) => string
 >b : any
@@ -560,7 +560,7 @@ trans(([b,c]) => 'foo');
 >'foo' : "foo"
 
 trans(({d: [e,f]}) => 'foo');
->trans(({d: [e,f]}) => 'foo') : any
+>trans(({d: [e,f]}) => 'foo') : number
 >trans : <T>(f: (x: T) => string) => number
 >({d: [e,f]}) => 'foo' : ({ d: [e, f] }: { d: [any, any]; }) => string
 >d : any
@@ -569,7 +569,7 @@ trans(({d: [e,f]}) => 'foo');
 >'foo' : "foo"
 
 trans(([{g},{h}]) => 'foo');
->trans(([{g},{h}]) => 'foo') : any
+>trans(([{g},{h}]) => 'foo') : number
 >trans : <T>(f: (x: T) => string) => number
 >([{g},{h}]) => 'foo' : ([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string
 >g : any
@@ -577,7 +577,7 @@ trans(([{g},{h}]) => 'foo');
 >'foo' : "foo"
 
 trans(({a, b = 10}) => a);
->trans(({a, b = 10}) => a) : any
+>trans(({a, b = 10}) => a) : number
 >trans : <T>(f: (x: T) => string) => number
 >({a, b = 10}) => a : ({ a, b }: { a: any; b?: number; }) => any
 >a : any
@@ -711,8 +711,8 @@ const a10: string[] = ["a", "b"];
 >"b" : "b"
 
 const b10 = a10.map(f10);
->b10 : {}[]
->a10.map(f10) : {}[]
+>b10 : string[]
+>a10.map(f10) : string[]
 >a10.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >a10 : string[]
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
@@ -739,8 +739,8 @@ declare function botox<X, Y>(idX: (x: X) => X, idY: (y: Y) => Y): (x: X, y: Y) =
 
 const xyPair: [number, string] = botox(id, id)(3, 'str');
 >xyPair : [number, string]
->botox(id, id)(3, 'str') : [{}, {}]
->botox(id, id) : (x: {}, y: {}) => [{}, {}]
+>botox(id, id)(3, 'str') : [number, string]
+>botox(id, id) : <X, Y>(x: X, y: Y) => [X, Y]
 >botox : <X, Y>(idX: (x: X) => X, idY: (y: Y) => Y) => (x: X, y: Y) => [X, Y]
 >id : <I>(x: I) => I
 >id : <I>(x: I) => I
@@ -751,8 +751,8 @@ const testPair: { x: number, y: string } = pair(3)('str');
 >testPair : { x: number; y: string; }
 >x : number
 >y : string
->pair(3)('str') : { x: number; y: {}; }
->pair(3) : (y: {}) => { x: number; y: {}; }
+>pair(3)('str') : { x: number; y: string; }
+>pair(3) : <S>(y: S) => { x: number; y: S; }
 >pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
 >3 : 3
 >'str' : "str"
@@ -786,8 +786,8 @@ const bottoxObj = { a: id };
 
 const xyPair2: [number, string] = botox2(bottoxObj, bottoxObj)(3, 'str'); // ZZZ
 >xyPair2 : [number, string]
->botox2(bottoxObj, bottoxObj)(3, 'str') : [{}, {}]
->botox2(bottoxObj, bottoxObj) : (x: {}, y: {}) => [{}, {}]
+>botox2(bottoxObj, bottoxObj)(3, 'str') : [number, string]
+>botox2(bottoxObj, bottoxObj) : <X, Y>(x: X, y: Y) => [X, Y]
 >botox2 : <X, Y>(idX: { a: (x: X) => X; }, idY: { a: (y: Y) => Y; }) => (x: X, y: Y) => [X, Y]
 >bottoxObj : { a: <I>(x: I) => I; }
 >bottoxObj : { a: <I>(x: I) => I; }
@@ -796,8 +796,8 @@ const xyPair2: [number, string] = botox2(bottoxObj, bottoxObj)(3, 'str'); // ZZZ
 
 const xyPair3: [number, string] = botox2({ a: id }, { a: id })(3, 'str');
 >xyPair3 : [number, string]
->botox2({ a: id }, { a: id })(3, 'str') : [{}, {}]
->botox2({ a: id }, { a: id }) : (x: {}, y: {}) => [{}, {}]
+>botox2({ a: id }, { a: id })(3, 'str') : [number, string]
+>botox2({ a: id }, { a: id }) : <X, Y>(x: X, y: Y) => [X, Y]
 >botox2 : <X, Y>(idX: { a: (x: X) => X; }, idY: { a: (y: Y) => Y; }) => (x: X, y: Y) => [X, Y]
 >{ a: id } : { a: <I>(x: I) => I; }
 >a : <I>(x: I) => I
@@ -1368,8 +1368,8 @@ function foo2<T, U>(x: T, cb: new(a: T) => U) {
 }
 
 var r4b = foo2(1, a); // number
->r4b : {}
->foo2(1, a) : {}
+>r4b : number
+>foo2(1, a) : 1
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
 >1 : 1
 >a : new <T>(x: T) => T
@@ -1504,8 +1504,8 @@ fbound(4, 4).tag;    // 4 (better) or number
 >tag : number
 
 flip(fbound)(4, 4)   // OK
->flip(fbound)(4, 4) : { tag: {}; value: {}; }
->flip(fbound) : (b: {}, a: {}) => { tag: {}; value: {}; }
+>flip(fbound)(4, 4) : { tag: number; value: number; }
+>flip(fbound) : <B>(b: B, a: B) => { tag: B; value: B; }
 >flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
 >fbound : <T extends Q, Q>(tag: T, value: Q) => { tag: T; value: Q; }
 >4 : 4
@@ -1518,8 +1518,8 @@ fbound(4, "4");      // Error
 >"4" : "4"
 
 flip(fbound)("4", 4) // Error
->flip(fbound)("4", 4) : { tag: {}; value: {}; }
->flip(fbound) : (b: {}, a: {}) => { tag: {}; value: {}; }
+>flip(fbound)("4", 4) : any
+>flip(fbound) : <B>(b: B, a: B) => { tag: B; value: B; }
 >flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
 >fbound : <T extends Q, Q>(tag: T, value: Q) => { tag: T; value: Q; }
 >"4" : "4"
@@ -1542,8 +1542,8 @@ function of2<a, b>(one: a, two: b): [a, b] {
 >two : b
 }
 const flipped = flip(of2);
->flipped : (b: {}, a: {}) => [{}, {}]
->flip(of2) : (b: {}, a: {}) => [{}, {}]
+>flipped : <A, B>(b: B, a: A) => [A, B]
+>flip(of2) : <A, B>(b: B, a: A) => [A, B]
 >flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
 >of2 : <a, b>(one: a, two: b) => [a, b]
 
@@ -1571,48 +1571,48 @@ const v2 = id(id)(3); // `3`
 
 // working now
 const f2 = flip(id);     // <T>(b: {}, a: T): T
->f2 : (b: {}, a: {}) => {}
->flip(id) : (b: {}, a: {}) => {}
+>f2 : <A, B>(b: B, a: A) => A
+>flip(id) : <A, B>(b: B, a: A) => A
 >flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
 >id : <I>(x: I) => I
 
 const f3 = flip(fconst); // <Y, X>(b: Y, a: X) => X
->f3 : (b: {}, a: {}) => {}
->flip(fconst) : (b: {}, a: {}) => {}
+>f3 : <A, B>(b: B, a: A) => A
+>flip(fconst) : <A, B>(b: B, a: A) => A
 >flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
 >fconst : <X, Y>(x: X, y: Y) => X
 
 const f4 = flip(tagged);   // <Q, T extends string>(b: Q, a: T) => { tag: T, value: Q }
->f4 : any
->flip(tagged) : any
+>f4 : <B>(b: B, a: string) => { tag: string; value: B; }
+>flip(tagged) : <B>(b: B, a: string) => { tag: string; value: B; }
 >flip : <A, B, R>(f: (a: A, b: B) => R) => (b: B, a: A) => R
 >tagged : <T extends string, Q>(tag: T, value: Q) => { tag: T; value: Q; }
 
 const v3 = f3(1, "qw") // `"qw"`
->v3 : {}
->f3(1, "qw") : {}
->f3 : (b: {}, a: {}) => {}
+>v3 : "qw"
+>f3(1, "qw") : "qw"
+>f3 : <A, B>(b: B, a: A) => A
 >1 : 1
 >"qw" : "qw"
 
 const v4 = f3([], {})  // `{}`
 >v4 : {}
 >f3([], {}) : {}
->f3 : (b: {}, a: {}) => {}
+>f3 : <A, B>(b: B, a: A) => A
 >[] : never[]
 >{} : {}
 
 const v5 = f4(5, "hello"); // { tag: "hello", value: number }
->v5 : any
->f4(5, "hello") : any
->f4 : any
+>v5 : { tag: string; value: number; }
+>f4(5, "hello") : { tag: string; value: number; }
+>f4 : <B>(b: B, a: string) => { tag: string; value: B; }
 >5 : 5
 >"hello" : "hello"
 
 const v6 = f4(5, 5);       // Error as expected
 >v6 : any
 >f4(5, 5) : any
->f4 : any
+>f4 : <B>(b: B, a: string) => { tag: string; value: B; }
 >5 : 5
 >5 : 5
 
@@ -1644,8 +1644,8 @@ declare const g: (x:boolean) => number;
 >x : boolean
 
 const f5 = compose(f, g)      // OUCH! this gets type `<T>(a: boolean) => T`
->f5 : any
->compose(f, g) : any
+>f5 : <T>(a: boolean) => T
+>compose(f, g) : <T>(a: boolean) => T
 >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
 >f : <T>(x: number) => T
 >g : (x: boolean) => number
@@ -1661,22 +1661,22 @@ declare const f_2: (x: boolean) => number;
 >x : boolean
 
 const f6 = compose(f_2, g_2)  // <T> (a: T) => number
->f6 : (a: {}) => number
->compose(f_2, g_2) : (a: {}) => number
+>f6 : <A>(a: A) => number
+>compose(f_2, g_2) : <A>(a: A) => number
 >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
 >f_2 : (x: boolean) => number
 >g_2 : <T>(x: T) => boolean
 
 const f7 = compose(id, x => String(x)) // (a: {}) => string
->f7 : (a: {}) => {}
->compose(id, x => String(x)) : (a: {}) => {}
+>f7 : <A>(a: A) => string
+>compose(id, x => String(x)) : <A>(a: A) => string
 >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
 >id : <I>(x: I) => I
->x => String(x) : (x: {}) => string
->x : {}
+>x => String(x) : (x: A) => string
+>x : A
 >String(x) : string
 >String : StringConstructor
->x : {}
+>x : A
 
 declare function h<R>(f: (x: number) => R): R;
 >h : <R>(f: (x: number) => R) => R
@@ -1887,7 +1887,7 @@ declare function uParam33(x: string, y: number|string): void;
 >y : string | number
 
 union3(uParam31);  // error;  A,X = [number, string]
->union3(uParam31) : {}
+>union3(uParam31) : string | number | {}
 >union3 : <A, B>(f: (a: string | A, b: number | A) => B) => B
 >uParam31 : <X>(x: number | X, y: string | X) => X
 
@@ -1934,19 +1934,19 @@ declare function uParam43<X>(y: string|X): X;
 >X : X
 
 union4(uParam41, 4); // A = number, B = string, C = void
->union4(uParam41, 4) : any
+>union4(uParam41, 4) : void
 >union4 : <A, B, C>(f: (b: A | B) => C, a: A) => C
 >uParam41 : (y: string | number) => void
 >4 : 4
 
 union4(uParam42, 4); // A = number, B = X, C = X
->union4(uParam42, 4) : {}
+>union4(uParam42, 4) : {} | 4
 >union4 : <A, B, C>(f: (b: A | B) => C, a: A) => C
 >uParam42 : <X>(y: number | X) => X
 >4 : 4
 
 union4(uParam43, 4); // A = number, B = string, C = number
->union4(uParam43, 4) : {}
+>union4(uParam43, 4) : {} | 4
 >union4 : <A, B, C>(f: (b: A | B) => C, a: A) => C
 >uParam43 : <X>(y: string | X) => X
 >4 : 4

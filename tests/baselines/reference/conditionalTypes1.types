@@ -187,8 +187,8 @@ declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: 
 >K : K
 
 let x0 = f5("a");  // { k: "a", a: number }
->x0 : { k: "a"; a: number; }
->f5("a") : { k: "a"; a: number; }
+>x0 : Extract<T, { k: "a"; }>
+>f5("a") : Extract<T, { k: "a"; }>
 >f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
 >"a" : "a"
 

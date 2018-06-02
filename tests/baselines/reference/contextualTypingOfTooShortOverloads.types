@@ -7,9 +7,9 @@ var use: Overload;
 use((req, res) => {});
 >use((req, res) => {}) : void
 >use : Overload
->(req, res) => {} : (req: any, res: any) => void
->req : any
->res : any
+>(req, res) => {} : (req: number, res: number) => void
+>req : number
+>res : number
 
 interface Overload {
 >Overload : Overload
@@ -33,11 +33,11 @@ app.use((err: any, req, res, next) => { return; });
 >app.use : IRouterHandler<MyApp> & IRouterMatcher<MyApp>
 >app : MyApp
 >use : IRouterHandler<MyApp> & IRouterMatcher<MyApp>
->(err: any, req, res, next) => { return; } : (err: any, req: any, res: any, next: any) => void
+>(err: any, req, res, next) => { return; } : (err: any, req: Request, res: Response, next: NextFunction) => void
 >err : any
->req : any
->res : any
->next : any
+>req : Request
+>res : Response
+>next : NextFunction
 
 
 interface MyApp {

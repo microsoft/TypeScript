@@ -14,12 +14,12 @@ declare function identity1<T, U>(f: (t: T) => U): (t2: T) => U
 >U : U
 
 const id1 = identity1(x => x)
->id1 : (t2: {}) => {}
->identity1(x => x) : (t2: {}) => {}
+>id1 : <T>(t2: T) => T
+>identity1(x => x) : <T>(t2: T) => T
 >identity1 : <T, U>(f: (t: T) => U) => (t2: T) => U
->x => x : (x: {}) => {}
->x : {}
->x : {}
+>x => x : (x: T) => T
+>x : T
+>x : T
 
 
 declare function identity2<T extends number, U>(f: (t: T) => U): (t2: T) => U
@@ -35,12 +35,12 @@ declare function identity2<T extends number, U>(f: (t: T) => U): (t2: T) => U
 >U : U
 
 const id2 = identity2(x => x)
->id2 : (t2: number) => number
->identity2(x => x) : (t2: number) => number
+>id2 : <T extends number>(t2: T) => T
+>identity2(x => x) : <T extends number>(t2: T) => T
 >identity2 : <T extends number, U>(f: (t: T) => U) => (t2: T) => U
->x => x : (x: number) => number
->x : number
->x : number
+>x => x : (x: T) => T
+>x : T
+>x : T
 
 
 // compose<D, E extends string, F> is just something I put in to make sure the contextual types handle multiple signatures.
@@ -81,15 +81,15 @@ declare function compose<A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => 
 
 {
     let composed1 = compose(x => x, x2 => x2)
->composed1 : (a2: {}) => {}
->compose(x => x, x2 => x2) : (a2: {}) => {}
+>composed1 : <A>(a2: A) => A
+>compose(x => x, x2 => x2) : <A>(a2: A) => A
 >compose : { <D, E extends string, F>(f: (d: D) => E, g: (e: E) => F): (d2: D) => [D, F]; <A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => C; }
->x => x : (x: {}) => {}
->x : {}
->x : {}
->x2 => x2 : (x2: {}) => {}
->x2 : {}
->x2 : {}
+>x => x : (x: A) => A
+>x : A
+>x : A
+>x2 => x2 : (x2: A) => A
+>x2 : A
+>x2 : A
 
     const expectedComposed1: <U>(u: U) => U = composed1;
 >expectedComposed1 : <U>(u: U) => U
@@ -97,31 +97,31 @@ declare function compose<A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => 
 >u : U
 >U : U
 >U : U
->composed1 : (a2: {}) => {}
+>composed1 : <A>(a2: A) => A
 
     const callComposed1 = composed1("test");
->callComposed1 : {}
->composed1("test") : {}
->composed1 : (a2: {}) => {}
+>callComposed1 : "test"
+>composed1("test") : "test"
+>composed1 : <A>(a2: A) => A
 >"test" : "test"
 
     const expectedCallComposed1 : string = callComposed1;
 >expectedCallComposed1 : string
->callComposed1 : {}
+>callComposed1 : "test"
 }
 
 {
     let composed2 = compose(x => x, x2 => [x2])
->composed2 : (a2: {}) => {}[]
->compose(x => x, x2 => [x2]) : (a2: {}) => {}[]
+>composed2 : <A>(a2: A) => A[]
+>compose(x => x, x2 => [x2]) : <A>(a2: A) => A[]
 >compose : { <D, E extends string, F>(f: (d: D) => E, g: (e: E) => F): (d2: D) => [D, F]; <A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => C; }
->x => x : (x: {}) => {}
->x : {}
->x : {}
->x2 => [x2] : (x2: {}) => {}[]
->x2 : {}
->[x2] : {}[]
->x2 : {}
+>x => x : (x: A) => A
+>x : A
+>x : A
+>x2 => [x2] : (x2: A) => A[]
+>x2 : A
+>[x2] : A[]
+>x2 : A
 
     const expectedComposed2: <U>(u: U) => U[] = composed2;
 >expectedComposed2 : <U>(u: U) => U[]
@@ -129,31 +129,31 @@ declare function compose<A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => 
 >u : U
 >U : U
 >U : U
->composed2 : (a2: {}) => {}[]
+>composed2 : <A>(a2: A) => A[]
 
     const callComposed2 = composed2("test");
->callComposed2 : {}[]
->composed2("test") : {}[]
->composed2 : (a2: {}) => {}[]
+>callComposed2 : string[]
+>composed2("test") : string[]
+>composed2 : <A>(a2: A) => A[]
 >"test" : "test"
 
     const expectedCallComposed2: string[] = callComposed2;
 >expectedCallComposed2 : string[]
->callComposed2 : {}[]
+>callComposed2 : string[]
 }
 
 {
     let composed3 = compose(x => [x], x2 => x2)
->composed3 : (a2: {}) => {}[]
->compose(x => [x], x2 => x2) : (a2: {}) => {}[]
+>composed3 : <A>(a2: A) => A[]
+>compose(x => [x], x2 => x2) : <A>(a2: A) => A[]
 >compose : { <D, E extends string, F>(f: (d: D) => E, g: (e: E) => F): (d2: D) => [D, F]; <A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => C; }
->x => [x] : (x: {}) => {}[]
->x : {}
->[x] : {}[]
->x : {}
->x2 => x2 : (x2: {}[]) => {}[]
->x2 : {}[]
->x2 : {}[]
+>x => [x] : (x: A) => A[]
+>x : A
+>[x] : A[]
+>x : A
+>x2 => x2 : (x2: A[]) => A[]
+>x2 : A[]
+>x2 : A[]
 
     const expectedComposed3: <U>(u: U) => U[] = composed3;
 >expectedComposed3 : <U>(u: U) => U[]
@@ -161,34 +161,34 @@ declare function compose<A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => 
 >u : U
 >U : U
 >U : U
->composed3 : (a2: {}) => {}[]
+>composed3 : <A>(a2: A) => A[]
 
     const callComposed3 = composed3("test");
->callComposed3 : {}[]
->composed3("test") : {}[]
->composed3 : (a2: {}) => {}[]
+>callComposed3 : string[]
+>composed3("test") : string[]
+>composed3 : <A>(a2: A) => A[]
 >"test" : "test"
 
     const expectedCallComposed3 : string[] = callComposed3;
 >expectedCallComposed3 : string[]
->callComposed3 : {}[]
+>callComposed3 : string[]
 }
 
 {
     let composed4 = compose(x => [x], x2 => ({ boxed: x2 }));
->composed4 : (a2: {}) => { boxed: {}[]; }
->compose(x => [x], x2 => ({ boxed: x2 })) : (a2: {}) => { boxed: {}[]; }
+>composed4 : <A>(a2: A) => { boxed: A[]; }
+>compose(x => [x], x2 => ({ boxed: x2 })) : <A>(a2: A) => { boxed: A[]; }
 >compose : { <D, E extends string, F>(f: (d: D) => E, g: (e: E) => F): (d2: D) => [D, F]; <A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => C; }
->x => [x] : (x: {}) => {}[]
->x : {}
->[x] : {}[]
->x : {}
->x2 => ({ boxed: x2 }) : (x2: {}[]) => { boxed: {}[]; }
->x2 : {}[]
->({ boxed: x2 }) : { boxed: {}[]; }
->{ boxed: x2 } : { boxed: {}[]; }
->boxed : {}[]
->x2 : {}[]
+>x => [x] : (x: A) => A[]
+>x : A
+>[x] : A[]
+>x : A
+>x2 => ({ boxed: x2 }) : (x2: A[]) => { boxed: A[]; }
+>x2 : A[]
+>({ boxed: x2 }) : { boxed: A[]; }
+>{ boxed: x2 } : { boxed: A[]; }
+>boxed : A[]
+>x2 : A[]
 
     const expectedComposed4: <U>(u: U) => {boxed: U[]} = composed4;
 >expectedComposed4 : <U>(u: U) => { boxed: U[]; }
@@ -197,30 +197,30 @@ declare function compose<A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => 
 >U : U
 >boxed : U[]
 >U : U
->composed4 : (a2: {}) => { boxed: {}[]; }
+>composed4 : <A>(a2: A) => { boxed: A[]; }
 
     const callComposed4 = composed4("test");
->callComposed4 : { boxed: {}[]; }
->composed4("test") : { boxed: {}[]; }
->composed4 : (a2: {}) => { boxed: {}[]; }
+>callComposed4 : { boxed: string[]; }
+>composed4("test") : { boxed: string[]; }
+>composed4 : <A>(a2: A) => { boxed: A[]; }
 >"test" : "test"
 
     const expectedCallComposed4 : {boxed: string[]} = callComposed4;
 >expectedCallComposed4 : { boxed: string[]; }
 >boxed : string[]
->callComposed4 : { boxed: {}[]; }
+>callComposed4 : { boxed: string[]; }
 }
 
 {
     let composed5 = compose(x => "" + x, x2 => ({ boxed: x2 }));
->composed5 : (d2: {}) => [{}, { boxed: string; }]
->compose(x => "" + x, x2 => ({ boxed: x2 })) : (d2: {}) => [{}, { boxed: string; }]
+>composed5 : <D>(d2: D) => [D, { boxed: string; }]
+>compose(x => "" + x, x2 => ({ boxed: x2 })) : <D>(d2: D) => [D, { boxed: string; }]
 >compose : { <D, E extends string, F>(f: (d: D) => E, g: (e: E) => F): (d2: D) => [D, F]; <A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => C; }
->x => "" + x : (x: {}) => string
->x : {}
+>x => "" + x : (x: D) => string
+>x : D
 >"" + x : string
 >"" : ""
->x : {}
+>x : D
 >x2 => ({ boxed: x2 }) : (x2: string) => { boxed: string; }
 >x2 : string
 >({ boxed: x2 }) : { boxed: string; }
@@ -235,18 +235,18 @@ declare function compose<A, B, C>(f: (a1: A) => B, g: (b1: B) => C): (a2: A) => 
 >U : U
 >U : U
 >boxed : string
->composed5 : (d2: {}) => [{}, { boxed: string; }]
+>composed5 : <D>(d2: D) => [D, { boxed: string; }]
 
     const callComposed5 = composed5(123456);
->callComposed5 : [{}, { boxed: string; }]
->composed5(123456) : [{}, { boxed: string; }]
->composed5 : (d2: {}) => [{}, { boxed: string; }]
+>callComposed5 : [number, { boxed: string; }]
+>composed5(123456) : [number, { boxed: string; }]
+>composed5 : <D>(d2: D) => [D, { boxed: string; }]
 >123456 : 123456
 
     const expectedCallComposed5 : [number, {boxed: string}] = callComposed5;
 >expectedCallComposed5 : [number, { boxed: string; }]
 >boxed : string
->callComposed5 : [{}, { boxed: string; }]
+>callComposed5 : [number, { boxed: string; }]
 }
 
 
@@ -288,15 +288,15 @@ declare function composeReverse<A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2:
 
 {
     let composed1 = composeReverse(x => x, x2 => x2)
->composed1 : any
->composeReverse(x => x, x2 => x2) : any
+>composed1 : <A>(a2: A) => A
+>composeReverse(x => x, x2 => x2) : <A>(a2: A) => A
 >composeReverse : { <D, E extends string, F>(g: (e: E) => F, f: (d: D) => E): (d2: D) => [D, F]; <A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2: A) => C; }
->x => x : (x: string) => string
->x : string
->x : string
->x2 => x2 : (x2: {}) => {}
->x2 : {}
->x2 : {}
+>x => x : (x: B) => B
+>x : B
+>x : B
+>x2 => x2 : (x2: A) => A
+>x2 : A
+>x2 : A
 
     const expectedComposed1: <U>(u: U) => U = composed1;
 >expectedComposed1 : <U>(u: U) => U
@@ -304,31 +304,31 @@ declare function composeReverse<A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2:
 >u : U
 >U : U
 >U : U
->composed1 : any
+>composed1 : <A>(a2: A) => A
 
     const callComposed1 = composed1("test");
->callComposed1 : any
->composed1("test") : any
->composed1 : any
+>callComposed1 : "test"
+>composed1("test") : "test"
+>composed1 : <A>(a2: A) => A
 >"test" : "test"
 
     const expectedCallComposed1 : string = callComposed1;
 >expectedCallComposed1 : string
->callComposed1 : any
+>callComposed1 : "test"
 }
 
 {
     let composed2 = composeReverse( x2 => [x2], x => x)
->composed2 : any
->composeReverse( x2 => [x2], x => x) : any
+>composed2 : <A>(a2: A) => A[]
+>composeReverse( x2 => [x2], x => x) : <A>(a2: A) => A[]
 >composeReverse : { <D, E extends string, F>(g: (e: E) => F, f: (d: D) => E): (d2: D) => [D, F]; <A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2: A) => C; }
->x2 => [x2] : (x2: string) => string[]
->x2 : string
->[x2] : string[]
->x2 : string
->x => x : (x: {}) => {}
->x : {}
->x : {}
+>x2 => [x2] : (x2: B) => B[]
+>x2 : B
+>[x2] : B[]
+>x2 : B
+>x => x : (x: A) => A
+>x : A
+>x : A
 
     const expectedComposed2: <U>(u: U) => U[] = composed2;
 >expectedComposed2 : <U>(u: U) => U[]
@@ -336,31 +336,31 @@ declare function composeReverse<A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2:
 >u : U
 >U : U
 >U : U
->composed2 : any
+>composed2 : <A>(a2: A) => A[]
 
     const callComposed2 = composed2("test");
->callComposed2 : any
->composed2("test") : any
->composed2 : any
+>callComposed2 : string[]
+>composed2("test") : string[]
+>composed2 : <A>(a2: A) => A[]
 >"test" : "test"
 
     const expectedCallComposed2: string[] = callComposed2;
 >expectedCallComposed2 : string[]
->callComposed2 : any
+>callComposed2 : string[]
 }
 
 {
     let composed3 = composeReverse( x2 => x2, x => [x])
->composed3 : any
->composeReverse( x2 => x2, x => [x]) : any
+>composed3 : <A>(a2: A) => A[]
+>composeReverse( x2 => x2, x => [x]) : <A>(a2: A) => A[]
 >composeReverse : { <D, E extends string, F>(g: (e: E) => F, f: (d: D) => E): (d2: D) => [D, F]; <A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2: A) => C; }
->x2 => x2 : (x2: string) => string
->x2 : string
->x2 : string
->x => [x] : (x: {}) => {}[]
->x : {}
->[x] : {}[]
->x : {}
+>x2 => x2 : (x2: B) => B
+>x2 : B
+>x2 : B
+>x => [x] : (x: A) => A[]
+>x : A
+>[x] : A[]
+>x : A
 
     const expectedComposed3: <U>(u: U) => U[] = composed3;
 >expectedComposed3 : <U>(u: U) => U[]
@@ -368,34 +368,34 @@ declare function composeReverse<A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2:
 >u : U
 >U : U
 >U : U
->composed3 : any
+>composed3 : <A>(a2: A) => A[]
 
     const callComposed3 = composed3("test");
->callComposed3 : any
->composed3("test") : any
->composed3 : any
+>callComposed3 : string[]
+>composed3("test") : string[]
+>composed3 : <A>(a2: A) => A[]
 >"test" : "test"
 
     const expectedCallComposed3 : string[] = callComposed3;
 >expectedCallComposed3 : string[]
->callComposed3 : any
+>callComposed3 : string[]
 }
 
 {
     let composed4 = composeReverse( x2 => ({ boxed: x2 }), x => [x]);
->composed4 : any
->composeReverse( x2 => ({ boxed: x2 }), x => [x]) : any
+>composed4 : <A>(a2: A) => { boxed: A[]; }
+>composeReverse( x2 => ({ boxed: x2 }), x => [x]) : <A>(a2: A) => { boxed: A[]; }
 >composeReverse : { <D, E extends string, F>(g: (e: E) => F, f: (d: D) => E): (d2: D) => [D, F]; <A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2: A) => C; }
->x2 => ({ boxed: x2 }) : (x2: string) => { boxed: string; }
->x2 : string
->({ boxed: x2 }) : { boxed: string; }
->{ boxed: x2 } : { boxed: string; }
->boxed : string
->x2 : string
->x => [x] : (x: {}) => {}[]
->x : {}
->[x] : {}[]
->x : {}
+>x2 => ({ boxed: x2 }) : (x2: B) => { boxed: B; }
+>x2 : B
+>({ boxed: x2 }) : { boxed: B; }
+>{ boxed: x2 } : { boxed: B; }
+>boxed : B
+>x2 : B
+>x => [x] : (x: A) => A[]
+>x : A
+>[x] : A[]
+>x : A
 
     const expectedComposed4: <U>(u: U) => {boxed: U[]} = composed4;
 >expectedComposed4 : <U>(u: U) => { boxed: U[]; }
@@ -404,36 +404,36 @@ declare function composeReverse<A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2:
 >U : U
 >boxed : U[]
 >U : U
->composed4 : any
+>composed4 : <A>(a2: A) => { boxed: A[]; }
 
     const callComposed4 = composed4("test");
->callComposed4 : any
->composed4("test") : any
->composed4 : any
+>callComposed4 : { boxed: string[]; }
+>composed4("test") : { boxed: string[]; }
+>composed4 : <A>(a2: A) => { boxed: A[]; }
 >"test" : "test"
 
     const expectedCallComposed4 : {boxed: string[]} = callComposed4;
 >expectedCallComposed4 : { boxed: string[]; }
 >boxed : string[]
->callComposed4 : any
+>callComposed4 : { boxed: string[]; }
 }
 
 {
     let composed5 = composeReverse( x2 => ({ boxed: x2 }), x => "" + x);
->composed5 : (d2: {}) => [{}, { boxed: string; }]
->composeReverse( x2 => ({ boxed: x2 }), x => "" + x) : (d2: {}) => [{}, { boxed: string; }]
+>composed5 : <D>(d2: D) => [D, { boxed: string; }]
+>composeReverse( x2 => ({ boxed: x2 }), x => "" + x) : <D>(d2: D) => [D, { boxed: string; }]
 >composeReverse : { <D, E extends string, F>(g: (e: E) => F, f: (d: D) => E): (d2: D) => [D, F]; <A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2: A) => C; }
->x2 => ({ boxed: x2 }) : (x2: string) => { boxed: string; }
->x2 : string
->({ boxed: x2 }) : { boxed: string; }
->{ boxed: x2 } : { boxed: string; }
->boxed : string
->x2 : string
->x => "" + x : (x: {}) => string
->x : {}
+>x2 => ({ boxed: x2 }) : (x2: E) => { boxed: E; }
+>x2 : E
+>({ boxed: x2 }) : { boxed: E; }
+>{ boxed: x2 } : { boxed: E; }
+>boxed : E
+>x2 : E
+>x => "" + x : (x: D) => string
+>x : D
 >"" + x : string
 >"" : ""
->x : {}
+>x : D
 
     const expectedComposed5: <U>(u: U) => [U, {boxed: string}] = composed5;
 >expectedComposed5 : <U>(u: U) => [U, { boxed: string; }]
@@ -442,17 +442,17 @@ declare function composeReverse<A, B, C>(g: (b1: B) => C, f: (a1: A) => B): (a2:
 >U : U
 >U : U
 >boxed : string
->composed5 : (d2: {}) => [{}, { boxed: string; }]
+>composed5 : <D>(d2: D) => [D, { boxed: string; }]
 
     const callComposed5 = composed5(123456);
->callComposed5 : [{}, { boxed: string; }]
->composed5(123456) : [{}, { boxed: string; }]
->composed5 : (d2: {}) => [{}, { boxed: string; }]
+>callComposed5 : [number, { boxed: string; }]
+>composed5(123456) : [number, { boxed: string; }]
+>composed5 : <D>(d2: D) => [D, { boxed: string; }]
 >123456 : 123456
 
     const expectedCallComposed5 : [number, {boxed: string}] = callComposed5;
 >expectedCallComposed5 : [number, { boxed: string; }]
 >boxed : string
->callComposed5 : [{}, { boxed: string; }]
+>callComposed5 : [number, { boxed: string; }]
 }
 
