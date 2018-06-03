@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 /////**
-//// * @template {T}
+//// * @template T
 //// * @param {T} x
 //// * @returns {T}
 //// */
