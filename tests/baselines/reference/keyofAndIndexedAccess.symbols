@@ -2258,3 +2258,64 @@ declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
 >I7 : Symbol(I7, Decl(keyofAndIndexedAccess.ts, 627, 1))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 635, 20))
 
+// Repro from #21770
+
+type Dict<T extends string> = { [key in T]: number };
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess.ts, 635, 62))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 639, 10))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 639, 33))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 639, 10))
+
+type DictDict<V extends string, T extends string> = { [key in V]: Dict<T> };
+>DictDict : Symbol(DictDict, Decl(keyofAndIndexedAccess.ts, 639, 53))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 640, 14))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 640, 31))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 640, 55))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 640, 14))
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess.ts, 635, 62))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 640, 31))
+
+function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+>ff1 : Symbol(ff1, Decl(keyofAndIndexedAccess.ts, 640, 76))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 642, 13))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 642, 30))
+>dd : Symbol(dd, Decl(keyofAndIndexedAccess.ts, 642, 49))
+>DictDict : Symbol(DictDict, Decl(keyofAndIndexedAccess.ts, 639, 53))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 642, 13))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 642, 30))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess.ts, 642, 68))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 642, 13))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess.ts, 642, 75))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 642, 30))
+
+    return dd[k1][k2];
+>dd : Symbol(dd, Decl(keyofAndIndexedAccess.ts, 642, 49))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess.ts, 642, 68))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess.ts, 642, 75))
+}
+
+function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+>ff2 : Symbol(ff2, Decl(keyofAndIndexedAccess.ts, 644, 1))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 646, 13))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 646, 30))
+>dd : Symbol(dd, Decl(keyofAndIndexedAccess.ts, 646, 49))
+>DictDict : Symbol(DictDict, Decl(keyofAndIndexedAccess.ts, 639, 53))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 646, 13))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 646, 30))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess.ts, 646, 68))
+>V : Symbol(V, Decl(keyofAndIndexedAccess.ts, 646, 13))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess.ts, 646, 75))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 646, 30))
+
+    const d: Dict<T> = dd[k1];
+>d : Symbol(d, Decl(keyofAndIndexedAccess.ts, 647, 9))
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess.ts, 635, 62))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 646, 30))
+>dd : Symbol(dd, Decl(keyofAndIndexedAccess.ts, 646, 49))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess.ts, 646, 68))
+
+    return d[k2];
+>d : Symbol(d, Decl(keyofAndIndexedAccess.ts, 647, 9))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess.ts, 646, 75))
+}
+
