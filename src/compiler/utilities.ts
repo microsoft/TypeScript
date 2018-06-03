@@ -3674,15 +3674,15 @@ namespace ts {
         return output;
     }
 
-    export function base64encode(host: { base64encode?(input: string): string }, input: string): string {
-        if (host.base64encode) {
+    export function base64encode(host: { base64encode?(input: string): string } | undefined, input: string): string {
+        if (host && host.base64encode) {
             return host.base64encode(input);
         }
         return convertToBase64(input);
     }
 
-    export function base64decode(host: { base64decode?(input: string): string }, input: string): string {
-        if (host.base64decode) {
+    export function base64decode(host: { base64decode?(input: string): string } | undefined, input: string): string {
+        if (host && host.base64decode) {
             return host.base64decode(input);
         }
         const length = input.length;
