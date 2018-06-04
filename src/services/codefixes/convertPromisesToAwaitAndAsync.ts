@@ -13,10 +13,27 @@ namespace ts.codefix {
     function convertToAsyncAwait(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         const oldNode = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, false)).valueDeclaration;
         const newModifier:Modifier = createModifier(SyntaxKind.AsyncKeyword);
-        let newNode = oldNode;
+        let newNode = <FunctionDeclaration>oldNode;
         newNode.modifiers ? newNode.modifiers.concat([newModifier]) : newNode.modifiers = createNodeArray([newModifier]);
-        changes.replaceNode(sourceFile, oldNode, newNode)
-        //changes.insertNodeBefore(sourceFile, temp.valueDeclaration, newNode);
+        changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, oldNode)
+        refactorDotThen(sourceFile, changes, newNode);
+    }
+   
+    function refactorDotThen(sourceFile: SourceFile, changes: textChanges.ChangeTracker, node: Node){
+        switch(node.kind){
+            case SyntaxKind.PropertyAccessExpression:
+                if((<PropertyAccessExpression>node).name.text === "then"){
+                    let newParNode = createAwait(<PropertyAccessExpression>node.parent);
+                    //getChildren().concat(node.parent.getChildren())
+                    changes.replaceNode(sourceFile, node.parent, newParNode)
+                    return;
+                }
+                break;
+        }
+
+        for( let child of node.getChildren() ){
+            refactorDotThen(sourceFile, changes, child);
+        }
     }
 
 }
