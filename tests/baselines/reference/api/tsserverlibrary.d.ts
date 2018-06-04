@@ -8556,9 +8556,7 @@ declare namespace ts.server {
         private mapCodeAction;
         private mapCodeFixAction;
         private mapTextChangesToCodeEdits;
-        private mapTextChangesToCodeEditsUsingScriptinfo;
         private convertTextChangeToCodeEdit;
-        private convertNewFileTextChangeToCodeEdit;
         private getBraceMatching;
         private getDiagnosticsForProject;
         getCanonicalFileName(fileName: string): string;

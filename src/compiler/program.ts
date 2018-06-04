@@ -1321,7 +1321,7 @@ namespace ts {
         }
 
         function getSourceFileByPath(path: Path): SourceFile | undefined {
-            return filesByName.get(path);
+            return options.configFile && toPath(options.configFile.fileName) === path ? options.configFile : filesByName.get(path);
         }
 
         function getDiagnosticsHelper<T extends Diagnostic>(
