@@ -1272,7 +1272,7 @@ namespace Harness {
                         throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                     }
                 }
-                else if (result.dts.size !== result.js.size) {
+                else if (result.dts.size !== result.getNumberOfJsFiles()) {
                     throw new Error("There were no errors and declFiles generated did not match number of js files generated");
                 }
             }
@@ -1639,7 +1639,7 @@ namespace Harness {
                 return;
             }
             else if (options.sourceMap || declMaps) {
-                if (result.maps.size !== (result.js.size * (declMaps && options.sourceMap ? 2 : 1))) {
+                if (result.maps.size !== (result.getNumberOfJsFiles() * (declMaps && options.sourceMap ? 2 : 1))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
