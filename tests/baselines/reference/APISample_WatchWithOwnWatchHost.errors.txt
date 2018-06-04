@@ -1,0 +1,71 @@
+tests/cases/compiler/APISample_WatchWithOwnWatchHost.ts(15,11): error TS2322: Type '{ rootFiles: string[]; options: CompilerOptions; useCaseSensitiveFileNames: () => boolean; getNewLine: () => string; getCurrentDirectory: () => string; getDefaultLibFileName: (options: CompilerOptions) => string; fileExists: (path: string) => boolean; readFile: (path: string, encoding?: string | undefined) => string | undefined; directoryExists: (path: string) => boolean; getDirectories: (path: string) => string[]; readDirectory: (path: string, extensions?: ReadonlyArray<string> | undefined, exclude?: ReadonlyArray<string> | undefined, include?: ReadonlyArray<string> | undefined, depth?: number | undefined) => string[]; realpath: ((path: string) => string) | undefined; watchFile: (path: string, callback: FileWatcherCallback, pollingInterval?: number | undefined) => FileWatcher; watchDirectory: (path: string, callback: DirectoryWatcherCallback, recursive?: boolean | undefined) => FileWatcher; createProgram: { (newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost | undefined, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; }; }' is not assignable to type 'WatchCompilerHostOfFilesAndCompilerOptions<BuilderProgram>'.
+  Types of property 'createProgram' are incompatible.
+    Type '{ (newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost | undefined, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; }' is not assignable to type 'CreateProgram<BuilderProgram>'.
+      Types of parameters 'newProgram' and 'rootNames' are incompatible.
+        Type 'ReadonlyArray<string> | undefined' is not assignable to type 'Program'.
+          Type 'undefined' is not assignable to type 'Program'.
+
+
+==== tests/cases/compiler/APISample_WatchWithOwnWatchHost.ts (1 errors) ====
+    /*
+     * Note: This test is a public API sample. This sample verifies creating abstract builder to watch list of root files 
+     *       Please log a "breaking change" issue for any API breaking change affecting this issue
+     */
+    
+    declare var console: any;
+    
+    import ts = require("typescript");
+    
+    function watchMain() {
+        // get list of files and compiler options somehow
+        const files: string[] = [];
+        const options: ts.CompilerOptions = {};
+    
+        const host: ts.WatchCompilerHostOfFilesAndCompilerOptions<ts.BuilderProgram> = {
+              ~~~~
+!!! error TS2322: Type '{ rootFiles: string[]; options: CompilerOptions; useCaseSensitiveFileNames: () => boolean; getNewLine: () => string; getCurrentDirectory: () => string; getDefaultLibFileName: (options: CompilerOptions) => string; fileExists: (path: string) => boolean; readFile: (path: string, encoding?: string | undefined) => string | undefined; directoryExists: (path: string) => boolean; getDirectories: (path: string) => string[]; readDirectory: (path: string, extensions?: ReadonlyArray<string> | undefined, exclude?: ReadonlyArray<string> | undefined, include?: ReadonlyArray<string> | undefined, depth?: number | undefined) => string[]; realpath: ((path: string) => string) | undefined; watchFile: (path: string, callback: FileWatcherCallback, pollingInterval?: number | undefined) => FileWatcher; watchDirectory: (path: string, callback: DirectoryWatcherCallback, recursive?: boolean | undefined) => FileWatcher; createProgram: { (newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost | undefined, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; }; }' is not assignable to type 'WatchCompilerHostOfFilesAndCompilerOptions<BuilderProgram>'.
+!!! error TS2322:   Types of property 'createProgram' are incompatible.
+!!! error TS2322:     Type '{ (newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost | undefined, oldProgram?: BuilderProgram | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined): BuilderProgram; }' is not assignable to type 'CreateProgram<BuilderProgram>'.
+!!! error TS2322:       Types of parameters 'newProgram' and 'rootNames' are incompatible.
+!!! error TS2322:         Type 'ReadonlyArray<string> | undefined' is not assignable to type 'Program'.
+!!! error TS2322:           Type 'undefined' is not assignable to type 'Program'.
+            rootFiles: files,
+            options,
+    
+            useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
+            getNewLine: () => ts.sys.newLine,
+            getCurrentDirectory: ts.sys.getCurrentDirectory,
+            getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
+    
+            fileExists: ts.sys.fileExists,
+            readFile: ts.sys.readFile,
+            directoryExists: ts.sys.directoryExists,
+            getDirectories: ts.sys.getDirectories,
+            readDirectory: ts.sys.readDirectory,
+            realpath: ts.sys.realpath,
+    
+            watchFile: ts.sys.watchFile!,
+            watchDirectory: ts.sys.watchDirectory!,
+            createProgram: ts.createAbstractBuilder
+        };
+    
+        // You can technically override any given hook on the host, though you probably don't need to.
+        // Note that we're assuming `origCreateProgram` and `origPostProgramCreate` doesn't use `this` at all.
+        const origCreateProgram = host.createProgram;
+        host.createProgram = (rootNames, options, host, oldProgram) => {
+            console.log("** We're about to create the program! **");
+            return origCreateProgram(rootNames, options, host, oldProgram);
+        }
+        const origPostProgramCreate = host.afterProgramCreate;
+    
+        host.afterProgramCreate = program => {
+            console.log("** We finished making the program! **");
+            origPostProgramCreate!(program);
+        };
+    
+        // `createWatchProgram` creates an initial program, watches files, and updates the program over time.
+        ts.createWatchProgram(host);
+    }
+    
+    watchMain();
+    
