@@ -171,12 +171,12 @@ namespace ts {
                                 [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
                                 createModuleBlock(setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements))
-                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
+                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                             return newFile;
                         }
                         needsDeclare = true;
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return updateSourceFileNode(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
+                        return updateSourceFileNode(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {

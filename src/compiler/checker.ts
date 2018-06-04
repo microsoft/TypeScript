@@ -17382,88 +17382,11 @@ namespace ts {
          *         and 1 insertion/deletion at 3 characters)
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
-            const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-            let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
-            let bestCandidate: Symbol | undefined;
-            let justCheckExactMatches = false;
-            const nameLowerCase = name.toLowerCase();
-            for (const candidate of symbols) {
+            return getSpellingSuggestion(name, symbols, getCandidateName);
+            function getCandidateName(candidate: Symbol) {
                 const candidateName = symbolName(candidate);
-                if (candidateName.charCodeAt(0) === CharacterCodes.doubleQuote
-                    || !(candidate.flags & meaning && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference)) {
-                    continue;
-                }
-                const candidateNameLowerCase = candidateName.toLowerCase();
-                if (candidateNameLowerCase === nameLowerCase) {
-                    return candidate;
-                }
-                if (justCheckExactMatches) {
-                    continue;
-                }
-                if (candidateName.length < 3) {
-                    // Don't bother, user would have noticed a 2-character name having an extra character
-                    continue;
-                }
-                // Only care about a result better than the best so far.
-                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
-                if (distance === undefined) {
-                    continue;
-                }
-                if (distance < 3) {
-                    justCheckExactMatches = true;
-                    bestCandidate = candidate;
-                }
-                else {
-                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
-                    bestDistance = distance;
-                    bestCandidate = candidate;
-                }
+                return !startsWith(candidateName, "\"") && candidate.flags & meaning ? candidateName : undefined;
             }
-            return bestCandidate;
-        }
-
-        function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
-            let previous = new Array(s2.length + 1);
-            let current = new Array(s2.length + 1);
-            /** Represents any value > max. We don't care about the particular value. */
-            const big = max + 1;
-
-            for (let i = 0; i <= s2.length; i++) {
-                previous[i] = i;
-            }
-
-            for (let i = 1; i <= s1.length; i++) {
-                const c1 = s1.charCodeAt(i - 1);
-                const minJ = i > max ? i - max : 1;
-                const maxJ = s2.length > max + i ? max + i : s2.length;
-                current[0] = i;
-                /** Smallest value of the matrix in the ith column. */
-                let colMin = i;
-                for (let j = 1; j < minJ; j++) {
-                    current[j] = big;
-                }
-                for (let j = minJ; j <= maxJ; j++) {
-                    const dist = c1 === s2.charCodeAt(j - 1)
-                        ? previous[j - 1]
-                        : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
-                    current[j] = dist;
-                    colMin = Math.min(colMin, dist);
-                }
-                for (let j = maxJ + 1; j <= s2.length; j++) {
-                    current[j] = big;
-                }
-                if (colMin > max) {
-                    // Give up -- everything in this column is > max and it can't get better in future columns.
-                    return undefined;
-                }
-
-                const temp = previous;
-                previous = current;
-                current = temp;
-            }
-
-            const res = previous[s2.length];
-            return res > max ? undefined : res;
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {

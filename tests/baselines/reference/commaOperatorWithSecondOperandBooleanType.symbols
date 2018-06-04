@@ -13,7 +13,7 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandBooleanType.ts, 4, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 //The second operand type is boolean
 ANY, BOOLEAN;

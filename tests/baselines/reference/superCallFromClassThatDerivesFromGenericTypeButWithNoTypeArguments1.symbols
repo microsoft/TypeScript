@@ -19,6 +19,6 @@ class B extends A {
 
     constructor() { super(value => String(value)); }
 >value : Symbol(value, Decl(superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts, 7, 26))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts, 7, 26))
 }

@@ -112,7 +112,7 @@ my.predicate.type = class {
 // global-ish prefixes
 var min = window.min || {};
 >min : Symbol(min, Decl(a.js, 29, 3), Decl(a.js, 29, 27), Decl(a.js, 30, 44))
->window : Symbol(window, Decl(lib.es6.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 
 min.nest = this.min.nest || function () { };
 >min.nest : Symbol(min.nest, Decl(a.js, 29, 27), Decl(a.js, 31, 4))
@@ -125,7 +125,7 @@ min.nest.other = self.min.nest.other || class { };
 >min : Symbol(min, Decl(a.js, 29, 3), Decl(a.js, 29, 27), Decl(a.js, 30, 44))
 >nest : Symbol(min.nest, Decl(a.js, 29, 27), Decl(a.js, 31, 4))
 >other : Symbol(min.nest.other, Decl(a.js, 30, 44))
->self : Symbol(self, Decl(lib.es6.d.ts, --, --))
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
 
 min.property = global.min.property || {};
 >min.property : Symbol(min.property, Decl(a.js, 31, 50))

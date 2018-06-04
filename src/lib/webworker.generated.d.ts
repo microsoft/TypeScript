@@ -1710,7 +1710,6 @@ declare var navigator: WorkerNavigator;
 declare function clearImmediate(handle: number): void;
 declare function clearInterval(handle: number): void;
 declare function clearTimeout(handle: number): void;
-declare function importScripts(...urls: string[]): void;
 declare function setImmediate(handler: any, ...args: any[]): number;
 declare function setInterval(handler: any, timeout?: any, ...args: any[]): number;
 declare function setTimeout(handler: any, timeout?: any, ...args: any[]): number;

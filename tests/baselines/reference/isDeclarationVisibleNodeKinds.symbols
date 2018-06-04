@@ -126,7 +126,7 @@ module schema {
     export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
 >createValidator8 : Symbol(createValidator8, Decl(isDeclarationVisibleNodeKinds.ts, 51, 15))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 52, 37))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 52, 60))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 52, 63))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 52, 60))

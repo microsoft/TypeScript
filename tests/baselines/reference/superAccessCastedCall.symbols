@@ -12,7 +12,7 @@ class Bar extends Foo {
 
     x: Number;
 >x : Symbol(Bar.x, Decl(superAccessCastedCall.ts, 4, 23))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     constructor() {
         super();

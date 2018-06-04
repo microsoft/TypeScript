@@ -107,6 +107,12 @@ namespace ts.GoToDefinition {
             return file && { fileName: typeReferenceDirective.fileName, file };
         }
 
+        const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
+        if (libReferenceDirective) {
+            const file = program.getLibFileFromReference(libReferenceDirective);
+            return file && { fileName: libReferenceDirective.fileName, file };
+        }
+
         return undefined;
     }
 
@@ -138,7 +144,10 @@ namespace ts.GoToDefinition {
         }
 
         // Check if position is on triple slash reference.
-        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ||
+            findReferenceInPosition(sourceFile.typeReferenceDirectives, position) ||
+            findReferenceInPosition(sourceFile.libReferenceDirectives, position);
+
         if (comment) {
             return { definitions, textSpan: createTextSpanFromRange(comment) };
         }

@@ -12,7 +12,7 @@ class Chain2<T extends { length: number }> {
     then<S extends Function>(cb: (x: T) => S): Chain2<S> {
 >then : Symbol(Chain2.then, Decl(promiseChaining2.ts, 2, 36))
 >S : Symbol(S, Decl(promiseChaining2.ts, 3, 9))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >cb : Symbol(cb, Decl(promiseChaining2.ts, 3, 29))
 >x : Symbol(x, Decl(promiseChaining2.ts, 3, 34))
 >T : Symbol(T, Decl(promiseChaining2.ts, 1, 13))

@@ -551,6 +551,7 @@ namespace ts {
         public moduleName: string;
         public referencedFiles: FileReference[];
         public typeReferenceDirectives: FileReference[];
+        public libReferenceDirectives: FileReference[];
 
         public syntacticDiagnostics: DiagnosticWithLocation[];
         public parseDiagnostics: DiagnosticWithLocation[];
