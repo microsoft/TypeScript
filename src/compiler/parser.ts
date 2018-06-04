@@ -7043,8 +7043,7 @@ namespace ts {
                     }
 
                     if (constraint) {
-                        Debug.assert(!!typeParameters.length);
-                        typeParameters[0].constraint = constraint.type;
+                        first(typeParameters).constraint = constraint.type;
                     }
 
                     const result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);

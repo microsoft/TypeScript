@@ -3177,7 +3177,7 @@ namespace ts {
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        return flatMap(filter(getJSDocTags(node), isNonTypeAliasTemplate), tag => tag.typeParameters);
+        return flatMap(getJSDocTags(node), tag => isNonTypeAliasTemplate(tag) ? tag.typeParameters : undefined);
     }
 
     /** template tags are only available when a typedef isn't already using them */
