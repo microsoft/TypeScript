@@ -2350,21 +2350,23 @@ namespace ts {
      * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
      */
     /* @internal */
-    export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement | undefined {
+    export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent as ObjectLiteralElementWithName : undefined;
                 }
             // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                    node.parent.name === node ? node.parent : undefined;
+                    node.parent.name === node ? node.parent as ObjectLiteralElementWithName : undefined;
         }
         return undefined;
     }
+    /* @internal */
+    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName };
 
     /* @internal */
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
