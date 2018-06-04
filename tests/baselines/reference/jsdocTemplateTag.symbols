@@ -34,8 +34,10 @@ let s = g('hi')()
  * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
  */
 Element.prototype.animate = function(keyframes) {};
+>Element.prototype.animate : Symbol(Animatable.animate, Decl(lib.dom.d.ts, --, --))
 >Element.prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
 >Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+>animate : Symbol(Animatable.animate, Decl(lib.dom.d.ts, --, --))
 >keyframes : Symbol(keyframes, Decl(forgot.js, 22, 37))
 
