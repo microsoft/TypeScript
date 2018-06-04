@@ -6993,29 +6993,27 @@ namespace ts {
                 }
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
-                    if (some(tags, isJSDocTemplateTag)) {
-                        parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                    // the template tag looks like '@template {Constraint} T,U,V'
+                    let constraint: JSDocTypeExpression | undefined;
+                    if (token() === SyntaxKind.OpenBraceToken) {
+                        constraint = parseJSDocTypeExpression();
+                        skipWhitespace();
                     }
 
-                    // Type parameter list looks like '@template T,U,V'
                     const typeParameters = [];
                     const typeParametersPos = getNodePos();
-
                     while (true) {
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-                        const name = parseJSDocIdentifierNameWithOptionalBraces();
-                        skipWhitespace();
-                        if (!name) {
-                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                        if (!tokenIsIdentifierOrKeyword(token())) {
+                            parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                             return undefined;
                         }
-
-                        typeParameter.name = name;
+                        typeParameter.name = parseJSDocIdentifierName()!;
+                        skipWhitespace();
                         finishNode(typeParameter);
-
                         typeParameters.push(typeParameter);
-
                         if (token() === SyntaxKind.CommaToken) {
+                            // need to look for more type parameters
                             nextJSDocToken();
                             skipWhitespace();
                         }
@@ -7024,21 +7022,16 @@ namespace ts {
                         }
                     }
 
+                    if (constraint) {
+                        first(typeParameters).constraint = constraint.type;
+                    }
+
                     const result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeParameters = createNodeArray(typeParameters, typeParametersPos);
                     finishNode(result);
                     return result;
-                }
-
-                function parseJSDocIdentifierNameWithOptionalBraces(): Identifier | undefined {
-                    const parsedBrace = parseOptional(SyntaxKind.OpenBraceToken);
-                    const res = parseJSDocIdentifierName();
-                    if (parsedBrace) {
-                        parseExpected(SyntaxKind.CloseBraceToken);
-                    }
-                    return res;
                 }
 
                 function nextJSDocToken(): JsDocSyntaxKind {
