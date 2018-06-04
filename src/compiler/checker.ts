@@ -28416,9 +28416,9 @@ namespace ts {
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
-            const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            if (isNodeArray(typeParameters) || typeParameters.length) {
-                const { pos, end } = isNodeArray(typeParameters) ? typeParameters : typeParameters[0];
+            const jsdocTypeParameters = isInJavaScriptFile(node) && getJSDocTypeParameterDeclarations(node);
+            if (node.typeParameters || jsdocTypeParameters && jsdocTypeParameters.length) {
+                const { pos, end } = node.typeParameters || jsdocTypeParameters && jsdocTypeParameters[0] || node;
                 return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }

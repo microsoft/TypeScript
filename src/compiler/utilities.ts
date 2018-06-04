@@ -3166,12 +3166,7 @@ namespace ts {
         }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
-            const templateTags = flatMap(filter(node.parent.tags, isJSDocTemplateTag), tag => tag.typeParameters) as ReadonlyArray<TypeParameterDeclaration>;
-            const templateTagNodes = templateTags as NodeArray<TypeParameterDeclaration>;
-            templateTagNodes.pos = templateTagNodes.length > 0 ? first(templateTagNodes).pos : node.pos;
-            templateTagNodes.end = templateTagNodes.length > 0 ? last(templateTagNodes).end : node.end;
-            templateTagNodes.hasTrailingComma = false;
-            return templateTagNodes;
+            return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
         }
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
     }
