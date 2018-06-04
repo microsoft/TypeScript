@@ -2510,11 +2510,12 @@ namespace ts {
          * -                       with non-empty object literals if assigned to the prototype property
          */
         function isJavascriptContainer(symbol: Symbol): boolean {
-            const node = symbol.valueDeclaration;
             if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule)) {
                 return true;
             }
-            const init = isVariableDeclaration(node) ? node.initializer :
+            const node = symbol.valueDeclaration;
+            const init = !node ? undefined :
+                isVariableDeclaration(node) ? node.initializer :
                 isBinaryExpression(node) ? node.right :
                 isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
                 undefined;
