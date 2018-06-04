@@ -36,7 +36,8 @@ namespace ts.GoToDefinition {
                 // TODO: GH#23742 Following check shouldn't be necessary if 'require' is an alias
                 symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
                 return [sigInfo];
-            } else {
+            }
+            else {
                 const defs = getDefinitionFromSymbol(typeChecker, symbol, node)!;
                 // For a 'super()' call, put the signature first, else put the variable first.
                 return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
