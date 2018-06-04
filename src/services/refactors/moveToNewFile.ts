@@ -118,7 +118,8 @@ namespace ts.refactor {
         }
 
         const useEs6ModuleSyntax = !!oldFile.externalModuleIndicator;
-        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, preferences);
+        const quotePreference = getQuotePreference(oldFile, preferences);
+        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
         if (importsFromNewFile) {
             changes.insertNodeBefore(oldFile, oldFile.statements[0], importsFromNewFile, /*blankLineBetween*/ true);
         }
@@ -129,7 +130,7 @@ namespace ts.refactor {
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
         return [
-            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, preferences),
+            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference),
             ...addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax),
         ];
     }
@@ -201,7 +202,7 @@ namespace ts.refactor {
         | ImportEqualsDeclaration
         | VariableStatement;
 
-    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, preferences: UserPreferences): Statement | undefined {
+    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
         let defaultImport: Identifier | undefined;
         const imports: string[] = [];
         newFileNeedExport.forEach(symbol => {
@@ -212,14 +213,14 @@ namespace ts.refactor {
                 imports.push(symbol.name);
             }
         });
-        return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, preferences);
+        return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, quotePreference);
     }
 
-    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean, preferences: UserPreferences): Statement | undefined {
+    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
         path = ensurePathIsNonModuleName(path);
         if (useEs6Imports) {
             const specifiers = imports.map(i => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(i)));
-            return makeImportIfNecessary(defaultImport, specifiers, path, preferences);
+            return makeImportIfNecessary(defaultImport, specifiers, path, quotePreference);
         }
         else {
             Debug.assert(!defaultImport); // If there's a default export, it should have been an es6 module.
@@ -325,7 +326,7 @@ namespace ts.refactor {
         changes: textChanges.ChangeTracker,
         checker: TypeChecker,
         useEs6ModuleSyntax: boolean,
-        preferences: UserPreferences,
+        quotePreference: QuotePreference,
     ): ReadonlyArray<SupportedImportStatement> {
         const copiedOldImports: SupportedImportStatement[] = [];
         for (const oldStatement of oldFile.statements) {
@@ -357,7 +358,7 @@ namespace ts.refactor {
             }
         });
 
-        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax, preferences));
+        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax, quotePreference));
         return copiedOldImports;
     }
 
