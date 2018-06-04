@@ -10,6 +10,6 @@
 
 verify.goToDefinition({
     useF: "f",
-    useG: ["f", "g"],
-    useH: ["f", "h"],
+    useG: ["g", "f"],
+    useH: ["h", "f"],
 });

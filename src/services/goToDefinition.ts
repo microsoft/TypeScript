@@ -32,11 +32,15 @@ namespace ts.GoToDefinition {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
-            return typeChecker.getRootSymbols(symbol).some(s => calledDeclaration.symbol === s || calledDeclaration.symbol.parent === s) ||
+            if (typeChecker.getRootSymbols(symbol).some(s => calledDeclaration.symbol === s || calledDeclaration.symbol.parent === s) ||
                 // TODO: GH#23742 Following check shouldn't be necessary if 'require' is an alias
-                symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))
-                ? [sigInfo]
-                : [sigInfo, ...getDefinitionFromSymbol(typeChecker, symbol, node)!];
+                symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
+                return [sigInfo];
+            } else {
+                const defs = getDefinitionFromSymbol(typeChecker, symbol, node)!;
+                // For a 'super()' call, put the signature first, else put the variable first.
+                return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
+            }
         }
 
         // Because name in short-hand property assignment has two different meanings: property name and property value,
