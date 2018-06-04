@@ -89,7 +89,6 @@ namespace ts.GoToDefinition {
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
-        debugger;
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = tryResolveScriptReference(program, sourceFile, referencePath);
