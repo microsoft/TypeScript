@@ -4029,6 +4029,17 @@ declare namespace ts {
      * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
      * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
      *
+     * @param createProgramOptions - The options for creating a program.
+     * @returns A 'Program' object.
+     */
+    function createProgram(createProgramOptions: CreateProgramOptions): Program;
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
      * @param rootNames - A set of root files.
      * @param options - The compiler options which should be used.
      * @param host - The host interacts with the underlying file system.
@@ -4036,7 +4047,6 @@ declare namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    function createProgram(createProgramOptions: CreateProgramOptions): Program;
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
 }
 declare namespace ts {
@@ -4572,7 +4582,7 @@ declare namespace ts {
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): ReadonlyArray<FileTextChanges>;
-        getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
+        getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program | undefined;
         dispose(): void;

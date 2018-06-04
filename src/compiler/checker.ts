@@ -1458,9 +1458,8 @@ namespace ts {
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
                         // js type aliases do not resolve names from their host, so skip past it
-                        lastLocation = location;
-                        location = getJSDocHost(location).parent;
-                        continue;
+                        location = getJSDocHost(location);
+                        break;
                 }
                 if (isSelfReferenceLocation(location)) {
                     lastSelfReferenceLocation = location;
@@ -1784,7 +1783,7 @@ namespace ts {
         }
 
         function isSyntacticDefault(node: Node) {
-            return ((isExportAssignment(node) && !node.isExportEquals) || hasModifier(node, ModifierFlags.Default));
+            return ((isExportAssignment(node) && !node.isExportEquals) || hasModifier(node, ModifierFlags.Default) || isExportSpecifier(node));
         }
 
         function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean) {
@@ -14113,11 +14112,14 @@ namespace ts {
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
+                if (type.flags & TypeFlags.Any && literal.text === "function") {
+                    return type;
+                }
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
-                    const targetType = typeofTypesByName.get(literal.text);
+                    const targetType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
                     if (targetType) {
                         if (isTypeSubtypeOf(targetType, type)) {
                             return targetType;
@@ -18678,6 +18680,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
+                    forEach(node.arguments, checkExpression); // Still visit arguments so they get marked for visibility, etc
                     return anySignature;
                 }
                 if (superType !== errorType) {
@@ -22784,7 +22787,7 @@ namespace ts {
         function errorUnusedLocal(declaration: Declaration, name: string, addDiagnostic: AddUnusedDiagnostic) {
             const node = getNameOfDeclaration(declaration) || declaration;
             const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_never_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
-            addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
+            addDiagnostic(UnusedKind.Local, createDiagnosticForNode(node, message, name));
         }
 
         function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {

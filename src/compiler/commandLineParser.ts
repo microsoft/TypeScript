@@ -930,7 +930,8 @@ namespace ts {
         }
     }
 
-    function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
+    /** @internal */
+    export function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
         optionName = optionName.toLowerCase();
         const { optionNameMap, shortOptionNames } = getOptionNameMap();
         // Try to translate short option names to their full equivalents.

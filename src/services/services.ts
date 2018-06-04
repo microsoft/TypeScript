@@ -1780,10 +1780,6 @@ namespace ts {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
-        function getSourceFile(fileName: string): SourceFile {
-            return getNonBoundSourceFile(fileName);
-        }
-
         function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
@@ -1985,8 +1981,8 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
-        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
-            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions));
+        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<FileTextChanges> {
+            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2291,7 +2287,6 @@ namespace ts {
             getEditsForFileRename,
             getEmitOutput,
             getNonBoundSourceFile,
-            getSourceFile,
             getProgram,
             getApplicableRefactors,
             getEditsForRefactor,

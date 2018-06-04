@@ -342,19 +342,13 @@ namespace ts {
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): ReadonlyArray<FileTextChanges>;
-        getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
+        getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): ReadonlyArray<FileTextChanges>;
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
-
-        /**
-         * @internal
-         * @deprecated Use ts.createSourceFile instead.
-         */
-        getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
     }

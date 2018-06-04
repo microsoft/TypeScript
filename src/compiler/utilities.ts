@@ -641,11 +641,6 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeSpan(sourceFile: SourceFile, startNode: Node, endNode: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
-        const start = skipTrivia(sourceFile.text, startNode.pos);
-        return createFileDiagnostic(sourceFile, start, endNode.end - start, message, arg0, arg1, arg2, arg3);
-    }
-
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
@@ -1088,7 +1083,7 @@ namespace ts {
     }
 
     export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): ReadonlyArray<PropertyAssignment> {
-        return filter(objectLiteral.properties, (property): property is PropertyAssignment => {
+        return objectLiteral.properties.filter((property): property is PropertyAssignment => {
             if (property.kind === SyntaxKind.PropertyAssignment) {
                 const propName = getTextOfPropertyName(property.name);
                 return key === propName || (!!key2 && key2 === propName);
@@ -1105,12 +1100,15 @@ namespace ts {
     }
 
     export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
+        return firstDefined(getTsConfigPropArray(tsConfigSourceFile, propKey), property =>
+            isArrayLiteralExpression(property.initializer) ?
+                find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                undefined);
+    }
+
+    export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): ReadonlyArray<PropertyAssignment> {
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-        return jsonObjectLiteral &&
-            firstDefined(getPropertyAssignment(jsonObjectLiteral, propKey), property =>
-                isArrayLiteralExpression(property.initializer) ?
-                    find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-                    undefined);
+        return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration | undefined {
