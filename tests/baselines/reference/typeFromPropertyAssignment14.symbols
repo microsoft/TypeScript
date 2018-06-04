@@ -9,11 +9,11 @@ Outer.Inner = function () {}
 >Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
 
 Outer.Inner.prototype = {
->Outer.Inner.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Outer.Inner.prototype : Symbol(Outer.Inner.prototype, Decl(work.js, 0, 28))
 >Outer.Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
 >Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(work.js, 0, 0), Decl(work.js, 0, 28))
 >Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Outer.Inner.prototype, Decl(work.js, 0, 28))
 
     x: 1,
 >x : Symbol(x, Decl(work.js, 1, 25))

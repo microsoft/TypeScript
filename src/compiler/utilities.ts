@@ -641,11 +641,6 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeSpan(sourceFile: SourceFile, startNode: Node, endNode: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
-        const start = skipTrivia(sourceFile.text, startNode.pos);
-        return createFileDiagnostic(sourceFile, start, endNode.end - start, message, arg0, arg1, arg2, arg3);
-    }
-
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
@@ -1088,7 +1083,7 @@ namespace ts {
     }
 
     export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): ReadonlyArray<PropertyAssignment> {
-        return filter(objectLiteral.properties, (property): property is PropertyAssignment => {
+        return objectLiteral.properties.filter((property): property is PropertyAssignment => {
             if (property.kind === SyntaxKind.PropertyAssignment) {
                 const propName = getTextOfPropertyName(property.name);
                 return key === propName || (!!key2 && key2 === propName);
@@ -1105,12 +1100,15 @@ namespace ts {
     }
 
     export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
+        return firstDefined(getTsConfigPropArray(tsConfigSourceFile, propKey), property =>
+            isArrayLiteralExpression(property.initializer) ?
+                find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                undefined);
+    }
+
+    export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): ReadonlyArray<PropertyAssignment> {
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-        return jsonObjectLiteral &&
-            firstDefined(getPropertyAssignment(jsonObjectLiteral, propKey), property =>
-                isArrayLiteralExpression(property.initializer) ?
-                    find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-                    undefined);
+        return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration | undefined {
@@ -1560,28 +1558,49 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    /**
-     * Given the symbol of a declaration, find the symbol of its Javascript container-like initializer,
-     * if it has one. Otherwise just return the original symbol.
-     *
-     * Container-like initializer behave like namespaces, so the binder needs to add contained symbols
-     * to their exports. An example is a function with assignments to `this` inside.
-     */
-    export function getJSInitializerSymbol(symbol: Symbol | undefined) {
-        if (!symbol || !symbol.valueDeclaration) {
-            return symbol;
+    export function getDeclarationOfJSInitializer(node: Node): Node | undefined {
+        if (!isInJavaScriptFile(node) || !node.parent) {
+            return undefined;
         }
-        const declaration = symbol.valueDeclaration;
-        const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration);
-        return e && e.symbol ? e.symbol : symbol;
+        let name: Expression | BindingName | undefined;
+        let decl: Node | undefined;
+        if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
+            name = node.parent.name;
+            decl = node.parent;
+        }
+        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.right === node) {
+            name = node.parent.left;
+            decl = name;
+        }
+        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken) {
+            if (isVariableDeclaration(node.parent.parent) && node.parent.parent.initializer === node.parent) {
+                name = node.parent.parent.name;
+                decl = node.parent.parent;
+            }
+            else if (isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.parent.right === node.parent) {
+                name = node.parent.parent.left;
+                decl = name;
+            }
+
+            if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
+                return undefined;
+            }
+        }
+
+        if (!name || !getJavascriptInitializer(node, isPrototypeAccess(name))) {
+            return undefined;
+        }
+        return decl;
     }
 
-    /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
-    export function getDeclaredJavascriptInitializer(node: Node) {
-        if (node && isVariableDeclaration(node) && node.initializer) {
-            return getJavascriptInitializer(node.initializer, /*isPrototypeAssignment*/ false) ||
-                isIdentifier(node.name) && getDefaultedJavascriptInitializer(node.name, node.initializer, /*isPrototypeAssignment*/ false);
+    /** Get the initializer, taking into account defaulted Javascript initializers */
+    export function getEffectiveInitializer(node: HasExpressionInitializer) {
+        if (isInJavaScriptFile(node) && node.initializer &&
+            isBinaryExpression(node.initializer) && node.initializer.operatorToken.kind === SyntaxKind.BarBarToken &&
+            node.name && isEntityNameExpression(node.name) && isSameEntityName(node.name, node.initializer.left)) {
+            return node.initializer.right;
         }
+        return node.initializer;
     }
 
     /**
@@ -1636,6 +1655,13 @@ namespace ts {
         }
     }
 
+    export function isDefaultedJavascriptInitializer(node: BinaryExpression) {
+        const name = isVariableDeclaration(node.parent) ? node.parent.name :
+            isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken ? node.parent.left :
+            undefined;
+        return name && getJavascriptInitializer(node.right, isPrototypeAccess(name)) && isEntityNameExpression(name) && isSameEntityName(name, node.left);
+    }
+
     /** Given a Javascript initializer, return the outer name. That is, the lhs of the assignment or the declaration name. */
     export function getOuterNameOfJsInitializer(node: Declaration): DeclarationName | undefined {
         if (isBinaryExpression(node.parent)) {
@@ -1658,7 +1684,7 @@ namespace ts {
      * var min = window.min || {}
      * my.app = self.my.app || class { }
      */
-    function isSameEntityName(name: EntityNameExpression, initializer: EntityNameExpression): boolean {
+    function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isIdentifier(name) && isIdentifier(initializer)) {
             return name.escapedText === initializer.escapedText;
         }
@@ -3138,21 +3164,18 @@ namespace ts {
         }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
-            const templateTags = flatMap(filter(node.parent.tags, isJSDocTemplateTag), tag => tag.typeParameters) as ReadonlyArray<TypeParameterDeclaration>;
-            const templateTagNodes = templateTags as NodeArray<TypeParameterDeclaration>;
-            templateTagNodes.pos = templateTagNodes.length > 0 ? first(templateTagNodes).pos : node.pos;
-            templateTagNodes.end = templateTagNodes.length > 0 ? last(templateTagNodes).end : node.end;
-            templateTagNodes.hasTrailingComma = false;
-            return templateTagNodes;
+            return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
         }
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        // template tags are only available when a typedef isn't already using them
-        const tag = find(getJSDocTags(node), (tag): tag is JSDocTemplateTag =>
-            isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias)));
-        return (tag && tag.typeParameters) || emptyArray;
+        return flatMap(getJSDocTags(node), tag => isNonTypeAliasTemplate(tag) ? tag.typeParameters : undefined);
+    }
+
+    /** template tags are only available when a typedef isn't already using them */
+    function isNonTypeAliasTemplate(tag: JSDocTag): tag is JSDocTemplateTag {
+        return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias));
     }
 
     /**
@@ -3648,15 +3671,15 @@ namespace ts {
         return output;
     }
 
-    export function base64encode(host: { base64encode?(input: string): string }, input: string): string {
-        if (host.base64encode) {
+    export function base64encode(host: { base64encode?(input: string): string } | undefined, input: string): string {
+        if (host && host.base64encode) {
             return host.base64encode(input);
         }
         return convertToBase64(input);
     }
 
-    export function base64decode(host: { base64decode?(input: string): string }, input: string): string {
-        if (host.base64decode) {
+    export function base64decode(host: { base64decode?(input: string): string } | undefined, input: string): string {
+        if (host && host.base64decode) {
             return host.base64decode(input);
         }
         const length = input.length;

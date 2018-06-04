@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js ===
 /**
  * @param {T} t
- * @template {T}
+ * @template T
  */
 function Zet(t) {
 >Zet : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))

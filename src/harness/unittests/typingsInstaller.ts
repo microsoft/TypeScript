@@ -1340,6 +1340,27 @@ namespace ts.projectSystem {
             assert.deepEqual(result.newTypingNames, ["bar"]);
         });
 
+        it("should gracefully handle packages that have been removed from the types-registry", () => {
+            const f = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const node = {
+                path: "/a/b/node.d.ts",
+                content: ""
+            };
+            const host = createServerHost([f, node]);
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: Semver.parse("1.3.0") } });
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap);
+            assert.deepEqual(logger.finish(), [
+                'Inferred typings from unresolved imports: ["node","bar"]',
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["node","bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
+            ]);
+            assert.deepEqual(result.cachedTypingPaths, []);
+            assert.deepEqual(result.newTypingNames, ["node", "bar"]);
+        });
+
         it("should search only 2 levels deep", () => {
             const app = {
                 path: "/app.js",

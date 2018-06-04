@@ -62,12 +62,12 @@ exports.B = B
 >B : Symbol(B, Decl(mod.js, 4, 3), Decl(mod.js, 9, 13))
 
 A.prototype = B.prototype = {
->A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>A.prototype : Symbol(A.prototype, Decl(mod.js, 8, 13))
 >A : Symbol(A, Decl(mod.js, 1, 3), Decl(mod.js, 8, 13))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
->B.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(A.prototype, Decl(mod.js, 8, 13))
+>B.prototype : Symbol(B.prototype, Decl(mod.js, 9, 13))
 >B : Symbol(B, Decl(mod.js, 4, 3), Decl(mod.js, 9, 13))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(B.prototype, Decl(mod.js, 9, 13))
 
     /** @param {number} n */
     m(n) {

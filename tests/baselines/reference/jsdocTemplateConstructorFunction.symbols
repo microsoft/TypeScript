@@ -1,11 +1,11 @@
 === tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js ===
 /**
- * @template {U}
+ * @template U
  * @typedef {(u: U) => U} Id
  */
 /**
  * @param {T} t
- * @template {T}
+ * @template T
  */
 function Zet(t) {
 >Zet : Symbol(Zet, Decl(templateTagOnConstructorFunctions.js, 0, 0))

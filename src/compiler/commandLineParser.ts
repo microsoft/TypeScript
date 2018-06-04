@@ -42,6 +42,7 @@ namespace ts {
         ["es2018.promise", "lib.es2018.promise.d.ts"],
         ["es2018.regexp", "lib.es2018.regexp.d.ts"],
         ["esnext.array", "lib.esnext.array.d.ts"],
+        ["esnext.symbol", "lib.esnext.symbol.d.ts"],
         ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
     ];
 
@@ -952,7 +953,8 @@ namespace ts {
         }
     }
 
-    function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
+    /** @internal */
+    export function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
         optionName = optionName.toLowerCase();
         const { optionNameMap, shortOptionNames } = getOptionNameMap();
         // Try to translate short option names to their full equivalents.

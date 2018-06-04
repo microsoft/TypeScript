@@ -633,7 +633,7 @@ namespace ts.Completions {
         }
 
         const { moduleSymbol } = symbolOriginInfo;
-        const exportedSymbol = skipAlias(symbol.exportSymbol || symbol, checker);
+        const exportedSymbol = checker.getMergedSymbol(skipAlias(symbol.exportSymbol || symbol, checker));
         const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
             exportedSymbol,
             moduleSymbol,

@@ -8400,15 +8400,23 @@ new C();`
                 path: "/user.ts",
                 content: 'import { x } from "./old";',
             };
+            const newTs: File = {
+                path: "/new.ts",
+                content: "export const x = 0;",
+            };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: "{}",
+            };
 
-            const host = createServerHost([userTs]);
+            const host = createServerHost([userTs, newTs, tsconfig]);
             const projectService = createProjectService(host);
             projectService.openClientFile(userTs.path);
-            const project = first(projectService.inferredProjects);
+            const project = projectService.configuredProjects.get(tsconfig.path)!;
 
             Debug.assert(!!project.resolveModuleNames);
 
-            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions);
+            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions, defaultPreferences);
             assert.deepEqual<ReadonlyArray<FileTextChanges>>(edits, [{
                 fileName: "/user.ts",
                 textChanges: [{

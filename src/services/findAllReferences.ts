@@ -24,7 +24,7 @@ namespace ts.FindAllReferences {
         textSpan: TextSpan;
     }
     export function nodeEntry(node: Node, isInString?: true): NodeEntry {
-        return { type: "node", node, isInString };
+        return { type: "node", node: (node as NamedDeclaration).name || node, isInString };
     }
 
     export interface Options {
@@ -1096,7 +1096,7 @@ namespace ts.FindAllReferences.Core {
     function addImplementationReferences(refNode: Node, addReference: (node: Node) => void, state: State): void {
         // Check if we found a function/propertyAssignment/method with an implementation or initializer
         if (isDeclarationName(refNode) && isImplementation(refNode.parent)) {
-            addReference(refNode.parent);
+            addReference(refNode);
             return;
         }
 

@@ -3,16 +3,16 @@ var Outer = {};
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
 
 Outer.Inner = function () {}
->Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
->Inner : Symbol(Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
 
 Outer.Inner.prototype = {
->Outer.Inner.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
->Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Outer.Inner.prototype : Symbol(Outer.Inner.prototype, Decl(a.js, 2, 28))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
->Inner : Symbol(Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>prototype : Symbol(Outer.Inner.prototype, Decl(a.js, 2, 28))
 
     x: 1,
 >x : Symbol(x, Decl(a.js, 3, 25))
@@ -37,9 +37,9 @@ inner.m()
 
 var inno = new Outer.Inner()
 >inno : Symbol(inno, Decl(a.js, 12, 3))
->Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
->Inner : Symbol(Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
 
 inno.x
 >inno.x : Symbol(x, Decl(a.js, 3, 25))

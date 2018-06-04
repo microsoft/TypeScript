@@ -717,6 +717,7 @@ namespace ts {
             initializeState(sourceText, languageVersion, syntaxCursor, ScriptKind.JSON);
             // Set source file so that errors will be reported with this file name
             sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false);
+            sourceFile.flags = contextFlags;
 
             // Prime the scanner.
             nextToken();
@@ -4147,27 +4148,6 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {
-            if (lhs.kind !== rhs.kind) {
-                return false;
-            }
-
-            if (lhs.kind === SyntaxKind.Identifier) {
-                return (<Identifier>lhs).escapedText === (<Identifier>rhs).escapedText;
-            }
-
-            if (lhs.kind === SyntaxKind.ThisKeyword) {
-                return true;
-            }
-
-            // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
-            // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
-            // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
-            return (<PropertyAccessExpression>lhs).name.escapedText === (<PropertyAccessExpression>rhs).name.escapedText &&
-                tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
-        }
-
-
         function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement | JsxFragment {
             const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -6385,17 +6365,14 @@ namespace ts {
                         indent += text.length;
                     }
 
-                    let t = nextJSDocToken();
-                    while (t === SyntaxKind.WhitespaceTrivia) {
-                        t = nextJSDocToken();
-                    }
-                    if (t === SyntaxKind.NewLineTrivia) {
+                    nextJSDocToken();
+                    while (parseOptionalJsdoc(SyntaxKind.WhitespaceTrivia));
+                    if (parseOptionalJsdoc(SyntaxKind.NewLineTrivia)) {
                         state = JSDocState.BeginningOfLine;
                         indent = 0;
-                        t = nextJSDocToken();
                     }
                     loop: while (true) {
-                        switch (t) {
+                        switch (token()) {
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
@@ -6455,12 +6432,11 @@ namespace ts {
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
-                        t = nextJSDocToken();
+                        nextJSDocToken();
                     }
                     removeLeadingNewlines(comments);
                     removeTrailingNewlines(comments);
                     result = createJSDocComment();
-
                 });
 
                 return result;
@@ -6897,8 +6873,7 @@ namespace ts {
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
                     const returnTag = tryParse(() => {
-                        if (token() === SyntaxKind.AtToken) {
-                            nextJSDocToken();
+                        if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
                             const tag = parseTag(indent);
                             if (tag && tag.kind === SyntaxKind.JSDocReturnTag) {
                                 return tag as JSDocReturnTag;
@@ -7013,35 +6988,29 @@ namespace ts {
                 }
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
-                    if (some(tags, isJSDocTemplateTag)) {
-                        parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                    // the template tag looks like '@template {Constraint} T,U,V'
+                    let constraint: JSDocTypeExpression | undefined;
+                    if (token() === SyntaxKind.OpenBraceToken) {
+                        constraint = parseJSDocTypeExpression();
                     }
 
-                    // Type parameter list looks like '@template T,U,V'
                     const typeParameters = [];
                     const typeParametersPos = getNodePos();
-
-                    while (true) {
-                        const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-                        const name = parseJSDocIdentifierNameWithOptionalBraces();
+                    do {
                         skipWhitespace();
-                        if (!name) {
-                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                        const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                        if (!tokenIsIdentifierOrKeyword(token())) {
+                            parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                             return undefined;
                         }
-
-                        typeParameter.name = name;
+                        typeParameter.name = parseJSDocIdentifierName()!;
+                        skipWhitespace();
                         finishNode(typeParameter);
-
                         typeParameters.push(typeParameter);
+                    } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
 
-                        if (token() === SyntaxKind.CommaToken) {
-                            nextJSDocToken();
-                            skipWhitespace();
-                        }
-                        else {
-                            break;
-                        }
+                    if (constraint) {
+                        first(typeParameters).constraint = constraint.type;
                     }
 
                     const result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
@@ -7052,17 +7021,16 @@ namespace ts {
                     return result;
                 }
 
-                function parseJSDocIdentifierNameWithOptionalBraces(): Identifier | undefined {
-                    const parsedBrace = parseOptional(SyntaxKind.OpenBraceToken);
-                    const res = parseJSDocIdentifierName();
-                    if (parsedBrace) {
-                        parseExpected(SyntaxKind.CloseBraceToken);
-                    }
-                    return res;
-                }
-
                 function nextJSDocToken(): JsDocSyntaxKind {
                     return currentToken = scanner.scanJSDocToken();
+                }
+
+                function parseOptionalJsdoc(t: JsDocSyntaxKind): boolean {
+                    if (token() === t) {
+                        nextJSDocToken();
+                        return true;
+                    }
+                    return false;
                 }
 
                 function parseJSDocEntityName(): EntityName {
@@ -7911,5 +7879,26 @@ namespace ts {
             argMap[argument.name] = args[i];
         }
         return argMap;
+    }
+
+    /** @internal */
+    export function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {
+        if (lhs.kind !== rhs.kind) {
+            return false;
+        }
+
+        if (lhs.kind === SyntaxKind.Identifier) {
+            return (<Identifier>lhs).escapedText === (<Identifier>rhs).escapedText;
+        }
+
+        if (lhs.kind === SyntaxKind.ThisKeyword) {
+            return true;
+        }
+
+        // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
+        // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
+        // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
+        return (<PropertyAccessExpression>lhs).name.escapedText === (<PropertyAccessExpression>rhs).name.escapedText &&
+            tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
     }
 }

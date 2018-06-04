@@ -177,6 +177,10 @@ namespace ts {
         return array ? array.length : 0;
     }
 
+    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
+        return !!map && !!map.size;
+    }
+
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
@@ -2693,6 +2697,22 @@ namespace ts {
         return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
+    export function tryRemovePrefix(str: string, prefix: string): string | undefined {
+        return startsWith(str, prefix) ? str.substring(prefix.length) : undefined;
+    }
+
+    export function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined {
+        const a = tryRemovePrefix(path, dirPath);
+        if (a === undefined) return undefined;
+        switch (a.charCodeAt(0)) {
+            case CharacterCodes.slash:
+            case CharacterCodes.backslash:
+                return a.slice(1);
+            default:
+                return undefined;
+        }
+    }
+
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
@@ -2700,6 +2720,10 @@ namespace ts {
 
     export function removeSuffix(str: string, suffix: string): string {
         return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
+    }
+
+    export function tryRemoveSuffix(str: string, suffix: string): string | undefined {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : undefined;
     }
 
     export function stringContains(str: string, substring: string): boolean {
@@ -2902,6 +2926,7 @@ namespace ts {
         basePaths: ReadonlyArray<string>;
     }
 
+    /** @param path directory of the tsconfig.json */
     export function getFileMatcherPatterns(path: string, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
@@ -2916,16 +2941,20 @@ namespace ts {
         };
     }
 
+    export function getRegexFromPattern(pattern: string, useCaseSensitiveFileNames: boolean): RegExp {
+        return new RegExp(pattern, useCaseSensitiveFileNames ? "" : "i");
+    }
+
+    /** @param path directory of the tsconfig.json */
     export function matchFiles(path: string, extensions: ReadonlyArray<string> | undefined, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
-        const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
-        const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
-        const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
+        const includeDirectoryRegex = patterns.includeDirectoryPattern && getRegexFromPattern(patterns.includeDirectoryPattern, useCaseSensitiveFileNames);
+        const excludeRegex = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, useCaseSensitiveFileNames);
 
         // Associate an array of results with each include regex. This keeps results in order of the "include" order.
         // If there are no "includes", then just put everything in results[0].

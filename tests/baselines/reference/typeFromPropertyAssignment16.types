@@ -1,22 +1,22 @@
 === tests/cases/conformance/salsa/a.js ===
 var Outer = {};
->Outer : { [x: string]: any; Inner(): void; }
->{} : { [x: string]: any; Inner(): void; }
+>Outer : { [x: string]: any; Inner: { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }; }
+>{} : { [x: string]: any; Inner: { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }; }
 
 Outer.Inner = function () {}
->Outer.Inner = function () {} : () => void
->Outer.Inner : () => void
->Outer : { [x: string]: any; Inner(): void; }
->Inner : () => void
->function () {} : () => void
+>Outer.Inner = function () {} : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
+>Outer.Inner : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
+>Outer : { [x: string]: any; Inner: { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }; }
+>Inner : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
+>function () {} : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
 
 Outer.Inner.prototype = {
 >Outer.Inner.prototype = {    x: 1,    m() { }} : { [x: string]: any; x: number; m(): void; }
->Outer.Inner.prototype : any
->Outer.Inner : () => void
->Outer : { [x: string]: any; Inner(): void; }
->Inner : () => void
->prototype : any
+>Outer.Inner.prototype : { [x: string]: any; x: number; m(): void; }
+>Outer.Inner : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
+>Outer : { [x: string]: any; Inner: { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }; }
+>Inner : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
+>prototype : { [x: string]: any; x: number; m(): void; }
 >{    x: 1,    m() { }} : { [x: string]: any; x: number; m(): void; }
 
     x: 1,
@@ -45,9 +45,9 @@ inner.m()
 var inno = new Outer.Inner()
 >inno : { [x: string]: any; x: number; m(): void; }
 >new Outer.Inner() : { [x: string]: any; x: number; m(): void; }
->Outer.Inner : () => void
->Outer : { [x: string]: any; Inner(): void; }
->Inner : () => void
+>Outer.Inner : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
+>Outer : { [x: string]: any; Inner: { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }; }
+>Inner : { (): void; prototype: { [x: string]: any; x: number; m(): void; }; }
 
 inno.x
 >inno.x : number
