@@ -714,7 +714,7 @@ namespace ts.refactor.extractSymbol {
 
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();
-        const functionNameText = getUniqueName(isClassLike(scope) ? "newMethod" : "newFunction", file.text);
+        const functionNameText = getUniqueName(isClassLike(scope) ? "newMethod" : "newFunction", file);
         const isJS = isInJavaScriptFile(scope);
 
         const functionName = createIdentifier(functionNameText);
@@ -1001,7 +1001,7 @@ namespace ts.refactor.extractSymbol {
 
         // Make a unique name for the extracted variable
         const file = scope.getSourceFile();
-        const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file.text);
+        const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
         const isJS = isInJavaScriptFile(scope);
 
         const variableType = isJS || !checker.isContextSensitive(node)
