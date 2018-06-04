@@ -224,6 +224,7 @@ namespace ts.server {
                 CommandNames.Occurrences,
                 CommandNames.DocumentHighlights,
                 CommandNames.DocumentHighlightsFull,
+                CommandNames.JsxClosingTag,
                 CommandNames.Open,
                 CommandNames.Quickinfo,
                 CommandNames.QuickinfoFull,

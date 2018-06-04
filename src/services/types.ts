@@ -323,6 +323,11 @@ namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
+        /**
+         * This will return a defined result if the position is after the `>` of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
+         * Editors should call this after `>` is typed.
+         */
+        getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
 
@@ -351,6 +356,10 @@ namespace ts {
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    export interface JsxClosingTagInfo {
+        readonly newText: string;
     }
 
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
