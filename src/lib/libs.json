@@ -9,7 +9,7 @@
         "esnext",
         // Host only
         "dom.generated",
-        "dom.iterable",
+        "dom.iterable.generated",
         "webworker.generated",
         "scripthost",
         // By-feature options
@@ -44,6 +44,7 @@
     ],
     "paths": {
         "dom.generated": "lib.dom.d.ts",
+        "dom.iterable.generated": "lib.dom.iterable.d.ts",
         "webworker.generated": "lib.webworker.d.ts",
         "es5.full": "lib.d.ts",
         "es2015.full": "lib.es6.d.ts"
@@ -69,35 +70,35 @@
             "dom.generated.d.ts",
             "webworker.importscripts.d.ts",
             "scripthost.d.ts",
-            "dom.iterable.d.ts"
+            "dom.iterable.generated.d.ts"
         ],
         "es2016.full": [
             "es2016.d.ts",
             "dom.generated.d.ts",
             "webworker.importscripts.d.ts",
             "scripthost.d.ts",
-            "dom.iterable.d.ts"
+            "dom.iterable.generated.d.ts"
         ],
         "es2017.full": [
             "es2017.d.ts",
             "dom.generated.d.ts",
             "webworker.importscripts.d.ts",
             "scripthost.d.ts",
-            "dom.iterable.d.ts"
+            "dom.iterable.generated.d.ts"
         ],
         "es2018.full": [
             "es2018.d.ts",
             "dom.generated.d.ts",
             "webworker.importscripts.d.ts",
             "scripthost.d.ts",
-            "dom.iterable.d.ts"
+            "dom.iterable.generated.d.ts"
         ],
         "esnext.full": [
             "esnext.d.ts",
             "dom.generated.d.ts",
             "webworker.importscripts.d.ts",
             "scripthost.d.ts",
-            "dom.iterable.d.ts"
+            "dom.iterable.generated.d.ts"
         ]
     }
 }
