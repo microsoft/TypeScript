@@ -6,7 +6,7 @@ namespace ts.GoToDefinition {
             return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
         }
 
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
         if (node === sourceFile) {
             return undefined;
         }
@@ -112,7 +112,7 @@ namespace ts.GoToDefinition {
 
     /// Goto type
     export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): DefinitionInfo[] | undefined {
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
         if (node === sourceFile) {
             return undefined;
         }
@@ -143,7 +143,7 @@ namespace ts.GoToDefinition {
             return { definitions, textSpan: createTextSpanFromRange(comment) };
         }
 
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
         const textSpan = createTextSpan(node.getStart(), node.getWidth());
 
         return { definitions, textSpan };
