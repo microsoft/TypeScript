@@ -1819,11 +1819,9 @@ namespace ts {
                 else if (isLiteralImportTypeNode(node)) {
                     imports = append(imports, node.argument.literal);
                 }
-                else {
-                    collectDynamicImportOrRequireCallsForEachChild(node);
-                    if (hasJSDocNodes(node)) {
-                        forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
-                    }
+                collectDynamicImportOrRequireCallsForEachChild(node);
+                if (hasJSDocNodes(node)) {
+                    forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
                 }
             }
 
