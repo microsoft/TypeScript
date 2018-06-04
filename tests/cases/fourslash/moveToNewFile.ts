@@ -4,7 +4,7 @@
 ////import './foo';
 ////import { a, b, alreadyUnused } from './other';
 ////const p = 0;
-////[|const y = p + b;|]
+////[|const y: Date = p + b;|]
 ////a; y;
 
 verify.moveToNewFile({
@@ -20,7 +20,7 @@ a; y;`,
         "/y.ts":
 `import { b } from './other';
 import { p } from './a';
-export const y = p + b;`,
+export const y: Date = p + b;`,
     },
 
     preferences: {
