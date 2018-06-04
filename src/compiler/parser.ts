@@ -6385,17 +6385,14 @@ namespace ts {
                         indent += text.length;
                     }
 
-                    let t = nextJSDocToken();
-                    while (t === SyntaxKind.WhitespaceTrivia) {
-                        t = nextJSDocToken();
-                    }
-                    if (t === SyntaxKind.NewLineTrivia) {
+                    nextJSDocToken();
+                    while (parseOptionalJsdoc(SyntaxKind.WhitespaceTrivia));
+                    if (parseOptionalJsdoc(SyntaxKind.NewLineTrivia)) {
                         state = JSDocState.BeginningOfLine;
                         indent = 0;
-                        t = nextJSDocToken();
                     }
                     loop: while (true) {
-                        switch (t) {
+                        switch (token()) {
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
@@ -6455,12 +6452,11 @@ namespace ts {
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
-                        t = nextJSDocToken();
+                        nextJSDocToken();
                     }
                     removeLeadingNewlines(comments);
                     removeTrailingNewlines(comments);
                     result = createJSDocComment();
-
                 });
 
                 return result;
@@ -6897,8 +6893,7 @@ namespace ts {
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
                     const returnTag = tryParse(() => {
-                        if (token() === SyntaxKind.AtToken) {
-                            nextJSDocToken();
+                        if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
                             const tag = parseTag(indent);
                             if (tag && tag.kind === SyntaxKind.JSDocReturnTag) {
                                 return tag as JSDocReturnTag;
@@ -7021,7 +7016,8 @@ namespace ts {
                     const typeParameters = [];
                     const typeParametersPos = getNodePos();
 
-                    while (true) {
+                    do {
+                        skipWhitespace();
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         const name = parseJSDocIdentifierNameWithOptionalBraces();
                         skipWhitespace();
@@ -7031,18 +7027,8 @@ namespace ts {
                         }
 
                         typeParameter.name = name;
-                        finishNode(typeParameter);
-
-                        typeParameters.push(typeParameter);
-
-                        if (token() === SyntaxKind.CommaToken) {
-                            nextJSDocToken();
-                            skipWhitespace();
-                        }
-                        else {
-                            break;
-                        }
-                    }
+                        typeParameters.push(finishNode(typeParameter));
+                    } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
 
                     const result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
                     result.atToken = atToken;
@@ -7063,6 +7049,14 @@ namespace ts {
 
                 function nextJSDocToken(): JsDocSyntaxKind {
                     return currentToken = scanner.scanJSDocToken();
+                }
+
+                function parseOptionalJsdoc(t: JsDocSyntaxKind): boolean {
+                    if (token() === t) {
+                        nextJSDocToken();
+                        return true;
+                    }
+                    return false;
                 }
 
                 function parseJSDocEntityName(): EntityName {
