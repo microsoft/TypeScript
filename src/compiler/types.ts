@@ -2551,6 +2551,7 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+        /* @internal */ resolvedPath: Path;
 
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.

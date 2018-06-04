@@ -990,7 +990,7 @@ namespace ts {
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath || oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
                     : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
@@ -1994,6 +1994,7 @@ namespace ts {
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
+                file.resolvedPath = toPath(fileName);
 
                 if (host.useCaseSensitiveFileNames()) {
                     const pathLowerCase = path.toLowerCase();
