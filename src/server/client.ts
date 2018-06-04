@@ -552,6 +552,10 @@ namespace ts.server {
             return notImplemented();
         }
 
+        getJsxClosingTagAtPosition(_fileName: string, _position: number): never {
+            return notImplemented();
+        }
+
         getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
             return notImplemented();
         }

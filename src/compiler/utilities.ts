@@ -3164,21 +3164,18 @@ namespace ts {
         }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
-            const templateTags = flatMap(filter(node.parent.tags, isJSDocTemplateTag), tag => tag.typeParameters) as ReadonlyArray<TypeParameterDeclaration>;
-            const templateTagNodes = templateTags as NodeArray<TypeParameterDeclaration>;
-            templateTagNodes.pos = templateTagNodes.length > 0 ? first(templateTagNodes).pos : node.pos;
-            templateTagNodes.end = templateTagNodes.length > 0 ? last(templateTagNodes).end : node.end;
-            templateTagNodes.hasTrailingComma = false;
-            return templateTagNodes;
+            return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
         }
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        // template tags are only available when a typedef isn't already using them
-        const tag = find(getJSDocTags(node), (tag): tag is JSDocTemplateTag =>
-            isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias)));
-        return (tag && tag.typeParameters) || emptyArray;
+        return flatMap(getJSDocTags(node), tag => isNonTypeAliasTemplate(tag) ? tag.typeParameters : undefined);
+    }
+
+    /** template tags are only available when a typedef isn't already using them */
+    function isNonTypeAliasTemplate(tag: JSDocTag): tag is JSDocTemplateTag {
+        return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias));
     }
 
     /**
@@ -3674,15 +3671,15 @@ namespace ts {
         return output;
     }
 
-    export function base64encode(host: { base64encode?(input: string): string }, input: string): string {
-        if (host.base64encode) {
+    export function base64encode(host: { base64encode?(input: string): string } | undefined, input: string): string {
+        if (host && host.base64encode) {
             return host.base64encode(input);
         }
         return convertToBase64(input);
     }
 
-    export function base64decode(host: { base64decode?(input: string): string }, input: string): string {
-        if (host.base64decode) {
+    export function base64decode(host: { base64decode?(input: string): string } | undefined, input: string): string {
+        if (host && host.base64decode) {
             return host.base64decode(input);
         }
         const length = input.length;

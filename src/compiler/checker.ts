@@ -8881,7 +8881,9 @@ namespace ts {
                 return type.simplified === circularConstraintType ? type : type.simplified;
             }
             type.simplified = circularConstraintType;
-            const objectType = type.objectType;
+            // We recursively simplify the object type as it may in turn be an indexed access type. For example, with
+            // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
+            const objectType = getSimplifiedType(type.objectType);
             if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType)) {
                 // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
                 // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
@@ -28419,9 +28421,9 @@ namespace ts {
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
-            const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            if (isNodeArray(typeParameters)) {
-                const { pos, end } = typeParameters;
+            const jsdocTypeParameters = isInJavaScriptFile(node) && getJSDocTypeParameterDeclarations(node);
+            if (node.typeParameters || jsdocTypeParameters && jsdocTypeParameters.length) {
+                const { pos, end } = node.typeParameters || jsdocTypeParameters && jsdocTypeParameters[0] || node;
                 return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
