@@ -2934,36 +2934,11 @@ namespace ts {
         };
     }
 
-    /** @internal */
-    export function getResolvedExternalModuleNameForPossiblyExternalModule(host: ModuleNameResolverHost, file: SourceFile, referenceFile?: SourceFile) {
-        const result = getResolvedExternalModuleName(host, file, referenceFile);
-        const opts = host.getCompilerOptions();
-        if (getEmitModuleResolutionKind(opts) === ModuleResolutionKind.NodeJs) {
-            // Trim leading paths to `node_modules` to allow node module resolution to find the thing in the future without an exact path
-            // This simplification means if a package.json for `foo` directs us to `foo/lib/main` instead of `foo/index` we'll write `foo/lib/main` over `foo`, however
-            const parts = getPathComponents(result);
-            if (parts[0] !== "") {
-                return result; // rooted path, leave as is
-            }
-            else {
-                parts.shift();
-            }
-            let index = 0;
-            while (parts[index] && (parts[index] === "." || parts[index] === "..")) {
-                index++;
-            }
-            if (parts[index] && parts[index] === "node_modules") {
-                return parts.slice(index + 1).join(directorySeparator);
-            }
-        }
-        return result;
-    }
-
-    export function getResolvedExternalModuleName(host: ModuleNameResolverHost, file: SourceFile, referenceFile?: SourceFile): string {
+    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile, referenceFile?: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: ModuleNameResolverHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;
@@ -2974,7 +2949,7 @@ namespace ts {
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
-    export function getExternalModuleNameFromPath(host: ModuleNameResolverHost, fileName: string, referencePath?: string): string {
+    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string, referencePath?: string): string {
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
         const dir = toPath(referencePath ? getDirectoryPath(referencePath) : host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());

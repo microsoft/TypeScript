@@ -1169,6 +1169,9 @@ namespace ts {
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
+                readFile: f => host.readFile(f),
+                fileExists: f => host.fileExists(f),
+                ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
             };
         }
 
