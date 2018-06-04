@@ -2857,7 +2857,22 @@ namespace ts {
                     // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
                     // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
                     meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = getContainerOfSymbol(symbol);
+                    const container = getContainerOfSymbol(symbol);
+                    // If we're trying to reference some object literal in, eg `var a = { x: 1 }`, the symbol for the literal, `__object`, is distinct
+                    // from the symbol of the declaration it is beign assigned to. Since we can use the declaration to refer to the literal, however,
+                    // we'd like to make that connection here - potentially causing us to paint the declararation's visibiility, and therefore the literal. 
+                    const firstDecl: Node = first(symbol.declarations);
+                    if (!container && meaning & SymbolFlags.Value && firstDecl && isObjectLiteralExpression(firstDecl)) {
+                        if (firstDecl.parent && isVariableDeclaration(firstDecl.parent) && firstDecl === firstDecl.parent.initializer) {
+                            symbol = getSymbolOfNode(firstDecl.parent);
+                        }
+                        else {
+                            symbol = undefined;
+                        }
+                    }
+                    else {
+                        symbol = container;
+                    }
                 }
 
                 // This could be a symbol that is not exported in the external module
@@ -3531,9 +3546,11 @@ namespace ts {
                         context.enclosingDeclaration = undefined;
                         if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
                             const decl = first(propertySymbol.declarations);
-                            const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
-                            if (name && context.tracker.trackSymbol) {
-                                context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                            if (hasLateBindableName(decl)) {
+                                const name = checkExpression(decl.name.expression) && getNodeLinks(decl.name.expression).resolvedSymbol;
+                                if (name && context.tracker.trackSymbol) {
+                                    context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                                }
                             }
                         }
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
