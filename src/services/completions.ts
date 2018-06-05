@@ -1074,7 +1074,7 @@ namespace ts.Completions {
         }
 
         function addTypeProperties(type: Type): void {
-            isNewIdentifierLocation = hasIndexSignature(type);
+            isNewIdentifierLocation = !!type.getStringIndexType();
 
             if (isUncheckedFile) {
                 // In javascript files, for union types, we don't just get the members that
