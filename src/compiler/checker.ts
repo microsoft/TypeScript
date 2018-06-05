@@ -2860,7 +2860,7 @@ namespace ts {
                     const container = getContainerOfSymbol(symbol);
                     // If we're trying to reference some object literal in, eg `var a = { x: 1 }`, the symbol for the literal, `__object`, is distinct
                     // from the symbol of the declaration it is beign assigned to. Since we can use the declaration to refer to the literal, however,
-                    // we'd like to make that connection here - potentially causing us to paint the declararation's visibiility, and therefore the literal. 
+                    // we'd like to make that connection here - potentially causing us to paint the declararation's visibiility, and therefore the literal.
                     const firstDecl: Node = first(symbol.declarations);
                     if (!container && meaning & SymbolFlags.Value && firstDecl && isObjectLiteralExpression(firstDecl)) {
                         if (firstDecl.parent && isVariableDeclaration(firstDecl.parent) && firstDecl === firstDecl.parent.initializer) {
