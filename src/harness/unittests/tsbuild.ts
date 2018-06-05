@@ -3,7 +3,7 @@ namespace ts {
     let lastDiagnostics: Diagnostic[] = [];
     const reportDiagnostic: DiagnosticReporter = diagnostic => lastDiagnostics.push(diagnostic);
 
-    namespace Sample1 {
+    export namespace Sample1 {
         tick();
         const projFs = loadProjectFromDisk("../../tests/projects/sample1");
 
@@ -228,7 +228,7 @@ namespace ts {
         });
     }
 
-    namespace OutFile {
+    export namespace OutFile {
         const outFileFs = loadProjectFromDisk("../../tests/projects/outfile-concat");
 
         describe("tsbuild - baseline sectioned sourcemaps", () => {
@@ -243,7 +243,6 @@ namespace ts {
                 "/src/third/thirdjs/output/third-output.js",
                 "/src/third/thirdjs/output/third-output.js.map"
             ];
-
 
             for (const file of files) {
                 it(`Generates files matching the baseline - ${file}`, () => {
@@ -260,8 +259,6 @@ namespace ts {
             });
         });
     }
-
-    void OutFile, Sample1;
 
     describe("tsbuild - graph-ordering", () => {
         const fs = new vfs.FileSystem(false);
