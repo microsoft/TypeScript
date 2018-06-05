@@ -1507,6 +1507,7 @@ namespace ts.server {
                 kind: tree.kind,
                 kindModifiers: tree.kindModifiers,
                 spans: tree.spans.map(span => this.toLocationTextSpan(span, scriptInfo)),
+                nameSpan: tree.nameSpan && this.toLocationTextSpan(tree.nameSpan, scriptInfo),
                 childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
             };
         }
