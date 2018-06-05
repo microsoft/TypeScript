@@ -34,8 +34,7 @@ namespace ts {
                         break;
                     }
 
-                    debugger;
-                    if(returnType.flags === TypeFlags.Object && returnType.symbol.name === "Promise"){
+                    if(isPromiseType(returnType)){
                         diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
                     }
                     
@@ -129,5 +128,9 @@ namespace ts {
         }
 
         return false;
+    }
+
+    function isPromiseType(T:Type):boolean{
+        return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
 }

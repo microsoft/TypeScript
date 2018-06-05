@@ -14,33 +14,132 @@ namespace ts.codefix {
         const funcToConvert = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, false)).valueDeclaration;
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert)
 
-        //maybe find the statement line with the promise call so we can put that in the .then
-        let tryBlock:FunctionBody = refactorDotThen(sourceFile, changes, funcToConvert)
-        if(tryBlock && (<FunctionDeclaration>funcToConvert).body.statements.length > 0){
-            changes.insertNodeBefore(sourceFile, (<FunctionDeclaration>funcToConvert).body.statements[0],  createTry(tryBlock, undefined, undefined));
+
+        //collect what to put in the try block
+        let callToAwait = findCallToAwait(funcToConvert, checker)
+        let dotThen:FunctionBody = findDotThen(funcToConvert, checker);
+        let tryBlock:Block = undefined;
+
+        if(!callToAwait){
+            return;
         }
-        
+
+        let newParNode = createAwait(callToAwait);
+
+        if(dotThen){
+            let stmts = createNodeArray([<Statement>createStatement(newParNode)]).concat(createNodeArray(dotThen.statements));
+            tryBlock = createBlock(stmts);
+        }else{
+            tryBlock = createBlock(createNodeArray([createStatement(newParNode)]));
+        }
+
+        changes.insertNodeBefore(sourceFile, (<FunctionDeclaration>funcToConvert).body.statements[0],  createTry(tryBlock, undefined, undefined));
+        changes.deleteNode(sourceFile, callToAwait);
     }
-   
-    function refactorDotThen(sourceFile: SourceFile, changes: textChanges.ChangeTracker, node: Node): FunctionBody{
+
+
+
+    function findCallToAwait(node: Node, checker:TypeChecker): Expression{
+        switch(node.kind){
+            case SyntaxKind.CallExpression:
+                //let callsig = checker.getTypeAtLocation(node).getCallSignatures()[0];
+                //if(cllsig && isPromiseType(checker.getReturnTypeOfSignature(callsig))){
+                if(isPromiseType(checker.getTypeAtLocation(node))){
+                    return node as CallExpression;
+                }
+        }
+       
+       for( let child of node.getChildren() ){
+            let ret = findCallToAwait(child, checker);
+            if(ret){
+                return ret;
+            }
+        }
+
+    }
+
+    function findDotThen(node:Node, checker:TypeChecker): FunctionBody{
         switch(node.kind){
             case SyntaxKind.PropertyAccessExpression:
-                if((<PropertyAccessExpression>node).name.text === "then" /*and the return type of the function called is a promise!!*/){
-                    let newParNode = createAwait(<PropertyAccessExpression>node.parent);
-                    changes.replaceNode(sourceFile, node.parent, newParNode)
-                    //node.parent.arguments[0].body is the try block
+                if((<PropertyAccessExpression>node).name.text === "then" && isPromiseType(checker.getTypeAtLocation(node.parent))){
                     let parNode = node.parent as CallExpression; 
-                    return parNode.arguments.length > 0 && isFunctionLikeDeclaration(parNode.arguments[0]) ? (<FunctionBody>(<FunctionLikeDeclaration>parNode.arguments[0]).body) : null;
+                    if(parNode.arguments.length > 0 && isFunctionLikeDeclaration(parNode.arguments[0])){
+                        //find the body of the func in the .then() to put in the try block
+                       return ((<FunctionLikeDeclaration>parNode.arguments[0]).body as FunctionBody);
+                    }
                 }
                 break;
         }
 
+        //recurse
+        for( let child of node.getChildren() ){
+            let ret = findDotThen(child, checker);
+            if(ret){
+                return ret;
+            }
+        }
+
+    }
+   
+    /*
+    function refactorDotThen(sourceFile: SourceFile, changes: textChanges.ChangeTracker, node: Node): FunctionBody{
+        switch(node.kind){
+            case SyntaxKind.PropertyAccessExpression:
+                if((<PropertyAccessExpression>node).name.text === "then" /*and the return type of the function called is a promise!!*///){
+                    //add await to the function call
+                    /*
+                    let newParNode = createAwait(<PropertyAccessExpression>node.parent);
+                    changes.replaceNode(sourceFile, node.parent, newParNode)
+
+                    let parNode = node.parent as CallExpression; 
+                    if(parNode.arguments.length > 0 && isFunctionLikeDeclaration(parNode.arguments[0])){
+                        //find the body of the func in the .then() to put in the try block
+                        let funcBody:FunctionBody  = (<FunctionLikeDeclaration>parNode.arguments[0]).body as FunctionBody;
+                        /*
+                        let nodeStmt:ExpressionStatement = createStatement(<PropertyAccessExpression>node);
+
+                        for(let stmt of funcBody.statements){
+                            if(isExpressionStatement(stmt) && exprStmtEql(<ExpressionStatement>stmt, nodeStmt)){
+                                return funcBody;
+                            }
+                        }
+
+                        //add the function call that returns a promise
+                        let stmts = funcBody.statements.concat(nodeStmt); //problem here - we don't want to add this node if its already there
+                        funcBody.statements = createNodeArray(stmts);
+                        */
+                        //createTryBlock(sourceFile, changes, funcBody, [node])
+                        /*
+                        return funcBody;
+                    }
+                }
+                break;
+        }
+
+        //recurse
         for( let child of node.getChildren() ){
             let ret = refactorDotThen(sourceFile, changes, child);
             if(ret){
                 return ret;
             }
         }
+    }
+    */
+
+    /*
+    function exprStmtEql(stmt1:ExpressionStatement, stmt2:ExpressionStatement): boolean{
+        if(isExpressionStatement(stmt1.expression) && isExpressionStatement(stmt2.expression)){
+            return exprStmtEql((<ExpressionStatement>stmt1.expression), stmt2.expression)
+        }else if(!isExpressionStatement(stmt1.expression) && !isExpressionStatement(stmt2.expression) &&
+                stmt1.expression.kind === stmt2.expression.kind){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    */
+    function isPromiseType(T:Type):boolean{
+        return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
 
 }
