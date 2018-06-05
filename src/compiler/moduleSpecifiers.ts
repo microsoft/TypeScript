@@ -273,7 +273,7 @@ namespace ts.moduleSpecifiers {
         const extensions = getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]);
         for (const e of extensions) {
             const fullPath = path + e;
-            if (host.fileExists!(fullPath)) {
+            if (host.fileExists!(fullPath)) { // TODO: GH#18217
                 return fullPath;
             }
         }
