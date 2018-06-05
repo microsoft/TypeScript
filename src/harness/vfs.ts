@@ -1155,7 +1155,7 @@ namespace vfs {
         EROFS: "file system is read-only"
     });
 
-    export function createIOError(code: keyof typeof IOErrorMessages, details: string = "") {
+    export function createIOError(code: keyof typeof IOErrorMessages, details = "") {
         const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]} ${details}`);
         err.code = code;
         if (Error.captureStackTrace) Error.captureStackTrace(err, createIOError);
