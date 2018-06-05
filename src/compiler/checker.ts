@@ -17107,6 +17107,8 @@ namespace ts {
             });
             // A protected property is accessible if the property is within the declaring class or classes derived from it
             if (!enclosingClass) {
+                // allow PropertyAccessibility if context is in function with this parameter
+                // static member access is disallow
                 let thisParameter: ParameterDeclaration | undefined;
                 const thisContainer = getThisContainer(node, /* includeArrowFunctions */ false);
                 if (flags & ModifierFlags.Static || !thisContainer || !isFunctionLike(thisContainer) || !(thisParameter = getThisParameter(thisContainer)) || !thisParameter.type) {
