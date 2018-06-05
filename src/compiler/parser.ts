@@ -6531,7 +6531,6 @@ namespace ts {
                             tag = parseUnknownTag(atToken, tagName);
                             break;
                     }
-                    Debug.assert(!!tag);
 
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
