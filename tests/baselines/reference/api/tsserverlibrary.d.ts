@@ -715,10 +715,14 @@ declare namespace ts {
         kind: SyntaxKind.ThisType;
     }
     type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
-    interface FunctionTypeNode extends TypeNode, SignatureDeclarationBase {
+    interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDeclarationBase {
+        kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
+        type: TypeNode;
+    }
+    interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
         kind: SyntaxKind.FunctionType;
     }
-    interface ConstructorTypeNode extends TypeNode, SignatureDeclarationBase {
+    interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
         kind: SyntaxKind.ConstructorType;
     }
     interface NodeWithTypeArguments extends TypeNode {
