@@ -2,7 +2,7 @@ describe("forAwaitOfEvaluation", () => {
     it("sync (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
-        const iterator = {
+        const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
             next() {
                 switch (i++) {
@@ -18,7 +18,7 @@ describe("forAwaitOfEvaluation", () => {
             for await (const item of iterator) {
                 output.push(item);
             }
-        }`);
+        }`, { downlevelIteration: true });
         await result.main();
         assert.strictEqual(result.output[0], 1);
         assert.strictEqual(result.output[1], 2);
@@ -28,7 +28,7 @@ describe("forAwaitOfEvaluation", () => {
     it("sync (es2015)", async () => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
-        const iterator = {
+        const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
             next() {
                 switch (i++) {
@@ -55,7 +55,7 @@ describe("forAwaitOfEvaluation", () => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator = {
-            [Symbol.asyncIterator]() { return this; },
+            [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },
             async next() {
                 switch (i++) {
                     case 0: return { value: 1, done: false };
@@ -70,7 +70,7 @@ describe("forAwaitOfEvaluation", () => {
             for await (const item of iterator) {
                 output.push(item);
             }
-        }`);
+        }`, { downlevelIteration: true });
         await result.main();
         assert.strictEqual(result.output[0], 1);
         assert.instanceOf(result.output[1], Promise);
@@ -81,7 +81,7 @@ describe("forAwaitOfEvaluation", () => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator = {
-            [Symbol.asyncIterator]() { return this; },
+            [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },
             async next() {
                 switch (i++) {
                     case 0: return { value: 1, done: false };
