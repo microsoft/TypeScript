@@ -223,11 +223,11 @@ namespace ts {
     }
 
     /**
-     * Returns a value indicating whether a name is unique globally or within the current file
+     * Returns a value indicating whether a name is unique globally or within the current file.
+     * Note: This does not consider whether a name appears as a free identifier or not, so at the expression `x.y` this includes both `x` and `y`.
      */
-    export function isFileLevelUniqueName(currentSourceFile: SourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
-        return !(hasGlobalName && hasGlobalName(name))
-            && !currentSourceFile.identifiers.has(name);
+    export function isFileLevelUniqueName(sourceFile: SourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
+        return !(hasGlobalName && hasGlobalName(name)) && !sourceFile.identifiers.has(name);
     }
 
     // Returns true if this node is missing from the actual source code. A 'missing' node is different
@@ -810,6 +810,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.AnyKeyword:
+            case SyntaxKind.UnknownKeyword:
             case SyntaxKind.NumberKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
@@ -2824,13 +2825,26 @@ namespace ts {
         let lineCount: number;
         let linePos: number;
 
+        function updateLineCountAndPosFor(s: string) {
+            const lineStartsOfS = computeLineStarts(s);
+            if (lineStartsOfS.length > 1) {
+                lineCount = lineCount + lineStartsOfS.length - 1;
+                linePos = output.length - s.length + last(lineStartsOfS);
+                lineStart = (linePos - output.length) === 0;
+            }
+            else {
+                lineStart = false;
+            }
+        }
+
         function write(s: string) {
             if (s && s.length) {
                 if (lineStart) {
-                    output += getIndentString(indent);
+                    s = getIndentString(indent) + s;
                     lineStart = false;
                 }
                 output += s;
+                updateLineCountAndPosFor(s);
             }
         }
 
@@ -2844,21 +2858,14 @@ namespace ts {
 
         function rawWrite(s: string) {
             if (s !== undefined) {
-                if (lineStart) {
-                    lineStart = false;
-                }
                 output += s;
+                updateLineCountAndPosFor(s);
             }
         }
 
         function writeLiteral(s: string) {
             if (s && s.length) {
                 write(s);
-                const lineStartsOfS = computeLineStarts(s);
-                if (lineStartsOfS.length > 1) {
-                    lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + last(lineStartsOfS);
-                }
             }
         }
 
@@ -2872,7 +2879,9 @@ namespace ts {
         }
 
         function writeTextOfNode(text: string, node: Node) {
-            write(getTextOfNodeFromSourceText(text, node));
+            const s = getTextOfNodeFromSourceText(text, node);
+            write(s);
+            updateLineCountAndPosFor(s);
         }
 
         reset();
@@ -5453,6 +5462,10 @@ namespace ts {
         return node.kind === SyntaxKind.Bundle;
     }
 
+    export function isUnparsedSource(node: Node): node is UnparsedSource {
+        return node.kind === SyntaxKind.UnparsedSource;
+    }
+
     // JSDoc
 
     export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression {
@@ -5594,13 +5607,18 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
+    export type TemplateLiteralToken = NoSubstitutionTemplateLiteral | TemplateHead | TemplateMiddle | TemplateTail;
+    export function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken {
+        return isTemplateLiteralKind(node.kind);
+    }
+
     export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail {
         const kind = node.kind;
         return kind === SyntaxKind.TemplateMiddle
             || kind === SyntaxKind.TemplateTail;
     }
 
-    export function isStringTextContainingNode(node: Node) {
+    export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
 
@@ -5777,6 +5795,7 @@ namespace ts {
     function isTypeNodeKind(kind: SyntaxKind) {
         return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
             || kind === SyntaxKind.AnyKeyword
+            || kind === SyntaxKind.UnknownKeyword
             || kind === SyntaxKind.NumberKeyword
             || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.BooleanKeyword

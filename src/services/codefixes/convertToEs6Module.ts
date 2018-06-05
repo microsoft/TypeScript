@@ -437,13 +437,17 @@ namespace ts.codefix {
     type FreeIdentifiers = ReadonlyMap<ReadonlyArray<Identifier>>;
     function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
         const map = createMultiMap<Identifier>();
-        file.forEachChild(function recur(node) {
-            if (isIdentifier(node) && isFreeIdentifier(node)) {
-                map.add(node.text, node);
-            }
-            node.forEachChild(recur);
-        });
+        forEachFreeIdentifier(file, id => map.add(id.text, id));
         return map;
+    }
+
+    /**
+     * A free identifier is an identifier that can be accessed through name lookup as a local variable.
+     * In the expression `x.y`, `x` is a free identifier, but `y` is not.
+     */
+    function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
+        if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
+        node.forEachChild(child => forEachFreeIdentifier(child, cb));
     }
 
     function isFreeIdentifier(node: Identifier): boolean {
@@ -453,6 +457,8 @@ namespace ts.codefix {
                 return (parent as PropertyAccessExpression).name !== node;
             case SyntaxKind.BindingElement:
                 return (parent as BindingElement).propertyName !== node;
+            case SyntaxKind.ImportSpecifier:
+                return (parent as ImportSpecifier).propertyName !== node;
             default:
                 return true;
         }

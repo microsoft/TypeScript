@@ -99,6 +99,10 @@ namespace ts {
         let sourceMapDataList: SourceMapData[] | undefined;
         let disabled: boolean = !(compilerOptions.sourceMap || compilerOptions.inlineSourceMap);
 
+        let completedSections: SourceMapSectionDefinition[];
+        let sectionStartLine: number;
+        let sectionStartColumn: number;
+
         return {
             initialize,
             reset,
@@ -146,6 +150,9 @@ namespace ts {
             lastEncodedNameIndex = 0;
 
             // Initialize source map data
+            completedSections = [];
+            sectionStartLine = 1;
+            sectionStartColumn = 1;
             sourceMapData = {
                 sourceMapFilePath,
                 jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined!, // TODO: GH#18217
@@ -214,6 +221,65 @@ namespace ts {
             lastEncodedNameIndex = undefined;
             sourceMapData = undefined!;
             sourceMapDataList = undefined!;
+            completedSections = undefined!;
+            sectionStartLine = undefined!;
+            sectionStartColumn = undefined!;
+        }
+
+        interface SourceMapSection {
+            version: 3;
+            file: string;
+            sourceRoot?: string;
+            sources: string[];
+            names?: string[];
+            mappings: string;
+            sourcesContent?: string[];
+            sections?: undefined;
+        }
+
+        type SourceMapSectionDefinition =
+            | { offset: { line: number, column: number }, url: string } // Included for completeness
+            | { offset: { line: number, column: number }, map: SourceMap };
+
+        interface SectionalSourceMap {
+            version: 3;
+            file: string;
+            sections: SourceMapSectionDefinition[];
+        }
+
+        type SourceMap = SectionalSourceMap | SourceMapSection;
+
+        function captureSection(): SourceMapSection {
+            return {
+                version: 3,
+                file: sourceMapData.sourceMapFile,
+                sourceRoot: sourceMapData.sourceMapSourceRoot,
+                sources: sourceMapData.sourceMapSources,
+                names: sourceMapData.sourceMapNames,
+                mappings: sourceMapData.sourceMapMappings,
+                sourcesContent: sourceMapData.sourceMapSourcesContent,
+            };
+        }
+
+        function resetSectionalData(): void {
+            sourceMapData.sourceMapSources = [];
+            sourceMapData.sourceMapNames = [];
+            sourceMapData.sourceMapMappings = "";
+            sourceMapData.sourceMapSourcesContent = compilerOptions.inlineSources ? [] : undefined;
+        }
+
+        function generateMap(): SourceMap {
+            if (completedSections.length) {
+                captureSectionalSpanIfNeeded(/*reset*/ false);
+                return {
+                    version: 3,
+                    file: sourceMapData.sourceMapFile,
+                    sections: completedSections
+                };
+            }
+            else {
+                return captureSection();
+            }
         }
 
         // Encoding for sourcemap span
@@ -284,8 +350,8 @@ namespace ts {
             sourceLinePos.line++;
             sourceLinePos.character++;
 
-            const emittedLine = writer.getLine();
-            const emittedColumn = writer.getColumn();
+            const emittedLine = writer.getLine() - sectionStartLine + 1;
+            const emittedColumn = emittedLine === 0 ? (writer.getColumn() - sectionStartColumn + 1) : writer.getColumn();
 
             // If this location wasn't recorded or the location in source is going backwards, record the span
             if (!lastRecordedSourceMapSpan ||
@@ -320,6 +386,15 @@ namespace ts {
             }
         }
 
+        function captureSectionalSpanIfNeeded(reset: boolean) {
+            if (lastRecordedSourceMapSpan && lastRecordedSourceMapSpan === lastEncodedSourceMapSpan) { // If we've recorded some spans, save them
+                completedSections.push({ offset: { line: sectionStartLine - 1, column: sectionStartColumn - 1 }, map: captureSection() });
+                if (reset) {
+                    resetSectionalData();
+                }
+            }
+        }
+
         /**
          * Emits a node with possible leading and trailing source maps.
          *
@@ -333,6 +408,35 @@ namespace ts {
             }
 
             if (node) {
+                if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
+                    captureSectionalSpanIfNeeded(/*reset*/ true);
+                    const text = node.sourceMapText;
+                    let parsed: {} | undefined;
+                    try {
+                        parsed = JSON.parse(text);
+                    }
+                    catch {
+                        // empty
+                    }
+                    const offset = { line: writer.getLine() - 1, column: writer.getColumn() - 1 };
+                    completedSections.push(parsed
+                        ? {
+                            offset,
+                            map: parsed as SourceMap
+                        }
+                        : {
+                            offset,
+                            // This is just passes the buck on sourcemaps we don't really understand, instead of issuing an error (which would be difficult this late)
+                            url: `data:application/json;charset=utf-8;base64,${base64encode(sys, text)}`
+                        }
+                    );
+                    const emitResult = emitCallback(hint, node);
+                    sectionStartLine = writer.getLine();
+                    sectionStartColumn = writer.getColumn();
+                    lastRecordedSourceMapSpan = undefined!;
+                    lastEncodedSourceMapSpan = defaultLastEncodedSourceMapSpan;
+                    return emitResult;
+                }
                 const emitNode = node.emitNode;
                 const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
                 const range = emitNode && emitNode.sourceMapRange;
@@ -452,15 +556,7 @@ namespace ts {
 
             encodeLastRecordedSourceMapSpan();
 
-            return JSON.stringify({
-                version: 3,
-                file: sourceMapData.sourceMapFile,
-                sourceRoot: sourceMapData.sourceMapSourceRoot,
-                sources: sourceMapData.sourceMapSources,
-                names: sourceMapData.sourceMapNames,
-                mappings: sourceMapData.sourceMapMappings,
-                sourcesContent: sourceMapData.sourceMapSourcesContent,
-            });
+            return JSON.stringify(generateMap());
         }
 
         /**

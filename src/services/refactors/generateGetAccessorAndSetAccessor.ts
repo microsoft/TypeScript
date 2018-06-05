@@ -129,8 +129,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
-        const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file.text), declaration.name);
-        const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file.text) : name, declaration.name);
+        const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
+        const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
             isStatic: hasStaticModifier(declaration),
             isReadonly: hasReadonlyModifier(declaration),

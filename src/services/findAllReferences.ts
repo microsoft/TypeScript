@@ -712,16 +712,23 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
-    export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile) {
+    export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile): boolean {
+        return eachSymbolReferenceInFile(definition, checker, sourceFile, () => true) || false;
+    }
+
+    export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined {
         const symbol = checker.getSymbolAtLocation(definition);
-        if (!symbol) return true; // Be lenient with invalid code.
-        return getPossibleSymbolReferenceNodes(sourceFile, symbol.name).some(token => {
-            if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) return false;
-            const referenceSymbol = checker.getSymbolAtLocation(token)!;
-            return referenceSymbol === symbol
+        if (!symbol) return undefined;
+        for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
+            if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;
+            const referenceSymbol: Symbol = checker.getSymbolAtLocation(token)!; // See GH#19955 for why the type annotation is necessary
+            if (referenceSymbol === symbol
                 || checker.getShorthandAssignmentValueSymbol(token.parent) === symbol
-                || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol;
-        });
+                || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol) {
+                const res = cb(token);
+                if (res) return res;
+            }
+        }
     }
 
     function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<Node> {
