@@ -239,13 +239,23 @@ namespace ts {
             builder.buildAllProjects();
             assertDiagnosticMessages(/*none*/);
 
-            it("Generates files matching the baseline", () => {
-                Harness.Baseline.runBaseline("outfile-concat.js", () => {
-                    return fs.readFileSync("/src/third/third-output.js", 'utf-8');
+            const files = [
+                "/src/third/thirdjs/output/third-output.js",
+                "/src/third/thirdjs/output/third-output.js.map"
+            ];
+
+
+            for (const file of files) {
+                it(`Generates files matching the baseline - ${file}`, () => {
+                    Harness.Baseline.runBaseline(getBaseFileName(file), () => {
+                        return fs.readFileSync(file, 'utf-8');
+                    });
                 });
-    
-                Harness.Baseline.runBaseline("outfile-concat.js.map", () => {
-                    return fs.readFileSync("/src/third/third-output.js.map", 'utf-8');
+            }
+
+            it(`Generates files matching the baseline - file listing for outFile-concat`, () => {
+                Harness.Baseline.runBaseline("outfile-concat-fileListing.txt", () => {
+                    return fs.getFileListing();
                 });
             });
         });

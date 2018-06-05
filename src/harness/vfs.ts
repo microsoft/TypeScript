@@ -353,10 +353,7 @@ namespace vfs {
             if (!result.node) this._mkdir(result);
         }
 
-        /**
-         * Print diagnostic information about the structure of the file system to the console.
-         */
-        public debugPrint(): void {
+        public getFileListing(): string {
             let result = "";
             const printLinks = (dirname: string | undefined, links: collections.SortedMap<string, Inode>) => {
                 const iterator = collections.getIterator(links);
@@ -384,7 +381,14 @@ namespace vfs {
                 }
             };
             printLinks(/*dirname*/ undefined, this._getRootLinks());
-            console.log(result);
+            return result;
+        }
+
+        /**
+         * Print diagnostic information about the structure of the file system to the console.
+         */
+        public debugPrint(): void {
+            console.log(this.getFileListing());
         }
 
         // POSIX API (aligns with NodeJS "fs" module API)

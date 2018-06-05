@@ -7,7 +7,7 @@
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "outFile": "./third-output.js"
+    "outFile": "./thirdjs/output/third-output.js"
   },
   "references": [
     { "path": "../first", "prepend": true },

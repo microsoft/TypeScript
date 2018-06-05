@@ -7,7 +7,7 @@
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "outFile": "./first-output.js"
+    "outFile": "./bin/first-output.js"
   },
   "references": [
   ]
