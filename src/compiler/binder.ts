@@ -262,9 +262,9 @@ namespace ts {
                     if (isStringOrNumericLiteral(nameExpression)) {
                         return escapeLeadingUnderscores(nameExpression.text);
                     }
-
-                    Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
+                    else {
+                        Debug.fail("Only computed properties with literal names have declaration names");
+                    }
                 }
                 return isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
             }

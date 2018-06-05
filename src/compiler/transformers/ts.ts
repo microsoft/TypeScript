@@ -2097,8 +2097,7 @@ namespace ts {
          * any such locations
          */
         function isSimpleInlineableExpression(expression: Expression) {
-            return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
-                isWellKnownSymbolSyntactically(expression);
+            return !isIdentifier(expression) && isSimpleCopiableExpression(expression);
         }
 
         /**

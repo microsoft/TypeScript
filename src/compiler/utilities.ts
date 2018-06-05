@@ -2396,17 +2396,7 @@ namespace ts {
 
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteral(name.expression) &&
-            !isWellKnownSymbolSyntactically(name.expression);
-    }
-
-    /**
-     * Checks if the expression is of the form:
-     *    Symbol.name
-     * where Symbol is literally the word "Symbol", and name is any identifierName
-     */
-    export function isWellKnownSymbolSyntactically(node: Expression): boolean {
-        return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
+            !isStringOrNumericLiteral(name.expression);
     }
 
     export function getPropertyNameForPropertyNameNode(name: DeclarationName): __String | undefined {
@@ -2418,10 +2408,7 @@ namespace ts {
         }
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             const nameExpression = name.expression;
-            if (isWellKnownSymbolSyntactically(nameExpression)) {
-                return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-            }
-            else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
+            if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
                 return escapeLeadingUnderscores((<LiteralExpression>nameExpression).text);
             }
         }
@@ -2447,10 +2434,6 @@ namespace ts {
 
     export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
         return node.kind === SyntaxKind.Identifier ? node.escapedText : escapeLeadingUnderscores(node.text);
-    }
-
-    export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
-        return "__@" + symbolName as __String;
     }
 
     export function isKnownSymbol(symbol: Symbol): boolean {

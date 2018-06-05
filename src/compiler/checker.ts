@@ -4439,8 +4439,7 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     const isLate = isLateBindableName(name);
-                    const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
-                    if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
+                    if (!isLate && isComputedNonLiteralName(name)) {
                         const exprType = checkExpression((name as ComputedPropertyName).expression);
                         if (isTypeAssignableToKind(exprType, TypeFlags.ESSymbolLike)) {
                             if (noImplicitAny) {
@@ -4463,9 +4462,7 @@ namespace ts {
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                     // or otherwise the type of the string index signature.
                     const nameType = isLate ? checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType : undefined;
-                    const text = isLate ? getLateBoundNameFromType(nameType!) :
-                        isWellKnown ? getPropertyNameForKnownSymbolName(idText(((name as ComputedPropertyName).expression as PropertyAccessExpression).name)) :
-                        getTextOfPropertyName(name);
+                    const text = isLate ? getLateBoundNameFromType(nameType!) : getTextOfPropertyName(name);
 
                     // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
@@ -8780,10 +8777,7 @@ namespace ts {
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | undefined, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
-            const propName = isTypeUsableAsLateBoundName(indexType) ? getLateBoundNameFromType(indexType) :
-                accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
-                    getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
-                    undefined;
+            const propName = isTypeUsableAsLateBoundName(indexType) ? getLateBoundNameFromType(indexType) : undefined;
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
@@ -15941,9 +15935,6 @@ namespace ts {
                     !isTypeAssignableTo(links.resolvedType, stringNumberSymbolType)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
-                else {
-                    checkThatExpressionIsProperSymbolReference(node.expression, links.resolvedType, /*reportError*/ true);
-                }
             }
 
             return links.resolvedType;
@@ -15998,7 +15989,7 @@ namespace ts {
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
                 let member = getSymbolOfNode(memberDecl);
-                const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName && !isWellKnownSymbolSyntactically(memberDecl.name.expression) ?
+                const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName ?
                     checkComputedPropertyName(memberDecl.name) : undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
@@ -17538,48 +17529,6 @@ namespace ts {
             }
 
             return checkIndexedAccessIndexType(getIndexedAccessType(objectType, indexType, node), node);
-        }
-
-        function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
-            if (expressionType === errorType) {
-                // There is already an error, so no need to report one.
-                return false;
-            }
-
-            if (!isWellKnownSymbolSyntactically(expression)) {
-                return false;
-            }
-
-            // Make sure the property type is the primitive symbol type
-            if ((expressionType.flags & TypeFlags.ESSymbolLike) === 0) {
-                if (reportError) {
-                    error(expression, Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, getTextOfNode(expression));
-                }
-                return false;
-            }
-
-            // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
-            // global Symbol object
-            const leftHandSide = <Identifier>(<PropertyAccessExpression>expression).expression;
-            const leftHandSideSymbol = getResolvedSymbol(leftHandSide);
-            if (!leftHandSideSymbol) {
-                return false;
-            }
-
-            const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ true);
-            if (!globalESSymbol) {
-                // Already errored when we tried to look up the symbol
-                return false;
-            }
-
-            if (leftHandSideSymbol !== globalESSymbol) {
-                if (reportError) {
-                    error(leftHandSide, Diagnostics.Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object);
-                }
-                return false;
-            }
-
-            return true;
         }
 
         function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression {
@@ -23631,6 +23580,12 @@ namespace ts {
             }
 
             return arrayElementType;
+        }
+
+        function getPropertyNameForKnownSymbolName(symbolName: string): __String {
+            const ctorType = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ true);
+            const uniqueType = ctorType && getTypeOfPropertyOfType(getDeclaredTypeOfSymbol(ctorType), escapeLeadingUnderscores(symbolName));
+            return uniqueType ? getLateBoundNameFromType(uniqueType) : `__@${symbolName}` as __String;
         }
 
         /**
