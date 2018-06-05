@@ -58,15 +58,15 @@ enum E5 {
 
     e = NaN,
 >e : Symbol(E5.e, Decl(enumConstantMembers.ts, 24, 18))
->NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
     f = Infinity,
 >f : Symbol(E5.f, Decl(enumConstantMembers.ts, 25, 12))
->Infinity : Symbol(Infinity, Decl(lib.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
 
     g = -Infinity
 >g : Symbol(E5.g, Decl(enumConstantMembers.ts, 26, 17))
->Infinity : Symbol(Infinity, Decl(lib.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
 }
 
 const enum E6 {
@@ -86,14 +86,14 @@ const enum E6 {
 
     e = NaN,
 >e : Symbol(E6.e, Decl(enumConstantMembers.ts, 34, 18))
->NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
     f = Infinity,
 >f : Symbol(E6.f, Decl(enumConstantMembers.ts, 35, 12))
->Infinity : Symbol(Infinity, Decl(lib.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
 
     g = -Infinity
 >g : Symbol(E6.g, Decl(enumConstantMembers.ts, 36, 17))
->Infinity : Symbol(Infinity, Decl(lib.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
 }
 

@@ -32,5 +32,5 @@ class C extends Mixin2(Mixin1(Object)) {}
 >C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 76))
 >Mixin2 : Symbol(Mixin2, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 5))
 >Mixin1 : Symbol(Mixin1, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

@@ -19,7 +19,7 @@ var d: string;
 
 var e: Object;
 >e : Symbol(e, Decl(additionOperatorWithStringAndEveryType.ts, 6, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var f: void;
 >f : Symbol(f, Decl(additionOperatorWithStringAndEveryType.ts, 7, 3))

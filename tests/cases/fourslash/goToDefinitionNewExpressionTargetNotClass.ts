@@ -11,6 +11,6 @@
 ////new [|/*invokeExpression2*/I2|]();
 
 verify.goToDefinition({
-    invokeExpression1: ["constructSignature", "I"],
+    invokeExpression1: ["I", "constructSignature"],
     invokeExpression2: "symbolDeclaration"
 });

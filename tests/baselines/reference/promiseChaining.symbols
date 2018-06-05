@@ -38,9 +38,9 @@ class Chain<T> {
 >x : Symbol(x, Decl(promiseChaining.ts, 5, 49))
 >then : Symbol(Chain.then, Decl(promiseChaining.ts, 1, 36))
 >x : Symbol(x, Decl(promiseChaining.ts, 5, 76))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(promiseChaining.ts, 5, 76))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         return new Chain(result);
 >Chain : Symbol(Chain, Decl(promiseChaining.ts, 0, 0))

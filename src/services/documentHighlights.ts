@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.DocumentHighlights {
     export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
             // For a JSX element, just highlight the matching tag, not all references.
@@ -78,6 +78,8 @@ namespace ts.DocumentHighlights {
                 return useParent(node.parent, isAwaitExpression, getAsyncAndAwaitOccurrences);
             case SyntaxKind.AsyncKeyword:
                 return highlightSpans(getAsyncAndAwaitOccurrences(node));
+            case SyntaxKind.YieldKeyword:
+                return highlightSpans(getYieldOccurrences(node));
             default:
                 return isModifierKind(node.kind) && (isDeclaration(node.parent) || isVariableStatement(node.parent))
                     ? highlightSpans(getModifierOccurrences(node.kind, node.parent))
@@ -170,7 +172,7 @@ namespace ts.DocumentHighlights {
                     if (statement.kind === SyntaxKind.ContinueStatement) {
                         return false;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
@@ -237,7 +239,7 @@ namespace ts.DocumentHighlights {
         }
     }
 
-    function pushKeywordIf(keywordList: Push<Node>, token: Node, ...expected: SyntaxKind[]): boolean {
+    function pushKeywordIf(keywordList: Push<Node>, token: Node | undefined, ...expected: SyntaxKind[]): boolean {
         if (token && contains(expected, token.kind)) {
             keywordList.push(token);
             return true;
@@ -384,18 +386,42 @@ namespace ts.DocumentHighlights {
             });
         }
 
-        forEachChild(func, aggregate);
+        forEachChild(func, child => {
+            traverseWithoutCrossingFunction(child, node => {
+                if (isAwaitExpression(node)) {
+                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.AwaitKeyword);
+                }
+            });
+        });
+
 
         return keywords;
+    }
 
-        function aggregate(node: Node): void {
-            if (isAwaitExpression(node)) {
-                pushKeywordIf(keywords, node.getFirstToken()!, SyntaxKind.AwaitKeyword);
-            }
-            // Do not cross function boundaries.
-            if (!isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) && !isTypeNode(node)) {
-                forEachChild(node, aggregate);
-            }
+    function getYieldOccurrences(node: Node): Node[] | undefined {
+        const func = getContainingFunction(node) as FunctionDeclaration;
+        if (!func) {
+            return undefined;
+        }
+
+        const keywords: Node[] = [];
+
+        forEachChild(func, child => {
+            traverseWithoutCrossingFunction(child, node => {
+                if (isYieldExpression(node)) {
+                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.YieldKeyword);
+                }
+            });
+        });
+
+        return keywords;
+    }
+
+    // Do not cross function/class/interface/module/type boundaries.
+    function traverseWithoutCrossingFunction(node: Node, cb: (node: Node) => void) {
+        cb(node);
+        if (!isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) && !isTypeNode(node)) {
+            forEachChild(node, child => traverseWithoutCrossingFunction(child, cb));
         }
     }
 

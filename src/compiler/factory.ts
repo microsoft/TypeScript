@@ -2432,12 +2432,13 @@ namespace ts {
 
     // Top-level nodes
 
-    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"], hasNoDefaultLib?: boolean) {
+    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"], hasNoDefaultLib?: boolean, libReferences?: SourceFile["libReferenceDirectives"]) {
         if (
             node.statements !== statements ||
             (isDeclarationFile !== undefined && node.isDeclarationFile !== isDeclarationFile) ||
             (referencedFiles !== undefined && node.referencedFiles !== referencedFiles) ||
             (typeReferences !== undefined && node.typeReferenceDirectives !== typeReferences) ||
+            (libReferences !== undefined && node.libReferenceDirectives !== libReferences) ||
             (hasNoDefaultLib !== undefined && node.hasNoDefaultLib !== hasNoDefaultLib)
         ) {
             const updated = <SourceFile>createSynthesizedNode(SyntaxKind.SourceFile);
@@ -2451,6 +2452,7 @@ namespace ts {
             updated.referencedFiles = referencedFiles === undefined ? node.referencedFiles : referencedFiles;
             updated.typeReferenceDirectives = typeReferences === undefined ? node.typeReferenceDirectives : typeReferences;
             updated.hasNoDefaultLib = hasNoDefaultLib === undefined ? node.hasNoDefaultLib : hasNoDefaultLib;
+            updated.libReferenceDirectives = libReferences === undefined ? node.libReferenceDirectives : libReferences;
             if (node.amdDependencies !== undefined) updated.amdDependencies = node.amdDependencies;
             if (node.moduleName !== undefined) updated.moduleName = node.moduleName;
             if (node.languageVariant !== undefined) updated.languageVariant = node.languageVariant;

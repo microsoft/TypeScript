@@ -219,6 +219,10 @@
         "category": "Error",
         "code": 1068
     },
+    "Unexpected token. A type parameter name was expected without curly braces.": {
+        "category": "Error",
+        "code": 1069
+    },
     "'{0}' modifier cannot appear on a type member.": {
         "category": "Error",
         "code": 1070
@@ -2364,6 +2368,14 @@
     "Class name cannot be 'Object' when targeting ES5 with module {0}.": {
         "category": "Error",
         "code": 2725
+    },
+    "Cannot find lib definition for '{0}'.": {
+        "category": "Error",
+        "code": 2726
+    },
+    "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2727
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

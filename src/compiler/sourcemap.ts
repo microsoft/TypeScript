@@ -129,7 +129,7 @@ namespace ts {
          * @param sourceFileOrBundle The input source file or bundle for the program.
          */
         function initialize(filePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle, outputSourceMapDataList?: SourceMapData[]) {
-            if (disabled) {
+            if (disabled || fileExtensionIs(filePath, Extension.Json)) {
                 return;
             }
 
@@ -336,7 +336,7 @@ namespace ts {
          * @param pos The position.
          */
         function emitPos(pos: number) {
-            if (disabled || positionIsSynthesized(pos)) {
+            if (disabled || positionIsSynthesized(pos) || isJsonSourceMapSource(currentSource)) {
                 return;
             }
 
@@ -403,7 +403,7 @@ namespace ts {
          * @param emitCallback The callback used to emit the node.
          */
         function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (disabled) {
+            if (disabled || isInJsonFile(node)) {
                 return emitCallback(hint, node);
             }
 
@@ -485,7 +485,7 @@ namespace ts {
          * @param emitCallback The callback used to emit the token.
          */
         function emitTokenWithSourceMap(node: Node, token: SyntaxKind, writer: (s: string) => void, tokenPos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number) {
-            if (disabled) {
+            if (disabled || isInJsonFile(node)) {
                 return emitCallback(token, writer, tokenPos);
             }
 
@@ -508,6 +508,10 @@ namespace ts {
             return tokenPos;
         }
 
+        function isJsonSourceMapSource(sourceFile: SourceMapSource) {
+            return fileExtensionIs(sourceFile.fileName, Extension.Json);
+        }
+
         /**
          * Set the current source file.
          *
@@ -520,6 +524,10 @@ namespace ts {
 
             currentSource = sourceFile;
             currentSourceText = currentSource.text;
+
+            if (isJsonSourceMapSource(sourceFile)) {
+                return;
+            }
 
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
@@ -550,7 +558,7 @@ namespace ts {
          * Gets the text for the source map.
          */
         function getText() {
-            if (disabled) {
+            if (disabled || isJsonSourceMapSource(currentSource)) {
                 return undefined!; // TODO: GH#18217
             }
 
@@ -563,7 +571,7 @@ namespace ts {
          * Gets the SourceMappingURL for the source map.
          */
         function getSourceMappingURL() {
-            if (disabled) {
+            if (disabled || isJsonSourceMapSource(currentSource)) {
                 return undefined!; // TODO: GH#18217
             }
 

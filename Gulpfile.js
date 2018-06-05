@@ -11,6 +11,7 @@ const concat = require("gulp-concat");
 const clone = require("gulp-clone");
 const newer = require("gulp-newer");
 const tsc = require("gulp-typescript");
+const tsc_oop = require("./scripts/build/gulp-typescript-oop");
 const insert = require("gulp-insert");
 const sourcemaps = require("gulp-sourcemaps");
 const Q = require("q");
@@ -412,6 +413,10 @@ function prependCopyright(outputCopyright = !useDebugMode) {
     return insert.prepend(outputCopyright ? (copyrightContent || (copyrightContent = fs.readFileSync(copyright).toString())) : "");
 }
 
+function getCompilerPath(useBuiltCompiler) {
+    return useBuiltCompiler ? "./built/local/typescript.js" : "./lib/typescript.js";
+}
+
 gulp.task(builtLocalCompiler, /*help*/ false, [servicesFile], () => {
     const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return localCompilerProject.src()
@@ -424,7 +429,7 @@ gulp.task(builtLocalCompiler, /*help*/ false, [servicesFile], () => {
 });
 
 gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
-    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ false));
+    const servicesProject = tsc_oop.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }), { typescript: getCompilerPath(/*useBuiltCompiler*/ false) });
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
@@ -499,7 +504,7 @@ const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js")
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
 gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (done) => {
-    const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ true));
+    const serverLibraryProject = tsc_oop.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }), { typescript: getCompilerPath(/*useBuiltCompiler*/ true) });
     /** @type {{ js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream }} */
     const {js, dts} = serverLibraryProject.src()
         .pipe(sourcemaps.init())
@@ -590,7 +595,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
 gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
-    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
+    const testProject = tsc_oop.createProject("src/harness/tsconfig.json", getCompilerSettings({}), { typescript: getCompilerPath(/*useBuiltCompiler*/ true) });
     return testProject.src()
         .pipe(newer(run))
         .pipe(sourcemaps.init())

@@ -15,9 +15,9 @@ var x = id1(function (n) { return this.length + n });
 >x : Symbol(x, Decl(functions.js, 8, 3))
 >id1 : Symbol(id1, Decl(functions.js, 0, 0))
 >n : Symbol(n, Decl(functions.js, 8, 22))
->this.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>this.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(this, Decl(functions.js, 1, 20))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(functions.js, 8, 22))
 
 /**

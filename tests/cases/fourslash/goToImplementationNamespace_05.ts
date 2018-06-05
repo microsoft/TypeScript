@@ -2,11 +2,11 @@
 
 // Should handle namespace and module implementations with qualified names
 
-//// /*implementation0*/namespace Foo./*implementation2*/Baz {
+//// namespace /*implementation0*/Foo./*implementation2*/Baz {
 ////     export function hello() {}
 //// }
 ////
-//// /*implementation1*/module Bar./*implementation3*/Baz {
+//// module /*implementation1*/Bar./*implementation3*/Baz {
 ////     export function sure() {}
 //// }
 ////
