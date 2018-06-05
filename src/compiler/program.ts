@@ -618,25 +618,27 @@ namespace ts {
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         const resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
         const projectReferenceRedirects: Map<string> = createMap();
-        if (projectReferences) {
-            for (const ref of projectReferences) {
-                const parsedRef = parseProjectReferenceConfigFile(ref);
-                resolvedProjectReferences!.push(parsedRef);
-                if (parsedRef) {
-                    if (parsedRef.commandLine.options.outFile) {
-                        const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
-                        processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
-                    }
-                    addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
-                }
-            }
-        }
-
+        
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];
+
+            if (projectReferences) {
+                for (const ref of projectReferences) {
+                    const parsedRef = parseProjectReferenceConfigFile(ref);
+                    resolvedProjectReferences!.push(parsedRef);
+                    if (parsedRef) {
+                        if (parsedRef.commandLine.options.outFile) {
+                            const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
+                            processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                        }
+                        addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
+                    }
+                }
+            }
+
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
