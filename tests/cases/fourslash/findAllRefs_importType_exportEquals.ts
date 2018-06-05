@@ -27,5 +27,5 @@ verify.renameLocations(r1, [r1, r2]);
 verify.renameLocations(r2, [r0, r1, r2]);
 for (const range of [r3, r4]) {
     goTo.rangeStart(range);
-    verify.renameInfoFailed();
+    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "/a.ts", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
 }

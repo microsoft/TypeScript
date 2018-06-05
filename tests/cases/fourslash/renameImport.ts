@@ -7,10 +7,12 @@
 
 // @Filename: /b.ts
 ////import * as a from "[|./a|]";
-////import a2 = require("[|./a"|]);
+////import a2 = require("[|./a|]");
 
 // @Filename: /c.js
 ////const a = require("[|./a|]");
 
 verify.noErrors();
-goTo.eachRange(() => { verify.renameInfoFailed(); });
+goTo.eachRange(range => {
+    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "/a.ts", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
+});
