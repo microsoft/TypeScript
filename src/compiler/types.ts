@@ -5026,8 +5026,9 @@ namespace ts {
     }
 
     /* @internal */
-    export interface EmitHost extends ScriptReferenceHost {
+    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        getCurrentDirectory(): string;
 
         /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
@@ -5289,11 +5290,15 @@ namespace ts {
         isAtStartOfLine(): boolean;
     }
 
-    /* @internal */
-    export interface ModuleNameResolverHost {
-        getCanonicalFileName(f: string): string;
-        getCommonSourceDirectory(): string;
-        getCurrentDirectory(): string;
+    export interface GetEffectiveTypeRootsHost {
+        directoryExists?(directoryName: string): boolean;
+        getCurrentDirectory?(): string;
+    }
+    /** @internal */
+    export interface ModuleSpecifierResolutionHost extends GetEffectiveTypeRootsHost {
+        useCaseSensitiveFileNames?(): boolean;
+        fileExists?(path: string): boolean;
+        readFile?(path: string): string | undefined;
     }
 
     /** @deprecated See comment on SymbolWriter */
@@ -5307,7 +5312,7 @@ namespace ts {
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
         /* @internal */
-        moduleResolverHost?: ModuleNameResolverHost;
+        moduleResolverHost?: ModuleSpecifierResolutionHost;
         /* @internal */
         trackReferencedAmbientModule?(decl: ModuleDeclaration): void;
     }
