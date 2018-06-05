@@ -1912,6 +1912,7 @@ namespace ts {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ImportType:
                     break;
 
                 default:
