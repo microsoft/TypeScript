@@ -2477,12 +2477,12 @@ namespace ts {
             if (!(flags & SignatureFlags.JSDoc)) {
                 signature.typeParameters = parseTypeParameters();
             }
-            const parsedParameters = parseParameterList(signature, flags); // TODO: GH#18217
+            const parametersParsedSuccessfully = parseParameterList(signature, flags);
             if (shouldParseReturnType(returnToken, !!(flags & SignatureFlags.Type))) {
                 signature.type = parseTypeOrTypePredicate();
                 if (typeHasArrowFunctionBlockingParseError(signature.type)) return false;
             }
-            return parsedParameters;
+            return parametersParsedSuccessfully;
         }
 
         function shouldParseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): boolean {
