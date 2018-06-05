@@ -13534,9 +13534,9 @@ interface NavigatorUserMedia {
 interface Node extends EventTarget {
     readonly baseURI: string | null;
     readonly childNodes: NodeListOf<Node & ChildNode>;
-    readonly firstChild: Node | null;
+    readonly firstChild: Node & ChildNode | null;
     readonly isConnected: boolean;
-    readonly lastChild: Node | null;
+    readonly lastChild: Node & ChildNode | null;
     readonly localName: string | null;
     readonly namespaceURI: string | null;
     readonly nextSibling: Node | null;
@@ -13544,8 +13544,8 @@ interface Node extends EventTarget {
     readonly nodeType: number;
     nodeValue: string | null;
     readonly ownerDocument: Document;
-    readonly parentElement: HTMLElement | null;
-    readonly parentNode: Node | null;
+    readonly parentElement: Element | null;
+    readonly parentNode: Node & ParentNode | null;
     readonly previousSibling: Node | null;
     textContent: string | null;
     appendChild<T extends Node>(newChild: T): T;
