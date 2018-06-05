@@ -1,0 +1,15 @@
+Exit Code: 1
+Standard output:
+lib/webpack.js(64,9): error TS2339: Property 'version' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(125,24): error TS2339: Property 'optimize' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(140,24): error TS2339: Property 'web' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(145,24): error TS2339: Property 'webworker' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(148,24): error TS2339: Property 'node' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(153,24): error TS2339: Property 'debug' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(156,24): error TS2339: Property 'util' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(172,10): error TS2339: Property 'optimize' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+lib/webpack.js(179,10): error TS2339: Property 'optimize' does not exist on type 'typeof import("/webpack/webpack/lib/webpack")'.
+
+
+
+Standard error:

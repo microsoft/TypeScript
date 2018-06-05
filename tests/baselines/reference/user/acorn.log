@@ -145,11 +145,11 @@ node_modules/acorn/dist/acorn_loose.js(261,31): error TS2322: Type '{ start: any
 node_modules/acorn/dist/acorn_loose.js(264,21): error TS2339: Property 'loc' does not exist on type 'true'.
 node_modules/acorn/dist/acorn_loose.js(266,55): error TS2339: Property 'start' does not exist on type 'true'.
 node_modules/acorn/dist/acorn_loose.js(267,55): error TS2339: Property 'end' does not exist on type 'true'.
-node_modules/acorn/dist/walk.es.js(162,41): error TS2339: Property 'node' does not exist on type 'never'.
+node_modules/acorn/dist/walk.es.js(155,41): error TS2339: Property 'node' does not exist on type 'never'.
 node_modules/acorn/dist/walk.js(3,9): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/walk.js(3,34): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/walk.js(3,47): error TS2304: Cannot find name 'define'.
-node_modules/acorn/dist/walk.js(168,41): error TS2339: Property 'node' does not exist on type 'never'.
+node_modules/acorn/dist/walk.js(161,41): error TS2339: Property 'node' does not exist on type 'never'.
 
 
 
