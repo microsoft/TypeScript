@@ -17109,7 +17109,7 @@ namespace ts {
             if (!enclosingClass) {
                 let thisParameter: ParameterDeclaration | undefined;
                 const thisContainer = getThisContainer(node, /* includeArrowFunctions */ false);
-                if (!thisContainer || !isFunctionLike(thisContainer) || !(thisParameter = getThisParameter(thisContainer)) || !thisParameter.type) {
+                if (flags & ModifierFlags.Static || !thisContainer || !isFunctionLike(thisContainer) || !(thisParameter = getThisParameter(thisContainer)) || !thisParameter.type) {
                     error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
                     return false;
                 }
@@ -17121,7 +17121,7 @@ namespace ts {
             if (flags & ModifierFlags.Static) {
                 return true;
             }
-             if (type.flags & TypeFlags.TypeParameter) {
+            if (type.flags & TypeFlags.TypeParameter) {
                 // get the original type -- represented as the type constraint of the 'this' type
                 type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(<TypeParameter>type)! : getBaseConstraintOfType(<TypeParameter>type)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
             }
