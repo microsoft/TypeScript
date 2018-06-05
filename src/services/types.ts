@@ -151,9 +151,11 @@ namespace ts {
             return new StringScriptSnapshot(text);
         }
     }
+
     export interface PreProcessedFileInfo {
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
+        libReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules?: string[];
         isLibFile: boolean;

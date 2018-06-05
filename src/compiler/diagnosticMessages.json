@@ -2369,6 +2369,14 @@
         "category": "Error",
         "code": 2725
     },
+    "Cannot find lib definition for '{0}'.": {
+        "category": "Error",
+        "code": 2726
+    },
+    "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2727
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

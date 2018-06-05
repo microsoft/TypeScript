@@ -1,6 +1,6 @@
 === tests/cases/compiler/evalAfter0.ts ===
 (0,eval)("10"); // fine: special case for eval
->eval : Symbol(eval, Decl(lib.d.ts, --, --))
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
 
 declare var eva;
 >eva : Symbol(eva, Decl(evalAfter0.ts, 2, 11))

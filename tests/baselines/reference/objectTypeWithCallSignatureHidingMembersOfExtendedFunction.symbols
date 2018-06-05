@@ -3,14 +3,14 @@
 // no errors expected below 
 
 interface Function {
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 0, 0))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 0, 0))
 
     data: number;
 >data : Symbol(Function.data, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 3, 20))
 
     [x: string]: Object;
 >x : Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 5, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 interface I {
@@ -50,9 +50,9 @@ var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
 
 var r1c = i.arguments;
 >r1c : Symbol(r1c, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 17, 3))
->i.arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>i.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 14, 3))
->arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 
 var r1d = i.data;
 >r1d : Symbol(r1d, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 18, 3))
@@ -97,9 +97,9 @@ var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
 
 var r2c = x.arguments;
 >r2c : Symbol(r2c, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 29, 3))
->x.arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>x.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 21, 3))
->arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 
 var r2d = x.data;
 >r2d : Symbol(r2d, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 30, 3))

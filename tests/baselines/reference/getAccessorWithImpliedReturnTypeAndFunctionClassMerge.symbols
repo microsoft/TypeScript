@@ -3,7 +3,7 @@ declare function _<T>(value: Array<T>): _<T>;
 >_ : Symbol(_, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 0), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 45), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 38))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 19))
 >value : Symbol(value, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 22))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 19))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 19))
 

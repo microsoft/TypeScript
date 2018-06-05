@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.DocumentHighlights {
     export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
             // For a JSX element, just highlight the matching tag, not all references.

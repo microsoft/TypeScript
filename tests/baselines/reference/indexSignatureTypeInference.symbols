@@ -36,16 +36,16 @@ declare function stringMapToArray<T>(object: StringMap<T>): T[];
 var numberMap: NumberMap<Function>;
 >numberMap : Symbol(numberMap, Decl(indexSignatureTypeInference.ts, 11, 3))
 >NumberMap : Symbol(NumberMap, Decl(indexSignatureTypeInference.ts, 0, 0))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var stringMap: StringMap<Function>;
 >stringMap : Symbol(stringMap, Decl(indexSignatureTypeInference.ts, 12, 3))
 >StringMap : Symbol(StringMap, Decl(indexSignatureTypeInference.ts, 2, 1))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var v1: Function[];
 >v1 : Symbol(v1, Decl(indexSignatureTypeInference.ts, 14, 3), Decl(indexSignatureTypeInference.ts, 15, 3), Decl(indexSignatureTypeInference.ts, 16, 3), Decl(indexSignatureTypeInference.ts, 17, 3), Decl(indexSignatureTypeInference.ts, 18, 3))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var v1 = numberMapToArray(numberMap);  // Ok
 >v1 : Symbol(v1, Decl(indexSignatureTypeInference.ts, 14, 3), Decl(indexSignatureTypeInference.ts, 15, 3), Decl(indexSignatureTypeInference.ts, 16, 3), Decl(indexSignatureTypeInference.ts, 17, 3), Decl(indexSignatureTypeInference.ts, 18, 3))

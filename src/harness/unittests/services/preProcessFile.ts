@@ -9,6 +9,7 @@ describe("PreProcessFile:", () => {
         checkFileReferenceList("Imported files", expectedPreProcess.importedFiles, resultPreProcess.importedFiles);
         checkFileReferenceList("Referenced files", expectedPreProcess.referencedFiles, resultPreProcess.referencedFiles);
         checkFileReferenceList("Type reference directives", expectedPreProcess.typeReferenceDirectives, resultPreProcess.typeReferenceDirectives);
+        checkFileReferenceList("Lib reference directives", expectedPreProcess.libReferenceDirectives, resultPreProcess.libReferenceDirectives);
 
         assert.deepEqual(resultPreProcess.ambientExternalModules, expectedPreProcess.ambientExternalModules);
     }
@@ -41,6 +42,7 @@ describe("PreProcessFile:", () => {
                         { fileName: "refFile3.ts", pos: 94, end: 105 }, { fileName: "..\\refFile4d.ts", pos: 131, end: 146 }],
                     importedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -54,6 +56,7 @@ describe("PreProcessFile:", () => {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -67,6 +70,7 @@ describe("PreProcessFile:", () => {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -80,6 +84,7 @@ describe("PreProcessFile:", () => {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -92,6 +97,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
                         { fileName: "r4.ts", pos: 106, end: 111 }, { fileName: "r5.ts", pos: 138, end: 143 }],
                     ambientExternalModules: undefined,
@@ -106,6 +112,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: <ts.FileReference[]>[],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -119,6 +126,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -132,6 +140,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }, { fileName: "refFile2.ts", pos: 57, end: 68 }],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 92, end: 97 }, { fileName: "r2.ts", pos: 121, end: 126 }],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -145,6 +154,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -164,6 +174,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 20, end: 22 },
                         { fileName: "m2", pos: 51, end: 53 },
@@ -188,6 +199,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 14, end: 16 },
                         { fileName: "m2", pos: 36, end: 38 },
@@ -212,6 +224,7 @@ describe("PreProcessFile:", () => {
                {
                    referencedFiles: [],
                    typeReferenceDirectives: [],
+                   libReferenceDirectives: [],
                    importedFiles: [],
                    ambientExternalModules: ["B"],
                    isLibFile: false
@@ -225,6 +238,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 26, end: 28 }
                     ],
@@ -244,6 +258,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 39, end: 41 },
                         { fileName: "m2", pos: 74, end: 76 },
@@ -264,6 +279,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "mod1", pos: 21, end: 25 },
                         { fileName: "mod2", pos: 29, end: 33 },
@@ -282,6 +298,7 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: [],
                     typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "mod1", pos: 28, end: 32 },
                         { fileName: "mod2", pos: 36, end: 40 },
@@ -303,6 +320,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "../Observable", pos: 28, end: 41 }
                 ],
@@ -323,6 +341,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m", pos: 123, end: 124 },
                     { fileName: "../Observable", pos: 28, end: 41 }
@@ -344,6 +363,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m", pos: 123, end: 124 },
                     { fileName: "../Observable", pos: 28, end: 41 }
@@ -365,6 +385,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "../Observable", pos: 28, end: 41 }
                 ],
@@ -385,6 +406,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "../Observable", pos: 28, end: 41 }
                 ],
@@ -404,6 +426,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "../Observable", pos: 28, end: 41 }
                 ],
@@ -425,6 +448,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m2", pos: 65, end: 67 },
                     { fileName: "augmentation", pos: 102, end: 114 }
@@ -449,6 +473,7 @@ describe("PreProcessFile:", () => {
             {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
+                libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m2", pos: 127, end: 129 },
                     { fileName: "augmentation", pos: 164, end: 176 }
@@ -474,6 +499,32 @@ describe("PreProcessFile:", () => {
                 typeReferenceDirectives: [
                     { pos: 73, end: 75, fileName: "a1" },
                     { pos: 152, end: 154, fileName: "a3" }
+                ],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+        it ("correctly recognizes lib reference directives", () => {
+            test(`
+            /// <reference path="a"/>
+            /// <reference lib="a1"/>
+            /// <reference path="a2"/>
+            /// <reference lib="a3"/>
+            `,
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [
+                    { pos: 34, end: 35, fileName: "a" },
+                    { pos: 110, end: 112, fileName: "a2" }
+                ],
+                typeReferenceDirectives: [
+                ],
+                libReferenceDirectives: [
+                    { pos: 71, end: 73, fileName: "a1" },
+                    { pos: 148, end: 150, fileName: "a3" }
                 ],
                 importedFiles: [],
                 ambientExternalModules: undefined,

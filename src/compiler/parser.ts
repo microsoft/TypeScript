@@ -7659,6 +7659,7 @@ namespace ts {
         checkJsDirective?: CheckJsDirective;
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
+        libReferenceDirectives: FileReference[];
         amdDependencies: AmdDependency[];
         hasNoDefaultLib?: boolean;
         moduleName?: string;
@@ -7712,6 +7713,7 @@ namespace ts {
         context.checkJsDirective = undefined;
         context.referencedFiles = [];
         context.typeReferenceDirectives = [];
+        context.libReferenceDirectives = [];
         context.amdDependencies = [];
         context.hasNoDefaultLib = false;
         context.pragmas!.forEach((entryOrList, key) => { // TODO: GH#18217
@@ -7721,6 +7723,7 @@ namespace ts {
                 case "reference": {
                     const referencedFiles = context.referencedFiles;
                     const typeReferenceDirectives = context.typeReferenceDirectives;
+                    const libReferenceDirectives = context.libReferenceDirectives;
                     forEach(toArray(entryOrList), (arg: PragmaPsuedoMap["reference"]) => {
                         // TODO: GH#18217
                         if (arg!.arguments["no-default-lib"]) {
@@ -7728,6 +7731,9 @@ namespace ts {
                         }
                         else if (arg!.arguments.types) {
                             typeReferenceDirectives.push({ pos: arg!.arguments.types!.pos, end: arg!.arguments.types!.end, fileName: arg!.arguments.types!.value });
+                        }
+                        else if (arg!.arguments.lib) {
+                            libReferenceDirectives.push({ pos: arg!.arguments.lib!.pos, end: arg!.arguments.lib!.end, fileName: arg!.arguments.lib!.value });
                         }
                         else if (arg!.arguments.path) {
                             referencedFiles.push({ pos: arg!.arguments.path!.pos, end: arg!.arguments.path!.end, fileName: arg!.arguments.path!.value });

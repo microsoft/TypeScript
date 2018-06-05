@@ -41,9 +41,9 @@ class D extends C {
 >a : Symbol(a, Decl(derivedClassConstructorWithExplicitReturns01.ts, 18, 16))
 
         if (Math.random() < 0.5) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
             "You win!"
             return {

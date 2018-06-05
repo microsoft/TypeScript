@@ -1090,7 +1090,7 @@ namespace FourSlash {
         }
 
         private getNode(): ts.Node {
-            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition, /*includeJsDocComment*/ false);
+            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition);
         }
 
         private goToAndGetNode(range: Range): ts.Node {
