@@ -1,0 +1,7 @@
+tests/cases/compiler/computerPropertiesInES5ShouldBeTransformed.ts(1,15): error TS2339: Property 'key' does not exist on type '{}'.
+
+
+==== tests/cases/compiler/computerPropertiesInES5ShouldBeTransformed.ts (1 errors) ====
+    const b = ({ [`key`]: renamed }) => renamed;
+                  ~~~~~
+!!! error TS2339: Property 'key' does not exist on type '{}'.

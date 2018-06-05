@@ -1,8 +1,8 @@
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,5): error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
   Type '{ i: number; }' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2459: Type 'string | number' has no property 'i' and no string index signature.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(4,6): error TS2459: Type 'string | number | {}' has no property 'i1' and no string index signature.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2339: Property 'i' does not exist on type 'string | number'.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(4,6): error TS2339: Property 'i1' does not exist on type 'string | number | {}'.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(5,12): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(5,21): error TS2353: Object literal may only specify known properties, and 'f212' does not exist in type '{ f21: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(6,7): error TS1005: ':' expected.
@@ -20,10 +20,10 @@ tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAs
 !!! error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
 !!! error TS2322:   Type '{ i: number; }' is not assignable to type 'number'.
          ~
-!!! error TS2459: Type 'string | number' has no property 'i' and no string index signature.
+!!! error TS2339: Property 'i' does not exist on type 'string | number'.
     var {i1}: string | number| {} = { i1: 2 };
          ~~
-!!! error TS2459: Type 'string | number | {}' has no property 'i1' and no string index signature.
+!!! error TS2339: Property 'i1' does not exist on type 'string | number | {}'.
     var { f2: {f21} = { f212: "string" } }: any = undefined;
                ~~~
 !!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.

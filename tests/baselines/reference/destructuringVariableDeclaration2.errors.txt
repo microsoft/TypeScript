@@ -5,8 +5,8 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4
   Type '[[boolean]]' is not assignable to type '[[string]]'.
     Type '[boolean]' is not assignable to type '[string]'.
       Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(14,16): error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c3' and no string index signature.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(14,24): error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c5' and no string index signature.
+tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(14,16): error TS2339: Property 'c3' does not exist on type 'number | { c3: number; c5: number; }'.
+tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(14,24): error TS2339: Property 'c5' does not exist on type 'number | { c3: number; c5: number; }'.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts (4 errors) ====
@@ -34,9 +34,9 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(1
     //          an element type E, where E is the type of the numeric index signature of S.
     var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
                    ~~
-!!! error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c3' and no string index signature.
+!!! error TS2339: Property 'c3' does not exist on type 'number | { c3: number; c5: number; }'.
                            ~~
-!!! error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c5' and no string index signature.
+!!! error TS2339: Property 'c5' does not exist on type 'number | { c3: number; c5: number; }'.
     
     // When a destructuring variable declaration, binding property, or binding element specifies
     // an initializer expression, the type of the initializer expression is required to be assignable
