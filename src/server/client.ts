@@ -394,6 +394,7 @@ namespace ts.server {
 
             return this.lastRenameEntry = {
                 canRename: body.info.canRename,
+                fileToRename: body.info.fileToRename,
                 displayName: body.info.displayName,
                 fullDisplayName: body.info.fullDisplayName,
                 kind: body.info.kind,

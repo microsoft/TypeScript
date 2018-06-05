@@ -4919,6 +4919,11 @@ declare namespace ts {
     }
     interface RenameInfo {
         canRename: boolean;
+        /**
+         * fileName to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
@@ -6343,6 +6348,11 @@ declare namespace ts.server.protocol {
          * True if item can be renamed.
          */
         canRename: boolean;
+        /**
+         * fileName to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         /**
          * Error message if item can not be renamed.
          */

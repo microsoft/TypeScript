@@ -36,8 +36,9 @@ namespace ts.Rename {
             return undefined;
         }
 
-        // Can't rename a module name.
-        if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
+        if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) {
+            return getRenameInfoForModule(node, sourceFile, symbol);
+        }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
         const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
@@ -48,9 +49,24 @@ namespace ts.Rename {
         return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
     }
 
+    function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
+        const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
+        return moduleSourceFile && {
+            canRename: true,
+            fileToRename: moduleSourceFile.fileName,
+            kind: ScriptElementKind.moduleElement,
+            displayName: moduleSourceFile.fileName,
+            localizedErrorMessage: undefined,
+            fullDisplayName: moduleSourceFile.fileName,
+            kindModifiers: ScriptElementKindModifier.none,
+            triggerSpan: createTriggerSpanForNode(node, sourceFile),
+        };
+    }
+
     function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
         return {
             canRename: true,
+            fileToRename: undefined,
             kind,
             displayName,
             localizedErrorMessage: undefined,

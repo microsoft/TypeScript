@@ -1544,7 +1544,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
+        public verifyRenameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string): void {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (!renameInfo.canRename) {
                 this.raiseError("Rename did not succeed");
@@ -1554,6 +1554,7 @@ Actual: ${stringify(fullActual)}`);
             this.validate("fullDisplayName", fullDisplayName, renameInfo.fullDisplayName);
             this.validate("kind", kind, renameInfo.kind);
             this.validate("kindModifiers", kindModifiers, renameInfo.kindModifiers);
+            this.validate("fileToRename", fileToRename, renameInfo.fileToRename);
 
             if (this.getRanges().length !== 1) {
                 this.raiseError("Expected a single range to be selected in the test file.");
@@ -4404,8 +4405,8 @@ namespace FourSlashInterface {
             this.state.verifySemanticClassifications(classifications);
         }
 
-        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
-            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers);
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string) {
+            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename);
         }
 
         public renameInfoFailed(message?: string) {
