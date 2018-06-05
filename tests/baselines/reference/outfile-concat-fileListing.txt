@@ -1,6 +1,10 @@
 */
  /lib/
  /lib/lib.d.ts
+ /lib/lib.dom.d.ts
+ /lib/lib.es5.d.ts
+ /lib/lib.scripthost.d.ts
+ /lib/lib.webworker.importscripts.d.ts
  /src/
  /src/2/
  /src/2/second-output.d.ts

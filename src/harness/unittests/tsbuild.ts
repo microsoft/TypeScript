@@ -391,6 +391,14 @@ namespace ts {
         const rootPath = resolvePath(__dirname, root);
         loadFsMirror(fs, rootPath, "/src");
         fs.mkdirpSync("/lib");
+        const libs = ["es5", "dom", "webworker.importscripts", "scripthost"];
+        for (const lib of libs) {
+            const content = Harness.IO.readFile(combinePaths(Harness.libFolder, `lib.${lib}.d.ts`));
+            if (content === undefined) {
+                throw new Error(`Failed to read lib ${lib}`);
+            }
+            fs.writeFileSync(`/lib/lib.${lib}.d.ts`, content);
+        }
         fs.writeFileSync("/lib/lib.d.ts", Harness.IO.readFile(combinePaths(Harness.libFolder, "lib.d.ts"))!);
         fs.meta.set("defaultLibLocation", "/lib");
         fs.makeReadonly();
