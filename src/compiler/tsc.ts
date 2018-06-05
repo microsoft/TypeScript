@@ -49,7 +49,7 @@ namespace ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        if ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b")) {
+        if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
             return performBuild(createCompilerHost({}), createDiagnosticReporter(sys), args.slice(1), sys);
         }
 
