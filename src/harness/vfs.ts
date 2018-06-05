@@ -444,7 +444,7 @@ namespace vfs {
 
         private _stat(entry: WalkResult) {
             const node = entry.node;
-            if (!node) throw createIOError("ENOENT");
+            if (!node) throw createIOError(`ENOENT`, entry.realpath);
             return new Stats(
                 node.dev,
                 node.ino,
@@ -1155,8 +1155,8 @@ namespace vfs {
         EROFS: "file system is read-only"
     });
 
-    export function createIOError(code: keyof typeof IOErrorMessages) {
-        const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]}`);
+    export function createIOError(code: keyof typeof IOErrorMessages, details: string = "") {
+        const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]} ${details}`);
         err.code = code;
         if (Error.captureStackTrace) Error.captureStackTrace(err, createIOError);
         return err;
