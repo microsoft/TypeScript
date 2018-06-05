@@ -199,18 +199,18 @@ namespace ts {
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
-    
+
                 clearDiagnostics();
                 builder.buildAllProjects();
                 assertDiagnosticMessages(/*empty*/);
-    
+
                 // Update a timestamp in the middle project
                 tick();
                 touch(fs, "/src/logic/index.ts");
                 // Because we haven't reset the build context, the builder should assume there's nothing to do right now
                 const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic")!);
                 assert.equal(status.type, UpToDateStatusType.UpToDate, "Project should be assumed to be up-to-date");
-    
+
                 // Rebuild this project
                 tick();
                 builder.invalidateProject("/src/logic");
@@ -218,7 +218,7 @@ namespace ts {
                 // The file should be updated
                 assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
-    
+
                 // Build downstream projects should update 'tests', but not 'core'
                 tick();
                 builder.buildDependentInvalidatedProjects();
@@ -247,7 +247,7 @@ namespace ts {
             for (const file of files) {
                 it(`Generates files matching the baseline - ${file}`, () => {
                     Harness.Baseline.runBaseline(getBaseFileName(file), () => {
-                        return fs.readFileSync(file, 'utf-8');
+                        return fs.readFileSync(file, "utf-8");
                     });
                 });
             }
