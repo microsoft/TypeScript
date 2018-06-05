@@ -1096,11 +1096,16 @@ namespace ts {
 
     export type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
 
-    export interface FunctionTypeNode extends TypeNode, SignatureDeclarationBase {
+    export interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDeclarationBase {
+        kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
+        type: TypeNode;
+    }
+
+    export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
         kind: SyntaxKind.FunctionType;
     }
 
-    export interface ConstructorTypeNode extends TypeNode, SignatureDeclarationBase {
+    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
         kind: SyntaxKind.ConstructorType;
     }
 
