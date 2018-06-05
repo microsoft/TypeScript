@@ -9,7 +9,7 @@
         "esnext",
         // Host only
         "dom.generated",
-        "dom.iterable",
+        "dom.iterable.generated",
         "webworker.generated",
         "webworker.importscripts",
         "scripthost",
@@ -45,6 +45,7 @@
     ],
     "paths": {
         "dom.generated": "lib.dom.d.ts",
+        "dom.iterable.generated": "lib.dom.iterable.d.ts",
         "webworker.generated": "lib.webworker.d.ts",
         "es5.full": "lib.d.ts",
         "es2015.full": "lib.es6.d.ts"
