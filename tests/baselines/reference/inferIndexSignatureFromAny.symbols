@@ -1,0 +1,13 @@
+=== tests/cases/compiler/inferIndexSignatureFromAny.ts ===
+declare function f<T>(x: { [key: string]: T }): T;
+>f : Symbol(f, Decl(inferIndexSignatureFromAny.ts, 0, 0))
+>T : Symbol(T, Decl(inferIndexSignatureFromAny.ts, 0, 19))
+>x : Symbol(x, Decl(inferIndexSignatureFromAny.ts, 0, 22))
+>key : Symbol(key, Decl(inferIndexSignatureFromAny.ts, 0, 28))
+>T : Symbol(T, Decl(inferIndexSignatureFromAny.ts, 0, 19))
+>T : Symbol(T, Decl(inferIndexSignatureFromAny.ts, 0, 19))
+
+const a = f(<any>null);
+>a : Symbol(a, Decl(inferIndexSignatureFromAny.ts, 1, 5))
+>f : Symbol(f, Decl(inferIndexSignatureFromAny.ts, 0, 0))
+

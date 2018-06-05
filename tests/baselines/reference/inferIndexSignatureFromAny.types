@@ -1,0 +1,16 @@
+=== tests/cases/compiler/inferIndexSignatureFromAny.ts ===
+declare function f<T>(x: { [key: string]: T }): T;
+>f : <T>(x: { [key: string]: T; }) => T
+>T : T
+>x : { [key: string]: T; }
+>key : string
+>T : T
+>T : T
+
+const a = f(<any>null);
+>a : any
+>f(<any>null) : any
+>f : <T>(x: { [key: string]: T; }) => T
+><any>null : any
+>null : null
+

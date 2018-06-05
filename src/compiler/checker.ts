@@ -7137,6 +7137,7 @@ namespace ts {
                     return getUnionType(propTypes, UnionReduction.Subtype);
                 }
             }
+            if (isTypeAny(type)) return type;
             return undefined;
         }
 
@@ -12713,6 +12714,9 @@ namespace ts {
                         else {
                             inferFromObjectTypes(source, target);
                         }
+                    }
+                    else if (isTypeAny(source)) {
+                        inferFromIndexTypes(source, target);
                     }
                 }
             }
