@@ -4,16 +4,24 @@ namespace ts.refactor.convertReactPureComponent {
     const actionNameComponentToSFC = "Covert React.Component to SFC";
     const actionNameSFCToPureComponent = "Covert React.SFC to PureComponent";
 
+    type SFCLikeDeclaration =
+        | FunctionDeclaration
+        | FunctionExpression
+        | ArrowFunction;
+    function isSFCLikeDeclaration(node: Node): node is SFCLikeDeclaration {
+        return isFunctionDeclaration(node) || isFunctionExpression(node) || isArrowFunction(node);
+    }
+
     /**
      * This refactor follows this rule.
      * * Is optional.
      *
-     * 1. [ ] Check if JSX Factory is React. If not, no actions will be provided
-     * 2. [ ] If the selection is a function declaration of type `React.SFC`
+     * 1. [x] Check if JSX Factory is React. If not, no actions will be provided
+     * 2. [x] If the selection is a function declaration of type `React.SFC`
      *        [ ] Provide an action to convert it to `React.PureComponent`
      *        [ ] * Make a function with 1 to 2 arguments (treat as props & context)
-     *              and explicit returnType T and T subtypeable to React.Element also convertable
-     * 3. [ ] If the selection is a subclass of `React.Component` or `React.PureComponent`
+     *              and explicit returnType T and T subtypeable to React.Element also convertible
+     * 3. [x] If the selection is a subclass of `React.Component` or `React.PureComponent`
      *        [x] and if it satisifies `isConvertableClass()`
      *        [ ] Provide an action to convert it to `React.SFC` or `React.PureComponent` (if it is `React.Component`)
      * 4. [x] Resolve React by `getReferenceToReact()`
@@ -23,16 +31,52 @@ namespace ts.refactor.convertReactPureComponent {
 
     registerRefactor(refactorName, {
         getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-            return;
+            if (!checkJSXFactoryIsReact(context.host)) return;
+            if (!getReferenceToReact(context.file)) return;
+            const node = getSelectedNode(context);
+            if (!node) { return; }
+
+            if (isConvertibleReactClassComponent(node, context.file)) {
+                // const description = Diagnostics.???
+                const description = actionNameComponentToSFC;
+                return [{
+                    name: refactorName,
+                    description,
+                    actions: [{ description: description, name: actionNameComponentToSFC }]
+                }];
+            } else if (isReactSFCDeclaration(node)) {
+                // const description = Diagnostics.???
+                const description = actionNameSFCToPureComponent;
+                return [{
+                    name: refactorName,
+                    description,
+                    actions: [{ description: description, name: actionNameSFCToPureComponent }]
+                }];
+            }
         },
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+            context.cancellationToken, actionName;
             return;
         }
     });
 
-    function checkJSXFactoryIsReact() {
-        return true;
+    function checkJSXFactoryIsReact(host: LanguageServiceHost) {
+        const config = host.getCompilationSettings();
+        if (config.jsxFactory === undefined) { if (config.jsx) return true }
+        // In vue, people use jsxFactory: "h" insteadof React.createElement
+        else { if (config.jsxFactory.match(/React/)) return true; }
+        return false;
     }
+
+    function getSelectedNode(context: RefactorContext): Node | false {
+        const { file } = context;
+        const span = getRefactorContextSpan(context);
+        const token = getTokenAtPosition(file, span.start, /*includeJsDocComment*/ false);
+        const component = getParentNodeInSpan(token, file, span);
+        if (!component) { return false; }
+        return component;
+    }
+
     /** Get name binding to React, React.Component, React.PureComponent, React.SFC, React.StatelessComponent */
     function getReferenceToReact(sourcefile: SourceFile) {
         const result: Record<"React" | "Component" | "PureComponent" | "SFC" | "StatelessComponent", string | undefined> = {
@@ -44,7 +88,7 @@ namespace ts.refactor.convertReactPureComponent {
         } as any;
         let importClause: ImportClause;
         sourcefile.forEachChild(c => {
-            if (!ts.isImportDeclaration(c)) { return; }
+            if (!isImportDeclaration(c)) { return; }
             if (!c.importClause) { return; }
             if ((c.moduleSpecifier as StringLiteral).text !== "react") { return; }
             const { name, namedBindings } = c.importClause;
@@ -52,13 +96,13 @@ namespace ts.refactor.convertReactPureComponent {
             const names: (keyof typeof result)[] = ["Component", "PureComponent", "SFC", "StatelessComponent"];
             // In case of:
             // import * as ns from "mod" => name = undefined, namedBinding: NamespaceImport = { name: ns }
-            if (namedBindings && ts.isNamespaceImport(namedBindings)) { result.React = namedBindings.name.text; }
+            if (namedBindings && isNamespaceImport(namedBindings)) { result.React = namedBindings.name.text; }
             // import d from "mod" => name = d, namedBinding = undefined
             else if (name) { result.React = name.text; }
             // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
             // ? No this case
             // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-            if (namedBindings && ts.isNamedImports(namedBindings)) {
+            if (namedBindings && isNamedImports(namedBindings)) {
                 namedBindings.elements.forEach(e => {
                     if (e.propertyName) {
                         let p: keyof typeof result = e.propertyName.text as any;
@@ -83,64 +127,71 @@ namespace ts.refactor.convertReactPureComponent {
         return { ...result, importClause: importClause! };
     }
 
-    /** Check if expression is a React Component Class, then get its name (opt) */
-    function isReactComponentClass(expression: ClassDeclaration | ClassExpression, sourcefile: SourceFile) {
-        let is = false;
-        let name: string | undefined = "";
-        let reference = getReferenceToReact(sourcefile)!;
-        let propsType: TypeNode | undefined;
-        if (expression.heritageClauses) {
-            if (expression.heritageClauses.some(x =>
-                x.types.some(y => {
-                    const text = y.getText(sourcefile).replace(/\s/g, "");
-                    if (text === reference.Component || text === reference.PureComponent) {
-                        propsType = y.typeArguments && y.typeArguments[0];
+    function isReactSFCDeclaration(expression: Node) {
+        if (!isSFCLikeDeclaration(expression)) { return; }
+        return expression && false;
+    }
+
+    function isConvertibleReactClassComponent(node: Node, sourcefile: SourceFile) {
+        if (!isClassLike(node)) return;
+        /** Check if expression is a React Component Class, then get its name and PropType */
+        function isReactComponentClass(expression: ClassLikeDeclaration, sourcefile: SourceFile) {
+            let is = false;
+            let name: string | undefined = "";
+            let reference = getReferenceToReact(sourcefile)!;
+            let propsType: TypeNode | undefined;
+            if (expression.heritageClauses) {
+                if (expression.heritageClauses.some(x =>
+                    x.types.some(y => {
+                        const text = y.getText(sourcefile).replace(/\s/g, "");
+                        if (text === reference.Component || text === reference.PureComponent) {
+                            propsType = y.typeArguments && y.typeArguments[0];
+                            return true;
+                        }
+                        return false;
+                    })
+                )) {
+                    is = true;
+                    if (isClassDeclaration(expression)) {
+                        name = expression.name && expression.name.text;
+                    }
+                }
+            }
+            if (is) return { name, propsType };
+            return undefined;
+        }
+        const ircs = isReactComponentClass(node, sourcefile);
+        if (!ircs) return;
+        /**
+         * 1. If have any property than `render`, return false
+         * 2. If have reference to `setState` or `state`, return false
+         */
+        function isConvertibleComponent(expression: ClassLikeDeclaration, sourcefile: SourceFile) {
+            let render: Block;
+            let convertable = every(expression.members, val => {
+                // * Should include `["render"]() {}` and `render = () => {}`, but that's crazy, no one code like this
+                if (isMethodDeclaration(val) && val.modifiers) {
+                    const isMethodNamedRender = isIdentifier(val.name) && val.name.escapedText === "render"
+                    const isStatic = val.modifiers.some(mod => mod.kind === SyntaxKind.StaticKeyword);
+                    if (isMethodNamedRender && !isStatic) {
+                        render = val.body!;
                         return true;
                     }
-                    return false;
-                })
-            )) {
-                is = true;
-                if (ts.isClassDeclaration(expression)) {
-                    name = expression.name && expression.name.text;
+                }
+                // TODO: Should include staic `propTypes`, `contextTypes`, `defaultProps`, `displayName`. Not now.
+                return false;
+            })
+            // ? Now check reference to `state` or `setState`
+            if (convertable) {
+                // OK let's do this quick
+                if (render!.getText(sourcefile).match(/this\s+\.\s+(state|setState)/)) {
+                    convertable = false;
                 }
             }
+            return { convertable, render: render! };
         }
-        if (is) return { name, propsType };
-        return undefined;
+        const icc = isConvertibleComponent(node, sourcefile);
+        if (!icc.convertable) return;
+        return { name: ircs.name, propsType: ircs.propsType, render: icc.render };
     }
-    function isReactSFCDeclaration(expression: FunctionDeclaration | FunctionExpression) {
-        return true;
-    }
-    /**
-     * 1. If have any property than `render`, return false
-     * 2. If have reference to `setState` or `state`, return false
-     */
-    function isConvertableClass(expression: ClassDeclaration | ClassExpression, sourcefile: SourceFile) {
-        let render: MethodDeclaration;
-        let convertable = ts.every(expression.members, val => {
-            // * Should include `["render"]() {}` and `render = () => {}`, but that's crazy, no one code like this
-            if (ts.isMethodDeclaration(val) && val.modifiers) {
-                const isMethodNamedRender = ts.isIdentifier(val.name) && val.name.escapedText === "render"
-                const isStatic = val.modifiers.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword);
-                if (isMethodNamedRender && !isStatic) {
-                    render = val;
-                    return true;
-                }
-            }
-            // TODO: Should include staic `propTypes`, `contextTypes`, `defaultProps`, `displayName`. Not now.
-            return false;
-        })
-        // ? Now check reference to `state` or `setState`
-        if (convertable) {
-            // OK let's do this quick
-            if (render!.getText(sourcefile).match(/this\s+\.\s+(state|setState)/)) {
-                convertable = false;
-            }
-        }
-        return { convertable, render: render! };
-    }
-
-    function transformer() { }
 }
-
