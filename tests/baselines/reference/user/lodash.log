@@ -34,7 +34,7 @@ node_modules/lodash/_baseClone.js(128,43): error TS2345: Argument of type 'numbe
 node_modules/lodash/_baseClone.js(157,17): error TS2552: Cannot find name 'keysIn'. Did you mean 'keys'?
 node_modules/lodash/_baseDifference.js(37,5): error TS2322: Type '(array?: any[] | undefined, value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[] | undefined, value: any) => boolean'.
 node_modules/lodash/_baseDifference.js(43,5): error TS2322: Type 'SetCache' is not assignable to type 'any[]'.
-  Property 'flatMap' is missing in type 'SetCache'.
+  Property 'length' is missing in type 'SetCache'.
 node_modules/lodash/_baseDifference.js(60,15): error TS2554: Expected 2 arguments, but got 3.
 node_modules/lodash/_baseFlatten.js(19,17): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'false'.
@@ -229,7 +229,7 @@ node_modules/lodash/core.js(3424,41): error TS2345: Argument of type 'Function' 
   Type 'Function' provides no match for the signature '(substring: string, ...args: any[]): string'.
 node_modules/lodash/core.js(3573,51): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/core.js(3590,63): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'flatMap' is missing in type 'IArguments'.
+  Property 'push' is missing in type 'IArguments'.
 node_modules/lodash/core.js(3830,14): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.

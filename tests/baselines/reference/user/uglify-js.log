@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 node_modules/uglify-js/lib/ast.js(210,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/ast.js(332,33): error TS2339: Property 'transform' does not exist on type 'string'.
-node_modules/uglify-js/lib/ast.js(860,5): error TS2322: Type '{ [x: string]: any; _visit: (node: any, descend: any) => any; parent: (n: any) => any; push: type...' is not assignable to type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(877,5): error TS2322: Type '{ [x: string]: any; _visit: (node: any, descend: any) => any; parent: (n: any) => any; push: type...' is not assignable to type 'TreeWalker'.
   Object literal may only specify known properties, but '_visit' does not exist in type 'TreeWalker'. Did you mean to write 'visit'?
 node_modules/uglify-js/lib/compress.js(165,27): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(514,26): error TS2554: Expected 0 arguments, but got 1.
@@ -66,7 +66,7 @@ node_modules/uglify-js/lib/compress.js(6232,25): error TS2403: Subsequent variab
 node_modules/uglify-js/lib/compress.js(6235,46): error TS2339: Property 'has_side_effects' does not exist on type 'number'.
 node_modules/uglify-js/lib/compress.js(6242,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(6295,19): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/minify.js(166,75): error TS2339: Property 'compress' does not exist on type 'Compressor'.
+node_modules/uglify-js/lib/minify.js(170,75): error TS2339: Property 'compress' does not exist on type 'Compressor'.
 node_modules/uglify-js/lib/mozilla-ast.js(569,18): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/output.js(481,22): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/output.js(774,23): error TS2554: Expected 0 arguments, but got 1.
