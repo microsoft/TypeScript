@@ -341,8 +341,6 @@ namespace ts {
         const cache = createFileMap<ParsedCommandLine>();
         const configParseHost = parseConfigHostFromCompilerHost(host);
 
-        // TODO: Cache invalidation under --watch
-
         function parseConfigFile(configFilePath: ResolvedConfigFileName) {
             const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
             if (sourceFile === undefined) {
@@ -529,6 +527,8 @@ namespace ts {
         const configFileCache = createConfigFileCache(host);
         let context = createBuildContext(defaultOptions, reportDiagnostic);
 
+        const existingWatchersForWildcards = createMap<WildcardDirectoryWatcher>();
+
         return {
             buildAllProjects,
             getUpToDateStatus,
@@ -551,17 +551,42 @@ namespace ts {
             if (!system.watchFile || !system.watchDirectory || !system.setTimeout) throw new Error("System host must support watchFile / watchDirectory / setTimeout if using --watch");
 
             const graph = getGlobalDependencyGraph()!;
+            if (!graph.buildQueue) {
+                // Everything is broken - we don't even know what to watch. Give up.
+                return;
+            }
+
             for (const resolved of graph.buildQueue) {
                 const cfg = configFileCache.parseConfigFile(resolved);
                 if (cfg) {
+                    // Watch this file
+                    system.watchFile!(resolved, () => {
+                        configFileCache.removeKey(resolved);
+                        invalidateProjectAndScheduleBuilds(resolved);
+                    });
+
+                    // Update watchers for wildcard directories
+                    if (cfg.configFileSpecs) {
+                        updateWatchingWildcardDirectories(existingWatchersForWildcards, createMapFromTemplate(cfg.configFileSpecs.wildcardDirectories), (dir, flags) => {
+                            return system.watchDirectory!(dir, () => {
+                                invalidateProjectAndScheduleBuilds(resolved);
+                            }, !!(flags & WatchDirectoryFlags.Recursive));
+                        });
+                    }
+                    
+                    // Watch input files
                     for (const input of cfg.fileNames) {
                         system.watchFile(input, () => {
-                            invalidateProject(resolved);
-                            system.setTimeout!(buildInvalidatedProjects, 100);
-                            system.setTimeout!(buildDependentInvalidatedProjects, 3000);
+                            invalidateProjectAndScheduleBuilds(resolved);
                         });
                     }
                 }
+            }
+
+            function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
+                invalidateProject(resolved);
+                system!.setTimeout!(buildInvalidatedProjects, 100);
+                system!.setTimeout!(buildDependentInvalidatedProjects, 3000);
             }
         }
 
