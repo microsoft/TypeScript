@@ -12170,6 +12170,19 @@ namespace ts {
         }
 
         function getWidenedProperty(prop: Symbol, context: WideningContext | undefined): Symbol {
+            if (!(prop.flags & SymbolFlags.Property)) {
+                // Since get accessors already widen their return value there is no need to
+                // widen accessor based properties here.
+                return prop;
+            }
+            if (prop.flags & SymbolFlags.JSContainer) {
+                const node = prop.declarations && first(prop.declarations);
+                const init = getAssignedJavascriptInitializer(node);
+                if (init && init.kind !== SyntaxKind.ObjectLiteralExpression) {
+                    // for JS special declarations, the only kind of initializer that will widen is object literals
+                    return prop;
+                }
+            }
             const original = getTypeOfSymbol(prop);
             const propContext = context && createWideningContext(context, prop.escapedName, /*siblings*/ undefined);
             const widened = getWidenedTypeWithContext(original, propContext);
@@ -12190,9 +12203,7 @@ namespace ts {
         function getWidenedTypeOfObjectLiteral(type: Type, context: WideningContext | undefined): Type {
             const members = createSymbolTable();
             for (const prop of getPropertiesOfObjectType(type)) {
-                // Since get accessors already widen their return value there is no need to
-                // widen accessor based properties here.
-                members.set(prop.escapedName, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop, context) : prop);
+                members.set(prop.escapedName, getWidenedProperty(prop, context));
             }
             if (context) {
                 for (const prop of getPropertiesOfContext(context)) {
@@ -15984,10 +15995,10 @@ namespace ts {
                 const decl = getDeclarationOfJSInitializer(node);
                 if (decl) {
                     // a JS object literal whose declaration's symbol has exports is a JS namespace
-                    const symbol = getMergedSymbol(decl.symbol);
+                    const symbol = getSymbolOfNode(decl);
                     if (symbol && hasEntries(symbol.exports)) {
                         propertiesTable = symbol.exports;
-                        symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
+                        symbol.exports.forEach(s => propertiesArray.push(getMergedSymbol(s)));
                         return createObjectLiteralType();
                     }
                 }
