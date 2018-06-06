@@ -236,7 +236,7 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
-                    (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     symbol.valueDeclaration = node;
                 }
