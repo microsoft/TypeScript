@@ -1,5 +1,5 @@
 //// [ES5SymbolProperty5.ts]
-var Symbol: { iterator: symbol };
+var Symbol: { readonly iterator: unique symbol };
 
 class C {
     [Symbol.iterator]() { }

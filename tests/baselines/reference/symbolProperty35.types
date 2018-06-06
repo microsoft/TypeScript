@@ -4,9 +4,9 @@ interface I1 {
 
     [Symbol.toStringTag](): { x: string }
 >[Symbol.toStringTag] : () => { x: string; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >x : string
 }
 interface I2 {
@@ -14,9 +14,9 @@ interface I2 {
 
     [Symbol.toStringTag](): { x: number }
 >[Symbol.toStringTag] : () => { x: number; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >x : number
 }
 

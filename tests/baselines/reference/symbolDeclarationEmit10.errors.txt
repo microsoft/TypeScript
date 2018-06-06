@@ -1,0 +1,10 @@
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit10.ts(3,9): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit10.ts (1 errors) ====
+    var obj = {
+        get [Symbol.isConcatSpreadable]() { return '' },
+        set [Symbol.isConcatSpreadable](x) { }
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+    }

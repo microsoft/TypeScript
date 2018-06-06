@@ -1,16 +1,16 @@
 === tests/cases/conformance/Symbols/ES5SymbolProperty5.ts ===
-var Symbol: { iterator: symbol };
->Symbol : { iterator: symbol; }
->iterator : symbol
+var Symbol: { readonly iterator: unique symbol };
+>Symbol : { readonly iterator: unique symbol; }
+>iterator : unique symbol
 
 class C {
 >C : C
 
     [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
->Symbol.iterator : symbol
->Symbol : { iterator: symbol; }
->iterator : symbol
+>Symbol.iterator : unique symbol
+>Symbol : { readonly iterator: unique symbol; }
+>iterator : unique symbol
 }
 
 (new C)[Symbol.iterator](0) // Should error
@@ -19,8 +19,8 @@ class C {
 >(new C) : C
 >new C : C
 >C : typeof C
->Symbol.iterator : symbol
->Symbol : { iterator: symbol; }
->iterator : symbol
+>Symbol.iterator : unique symbol
+>Symbol : { readonly iterator: unique symbol; }
+>iterator : unique symbol
 >0 : 0
 

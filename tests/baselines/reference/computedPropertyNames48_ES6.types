@@ -17,7 +17,7 @@ var a: any;
 extractIndexer({
 >extractIndexer({    [a]: ""}) : string
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
->{    [a]: ""} : { [x: number]: string; }
+>{    [a]: ""} : { [x: string]: string; }
 
     [a]: ""
 >[a] : string

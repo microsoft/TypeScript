@@ -2,7 +2,7 @@ tests/cases/conformance/Symbols/ES5SymbolProperty5.ts(7,1): error TS2554: Expect
 
 
 ==== tests/cases/conformance/Symbols/ES5SymbolProperty5.ts (1 errors) ====
-    var Symbol: { iterator: symbol };
+    var Symbol: { readonly iterator: unique symbol };
     
     class C {
         [Symbol.iterator]() { }

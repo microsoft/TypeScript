@@ -4,8 +4,8 @@ async function foo(): Promise<void> {
 >Promise : Promise<T>
 
   var v = { [await]: foo }
->v : { [x: number]: () => Promise<void>; }
->{ [await]: foo } : { [x: number]: () => Promise<void>; }
+>v : { [x: string]: () => Promise<void>; }
+>{ [await]: foo } : { [x: string]: () => Promise<void>; }
 >[await] : () => Promise<void>
 >await : any
 > : any

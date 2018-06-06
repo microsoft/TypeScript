@@ -3,8 +3,8 @@ function * foo() {
 >foo : () => IterableIterator<any>
 
   var v = { [yield]: foo }
->v : { [x: number]: () => IterableIterator<any>; }
->{ [yield]: foo } : { [x: number]: () => IterableIterator<any>; }
+>v : { [x: string]: () => IterableIterator<any>; }
+>{ [yield]: foo } : { [x: string]: () => IterableIterator<any>; }
 >[yield] : () => IterableIterator<any>
 >yield : any
 >foo : () => IterableIterator<any>

@@ -1,7 +1,7 @@
 === tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration8_es5.ts ===
 var v = { [await]: foo }
->v : { [x: number]: any; }
->{ [await]: foo } : { [x: number]: any; }
+>v : { [x: string]: any; }
+>{ [await]: foo } : { [x: string]: any; }
 >[await] : any
 >await : any
 >foo : any

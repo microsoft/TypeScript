@@ -21,9 +21,9 @@ class StringIterator {
     }
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
->Symbol.iterator : any
->Symbol : any
->iterator : any
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
 
         return this;
 >this : this

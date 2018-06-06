@@ -1,9 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts(2,5): error TS1166: A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts(2,6): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts (2 errors) ====
     class C {
         [Symbol.isRegExp]: string;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.
          ~~~~~~
 !!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
     }

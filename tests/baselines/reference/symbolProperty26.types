@@ -4,9 +4,9 @@ class C1 {
 
     [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : () => string
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
         return "";
 >"" : ""
@@ -19,9 +19,9 @@ class C2 extends C1 {
 
     [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : () => string
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
         return "";
 >"" : ""

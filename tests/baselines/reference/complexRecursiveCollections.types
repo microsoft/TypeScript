@@ -1909,9 +1909,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
 >[Symbol.iterator] : () => IterableIterator<[keyof T, T[keyof T]]>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >IterableIterator : IterableIterator<T>
 >T : T
 >T : T
@@ -2736,9 +2736,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<[K, V]>;
 >[Symbol.iterator] : () => IterableIterator<[K, V]>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >IterableIterator : IterableIterator<T>
 >K : K
 >V : V
@@ -2980,9 +2980,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : () => IterableIterator<T>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >IterableIterator : IterableIterator<T>
 >T : T
     }
@@ -3090,9 +3090,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : () => IterableIterator<T>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >IterableIterator : IterableIterator<T>
 >T : T
     }

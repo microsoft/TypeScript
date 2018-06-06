@@ -51,9 +51,9 @@ async function objectLiteral2() {
 >objectLiteral2 : () => Promise<void>
 
     x = {
->x = {        [await a]: y,        b: z    } : { [x: number]: any; b: any; }
+>x = {        [await a]: y,        b: z    } : { [x: string]: any; b: any; }
 >x : any
->{        [await a]: y,        b: z    } : { [x: number]: any; b: any; }
+>{        [await a]: y,        b: z    } : { [x: string]: any; b: any; }
 
         [await a]: y,
 >[await a] : any
@@ -72,9 +72,9 @@ async function objectLiteral3() {
 >objectLiteral3 : () => Promise<void>
 
     x = {
->x = {        [a]: await y,        b: z    } : { [x: number]: any; b: any; }
+>x = {        [a]: await y,        b: z    } : { [x: string]: any; b: any; }
 >x : any
->{        [a]: await y,        b: z    } : { [x: number]: any; b: any; }
+>{        [a]: await y,        b: z    } : { [x: string]: any; b: any; }
 
         [a]: await y,
 >[a] : any
@@ -93,9 +93,9 @@ async function objectLiteral4() {
 >objectLiteral4 : () => Promise<void>
 
     x = {
->x = {        a: await y,        [b]: z    } : { [x: number]: any; a: any; }
+>x = {        a: await y,        [b]: z    } : { [x: string]: any; a: any; }
 >x : any
->{        a: await y,        [b]: z    } : { [x: number]: any; a: any; }
+>{        a: await y,        [b]: z    } : { [x: string]: any; a: any; }
 
         a: await y,
 >a : any
@@ -114,9 +114,9 @@ async function objectLiteral5() {
 >objectLiteral5 : () => Promise<void>
 
     x = {
->x = {        a: y,        [await b]: z    } : { [x: number]: any; a: any; }
+>x = {        a: y,        [await b]: z    } : { [x: string]: any; a: any; }
 >x : any
->{        a: y,        [await b]: z    } : { [x: number]: any; a: any; }
+>{        a: y,        [await b]: z    } : { [x: string]: any; a: any; }
 
         a: y,
 >a : any
@@ -135,9 +135,9 @@ async function objectLiteral6() {
 >objectLiteral6 : () => Promise<void>
 
     x = {
->x = {        a: y,        [b]: await z    } : { [x: number]: any; a: any; }
+>x = {        a: y,        [b]: await z    } : { [x: string]: any; a: any; }
 >x : any
->{        a: y,        [b]: await z    } : { [x: number]: any; a: any; }
+>{        a: y,        [b]: await z    } : { [x: string]: any; a: any; }
 
         a: y,
 >a : any
