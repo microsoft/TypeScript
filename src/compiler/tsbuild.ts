@@ -90,7 +90,12 @@ namespace ts {
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
         UpstreamOutOfDate,
-        UpstreamBlocked
+        UpstreamBlocked,
+
+        /**
+         * Projects with no outputs (i.e. "solution" files)
+         */
+        ContainerOnly
     }
 
     export type UpToDateStatus =
@@ -100,7 +105,8 @@ namespace ts {
         | Status.OutOfDateWithSelf
         | Status.OutOfDateWithUpstream
         | Status.UpstreamOutOfDate
-        | Status.UpstreamBlocked;
+        | Status.UpstreamBlocked
+        | Status.ContainerOnly;
 
     export namespace Status {
         /**
@@ -113,14 +119,24 @@ namespace ts {
         }
 
         /**
+         * This project doesn't have any outputs, so "is it up to date" is a meaningless question.
+         */
+        export interface ContainerOnly {
+            type: UpToDateStatusType.ContainerOnly;
+        }
+
+        /**
          * The project is up to date with respect to its inputs.
          * We track what the newest input file is.
          */
         export interface UpToDate {
             type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
             newestInputFileTime: Date;
+            newestInputFileName: string;
             newestDeclarationFileContentChangedTime: Date;
             newestOutputFileTime: Date;
+            newestOutputFileName: string;
+            oldestOutputFileName: string;
         }
 
         /**
@@ -684,12 +700,19 @@ namespace ts {
             // Collect the expected outputs of this project
             const outputs = getAllProjectOutputs(project);
 
+            if (outputs.length === 0) {
+                return {
+                    type: UpToDateStatusType.ContainerOnly
+                };
+            }
+
             // Now see if all outputs are newer than the newest input
-            let oldestOutputFileName: string | undefined;
-            let oldestOutputFileTime: Date = maximumDate;
-            let newestOutputFileTime: Date = minimumDate;
-            let newestDeclarationFileContentChangedTime: Date = minimumDate;
+            let oldestOutputFileName = "(none)";
+            let oldestOutputFileTime = maximumDate;
+            let newestOutputFileName = "(none)";
+            let newestOutputFileTime = minimumDate;
             let missingOutputFileName: string | undefined;
+            let newestDeclarationFileContentChangedTime = minimumDate;
             let isOutOfDateWithInputs = false;
             for (const output of outputs) {
                 // Output is missing; can stop checking
@@ -712,7 +735,10 @@ namespace ts {
                     break;
                 }
 
-                newestOutputFileTime = newer(newestOutputFileTime, outputTime);
+                if (outputTime > newestOutputFileTime) {
+                    newestOutputFileTime = outputTime;
+                    newestOutputFileName = output;
+                }
 
                 // Keep track of when the most recent time a .d.ts file was changed.
                 // In addition to file timestamps, we also keep track of when a .d.ts file
@@ -768,7 +794,7 @@ namespace ts {
                     Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
                     return {
                         type: UpToDateStatusType.OutOfDateWithUpstream,
-                        outOfDateOutputFileName: oldestOutputFileName!,
+                        outOfDateOutputFileName: oldestOutputFileName,
                         newerProjectName: ref.path
                     };
                 }
@@ -784,7 +810,7 @@ namespace ts {
             if (isOutOfDateWithInputs) {
                 return {
                     type: UpToDateStatusType.OutOfDateWithSelf,
-                    outOfDateOutputFileName: oldestOutputFileName!,
+                    outOfDateOutputFileName: oldestOutputFileName,
                     newerInputFileName: newestInputFileName
                 };
             }
@@ -794,7 +820,10 @@ namespace ts {
                 type: pseudoUpToDate ? UpToDateStatusType.UpToDateWithUpstreamTypes : UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime,
                 newestInputFileTime,
-                newestOutputFileTime
+                newestOutputFileTime,
+                newestInputFileName,
+                newestOutputFileName,
+                oldestOutputFileName
             };
         }
 
@@ -1087,6 +1116,11 @@ namespace ts {
                     continue;
                 }
 
+                if (status.type === UpToDateStatusType.ContainerOnly) {
+                    // Do nothing
+                    continue;
+                }
+
                 buildSingleProject(next);
             }
         }
@@ -1101,7 +1135,11 @@ namespace ts {
             for (const name of graph.buildQueue) {
                 names.push(name);
             }
-            context.verbose(Diagnostics.Projects_in_this_build_Colon_0, names.map(s => "\r\n    * " + s).join(""));
+            context.verbose(Diagnostics.Projects_in_this_build_Colon_0, names.map(s => "\r\n    * " + relName(s)).join(""));
+        }
+
+        function relName(path: string): string {
+            return convertToRelativePath(path, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
         }
 
         /**
@@ -1111,32 +1149,46 @@ namespace ts {
             if (!context.options.verbose) return;
             switch (status.type) {
                 case UpToDateStatusType.OutOfDateWithSelf:
-                    context.verbose(Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, configFileName, status.outOfDateOutputFileName, status.newerInputFileName);
-                    return;
+                    return context.verbose(Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
+                        relName(configFileName),
+                        relName(status.outOfDateOutputFileName),
+                        relName(status.newerInputFileName));
                 case UpToDateStatusType.OutOfDateWithUpstream:
-                    context.verbose(Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, configFileName, status.outOfDateOutputFileName, status.newerProjectName);
-                    return;
+                    return context.verbose(Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
+                        relName(configFileName),
+                        relName(status.outOfDateOutputFileName),
+                        relName(status.newerProjectName));
                 case UpToDateStatusType.OutputMissing:
-                    context.verbose(Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFileName, status.missingOutputFileName);
-                    return;
+                    return context.verbose(Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
+                        relName(configFileName),
+                        relName(status.missingOutputFileName));
                 case UpToDateStatusType.UpToDate:
                     if (status.newestInputFileTime !== undefined) {
-                        context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFileName, status.newestInputFileTime, status.newestOutputFileTime);
+                        return context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
+                            relName(configFileName),
+                            relName(status.newestInputFileName),
+                            relName(status.oldestOutputFileName));
                     }
                     // Don't report anything for "up to date because it was already built" -- too verbose
-                    return;
+                    break;
                 case UpToDateStatusType.UpToDateWithUpstreamTypes:
-                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, configFileName);
-                    return;
+                    return context.verbose(Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
+                        relName(configFileName));
                 case UpToDateStatusType.UpstreamOutOfDate:
-                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, configFileName);
-                    return;
+                    return context.verbose(Diagnostics.Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date,
+                        relName(configFileName),
+                        relName(status.upstreamProjectName));
                 case UpToDateStatusType.UpstreamBlocked:
-                    context.verbose(Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, configFileName, status.upstreamProjectName);
-                    return;
+                    return context.verbose(Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
+                        relName(configFileName),
+                        relName(status.upstreamProjectName));
                 case UpToDateStatusType.Unbuildable:
-                    context.verbose(Diagnostics.Failed_to_parse_file_0_Colon_1, configFileName, status.reason);
-                    return;
+                    return context.verbose(Diagnostics.Failed_to_parse_file_0_Colon_1,
+                        relName(configFileName),
+                        status.reason);
+                case UpToDateStatusType.ContainerOnly:
+                    // Don't report status on "solution" projects
+                    break;
                 default:
                     assertTypeIsNever(status);
             }
