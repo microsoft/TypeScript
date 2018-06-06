@@ -641,7 +641,7 @@ namespace ts {
                 reportProjectStatus(next, status);
 
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    context.verbose(Diagnostics.Skipping_build_of_project_0_because_its_upstream_project_1_has_errors, resolved, status.upstreamProjectName);
+                    context.verbose(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
                     continue;
                 }
 
@@ -859,7 +859,7 @@ namespace ts {
 
         function buildSingleProject(proj: ResolvedConfigFileName): BuildResultFlags {
             if (context.options.dry) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_non_dry_build_would_build_project_0, proj));
                 return BuildResultFlags.Success;
             }
 
@@ -948,7 +948,7 @@ namespace ts {
 
         function updateOutputTimestamps(proj: ParsedCommandLine) {
             if (context.options.dry) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj.options.configFilePath));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath));
                 return;
             }
 
@@ -1013,7 +1013,7 @@ namespace ts {
             }
 
             if (context.options.dry) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join("")));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join("")));
             }
             else {
                 if (!host.deleteFile) {
@@ -1083,7 +1083,7 @@ namespace ts {
                 }
 
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    context.verbose(Diagnostics.Skipping_build_of_project_0_because_its_upstream_project_1_has_errors, projName, status.upstreamProjectName);
+                    context.verbose(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
                     continue;
                 }
 
@@ -1101,7 +1101,7 @@ namespace ts {
             for (const name of graph.buildQueue) {
                 names.push(name);
             }
-            context.verbose(Diagnostics.Sorted_list_of_input_projects_Colon_0, names.map(s => "\r\n    * " + s).join(""));
+            context.verbose(Diagnostics.Projects_in_this_build_Colon_0, names.map(s => "\r\n    * " + s).join(""));
         }
 
         /**
@@ -1123,22 +1123,19 @@ namespace ts {
                     if (status.newestInputFileTime !== undefined) {
                         context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFileName, status.newestInputFileTime, status.newestOutputFileTime);
                     }
-                    else {
-                        context.verbose(Diagnostics.Project_0_is_up_to_date_because_it_was_previously_built, configFileName);
-                    }
+                    // Don't report anything for "up to date because it was already built" -- too verbose
                     return;
                 case UpToDateStatusType.UpToDateWithUpstreamTypes:
-                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
+                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, configFileName);
                     return;
                 case UpToDateStatusType.UpstreamOutOfDate:
-                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
+                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, configFileName);
                     return;
                 case UpToDateStatusType.UpstreamBlocked:
-                    context.verbose(Diagnostics.Project_0_can_t_be_built_because_it_depends_on_a_project_with_errors, configFileName);
+                    context.verbose(Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, configFileName, status.upstreamProjectName);
                     return;
                 case UpToDateStatusType.Unbuildable:
-                    // TODO different error
-                    context.verbose(Diagnostics.Project_0_can_t_be_built_because_it_depends_on_a_project_with_errors, configFileName);
+                    context.verbose(Diagnostics.Failed_to_parse_file_0_Colon_1, configFileName, status.reason);
                     return;
                 default:
                     assertTypeIsNever(status);

@@ -3633,19 +3633,19 @@
         "code": 6352
     },
     
-    "Project '{0}' is up to date with its upstream types": {
+    "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6353
     },
-    "Sorted list of input projects: {0}": {
+    "Projects in this build: {0}": {
         "category": "Message",
         "code": 6354
     },
-    "Would delete the following files:{0}": {
+    "A non-dry build would delete the following files: {0}": {
         "category": "Message",
         "code": 6355
     },
-    "Would build project '{0}'": {
+    "A non-dry build would build project '{0}'": {
         "category": "Message",
         "code": 6356
     },
@@ -3657,7 +3657,7 @@
         "category": "Message",
         "code": 6358
     },
-    "Project '{0}' is up to date because it was previously built": {
+    "delete this - Project '{0}' is up to date because it was previously built": {
         "category": "Message",
         "code": 6359
     },
@@ -3665,15 +3665,15 @@
         "category": "Message",
         "code": 6360
     },
-    "Skipping build of project '{0}' because its upstream project '{1}' has errors": {
+    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
         "category": "Message",
         "code": 6361
     },
-    "Project '{0}' can't be built because it depends on a project with errors": {
+    "Project '{0}' can't be built because its dependency '{1}' has errors": {
         "category": "Message",
         "code": 6362
     },
-    "Build one or more projects and their dependencies, if out-of-date": {
+    "Build one or more projects and their dependencies, if out of date": {
         "category": "Message",
         "code": 6363
     },
@@ -3685,11 +3685,11 @@
         "category": "Message",
         "code": 6365
     },
-    "Show what would be built (or deleted, if specified with --clean)": {
+    "Show what would be built (or deleted, if specified with '--clean')": {
         "category": "Message",
         "code": 6366
     },
-    "Build all projects, including those that appear to be up-to-date": {
+    "Build all projects, including those that appear to be up to date": {
         "category": "Message",
         "code": 6367
     },

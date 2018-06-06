@@ -35,7 +35,7 @@ namespace ts {
                 const host = new fakes.CompilerHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: true, force: false, verbose: false });
                 builder.buildAllProjects();
-                assertDiagnosticMessages(Diagnostics.Would_build_project_0, Diagnostics.Would_build_project_0, Diagnostics.Would_build_project_0);
+                assertDiagnosticMessages(Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0);
 
                 // Check for outputs to not be written. Not an exhaustive list
                 for (const output of allExpectedOutputs) {
@@ -116,7 +116,7 @@ namespace ts {
                 clearDiagnostics();
                 builder.resetBuildContext();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
+                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                     Diagnostics.Building_project_0,
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
@@ -131,7 +131,7 @@ namespace ts {
                 clearDiagnostics();
                 builder.resetBuildContext();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
+                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2);
@@ -145,7 +145,7 @@ namespace ts {
                 builder.resetBuildContext();
                 builder.buildAllProjects();
 
-                assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
+                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
@@ -160,12 +160,12 @@ namespace ts {
                 builder.resetBuildContext();
                 builder.buildAllProjects();
 
-                assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
+                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
                     Diagnostics.Building_project_0,
-                    Diagnostics.Project_0_is_up_to_date_with_its_upstream_types,
+                    Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
                     Diagnostics.Updating_output_timestamps_of_project_0,
-                    Diagnostics.Project_0_is_up_to_date_with_its_upstream_types,
+                    Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
                     Diagnostics.Updating_output_timestamps_of_project_0);
             });
         });
@@ -182,14 +182,14 @@ namespace ts {
                 replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`);
                 builder.buildAllProjects();
                 assertDiagnosticMessages(
-                    Diagnostics.Sorted_list_of_input_projects_Colon_0,
+                    Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                     Diagnostics.Building_project_0,
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                     Diagnostics.Building_project_0,
                     Diagnostics.Property_0_does_not_exist_on_type_1,
-                    Diagnostics.Project_0_can_t_be_built_because_it_depends_on_a_project_with_errors,
-                    Diagnostics.Skipping_build_of_project_0_because_its_upstream_project_1_has_errors
+                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
+                    Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors
                 );
             });
         });
