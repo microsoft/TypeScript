@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/Symbols/symbolProperty36.ts(3,5): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+tests/cases/conformance/es6/Symbols/symbolProperty36.ts(3,5): error TS2718: Duplicate declaration '[Symbol.isConcatSpreadable]'.
 
 
 ==== tests/cases/conformance/es6/Symbols/symbolProperty36.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/conformance/es6/Symbols/symbolProperty36.ts(3,5): error TS2300: Dupl
         [Symbol.isConcatSpreadable]: 0,
         [Symbol.isConcatSpreadable]: 1
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+!!! error TS2718: Duplicate declaration '[Symbol.isConcatSpreadable]'.
     }

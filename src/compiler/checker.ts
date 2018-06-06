@@ -23594,7 +23594,7 @@ namespace ts {
         function getPropertyNameForKnownSymbolName(symbolName: string): __String {
             const ctorType = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ false);
             const uniqueType = ctorType && getTypeOfPropertyOfType(getTypeOfSymbol(ctorType), escapeLeadingUnderscores(symbolName));
-            return uniqueType ? getLateBoundNameFromType(uniqueType) : `__@${symbolName}` as __String;
+            return uniqueType && isTypeUsableAsLateBoundName(uniqueType) ? getLateBoundNameFromType(uniqueType) : `__@${symbolName}` as __String;
         }
 
         /**

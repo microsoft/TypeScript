@@ -160,8 +160,8 @@ async function * f21() {
 >f21 : () => AsyncIterableIterator<any>
 
     const x = { [yield]: 1 };
->x : { [x: number]: number; }
->{ [yield]: 1 } : { [x: number]: number; }
+>x : { [x: string]: number; }
+>{ [yield]: 1 } : { [x: string]: number; }
 >[yield] : number
 >yield : any
 >1 : 1
