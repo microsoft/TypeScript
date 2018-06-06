@@ -3531,9 +3531,11 @@ namespace ts {
                         context.enclosingDeclaration = undefined;
                         if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
                             const decl = first(propertySymbol.declarations);
-                            const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
-                            if (name && context.tracker.trackSymbol) {
-                                context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                            if (hasLateBindableName(decl)) {
+                                const name = checkExpression(decl.name.expression) && getNodeLinks(decl.name.expression).resolvedSymbol;
+                                if (name && context.tracker.trackSymbol) {
+                                    context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                                }
                             }
                         }
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -16079,7 +16081,10 @@ namespace ts {
                 }
 
                 if (computedNameType && !(computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
-                    if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
+                    if (isTypeAny(computedNameType)) {
+                        hasComputedStringProperty = true; // string is the closest to a catch-all index signature we have
+                    }
+                    else if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
                         if (isTypeAssignableTo(computedNameType, numberType)) {
                             hasComputedNumberProperty = true;
                         }
@@ -16092,6 +16097,10 @@ namespace ts {
                     }
                 }
                 else {
+                    if (computedNameType && propertiesTable.get(member.escapedName) && !isGetOrSetAccessorDeclaration(memberDecl)) {
+                        // The binder issues error for normal duplicate props, but for computed names we must do so here
+                        error(memberDecl.name, Diagnostics.Duplicate_declaration_0, getNameOfSymbolAsWritten(member));
+                    }
                     propertiesTable.set(member.escapedName, member);
                 }
                 propertiesArray.push(member);
@@ -23583,8 +23592,8 @@ namespace ts {
         }
 
         function getPropertyNameForKnownSymbolName(symbolName: string): __String {
-            const ctorType = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ true);
-            const uniqueType = ctorType && getTypeOfPropertyOfType(getDeclaredTypeOfSymbol(ctorType), escapeLeadingUnderscores(symbolName));
+            const ctorType = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ false);
+            const uniqueType = ctorType && getTypeOfPropertyOfType(getTypeOfSymbol(ctorType), escapeLeadingUnderscores(symbolName));
             return uniqueType ? getLateBoundNameFromType(uniqueType) : `__@${symbolName}` as __String;
         }
 
@@ -23810,7 +23819,7 @@ namespace ts {
 
         function isGetAccessorWithAnnotatedSetAccessor(node: SignatureDeclaration) {
             return node.kind === SyntaxKind.GetAccessor
-                && getEffectiveSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(node.symbol, SyntaxKind.SetAccessor)!) !== undefined;
+                && getEffectiveSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(getSymbolOfNode(node), SyntaxKind.SetAccessor)!) !== undefined;
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: SignatureDeclaration, returnType: Type): boolean {
