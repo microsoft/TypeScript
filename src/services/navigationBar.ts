@@ -169,16 +169,12 @@ namespace ts.NavigationBar {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodSignature:
-                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
-                    addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
-                }
+                addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
                 break;
 
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
-                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
-                    addLeafNode(node);
-                }
+                addLeafNode(node);
                 break;
 
             case SyntaxKind.ImportClause:
@@ -408,7 +404,8 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName) {
-            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName)!); // TODO: GH#18217
+            const candidate = getPropertyNameForPropertyNameNode(declName);
+            return candidate ? unescapeLeadingUnderscores(candidate) : getTextOfNode(declName);
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
