@@ -20046,7 +20046,6 @@ namespace ts {
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type): Type {
             const properties = node.properties;
-            checkGrammarForDisallowedTrailingComma(properties, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
             if (strictNullChecks && properties.length === 0) {
                 return checkNonNullType(sourceType, node);
             }
@@ -20057,7 +20056,7 @@ namespace ts {
         }
 
         /** Note: If property cannot be a SpreadAssignment, then allProperties does not need to be provided */
-        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: ReadonlyArray<ObjectLiteralElementLike>) {
+        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: NodeArray<ObjectLiteralElementLike>) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = property.name;
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
@@ -20097,6 +20096,7 @@ namespace ts {
                     }
                 }
                 const type = getRestType(objectLiteralType, nonRestNames, objectLiteralType.symbol);
+                checkGrammarForDisallowedTrailingComma(allProperties, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
                 return checkDestructuringAssignment(property.expression, type);
             }
             else {
@@ -20106,7 +20106,6 @@ namespace ts {
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
             const elements = node.elements;
-            checkGrammarForDisallowedTrailingComma(elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
             if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
             }
@@ -20158,6 +20157,7 @@ namespace ts {
                             error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
                         }
                         else {
+                            checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
                             return checkDestructuringAssignment(restExpression, createArrayType(elementType), checkMode);
                         }
                     }
