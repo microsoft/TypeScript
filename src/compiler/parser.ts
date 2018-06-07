@@ -6486,54 +6486,42 @@ namespace ts {
 
                     const tagName = parseJSDocIdentifierName();
                     skipWhitespace();
-                    if (!tagName) {
-                        return;
-                    }
 
                     let tag: JSDocTag | undefined;
-                    if (tagName) {
-                        switch (tagName.escapedText) {
-                            case "augments":
-                            case "extends":
-                                tag = parseAugmentsTag(atToken, tagName);
-                                break;
-                            case "class":
-                            case "constructor":
-                                tag = parseClassTag(atToken, tagName);
-                                break;
-                            case "arg":
-                            case "argument":
-                            case "param":
-                                return parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent);
-                            case "return":
-                            case "returns":
-                                tag = parseReturnTag(atToken, tagName);
-                                break;
-                            case "template":
-                                tag = parseTemplateTag(atToken, tagName);
-                                break;
-                            case "type":
-                                tag = parseTypeTag(atToken, tagName);
-                                break;
-                            case "typedef":
-                                tag = parseTypedefTag(atToken, tagName, indent);
-                                break;
-                            case "callback":
-                                tag = parseCallbackTag(atToken, tagName, indent);
-                                break;
-                            default:
-                                tag = parseUnknownTag(atToken, tagName);
-                                break;
-                        }
-                    }
-                    else {
-                        tag = parseUnknownTag(atToken, tagName);
+                    switch (tagName.escapedText) {
+                        case "augments":
+                        case "extends":
+                            tag = parseAugmentsTag(atToken, tagName);
+                            break;
+                        case "class":
+                        case "constructor":
+                            tag = parseClassTag(atToken, tagName);
+                            break;
+                        case "arg":
+                        case "argument":
+                        case "param":
+                            return parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent);
+                        case "return":
+                        case "returns":
+                            tag = parseReturnTag(atToken, tagName);
+                            break;
+                        case "template":
+                            tag = parseTemplateTag(atToken, tagName);
+                            break;
+                        case "type":
+                            tag = parseTypeTag(atToken, tagName);
+                            break;
+                        case "typedef":
+                            tag = parseTypedefTag(atToken, tagName, indent);
+                            break;
+                        case "callback":
+                            tag = parseCallbackTag(atToken, tagName, indent);
+                            break;
+                        default:
+                            tag = parseUnknownTag(atToken, tagName);
+                            break;
                     }
 
-                    if (!tag) {
-                        // a badly malformed tag should not be added to the list of tags
-                        return;
-                    }
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
                         tag.comment = parseTagComments(indent + tag.end - tag.pos);
@@ -6763,11 +6751,11 @@ namespace ts {
                 }
 
                 function parsePropertyAccessEntityNameExpression() {
-                    let node: Identifier | PropertyAccessEntityNameExpression = parseJSDocIdentifierName(/*createIfMissing*/ true);
+                    let node: Identifier | PropertyAccessEntityNameExpression = parseJSDocIdentifierName();
                     while (parseOptional(SyntaxKind.DotToken)) {
                         const prop: PropertyAccessEntityNameExpression = createNode(SyntaxKind.PropertyAccessExpression, node.pos) as PropertyAccessEntityNameExpression;
                         prop.expression = node;
-                        prop.name = parseJSDocIdentifierName()!; // TODO: GH#18217
+                        prop.name = parseJSDocIdentifierName();
                         node = finishNode(prop);
                     }
                     return node;
@@ -6832,9 +6820,11 @@ namespace ts {
 
                 function parseJSDocTypeNameWithNamespace(nested?: boolean) {
                     const pos = scanner.getTokenPos();
+                    if (!tokenIsIdentifierOrKeyword(token())) {
+                        return undefined;
+                    }
                     const typeNameOrNamespaceName = parseJSDocIdentifierName();
-
-                    if (typeNameOrNamespaceName && parseOptional(SyntaxKind.DotToken)) {
+                    if (parseOptional(SyntaxKind.DotToken)) {
                         const jsDocNamespaceNode = <JSDocNamespaceDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
                         if (nested) {
                             jsDocNamespaceNode.flags |= NodeFlags.NestedNamespace;
@@ -6844,7 +6834,7 @@ namespace ts {
                         return finishNode(jsDocNamespaceNode);
                     }
 
-                    if (typeNameOrNamespaceName && nested) {
+                    if (nested) {
                         typeNameOrNamespaceName.isInJSDocNamespace = true;
                     }
                     return typeNameOrNamespaceName;
@@ -6954,9 +6944,6 @@ namespace ts {
 
                     const tagName = parseJSDocIdentifierName();
                     skipWhitespace();
-                    if (!tagName) {
-                        return false;
-                    }
                     let t: PropertyLikeParse;
                     switch (tagName.escapedText) {
                         case "type":
@@ -6981,7 +6968,7 @@ namespace ts {
                     return tag;
                 }
 
-                function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
+                function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag {
                     // the template tag looks like '@template {Constraint} T,U,V'
                     let constraint: JSDocTypeExpression | undefined;
                     if (token() === SyntaxKind.OpenBraceToken) {
@@ -6993,11 +6980,7 @@ namespace ts {
                     do {
                         skipWhitespace();
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-                        if (!tokenIsIdentifierOrKeyword(token())) {
-                            parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
-                            return undefined;
-                        }
-                        typeParameter.name = parseJSDocIdentifierName()!;
+                        typeParameter.name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                         skipWhitespace();
                         finishNode(typeParameter);
                         typeParameters.push(typeParameter);
@@ -7028,7 +7011,7 @@ namespace ts {
                 }
 
                 function parseJSDocEntityName(): EntityName {
-                    let entity: EntityName = parseJSDocIdentifierName(/*createIfMissing*/ true);
+                    let entity: EntityName = parseJSDocIdentifierName();
                     if (parseOptional(SyntaxKind.OpenBracketToken)) {
                         parseExpected(SyntaxKind.CloseBracketToken);
                         // Note that y[] is accepted as an entity name, but the postfix brackets are not saved for checking.
@@ -7036,7 +7019,7 @@ namespace ts {
                         // but it's not worth it to enforce that restriction.
                     }
                     while (parseOptional(SyntaxKind.DotToken)) {
-                        const name = parseJSDocIdentifierName(/*createIfMissing*/ true);
+                        const name = parseJSDocIdentifierName();
                         if (parseOptional(SyntaxKind.OpenBracketToken)) {
                             parseExpected(SyntaxKind.CloseBracketToken);
                         }
@@ -7045,17 +7028,9 @@ namespace ts {
                     return entity;
                 }
 
-                function parseJSDocIdentifierName(): Identifier | undefined;
-                function parseJSDocIdentifierName(createIfMissing: true): Identifier;
-                function parseJSDocIdentifierName(createIfMissing = false): Identifier | undefined {
+                function parseJSDocIdentifierName(message?: DiagnosticMessage): Identifier {
                     if (!tokenIsIdentifierOrKeyword(token())) {
-                        if (createIfMissing) {
-                            return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
-                        }
-                        else {
-                            parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
-                            return undefined;
-                        }
+                        return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ !message, message || Diagnostics.Identifier_expected);
                     }
 
                     const pos = scanner.getTokenPos();

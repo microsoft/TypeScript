@@ -451,6 +451,16 @@ namespace ts {
         return isModuleDeclaration(node) && isStringLiteral(node.name);
     }
 
+    /**
+     * An effective module (namespace) declaration is either
+     * 1. An actual declaration: namespace X { ... }
+     * 2. A Javascript declaration, which is:
+     *    An identifier in a nested property access expression: Y in `X.Y.Z = { ... }`
+     */
+    export function isEffectiveModuleDeclaration(node: Node) {
+        return isModuleDeclaration(node) || isIdentifier(node);
+    }
+
     /** Given a symbol for a module, checks that it is a shorthand ambient module. */
     export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
         return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
