@@ -1,12 +1,12 @@
 === tests/cases/conformance/salsa/bug24730.js ===
 var UI = {}
->UI : { [x: string]: any; TreeElement: typeof TreeElement; context: any; }
->{} : { [x: string]: any; TreeElement: typeof TreeElement; context: any; }
+>UI : typeof UI
+>{} : { [x: string]: any; }
 
 UI.TreeElement = class {
 >UI.TreeElement = class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement
 >UI.TreeElement : typeof TreeElement
->UI : { [x: string]: any; TreeElement: typeof TreeElement; context: any; }
+>UI : typeof UI
 >TreeElement : typeof TreeElement
 >class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement
 
@@ -21,18 +21,18 @@ UI.TreeElement = class {
 };
 UI.context = new UI.TreeElement()
 >UI.context = new UI.TreeElement() : TreeElement
->UI.context : any
->UI : { [x: string]: any; TreeElement: typeof TreeElement; context: any; }
->context : any
+>UI.context : TreeElement
+>UI : typeof UI
+>context : TreeElement
 >new UI.TreeElement() : TreeElement
 >UI.TreeElement : typeof TreeElement
->UI : { [x: string]: any; TreeElement: typeof TreeElement; context: any; }
+>UI : typeof UI
 >TreeElement : typeof TreeElement
 
 class C extends UI.TreeElement {
 >C : C
 >UI.TreeElement : TreeElement
->UI : { [x: string]: any; TreeElement: typeof TreeElement; context: any; }
+>UI : typeof UI
 >TreeElement : typeof TreeElement
 
     onpopulate() {

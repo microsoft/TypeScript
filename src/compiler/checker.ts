@@ -4942,9 +4942,11 @@ namespace ts {
                 // * exports.p = expr
                 // * this.p = expr
                 // * className.prototype.method = expr
-                if (declaration.kind === SyntaxKind.BinaryExpression ||
-                    declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                if (isBinaryExpression(declaration)) {
+                    type = getJSInitializerType(symbol, getAssignedJavascriptInitializer(declaration.left)) || getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                }
+                else if (isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent)) {
+                    type = getJSInitializerType(symbol, getAssignedJavascriptInitializer(declaration)) || getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else if (isJSDocPropertyLikeTag(declaration)
                     || isPropertyAccessExpression(declaration)
@@ -4977,9 +4979,8 @@ namespace ts {
                     || isPropertySignature(declaration)
                     || isVariableDeclaration(declaration)
                     || isBindingElement(declaration)) {
-                    links.type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
-                    type = widenTypeForVariableLikeDeclaration(links.type, declaration, /*includeOptionality*/ true);
-                    links.type = undefined;
+                    type = getJSInitializerType(symbol, getDeclaredJavascriptInitializer(declaration)) ||
+                        getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
                 }
                 else {
                     return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
@@ -4991,6 +4992,12 @@ namespace ts {
                 links.type = type;
             }
             return links.type;
+        }
+
+        function getJSInitializerType(symbol: Symbol, init: Expression | undefined): Type | undefined {
+            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init) && hasEntries(symbol.exports)) {
+                return createAnonymousType(symbol, symbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+            }
         }
 
         function getAnnotatedAccessorType(accessor: AccessorDeclaration | undefined): Type | undefined {
@@ -12180,14 +12187,6 @@ namespace ts {
                 // widen accessor based properties here.
                 return prop;
             }
-            if (prop.flags & SymbolFlags.JSContainer) {
-                const node = prop.declarations && first(prop.declarations);
-                const init = getAssignedJavascriptInitializer(node);
-                if (init && init.kind !== SyntaxKind.ObjectLiteralExpression) {
-                    // for JS special declarations, the only kind of initializer that will widen is object literals
-                    return prop;
-                }
-            }
             const original = getTypeOfSymbol(prop);
             const propContext = context && createWideningContext(context, prop.escapedName, /*siblings*/ undefined);
             const widened = getWidenedTypeWithContext(original, propContext);
@@ -15995,19 +15994,6 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
-
-            if (isInJSFile) {
-                const decl = getDeclarationOfJSInitializer(node);
-                if (decl) {
-                    // a JS object literal whose declaration's symbol has exports is a JS namespace
-                    const symbol = getSymbolOfNode(decl);
-                    if (symbol && hasEntries(symbol.exports)) {
-                        propertiesTable = symbol.exports;
-                        symbol.exports.forEach(s => propertiesArray.push(getMergedSymbol(s)));
-                        return createObjectLiteralType();
-                    }
-                }
-            }
             propertiesTable = createSymbolTable();
 
             let offset = 0;
@@ -20499,11 +20485,29 @@ namespace ts {
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1)
                     // and the type of the non-compound operation to be assignable to the type of VarExpr.
+
                     if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)
-                        && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
+                        && !isJSSpecialPropertyAssignment()) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
                         checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
                     }
+                }
+            }
+
+            function isJSSpecialPropertyAssignment() {
+                switch (getSpecialPropertyAssignmentKind(right.parent as BinaryExpression)) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case SpecialPropertyAssignmentKind.Property:
+                    case SpecialPropertyAssignmentKind.Prototype:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                        const symbol = getSymbolOfNode(left);
+                        const init = getAssignedJavascriptInitializer(right);
+                        return init && isObjectLiteralExpression(init) &&
+                            symbol && hasEntries(symbol.exports);
+                    default:
+                        return isIdentifier(left) && unescapeLeadingUnderscores(left.escapedText) === "exports";
                 }
             }
 
@@ -23279,9 +23283,15 @@ namespace ts {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error
                 const initializer = getEffectiveInitializer(node);
-                if (initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(initializer), type, node, /*headMessage*/ undefined);
-                    checkParameterInitializer(node);
+                if (initializer) {
+                    const isJSObjectLiteralInitializer = isInJavaScriptFile(node) &&
+                        isObjectLiteralExpression(initializer) &&
+                        (initializer.properties.length === 0 || isPrototypeAccess(node.name)) &&
+                        hasEntries(symbol.exports);
+                    if (!isJSObjectLiteralInitializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
+                        checkTypeAssignableTo(checkExpressionCached(initializer), type, node, /*headMessage*/ undefined);
+                        checkParameterInitializer(node);
+                    }
                 }
             }
             else {

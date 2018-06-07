@@ -1613,6 +1613,12 @@ namespace ts {
         return node.initializer;
     }
 
+    /** Get the declaration initializer when it is container-like (See getJavascriptInitializer). */
+    export function getDeclaredJavascriptInitializer(node: HasExpressionInitializer) {
+        const init = getEffectiveInitializer(node);
+        return init && getJavascriptInitializer(init, isPrototypeAccess(node.name));
+    }
+
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.

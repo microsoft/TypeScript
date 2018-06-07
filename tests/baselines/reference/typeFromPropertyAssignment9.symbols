@@ -40,7 +40,7 @@ my.predicate.query = function () {
 
     var me = this;
 >me : Symbol(me, Decl(a.js, 9, 7))
->this : Symbol(__object, Decl(a.js, 7, 30))
+>this : Symbol(my.predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 13, 3))
 
     me.property = false;
 >me : Symbol(me, Decl(a.js, 9, 7))

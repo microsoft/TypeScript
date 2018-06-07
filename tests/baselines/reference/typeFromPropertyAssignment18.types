@@ -1,11 +1,11 @@
 === tests/cases/conformance/salsa/a.js ===
 var GLOBSTAR = m.GLOBSTAR = {}
->GLOBSTAR : { [x: string]: any; q: number; }
->m.GLOBSTAR = {} : { [x: string]: any; q: number; }
+>GLOBSTAR : { [x: string]: any; }
+>m.GLOBSTAR = {} : { [x: string]: any; }
 >m.GLOBSTAR : { [x: string]: any; q: number; }
 >m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
 >GLOBSTAR : { [x: string]: any; q: number; }
->{} : { [x: string]: any; q: number; }
+>{} : { [x: string]: any; }
 
 function m() {
 >m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
@@ -13,7 +13,7 @@ function m() {
 GLOBSTAR.p = 1
 >GLOBSTAR.p = 1 : 1
 >GLOBSTAR.p : any
->GLOBSTAR : { [x: string]: any; q: number; }
+>GLOBSTAR : { [x: string]: any; }
 >p : any
 >1 : 1
 
@@ -26,10 +26,15 @@ m.GLOBSTAR.q = 2
 >q : number
 >2 : 2
 
+GLOBSTAR.p
+>GLOBSTAR.p : any
+>GLOBSTAR : { [x: string]: any; }
+>p : any
+
 GLOBSTAR.q
->GLOBSTAR.q : number
->GLOBSTAR : { [x: string]: any; q: number; }
->q : number
+>GLOBSTAR.q : any
+>GLOBSTAR : { [x: string]: any; }
+>q : any
 
 m.GLOBSTAR.p
 >m.GLOBSTAR.p : any
@@ -37,4 +42,11 @@ m.GLOBSTAR.p
 >m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
 >GLOBSTAR : { [x: string]: any; q: number; }
 >p : any
+
+m.GLOBSTAR.q
+>m.GLOBSTAR.q : number
+>m.GLOBSTAR : { [x: string]: any; q: number; }
+>m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
+>GLOBSTAR : { [x: string]: any; q: number; }
+>q : number
 
