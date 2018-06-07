@@ -1766,20 +1766,10 @@ namespace ts.server {
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
-            return textChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
-        }
-
-        private mapTextChangesToCodeEditsUsingScriptinfo(textChanges: FileTextChanges, scriptInfo: ScriptInfo | undefined): protocol.FileCodeEdits {
-            Debug.assert(!!textChanges.isNewFile === !scriptInfo);
-            if (scriptInfo) {
-                return {
-                    fileName: textChanges.fileName,
-                    textChanges: textChanges.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
-                };
-            }
-            else {
-                return this.convertNewFileTextChangeToCodeEdit(textChanges);
-            }
+            return textChanges.map(change => {
+                const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
+                return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
+            });
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
@@ -1790,14 +1780,7 @@ namespace ts.server {
             };
         }
 
-        private convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): protocol.FileCodeEdits {
-            Debug.assert(textChanges.textChanges.length === 1);
-            const change = first(textChanges.textChanges);
-            Debug.assert(change.span.start === 0 && change.span.length === 0);
-            return { fileName: textChanges.fileName, textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: change.newText }] };
-        }
-
-        private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] {
+        private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] | undefined {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
@@ -2270,6 +2253,34 @@ namespace ts.server {
         private getPreferences(file: NormalizedPath): UserPreferences {
             return this.projectService.getPreferences(file);
         }
+    }
+
+    function mapTextChangesToCodeEdits(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
+        Debug.assert(!!textChanges.isNewFile === !sourceFile);
+        if (sourceFile) {
+            return {
+                fileName: textChanges.fileName,
+                textChanges: textChanges.textChanges.map(textChange => convertTextChangeToCodeEdit(textChange, sourceFile)),
+            };
+        }
+        else {
+            return convertNewFileTextChangeToCodeEdit(textChanges);
+        }
+    }
+
+    function convertTextChangeToCodeEdit(change: TextChange, sourceFile: SourceFile): protocol.CodeEdit {
+        return {
+            start: convertToLocation(sourceFile.getLineAndCharacterOfPosition(change.span.start)),
+            end: convertToLocation(sourceFile.getLineAndCharacterOfPosition(change.span.start + change.span.length)),
+            newText: change.newText ? change.newText : "",
+        };
+    }
+
+    function convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): protocol.FileCodeEdits {
+        Debug.assert(textChanges.textChanges.length === 1);
+        const change = first(textChanges.textChanges);
+        Debug.assert(change.span.start === 0 && change.span.length === 0);
+        return { fileName: textChanges.fileName, textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: change.newText }] };
     }
 
     export interface HandlerResponse {
