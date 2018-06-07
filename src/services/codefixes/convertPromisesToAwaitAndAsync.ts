@@ -54,7 +54,7 @@ namespace ts.codefix {
             catchBlock = createCatchClause("e", createBlock(createNodeArray()));
         }
 
-        changes.replaceRange(sourceFile, onResTextRange, createTry(tryBlock, catchBlock, undefined), {prefix: "\n"})
+        changes.replaceRange(sourceFile, onResTextRange, createTry(tryBlock, catchBlock, undefined));
     }
 
 
@@ -76,24 +76,29 @@ namespace ts.codefix {
 
     }
 
-    function findDotThen(node:Node, checker:TypeChecker, onRes:boolean): [NodeArray<Statement>, string, TextRange]{
+    enum PromiseMemberFunc{
+        Then = "then",
+        Catch = "catch",
+    }
+
+    function findDotThen(node:Node, checker:TypeChecker, onRes:boolean, memberFunc:PromiseMemberFunc): [NodeArray<Statement>, string, TextRange]{
 
         const index:number = onRes ? 0 : 1;
 
         switch(node.kind){
             case SyntaxKind.PropertyAccessExpression:
-                if((<PropertyAccessExpression>node).name.text === "then" && isPromiseType(checker.getTypeAtLocation(node.parent))){
+                if((<PropertyAccessExpression>node).name.text === memberFunc && isPromiseType(checker.getTypeAtLocation(node.parent))){
                     let parNode = node.parent as CallExpression; 
                     if(parNode.arguments.length > index && isFunctionLikeDeclaration(parNode.arguments[index])){
                         //inlined function definitiion
                         let funcDecl:FunctionLikeDeclaration = parNode.arguments[index] as FunctionLikeDeclaration;
                         let funcBody:FunctionBody = funcDecl.body as FunctionBody;
-                        return [createNodeArray(funcBody.statements), funcDecl.parameters[0].symbol.name, createTextRange(parNode.pos, parNode.end)];
+                        return [createNodeArray(funcBody.statements), funcDecl.parameters[0].symbol.name, createTextRange(parNode.getStart(), parNode.end)];
                     }else if(parNode.arguments.length > index &&  isIdentifier(parNode.arguments[index])){
                         //reference to an elsewhere declared function
                         let argName = (<Identifier>(<FunctionLikeDeclaration>checker.getTypeAtLocation(parNode.arguments[index]).symbol.valueDeclaration).parameters[0].name)
                         let callExpr = createCall(parNode.arguments[index], undefined, [argName]);
-                        return [createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(parNode.pos, parNode.end)]
+                        return [createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(parNode.getStart(), parNode.end)]
                     }
                 }
                 break;
