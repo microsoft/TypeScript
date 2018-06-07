@@ -7186,7 +7186,7 @@ namespace ts {
                 const signature = getSignatureFromDeclaration(node.parent);
                 const parameterIndex = node.parent.parameters.indexOf(node);
                 Debug.assert(parameterIndex >= 0);
-                return parameterIndex >= signature.minArgumentCount;
+                return parameterIndex >= getMinArgumentCount(signature);
             }
             const iife = getImmediatelyInvokedFunctionExpression(node.parent);
             if (iife) {
@@ -7538,14 +7538,9 @@ namespace ts {
             return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
         }
 
-        function getRestTypeOfSignature(signature: Signature): Type {
-            if (signature.hasRestParameter) {
-                const type = getTypeOfSymbol(last(signature.parameters));
-                if (getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalArrayType) {
-                    return (<TypeReference>type).typeArguments![0];
-                }
-            }
-            return anyType;
+        function getRestTypeOfSignature(signature: Signature) {
+            let type = getTypeOfRestParameter(signature);
+            return type && getIndexTypeOfType(type, IndexKind.Number) || anyType;
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean): Signature {
@@ -10102,7 +10097,11 @@ namespace ts {
             if (source === target) {
                 return Ternary.True;
             }
-            if (!target.hasRestParameter && source.minArgumentCount > target.parameters.length) {
+
+            const sourceCount = getParameterCount(source);
+            const targetCount = getParameterCount(target);
+
+            if (!hasEffectiveRestParameter(target) && getMinArgumentCount(source) > targetCount) {
                 return Ternary.False;
             }
 
@@ -10133,14 +10132,20 @@ namespace ts {
                 }
             }
 
-            const sourceMax = getNumNonRestParameters(source);
-            const targetMax = getNumNonRestParameters(target);
-            const checkCount = getNumParametersToCheckForSignatureRelatability(source, sourceMax, target, targetMax);
-            const sourceParams = source.parameters;
-            const targetParams = target.parameters;
-            for (let i = 0; i < checkCount; i++) {
-                const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
-                const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
+            const paramCount = Math.max(sourceCount, targetCount);
+            for (let i = 0; i < paramCount; i++) {
+                let targetType;
+                let sourceType = getGenericRestTypeAtPosition(source, i);
+                if (sourceType) {
+                    targetType = getGenericRestTypeAtPosition(target, i);
+                    if (!targetType) {
+                        return Ternary.False;
+                    }
+                }
+                else {
+                    sourceType = getTypeAtPosition(source, i);
+                    targetType = getTypeAtPosition(target, i);
+                }
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -10160,8 +10165,7 @@ namespace ts {
                 if (!related) {
                     if (reportErrors) {
                         errorReporter!(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
-                            symbolName(sourceParams[i < sourceMax ? i : sourceMax]),
-                            symbolName(targetParams[i < targetMax ? i : targetMax]));
+                            getParameterNameAtPosition(source, i), getParameterNameAtPosition(target, i));
                     }
                     return Ternary.False;
                 }
@@ -10253,32 +10257,6 @@ namespace ts {
             }
 
             return false;
-        }
-
-        function getNumNonRestParameters(signature: Signature) {
-            const numParams = signature.parameters.length;
-            return signature.hasRestParameter ?
-                numParams - 1 :
-                numParams;
-        }
-
-        function getNumParametersToCheckForSignatureRelatability(source: Signature, sourceNonRestParamCount: number, target: Signature, targetNonRestParamCount: number) {
-            if (source.hasRestParameter === target.hasRestParameter) {
-                if (source.hasRestParameter) {
-                    // If both have rest parameters, get the max and add 1 to
-                    // compensate for the rest parameter.
-                    return Math.max(sourceNonRestParamCount, targetNonRestParamCount) + 1;
-                }
-                else {
-                    return Math.min(sourceNonRestParamCount, targetNonRestParamCount);
-                }
-            }
-            else {
-                // Return the count for whichever signature doesn't have rest parameters.
-                return source.hasRestParameter ?
-                    targetNonRestParamCount :
-                    sourceNonRestParamCount;
-            }
         }
 
         function isEmptyResolvedType(t: ResolvedType) {
@@ -11798,21 +11776,27 @@ namespace ts {
         }
 
         function isMatchingSignature(source: Signature, target: Signature, partialMatch: boolean) {
+            const sourceParameterCount = getParameterCount(source);
+            const targetParameterCount = getParameterCount(target);
+            const sourceMinArgumentCount = getMinArgumentCount(source);
+            const targetMinArgumentCount = getMinArgumentCount(target);
+            const sourceHasRestParameter = hasEffectiveRestParameter(source);
+            const targetHasRestParameter = hasEffectiveRestParameter(target);
             // A source signature matches a target signature if the two signatures have the same number of required,
             // optional, and rest parameters.
-            if (source.parameters.length === target.parameters.length &&
-                source.minArgumentCount === target.minArgumentCount &&
-                source.hasRestParameter === target.hasRestParameter) {
+            if (sourceParameterCount === targetParameterCount &&
+                sourceMinArgumentCount === targetMinArgumentCount &&
+                sourceHasRestParameter === targetHasRestParameter) {
                 return true;
             }
             // A source signature partially matches a target signature if the target signature has no fewer required
             // parameters and no more overall parameters than the source signature (where a signature with a rest
             // parameter is always considered to have more overall parameters than one without).
-            const sourceRestCount = source.hasRestParameter ? 1 : 0;
-            const targetRestCount = target.hasRestParameter ? 1 : 0;
-            if (partialMatch && source.minArgumentCount <= target.minArgumentCount && (
+            const sourceRestCount = sourceHasRestParameter ? 1 : 0;
+            const targetRestCount = targetHasRestParameter ? 1 : 0;
+            if (partialMatch && sourceMinArgumentCount <= targetMinArgumentCount && (
                 sourceRestCount > targetRestCount ||
-                sourceRestCount === targetRestCount && source.parameters.length >= target.parameters.length)) {
+                sourceRestCount === targetRestCount && sourceParameterCount >= targetParameterCount)) {
                 return true;
             }
             return false;
@@ -11857,10 +11841,10 @@ namespace ts {
                 }
             }
 
-            const targetLen = target.parameters.length;
+            const targetLen = getParameterCount(target);
             for (let i = 0; i < targetLen; i++) {
-                const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfParameter(source.parameters[i]);
-                const t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfParameter(target.parameters[i]);
+                const s = getTypeAtPosition(source, i);
+                const t = getTypeAtPosition(target, i);
                 const related = compareTypes(s, t);
                 if (!related) {
                     return Ternary.False;
@@ -11880,10 +11864,6 @@ namespace ts {
 
         function compareTypePredicatesIdentical(source: TypePredicate | undefined, target: TypePredicate | undefined, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
             return source === undefined || target === undefined || !typePredicateKindsMatch(source, target) ? Ternary.False : compareTypes(source.type, target.type);
-        }
-
-        function isRestParameterIndex(signature: Signature, parameterIndex: number) {
-            return signature.hasRestParameter && parameterIndex >= signature.parameters.length - 1;
         }
 
         function literalTypesWithSameBaseType(types: Type[]): boolean {
@@ -12331,22 +12311,24 @@ namespace ts {
         }
 
         function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
-            const sourceMax = source.parameters.length;
-            const targetMax = target.parameters.length;
-            let count: number;
-            if (source.hasRestParameter && target.hasRestParameter) {
-                count = Math.max(sourceMax, targetMax);
-            }
-            else if (source.hasRestParameter) {
-                count = targetMax;
-            }
-            else if (target.hasRestParameter) {
-                count = sourceMax;
-            }
-            else {
-                count = Math.min(sourceMax, targetMax);
-            }
-            for (let i = 0; i < count; i++) {
+            const sourceCount = getParameterCount(source);
+            for (let i = 0; i < sourceCount; i++) {
+                const targetRest = getGenericRestTypeAtPosition(target, i);
+                if (targetRest) {
+                    const sourceRest = getTypeOfRestParameter(source);
+                    if (sourceRest && i === source.parameters.length - 1) {
+                        callback(sourceRest, targetRest);
+                    }
+                    else {
+                        const types: Type[] = [];
+                        for (let j = i; j < sourceCount; j++) {
+                            types.push(getTypeAtPosition(source, j));
+                        }
+                        const rest = !sourceRest || isTupleType(sourceRest) ? createTupleType(types) : createArrayType(getUnionType(types));
+                        callback(rest, targetRest);
+                    }
+                    break;
+                }
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
         }
@@ -15155,9 +15137,10 @@ namespace ts {
 
                 // If last parameter is contextually rest parameter get its type
                 if (funcHasRestParameters &&
-                    indexOfParameter === (func.parameters.length - 1) &&
-                    isRestParameterIndex(contextualSignature, func.parameters.length - 1)) {
-                    return getTypeOfSymbol(last(contextualSignature.parameters));
+                    indexOfParameter === func.parameters.length - 1 &&
+                    hasEffectiveRestParameter(contextualSignature) &&
+                    func.parameters.length >= contextualSignature.parameters.length) {
+                    return getTypeOfRestParameter(contextualSignature);
                 }
             }
         }
@@ -15721,8 +15704,7 @@ namespace ts {
             if (target.parameters.length && parameterIsThisKeyword(target.parameters[0])) {
                 targetParameterCount--;
             }
-            const sourceLength = signature.hasRestParameter ? Number.MAX_VALUE : signature.parameters.length;
-            return sourceLength < targetParameterCount;
+            return !hasEffectiveRestParameter(signature) && getParameterCount(signature) < targetParameterCount;
         }
 
         function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
@@ -17713,8 +17695,7 @@ namespace ts {
                 if (!node.arguments) {
                     // This only happens when we have something of the form: 'new C'
                     Debug.assert(node.kind === SyntaxKind.NewExpression);
-
-                    return signature.minArgumentCount === 0;
+                    return getMinArgumentCount(signature) === 0;
                 }
 
                 argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
@@ -17732,17 +17713,16 @@ namespace ts {
 
             // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
             if (spreadArgIndex >= 0) {
-                return isRestParameterIndex(signature, spreadArgIndex) ||
-                    signature.minArgumentCount <= spreadArgIndex && spreadArgIndex < signature.parameters.length;
+                return spreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || spreadArgIndex < getParameterCount(signature));
             }
 
             // Too many arguments implies incorrect arity.
-            if (!signature.hasRestParameter && argCount > signature.parameters.length) {
+            if (!hasEffectiveRestParameter(signature) && argCount > getParameterCount(signature)) {
                 return false;
             }
 
             // If the call is incomplete, we should skip the lower bound check.
-            const hasEnoughArguments = argCount >= signature.minArgumentCount;
+            const hasEnoughArguments = argCount >= getMinArgumentCount(signature);
             return callIsIncomplete || hasEnoughArguments;
         }
 
@@ -17848,18 +17828,26 @@ namespace ts {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
                 if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
-                    const paramType = getTypeAtPosition(signature, i);
+                    let paramType = getTypeAtPosition(signature, i);
                     let argType = getEffectiveArgumentType(node, i);
-
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
-                        // context sensitive function expressions as wildcards
-                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
-                        argType = checkExpressionWithContextualType(arg!, paramType, mapper);
+                        const restType = getGenericRestTypeAtPosition(signature, i);
+                        if (!restType) {
+                            // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                            // context sensitive function expressions as wildcards
+                            const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
+                            argType = checkExpressionWithContextualType(arg!, paramType, mapper);
+                        }
+                        else {
+                            // The parameter list ends in a rest parameter with a generic type. We consume the remainder
+                            // of the argument list an infer a tuple type or an array type.
+                            argType = inferGenericRestType(signature, args, context);
+                            paramType = restType;
+                            i = argCount;
+                        }
                     }
-
                     inferTypes(context.inferences, argType, paramType);
                 }
             }
@@ -17872,7 +17860,7 @@ namespace ts {
             if (excludeArgument) {
                 for (let i = 0; i < argCount; i++) {
                     // No need to check for omitted args and template expressions, their exclusion value is always undefined
-                    if (excludeArgument[i] === false) {
+                    if (excludeArgument[i] === false && !getGenericRestTypeAtPosition(signature, i)) {
                         const arg = args[i];
                         const paramType = getTypeAtPosition(signature, i);
                         inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, context), paramType);
@@ -17880,6 +17868,26 @@ namespace ts {
                 }
             }
             return getInferredTypes(context);
+        }
+
+        function inferGenericRestType(signature: Signature, args: ReadonlyArray<Expression>, context: InferenceContext): Type {
+            const startIndex = signature.parameters.length - 1;
+            if (args[startIndex].kind === SyntaxKind.SpreadElement && args.length === startIndex + 1) {
+                // We are inferring from a spread expression in the last argument position, i.e. both the parameter
+                // and the argument are ...x forms.
+                return checkExpressionWithContextualType((<SpreadElement>args[startIndex]).expression, getTypeOfRestParameter(signature)!, context);
+            }
+            const contextualType = getTypeAtPosition(signature, startIndex);
+            const types: Type[] = [];
+            let hasSpreadExpression = false;
+            for (let i = startIndex; i < args.length; i++) {
+                const arg = args[i];
+                types.push(checkExpressionWithContextualType(arg, contextualType, context));
+                hasSpreadExpression = hasSpreadExpression || arg.kind === SyntaxKind.SpreadElement;
+            }
+            // If none of the remaining arguments are spread expressions, infer a tuple type. Otherwise, infer
+            // an array type.
+            return hasSpreadExpression ? createArrayType(getUnionType(types)) : createTupleType(types);
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
@@ -17973,20 +17981,30 @@ namespace ts {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
                 if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
-                    // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
-                    const paramType = getTypeAtPosition(signature, i);
-                    // If the effective argument type is undefined, there is no synthetic type for the argument.
-                    // In that case, we should check the argument.
-                    const argType = getEffectiveArgumentType(node, i) ||
-                        checkExpressionWithContextualType(arg!, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                    // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
-                    // we obtain the regular type of any object literal arguments because we may not have inferred complete
-                    // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                    const checkArgType = excludeArgument ? getRegularTypeOfObjectLiteral(argType) : argType;
-                    // Use argument expression as error location when reporting errors
-                    const errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
-                    if (!checkTypeRelatedTo(checkArgType, paramType, relation, errorNode, headMessage)) {
-                        return false;
+                    const restType = getTypeOfRestParameter(signature);
+                    if (arg && arg.kind === SyntaxKind.SpreadElement && i === argCount - 1 && restType &&
+                        signature.parameters.length === argCount && !isArrayType(restType)) {
+                        const argType = checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, /*contextualMapper*/ undefined);
+                        if (!checkTypeRelatedTo(argType, restType, relation, arg, headMessage)) {
+                            return false;
+                        }
+                    }
+                    else {
+                        // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
+                        const paramType = getTypeAtPosition(signature, i);
+                        // If the effective argument type is undefined, there is no synthetic type for the argument.
+                        // In that case, we should check the argument.
+                        const argType = getEffectiveArgumentType(node, i) ||
+                            checkExpressionWithContextualType(arg!, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
+                        // we obtain the regular type of any object literal arguments because we may not have inferred complete
+                        // parameter types yet and therefore excess property checks may yield false positives (see #17041).
+                        const checkArgType = excludeArgument ? getRegularTypeOfObjectLiteral(argType) : argType;
+                        // Use argument expression as error location when reporting errors
+                        const errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
+                        if (!checkTypeRelatedTo(checkArgType, paramType, relation, errorNode, headMessage)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -18460,10 +18478,10 @@ namespace ts {
                 let min = Number.POSITIVE_INFINITY;
                 let max = Number.NEGATIVE_INFINITY;
                 for (const sig of signatures) {
-                    min = Math.min(min, sig.minArgumentCount);
-                    max = Math.max(max, sig.parameters.length);
+                    min = Math.min(min, getMinArgumentCount(sig));
+                    max = Math.max(max, getParameterCount(sig));
                 }
-                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
+                const hasRestParameter = some(signatures, hasEffectiveRestParameter);
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
                 const paramCount = hasRestParameter ? min :
                     min < max ? min + "-" + max :
@@ -18590,11 +18608,12 @@ namespace ts {
 
             for (let i = 0; i < candidates.length; i++) {
                 const candidate = candidates[i];
-                if (candidate.hasRestParameter || candidate.parameters.length >= argsCount) {
+                const paramCount = getParameterCount(candidate);
+                if (hasEffectiveRestParameter(candidate) || paramCount >= argsCount) {
                     return i;
                 }
-                if (candidate.parameters.length > maxParams) {
-                    maxParams = candidate.parameters.length;
+                if (paramCount > maxParams) {
+                    maxParams = paramCount;
                     maxParamsIndex = i;
                 }
             }
@@ -19321,12 +19340,81 @@ namespace ts {
             return type;
         }
 
-        function getTypeAtPosition(signature: Signature, pos: number): Type {
-            return signature.hasRestParameter ?
-                pos < signature.parameters.length - 1 ? getTypeOfParameter(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
-                pos < signature.parameters.length ? getTypeOfParameter(signature.parameters[pos]) : anyType;
+        function getParameterNameAtPosition(signature: Signature, pos: number) {
+            const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
+            if (pos < paramCount) {
+                return symbolName(signature.parameters[pos]);
+            }
+            const restParameter = signature.parameters[paramCount] || unknownSymbol;
+            const restName = symbolName(restParameter);
+            return isTupleType(getTypeOfSymbol(restParameter)) ? `${restName}[${pos - paramCount}]` : restName;
         }
 
+        function getTypeAtPosition(signature: Signature, pos: number): Type {
+            const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
+            if (pos < paramCount) {
+                return getTypeOfParameter(signature.parameters[pos]);
+            }
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[paramCount]);
+                if (isTupleType(restType)) {
+                    const elementCount = ((<TypeReference>restType).typeArguments || emptyArray).length;
+                    if (pos - paramCount < elementCount) {
+                        return (<TypeReference>restType).typeArguments![pos - paramCount];
+                    }
+                }
+                return getIndexTypeOfType(restType, IndexKind.Number) || anyType;
+            }
+            return anyType;
+        }
+
+        function getGenericRestTypeAtPosition(signature: Signature, pos: number) {
+            if (signature.hasRestParameter) {
+                const restIndex = signature.parameters.length - 1;
+                if (pos >= restIndex) {
+                    const restType = getTypeOfSymbol(signature.parameters[restIndex]);
+                    if (restType.flags & TypeFlags.TypeParameter) {
+                        return restType;
+                    }
+                }
+            }
+            return undefined;
+        }
+
+        function getTypeOfRestParameter(signature: Signature) {
+            return signature.hasRestParameter ? getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]) : undefined;
+        }
+
+        function getParameterCount(signature: Signature) {
+            const length = signature.parameters.length;
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[length - 1]);
+                if (isTupleType(restType)) {
+                    return length + ((<TypeReference>restType).typeArguments || emptyArray).length - 1;
+                }
+            }
+            return length;
+        }
+
+        function getMinArgumentCount(signature: Signature) {
+            const restType = getTypeOfRestParameter(signature);
+            if (restType && isTupleType(restType)) {
+                const elementTypes = (<TypeReference>restType).typeArguments || emptyArray;
+                let index = elementTypes.length;
+                while (index > 0) {
+                    --index;
+                    // TODO: Revise this once we have proper support for optional tuple elements
+                    if (!maybeTypeOfKind(elementTypes[index], TypeFlags.Undefined)) {
+                        return signature.parameters.length + index;
+                    }
+                }
+            }
+            return signature.minArgumentCount;
+        }
+
+        function hasEffectiveRestParameter(signature: Signature) {
+            return signature.hasRestParameter && !isTupleType(getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]));
+        }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
             return getTypeOfFirstParameterOfSignatureWithFallback(signature, neverType);
@@ -19368,7 +19456,7 @@ namespace ts {
                     assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
             }
-            if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
+            if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
                 // parameter might be a transient symbol generated by use of `arguments` in the function body.
                 const parameter = last(signature.parameters);
                 if (isTransientSymbol(parameter) || !getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
@@ -20930,6 +21018,10 @@ namespace ts {
             }
         }
 
+        function isRestParameterType(type: Type) {
+            return isArrayType(type) || type.flags & TypeFlags.TypeParameter && isArrayType(getConstraintOfType(type) || unknownType);
+        }
+
         function checkParameter(node: ParameterDeclaration) {
             // Grammar checking
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
@@ -20958,7 +21050,7 @@ namespace ts {
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
             // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
-            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isArrayType(getTypeOfSymbol(node.symbol))) {
+            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isRestParameterType(getTypeOfSymbol(node.symbol))) {
                 error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
         }
