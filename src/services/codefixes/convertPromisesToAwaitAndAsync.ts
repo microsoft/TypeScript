@@ -11,17 +11,25 @@ namespace ts.codefix {
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncAwait(changes, err.file!, err.start, context.program.getTypeChecker())),
     });
     function convertToAsyncAwait(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
+        //get the function declaration - returns a promise
         const funcToConvert = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, false)).valueDeclaration;
+        //add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert)
-
 
         //collect what to put in the try block
         let callToAwait = findCallToAwait(funcToConvert, checker);
-        let dotThenTuple:[NodeArray<Statement>, string, TextRange] = findDotThen(funcToConvert, checker);
-        let dotThenBody:NodeArray<Statement> = dotThenTuple[0];
-        let dotThenFuncName:string = dotThenTuple[1];
-        let textRange:TextRange = dotThenTuple[2];
+        let onResTuple:[NodeArray<Statement>, string, TextRange] = findDotThen(funcToConvert, checker, true);
+        let onResBody:NodeArray<Statement> = onResTuple[0];
+        let onResFuncName:string = onResTuple[1];
+        let onResTextRange:TextRange = onResTuple[2];
+
+        let onRejTuple:[NodeArray<Statement>, string, TextRange] = findDotThen(funcToConvert, checker, false);
+        let onRejBody:NodeArray<Statement> = onRejTuple[0];
+        //let onRejFuncName:string = onRejTuple[1];
+        //let onRejTextRange:TextRange = onRejTuple[2];
+
         let tryBlock:Block = undefined;
+        let catchBlock:CatchClause = undefined;
 
         if(!callToAwait){
             return;
@@ -29,23 +37,24 @@ namespace ts.codefix {
 
         let awaitNode = createAwait(callToAwait);
 
-        if(dotThenTuple && dotThenBody.length > 0){
-            let awaitDecl = createVariableDeclarationList(createNodeArray([createVariableDeclaration(dotThenFuncName, undefined, awaitNode)]));
+        if(onResTuple && onResBody.length > 0){
+            let awaitDecl = createVariableDeclarationList(createNodeArray([createVariableDeclaration(onResFuncName, undefined, awaitNode)]));
             let awaitDeclStmt = createVariableStatement(undefined, awaitDecl);
-            //let stmts = createNodeArray([<Statement>createStatement(awaitNode)]).concat(getSynthesizedDeepClones(createNodeArray(dotThenBody.statements)));
-            let stmts = undefined;
-            stmts = createNodeArray([<Statement>awaitDeclStmt]).concat(getSynthesizedDeepClones(dotThenBody));
-            tryBlock = createBlock(stmts.concat());
-            //changes.deleteNode(sourceFile, dotThen)
+            let stmts = createNodeArray([<Statement>awaitDeclStmt]).concat(getSynthesizedDeepClones(onResBody));
+            tryBlock = createBlock(stmts);
         }else{
             tryBlock = createBlock(createNodeArray([createStatement(awaitNode)]));
         }
 
-        changes.replaceRange(sourceFile, textRange, createTry(tryBlock, undefined, undefined), {prefix: "\n"})
-        //changes.replaceNode(sourceFile, callToAwait, createTry(tryBlock, undefined, undefined));
-        //fix this
-        //changes.insertNodeBefore(sourceFile, (<FunctionDeclaration>funcToConvert).body.statements[0],  createTry(tryBlock, undefined, undefined));
-        //changes.deleteNodes(sourceFile, dotThenBody);
+
+        if(onRejTuple && onRejBody.length > 0){
+            let stmts = createNodeArray(onRejBody);
+            catchBlock = createCatchClause("e", createBlock(stmts));
+        }else{
+            catchBlock = createCatchClause("e", createBlock(createNodeArray()));
+        }
+
+        changes.replaceRange(sourceFile, onResTextRange, createTry(tryBlock, catchBlock, undefined), {prefix: "\n"})
     }
 
 
@@ -67,23 +76,24 @@ namespace ts.codefix {
 
     }
 
-    function findDotThen(node:Node, checker:TypeChecker): [NodeArray<Statement>, string, TextRange]{
+    function findDotThen(node:Node, checker:TypeChecker, onRes:boolean): [NodeArray<Statement>, string, TextRange]{
+
+        const index:number = onRes ? 0 : 1;
+
         switch(node.kind){
             case SyntaxKind.PropertyAccessExpression:
                 if((<PropertyAccessExpression>node).name.text === "then" && isPromiseType(checker.getTypeAtLocation(node.parent))){
                     let parNode = node.parent as CallExpression; 
-                    if(parNode.arguments.length > 0 && isFunctionLikeDeclaration(parNode.arguments[0])){
-                        //find the body of the func in the .then() to put in the try block
-                        let funcDecl:FunctionLikeDeclaration = parNode.arguments[0] as FunctionLikeDeclaration;
+                    if(parNode.arguments.length > index && isFunctionLikeDeclaration(parNode.arguments[index])){
+                        //inlined function definitiion
+                        let funcDecl:FunctionLikeDeclaration = parNode.arguments[index] as FunctionLikeDeclaration;
                         let funcBody:FunctionBody = funcDecl.body as FunctionBody;
                         return [createNodeArray(funcBody.statements), funcDecl.parameters[0].symbol.name, createTextRange(parNode.pos, parNode.end)];
-                        //return parNode.arguments[0] as FunctionLikeDeclaration;
-                       //return ((<FunctionLikeDeclaration>parNode.arguments[0]).body as FunctionBody);
-                    }else if(parNode.arguments.length > 0 &&  isIdentifier(parNode.arguments[0])){
-                        let argName= (<Identifier>(<FunctionLikeDeclaration>checker.getTypeAtLocation(parNode.arguments[0]).symbol.valueDeclaration).parameters[0].name)
-                        let callExpr = createCall(parNode.arguments[0], undefined, [argName]);
+                    }else if(parNode.arguments.length > index &&  isIdentifier(parNode.arguments[index])){
+                        //reference to an elsewhere declared function
+                        let argName = (<Identifier>(<FunctionLikeDeclaration>checker.getTypeAtLocation(parNode.arguments[index]).symbol.valueDeclaration).parameters[0].name)
+                        let callExpr = createCall(parNode.arguments[index], undefined, [argName]);
                         return [createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(parNode.pos, parNode.end)]
-                        //return checker.getTypeAtLocation(parNode.arguments[0]).symbol.valueDeclaration as FunctionLikeDeclaration;
                     }
                 }
                 break;
@@ -91,14 +101,14 @@ namespace ts.codefix {
 
         //recurse
         for( let child of node.getChildren() ){
-            let ret = findDotThen(child, checker);
+            let ret = findDotThen(child, checker, onRes);
             if(ret){
                 return ret;
             }
         }
 
     }
-   
+
     function isPromiseType(T:Type):boolean{
         return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
