@@ -426,7 +426,7 @@ namespace ts {
             return !!(this.flags & TypeFlags.UnionOrIntersection);
         }
         isLiteral(): this is LiteralType {
-            return !!(this.flags & TypeFlags.Literal);
+            return !!(this.flags & TypeFlags.StringOrNumberLiteral);
         }
         isStringLiteral(): this is StringLiteralType {
             return !!(this.flags & TypeFlags.StringLiteral);
