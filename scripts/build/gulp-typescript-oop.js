@@ -31,7 +31,7 @@ function createProject(tsConfigFileName, settings, options) {
             read() {},
             /** @param {*} file */
             write(file, encoding, callback) {
-                proc.send({ method: "write", params: { path: file.path, cwd: file.cwd, base: file.base }});
+                proc.send({ method: "write", params: { path: file.path, cwd: file.cwd, base: file.base, sourceMap: file.sourceMap }});
                 callback();
             },
             final(callback) {
