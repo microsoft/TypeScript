@@ -18,6 +18,7 @@ namespace ts.refactor.convertReactPureComponent {
         name?: Identifier;
         render: Block;
         propsType?: TypeNode;
+        originNode: SFCLikeDeclaration | ClassLikeDeclaration;
     }
 
     /**
@@ -63,7 +64,11 @@ namespace ts.refactor.convertReactPureComponent {
             }
         },
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-            context.cancellationToken, actionName;
+            Debug.assert(actionName === actionNameComponentToSFC || actionName === actionNameSFCToPureComponent);
+            if (actionName === actionNameSFCToPureComponent) {
+                const node = getSelectedNode(context) as Node;
+                return transformSFCtoComponent(isReactSFCDeclaration(node, context.file)!, context);
+            }
             return;
         }
     });
@@ -135,13 +140,13 @@ namespace ts.refactor.convertReactPureComponent {
         return { ...result, importClause: importClause! };
     }
 
-    function isReactSFCDeclaration(expression: Node, sourcefile: SourceFile): Component | undefined {
-        if (!isSFCLikeDeclaration(expression)) { return; }
-        if (expression.asteriskToken) { return; }
-        if (!expression.body) { return; }
+    function isReactSFCDeclaration(node: Node, sourcefile: SourceFile): Component | undefined {
+        if (!isSFCLikeDeclaration(node)) { return; }
+        if (node.asteriskToken) { return; }
+        if (!node.body) { return; }
 
         // TODO: Should also check the actual type insteadof only receive explicit typed
-        const typeNode = expression.type;
+        const typeNode = node.type;
         if (!typeNode) { return; }
         const binding = getReferenceToReact(sourcefile)!;
         const type = removeEmpty(typeNode.getFullText(sourcefile));
@@ -153,15 +158,16 @@ namespace ts.refactor.convertReactPureComponent {
         }
 
         let render: Block;
-        if (isBlock(expression.body)) {
-            render = expression.body;
-        } else if (isExpression(expression.body!)) {
-            render = createBlock([createReturn(expression.body)]);
+        if (isBlock(node.body)) {
+            render = node.body;
+        } else if (isExpression(node.body!)) {
+            render = createBlock([createReturn(node.body)]);
         }
         return {
             propsType: propsType,
-            name: expression.name,
+            name: node.name,
             render: render!,
+            originNode: node,
         }
     }
 
@@ -225,6 +231,28 @@ namespace ts.refactor.convertReactPureComponent {
         }
         const icc = isConvertibleComponent(node, sourcefile);
         if (!icc.convertable) return;
-        return { name: ircs.name, propsType: ircs.propsType, render: icc.render };
+        return { name: ircs.name, propsType: ircs.propsType, render: icc.render, originNode: node };
+    }
+
+    function transformSFCtoComponent(component: Component, context: RefactorContext): RefactorEditInfo {
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
+
+        const react = getReferenceToReact(context.file)!;
+
+        const extendsClause = createHeritageClause(SyntaxKind.ExtendsKeyword, [
+            createExpressionWithTypeArguments(component.propsType ? [component.propsType] : undefined,
+            createIdentifier(react.PureComponent))
+        ]);
+        const renderMethod = createMethod(undefined, undefined, undefined, "render",
+            undefined, undefined, [], undefined, component.render);
+
+        let newNode: ClassLikeDeclaration;
+        if (component.name) {
+            newNode = createClassDeclaration(undefined, undefined, component.name, undefined, [extendsClause], [renderMethod]);
+        } else {
+            newNode = createClassExpression(undefined, undefined, undefined, [extendsClause], [renderMethod]);
+        }
+        changeTracker.replaceNode(context.file, component.originNode, newNode);
+        return { edits: changeTracker.getChanges() };
     }
 }
