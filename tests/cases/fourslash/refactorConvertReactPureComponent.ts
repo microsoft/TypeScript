@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts' />
 
-// @jsx: "react"
-
 //// import * as React from "react"
-//// /*start*/class Ele extends React.Component<P> {
+//// /*start*/
+//// class Ele extends React.Component<P> {
 ////     render() {
 ////         return <>
 ////             {this.props.children}
 ////             <h1 className={this.props.className} />
-////         </> 
+////         </>;
 ////     }
-//// }/*end*/
+//// }
+///// /*end*/
 
 goTo.select("start", "end");
 edit.applyRefactor({
@@ -19,7 +19,7 @@ edit.applyRefactor({
     actionDescription: "Covert React.Component to SFC",
     newContent:
         `import * as React from "react"
-const Ele: React.SFC<P> = (props) => {
+const EleQ: React.SFC<P> = (props) => {
     return <>
         {props.children}
         <h1 className={props.className} />

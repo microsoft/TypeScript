@@ -14,7 +14,7 @@ namespace ts.refactor.convertReactPureComponent {
         return isFunctionDeclaration(node) || isFunctionExpression(node) || isArrowFunction(node);
     }
 
-    type Component = {
+    interface Component {
         name?: Identifier;
         render: Block;
         propsType?: TypeNode;
@@ -40,7 +40,7 @@ namespace ts.refactor.convertReactPureComponent {
 
     registerRefactor(refactorName, {
         getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-            if (!checkJSXFactoryIsReact(context.host)) return;
+            // if (!checkJSXFactoryIsReact(context.host)) return;
             if (!getReferenceToReact(context.file)) return;
             const node = getSelectedNode(context);
             if (!node) { return; }
@@ -51,15 +51,16 @@ namespace ts.refactor.convertReactPureComponent {
                 return [{
                     name: refactorName,
                     description,
-                    actions: [{ description: description, name: actionNameComponentToSFC }]
+                    actions: [{ description, name: actionNameComponentToSFC }]
                 }];
-            } else if (isReactSFCDeclaration(node, context.file)) {
+            }
+            else if (isReactSFCDeclaration(node, context.file)) {
                 // const description = Diagnostics.???
                 const description = actionNameSFCToPureComponent;
                 return [{
                     name: refactorName,
                     description,
-                    actions: [{ description: description, name: actionNameSFCToPureComponent }]
+                    actions: [{ description, name: actionNameSFCToPureComponent }]
                 }];
             }
         },
@@ -68,20 +69,21 @@ namespace ts.refactor.convertReactPureComponent {
             const node = getSelectedNode(context) as Node;
             if (actionName === actionNameSFCToPureComponent) {
                 return transformSFCtoComponent(isReactSFCDeclaration(node, context.file)!, context);
-            } else if (actionName === actionNameComponentToSFC) {
+            }
+            else if (actionName === actionNameComponentToSFC) {
                 return transformComponentToSFC(isConvertibleReactClassComponent(node, context.file)!, context);
             }
             return;
         }
     });
 
-    function checkJSXFactoryIsReact(host: LanguageServiceHost) {
-        const config = host.getCompilationSettings();
-        if (config.jsxFactory === undefined) { if (config.jsx) return true }
-        // In vue, people use jsxFactory: "h" insteadof React.createElement
-        else { if (config.jsxFactory.match(/React/)) return true; }
-        return false;
-    }
+    // function checkJSXFactoryIsReact(host: LanguageServiceHost) {
+    //     const config = host.getCompilationSettings();
+    //     if (config.jsxFactory === undefined) { if (config.jsx) return true; }
+    //     // In vue, people use jsxFactory: "h" insteadof React.createElement
+    //     else { if (config.jsxFactory.match(/React/)) return true; }
+    //     return false;
+    // }
 
     function getSelectedNode(context: RefactorContext): Node | false {
         const { file } = context;
@@ -120,23 +122,25 @@ namespace ts.refactor.convertReactPureComponent {
             if (namedBindings && isNamedImports(namedBindings)) {
                 namedBindings.elements.forEach(e => {
                     if (e.propertyName) {
-                        let p: keyof typeof result = e.propertyName.text as any;
+                        const p: keyof typeof result = e.propertyName.text as any;
                         if (names.indexOf(p) !== -1) { result[p] = e.name.text; }
-                    } else {
-                        let n: keyof typeof result = e.name.text as any;
+                    }
+                    else {
+                        const n: keyof typeof result = e.name.text as any;
                         if (names.indexOf(n) !== -1) { result[n] = n; }
                     }
-                })
+                });
             }
             // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
             // ? No this case
-        })
+        });
         if (result.React) {
             result.Component = result.Component || result.React + ".Component";
             result.PureComponent = result.PureComponent || result.React + ".PureComponent";
             result.SFC = result.SFC || result.React + ".SFC";
             result.StatelessComponent = result.StatelessComponent || result.StatelessComponent + ".StatelessComponent";
-        } else if (!result.Component && !result.PureComponent && !result.React && !result.SFC && !result.StatelessComponent) {
+        }
+        else if (!result.Component && !result.PureComponent && !result.React && !result.SFC && !result.StatelessComponent) {
             return undefined;
         }
         return { ...result, importClause: importClause! };
@@ -162,15 +166,16 @@ namespace ts.refactor.convertReactPureComponent {
         let render: Block;
         if (isBlock(node.body)) {
             render = node.body;
-        } else if (isExpression(node.body!)) {
+        }
+        else if (isExpression(node.body!)) {
             render = createBlock([createReturn(node.body)]);
         }
         return {
-            propsType: propsType,
+            propsType,
             name: node.name,
             render: render!,
             originNode: node,
-        }
+        };
     }
 
     function isConvertibleReactClassComponent(node: Node, sourcefile: SourceFile): Component | undefined {
@@ -179,12 +184,12 @@ namespace ts.refactor.convertReactPureComponent {
         function isReactComponentClass(expression: ClassLikeDeclaration, sourcefile: SourceFile) {
             let is = false;
             let name: Identifier | undefined;
-            let reference = getReferenceToReact(sourcefile)!;
+            const reference = getReferenceToReact(sourcefile)!;
             let propsType: TypeNode | undefined;
             if (expression.heritageClauses) {
                 if (expression.heritageClauses.some(x =>
                     x.types.some(y => {
-                        const text = removeEmpty(y.getText(sourcefile));
+                        const text = removeEmpty(y.expression.getText(sourcefile));
                         if (text === reference.Component || text === reference.PureComponent) {
                             propsType = y.typeArguments && y.typeArguments[0];
                             return true;
@@ -211,9 +216,9 @@ namespace ts.refactor.convertReactPureComponent {
             let render: Block;
             let convertable = every(expression.members, val => {
                 // * Should include `["render"]() {}` and `render = () => {}`, but that's crazy, no one code like this
-                if (isMethodDeclaration(val) && val.modifiers) {
-                    const isMethodNamedRender = isIdentifier(val.name) && val.name.escapedText === "render"
-                    const isStatic = val.modifiers.some(mod => mod.kind === SyntaxKind.StaticKeyword);
+                if (isMethodDeclaration(val)) {
+                    const isMethodNamedRender = isIdentifier(val.name) && val.name.escapedText === "render";
+                    const isStatic = val.modifiers && val.modifiers.some(mod => mod.kind === SyntaxKind.StaticKeyword);
                     if (isMethodNamedRender && !isStatic) {
                         render = val.body!;
                         return true;
@@ -221,7 +226,7 @@ namespace ts.refactor.convertReactPureComponent {
                 }
                 // TODO: Should include staic `propTypes`, `contextTypes`, `defaultProps`, `displayName`. Not now.
                 return false;
-            })
+            });
             // ? Now check reference to `state` or `setState`
             if (convertable) {
                 // OK let's do this quick
@@ -245,14 +250,15 @@ namespace ts.refactor.convertReactPureComponent {
             createExpressionWithTypeArguments(component.propsType ? [component.propsType] : undefined,
                 createIdentifier(react.PureComponent))
         ]);
-        const renderMethod = createMethod(undefined, undefined, undefined, "render",
-            undefined, undefined, [], undefined, component.render);
+        const renderMethod = createMethod([], [], void 0, "render",
+            void 0, void 0, [], void 0, component.render);
 
         let newNode: ClassLikeDeclaration;
         if (component.name) {
-            newNode = createClassDeclaration(undefined, undefined, component.name, undefined, [extendsClause], [renderMethod]);
-        } else {
-            newNode = createClassExpression(undefined, undefined, undefined, [extendsClause], [renderMethod]);
+            newNode = createClassDeclaration(void 0, void 0, component.name, void 0, [extendsClause], [renderMethod]);
+        }
+        else {
+            newNode = createClassExpression(void 0, void 0, void 0, [extendsClause], [renderMethod]);
         }
         changeTracker.replaceNode(context.file, component.originNode, newNode);
         return {
@@ -270,8 +276,8 @@ namespace ts.refactor.convertReactPureComponent {
         const react = getReferenceToReact(context.file)!;
 
         const newNode: FunctionDeclaration = createFunctionDeclaration(
-            undefined, undefined, undefined, component.name, undefined,
-            [createParameter(undefined, undefined, undefined, "props", undefined)],
+            void 0, void 0, void 0, component.name, void 0,
+            [createParameter(void 0, void 0, void 0, "props", void 0)],
             createTypeReferenceNode(react.SFC, component.propsType ? [component.propsType] : undefined),
             component.render
         );
