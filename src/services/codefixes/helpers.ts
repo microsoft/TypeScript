@@ -111,16 +111,18 @@ namespace ts.codefix {
     }
 
     export function createMethodFromCallExpression(
-        { typeArguments, arguments: args }: CallExpression,
+        { typeArguments, arguments: args, parent: parent }: CallExpression,
         methodName: string,
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
     ): MethodDeclaration {
+        const asterisk = parent.kind === SyntaxKind.YieldExpression ? createToken(SyntaxKind.AsteriskToken) : undefined;
+
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
-            /*asteriskToken*/ undefined,
+            /*asteriskToken*/ asterisk,
             methodName,
             /*questionToken*/ undefined,
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
