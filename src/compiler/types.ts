@@ -3009,6 +3009,8 @@ namespace ts {
         /* @internal */ getStringType(): Type;
         /* @internal */ getNumberType(): Type;
         /* @internal */ getBooleanType(): Type;
+        /* @internal */ getFalseType(): Type;
+        /* @internal */ getTrueType(): Type;
         /* @internal */ getVoidType(): Type;
         /* @internal */ getUndefinedType(): Type;
         /* @internal */ getNullType(): Type;
