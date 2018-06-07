@@ -197,7 +197,7 @@ namespace ts.codefix {
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
-        const quotedModuleSpecifier = createLiteral(moduleSpecifierWithoutQuotes, shouldUseSingleQuote(sourceFile, preferences));
+        const quotedModuleSpecifier = makeStringLiteral(moduleSpecifierWithoutQuotes, getQuotePreference(sourceFile, preferences));
         const importDecl = importKind !== ImportKind.Equals
             ? createImportDeclaration(
                 /*decorators*/ undefined,
@@ -223,16 +223,6 @@ namespace ts.codefix {
         // between the only import statement and user code. Otherwise just insert the statement because chances
         // are there are already a new line separating code and import statements.
         return createCodeAction(Diagnostics.Import_0_from_module_1, [symbolName, moduleSpecifierWithoutQuotes], changes);
-    }
-
-    function shouldUseSingleQuote(sourceFile: SourceFile, preferences: UserPreferences): boolean {
-        if (preferences.quotePreference) {
-            return preferences.quotePreference === "single";
-        }
-        else {
-            const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
-            return !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile);
-        }
     }
 
     function createImportClauseOfKind(kind: ImportKind.Default | ImportKind.Named | ImportKind.Namespace, symbolName: string) {
