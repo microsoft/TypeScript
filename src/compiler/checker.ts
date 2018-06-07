@@ -282,8 +282,6 @@ namespace ts {
             createPromiseType,
             createArrayType,
             getBooleanType: () => booleanType,
-            getFalseType: () => falseType,
-            getTrueType: () => trueType,
             getVoidType: () => voidType,
             getUndefinedType: () => undefinedType,
             getNullType: () => nullType,
@@ -376,9 +374,9 @@ namespace ts {
         const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsWideningType, "null");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
-        const falseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false");
         const trueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true");
-        const booleanType = createBooleanType([falseType, trueType]);
+        const falseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false");
+        const booleanType = createBooleanType([trueType, falseType]);
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");

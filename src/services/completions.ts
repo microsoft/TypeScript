@@ -484,8 +484,11 @@ namespace ts.Completions {
     function getStringLiteralTypes(type: Type | undefined, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> {
         if (!type) return emptyArray;
         type = skipConstraint(type);
-        return getTypesOfUnion(type).filter((t): t is StringLiteralType =>
-            t.isStringLiteral() && !(t.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, t.value));
+        return type.isUnion()
+            ? flatMap(type.types, t => getStringLiteralTypes(t, uniques))
+            : type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value)
+            ? [type]
+            : emptyArray;
     }
 
     interface SymbolCompletion {
@@ -707,7 +710,7 @@ namespace ts.Completions {
 
     function getRecommendedCompletion(previousToken: Node, contextualType: Type, checker: TypeChecker): Symbol | undefined {
         // For a union, return the first one with a recommended completion.
-        return firstDefined(getTypesOfUnion(contextualType), type => {
+        return firstDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), type => {
             const symbol = type && type.symbol;
             // Don't include make a recommended completion for an abstract class
             return symbol && (symbol.flags & (SymbolFlags.EnumMember | SymbolFlags.Enum | SymbolFlags.Class) && !isAbstractConstructorSymbol(symbol))
@@ -1025,7 +1028,7 @@ namespace ts.Completions {
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
         const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
-        const literals = mapDefined(contextualType && getTypesOfUnion(contextualType), t => t.isLiteral() ? t.value : undefined);
+        const literals = mapDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), t => t.isLiteral() ? t.value : undefined);
 
         const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
         return { kind: CompletionDataKind.Data, symbols, completionKind, isInSnippetScope, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, literals, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };

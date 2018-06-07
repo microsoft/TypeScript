@@ -105,33 +105,34 @@ namespace ts.codefix {
     }
 
     function getInitializer(checker: TypeChecker, propertyDeclaration: PropertyDeclaration): Expression | undefined {
-        return getDefaultValueFromType(checker.getTypeFromTypeNode(propertyDeclaration.type!), checker); // TODO: GH#18217
+        return getDefaultValueFromType(checker, checker.getTypeFromTypeNode(propertyDeclaration.type!)); // TODO: GH#18217
     }
 
-    function getDefaultValueFromType(propertyType: Type, checker: TypeChecker): Expression | undefined {
-        return firstDefined(getTypesOfUnion(propertyType), type => {
-            if (type.flags & TypeFlags.String) {
-                return createLiteral("");
-            }
-            else if (type.flags & TypeFlags.Number) {
-                return createNumericLiteral("0");
-            }
-            else if (type.flags & TypeFlags.BooleanLiteral) {
-                return type === checker.getFalseType() ? createFalse() : createTrue();
-            }
-            else if (type.isLiteral()) {
-                return createLiteral(type.value);
-            }
-            else if (type.isClass()) {
-                const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
-                if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
+    function getDefaultValueFromType (checker: TypeChecker, type: Type): Expression | undefined {
+        if (type.flags & TypeFlags.String) {
+            return createLiteral("");
+        }
+        else if (type.flags & TypeFlags.Number) {
+            return createNumericLiteral("0");
+        }
+        else if (type.flags & TypeFlags.Boolean) {
+            return createFalse();
+        }
+        else if (type.isLiteral()) {
+            return createLiteral(type.value);
+        }
+        else if (type.isUnion()) {
+            return firstDefined(type.types, t => getDefaultValueFromType(checker, t));
+        }
+        else if (type.isClass()) {
+            const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
+            if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 
-                const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
-                if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
+            const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
+            if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
-                return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
-            }
-            return undefined;
-        });
+            return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        }
+        return undefined;
     }
 }

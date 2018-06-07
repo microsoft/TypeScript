@@ -1363,10 +1363,6 @@ namespace ts {
         return textSpanContainsPosition(span, node.getStart(file)) &&
             node.getEnd() <= textSpanEnd(span);
     }
-
-    export function getTypesOfUnion(type: Type): ReadonlyArray<Type> {
-        return type.isUnion() ? type.types : [type];
-    }
 }
 
 // Display-part writer helpers
