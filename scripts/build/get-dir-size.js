@@ -1,8 +1,6 @@
 // @ts-check
 const { lstatSync, readdirSync } = require("fs");
 const { join } = require("path");
-const { promisify } = require("util");
-const execFile = promisify(require("child_process").execFile);
 
 /**
  * Find the size of a directory recursively.
