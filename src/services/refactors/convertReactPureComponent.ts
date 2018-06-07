@@ -65,9 +65,11 @@ namespace ts.refactor.convertReactPureComponent {
         },
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
             Debug.assert(actionName === actionNameComponentToSFC || actionName === actionNameSFCToPureComponent);
+            const node = getSelectedNode(context) as Node;
             if (actionName === actionNameSFCToPureComponent) {
-                const node = getSelectedNode(context) as Node;
                 return transformSFCtoComponent(isReactSFCDeclaration(node, context.file)!, context);
+            } else if (actionName === actionNameComponentToSFC) {
+                return transformComponentToSFC(isConvertibleReactClassComponent(node, context.file)!, context);
             }
             return;
         }
@@ -241,7 +243,7 @@ namespace ts.refactor.convertReactPureComponent {
 
         const extendsClause = createHeritageClause(SyntaxKind.ExtendsKeyword, [
             createExpressionWithTypeArguments(component.propsType ? [component.propsType] : undefined,
-            createIdentifier(react.PureComponent))
+                createIdentifier(react.PureComponent))
         ]);
         const renderMethod = createMethod(undefined, undefined, undefined, "render",
             undefined, undefined, [], undefined, component.render);
@@ -253,6 +255,34 @@ namespace ts.refactor.convertReactPureComponent {
             newNode = createClassExpression(undefined, undefined, undefined, [extendsClause], [renderMethod]);
         }
         changeTracker.replaceNode(context.file, component.originNode, newNode);
-        return { edits: changeTracker.getChanges() };
+        return {
+            edits: changeTracker.getChanges().map(x => ({
+                ...x, textChanges: x.textChanges.map(y => ({
+                    ...y, newText: y.newText.replace(/props/g, "this.props")
+                }))
+            }))
+        };
+    }
+
+    function transformComponentToSFC(component: Component, context: RefactorContext): RefactorEditInfo {
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
+
+        const react = getReferenceToReact(context.file)!;
+
+        const newNode: FunctionDeclaration = createFunctionDeclaration(
+            undefined, undefined, undefined, component.name, undefined,
+            [createParameter(undefined, undefined, undefined, "props", undefined)],
+            createTypeReferenceNode(react.SFC, component.propsType ? [component.propsType] : undefined),
+            component.render
+        );
+
+        changeTracker.replaceNode(context.file, component.originNode, newNode);
+        return {
+            edits: changeTracker.getChanges().map(x => ({
+                ...x, textChanges: x.textChanges.map(y => ({
+                    ...y, newText: y.newText.replace(/this\.props/g, "props")
+                }))
+            }))
+        };
     }
 }
