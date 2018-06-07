@@ -448,6 +448,7 @@ namespace ts {
         // This allows users to just specify library files they want to used through --lib
         // and they will not get an error from not having unrelated library files
         let deferredGlobalESSymbolConstructorSymbol: Symbol | undefined;
+        let deferredGlobalESSymbolConstructorTypeSymbol: Symbol | undefined;
         let deferredGlobalESSymbolType: ObjectType;
         let deferredGlobalTypedPropertyDescriptorType: GenericType;
         let deferredGlobalPromiseType: GenericType;
@@ -4851,6 +4852,12 @@ namespace ts {
                 : getTypeFromArrayBindingPattern(pattern, includePatternInType, reportErrors);
         }
 
+        function isGlobalSymbolConstructor(node: Node) {
+            const symbol = getSymbolOfNode(node);
+            const globalSymbol = getGlobalESSymbolConstructorTypeSymbol(/*reportErrors*/ false);
+            return globalSymbol && symbol && symbol === globalSymbol;
+        }
+
         // Return the type associated with a variable, parameter, or property declaration. In the simple case this is the type
         // specified in a type annotation or inferred from an initializer. However, in the case of a destructuring declaration it
         // is a bit more involved. For example:
@@ -4863,6 +4870,10 @@ namespace ts {
         function getWidenedTypeForVariableLikeDeclaration(declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement, reportErrors?: boolean): Type {
             let type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
             if (type) {
+                // TODO: Remove the following SymbolConstructor special case when back compat with pre-3.0 libs isn't required
+                if (type.flags & TypeFlags.ESSymbol && isGlobalSymbolConstructor(declaration.parent)) {
+                    type = getESSymbolLikeTypeForNode(declaration);
+                }
                 if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
                 }
@@ -8150,6 +8161,10 @@ namespace ts {
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
             return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as __String, reportErrors));
+        }
+
+        function getGlobalESSymbolConstructorTypeSymbol(reportErrors: boolean) {
+            return deferredGlobalESSymbolConstructorTypeSymbol || (deferredGlobalESSymbolConstructorTypeSymbol = getGlobalTypeSymbol("SymbolConstructor" as __String, reportErrors));
         }
 
         function getGlobalESSymbolType(reportErrors: boolean) {
