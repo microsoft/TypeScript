@@ -7501,8 +7501,8 @@ namespace ts.projectSystem {
     });
 
     describe("tsserverProjectSystem Watched recursive directories with windows style file system", () => {
-        function verifyWatchedDirectories(useProjectAtRoot: boolean) {
-            const root = useProjectAtRoot ? "c:/" : "c:/myfolder/allproject/";
+        function verifyWatchedDirectories(rootedPath: string, useProjectAtRoot: boolean) {
+            const root = useProjectAtRoot ? rootedPath : `${rootedPath}myfolder/allproject/`;
             const configFile: File = {
                 path: root + "project/tsconfig.json",
                 content: "{}"
@@ -7531,12 +7531,22 @@ namespace ts.projectSystem {
             ].concat(useProjectAtRoot ? [] : [root + nodeModulesAtTypes]), /*recursive*/ true);
         }
 
-        it("When project is in rootFolder", () => {
-            verifyWatchedDirectories(/*useProjectAtRoot*/ true);
+        function verifyRootedDirectoryWatch(rootedPath: string) {
+            it("When project is in rootFolder of style c:/", () => {
+                verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ true);
+            });
+
+            it("When files at some folder other than root", () => {
+                verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ false);
+            });
+        }
+
+        describe("for rootFolder of style c:/", () => {
+            verifyRootedDirectoryWatch("c:/");
         });
 
-        it("When files at some folder other than root", () => {
-            verifyWatchedDirectories(/*useProjectAtRoot*/ false);
+        describe("for rootFolder of style c:/users/username", () => {
+            verifyRootedDirectoryWatch("c:/users/username/");
         });
     });
 
