@@ -22,7 +22,7 @@ edit.insert('.');
 verify.completions({ exact: ["bar", "thing", "union", "Foo", "x"] });
 
 edit.insert('bar.');
-verify.completions({ includes: ["substr"], isNewIdentifierLocation: true });
+verify.completions({ includes: ["substr"] });
 edit.backspace('bar.'.length);
 
 edit.insert('union.');
