@@ -248,7 +248,7 @@ namespace ts.moduleSpecifiers {
                     const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
                     if (mainFileRelative) {
                         const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                        if (mainExportFile === getCanonicalFileName(path)) {
+                        if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(path))) {
                             return packageRootPath;
                         }
                     }
