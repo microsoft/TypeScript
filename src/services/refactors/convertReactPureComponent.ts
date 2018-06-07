@@ -4,12 +4,20 @@ namespace ts.refactor.convertReactPureComponent {
     const actionNameComponentToSFC = "Covert React.Component to SFC";
     const actionNameSFCToPureComponent = "Covert React.SFC to PureComponent";
 
+    const removeEmpty = (s: string) => s.replace(/\s/g, "");
+
     type SFCLikeDeclaration =
         | FunctionDeclaration
         | FunctionExpression
         | ArrowFunction;
     function isSFCLikeDeclaration(node: Node): node is SFCLikeDeclaration {
         return isFunctionDeclaration(node) || isFunctionExpression(node) || isArrowFunction(node);
+    }
+
+    type Component = {
+        name?: Identifier;
+        render: Block;
+        propsType?: TypeNode;
     }
 
     /**
@@ -44,7 +52,7 @@ namespace ts.refactor.convertReactPureComponent {
                     description,
                     actions: [{ description: description, name: actionNameComponentToSFC }]
                 }];
-            } else if (isReactSFCDeclaration(node)) {
+            } else if (isReactSFCDeclaration(node, context.file)) {
                 // const description = Diagnostics.???
                 const description = actionNameSFCToPureComponent;
                 return [{
@@ -79,7 +87,7 @@ namespace ts.refactor.convertReactPureComponent {
 
     /** Get name binding to React, React.Component, React.PureComponent, React.SFC, React.StatelessComponent */
     function getReferenceToReact(sourcefile: SourceFile) {
-        const result: Record<"React" | "Component" | "PureComponent" | "SFC" | "StatelessComponent", string | undefined> = {
+        const result: Record<"React" | "Component" | "PureComponent" | "SFC" | "StatelessComponent", string> = {
             Component: undefined,
             PureComponent: undefined,
             React: undefined,
@@ -127,23 +135,48 @@ namespace ts.refactor.convertReactPureComponent {
         return { ...result, importClause: importClause! };
     }
 
-    function isReactSFCDeclaration(expression: Node) {
+    function isReactSFCDeclaration(expression: Node, sourcefile: SourceFile): Component | undefined {
         if (!isSFCLikeDeclaration(expression)) { return; }
-        return expression && false;
+        if (expression.asteriskToken) { return; }
+        if (!expression.body) { return; }
+
+        // TODO: Should also check the actual type insteadof only receive explicit typed
+        const typeNode = expression.type;
+        if (!typeNode) { return; }
+        const binding = getReferenceToReact(sourcefile)!;
+        const type = removeEmpty(typeNode.getFullText(sourcefile));
+        if (type !== binding.SFC && type !== binding.Component) { return; }
+
+        let propsType: TypeNode | undefined;
+        if (isTypeReferenceNode(typeNode)) {
+            if (typeNode.typeArguments) { propsType = typeNode.typeArguments[0]; }
+        }
+
+        let render: Block;
+        if (isBlock(expression.body)) {
+            render = expression.body;
+        } else if (isExpression(expression.body!)) {
+            render = createBlock([createReturn(expression.body)]);
+        }
+        return {
+            propsType: propsType,
+            name: expression.name,
+            render: render!,
+        }
     }
 
-    function isConvertibleReactClassComponent(node: Node, sourcefile: SourceFile) {
-        if (!isClassLike(node)) return;
+    function isConvertibleReactClassComponent(node: Node, sourcefile: SourceFile): Component | undefined {
+        if (!isClassLike(node)) { return; }
         /** Check if expression is a React Component Class, then get its name and PropType */
         function isReactComponentClass(expression: ClassLikeDeclaration, sourcefile: SourceFile) {
             let is = false;
-            let name: string | undefined = "";
+            let name: Identifier | undefined;
             let reference = getReferenceToReact(sourcefile)!;
             let propsType: TypeNode | undefined;
             if (expression.heritageClauses) {
                 if (expression.heritageClauses.some(x =>
                     x.types.some(y => {
-                        const text = y.getText(sourcefile).replace(/\s/g, "");
+                        const text = removeEmpty(y.getText(sourcefile));
                         if (text === reference.Component || text === reference.PureComponent) {
                             propsType = y.typeArguments && y.typeArguments[0];
                             return true;
@@ -153,7 +186,7 @@ namespace ts.refactor.convertReactPureComponent {
                 )) {
                     is = true;
                     if (isClassDeclaration(expression)) {
-                        name = expression.name && expression.name.text;
+                        name = expression.name;
                     }
                 }
             }
@@ -184,7 +217,7 @@ namespace ts.refactor.convertReactPureComponent {
             // ? Now check reference to `state` or `setState`
             if (convertable) {
                 // OK let's do this quick
-                if (render!.getText(sourcefile).match(/this\s+\.\s+(state|setState)/)) {
+                if (removeEmpty(render!.getText(sourcefile)).match(/this\.(state|setState)/)) {
                     convertable = false;
                 }
             }
