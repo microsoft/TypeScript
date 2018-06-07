@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/mod.js ===
 exports.n = {};
->exports.n = {} : { [x: string]: any; }
+>exports.n = {} : typeof n
 >exports.n : typeof n
 >exports : typeof import("tests/cases/conformance/salsa/mod")
 >n : typeof n

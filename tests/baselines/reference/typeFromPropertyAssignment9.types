@@ -34,7 +34,7 @@ my.object = {};
 >{} : { [x: string]: any; }
 
 my.predicate = my.predicate || {};
->my.predicate = my.predicate || {} : { [x: string]: any; }
+>my.predicate = my.predicate || {} : typeof my.predicate
 >my.predicate : typeof my.predicate
 >my : typeof my
 >predicate : typeof my.predicate

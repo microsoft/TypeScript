@@ -6,7 +6,7 @@ var Outer = Outer || {};
 >{} : { [x: string]: any; }
 
 Outer.app = Outer.app || {};
->Outer.app = Outer.app || {} : { [x: string]: any; }
+>Outer.app = Outer.app || {} : typeof Outer.app
 >Outer.app : typeof Outer.app
 >Outer : typeof Outer
 >app : typeof Outer.app

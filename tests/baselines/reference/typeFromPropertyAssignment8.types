@@ -6,7 +6,7 @@ var my = my || {};
 >{} : { [x: string]: any; }
 
 my.app = my.app || {};
->my.app = my.app || {} : { [x: string]: any; }
+>my.app = my.app || {} : typeof my.app
 >my.app : typeof my.app
 >my : typeof my
 >app : typeof my.app
@@ -55,7 +55,7 @@ var min = window.min || {};
 >{} : { [x: string]: any; }
 
 min.app = min.app || {};
->min.app = min.app || {} : { [x: string]: any; }
+>min.app = min.app || {} : typeof min.app
 >min.app : typeof min.app
 >min : typeof min
 >app : typeof min.app

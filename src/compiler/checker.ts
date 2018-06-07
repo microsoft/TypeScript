@@ -20412,9 +20412,15 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
-                    checkSpecialAssignment(left, right);
-                    checkAssignmentOperator(rightType);
-                    return getRegularTypeOfObjectLiteral(rightType);
+                    const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+                    checkSpecialAssignment(special, right);
+                    if (isJSSpecialPropertyAssignment(special)) {
+                        return leftType;
+                    }
+                    else {
+                        checkAssignmentOperator(rightType);
+                        return getRegularTypeOfObjectLiteral(rightType);
+                    }
                 case SyntaxKind.CommaToken:
                     if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
@@ -20425,8 +20431,7 @@ namespace ts {
                     return Debug.fail();
             }
 
-            function checkSpecialAssignment(left: Node, right: Expression) {
-                const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+            function checkSpecialAssignment(special: SpecialPropertyAssignmentKind, right: Expression) {
                 if (special === SpecialPropertyAssignmentKind.ModuleExports) {
                     const rightType = checkExpression(right, checkMode);
                     for (const prop of getPropertiesOfObjectType(rightType)) {
@@ -20487,15 +20492,15 @@ namespace ts {
                     // and the type of the non-compound operation to be assignable to the type of VarExpr.
 
                     if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)
-                        && !isJSSpecialPropertyAssignment()) {
+                        && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
                         checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
                     }
                 }
             }
 
-            function isJSSpecialPropertyAssignment() {
-                switch (getSpecialPropertyAssignmentKind(right.parent as BinaryExpression)) {
+            function isJSSpecialPropertyAssignment(special: SpecialPropertyAssignmentKind) {
+                switch (special) {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
                     case SpecialPropertyAssignmentKind.Property:
@@ -20507,7 +20512,7 @@ namespace ts {
                         return init && isObjectLiteralExpression(init) &&
                             symbol && hasEntries(symbol.exports);
                     default:
-                        return isIdentifier(left) && unescapeLeadingUnderscores(left.escapedText) === "exports";
+                        return false;
                 }
             }
 
