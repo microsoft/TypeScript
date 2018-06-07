@@ -4313,5 +4313,13 @@
     "Convert named imports to namespace import": {
         "category": "Message",
         "code": 95057
+    },
+    "Covert React.Component to SFC": {
+        "category": "Message",
+        "code": 95058
+    },
+    "Covert React.SFC to PureComponent": {
+        "category": "Message",
+        "code": 95059
     }
 }
