@@ -1,0 +1,32 @@
+=== tests/cases/compiler/typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts ===
+const s = Symbol("s");
+>s : Symbol(s, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+interface I {
+>I : Symbol(I, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 0, 22))
+
+    n: number;
+>n : Symbol(I.n, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 2, 13))
+
+    [s]: string;
+>[s] : Symbol(I[s], Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 3, 14))
+>s : Symbol(s, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 0, 5))
+
+    [Symbol.iterator](): IterableIterator<[string, string]>;
+>[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 4, 16))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+}
+
+type K = keyof I;
+>K : Symbol(K, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 6, 1))
+>I : Symbol(I, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 0, 22))
+
+type T = I[K];
+>T : Symbol(T, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 8, 17))
+>I : Symbol(I, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 0, 22))
+>K : Symbol(K, Decl(typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts, 6, 1))
+

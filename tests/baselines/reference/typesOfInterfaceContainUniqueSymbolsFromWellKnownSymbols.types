@@ -1,0 +1,34 @@
+=== tests/cases/compiler/typesOfInterfaceContainUniqueSymbolsFromWellKnownSymbols.ts ===
+const s = Symbol("s");
+>s : unique symbol
+>Symbol("s") : unique symbol
+>Symbol : SymbolConstructor
+>"s" : "s"
+
+interface I {
+>I : I
+
+    n: number;
+>n : number
+
+    [s]: string;
+>[s] : string
+>s : unique symbol
+
+    [Symbol.iterator](): IterableIterator<[string, string]>;
+>[Symbol.iterator] : () => IterableIterator<[string, string]>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>IterableIterator : IterableIterator<T>
+}
+
+type K = keyof I;
+>K : unique symbol | unique symbol | "n"
+>I : I
+
+type T = I[K];
+>T : string | number | (() => IterableIterator<[string, string]>)
+>I : I
+>K : unique symbol | unique symbol | "n"
+
