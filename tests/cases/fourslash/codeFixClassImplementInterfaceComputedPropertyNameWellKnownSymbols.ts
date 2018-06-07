@@ -1,7 +1,19 @@
 /// <reference path='fourslash.ts' />
 
-// @lib: es2017
-
+// @noLib: true
+////declare const Symbol: {
+////    readonly hasInstance: unique symbol,
+////    readonly isConcatSpreadable: unique symbol,
+////    readonly iterator: unique symbol,
+////    readonly match: unique symbol,
+////    readonly replace: unique symbol,
+////    readonly search: unique symbol,
+////    readonly species: unique symbol,
+////    readonly split: unique symbol,
+////    readonly toPrimitive: unique symbol,
+////    readonly toStringTag: unique symbol,
+////    readonly unscopables: unique symbol,
+////};
 ////interface I<Species> {
 ////    [Symbol.hasInstance](o: any): boolean;
 ////    [Symbol.isConcatSpreadable]: boolean;
@@ -22,7 +34,20 @@
 verify.codeFix({
     description: "Implement interface 'I<number>'",
     newFileContent:
-`interface I<Species> {
+`declare const Symbol: {
+    readonly hasInstance: unique symbol,
+    readonly isConcatSpreadable: unique symbol,
+    readonly iterator: unique symbol,
+    readonly match: unique symbol,
+    readonly replace: unique symbol,
+    readonly search: unique symbol,
+    readonly species: unique symbol,
+    readonly split: unique symbol,
+    readonly toPrimitive: unique symbol,
+    readonly toStringTag: unique symbol,
+    readonly unscopables: unique symbol,
+};
+interface I<Species> {
     [Symbol.hasInstance](o: any): boolean;
     [Symbol.isConcatSpreadable]: boolean;
     [Symbol.iterator](): any;
@@ -64,7 +89,7 @@ class C implements I<number> {
     [Symbol.toPrimitive](hint: any) {
         throw new Error("Method not implemented.");
     }
-    [Symbol.toStringTag]: string\;
+    [Symbol.toStringTag]: string;
     [Symbol.unscopables]: any;
 }`,
 });

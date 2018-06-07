@@ -2303,9 +2303,7 @@ Actual: ${stringify(fullActual)}`);
 
         private verifyFileContent(fileName: string, text: string) {
             const actual = this.getFileContent(fileName);
-            if (actual !== text) {
-                throw new Error(`verifyFileContent failed:\n${showTextDiff(text, actual)}`);
-            }
+            assert.equal(actual, text, "verifyFileContent failed");
         }
 
         public verifyTextAtCaretIs(text: string) {
