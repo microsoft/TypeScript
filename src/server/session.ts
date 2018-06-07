@@ -1772,7 +1772,7 @@ namespace ts.server {
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
             return textChanges.map(change => {
                 const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
-                return mapTextChangesToCodeEdits(change, project.getSourceFile(path));
+                return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
             });
         }
 
