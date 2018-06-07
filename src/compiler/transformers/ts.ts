@@ -1910,6 +1910,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ImportType:
                     break;
 
                 default:
