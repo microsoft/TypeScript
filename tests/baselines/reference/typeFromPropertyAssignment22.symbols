@@ -8,7 +8,7 @@ function Installer () {
 Installer.prototype.loadArgMetadata = function (next) {
 >Installer.prototype : Symbol(Installer.loadArgMetadata, Decl(npm-install.js, 2, 1))
 >Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >loadArgMetadata : Symbol(Installer.loadArgMetadata, Decl(npm-install.js, 2, 1))
 >next : Symbol(next, Decl(npm-install.js, 3, 48))
 

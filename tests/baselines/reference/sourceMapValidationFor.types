@@ -9,10 +9,10 @@ for (var i = 0; i < 10; i++) {
 >i : number
 
     WScript.Echo("i: " + i);
->WScript.Echo("i: " + i) : any
->WScript.Echo : any
->WScript : any
->Echo : any
+>WScript.Echo("i: " + i) : void
+>WScript.Echo : (s: any) => void
+>WScript : { Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number): number; BuildVersion: number; FullName: string; Interactive: boolean; Name: string; Path: string; ScriptName: string; StdIn: TextStreamReader; Version: string; ConnectObject(objEventSource: any, strPrefix: string): void; CreateObject(strProgID: string, strPrefix?: string): any; DisconnectObject(obj: any): void; GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any; Sleep(intTime: number): void; }
+>Echo : (s: any) => void
 >"i: " + i : string
 >"i: " : "i: "
 >i : number
@@ -28,10 +28,10 @@ for (i = 0; i < 10; i++)
 >i : number
 {
     WScript.Echo("i: " + i);
->WScript.Echo("i: " + i) : any
->WScript.Echo : any
->WScript : any
->Echo : any
+>WScript.Echo("i: " + i) : void
+>WScript.Echo : (s: any) => void
+>WScript : { Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number): number; BuildVersion: number; FullName: string; Interactive: boolean; Name: string; Path: string; ScriptName: string; StdIn: TextStreamReader; Version: string; ConnectObject(objEventSource: any, strPrefix: string): void; CreateObject(strProgID: string, strPrefix?: string): any; DisconnectObject(obj: any): void; GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any; Sleep(intTime: number): void; }
+>Echo : (s: any) => void
 >"i: " + i : string
 >"i: " : "i: "
 >i : number

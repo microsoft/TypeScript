@@ -136,7 +136,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                const configuredProject = find(projectService.synchronizeProjectList([]), f => f.info!.projectName === corruptedConfig.path)!;
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
                 const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
@@ -144,13 +144,13 @@ namespace ts.projectSystem {
                     "'{' expected."
                 ]);
                 assert.isNotNull(projectErrors[0].file);
-                assert.equal(projectErrors[0].file.fileName, corruptedConfig.path);
+                assert.equal(projectErrors[0].file!.fileName, corruptedConfig.path);
             }
             // fix config and trigger watcher
             host.reloadFS([file1, file2, correctConfig]);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                const configuredProject = find(projectService.synchronizeProjectList([]), f => f.info!.projectName === corruptedConfig.path)!;
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
                 const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
@@ -181,7 +181,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                const configuredProject = find(projectService.synchronizeProjectList([]), f => f.info!.projectName === corruptedConfig.path)!;
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
                 const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
@@ -191,7 +191,7 @@ namespace ts.projectSystem {
             host.reloadFS([file1, file2, corruptedConfig]);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                const configuredProject = find(projectService.synchronizeProjectList([]), f => f.info!.projectName === corruptedConfig.path)!;
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
                 const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
@@ -199,7 +199,7 @@ namespace ts.projectSystem {
                     "'{' expected."
                 ]);
                 assert.isNotNull(projectErrors[0].file);
-                assert.equal(projectErrors[0].file.fileName, corruptedConfig.path);
+                assert.equal(projectErrors[0].file!.fileName, corruptedConfig.path);
             }
         });
     });

@@ -34,7 +34,7 @@ class TypeWriterWalker {
     }
 
     public *getSymbols(fileName: string): IterableIterator<TypeWriterSymbolResult> {
-        const sourceFile = this.program.getSourceFile(fileName);
+        const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ true);
         for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -43,7 +43,7 @@ class TypeWriterWalker {
     }
 
     public *getTypes(fileName: string): IterableIterator<TypeWriterTypeResult> {
-        const sourceFile = this.program.getSourceFile(fileName);
+        const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ false);
         for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -69,7 +69,7 @@ class TypeWriterWalker {
         }
     }
 
-    private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult {
+    private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult | undefined {
         const actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         const lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
         const sourceText = ts.getSourceTextOfNodeFromSourceFile(this.currentSourceFile, node);

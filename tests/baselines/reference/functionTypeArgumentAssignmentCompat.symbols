@@ -24,10 +24,13 @@ f = g;
 
 var s = f("str").toUpperCase();
 >s : Symbol(s, Decl(functionTypeArgumentAssignmentCompat.ts, 9, 3))
->f("str").toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>f("str").toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(functionTypeArgumentAssignmentCompat.ts, 0, 3))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 console.log(s);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >s : Symbol(s, Decl(functionTypeArgumentAssignmentCompat.ts, 9, 3))
 

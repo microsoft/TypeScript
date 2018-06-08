@@ -358,3 +358,60 @@ var publicClassExtendingPublicClassInGlobal = /** @class */ (function (_super) {
     }
     return publicClassExtendingPublicClassInGlobal;
 }(publicClassInGlobal));
+
+
+//// [privacyClassExtendsClauseDeclFile_externalModule.d.ts]
+export declare module publicModule {
+    class publicClassInPublicModule {
+        private f1;
+    }
+    class privateClassInPublicModule {
+    }
+    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    }
+    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    }
+    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    }
+}
+declare module privateModule {
+    class publicClassInPrivateModule {
+        private f1;
+    }
+    class privateClassInPrivateModule {
+    }
+    class publicClassExtendingPublicClassInModule extends publicClassInPrivateModule {
+    }
+    class publicClassExtendingPrivateClassInModule extends privateClassInPrivateModule {
+    }
+    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    }
+}
+export declare class publicClass {
+    private f1;
+}
+declare class privateClass {
+}
+export declare class publicClassExtendingPublicClass extends publicClass {
+}
+export declare class publicClassExtendingPrivateClass extends privateClass {
+}
+export declare class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+}
+export {};
+//// [privacyClassExtendsClauseDeclFile_GlobalFile.d.ts]
+declare module publicModuleInGlobal {
+    class publicClassInPublicModule {
+        private f1;
+    }
+    class privateClassInPublicModule {
+    }
+    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    }
+    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    }
+}
+declare class publicClassInGlobal {
+}
+declare class publicClassExtendingPublicClassInGlobal extends publicClassInGlobal {
+}

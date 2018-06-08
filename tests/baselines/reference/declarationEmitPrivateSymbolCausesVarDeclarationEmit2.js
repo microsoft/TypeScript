@@ -26,6 +26,7 @@ exports.x = Symbol();
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+var _a;
 var a_1 = require("./a");
 var C = /** @class */ (function () {
     function C() {
@@ -35,7 +36,6 @@ var C = /** @class */ (function () {
 }());
 _a = a_1.x;
 exports.C = C;
-var _a;
 //// [c.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -49,6 +49,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+var _a;
 var a_1 = require("./a");
 var b_1 = require("./b");
 var D = /** @class */ (function (_super) {
@@ -62,7 +63,6 @@ var D = /** @class */ (function (_super) {
 }(b_1.C));
 _a = a_1.x;
 exports.D = D;
-var _a;
 
 
 //// [a.d.ts]

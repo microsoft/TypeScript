@@ -18,9 +18,9 @@
 ////     return <h1>World </h1>;
 //// }
 
-//// var SFCComp = SFC1 || SFC2;
+//// var /*def*/SFCComp = SFC1 || SFC2;
 //// <[|SFC/*one*/Comp|] x />
 
 verify.goToDefinition({
-    "one": "pt1"
-})
+    "one": ["def", "pt1"],
+});

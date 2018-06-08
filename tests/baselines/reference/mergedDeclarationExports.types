@@ -26,14 +26,14 @@ interface c {}
 >c : c
 
 export interface c {}
->c : c
+>c : import("tests/cases/compiler/mergedDeclarationExports").c
 
 // both types (class is also value, but that doesn't matter)
 interface d {}
 >d : d
 
 export class d {}
->d : d
+>d : import("tests/cases/compiler/mergedDeclarationExports").d
 
 // both namespaces
 namespace N { }

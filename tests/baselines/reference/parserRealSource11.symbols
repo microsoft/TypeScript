@@ -124,7 +124,7 @@ module TypeScript {
                     break;
                 default:
                     throw new Error("please implement in derived class");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
             }
             return this;
 >this : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
@@ -252,7 +252,7 @@ module TypeScript {
                     break;
                 default:
                     throw new Error("please implement in derived class");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
             }
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 63, 20))
@@ -367,6 +367,7 @@ module TypeScript {
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
 >netFreeUses : Symbol(AST.netFreeUses, Decl(parserRealSource11.ts, 148, 9))
 >container : Symbol(container, Decl(parserRealSource11.ts, 150, 27))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 >freeUses : Symbol(freeUses, Decl(parserRealSource11.ts, 150, 45))
         }
 
@@ -397,43 +398,43 @@ module TypeScript {
 
             while(i <= name.length - 6) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 162, 15))
->name.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>name.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(parserRealSource11.ts, 157, 48))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
                 // Look for escape sequence \uxxxx
                 if (name.charAt(i) == '\\' && name.charAt(i+1) == 'u') {
->name.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>name.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(parserRealSource11.ts, 157, 48))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource11.ts, 162, 15))
->name.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>name.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(parserRealSource11.ts, 157, 48))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource11.ts, 162, 15))
 
                     var charCode = parseInt(name.substr(i + 2, 4), 16);
 >charCode : Symbol(charCode, Decl(parserRealSource11.ts, 166, 23))
->parseInt : Symbol(parseInt, Decl(lib.d.ts, --, --))
->name.substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>name.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(parserRealSource11.ts, 157, 48))
->substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource11.ts, 162, 15))
 
                     resolved += name.substr(start, i - start);
 >resolved : Symbol(resolved, Decl(parserRealSource11.ts, 160, 15))
->name.substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
+>name.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(parserRealSource11.ts, 157, 48))
->substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >start : Symbol(start, Decl(parserRealSource11.ts, 161, 15))
 >i : Symbol(i, Decl(parserRealSource11.ts, 162, 15))
 >start : Symbol(start, Decl(parserRealSource11.ts, 161, 15))
 
                     resolved += String.fromCharCode(charCode);
 >resolved : Symbol(resolved, Decl(parserRealSource11.ts, 160, 15))
->String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.d.ts, --, --))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.d.ts, --, --))
+>String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
 >charCode : Symbol(charCode, Decl(parserRealSource11.ts, 166, 23))
 
                     i += 6;
@@ -451,9 +452,9 @@ module TypeScript {
             // Append remaining string
             resolved += name.substring(start);
 >resolved : Symbol(resolved, Decl(parserRealSource11.ts, 160, 15))
->name.substring : Symbol(String.substring, Decl(lib.d.ts, --, --))
+>name.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(parserRealSource11.ts, 157, 48))
->substring : Symbol(String.substring, Decl(lib.d.ts, --, --))
+>substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
 >start : Symbol(start, Decl(parserRealSource11.ts, 161, 15))
 
             return resolved;
@@ -509,11 +510,11 @@ module TypeScript {
 
             var len = this.members.length;
 >len : Symbol(len, Decl(parserRealSource11.ts, 199, 15))
->this.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this : Symbol(ASTList, Decl(parserRealSource11.ts, 188, 5))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
             for (var i = 0; i < len; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 200, 20))
@@ -560,11 +561,11 @@ module TypeScript {
 >this.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this : Symbol(ASTList, Decl(parserRealSource11.ts, 188, 5))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->this.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this : Symbol(ASTList, Decl(parserRealSource11.ts, 188, 5))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >ast : Symbol(ast, Decl(parserRealSource11.ts, 212, 22))
 
             return this;
@@ -589,11 +590,11 @@ module TypeScript {
                 for (var i = 0, len = list.members.length; i < len; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 220, 24))
 >len : Symbol(len, Decl(parserRealSource11.ts, 220, 31))
->list.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>list.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >list.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >list : Symbol(list, Decl(parserRealSource11.ts, 219, 19))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource11.ts, 220, 24))
 >len : Symbol(len, Decl(parserRealSource11.ts, 220, 31))
 >i : Symbol(i, Decl(parserRealSource11.ts, 220, 24))
@@ -645,11 +646,11 @@ module TypeScript {
 
             var len = this.members.length;
 >len : Symbol(len, Decl(parserRealSource11.ts, 237, 15))
->this.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this : Symbol(ASTList, Decl(parserRealSource11.ts, 188, 5))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
             typeFlow.nestingLevel++;
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 236, 25))
@@ -694,6 +695,7 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol(Identifier.sym, Decl(parserRealSource11.ts, 249, 41))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
         public cloId = -1;
 >cloId : Symbol(Identifier.cloId, Decl(parserRealSource11.ts, 250, 34))
@@ -1179,7 +1181,7 @@ module TypeScript {
 
                 default:
                     throw new Error("please implement in derived class");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
             }
             return this;
 >this : Symbol(UnaryExpression, Decl(parserRealSource11.ts, 356, 5))
@@ -1395,7 +1397,7 @@ module TypeScript {
                     break;
                 default:
                     throw new Error("please implement in derived class");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
             }
             emitter.recordSourceMappingEnd(this);
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 440, 20))
@@ -1693,7 +1695,7 @@ module TypeScript {
                     break;
                 default:
                     throw new Error("please implement in derived class");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
             }
             return this;
 >this : Symbol(BinaryExpression, Decl(parserRealSource11.ts, 549, 5))
@@ -1877,11 +1879,11 @@ module TypeScript {
                         break;
                     case NodeType.Is:
                         throw new Error("should be de-sugared during type check");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
                     default:
                         throw new Error("please implement in derived class");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
                 }
             }
             emitter.recordSourceMappingEnd(this);
@@ -2034,11 +2036,11 @@ module TypeScript {
 
             emitter.writeToOutput(this.value.toString());
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 746, 20))
->this.value.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>this.value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
 >this : Symbol(NumberLiteral, Decl(parserRealSource11.ts, 728, 5))
 >value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
             if (this.hasEmptyFraction)
 >this.hasEmptyFraction : Symbol(NumberLiteral.hasEmptyFraction, Decl(parserRealSource11.ts, 731, 42))
@@ -2061,9 +2063,9 @@ module TypeScript {
 >printLabel : Symbol(NumberLiteral.printLabel, Decl(parserRealSource11.ts, 760, 9))
 
             if (Math.floor(this.value) != this.value) {
->Math.floor : Symbol(Math.floor, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->floor : Symbol(Math.floor, Decl(lib.d.ts, --, --))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
 >this : Symbol(NumberLiteral, Decl(parserRealSource11.ts, 728, 5))
 >value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
@@ -2072,13 +2074,13 @@ module TypeScript {
 >value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
 
                 return this.value.toFixed(2).toString();
->this.value.toFixed(2).toString : Symbol(String.toString, Decl(lib.d.ts, --, --))
->this.value.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>this.value.toFixed(2).toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>this.value.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
 >this : Symbol(NumberLiteral, Decl(parserRealSource11.ts, 728, 5))
 >value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
->toString : Symbol(String.toString, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
             }
             else if (this.hasEmptyFraction) {
 >this.hasEmptyFraction : Symbol(NumberLiteral.hasEmptyFraction, Decl(parserRealSource11.ts, 731, 42))
@@ -2086,19 +2088,19 @@ module TypeScript {
 >hasEmptyFraction : Symbol(NumberLiteral.hasEmptyFraction, Decl(parserRealSource11.ts, 731, 42))
 
                 return this.value.toString() + ".0";
->this.value.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>this.value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
 >this : Symbol(NumberLiteral, Decl(parserRealSource11.ts, 728, 5))
 >value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
             }
             else {
                 return this.value.toString();
->this.value.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>this.value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
 >this : Symbol(NumberLiteral, Decl(parserRealSource11.ts, 728, 5))
 >value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
             }
         }
     }
@@ -2477,6 +2479,7 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol(BoundDecl.sym, Decl(parserRealSource11.ts, 890, 40))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
         constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
 >id : Symbol(BoundDecl.id, Decl(parserRealSource11.ts, 893, 21))
@@ -2703,6 +2706,7 @@ module TypeScript {
 
         public freeVariables: Symbol[] = [];
 >freeVariables : Symbol(FuncDecl.freeVariables, Decl(parserRealSource11.ts, 967, 45))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
         public unitIndex = -1;
 >unitIndex : Symbol(FuncDecl.unitIndex, Decl(parserRealSource11.ts, 968, 44))
@@ -2730,6 +2734,7 @@ module TypeScript {
 
         public accessorSymbol: Symbol = null;
 >accessorSymbol : Symbol(FuncDecl.accessorSymbol, Decl(parserRealSource11.ts, 975, 43))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
         public leftCurlyCount = 0;
 >leftCurlyCount : Symbol(FuncDecl.leftCurlyCount, Decl(parserRealSource11.ts, 976, 45))
@@ -2827,6 +2832,7 @@ module TypeScript {
 >id : Symbol(id, Decl(parserRealSource11.ts, 1006, 25))
 >Identifier : Symbol(Identifier, Decl(parserRealSource11.ts, 247, 5))
 >sym : Symbol(sym, Decl(parserRealSource11.ts, 1006, 40))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
             if (this.envids == null) {
 >this.envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
@@ -2843,11 +2849,11 @@ module TypeScript {
 >this.envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
->this.envids.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.envids.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >id : Symbol(id, Decl(parserRealSource11.ts, 1006, 25))
 
             var outerFnc = this.enclosingFnc;
@@ -2880,16 +2886,17 @@ module TypeScript {
                 }
             }
             return this.envids.length - 1;
->this.envids.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.envids.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
         }
 
         public addJumpRef(sym: Symbol): void {
 >addJumpRef : Symbol(FuncDecl.addJumpRef, Decl(parserRealSource11.ts, 1019, 9))
 >sym : Symbol(sym, Decl(parserRealSource11.ts, 1021, 26))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
             if (this.jumpRefs == null) {
 >this.jumpRefs : Symbol(FuncDecl.jumpRefs, Decl(parserRealSource11.ts, 963, 36))
@@ -2911,11 +2918,11 @@ module TypeScript {
 >this.jumpRefs : Symbol(FuncDecl.jumpRefs, Decl(parserRealSource11.ts, 963, 36))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >jumpRefs : Symbol(FuncDecl.jumpRefs, Decl(parserRealSource11.ts, 963, 36))
->this.jumpRefs.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.jumpRefs.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.jumpRefs : Symbol(FuncDecl.jumpRefs, Decl(parserRealSource11.ts, 963, 36))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >jumpRefs : Symbol(FuncDecl.jumpRefs, Decl(parserRealSource11.ts, 963, 36))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >id : Symbol(id, Decl(parserRealSource11.ts, 1025, 15))
 
             id.sym = sym;
@@ -3165,18 +3172,18 @@ module TypeScript {
 >this.isConstructor : Symbol(FuncDecl.isConstructor, Decl(parserRealSource11.ts, 983, 66))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >isConstructor : Symbol(FuncDecl.isConstructor, Decl(parserRealSource11.ts, 983, 66))
->this.statics.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.statics.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.statics.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this.statics : Symbol(FuncDecl.statics, Decl(parserRealSource11.ts, 984, 93))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >statics : Symbol(FuncDecl.statics, Decl(parserRealSource11.ts, 984, 93))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
->this.innerStaticFuncs.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.innerStaticFuncs.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.innerStaticFuncs : Symbol(FuncDecl.innerStaticFuncs, Decl(parserRealSource11.ts, 972, 34))
 >this : Symbol(FuncDecl, Decl(parserRealSource11.ts, 954, 23))
 >innerStaticFuncs : Symbol(FuncDecl.innerStaticFuncs, Decl(parserRealSource11.ts, 972, 34))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
     }
 
     export class LocationInfo {
@@ -3300,13 +3307,13 @@ module TypeScript {
                 for (var i = 0, len = this.bod.members.length; i < len; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 1141, 24))
 >len : Symbol(len, Decl(parserRealSource11.ts, 1141, 31))
->this.bod.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.bod.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.bod.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this.bod : Symbol(FuncDecl.bod, Decl(parserRealSource11.ts, 983, 45))
 >this : Symbol(Script, Decl(parserRealSource11.ts, 1106, 75))
 >bod : Symbol(FuncDecl.bod, Decl(parserRealSource11.ts, 983, 45))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource11.ts, 1141, 24))
 >len : Symbol(len, Decl(parserRealSource11.ts, 1141, 31))
 >i : Symbol(i, Decl(parserRealSource11.ts, 1141, 24))
@@ -3837,13 +3844,13 @@ module TypeScript {
 
                 var labelsLen = this.labels.members.length;
 >labelsLen : Symbol(labelsLen, Decl(parserRealSource11.ts, 1320, 19))
->this.labels.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.labels.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.labels.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this.labels : Symbol(LabeledStatement.labels, Decl(parserRealSource11.ts, 1312, 21))
 >this : Symbol(LabeledStatement, Decl(parserRealSource11.ts, 1309, 5))
 >labels : Symbol(LabeledStatement.labels, Decl(parserRealSource11.ts, 1312, 21))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                 for (var i = 0; i < labelsLen; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 1321, 24))
@@ -3972,13 +3979,13 @@ module TypeScript {
             } else {
                 emitter.setInVarBlock(this.statements.members.length);
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1350, 20))
->this.statements.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.statements.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.statements.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this.statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >this : Symbol(Block, Decl(parserRealSource11.ts, 1342, 5))
 >statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
             }
             var temp = emitter.setInObjectLiteral(false);
 >temp : Symbol(temp, Decl(parserRealSource11.ts, 1359, 15))
@@ -4077,13 +4084,13 @@ module TypeScript {
 >this.statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >this : Symbol(Block, Decl(parserRealSource11.ts, 1342, 5))
 >statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
->this.statements.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.statements.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.statements.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this.statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >this : Symbol(Block, Decl(parserRealSource11.ts, 1342, 5))
 >statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                     typeFlow.checker.errorReporter.styleError(this, "empty block");
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1387, 25))
@@ -5016,11 +5023,11 @@ module TypeScript {
 >body : Symbol(ForInStatement.body, Decl(parserRealSource11.ts, 1692, 50))
 
                     if (stmts.members.length == 1) {
->stmts.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>stmts.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >stmts.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >stmts : Symbol(stmts, Decl(parserRealSource11.ts, 1701, 23))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                         singleItem = stmts.members[0];
 >singleItem : Symbol(singleItem, Decl(parserRealSource11.ts, 1699, 19))
@@ -5054,13 +5061,13 @@ module TypeScript {
 >block.statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >block : Symbol(block, Decl(parserRealSource11.ts, 1712, 27))
 >statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
->block.statements.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>block.statements.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >block.statements.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >block.statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >block : Symbol(block, Decl(parserRealSource11.ts, 1712, 27))
 >statements : Symbol(Block.statements, Decl(parserRealSource11.ts, 1345, 21))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                             singleItem = block.statements.members[0];
 >singleItem : Symbol(singleItem, Decl(parserRealSource11.ts, 1699, 19))
@@ -5154,11 +5161,11 @@ module TypeScript {
 
                                         if ((args !== null) && (args.members.length == 1)) {
 >args : Symbol(args, Decl(parserRealSource11.ts, 1728, 43))
->args.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>args.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >args.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >args : Symbol(args, Decl(parserRealSource11.ts, 1728, 43))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                                             var arg = args.members[0];
 >arg : Symbol(arg, Decl(parserRealSource11.ts, 1730, 47))
@@ -5458,14 +5465,14 @@ module TypeScript {
                 else {
                     emitter.setInVarBlock((<ASTList>this.init).members.length); 
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1815, 20))
->(<ASTList>this.init).members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>(<ASTList>this.init).members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >(<ASTList>this.init).members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >ASTList : Symbol(ASTList, Decl(parserRealSource11.ts, 188, 5))
 >this.init : Symbol(ForStatement.init, Decl(parserRealSource11.ts, 1809, 21))
 >this : Symbol(ForStatement, Decl(parserRealSource11.ts, 1802, 5))
 >init : Symbol(ForStatement.init, Decl(parserRealSource11.ts, 1809, 21))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                     emitter.emitJavascriptList(this.init, null, TokenID.For, false, false, false);
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1815, 20))
@@ -5853,13 +5860,13 @@ module TypeScript {
 
             var casesLen = this.caseList.members.length;
 >casesLen : Symbol(casesLen, Decl(parserRealSource11.ts, 1954, 15))
->this.caseList.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.caseList.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.caseList.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this.caseList : Symbol(SwitchStatement.caseList, Decl(parserRealSource11.ts, 1932, 52))
 >this : Symbol(SwitchStatement, Decl(parserRealSource11.ts, 1930, 5))
 >caseList : Symbol(SwitchStatement.caseList, Decl(parserRealSource11.ts, 1932, 52))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
             for (var i = 0; i < casesLen; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 1955, 20))
@@ -5911,13 +5918,13 @@ module TypeScript {
 
             var len = this.caseList.members.length;
 >len : Symbol(len, Decl(parserRealSource11.ts, 1969, 15))
->this.caseList.members.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.caseList.members.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.caseList.members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
 >this.caseList : Symbol(SwitchStatement.caseList, Decl(parserRealSource11.ts, 1932, 52))
 >this : Symbol(SwitchStatement, Decl(parserRealSource11.ts, 1930, 5))
 >caseList : Symbol(SwitchStatement.caseList, Decl(parserRealSource11.ts, 1932, 52))
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
             this.val = typeFlow.typeCheck(this.val);
 >this.val : Symbol(SwitchStatement.val, Decl(parserRealSource11.ts, 1937, 21))
@@ -6242,7 +6249,7 @@ module TypeScript {
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2069, 55))
 
             throw new Error("should not emit a type ref");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
         }
 
         public typeCheck(typeFlow: TypeFlow) {
@@ -7103,20 +7110,20 @@ module TypeScript {
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
->this.content.split : Symbol(String.split, Decl(lib.d.ts, --, --))
+>this.content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
 >this.content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
->split : Symbol(String.split, Decl(lib.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
 
                     for (var i = 0; i < this.text.length; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
->this.text.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.text.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
 
                         this.text[i] = this.text[i].replace(/^\s+|\s+$/g, '');
@@ -7124,12 +7131,12 @@ module TypeScript {
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
->this.text[i].replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>this.text[i].replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
->replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
                     }
                 }
                 else {
@@ -7137,11 +7144,11 @@ module TypeScript {
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
->this.content.replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>this.content.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
->replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
                 }
             }
 

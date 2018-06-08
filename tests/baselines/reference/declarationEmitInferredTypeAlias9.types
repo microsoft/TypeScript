@@ -1,19 +1,19 @@
 === tests/cases/compiler/declarationEmitInferredTypeAlias9.ts ===
 type Foo<T> = T | { x: Foo<T> };
->Foo : T | { x: T | any; }
+>Foo : Foo<T>
 >T : T
 >T : T
->x : T | { x: T | any; }
->Foo : T | { x: T | any; }
+>x : Foo<T>
+>Foo : Foo<T>
 >T : T
 
 var x: Foo<number[]>;
->x : number[] | { x: number[] | any; }
->Foo : T | { x: T | any; }
+>x : Foo<number[]>
+>Foo : Foo<T>
 
 export function returnSomeGlobalValue() {
->returnSomeGlobalValue : () => number[] | { x: number[] | any; }
+>returnSomeGlobalValue : () => Foo<number[]>
 
     return x;
->x : number[] | { x: number[] | any; }
+>x : Foo<number[]>
 }

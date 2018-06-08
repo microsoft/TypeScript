@@ -3,7 +3,7 @@ var strAndNum: string & number;
 >strAndNum : string & number
 
 var numAndBool: number & boolean;
->numAndBool : (number & true) | (number & false)
+>numAndBool : never
 
 var str: string;
 >str : string
@@ -34,7 +34,7 @@ switch (strAndNum) {
 
     // Overlap in constituents
     case numAndBool:
->numAndBool : (number & true) | (number & false)
+>numAndBool : never
 
         break;
 

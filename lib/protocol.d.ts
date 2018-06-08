@@ -3,6 +3,7 @@
  */
 declare namespace ts.server.protocol {
     const enum CommandTypes {
+        JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         BraceCompletion = "braceCompletion",
         GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -57,7 +58,8 @@ declare namespace ts.server.protocol {
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
-        OrganizeImports = "organizeImports"
+        OrganizeImports = "organizeImports",
+        GetEditsForFileRename = "getEditsForFileRename"
     }
     /**
      * A TypeScript Server message
@@ -223,6 +225,10 @@ declare namespace ts.server.protocol {
          * the 'Collapse to Definitions' command is invoked.
          */
         autoCollapse: boolean;
+        /**
+         * Classification of the contents of the span
+         */
+        kind: OutliningSpanKind;
     }
     /**
      * Response to OutliningSpansRequest request.
@@ -328,6 +334,8 @@ declare namespace ts.server.protocol {
         endLocation: Location;
         category: string;
         code: number;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
     }
     /**
      * Response message for "projectInfo" request
@@ -449,6 +457,17 @@ declare namespace ts.server.protocol {
         scope: OrganizeImportsScope;
     }
     interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+    interface GetEditsForFileRenameRequest extends Request {
+        command: CommandTypes.GetEditsForFileRename;
+        arguments: GetEditsForFileRenameRequestArgs;
+    }
+    interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+        readonly oldFilePath: string;
+        readonly newFilePath: string;
+    }
+    interface GetEditsForFileRenameResponse extends Response {
         edits: ReadonlyArray<FileCodeEdits>;
     }
     /**
@@ -653,6 +672,15 @@ declare namespace ts.server.protocol {
          * Kind of opening brace
          */
         openingBrace: string;
+    }
+    interface JsxClosingTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.JsxClosingTag;
+        readonly arguments: JsxClosingTagRequestArgs;
+    }
+    interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {
+    }
+    interface JsxClosingTagResponse extends Response {
+        readonly body: TextInsertion;
     }
     /**
      * @deprecated
@@ -941,7 +969,7 @@ declare namespace ts.server.protocol {
         /**
          * The host's additional supported .js file extensions
          */
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
     /**
      *  Configure request; value of command field is "configure".  Specifies
@@ -1267,6 +1295,8 @@ declare namespace ts.server.protocol {
         commands?: ReadonlyArray<{}>;
     }
     interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
+        fixName: string;
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.
@@ -1303,6 +1333,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
     /**
      * Arguments for completions messages.
      */
@@ -1311,6 +1342,7 @@ declare namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        triggerCharacter?: CompletionsTriggerCharacter;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -1341,7 +1373,7 @@ declare namespace ts.server.protocol {
     }
     interface CompletionEntryIdentifier {
         name: string;
-        source: string;
+        source?: string;
     }
     /**
      * Completion entry details request; value of command field is
@@ -1381,7 +1413,7 @@ declare namespace ts.server.protocol {
         /**
          * Optional modifiers for the kind (such as 'public').
          */
-        kindModifiers: string;
+        kindModifiers?: string;
         /**
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
@@ -1438,11 +1470,11 @@ declare namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[];
+        documentation?: SymbolDisplayPart[];
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
         /**
          * The associated code actions for this entry
          */
@@ -1678,6 +1710,7 @@ declare namespace ts.server.protocol {
          * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
+        reportsUnnecessary?: {};
         /**
          * The error code of the diagnostic message.
          */
@@ -2076,6 +2109,7 @@ declare namespace ts.server.protocol {
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
     interface UserPreferences {
+        readonly disableSuggestions?: boolean;
         readonly quotePreference?: "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
@@ -2088,6 +2122,7 @@ declare namespace ts.server.protocol {
          */
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -2141,6 +2176,7 @@ declare namespace ts.server.protocol {
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
+        references?: ProjectReference[];
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -2153,6 +2189,7 @@ declare namespace ts.server.protocol {
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget | ts.ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
@@ -2209,6 +2246,17 @@ declare namespace ts.server.protocol {
         descriptor: TodoCommentDescriptor;
         message: string;
         position: number;
+    }
+
+    enum OutliningSpanKind {
+        /** Single or multi-line comments */
+        Comment = "comment",
+        /** Sections marked by '// #region' and '// #endregion' comments */
+        Region = "region",
+        /** Declarations and expressions */
+        Code = "code",
+        /** Contiguous blocks of import declarations */
+        Imports = "imports"
     }
 
     enum HighlightSpanKind {
@@ -2283,7 +2331,9 @@ declare namespace ts.server.protocol {
         /**
          * <JsxTagName attribute1 attribute2={0} />
          */
-        jsxAttribute = "JSX attribute"
+        jsxAttribute = "JSX attribute",
+        /** String literal */
+        string = "string"
     }
 
     interface TypeAcquisition {
@@ -2294,7 +2344,7 @@ declare namespace ts.server.protocol {
         [option: string]: string[] | boolean | undefined;
     }
 
-    interface JsFileExtensionInfo {
+    interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
@@ -2318,7 +2368,18 @@ declare namespace ts.server.protocol {
         name: string;
     }
 
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
+    interface ProjectReference {
+        /** A normalized path on disk */
+        path: string;
+        /** The path as the user originally wrote it */
+        originalPath?: string;
+        /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
+        prepend?: boolean;
+        /** True if it is intended that this reference form a circularity */
+        circular?: boolean;
+    }
+
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly

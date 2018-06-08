@@ -1,3 +1,5 @@
+// @keyofStringsOnly: true
+
 declare const fooProp: unique symbol;
 declare const barProp: unique symbol;
 

@@ -1,0 +1,73 @@
+=== tests/cases/compiler/noCrashOnThisTypeUsage.ts ===
+interface IListenable {
+>IListenable : Symbol(IListenable, Decl(noCrashOnThisTypeUsage.ts, 0, 0))
+
+    changeListeners: Function[] | null
+>changeListeners : Symbol(IListenable.changeListeners, Decl(noCrashOnThisTypeUsage.ts, 0, 23))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
+>observe : Symbol(IListenable.observe, Decl(noCrashOnThisTypeUsage.ts, 1, 38))
+>handler : Symbol(handler, Decl(noCrashOnThisTypeUsage.ts, 2, 12))
+>change : Symbol(change, Decl(noCrashOnThisTypeUsage.ts, 2, 22))
+>oldValue : Symbol(oldValue, Decl(noCrashOnThisTypeUsage.ts, 2, 34))
+>fireImmediately : Symbol(fireImmediately, Decl(noCrashOnThisTypeUsage.ts, 2, 59))
+}
+
+function notifyListeners<T>(listenable: IListenable, change: T) {
+>notifyListeners : Symbol(notifyListeners, Decl(noCrashOnThisTypeUsage.ts, 3, 1))
+>T : Symbol(T, Decl(noCrashOnThisTypeUsage.ts, 5, 25))
+>listenable : Symbol(listenable, Decl(noCrashOnThisTypeUsage.ts, 5, 28))
+>IListenable : Symbol(IListenable, Decl(noCrashOnThisTypeUsage.ts, 0, 0))
+>change : Symbol(change, Decl(noCrashOnThisTypeUsage.ts, 5, 52))
+>T : Symbol(T, Decl(noCrashOnThisTypeUsage.ts, 5, 25))
+}
+
+export class ObservableValue<T> {
+>ObservableValue : Symbol(ObservableValue, Decl(noCrashOnThisTypeUsage.ts, 6, 1))
+>T : Symbol(T, Decl(noCrashOnThisTypeUsage.ts, 8, 29))
+
+    constructor(
+        public value: T
+>value : Symbol(ObservableValue.value, Decl(noCrashOnThisTypeUsage.ts, 9, 16))
+>T : Symbol(T, Decl(noCrashOnThisTypeUsage.ts, 8, 29))
+
+    ) {
+        const newValue: T = value;
+>newValue : Symbol(newValue, Decl(noCrashOnThisTypeUsage.ts, 12, 13))
+>T : Symbol(T, Decl(noCrashOnThisTypeUsage.ts, 8, 29))
+>value : Symbol(value, Decl(noCrashOnThisTypeUsage.ts, 9, 16))
+
+        const oldValue: any = null;
+>oldValue : Symbol(oldValue, Decl(noCrashOnThisTypeUsage.ts, 13, 13))
+
+        notifyListeners(this, {
+>notifyListeners : Symbol(notifyListeners, Decl(noCrashOnThisTypeUsage.ts, 3, 1))
+>this : Symbol(ObservableValue, Decl(noCrashOnThisTypeUsage.ts, 6, 1))
+
+            type: "update",
+>type : Symbol(type, Decl(noCrashOnThisTypeUsage.ts, 14, 31))
+
+            object: this,
+>object : Symbol(object, Decl(noCrashOnThisTypeUsage.ts, 15, 27))
+>this : Symbol(ObservableValue, Decl(noCrashOnThisTypeUsage.ts, 6, 1))
+
+            newValue,
+>newValue : Symbol(newValue, Decl(noCrashOnThisTypeUsage.ts, 16, 25))
+
+            oldValue
+>oldValue : Symbol(oldValue, Decl(noCrashOnThisTypeUsage.ts, 17, 21))
+
+        });
+    }
+    changeListeners: Function[] | null = [];
+>changeListeners : Symbol(ObservableValue.changeListeners, Decl(noCrashOnThisTypeUsage.ts, 20, 5))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
+>observe : Symbol(ObservableValue.observe, Decl(noCrashOnThisTypeUsage.ts, 21, 44))
+>handler : Symbol(handler, Decl(noCrashOnThisTypeUsage.ts, 22, 12))
+>change : Symbol(change, Decl(noCrashOnThisTypeUsage.ts, 22, 22))
+>oldValue : Symbol(oldValue, Decl(noCrashOnThisTypeUsage.ts, 22, 34))
+>fireImmediately : Symbol(fireImmediately, Decl(noCrashOnThisTypeUsage.ts, 22, 59))
+}

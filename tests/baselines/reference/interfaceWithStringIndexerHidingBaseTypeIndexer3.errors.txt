@@ -15,10 +15,8 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringInde
         };
         // error
         2: {
-        ~~~~
-            a: number;
-    ~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+        ~
 !!! error TS2412: Property '2' of type '{ a: number; }' is not assignable to numeric index type '{ a: number; b: number; }'.
+            a: number;
+        }
     }

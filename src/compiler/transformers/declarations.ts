@@ -1,6 +1,6 @@
 /*@internal*/
 namespace ts {
-    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): Diagnostic[] {
+    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
         if (file && isSourceFileJavaScript(file)) {
             return []; // No declaration diagnostics for js for now
         }
@@ -9,7 +9,13 @@ namespace ts {
         return result.diagnostics;
     }
 
-    const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | NodeBuilderFlags.UseTypeOfFunction | NodeBuilderFlags.UseStructuralFallback | NodeBuilderFlags.AllowEmptyTuple;
+    const declarationEmitNodeBuilderFlags =
+        NodeBuilderFlags.MultilineObjectLiterals |
+        TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
+        NodeBuilderFlags.UseTypeOfFunction |
+        NodeBuilderFlags.UseStructuralFallback |
+        NodeBuilderFlags.AllowEmptyTuple |
+        NodeBuilderFlags.GenerateNamesForShadowedTypeParams;
 
     /**
      * Transforms a ts file into a .d.ts file
@@ -26,28 +32,31 @@ namespace ts {
         let needsScopeFixMarker = false;
         let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
-        let necessaryTypeRefernces: Map<true>;
-        let lateMarkedStatements: LateVisibilityPaintedStatement[];
-        let lateStatementReplacementMap: Map<LateVisibilityPaintedStatement | undefined>;
+        let necessaryTypeRefernces: Map<true> | undefined;
+        let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
+        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
         let suppressNewDiagnosticContexts: boolean;
 
+        const host = context.getEmitHost();
         const symbolTracker: SymbolTracker = {
             trackSymbol,
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
-            reportPrivateInBaseOfClassExpression
+            reportPrivateInBaseOfClassExpression,
+            moduleResolverHost: host,
+            trackReferencedAmbientModule,
         };
         let errorNameNode: DeclarationName | undefined;
 
         let currentSourceFile: SourceFile;
+        let refs: Map<SourceFile>;
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
         const newLine = getNewLineCharacter(options);
         const { noResolve, stripInternal } = options;
-        const host = context.getEmitHost();
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[]): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[] | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -55,6 +64,11 @@ namespace ts {
             for (const ref of typeReferenceDirectives) {
                 necessaryTypeRefernces.set(ref, true);
             }
+        }
+
+        function trackReferencedAmbientModule(node: ModuleDeclaration) {
+            const container = getSourceFileOfNode(node);
+            refs.set("" + getOriginalNodeId(container), container);
         }
 
         function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -95,6 +109,7 @@ namespace ts {
         }
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+            if (symbol.flags & SymbolFlags.TypeParameter) return;
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         }
@@ -136,7 +151,7 @@ namespace ts {
                 let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
-                        if (sourceFile.isDeclarationFile || isSourceFileJavaScript(sourceFile)) return; // Omit declaration files from bundle results, too
+                        if (sourceFile.isDeclarationFile || isSourceFileJavaScript(sourceFile)) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
                         hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                         currentSourceFile = sourceFile;
                         enclosingDeclaration = sourceFile;
@@ -155,19 +170,23 @@ namespace ts {
                                 [],
                                 [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
-                                createModuleBlock(setTextRange(createNodeArray(filterCandidateImports(statements)), sourceFile.statements))
-                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
+                                createModuleBlock(setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements))
+                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                             return newFile;
                         }
                         needsDeclare = true;
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return updateSourceFileNode(sourceFile, filterCandidateImports(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
+                        return updateSourceFileNode(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                     }
-                ));
+                ), mapDefined(node.prepends, prepend => {
+                    if (prepend.kind === SyntaxKind.InputFiles) {
+                        return createUnparsedSourceFile(prepend.declarationText);
+                    }
+                }));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
                 bundle.hasNoDefaultLib = hasNoDefaultLib;
-                const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath));
+                const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
                 const referenceVisitor = mapReferencesIntoArray(bundle.syntheticFileReferences as FileReference[], outputFilePath);
                 refs.forEach(referenceVisitor);
                 return bundle;
@@ -186,13 +205,13 @@ namespace ts {
             lateMarkedStatements = undefined;
             lateStatementReplacementMap = createMap();
             necessaryTypeRefernces = undefined;
-            const refs = collectReferences(currentSourceFile, createMap());
+            refs = collectReferences(currentSourceFile, createMap());
             const references: FileReference[] = [];
-            const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath));
+            const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
-            refs.forEach(referenceVisitor);
             const statements = visitNodes(node.statements, visitDeclarationStatements);
-            let combinedStatements = setTextRange(createNodeArray(filterCandidateImports(statements)), node.statements);
+            let combinedStatements = setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
+            refs.forEach(referenceVisitor);
             const emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
@@ -206,15 +225,17 @@ namespace ts {
 
             function getFileReferenceForTypeName(typeName: string): FileReference | undefined {
                 // Elide type references for which we have imports
-                for (const importStatement of emittedImports) {
-                    if (isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)) {
-                        const expr = importStatement.moduleReference.expression;
-                        if (isStringLiteralLike(expr) && expr.text === typeName) {
+                if (emittedImports) {
+                    for (const importStatement of emittedImports) {
+                        if (isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)) {
+                            const expr = importStatement.moduleReference.expression;
+                            if (isStringLiteralLike(expr) && expr.text === typeName) {
+                                return undefined;
+                            }
+                        }
+                        else if (isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName) {
                             return undefined;
                         }
-                    }
-                    else if (isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName) {
-                        return undefined;
                     }
                 }
                 return { fileName: typeName, pos: -1, end: -1 };
@@ -254,7 +275,7 @@ namespace ts {
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
                 if (elem) {
-                    ret.set("" + getNodeId(elem), elem);
+                    ret.set("" + getOriginalNodeId(elem), elem);
                 }
             });
             return ret;
@@ -283,7 +304,7 @@ namespace ts {
         }
 
         function ensureParameter(p: ParameterDeclaration, modifierMask?: ModifierFlags): ParameterDeclaration {
-            let oldDiag: typeof getSymbolAccessibilityDiagnostic;
+            let oldDiag: typeof getSymbolAccessibilityDiagnostic | undefined;
             if (!suppressNewDiagnosticContexts) {
                 oldDiag = getSymbolAccessibilityDiagnostic;
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p);
@@ -299,7 +320,7 @@ namespace ts {
                 ensureNoInitializer(p)
             );
             if (!suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = oldDiag;
+                getSymbolAccessibilityDiagnostic = oldDiag!;
             }
             return newParam;
         }
@@ -329,7 +350,7 @@ namespace ts {
             | PropertyDeclaration
             | PropertySignature;
 
-        function ensureType(node: HasInferredType, type: TypeNode, ignorePrivate?: boolean): TypeNode {
+        function ensureType(node: HasInferredType, type: TypeNode | undefined, ignorePrivate?: boolean): TypeNode | undefined {
             if (!ignorePrivate && hasModifier(node, ModifierFlags.Private)) {
                 // Private nodes emit no types (except private parameter properties, whose parameter types are actually visible)
                 return;
@@ -406,7 +427,7 @@ namespace ts {
             }
             if (isBindingPattern(elem.name)) {
                 // If any child binding pattern element has been marked visible (usually by collect linked aliases), then this is visible
-                return forEach(elem.name.elements, getBindingNameVisible);
+                return some(elem.name.elements, getBindingNameVisible);
             }
             else {
                 return resolver.isDeclarationVisible(elem);
@@ -415,16 +436,16 @@ namespace ts {
 
         function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags) {
             if (hasModifier(node, ModifierFlags.Private)) {
-                return undefined;
+                return undefined!; // TODO: GH#18217
             }
             const newParams = map(params, p => ensureParameter(p, modifierMask));
             if (!newParams) {
-                return undefined;
+                return undefined!; // TODO: GH#18217
             }
             return createNodeArray(newParams, params.hasTrailingComma);
         }
 
-        function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration>) {
+        function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {
             return hasModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree);
         }
 
@@ -452,8 +473,8 @@ namespace ts {
             return setCommentRange(updated, getCommentRange(original));
         }
 
-        function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T): T | StringLiteral {
-            if (!input) return;
+        function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
+            if (!input) return undefined!; // TODO: GH#18217
             resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
             if (input.kind === SyntaxKind.StringLiteral && isBundledEmit) {
                 const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
@@ -534,7 +555,7 @@ namespace ts {
             // Nothing visible
         }
 
-        function filterCandidateImports(statements: NodeArray<Statement>): NodeArray<Statement> {
+        function transformAndReplaceLatePaintedStatements(statements: NodeArray<Statement>): NodeArray<Statement> {
             // This is a `while` loop because `handleSymbolAccessibilityError` can see additional import aliases marked as visible during
             // error handling which must now be included in the output and themselves checked for errors.
             // For example:
@@ -549,63 +570,48 @@ namespace ts {
             // In such a scenario, only Q and D are initially visible, but we don't consider imports as private names - instead we say they if they are referenced they must
             // be recorded. So while checking D's visibility we mark C as visible, then we must check C which in turn marks B, completing the chain of
             // dependent imports and allowing a valid declaration file output. Today, this dependent alias marking only happens for internal import aliases.
-            const unconsideredStatements: LateVisibilityPaintedStatement[] = [];
             while (length(lateMarkedStatements)) {
-                const i = lateMarkedStatements.shift();
-                if ((isSourceFile(i.parent) ? i.parent : i.parent.parent) !== enclosingDeclaration) { // Filter to only declarations in the current scope
-                    unconsideredStatements.push(i);
-                    continue;
-                }
+                const i = lateMarkedStatements!.shift()!;
                 if (!isLateVisibilityPaintedStatement(i)) {
-                    return Debug.fail(`Late replaced statement was foudn which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
+                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
                 }
-                switch (i.kind) {
-                    case SyntaxKind.ImportEqualsDeclaration: {
-                        const result = transformImportEqualsDeclaration(i);
-                        lateStatementReplacementMap.set("" + getNodeId(i), result);
-                        break;
-                    }
-                    case SyntaxKind.ImportDeclaration: {
-                        const result = transformImportDeclaration(i);
-                        lateStatementReplacementMap.set("" + getNodeId(i), result);
-                        break;
-                    }
-                    case SyntaxKind.VariableStatement: {
-                        const result = transformVariableStatement(i, /*privateDeclaration*/ true); // Transform the statement (potentially again, possibly revealing more sub-nodes)
-                        lateStatementReplacementMap.set("" + getNodeId(i), result);
-                        break;
-                    }
-                    default: Debug.assertNever(i, "Unhandled late painted statement!");
-                }
+                const result = transformTopLevelDeclaration(i, /*privateDeclaration*/ true);
+                lateStatementReplacementMap.set("" + getOriginalNodeId(i), result);
             }
-            // Filtering available imports is the last thing done within a scope, so the possible set becomes those which could not
-            // be considered in the child scope
-            lateMarkedStatements = unconsideredStatements;
 
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
             // (and remove them from the set to examine for outter declarations)
             return visitNodes(statements, visitLateVisibilityMarkedStatements);
-        }
 
-        function visitLateVisibilityMarkedStatements(statement: Statement) {
-            if (isLateVisibilityPaintedStatement(statement)) {
-                const key = "" + getNodeId(statement);
-                if (lateStatementReplacementMap.has(key)) {
-                    const result = lateStatementReplacementMap.get(key);
-                    lateStatementReplacementMap.delete(key);
-                    if (result && isSourceFile(statement.parent) && !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export)) {
-                        // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
-                        needsScopeFixMarker = true;
+            function visitLateVisibilityMarkedStatements(statement: Statement) {
+                if (isLateVisibilityPaintedStatement(statement)) {
+                    const key = "" + getOriginalNodeId(statement);
+                    if (lateStatementReplacementMap.has(key)) {
+                        const result = lateStatementReplacementMap.get(key);
+                        lateStatementReplacementMap.delete(key);
+                        if (result && isSourceFile(statement.parent)) {
+                            if (isArray(result) ? some(result, needsScopeMarker) : needsScopeMarker(result)) {
+                                // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
+                                needsScopeFixMarker = true;
+                            }
+                            if (isArray(result) ? some(result, isExternalModuleIndicator) : isExternalModuleIndicator(result)) {
+                                resultHasExternalModuleIndicator = true;
+                            }
+                        }
+                        return result;
                     }
-                    return result;
                 }
-                else {
-                    return getParseTreeNode(statement) ? undefined : statement;
-                }
-            }
-            else {
                 return statement;
             }
+        }
+
+        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement) {
+            // Exported top-level member indicates moduleness
+            return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
+        }
+
+        function needsScopeMarker(result: LateVisibilityPaintedStatement) {
+            return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
         }
 
         function visitDeclarationSubtree(input: Node): VisitResult<Node> {
@@ -681,7 +687,8 @@ namespace ts {
                         const ctor = createSignatureDeclaration(
                             SyntaxKind.Constructor,
                             isPrivate ? undefined : ensureTypeParams(input, input.typeParameters),
-                            isPrivate ? undefined : updateParamsList(input, input.parameters, ModifierFlags.None),
+                            // TODO: GH#18217
+                            isPrivate ? undefined! : updateParamsList(input, input.parameters, ModifierFlags.None),
                             /*type*/ undefined
                         );
                         ctor.modifiers = createNodeArray(ensureModifiers(input));
@@ -801,7 +808,7 @@ namespace ts {
 
             return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
 
-            function cleanup<T extends Node>(returnValue: T | undefined): T {
+            function cleanup<T extends Node>(returnValue: T | undefined): T | undefined {
                 if (returnValue && canProdiceDiagnostic && hasDynamicName(input as Declaration)) {
                     checkName(input as DeclarationDiagnosticProducing);
                 }
@@ -862,13 +869,22 @@ namespace ts {
                         return [statement, updateExportAssignment(input, input.decorators, input.modifiers, newId)];
                     }
                 }
-                case SyntaxKind.ImportEqualsDeclaration:
+            }
+
+            const result = transformTopLevelDeclaration(input);
+            // Don't actually transform yet; just leave as original node - will be elided/swapped by late pass
+            lateStatementReplacementMap.set("" + getOriginalNodeId(input), result);
+            return input;
+        }
+
+        function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement, isPrivate?: boolean) {
+            if (shouldStripInternal(input)) return;
+            switch (input.kind) {
+                case SyntaxKind.ImportEqualsDeclaration: {
+                    return transformImportEqualsDeclaration(input);
+                }
                 case SyntaxKind.ImportDeclaration: {
-                    // Different parts of the import may be marked visible at different times (via visibility checking), so we defer our first look until later
-                    // to reduce the likelihood we need to rewrite it
-                    lateMarkedStatements = lateMarkedStatements || [];
-                    pushIfUnique(lateMarkedStatements, input);
-                    return input;
+                    return transformImportDeclaration(input);
                 }
             }
             if (isDeclaration(input) && isDeclarationAndNotVisible(input)) return;
@@ -881,21 +897,20 @@ namespace ts {
                 previousEnclosingDeclaration = enclosingDeclaration;
                 enclosingDeclaration = input as Declaration;
             }
-            let previousNeedsDeclare: typeof needsDeclare;
 
             const canProdiceDiagnostic = canProduceDiagnostics(input);
             const oldDiag = getSymbolAccessibilityDiagnostic;
             if (canProdiceDiagnostic) {
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
             }
-            let oldPossibleImports: typeof lateMarkedStatements;
 
+            const previousNeedsDeclare = needsDeclare;
             switch (input.kind) {
                 case SyntaxKind.TypeAliasDeclaration: // Type aliases get `declare`d if need be (for legacy support), but that's all
                     return cleanup(updateTypeAliasDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input),
+                        ensureModifiers(input, isPrivate),
                         input.name,
                         visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
                         visitNode(input.type, visitDeclarationSubtree, isTypeNode)
@@ -904,7 +919,7 @@ namespace ts {
                     return cleanup(updateInterfaceDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input),
+                        ensureModifiers(input, isPrivate),
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
                         transformHeritageClauses(input.heritageClauses),
@@ -916,7 +931,7 @@ namespace ts {
                     return cleanup(updateFunctionDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input),
+                        ensureModifiers(input, isPrivate),
                         /*asteriskToken*/ undefined,
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
@@ -926,16 +941,13 @@ namespace ts {
                     ));
                 }
                 case SyntaxKind.ModuleDeclaration: {
-                    previousNeedsDeclare = needsDeclare;
                     needsDeclare = false;
-                    oldPossibleImports = lateMarkedStatements;
-                    lateMarkedStatements = undefined;
                     const inner = input.body;
                     if (inner && inner.kind === SyntaxKind.ModuleBlock) {
                         const statements = visitNodes(inner.statements, visitDeclarationStatements);
-                        const body = updateModuleBlock(inner, filterCandidateImports(statements));
+                        const body = updateModuleBlock(inner, transformAndReplaceLatePaintedStatements(statements));
                         needsDeclare = previousNeedsDeclare;
-                        const mods = ensureModifiers(input);
+                        const mods = ensureModifiers(input, isPrivate);
                         return cleanup(updateModuleDeclaration(
                             input,
                             /*decorators*/ undefined,
@@ -946,22 +958,27 @@ namespace ts {
                     }
                     else {
                         needsDeclare = previousNeedsDeclare;
-                        const mods = ensureModifiers(input);
+                        const mods = ensureModifiers(input, isPrivate);
                         needsDeclare = false;
+                        visitNode(inner, visitDeclarationStatements);
+                        // eagerly transform nested namespaces (the nesting doesn't need any elision or painting done)
+                        const id = "" + getOriginalNodeId(inner!); // TODO: GH#18217
+                        const body = lateStatementReplacementMap.get(id);
+                        lateStatementReplacementMap.delete(id);
                         return cleanup(updateModuleDeclaration(
                             input,
                             /*decorators*/ undefined,
                             mods,
                             input.name,
-                            visitNode(inner, visitDeclarationStatements)
+                            body as ModuleBody
                         ));
                     }
                 }
                 case SyntaxKind.ClassDeclaration: {
-                    const modifiers = createNodeArray(ensureModifiers(input));
+                    const modifiers = createNodeArray(ensureModifiers(input, isPrivate));
                     const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
-                    let parameterProperties: PropertyDeclaration[];
+                    let parameterProperties: PropertyDeclaration[] | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, param => {
@@ -982,7 +999,7 @@ namespace ts {
                             }
 
                             function walkBindingPattern(pattern: BindingPattern) {
-                                let elems: PropertyDeclaration[];
+                                let elems: PropertyDeclaration[] | undefined;
                                 for (const elem of pattern.elements) {
                                     if (isOmittedExpression(elem)) continue;
                                     if (isBindingPattern(elem.name)) {
@@ -1009,7 +1026,7 @@ namespace ts {
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                         // We must add a temporary declaration for the extends clause expression
 
-                        const newId = createOptimisticUniqueName(`${unescapeLeadingUnderscores(input.name.escapedText)}_base`);
+                        const newId = createOptimisticUniqueName(`${unescapeLeadingUnderscores(input.name!.escapedText)}_base`); // TODO: GH#18217
                         getSymbolAccessibilityDiagnostic = () => ({
                             diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                             errorNode: extendsClause,
@@ -1035,7 +1052,7 @@ namespace ts {
                             typeParameters,
                             heritageClauses,
                             members
-                        ))];
+                        ))!]; // TODO: GH#18217
                     }
                     else {
                         const heritageClauses = transformHeritageClauses(input.heritageClauses);
@@ -1051,12 +1068,10 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.VariableStatement: {
-                    const result = transformVariableStatement(input);
-                    lateStatementReplacementMap.set("" + getNodeId(input), result); // Don't actually elide yet; just leave as original node - will be elided/swapped by late pass
-                    return cleanup(input);
+                    return cleanup(transformVariableStatement(input, isPrivate));
                 }
                 case SyntaxKind.EnumDeclaration: {
-                    return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input)), input.name, createNodeArray(mapDefined(input.members, m => {
+                    return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input, isPrivate)), input.name, createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
@@ -1064,31 +1079,23 @@ namespace ts {
                     }))));
                 }
             }
-
             // Anything left unhandled is an error, so this should be unreachable
             return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
 
-            function cleanup<T extends Node>(returnValue: T | undefined): T {
+            function cleanup<T extends Node>(node: T | undefined): T | undefined {
                 if (isEnclosingDeclaration(input)) {
                     enclosingDeclaration = previousEnclosingDeclaration;
-                }
-                if (input.kind === SyntaxKind.ModuleDeclaration) {
-                    needsDeclare = previousNeedsDeclare;
-                    lateMarkedStatements = concatenate(oldPossibleImports, lateMarkedStatements);
                 }
                 if (canProdiceDiagnostic) {
                     getSymbolAccessibilityDiagnostic = oldDiag;
                 }
-                if (returnValue && (!isLateVisibilityPaintedStatement(input) || lateStatementReplacementMap.get("" + getNodeId(input)))) {
-                    if (!resultHasExternalModuleIndicator && hasModifier(input, ModifierFlags.Export) && isSourceFile(input.parent)) {
-                        // Exported top-level member indicates moduleness
-                        resultHasExternalModuleIndicator = true;
-                    }
+                if (input.kind === SyntaxKind.ModuleDeclaration) {
+                    needsDeclare = previousNeedsDeclare;
                 }
-                if (returnValue === input) {
-                    return returnValue;
+                if (node as Node === input) {
+                    return node;
                 }
-                return returnValue && setOriginalNode(preserveJsDoc(returnValue, input), input);
+                return node && setOriginalNode(preserveJsDoc(node, input), input);
             }
         }
 
@@ -1119,7 +1126,7 @@ namespace ts {
         }
 
         function checkName(node: DeclarationDiagnosticProducing) {
-            let oldDiag: typeof getSymbolAccessibilityDiagnostic;
+            let oldDiag: typeof getSymbolAccessibilityDiagnostic | undefined;
             if (!suppressNewDiagnosticContexts) {
                 oldDiag = getSymbolAccessibilityDiagnostic;
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node);
@@ -1130,7 +1137,7 @@ namespace ts {
             const entityName = decl.name.expression;
             checkEntityNameVisibility(entityName, enclosingDeclaration);
             if (!suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = oldDiag;
+                getSymbolAccessibilityDiagnostic = oldDiag!;
             }
             errorNameNode = undefined;
         }
@@ -1150,7 +1157,7 @@ namespace ts {
             return false;
         }
 
-        function ensureModifiers(node: Node, privateDeclaration?: boolean): ReadonlyArray<Modifier> {
+        function ensureModifiers(node: Node, privateDeclaration?: boolean): ReadonlyArray<Modifier> | undefined {
             const currentFlags = getModifierFlags(node);
             const newFlags = ensureModifierFlags(node, privateDeclaration);
             if (currentFlags === newFlags) {
@@ -1171,7 +1178,7 @@ namespace ts {
         }
 
         function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
-            const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node);
+            const accessors = resolver.getAllAccessorDeclarations(node);
             if (node.kind !== accessors.firstAccessor.kind) {
                 return;
             }
@@ -1205,7 +1212,7 @@ namespace ts {
             return prop;
         }
 
-        function transformHeritageClauses(nodes: NodeArray<HeritageClause>) {
+        function transformHeritageClauses(nodes: NodeArray<HeritageClause> | undefined) {
             return createNodeArray(filter(map(nodes, clause => updateHeritageClause(clause, visitNodes(createNodeArray(filter(clause.types, t => {
                 return isEntityNameExpression(t.expression) || (clause.token === SyntaxKind.ExtendsKeyword && t.expression.kind === SyntaxKind.NullKeyword);
             })), visitDeclarationSubtree))), clause => clause.types && !!clause.types.length));
@@ -1232,7 +1239,7 @@ namespace ts {
         return flags;
     }
 
-    function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode {
+    function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode | undefined {
         if (accessor) {
             return accessor.kind === SyntaxKind.GetAccessor
                 ? accessor.type // Getter - return type

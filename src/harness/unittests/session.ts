@@ -12,7 +12,7 @@ namespace ts.server {
         write(s): void { lastWrittenToHost = s; },
         readFile: () => undefined,
         writeFile: noop,
-        resolvePath(): string { return void 0; },
+        resolvePath(): string { return undefined!; }, // TODO: GH#18217
         fileExists: () => false,
         directoryExists: () => false,
         getDirectories: () => [],
@@ -47,7 +47,7 @@ namespace ts.server {
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined,
+                typingsInstaller: undefined!, // TODO: GH#18217
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
                 logger: projectSystem.nullLogger,
@@ -81,7 +81,7 @@ namespace ts.server {
                     seq: 0,
                     type: "request",
                     arguments: {
-                        file: undefined
+                        file: undefined! // TODO: GH#18217
                     }
                 };
 
@@ -224,6 +224,7 @@ namespace ts.server {
                 CommandNames.Occurrences,
                 CommandNames.DocumentHighlights,
                 CommandNames.DocumentHighlightsFull,
+                CommandNames.JsxClosingTag,
                 CommandNames.Open,
                 CommandNames.Quickinfo,
                 CommandNames.QuickinfoFull,
@@ -263,6 +264,8 @@ namespace ts.server {
                 CommandNames.GetEditsForRefactorFull,
                 CommandNames.OrganizeImports,
                 CommandNames.OrganizeImportsFull,
+                CommandNames.GetEditsForFileRename,
+                CommandNames.GetEditsForFileRenameFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -439,7 +442,7 @@ namespace ts.server {
             lastSent: protocol.Message;
             private exceptionRaisingHandler(_request: protocol.Request): { response?: any, responseRequired: boolean } {
                 f1();
-                return;
+                return Debug.fail(); // unreachable, throw to make compiler happy
                 function f1() {
                     throw new Error("myMessage");
                 }
@@ -451,7 +454,7 @@ namespace ts.server {
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
-                    typingsInstaller: undefined,
+                    typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
                     logger: projectSystem.nullLogger,
@@ -498,7 +501,7 @@ namespace ts.server {
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
-                    typingsInstaller: undefined,
+                    typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
                     logger: projectSystem.nullLogger,
@@ -566,7 +569,7 @@ namespace ts.server {
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
-                    typingsInstaller: undefined,
+                    typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
                     logger: projectSystem.nullLogger,
@@ -602,7 +605,7 @@ namespace ts.server {
 
             consumeQueue() {
                 while (this.queue.length > 0) {
-                    const elem = this.queue.pop();
+                    const elem = this.queue.pop()!;
                     this.handleRequest(elem);
                 }
             }

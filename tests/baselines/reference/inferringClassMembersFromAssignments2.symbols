@@ -2,7 +2,7 @@
 OOOrder.prototype.m = function () {
 >OOOrder.prototype : Symbol(OOOrder.m, Decl(a.js, 0, 0))
 >OOOrder : Symbol(OOOrder, Decl(a.js, 2, 1))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >m : Symbol(OOOrder.m, Decl(a.js, 0, 0))
 
     this.p = 1

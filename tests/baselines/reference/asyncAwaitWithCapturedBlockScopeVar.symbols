@@ -65,7 +65,7 @@ async function fn3() {
 
 async function fn4(): Promise<number> {
 >fn4 : Symbol(fn4, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 24, 1))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     let ar = [];
 >ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 27, 7))

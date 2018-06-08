@@ -62,7 +62,7 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node>;
+        let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -88,7 +88,23 @@ namespace ts {
          */
         let pendingExpressions: Expression[] | undefined;
 
-        return transformSourceFile;
+        return transformSourceFileOrBundle;
+
+        function transformSourceFileOrBundle(node: SourceFile | Bundle) {
+            if (node.kind === SyntaxKind.Bundle) {
+                return transformBundle(node);
+            }
+            return transformSourceFile(node);
+        }
+
+        function transformBundle(node: Bundle) {
+            return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
+                if (prepend.kind === SyntaxKind.InputFiles) {
+                    return createUnparsedSourceFile(prepend.javascriptText);
+                }
+                return prepend;
+            }));
+        }
 
         /**
          * Transform TypeScript-specific syntax in a SourceFile.
@@ -105,7 +121,7 @@ namespace ts {
             const visited = saveStateAndInvoke(node, visitSourceFile);
             addEmitHelpers(visited, context.readEmitHelpers());
 
-            currentSourceFile = undefined;
+            currentSourceFile = undefined!;
             return visited;
         }
 
@@ -368,6 +384,7 @@ namespace ts {
                 case SyntaxKind.TypePredicate:
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
@@ -502,6 +519,9 @@ namespace ts {
                 case SyntaxKind.NewExpression:
                     return visitNewExpression(<NewExpression>node);
 
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+
                 case SyntaxKind.NonNullExpression:
                     // TypeScript non-null expressions are removed, but their subtrees are preserved.
                     return visitNonNullExpression(<NonNullExpression>node);
@@ -532,7 +552,9 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile) {
             const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
-                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
+                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
+                !isJsonSourceFile(node);
+
             return updateSourceFileNode(
                 node,
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
@@ -606,7 +628,7 @@ namespace ts {
 
             // Write any pending expressions from elided or moved computed property names
             if (some(pendingExpressions)) {
-                statements.push(createStatement(inlineExpressions(pendingExpressions)));
+                statements.push(createStatement(inlineExpressions(pendingExpressions!)));
             }
             pendingExpressions = savedPendingExpressions;
 
@@ -650,7 +672,7 @@ namespace ts {
                 setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
                 statements.push(statement);
 
-                addRange(statements, context.endLexicalEnvironment());
+                prependStatements(statements, context.endLexicalEnvironment());
 
                 const iife = createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
@@ -704,7 +726,7 @@ namespace ts {
          * @param name The name of the class.
          * @param facts Precomputed facts about the class.
          */
-        function createClassDeclarationHeadWithoutDecorators(node: ClassDeclaration, name: Identifier, facts: ClassFacts) {
+        function createClassDeclarationHeadWithoutDecorators(node: ClassDeclaration, name: Identifier | undefined, facts: ClassFacts) {
             //  ${modifiers} class ${name} ${heritageClauses} {
             //      ${members}
             //  }
@@ -740,7 +762,7 @@ namespace ts {
          * Transforms a decorated class declaration and appends the resulting statements. If
          * the class requires an alias to avoid issues with double-binding, the alias is returned.
          */
-        function createClassDeclarationHeadWithDecorators(node: ClassDeclaration, name: Identifier, facts: ClassFacts) {
+        function createClassDeclarationHeadWithDecorators(node: ClassDeclaration, name: Identifier | undefined, facts: ClassFacts) {
             // When we emit an ES6 class that has a class decorator, we must tailor the
             // emit to certain specific cases.
             //
@@ -979,7 +1001,7 @@ namespace ts {
          *
          * @param constructor The constructor declaration.
          */
-        function transformConstructorParameters(constructor: ConstructorDeclaration) {
+        function transformConstructorParameters(constructor: ConstructorDeclaration | undefined) {
             // The ES2015 spec specifies in 14.5.14. Runtime Semantics: ClassDefinitionEvaluation:
             // If constructor is empty, then
             //     If ClassHeritag_eopt is present and protoParent is not null, then
@@ -1007,7 +1029,7 @@ namespace ts {
          * @param constructor The current class constructor.
          * @param isDerivedClass A value indicating whether the class has an extends clause that does not extend 'null'.
          */
-        function transformConstructorBody(node: ClassExpression | ClassDeclaration, constructor: ConstructorDeclaration, isDerivedClass: boolean) {
+        function transformConstructorBody(node: ClassExpression | ClassDeclaration, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
             let statements: Statement[] = [];
             let indexOfFirstStatement = 0;
 
@@ -1062,7 +1084,7 @@ namespace ts {
 
             if (constructor) {
                 // The class already had a constructor, so we should add the existing statements, skipping the initial super call.
-                addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement));
+                addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatement));
             }
 
             // End the lexical environment.
@@ -1071,7 +1093,7 @@ namespace ts {
                 createBlock(
                     setTextRange(
                         createNodeArray(statements),
-                        /*location*/ constructor ? constructor.body.statements : node.members
+                        /*location*/ constructor ? constructor.body!.statements : node.members
                     ),
                     /*multiLine*/ true
                 ),
@@ -1245,9 +1267,9 @@ namespace ts {
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
-                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name, !hasModifier(property, ModifierFlags.Static)))
+                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
-            const initializer = visitNode(property.initializer, visitor, isExpression);
+            const initializer = visitNode(property.initializer!, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
 
             return createAssignment(memberAccess, initializer);
@@ -1300,8 +1322,8 @@ namespace ts {
          * A structure describing the decorators for a class element.
          */
         interface AllDecorators {
-            decorators: ReadonlyArray<Decorator>;
-            parameters?: ReadonlyArray<ReadonlyArray<Decorator>>;
+            decorators: ReadonlyArray<Decorator> | undefined;
+            parameters?: ReadonlyArray<ReadonlyArray<Decorator> | undefined>;
         }
 
         /**
@@ -1310,8 +1332,8 @@ namespace ts {
          *
          * @param node The function-like node.
          */
-        function getDecoratorsOfParameters(node: FunctionLikeDeclaration) {
-            let decorators: ReadonlyArray<Decorator>[];
+        function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
+            let decorators: (ReadonlyArray<Decorator> | undefined)[] | undefined;
             if (node) {
                 const parameters = node.parameters;
                 for (let i = 0; i < parameters.length; i++) {
@@ -1335,7 +1357,7 @@ namespace ts {
          *
          * @param node The class node.
          */
-        function getAllDecoratorsOfConstructor(node: ClassExpression | ClassDeclaration): AllDecorators {
+        function getAllDecoratorsOfConstructor(node: ClassExpression | ClassDeclaration): AllDecorators | undefined {
             const decorators = node.decorators;
             const parameters = getDecoratorsOfParameters(getFirstConstructorWithBody(node));
             if (!decorators && !parameters) {
@@ -1354,7 +1376,7 @@ namespace ts {
          * @param node The class node that contains the member.
          * @param member The class member.
          */
-        function getAllDecoratorsOfClassElement(node: ClassExpression | ClassDeclaration, member: ClassElement): AllDecorators {
+        function getAllDecoratorsOfClassElement(node: ClassExpression | ClassDeclaration, member: ClassElement): AllDecorators | undefined {
             switch (member.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -1377,7 +1399,7 @@ namespace ts {
          * @param node The class node that contains the accessor.
          * @param accessor The class accessor member.
          */
-        function getAllDecoratorsOfAccessors(node: ClassExpression | ClassDeclaration, accessor: AccessorDeclaration): AllDecorators {
+        function getAllDecoratorsOfAccessors(node: ClassExpression | ClassDeclaration, accessor: AccessorDeclaration): AllDecorators | undefined {
             if (!accessor.body) {
                 return undefined;
             }
@@ -1402,7 +1424,7 @@ namespace ts {
          *
          * @param method The class method member.
          */
-        function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators {
+        function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators | undefined {
             if (!method.body) {
                 return undefined;
             }
@@ -1421,7 +1443,7 @@ namespace ts {
          *
          * @param property The class property member.
          */
-        function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorators {
+        function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorators | undefined {
             const decorators = property.decorators;
             if (!decorators) {
                 return undefined;
@@ -1437,7 +1459,7 @@ namespace ts {
          * @param node The declaration node.
          * @param allDecorators An object containing all of the decorators for the declaration.
          */
-        function transformAllDecoratorsOfDeclaration(node: Declaration, container: ClassLikeDeclaration, allDecorators: AllDecorators) {
+        function transformAllDecoratorsOfDeclaration(node: Declaration, container: ClassLikeDeclaration, allDecorators: AllDecorators | undefined) {
             if (!allDecorators) {
                 return undefined;
             }
@@ -1471,7 +1493,7 @@ namespace ts {
          */
         function generateClassElementDecorationExpressions(node: ClassExpression | ClassDeclaration, isStatic: boolean) {
             const members = getDecoratedClassElements(node, isStatic);
-            let expressions: Expression[];
+            let expressions: Expression[] | undefined;
             for (const member of members) {
                 const expression = generateClassElementDecorationExpression(node, member);
                 if (expression) {
@@ -1605,7 +1627,7 @@ namespace ts {
          * @param parameterOffset The offset of the parameter.
          */
         function transformDecoratorsOfParameter(decorators: Decorator[], parameterOffset: number) {
-            let expressions: Expression[];
+            let expressions: Expression[] | undefined;
             if (decorators) {
                 expressions = [];
                 for (const decorator of decorators) {
@@ -1653,7 +1675,7 @@ namespace ts {
 
         function addNewTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
-                let properties: ObjectLiteralElementLike[];
+                let properties: ObjectLiteralElementLike[] | undefined;
                 if (shouldAddTypeMetadata(node)) {
                     (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeTypeOfNode(node))));
                 }
@@ -1818,7 +1840,7 @@ namespace ts {
          *
          * @param node The type node to serialize.
          */
-        function serializeTypeNode(node: TypeNode): SerializedTypeNode {
+        function serializeTypeNode(node: TypeNode | undefined): SerializedTypeNode {
             if (node === undefined) {
                 return createIdentifier("Object");
             }
@@ -1888,7 +1910,9 @@ namespace ts {
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ImportType:
                     break;
 
                 default:
@@ -1901,7 +1925,7 @@ namespace ts {
         function serializeUnionOrIntersectionType(node: UnionOrIntersectionTypeNode): SerializedTypeNode {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
-            let serializedUnion: SerializedTypeNode;
+            let serializedUnion: SerializedTypeNode | undefined;
             for (let typeNode of node.types) {
                 while (typeNode.kind === SyntaxKind.ParenthesizedType) {
                     typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
@@ -1945,7 +1969,8 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
-            switch (resolver.getTypeReferenceSerializationKind(node.typeName, currentScope)) {
+            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentScope);
+            switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
                     const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
                     const temp = createTempVariable(hoistVariableDeclaration);
@@ -1987,8 +2012,9 @@ namespace ts {
                     return createIdentifier("Promise");
 
                 case TypeReferenceSerializationKind.ObjectType:
-                default:
                     return createIdentifier("Object");
+                default:
+                    return Debug.assertNever(kind);
             }
         }
 
@@ -2083,7 +2109,7 @@ namespace ts {
          * @param member The member whose name should be converted into an expression.
          */
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
-            const name = member.name;
+            const name = member.name!;
             if (isComputedPropertyName(name)) {
                 return generateNameForComputedPropertyName && !isSimpleInlineableExpression(name.expression)
                     ? getGeneratedNameForNode(name)
@@ -2103,7 +2129,7 @@ namespace ts {
          * @param shouldHoist Does the expression need to be reused? (ie, for an initializer or a decorator)
          * @param omitSimple Should expressions with no observable side-effects be elided? (ie, the expression is not hoisted for a decorator or initializer and is a literal)
          */
-        function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, omitSimple: boolean): Expression {
+        function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, omitSimple: boolean): Expression | undefined {
             if (isComputedPropertyName(name)) {
                 const expression = visitNode(name.expression, visitor, isExpression);
                 const innerExpression = skipPartiallyEmittedExpressions(expression);
@@ -2125,7 +2151,7 @@ namespace ts {
          * @param member The member whose name should be visited.
          */
         function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
-            const name = member.name;
+            const name = member.name!;
             let expr = getPropertyNameExpressionIfNeeded(name, some(member.decorators), /*omitSimple*/ false);
             if (expr) { // expr only exists if `name` is a computed property name
                 // Inline any pending expressions from previous elided or relocated computed property name expressions in order to preserve execution order
@@ -2149,7 +2175,7 @@ namespace ts {
          *
          * @param node The HeritageClause to transform.
          */
-        function visitHeritageClause(node: HeritageClause): HeritageClause {
+        function visitHeritageClause(node: HeritageClause): HeritageClause | undefined {
             if (node.token === SyntaxKind.ExtendsKeyword) {
                 const types = visitNodes(node.types, visitor, isExpressionWithTypeArguments, 0, 1);
                 return setTextRange(
@@ -2436,7 +2462,7 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is exported from a TypeScript namespace.
          */
-        function visitVariableStatement(node: VariableStatement): Statement {
+        function visitVariableStatement(node: VariableStatement): Statement | undefined {
             if (isExportOfNamespace(node)) {
                 const variables = getInitializedVariables(node.declarationList);
                 if (variables.length === 0) {
@@ -2474,7 +2500,7 @@ namespace ts {
                 return setTextRange(
                     createAssignment(
                         getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
-                        visitNode(node.initializer, visitor, isExpression)
+                        visitNode(node.initializer!, visitor, isExpression)
                     ),
                     /*location*/ node
                 );
@@ -2515,6 +2541,11 @@ namespace ts {
                 // we can safely elide the parentheses here, as a new synthetic
                 // ParenthesizedExpression will be inserted if we remove parentheses too
                 // aggressively.
+                // HOWEVER - if there are leading comments on the expression itself, to handle ASI
+                // correctly for return and throw, we must keep the parenthesis
+                if (length(getLeadingCommentRangesOfNode(expression, currentSourceFile))) {
+                    return updateParen(node, expression);
+                }
                 return createPartiallyEmittedExpression(expression, node);
             }
 
@@ -2545,6 +2576,14 @@ namespace ts {
                 visitNode(node.expression, visitor, isExpression),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression));
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            return updateTaggedTemplate(
+                node,
+                visitNode(node.tag, visitor, isExpression),
+                /*typeArguments*/ undefined,
+                visitNode(node.template, visitor, isExpression));
         }
 
         /**
@@ -2658,8 +2697,9 @@ namespace ts {
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            addRange(statements, map(node.members, transformEnumMember));
-            addRange(statements, endLexicalEnvironment());
+            const members = map(node.members, transformEnumMember);
+            prependStatements(statements, endLexicalEnvironment());
+            addRange(statements, members);
 
             currentNamespaceContainerName = savedCurrentNamespaceLocalName;
             return createBlock(
@@ -2733,7 +2773,7 @@ namespace ts {
          * @param node The module declaration node.
          */
         function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
-            return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+            return isInstantiatedModule(node, !!compilerOptions.preserveConstEnums || !!compilerOptions.isolatedModules);
         }
 
         /**
@@ -2951,8 +2991,8 @@ namespace ts {
             startLexicalEnvironment();
 
             let statementsLocation: TextRange;
-            let blockLocation: TextRange;
-            const body = node.body;
+            let blockLocation: TextRange | undefined;
+            const body = node.body!;
             if (body.kind === SyntaxKind.ModuleBlock) {
                 saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
                 statementsLocation = body.statements;
@@ -2969,11 +3009,11 @@ namespace ts {
                     }
                 }
 
-                const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
+                const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node)!.body;
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
 
-            addRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
             currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
@@ -3013,8 +3053,8 @@ namespace ts {
             return block;
         }
 
-        function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
-            if (moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+        function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration | undefined {
+            if (moduleDeclaration.body!.kind === SyntaxKind.ModuleDeclaration) {
                 const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(<ModuleDeclaration>moduleDeclaration.body);
                 return recursiveInnerModule || <ModuleDeclaration>moduleDeclaration.body;
             }
@@ -3105,7 +3145,7 @@ namespace ts {
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (!node.exportClause) {
                 // Elide a star export if the module it references does not export a value.
-                return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
+                return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier!) ? node : undefined;
             }
 
             if (!resolver.isValueAliasDeclaration(node)) {
@@ -3461,7 +3501,7 @@ namespace ts {
                 || node;
         }
 
-        function trySubstituteClassAlias(node: Identifier): Expression {
+        function trySubstituteClassAlias(node: Identifier): Expression | undefined {
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.ClassAliases) {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
                     // Due to the emit for class decorators, any reference to the class from inside of the class body
@@ -3471,7 +3511,7 @@ namespace ts {
                     // constructor references in static property initializers.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = classAliases[declaration.id];
+                        const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
                         if (classAlias) {
                             const clone = getSynthesizedClone(classAlias);
                             setSourceMapRange(clone, node);
@@ -3485,7 +3525,7 @@ namespace ts {
             return undefined;
         }
 
-        function trySubstituteNamespaceExportedName(node: Identifier): Expression {
+        function trySubstituteNamespaceExportedName(node: Identifier): Expression | undefined {
             // If this is explicitly a local name, do not substitute.
             if (enabledSubstitutions & applicableSubstitutions && !isGeneratedIdentifier(node) && !isLocalName(node)) {
                 // If we are nested within a namespace declaration, we may need to qualifiy
@@ -3536,7 +3576,7 @@ namespace ts {
             return node;
         }
 
-        function tryGetConstEnumValue(node: Node): string | number {
+        function tryGetConstEnumValue(node: Node): string | number | undefined {
             if (compilerOptions.isolatedModules) {
                 return undefined;
             }

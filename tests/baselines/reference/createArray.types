@@ -4,6 +4,7 @@ var na=new number[];
 >new number[] : any
 >number[] : any
 >number : any
+> : any
 
 class C {
 >C : C
@@ -13,18 +14,21 @@ new C[];
 >new C[] : any
 >C[] : any
 >C : typeof C
+> : any
 
 var ba=new boolean[];
 >ba : any
 >new boolean[] : any
 >boolean[] : any
 >boolean : any
+> : any
 
 var sa=new string[];
 >sa : any
 >new string[] : any
 >string[] : any
 >string : any
+> : any
 
 function f(s:string):number { return 0;
 >f : (s: string) => number

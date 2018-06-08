@@ -77,8 +77,9 @@ namespace ts.codefix {
 
     function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
         const undefinedTypeNode = createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
-        const types = isUnionTypeNode(propertyDeclaration.type) ? propertyDeclaration.type.types.concat(undefinedTypeNode) : [propertyDeclaration.type, undefinedTypeNode];
-        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration.type, createUnionTypeNode(types));
+        const type = propertyDeclaration.type!; // TODO: GH#18217
+        const types = isUnionTypeNode(type) ? type.types.concat(undefinedTypeNode) : [type, undefinedTypeNode];
+        changeTracker.replaceNode(propertyDeclarationSourceFile, type, createUnionTypeNode(types));
     }
 
     function getActionForAddMissingInitializer(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction | undefined {
@@ -104,18 +105,12 @@ namespace ts.codefix {
     }
 
     function getInitializer(checker: TypeChecker, propertyDeclaration: PropertyDeclaration): Expression | undefined {
-        return getDefaultValueFromType(checker, checker.getTypeFromTypeNode(propertyDeclaration.type));
+        return getDefaultValueFromType(checker, checker.getTypeFromTypeNode(propertyDeclaration.type!)); // TODO: GH#18217
     }
 
     function getDefaultValueFromType (checker: TypeChecker, type: Type): Expression | undefined {
-        if (type.flags & TypeFlags.String) {
-            return createLiteral("");
-        }
-        else if (type.flags & TypeFlags.Number) {
-            return createNumericLiteral("0");
-        }
-        else if (type.flags & TypeFlags.Boolean) {
-            return createFalse();
+        if (type.flags & TypeFlags.BooleanLiteral) {
+            return type === checker.getFalseType() ? createFalse() : createTrue();
         }
         else if (type.isLiteral()) {
             return createLiteral(type.value);
@@ -127,7 +122,7 @@ namespace ts.codefix {
             const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
             if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 
-            const constructorDeclaration = find<ClassElement, ConstructorDeclaration>(classDeclaration.members, (m): m is ConstructorDeclaration => isConstructorDeclaration(m) && !!m.body)!;
+            const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
             return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);

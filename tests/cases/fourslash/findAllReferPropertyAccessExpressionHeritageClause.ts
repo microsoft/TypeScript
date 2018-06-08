@@ -2,12 +2,9 @@
 
 //// class B {}
 //// function foo() {
-////     return {[|B|]: B};
+////     return {[|{| "isWriteAccess": true, "isDefinition": true |}B|]: B};
 //// }
 //// class C extends (foo()).[|B|] {}
 //// class C1 extends foo().[|B|] {}
 
-const ranges = test.ranges();
-for (const range of ranges) {
-  verify.referencesOf(range, ranges);
-}
+verify.singleReferenceGroup("(property) B: typeof B");

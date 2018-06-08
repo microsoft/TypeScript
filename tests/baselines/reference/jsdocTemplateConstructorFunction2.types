@@ -1,0 +1,86 @@
+=== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js ===
+/**
+ * @param {T} t
+ * @template T
+ */
+function Zet(t) {
+>Zet : typeof Zet
+>t : T
+
+    /** @type {T} */
+    this.u
+>this.u : any
+>this : any
+>u : any
+
+    this.t = t
+>this.t = t : T
+>this.t : any
+>this : any
+>t : any
+>t : T
+}
+/**
+ * @param {T} v
+ * @param {object} o
+ * @param {T} o.nested
+ */
+Zet.prototype.add = function(v, o) {
+>Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: { nested: T; }) => T
+>Zet.prototype.add : any
+>Zet.prototype : any
+>Zet : typeof Zet
+>prototype : any
+>add : any
+>function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: { nested: T; }) => T
+>v : T
+>o : { nested: T; }
+
+    this.u = v || o.nested
+>this.u = v || o.nested : T
+>this.u : T
+>this : Zet
+>u : T
+>v || o.nested : T
+>v : T
+>o.nested : T
+>o : { nested: T; }
+>nested : T
+
+    return this.u
+>this.u : T
+>this : Zet
+>u : T
+}
+var z = new Zet(1)
+>z : typeof Zet
+>new Zet(1) : typeof Zet
+>Zet : typeof Zet
+>1 : 1
+
+z.t = 2
+>z.t = 2 : 2
+>z.t : number
+>z : typeof Zet
+>t : number
+>2 : 2
+
+z.u = false
+>z.u = false : false
+>z.u : number
+>z : typeof Zet
+>u : number
+>false : false
+
+// lookup in typedef should not crash the compiler, even when the type is unknown
+/**
+ * @typedef {Object} A
+ * @property {T} value
+ */
+/** @type {A} */
+const options = { value: null };
+>options : A
+>{ value: null } : { value: null; }
+>value : null
+>null : null
+

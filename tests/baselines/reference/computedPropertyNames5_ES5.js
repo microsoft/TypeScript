@@ -10,6 +10,7 @@ var v = {
 }
 
 //// [computedPropertyNames5_ES5.js]
+var _a;
 var b;
 var v = (_a = {},
     _a[b] = 0,
@@ -19,4 +20,3 @@ var v = (_a = {},
     _a[undefined] = undefined,
     _a[null] = null,
     _a);
-var _a;

@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////module.exports = function() {}
@@ -14,11 +15,9 @@
 verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:
-`export default function() { }
-export default function f() { }
-export default class {
-}
-export default class C {
-}
+`export default function() {}
+export default function f() {}
+export default class {}
+export default class C {}
 export default 0;`,
 });

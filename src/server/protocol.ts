@@ -6,6 +6,7 @@
 namespace ts.server.protocol {
     // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     export const enum CommandTypes {
+        JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         /* @internal */
         BraceFull = "brace-full",
@@ -121,6 +122,9 @@ namespace ts.server.protocol {
         OrganizeImports = "organizeImports",
         /* @internal */
         OrganizeImportsFull = "organizeImports-full",
+        GetEditsForFileRename = "getEditsForFileRename",
+        /* @internal */
+        GetEditsForFileRenameFull = "getEditsForFileRename-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -323,6 +327,11 @@ namespace ts.server.protocol {
          * the 'Collapse to Definitions' command is invoked.
          */
         autoCollapse: boolean;
+
+        /**
+         * Classification of the contents of the span
+         */
+        kind: OutliningSpanKind;
     }
 
     /**
@@ -610,6 +619,22 @@ namespace ts.server.protocol {
         edits: ReadonlyArray<FileCodeEdits>;
     }
 
+    export interface GetEditsForFileRenameRequest extends Request {
+        command: CommandTypes.GetEditsForFileRename;
+        arguments: GetEditsForFileRenameRequestArgs;
+    }
+
+    // Note: The file from FileRequestArgs is just any file in the project.
+    // We will generate code changes for every file in that project, so the choice is arbitrary.
+    export interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+        readonly oldFilePath: string;
+        readonly newFilePath: string;
+    }
+
+    export interface GetEditsForFileRenameResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+
     /**
      * Request for the available codefixes at a specific position.
      */
@@ -864,6 +889,17 @@ namespace ts.server.protocol {
          * Kind of opening brace
          */
         openingBrace: string;
+    }
+
+    export interface JsxClosingTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.JsxClosingTag;
+        readonly arguments: JsxClosingTagRequestArgs;
+    }
+
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+
+    export interface JsxClosingTagResponse extends Response {
+        readonly body: TextInsertion;
     }
 
     /**
@@ -1177,7 +1213,7 @@ namespace ts.server.protocol {
         /**
          * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
          */
-        lastFileExceededProgramSize: string | undefined;
+        lastFileExceededProgramSize?: string;
     }
 
     /**
@@ -1274,7 +1310,7 @@ namespace ts.server.protocol {
         /**
          * The host's additional supported .js file extensions
          */
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     /**
@@ -1741,6 +1777,8 @@ namespace ts.server.protocol {
         arguments: FormatOnKeyRequestArgs;
     }
 
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+
     /**
      * Arguments for completions messages.
      */
@@ -1749,6 +1787,7 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        triggerCharacter?: CompletionsTriggerCharacter;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -1782,7 +1821,7 @@ namespace ts.server.protocol {
 
     export interface CompletionEntryIdentifier {
         name: string;
-        source: string;
+        source?: string;
     }
 
     /**
@@ -1826,7 +1865,7 @@ namespace ts.server.protocol {
         /**
          * Optional modifiers for the kind (such as 'public').
          */
-        kindModifiers: string;
+        kindModifiers?: string;
         /**
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
@@ -1885,12 +1924,12 @@ namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[];
+        documentation?: SymbolDisplayPart[];
 
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
 
         /**
          * The associated code actions for this entry
@@ -2516,6 +2555,7 @@ namespace ts.server.protocol {
         kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
+        nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
     }
 
@@ -2655,6 +2695,7 @@ namespace ts.server.protocol {
          */
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
 
     export interface CompilerOptions {
@@ -2709,6 +2750,7 @@ namespace ts.server.protocol {
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
+        references?: ProjectReference[];
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -2721,6 +2763,7 @@ namespace ts.server.protocol {
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget | ts.ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];

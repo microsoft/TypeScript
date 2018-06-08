@@ -19,7 +19,7 @@ const bxRanges = [bx0, bx1];
 const byRanges = [by0, by1];
 const axGroup = { definition: "var x: any", ranges: axRanges };
 const bxGroup = { definition: "(alias) var x: any\nimport x", ranges: bxRanges };
-const ayGroup = { definition: "(alias) var y: any\nimport y", ranges: [ay] }
+const ayGroup = { definition: "(alias) var y: any\nexport y", ranges: [ay] }
 const byGroup = { definition: "(alias) var y: any\nimport y", ranges: byRanges }
 
 verify.referenceGroups(axRanges, [axGroup, bxGroup, ayGroup, byGroup]);

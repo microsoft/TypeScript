@@ -7,7 +7,7 @@ namespace Harness.LanguageService {
     export class ScriptInfo {
         public version = 1;
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
-        private lineMap: number[] = undefined;
+        private lineMap: number[] | undefined;
 
         constructor(public fileName: string, public content: string, public isRootFile: boolean) {
             this.setContent(content);
@@ -95,7 +95,7 @@ namespace Harness.LanguageService {
             return this.scriptSnapshot.getLength();
         }
 
-        public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
+        public getChangeRange(oldScript: ts.ScriptSnapshotShim): string | undefined {
             const range = this.scriptSnapshot.getChangeRange((oldScript as ScriptSnapshotProxy).scriptSnapshot);
             return range && JSON.stringify(range);
         }
@@ -117,11 +117,17 @@ namespace Harness.LanguageService {
     }
 
     export abstract class LanguageServiceAdapterHost {
+        public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
         public typesRegistry: ts.Map<void> | undefined;
-        protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
+        private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
+            this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        }
+
+        public get vfs() {
+            return this.sys.vfs;
         }
 
         public getNewLine(): string {
@@ -130,37 +136,37 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()) {
-                const scriptInfo = virtualEntry.content;
+            this.scriptInfos.forEach(scriptInfo => {
                 if (scriptInfo.isRootFile) {
                     // only include root files here
                     // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
                     fileNames.push(scriptInfo.fileName);
                 }
-            }
+            });
             return fileNames;
         }
 
-        public getScriptInfo(fileName: string): ScriptInfo {
-            const fileEntry = this.virtualFileSystem.traversePath(fileName);
-            return fileEntry && fileEntry.isFile() ? fileEntry.content : undefined;
+        public getScriptInfo(fileName: string): ScriptInfo | undefined {
+            return this.scriptInfos.get(vpath.resolve(this.vfs.cwd(), fileName));
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
-            this.virtualFileSystem.addFile(fileName, new ScriptInfo(fileName, content, isRootFile));
+            this.vfs.mkdirpSync(vpath.dirname(fileName));
+            this.vfs.writeFileSync(fileName, content);
+            this.scriptInfos.set(vpath.resolve(this.vfs.cwd(), fileName), new ScriptInfo(fileName, content, isRootFile));
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
             const script = this.getScriptInfo(fileName);
-            if (script !== undefined) {
+            if (script) {
                 script.editContent(start, end, newText);
+                this.vfs.mkdirpSync(vpath.dirname(fileName));
+                this.vfs.writeFileSync(fileName, script.content);
                 return;
             }
 
             throw new Error("No script with name '" + fileName + "'");
         }
-
-        public abstract addSymlink(from: string, target: string): void;
 
         public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void { /*overridden*/ }
 
@@ -169,71 +175,68 @@ namespace Harness.LanguageService {
          * @param col 0 based index
          */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
-            const script: ScriptInfo = this.getScriptInfo(fileName);
+            const script: ScriptInfo = this.getScriptInfo(fileName)!;
             assert.isOk(script);
-
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
     }
 
     /// Native adapter
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
-        symlinks = ts.createMap<string>();
-
         isKnownTypesPackageName(name: string): boolean {
-            return this.typesRegistry && this.typesRegistry.has(name);
+            return !!this.typesRegistry && this.typesRegistry.has(name);
         }
+
         installPackage = ts.notImplemented;
 
         getCompilationSettings() { return this.settings; }
+
         getCancellationToken() { return this.cancellationToken; }
+
         getDirectories(path: string): string[] {
-            const dir = this.virtualFileSystem.traversePath(path);
-            return dir && dir.isDirectory() ? dir.getDirectories().map(d => d.name) : [];
+            return this.sys.getDirectories(path);
         }
+
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
+
         getDefaultLibFileName(): string { return Compiler.defaultLibFileName; }
+
         getScriptFileNames(): string[] {
             return this.getFilenames().filter(ts.isAnySupportedFileExtension);
         }
-        getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
+
+        getScriptSnapshot(fileName: string): ts.IScriptSnapshot | undefined {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
         }
+
         getScriptKind(): ts.ScriptKind { return ts.ScriptKind.Unknown; }
+
         getScriptVersion(fileName: string): string {
             const script = this.getScriptInfo(fileName);
-            return script ? script.version.toString() : undefined;
+            return script ? script.version.toString() : undefined!; // TODO: GH#18217
         }
 
         directoryExists(dirName: string): boolean {
-            if (ts.forEachEntry(this.symlinks, (_, key) => ts.forSomeAncestorDirectory(key, ancestor => ancestor === dirName))) {
-                return true;
-            }
-
-            const fileEntry = this.virtualFileSystem.traversePath(dirName);
-            return fileEntry && fileEntry.isDirectory();
+            return this.sys.directoryExists(dirName);
         }
 
         fileExists(fileName: string): boolean {
-            return this.symlinks.has(fileName) || this.getScriptSnapshot(fileName) !== undefined;
+            return this.sys.fileExists(fileName);
         }
+
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return ts.matchFiles(path, extensions, exclude, include,
-                /*useCaseSensitiveFileNames*/ false,
-                this.getCurrentDirectory(),
-                depth,
-                (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
+            return this.sys.readDirectory(path, extensions, exclude, include, depth);
         }
+
         readFile(path: string): string | undefined {
-            const target = this.symlinks.get(path);
-            return target !== undefined ? this.readFile(target) : ts.getSnapshotText(this.getScriptSnapshot(path));
+            return this.sys.readFile(path);
         }
-        addSymlink(from: string, target: string) { this.symlinks.set(from, target); }
+
         realpath(path: string): string {
-            const target = this.symlinks.get(path);
-            return target === undefined ? path : target;
+            return this.sys.realpath(path);
         }
+
         getTypeRootsVersion() {
             return 0;
         }
@@ -262,8 +265,6 @@ namespace Harness.LanguageService {
         public getModuleResolutionsForFile: (fileName: string) => string;
         public getTypeReferenceDirectiveResolutionsForFile: (fileName: string) => string;
 
-        addSymlink() { return ts.notImplemented(); }
-
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
             this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
@@ -278,7 +279,7 @@ namespace Harness.LanguageService {
                     }
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
-                    const scriptInfo = this.getScriptInfo(fileName);
+                    const scriptInfo = this.getScriptInfo(fileName)!;
                     const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
                     const imports: ts.MapLike<string> = {};
                     for (const module of preprocessInfo.importedFiles) {
@@ -297,8 +298,8 @@ namespace Harness.LanguageService {
                         const settings = this.nativeHost.getCompilationSettings();
                         for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
                             const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
-                            if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
-                                resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
+                            if (resolutionInfo.resolvedTypeReferenceDirective!.resolvedFileName) {
+                                resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective!;
                             }
                         }
                         return JSON.stringify(resolutions);
@@ -311,7 +312,7 @@ namespace Harness.LanguageService {
         }
 
         getFilenames(): string[] { return this.nativeHost.getFilenames(); }
-        getScriptInfo(fileName: string): ScriptInfo { return this.nativeHost.getScriptInfo(fileName); }
+        getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
         addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
         editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
         positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
@@ -323,7 +324,7 @@ namespace Harness.LanguageService {
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
-            const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
+            const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName)!; // TODO: GH#18217
             return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
         }
         getScriptKind(): ts.ScriptKind { return this.nativeHost.getScriptKind(); }
@@ -396,13 +397,13 @@ namespace Harness.LanguageService {
         cleanupSemanticCache(): void {
             this.shim.cleanupSemanticCache();
         }
-        getSyntacticDiagnostics(fileName: string): ts.Diagnostic[] {
+        getSyntacticDiagnostics(fileName: string): ts.DiagnosticWithLocation[] {
             return unwrapJSONCallResult(this.shim.getSyntacticDiagnostics(fileName));
         }
-        getSemanticDiagnostics(fileName: string): ts.Diagnostic[] {
+        getSemanticDiagnostics(fileName: string): ts.DiagnosticWithLocation[] {
             return unwrapJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
         }
-        getSuggestionDiagnostics(fileName: string): ts.Diagnostic[] {
+        getSuggestionDiagnostics(fileName: string): ts.DiagnosticWithLocation[] {
             return unwrapJSONCallResult(this.shim.getSuggestionDiagnostics(fileName));
         }
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
@@ -502,11 +503,14 @@ namespace Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
-        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion | undefined {
+        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
+        }
+        getJsxClosingTagAtPosition(): never {
+            throw new Error("Not supported on the shim.");
         }
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
             return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
@@ -526,6 +530,9 @@ namespace Harness.LanguageService {
             throw new Error("Not supported on the shim.");
         }
         organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.FileTextChanges> {
+            throw new Error("Not supported on the shim.");
+        }
+        getEditsForFileRename(): ReadonlyArray<ts.FileTextChanges> {
             throw new Error("Not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
@@ -569,7 +576,8 @@ namespace Harness.LanguageService {
                 importedFiles: [],
                 ambientExternalModules: [],
                 isLibFile: shimResult.isLibFile,
-                typeReferenceDirectives: []
+                typeReferenceDirectives: [],
+                libReferenceDirectives: []
             };
 
             ts.forEach(shimResult.referencedFiles, refFile => {
@@ -603,7 +611,7 @@ namespace Harness.LanguageService {
     class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost {
         private client: ts.server.SessionClient;
 
-        constructor(cancellationToken: ts.HostCancellationToken, settings: ts.CompilerOptions) {
+        constructor(cancellationToken: ts.HostCancellationToken | undefined, settings: ts.CompilerOptions | undefined) {
             super(cancellationToken, settings);
         }
 
@@ -710,7 +718,7 @@ namespace Harness.LanguageService {
             return true;
         }
 
-        getLogFileName(): string {
+        getLogFileName(): string | undefined {
             return undefined;
         }
 
@@ -790,7 +798,7 @@ namespace Harness.LanguageService {
                                 const proxy = makeDefaultProxy(info);
                                 proxy.getSemanticDiagnostics = filename => {
                                     const prev = info.languageService.getSemanticDiagnostics(filename);
-                                    const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
+                                    const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
                                     prev.push({
                                         category: ts.DiagnosticCategory.Warning,
                                         file: sourceFile,
@@ -845,7 +853,7 @@ namespace Harness.LanguageService {
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined,
+                typingsInstaller: undefined!, // TODO: GH#18217
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
                 logger: serverHost,

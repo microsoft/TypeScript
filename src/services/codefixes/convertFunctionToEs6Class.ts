@@ -9,12 +9,12 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file!, err.start, context.program.getTypeChecker())),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker())),
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         const deletedNodes: { node: Node, inList: boolean }[] = [];
-        const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false));
+        const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false))!;
 
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
             // Bad input
@@ -23,8 +23,8 @@ namespace ts.codefix {
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
 
-        let precedingNode: Node;
-        let newClassDeclaration: ClassDeclaration;
+        let precedingNode: Node | undefined;
+        let newClassDeclaration: ClassDeclaration | undefined;
         switch (ctorDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
                 precedingNode = ctorDeclaration;
@@ -36,7 +36,7 @@ namespace ts.codefix {
                 precedingNode = ctorDeclaration.parent.parent;
                 newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
-                    copyComments(precedingNode, newClassDeclaration, sourceFile);
+                    copyComments(precedingNode, newClassDeclaration!, sourceFile); // TODO: GH#18217
                     deleteNode(precedingNode);
                 }
                 else {
@@ -52,7 +52,7 @@ namespace ts.codefix {
         copyComments(ctorDeclaration, newClassDeclaration, sourceFile);
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changes.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
+        changes.insertNodeAfter(sourceFile, precedingNode!, newClassDeclaration);
         for (const { node, inList } of deletedNodes) {
             if (inList) {
                 changes.deleteNodeInList(sourceFile, node);
@@ -99,7 +99,7 @@ namespace ts.codefix {
                 return isFunctionLike(source);
             }
 
-            function createClassElement(symbol: Symbol, modifiers: Modifier[]): ClassElement {
+            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): ClassElement | undefined {
                 // Right now the only thing we can convert are function expressions, which are marked as methods
                 if (!(symbol.flags & SymbolFlags.Method)) {
                     return;
@@ -166,7 +166,7 @@ namespace ts.codefix {
             }
         }
 
-        function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration {
+        function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration | undefined {
             const initializer = node.initializer as FunctionExpression;
             if (!initializer || initializer.kind !== SyntaxKind.FunctionExpression) {
                 return undefined;
@@ -176,12 +176,12 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const memberElements = createClassElementsFromSymbol(initializer.symbol);
+            const memberElements = createClassElementsFromSymbol(node.symbol);
             if (initializer.body) {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
-            const modifiers = getModifierKindFromSource(precedingNode, SyntaxKind.ExportKeyword);
+            const modifiers = getModifierKindFromSource(precedingNode!, SyntaxKind.ExportKeyword);
             const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
@@ -218,7 +218,7 @@ namespace ts.codefix {
         });
     }
 
-    function getModifierKindFromSource(source: Node, kind: SyntaxKind): ReadonlyArray<Modifier> {
+    function getModifierKindFromSource(source: Node, kind: SyntaxKind): ReadonlyArray<Modifier> | undefined {
         return filter(source.modifiers, modifier => modifier.kind === kind);
     }
 }
