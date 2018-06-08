@@ -8,6 +8,7 @@ var path = require("path");
 var child_process = require("child_process");
 var fold = require("travis-fold");
 var ts = require("./lib/typescript");
+const getDirSize = require("./scripts/build/getDirSize");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -643,6 +644,7 @@ task("generate-spec", [specMd]);
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
+    const sizeBefore = getDirSize(LKGDirectory);
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
         concat(libraryTargets).
         concat(localizationTargets);
@@ -658,10 +660,11 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
     for (i in expectedFiles) {
         jake.cpR(expectedFiles[i], LKGDirectory);
     }
-    //var resourceDirectories = fs.readdirSync(builtLocalResourcesDirectory).map(function(p) { return path.join(builtLocalResourcesDirectory, p); });
-    //resourceDirectories.map(function(d) {
-    //    jake.cpR(d, LKGResourcesDirectory);
-    //});
+
+    const sizeAfter = getDirSize(LKGDirectory);
+    if (sizeAfter > (sizeBefore * 1.10)) {
+        throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+    }
 });
 
 // Test directory
