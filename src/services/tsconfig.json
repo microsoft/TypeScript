@@ -73,6 +73,7 @@
         "codefixes/useDefaultImport.ts",
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
         "codefixes/convertToMappedObjectType.ts",
+        "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/extractSymbol.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",

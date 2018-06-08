@@ -397,6 +397,9 @@ namespace ts.textChanges {
             else if (isParameter(before)) {
                 return {};
             }
+            else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
+                return { suffix: ", " };
+            }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
@@ -465,6 +468,10 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
+        public insertNodeAtEndOfList(sourceFile: SourceFile, list: NodeArray<Node>, newNode: Node): void {
+            this.insertNodeAt(sourceFile, list.end, newNode, { prefix: ", " });
+        }
+
         public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
             this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
@@ -504,6 +511,9 @@ namespace ts.textChanges {
             }
             else if (isParameter(node)) {
                 return {};
+            }
+            else if (node.kind === SyntaxKind.ExportKeyword) {
+                return { prefix: " " };
             }
             return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }

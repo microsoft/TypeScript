@@ -3636,7 +3636,7 @@
         "category": "Message",
         "code": 6353
     },
-    
+
     "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6354
@@ -4414,5 +4414,13 @@
     "Remove braces from arrow function": {
         "category": "Message",
         "code": 95060
+    },
+    "Convert default export to named export": {
+        "category": "Message",
+        "code": 95061
+    },
+    "Convert named export to default export": {
+        "category": "Message",
+        "code": 95062
     }
 }

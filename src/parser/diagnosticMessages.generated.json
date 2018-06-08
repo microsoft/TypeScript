@@ -1097,5 +1097,7 @@
   "Convert_named_imports_to_namespace_import_95057" : "Convert named imports to namespace import",
   "Add_or_remove_braces_in_an_arrow_function_95058" : "Add or remove braces in an arrow function",
   "Add_braces_to_arrow_function_95059" : "Add braces to arrow function",
-  "Remove_braces_from_arrow_function_95060" : "Remove braces from arrow function"
+  "Remove_braces_from_arrow_function_95060" : "Remove braces from arrow function",
+  "Convert_default_export_to_named_export_95061" : "Convert default export to named export",
+  "Convert_named_export_to_default_export_95062" : "Convert named export to default export"
 }
