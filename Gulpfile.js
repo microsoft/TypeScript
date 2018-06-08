@@ -12,7 +12,7 @@ const clone = require("gulp-clone");
 const newer = require("gulp-newer");
 const tsc = require("gulp-typescript");
 const tsc_oop = require("./scripts/build/gulp-typescript-oop");
-const { getDirSize } = require("./scripts/build/getDirSize");
+const getDirSize = require("./scripts/build/getDirSize");
 const insert = require("gulp-insert");
 const sourcemaps = require("gulp-sourcemaps");
 const Q = require("q");
@@ -589,10 +589,9 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
 gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
 
 gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
-    const lib = "./lib";
-    const sizeBefore = getDirSize(lib);
+    const sizeBefore = getDirSize(lkgDirectory);
     const seq = runSequence("LKGInternal", "VerifyLKG");
-    const sizeAfter = getDirSize(lib);
+    const sizeAfter = getDirSize(lkgDirectory);
     if (sizeAfter > (sizeBefore * 1.10)) {
         throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
     }

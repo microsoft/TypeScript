@@ -27,4 +27,4 @@ function getDirSize(root, seen = new Set()) {
         .reduce((acc, num) => acc + num, 0);
 }
 
-exports.getDirSize = getDirSize;
+module.exports = getDirSize;
