@@ -511,6 +511,8 @@ namespace ts.server {
 
                 const { fileName, project } = checkList[index];
                 index++;
+                // Ensure the project is upto date before checking if this file is present in the project
+                project.updateGraph();
                 if (!project.containsFile(fileName, requireOpen)) {
                     return;
                 }
