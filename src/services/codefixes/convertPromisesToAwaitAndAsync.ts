@@ -38,9 +38,10 @@ namespace ts.codefix {
         //get the rejection handlers
         findDotThen(funcToConvert, checker, false, PromiseMemberFunc.Then, retArrayRej);
         let onRejTuple:[NodeArray<Statement>, string, TextRange] = retArrayRej[0];
-        let onRejBody:NodeArray<Statement> = undefined;
+        let onRejBody:NodeArray<Statement>, onRejFuncName:string = undefined;
         if(onRejTuple){
             onRejBody = onRejTuple[0];
+            onRejFuncName = onRejTuple[1];
         }
         
         
@@ -89,7 +90,7 @@ namespace ts.codefix {
         if(onRejTuple && onRejBody && onRejBody.length > 0){
             //fix this -> "e" ?
             let onRejTryBlock = createTry(createBlock(onRejBody), getSynthesizedDeepClone(cascadingCatchBlock), undefined)
-            topLevelCatchClause = createCatchClause("e", createBlock(createNodeArray([onRejTryBlock])));
+            topLevelCatchClause = createCatchClause(onRejFuncName, createBlock(createNodeArray([onRejTryBlock])));
         }
 
         /*
