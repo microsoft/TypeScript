@@ -17110,8 +17110,7 @@ namespace ts {
                 // allow PropertyAccessibility if context is in function with this parameter
                 // static member access is disallow
                 let thisParameter: ParameterDeclaration | undefined;
-                const thisContainer = getThisContainer(node, /* includeArrowFunctions */ false);
-                if (flags & ModifierFlags.Static || !thisContainer || !isFunctionLike(thisContainer) || !(thisParameter = getThisParameter(thisContainer)) || !thisParameter.type) {
+                if (flags & ModifierFlags.Static || !(thisParameter = getThisParameterFromNodeContext(node)) || !thisParameter.type) {
                     error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
                     return false;
                 }
@@ -17132,6 +17131,11 @@ namespace ts {
                 return false;
             }
             return true;
+        }
+
+        function getThisParameterFromNodeContext (node: Node) {
+            const thisContainer = getThisContainer(node, /* includeArrowFunctions */ false);
+            return thisContainer && isFunctionLike(thisContainer) ? getThisParameter(thisContainer) : undefined;
         }
 
         function symbolHasNonMethodDeclaration(symbol: Symbol) {
