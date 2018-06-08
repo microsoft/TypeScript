@@ -2280,15 +2280,21 @@ namespace ts {
         }
 
         function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
-            const errorInfo = packageId && chainDiagnosticMessages(
-                /*details*/ undefined,
-                Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                getMangledNameForScopedPackage(packageId.name));
+            const errorInfo = packageId && !typesPackageExists(packageId.name)
+                ? chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                    getMangledNameForScopedPackage(packageId.name))
+                : undefined;
             errorOrSuggestion(isError, errorNode, chainDiagnosticMessages(
                 errorInfo,
                 Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                 moduleReference,
                 resolvedFileName));
+        }
+        function typesPackageExists(packageName: string): boolean {
+            return host.getSourceFiles().some(sf => !!sf.resolvedModules && !!forEachEntry(sf.resolvedModules, r =>
+                r && r.packageId && r.packageId.name === getTypesPackageName(packageName)));
         }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
