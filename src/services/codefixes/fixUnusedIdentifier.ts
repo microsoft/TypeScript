@@ -228,15 +228,12 @@ namespace ts.codefix {
 
             case SyntaxKind.BindingElement: {
                 const pattern = (parent as BindingElement).parent;
-                switch (pattern.kind) {
-                    case SyntaxKind.ArrayBindingPattern:
-                        changes.deleteNode(sourceFile, parent); // Don't delete ','
-                        break;
-                    case SyntaxKind.ObjectBindingPattern:
-                        changes.deleteNodeInList(sourceFile, parent);
-                        break;
-                    default:
-                        return Debug.assertNever(pattern);
+                const preserveComma = pattern.kind === SyntaxKind.ArrayBindingPattern && parent !== last(pattern.elements);
+                if (preserveComma) {
+                    changes.deleteNode(sourceFile, parent);
+                }
+                else {
+                    changes.deleteNodeInList(sourceFile, parent);
                 }
                 break;
             }
