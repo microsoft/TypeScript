@@ -10396,6 +10396,48 @@ namespace ts {
             return getObjectFlags(source) & ObjectFlags.JsxAttributes && !(isUnhyphenatedJsxName(sourceProp.escapedName) || targetMemberType);
         }
 
+        function collectTypeParameters(type: Type) {
+            const params: TypeParameter[] = [];
+            instantiateType(type, t => {
+                if (t.flags & TypeFlags.TypeParameter) {
+                    params.push(t);
+                }
+                return t;
+            });
+            return params;
+        }
+
+        /**
+         * Runs a conditional type "backward" and returns weather the relationship check is true
+         * @param source The left-hand side of the relation
+         * @param target The conditional type on the right-hand side of the relation
+         * @param inferenceTarget The type that should be used as the inference target
+         * @param relation The relation to use for the comparison
+         */
+        function conditionalTypeReverseInferenceSucceeds(source: Type, target: ConditionalType, inferenceTarget: Type, relation: Map<RelationComparisonResult>) {
+            let checkType = target.checkType;
+            let mapper = identityMapper;
+            if (target.root.outerTypeParameters) {
+                // First, infer from source to the inference target
+                const params = collectTypeParameters(inferenceTarget);
+                const context = createInferenceContext(params, /*signature*/ undefined, InferenceFlags.None);
+                inferTypes(context.inferences, source, inferenceTarget, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                const results = getInferredTypes(context);
+                // And instantiate the checkType with the results
+                checkType = instantiateType(target.checkType, mapper = createTypeMapper(params, results));
+            }
+            let extendsType = target.extendsType;
+            if (target.root.inferTypeParameters) {
+                // Then, infer from the instantiated checkType to the extendsType
+                const context = createInferenceContext(target.root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                // And instantiate it with the inferences
+                extendsType = instantiateType(extendsType, combineTypeMappers(mapper, context));
+            }
+            // Finally, check if the statement is true
+            return checkTypeRelatedTo(checkType, extendsType, relation, /*errorNode*/ undefined);
+        }
+
         /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
@@ -11124,6 +11166,31 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    // Simple check - if assignable to both the true and false types, it is assignable
+                    const trueType = getTrueTypeFromConditionalType(target as ConditionalType);
+                    const falseType = getFalseTypeFromConditionalType(target as ConditionalType);
+                    if (result = isRelatedTo(source, trueType) && isRelatedTo(source, falseType)) {
+                        errorInfo = saveErrorInfo;
+                        return result;
+                    }
+
+                    if ((target as ConditionalType).root.isDistributive && source.flags & TypeFlags.Union) {
+                        // If the source is a union, and the root is distributive, break up the union and distribute it, too
+                        const types = (source as UnionType).types;
+                        let result = Ternary.True;
+                        for (const type of types) {
+                            result &= isAssociatedWithOneConditionalTypeBranch(type, target as ConditionalType, trueType, falseType);
+                            if (!result) {
+                                return result;
+                            }
+                        }
+                        return result;
+                    }
+                    else {
+                        return isAssociatedWithOneConditionalTypeBranch(source, target as ConditionalType, trueType, falseType);
+                    }
+                }
                 else {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
                         !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
@@ -11201,6 +11268,44 @@ namespace ts {
                         }
                     }
                 }
+                return Ternary.False;
+            }
+
+            function isAssociatedWithOneConditionalTypeBranch(source: Type, target: ConditionalType, trueType: Type, _falseType: Type) {
+                // This is a complex check for relating the source to either branch of a conditional.
+                // Assume we have a
+                //   * Target of type `{ x: T } extends { x: object } ? T : never`
+                //   * Source of type `{ x: number }`
+                // In order to check this, we need to discover if the `source` type could be a result given the target.
+                // To do so, first we assume that the `true` branch will succeed. We draw an inference from the `source` to the `trueType`.
+                // This inference produces instantiations for the type variables in the `checkType` (the left hand side of the `extends` clause).
+                // We instantiate the check type with these inferences, then check if the conditional is true, asking "does the check type actually extend the extends type?"
+                // If so, the `source` is assignable to the `target`. If not, the same process can be used for the `false` branch, but using definitely-not-assignable for
+                // checking the relationship between the instantiated `check` and `extends` types instead.
+                // If neither case is true, the type is not assignable.
+                if (isRelatedTo(source, trueType)) {
+                    if (conditionalTypeReverseInferenceSucceeds(source, target, trueType, assignableRelation)) {
+                        return Ternary.True;
+                    }
+                }
+                // TODO: The following `false` branch logic is good, but type variables in `false` branches do not currently
+                //   retain their negated constraint, resulting in false positives here; for example:
+                // ```
+                // @strict: true
+                // function f<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
+                //     y = x;
+                //     // Should be an error, but if we do the below, we find that yes, `undefined` is assignable to `T["x"]`
+                //     // because we've "forgotten" that we already verified that `T["x"]` does _not_ extend `null | undefined`
+                //     // in this position and that this should _not_ succeed. In effect, we need a substitution type with
+                //     // negatypes to come into play here. If/when that comes about, we should uncomment the following code
+                //     // to allow types compatible with the `false` branch of a conditional to be assignable to it.
+                // }
+                // ```
+                //else if (isRelatedTo(source, falseType)) {
+                //    if (!conditionalTypeReverseInferenceSucceeds(source, target, falseType, definitelyAssignableRelation)) {
+                //        return Ternary.True;
+                //    }
+                //}
                 return Ternary.False;
             }
 
