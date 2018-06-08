@@ -17,41 +17,21 @@ namespace ts.codefix {
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert)
 
         //containers to hold the resolve handlers, rejection handlers, and catch handlers
-        let retArrayRes:[NodeArray<Statement>, string, TextRange][] = [];
-        let retArrayRej:[NodeArray<Statement>, string, TextRange][] = [];
-        let retArrayCatch:[NodeArray<Statement>, string, TextRange][] = [];
+        let resCallbacks:callbackFunction[] = [];
+        let rejCallbacks:callbackFunction[] = [];
+        let catchCallbacks:callbackFunction[] = [];
 
         //find the function call that returns a promise
         let callToAwait:Expression = getSynthesizedDeepClone(findCallToAwait(funcToConvert, checker));
     
-        //get the resolve handlers
-        findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Then, retArrayRes);
-        let onResTuple:[NodeArray<Statement>, string, TextRange] = retArrayRes[0]; 
-        let onResBody:NodeArray<Statement>, onResFuncName:string, onResTextRange:TextRange = undefined;
-        if(onResTuple){
-            onResBody = onResTuple[0];
-            onResFuncName = onResTuple[1];
-            onResTextRange = onResTuple[2];
-        }
+        findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Then, resCallbacks); //get the resolve handlers
+        findDotThen(funcToConvert, checker, false, PromiseMemberFunc.Then, rejCallbacks); //get the rejection handlers
+        findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Catch, catchCallbacks); //get the catch handlers
 
-
-        //get the rejection handlers
-        findDotThen(funcToConvert, checker, false, PromiseMemberFunc.Then, retArrayRej);
-        let onRejTuple:[NodeArray<Statement>, string, TextRange] = retArrayRej[0];
-        let onRejBody:NodeArray<Statement>, onRejFuncName:string = undefined;
-        if(onRejTuple){
-            onRejBody = onRejTuple[0];
-            onRejFuncName = onRejTuple[1];
-        }
-        
-        
-        //get the catch handlers
-        findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Catch, retArrayCatch);
-        let onCatchTuple:[NodeArray<Statement>, string, TextRange] = retArrayCatch[0];
-        let onCatchTextRange:TextRange = undefined;
-        if(onCatchTuple){
-            onCatchTextRange = onCatchTuple[2];
-        }
+        //note - I will eventually fix this to handle all callbacks
+        let resCallback = resCallbacks.length > 0 ? resCallbacks[0] : undefined;
+        let rejCallback = rejCallbacks.length > 0 ? rejCallbacks[0] : undefined;
+        let catchCallback = rejCallbacks.length > 0 ? rejCallbacks[0] : undefined;
 
         //if there is no call to a function that returns a promise, just add async keyword and return
         if(!callToAwait){
@@ -62,19 +42,20 @@ namespace ts.codefix {
         let awaitNode = createAwait(callToAwait);
         
         //get the cascading catch block
-        let catchParam = retArrayCatch.length > 0 ? retArrayCatch[retArrayCatch.length-1][1] : "e";
-        let cascadingCatchBlock = createCatchClause(catchParam, createBlock(createCascadingCatches(retArrayCatch)));
+        let catchParam = catchCallbacks.length > 0 ? catchCallbacks[catchCallbacks.length-1].argName : "e";
+        let cascadingCatchBlock = createCatchClause(catchParam, createBlock(createCascadingCatches(catchCallbacks)));
 
         //get the onRes handler body
         let onResTryStmts:NodeArray<Statement> = undefined;
-        if(onResTuple && onResBody && onResBody.length > 0){
-            onResTryStmts = onResBody;
+        //if(onResTuple && onResBody && onResBody.length > 0){
+        if(resCallback){
+            onResTryStmts = resCallback.body;
         }
 
         //create the top level try block
         let topLevelTryStmts:NodeArray<Statement>;
         if(onResTryStmts){
-            let awaitDecl = createVariableDeclarationList(createNodeArray([createVariableDeclaration(onResFuncName, undefined, awaitNode)]));
+            let awaitDecl = createVariableDeclarationList(createNodeArray([createVariableDeclaration(resCallback.argName, undefined, awaitNode)]));
             let awaitDeclStmt = createVariableStatement(undefined, awaitDecl);
             let onResTryBlock = createBlock(onResTryStmts);
             topLevelTryStmts = createNodeArray([<Statement>awaitDeclStmt, createTry(onResTryBlock, getSynthesizedDeepClone(cascadingCatchBlock), undefined)]);
@@ -87,27 +68,20 @@ namespace ts.codefix {
         let topLevelCatchClause:CatchClause = undefined; //add the onRej try block
 
         
-        if(onRejTuple && onRejBody && onRejBody.length > 0){
-            //fix this -> "e" ?
-            let onRejTryBlock = createTry(createBlock(onRejBody), getSynthesizedDeepClone(cascadingCatchBlock), undefined)
-            topLevelCatchClause = createCatchClause(onRejFuncName, createBlock(createNodeArray([onRejTryBlock])));
+       // if(onRejTuple && onRejBody && onRejBody.length > 0){
+        if(rejCallback){
+            let onRejTryBlock = createTry(createBlock(rejCallback.body), getSynthesizedDeepClone(cascadingCatchBlock), undefined)
+            topLevelCatchClause = createCatchClause(rejCallback.argName, createBlock(createNodeArray([onRejTryBlock])));
         }
 
-        /*
-        if(onRejTuple && onRejBody.length > 0){
-            let stmts = createNodeArray(onRejBody);
-            catchBlock = createCatchClause("e", createBlock(stmts));
-        }else{
-            catchBlock = createCatchClause("e", createBlock(createNodeArray()));
-        }*/
 
         let range:TextRange = undefined;
-        if(onResTextRange && onCatchTextRange){
-            range = createTextRange(onResTextRange.pos, onCatchTextRange.end);
-        }else if(onResTextRange){
-            range = onResTextRange;
-        }else if(onCatchTextRange){
-            range = onCatchTextRange;
+        if(resCallback.range && catchCallback && catchCallback.range){
+            range = createTextRange(resCallback.range.pos, catchCallback.range.end);
+        }else if(resCallback.range){
+            range = resCallback.range;
+        }else if(catchCallback && catchCallback.range){
+            range = catchCallback.range;
         }
 
         if(range){
@@ -115,14 +89,14 @@ namespace ts.codefix {
         }
     }
 
-    function createCascadingCatches(catchArray:[NodeArray<Statement>, string, TextRange][]): NodeArray<Statement>{
+    function createCascadingCatches(catchArray:callbackFunction[]): NodeArray<Statement>{
 
         if(catchArray.length == 0){
             return undefined;
         }
 
         if(catchArray.length == 1){
-            return getSynthesizedDeepClones(catchArray.pop()[0]);
+            return getSynthesizedDeepClones(catchArray.pop().body);
             //just add the function call
         }
 
@@ -130,7 +104,7 @@ namespace ts.codefix {
         let cascadingCatches = createCascadingCatches(catchArray);
         let catchBlock = createBlock(cascadingCatches);
 
-        return createNodeArray([createTry(createBlock(getSynthesizedDeepClones(catchItem[0])), createCatchClause(catchItem[1], catchBlock), undefined)]);
+        return createNodeArray([createTry(createBlock(getSynthesizedDeepClones(catchItem.body)), createCatchClause(catchItem.argName, catchBlock), undefined)]);
     }
 
     function findCallToAwait(node: Node, checker:TypeChecker): Expression{
@@ -154,7 +128,19 @@ namespace ts.codefix {
         Catch = "catch",
     }
 
-    function findDotThen(node:Node, checker:TypeChecker, onRes:boolean, memberFunc:PromiseMemberFunc, retArray:[NodeArray<Statement>, string, TextRange][]):void{ //[[NodeArray<Statement>, string, TextRange]]{
+    class callbackFunction{
+        body: NodeArray<Statement>;
+        argName: string;
+        range: TextRange;
+
+        constructor(_body:NodeArray<Statement>, _argName:string, _range:TextRange){
+            this.body = _body;
+            this.argName = _argName;
+            this.range = _range;
+        }
+    }
+
+    function findDotThen(node:Node, checker:TypeChecker, onRes:boolean, memberFunc:PromiseMemberFunc, retArray:callbackFunction[]): void{ //[[NodeArray<Statement>, string, TextRange]]{
 
         const index:number = onRes ? 0 : 1;
 
@@ -167,13 +153,12 @@ namespace ts.codefix {
                         let funcDecl:FunctionLikeDeclaration = parNode.arguments[index] as FunctionLikeDeclaration;
                         let funcBody:FunctionBody = funcDecl.body as FunctionBody;
                         let name:string = funcDecl.parameters[0].symbol ? funcDecl.parameters[0].symbol.name : (<Identifier>funcDecl.parameters[0].name).text;
-                        retArray.push([createNodeArray(funcBody.statements), name, createTextRange(node.parent.getStart(), node.parent.end)]);
-                        //retArray.push([createNodeArray(funcBody.statements), funcDecl.parameters[0].symbol.name, createTextRange(parNode.getStart(), parNode.end)]);
+                        retArray.push(new callbackFunction(createNodeArray(funcBody.statements), name, createTextRange(node.parent.getStart(), node.parent.end)));
                     }else if(parNode.arguments.length > index &&  isIdentifier(parNode.arguments[index])){
                         //reference to an elsewhere declared function
                         let argName = (<Identifier>(<FunctionLikeDeclaration>checker.getTypeAtLocation(parNode.arguments[index]).symbol.valueDeclaration).parameters[0].name);
                         let callExpr = createCall(parNode.arguments[index], undefined, [argName]);
-                        retArray.push([createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(node.parent.getStart(), node.parent.end)]);
+                        retArray.push(new callbackFunction(createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(node.parent.getStart(), node.parent.end)));
                     }
                 }
                 break;
