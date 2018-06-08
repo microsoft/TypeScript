@@ -24,7 +24,7 @@ namespace ts {
         const rawStrings: Expression[] = [];
         const template = node.template;
 
-        if (level === ProcessLevel.LiftRestriction && !hasInvalidEscape(template)) return tag;
+        if (level === ProcessLevel.LiftRestriction && !hasInvalidEscape(template)) return node;
 
         if (isNoSubstitutionTemplateLiteral(template)) {
             cookedStrings.push(createTemplateCooked(template));

@@ -2,6 +2,8 @@ function tag (str: any, ...args: any[]): string {
   return str
 }
 
+const a = tag`123`
+const b = tag`123 ${100}`
 const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
 const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
 const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
