@@ -7955,10 +7955,11 @@ namespace ts {
             }
         }
 
-        function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
+        function getSubstitutionType(typeVariable: TypeVariable, substitute: Type, negaConstraints: Type[] | undefined) {
             const result = <SubstitutionType>createType(TypeFlags.Substitution);
             result.typeVariable = typeVariable;
             result.substitute = substitute;
+            result.negatedTypes = negaConstraints;
             return result;
         }
 
@@ -7974,17 +7975,23 @@ namespace ts {
 
         function getConstrainedTypeVariable(typeVariable: TypeVariable, node: Node) {
             let constraints: Type[] | undefined;
+            let negatedConstraints: Type[] | undefined;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
-                if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                if (parent.kind === SyntaxKind.ConditionalType && (node === (<ConditionalTypeNode>parent).trueType || node === (<ConditionalTypeNode>parent).falseType)) {
                     const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
-                        constraints = append(constraints, constraint);
+                        if (node === (<ConditionalTypeNode>parent).trueType) {
+                            constraints = append(constraints, constraint);
+                        }
+                        else {
+                            negatedConstraints = append(negatedConstraints, constraint);
+                        }
                     }
                 }
                 node = parent;
             }
-            return constraints ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable))) : typeVariable;
+            return (constraints || negatedConstraints) ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable)), negatedConstraints) : typeVariable;
         }
 
         function isJSDocTypeReference(node: Node): node is TypeReferenceNode {
@@ -10417,6 +10424,7 @@ namespace ts {
         function conditionalTypeReverseInferenceSucceeds(source: Type, target: ConditionalType, inferenceTarget: Type, relation: Map<RelationComparisonResult>) {
             let checkType = target.checkType;
             let mapper = identityMapper;
+            // target.root.outerTypeParameters indicates that this conditional type has some type variables which may be unbound
             if (target.root.outerTypeParameters) {
                 // First, infer from source to the inference target
                 const params = collectTypeParameters(inferenceTarget);
@@ -10571,6 +10579,14 @@ namespace ts {
                     source = relation === definitelyAssignableRelation ? (<SubstitutionType>source).typeVariable : (<SubstitutionType>source).substitute;
                 }
                 if (target.flags & TypeFlags.Substitution) {
+                    const negaTypes = (target as SubstitutionType).negatedTypes;
+                    if (negaTypes) {
+                        for (const type of negaTypes) {
+                            if (isRelatedTo(source, type)) {
+                                return Ternary.False;
+                            }
+                        }
+                    }
                     target = (<SubstitutionType>target).typeVariable;
                 }
                 if (source.flags & TypeFlags.IndexedAccess) {
@@ -11288,24 +11304,11 @@ namespace ts {
                         return Ternary.True;
                     }
                 }
-                // TODO: The following `false` branch logic is good, but type variables in `false` branches do not currently
-                //   retain their negated constraint, resulting in false positives here; for example:
-                // ```
-                // @strict: true
-                // function f<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
-                //     y = x;
-                //     // Should be an error, but if we do the below, we find that yes, `undefined` is assignable to `T["x"]`
-                //     // because we've "forgotten" that we already verified that `T["x"]` does _not_ extend `null | undefined`
-                //     // in this position and that this should _not_ succeed. In effect, we need a substitution type with
-                //     // negatypes to come into play here. If/when that comes about, we should uncomment the following code
-                //     // to allow types compatible with the `false` branch of a conditional to be assignable to it.
-                // }
-                // ```
-                //else if (isRelatedTo(source, falseType)) {
-                //    if (!conditionalTypeReverseInferenceSucceeds(source, target, falseType, definitelyAssignableRelation)) {
-                //        return Ternary.True;
-                //    }
-                //}
+                else if (isRelatedTo(source, falseType)) {
+                    if (!conditionalTypeReverseInferenceSucceeds(source, target, falseType, definitelyAssignableRelation)) {
+                        return Ternary.True;
+                    }
+                }
                 return Ternary.False;
             }
 

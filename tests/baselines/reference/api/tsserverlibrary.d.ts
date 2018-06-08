@@ -2302,6 +2302,7 @@ declare namespace ts {
     interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;
         substitute: Type;
+        negatedTypes?: Type[];
     }
     enum SignatureKind {
         Call = 0,

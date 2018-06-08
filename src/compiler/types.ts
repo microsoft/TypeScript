@@ -4066,6 +4066,7 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;  // Target type variable
         substitute: Type;            // Type to substitute for type parameter
+        negatedTypes?: Type[];       // Types proven that this type variables _doesn't_ extend
     }
 
     export const enum SignatureKind {
