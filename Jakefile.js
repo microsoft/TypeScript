@@ -643,23 +643,19 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), () => {
     const sizeBefore = getDirSize(LKGDirectory);
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
         concat(libraryTargets).
         concat(localizationTargets);
-    var missingFiles = expectedFiles.filter(function (f) {
-        return !fs.existsSync(f);
-    });
+    var missingFiles = expectedFiles.filter(f => !fs.existsSync(f));
     if (missingFiles.length > 0) {
         fail(new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
             ". The following files are missing:\n" + missingFiles.join("\n")));
     }
     // Copy all the targets into the LKG directory
     jake.mkdirP(LKGDirectory);
-    for (i in expectedFiles) {
-        jake.cpR(expectedFiles[i], LKGDirectory);
-    }
+    expectedFiles.forEach(f => jake.cpR(f, LKGDirectory));
 
     const sizeAfter = getDirSize(LKGDirectory);
     if (sizeAfter > (sizeBefore * 1.10)) {
