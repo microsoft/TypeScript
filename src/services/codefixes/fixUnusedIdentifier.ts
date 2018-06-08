@@ -152,6 +152,7 @@ namespace ts.codefix {
         switch (token.kind) {
             case SyntaxKind.Identifier:
                 tryDeleteIdentifier(changes, sourceFile, <Identifier>token, deletedAncestors, checker, isFixAll);
+                deleteAssignments(changes, sourceFile, token as Identifier, checker);
                 break;
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.NamespaceImport:
@@ -161,6 +162,15 @@ namespace ts.codefix {
             default:
                 tryDeleteDefault(changes, sourceFile, token, deletedAncestors);
         }
+    }
+
+    function deleteAssignments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier, checker: TypeChecker) {
+        FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
+            if (ref.parent.kind === SyntaxKind.PropertyAccessExpression) ref = ref.parent;
+            if (ref.parent.kind === SyntaxKind.BinaryExpression && ref.parent.parent.kind === SyntaxKind.ExpressionStatement) {
+                changes.deleteNode(sourceFile, ref.parent.parent);
+            }
+        });
     }
 
     function tryDeleteDefault(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined): void {
