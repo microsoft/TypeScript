@@ -117,12 +117,10 @@ namespace ts.codefix {
         makeStatic: boolean,
         preferences: UserPreferences,
     ): MethodDeclaration {
-        const asterisk = parent.kind === SyntaxKind.YieldExpression ? createToken(SyntaxKind.AsteriskToken) : undefined;
-
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
-            /*asteriskToken*/ asterisk,
+            /*asteriskToken*/ isYieldExpression(parent) ? createToken(SyntaxKind.AsteriskToken) : undefined,
             methodName,
             /*questionToken*/ undefined,
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
