@@ -70,7 +70,9 @@ namespace ts.codefix {
         }
 
 
-        catchBlock = createCatchClause("e", createBlock(createCascadingCatches(retArrayCatch)));
+        let catchParam = retArrayCatch.length > 0 ? retArrayCatch[retArrayCatch.length-1][1] : "e";
+
+        catchBlock = createCatchClause(catchParam, createBlock(createCascadingCatches(retArrayCatch)));
 
         
         /*
@@ -100,7 +102,7 @@ namespace ts.codefix {
         let cascadingCatches = createCascadingCatches(catchArray);
         let catchBlock = createBlock(cascadingCatches);
 
-        return createNodeArray([createTry(createBlock(getSynthesizedDeepClones(catchItem[0])), createCatchClause("e", catchBlock), undefined)]);
+        return createNodeArray([createTry(createBlock(getSynthesizedDeepClones(catchItem[0])), createCatchClause(catchItem[1], catchBlock), undefined)]);
     }
 
 
