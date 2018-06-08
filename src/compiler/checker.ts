@@ -18604,7 +18604,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
-                    forEach(node.arguments, checkExpression); // Still visit arguments so they get marked for visibility, etc
+                    forEach(node.arguments, checkExpresionNoReturn); // Still visit arguments so they get marked for visibility, etc
                     return anySignature;
                 }
                 if (superType !== unknownType) {
@@ -20750,6 +20750,10 @@ namespace ts {
             const type = getTypeOfExpression(node);
             node.contextualType = saveContextualType;
             return type;
+        }
+
+        function checkExpresionNoReturn(node: Expression) {
+            checkExpression(node);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
