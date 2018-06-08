@@ -8,6 +8,19 @@ function tag (str: any, ...args: any[]): string {
 >str : any
 }
 
+const a = tag`123`
+>a : string
+>tag`123` : string
+>tag : (str: any, ...args: any[]) => string
+>`123` : "123"
+
+const b = tag`123 ${100}`
+>b : string
+>tag`123 ${100}` : string
+>tag : (str: any, ...args: any[]) => string
+>`123 ${100}` : string
+>100 : 100
+
 const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
 >x : string
 >tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : string
