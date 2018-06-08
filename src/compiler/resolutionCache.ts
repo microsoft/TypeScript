@@ -352,8 +352,32 @@ namespace ts {
             return endsWith(dirPath, "/node_modules/@types");
         }
 
-        function isDirectoryAtleastAtLevelFromFSRoot(dirPath: Path, minLevels: number) {
-            for (let searchIndex = getRootLength(dirPath); minLevels > 0; minLevels--) {
+        /**
+         * Filter out paths like
+         * "/", "/user", "/user/username", "/user/username/folderAtRoot",
+         * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
+         * @param dirPath
+         */
+        function canWatchDirectory(dirPath: Path) {
+            const rootLength = getRootLength(dirPath);
+            if (dirPath.length === rootLength) {
+                // Ignore "/", "c:/"
+                return false;
+            }
+
+            const nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
+            if (nextDirectorySeparator === -1) {
+                // ignore "/user", "c:/users" or "c:/folderAtRoot"
+                return false;
+            }
+
+            if (dirPath.charCodeAt(0) !== CharacterCodes.slash &&
+                dirPath.substr(rootLength, nextDirectorySeparator).search(/users/i) === -1) {
+                // Paths like c:/folderAtRoot/subFolder are allowed
+                return true;
+            }
+
+            for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
                 searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
                 if (searchIndex === 0) {
                     // Folder isnt at expected minimun levels
@@ -361,15 +385,6 @@ namespace ts {
                 }
             }
             return true;
-        }
-
-        function canWatchDirectory(dirPath: Path) {
-            return isDirectoryAtleastAtLevelFromFSRoot(dirPath,
-                // When root is "/" do not watch directories like:
-                // "/", "/user", "/user/username", "/user/username/folderAtRoot"
-                // When root is "c:/" do not watch directories like:
-                // "c:/", "c:/folderAtRoot"
-                dirPath.charCodeAt(0) === CharacterCodes.slash ? 3 : 1);
         }
 
         function filterFSRootDirectoriesToWatch(watchPath: DirectoryOfFailedLookupWatch, dirPath: Path): DirectoryOfFailedLookupWatch {
