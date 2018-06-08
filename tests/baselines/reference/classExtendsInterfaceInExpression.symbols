@@ -5,7 +5,7 @@ interface A {}
 function factory(a: any): {new(): Object} {
 >factory : Symbol(factory, Decl(classExtendsInterfaceInExpression.ts, 0, 14))
 >a : Symbol(a, Decl(classExtendsInterfaceInExpression.ts, 2, 17))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
   return null;
 }

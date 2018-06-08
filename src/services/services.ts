@@ -426,7 +426,7 @@ namespace ts {
             return !!(this.flags & TypeFlags.UnionOrIntersection);
         }
         isLiteral(): this is LiteralType {
-            return !!(this.flags & TypeFlags.Literal);
+            return !!(this.flags & TypeFlags.StringOrNumberLiteral);
         }
         isStringLiteral(): this is StringLiteralType {
             return !!(this.flags & TypeFlags.StringLiteral);
@@ -551,6 +551,7 @@ namespace ts {
         public moduleName: string;
         public referencedFiles: FileReference[];
         public typeReferenceDirectives: FileReference[];
+        public libReferenceDirectives: FileReference[];
 
         public syntacticDiagnostics: DiagnosticWithLocation[];
         public parseDiagnostics: DiagnosticWithLocation[];
@@ -1415,7 +1416,7 @@ namespace ts {
 
         function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
-            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program);
+            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -1466,7 +1467,7 @@ namespace ts {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
-            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+            const node = getTouchingPropertyName(sourceFile, position);
             if (node === sourceFile) {
                 // Avoid giving quickInfo for the sourceFile as a whole.
                 return undefined;
@@ -1735,17 +1736,9 @@ namespace ts {
             synchronizeHostData();
 
             // Exclude default library when renaming as commonly user don't want to change that file.
-            let sourceFiles: SourceFile[] = [];
-            if (options && options.isForRename) {
-                for (const sourceFile of program.getSourceFiles()) {
-                    if (!program.isSourceFileDefaultLibrary(sourceFile)) {
-                        sourceFiles.push(sourceFile);
-                    }
-                }
-            }
-            else {
-                sourceFiles = program.getSourceFiles().slice();
-            }
+            const sourceFiles = options && options.isForRename
+                ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
+                : program.getSourceFiles();
 
             return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
         }
@@ -1788,15 +1781,11 @@ namespace ts {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
-        function getSourceFile(fileName: string): SourceFile {
-            return getNonBoundSourceFile(fileName);
-        }
-
         function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
-            const node = getTouchingPropertyName(sourceFile, startPos, /*includeJsDocComment*/ false);
+            const node = getTouchingPropertyName(sourceFile, startPos);
 
             if (node === sourceFile) {
                 return undefined;
@@ -1993,8 +1982,8 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
-        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
-            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions));
+        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<FileTextChanges> {
+            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2057,6 +2046,17 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const token = findPrecedingToken(position, sourceFile);
+            if (!token) return undefined;
+            const element = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent) ? token.parent.parent
+                : isJsxText(token) ? token.parent : undefined;
+            if (element && !tagNamesAreEquivalent(element.openingElement.tagName, element.closingElement.tagName)) {
+                return { newText: `</${element.openingElement.tagName.getText(sourceFile)}>` };
+            }
         }
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {
@@ -2291,6 +2291,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getJsxClosingTagAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
             getCombinedCodeFix,
@@ -2299,7 +2300,6 @@ namespace ts {
             getEditsForFileRename,
             getEmitOutput,
             getNonBoundSourceFile,
-            getSourceFile,
             getProgram,
             getApplicableRefactors,
             getEditsForRefactor,

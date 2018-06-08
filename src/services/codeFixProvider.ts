@@ -86,8 +86,8 @@ namespace ts {
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        function eachDiagnostic({ program, sourceFile }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void {
-            for (const diag of program.getSemanticDiagnostics(sourceFile).concat(computeSuggestionDiagnostics(sourceFile, program))) {
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void {
+            for (const diag of program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken))) {
                 if (contains(errorCodes, diag.code)) {
                     cb(diag as DiagnosticWithLocation);
                 }

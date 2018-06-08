@@ -241,6 +241,7 @@ namespace ts {
         TypeKeyword,
         UndefinedKeyword,
         UniqueKeyword,
+        UnknownKeyword,
         FromKeyword,
         GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
@@ -1068,6 +1069,7 @@ namespace ts {
 
     export interface KeywordTypeNode extends TypeNode {
         kind: SyntaxKind.AnyKeyword
+            | SyntaxKind.UnknownKeyword
             | SyntaxKind.NumberKeyword
             | SyntaxKind.ObjectKeyword
             | SyntaxKind.BooleanKeyword
@@ -1096,11 +1098,16 @@ namespace ts {
 
     export type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
 
-    export interface FunctionTypeNode extends TypeNode, SignatureDeclarationBase {
+    export interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDeclarationBase {
+        kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
+        type: TypeNode;
+    }
+
+    export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
         kind: SyntaxKind.FunctionType;
     }
 
-    export interface ConstructorTypeNode extends TypeNode, SignatureDeclarationBase {
+    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
         kind: SyntaxKind.ConstructorType;
     }
 
@@ -2563,6 +2570,7 @@ namespace ts {
         moduleName?: string;
         referencedFiles: ReadonlyArray<FileReference>;
         typeReferenceDirectives: ReadonlyArray<FileReference>;
+        libReferenceDirectives: ReadonlyArray<FileReference>;
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
 
@@ -2753,6 +2761,7 @@ namespace ts {
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        /* @internal */ getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
 
         /**
          * Gets a type checker that can be used to semantically analyze source files in the program.
@@ -2782,6 +2791,7 @@ namespace ts {
         /* @internal */ structureIsReused?: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+        /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         /** Given a source file, get the name of the package it was imported from. */
         /* @internal */ sourceFileToPackageName: Map<string>;
@@ -3006,6 +3016,8 @@ namespace ts {
         /* @internal */ getStringType(): Type;
         /* @internal */ getNumberType(): Type;
         /* @internal */ getBooleanType(): Type;
+        /* @internal */ getFalseType(): Type;
+        /* @internal */ getTrueType(): Type;
         /* @internal */ getVoidType(): Type;
         /* @internal */ getUndefinedType(): Type;
         /* @internal */ getNullType(): Type;
@@ -3074,7 +3086,7 @@ namespace ts {
          * Does *not* get *all* suggestion diagnostics, just the ones that were convenient to report in the checker.
          * Others are added in computeSuggestionDiagnostics.
          */
-        /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<DiagnosticWithLocation>;
+        /* @internal */ getSuggestionDiagnostics(file: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
 
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
@@ -3665,42 +3677,43 @@ namespace ts {
 
     export const enum TypeFlags {
         Any                     = 1 << 0,
-        String                  = 1 << 1,
-        Number                  = 1 << 2,
-        Boolean                 = 1 << 3,
-        Enum                    = 1 << 4,
-        StringLiteral           = 1 << 5,
-        NumberLiteral           = 1 << 6,
-        BooleanLiteral          = 1 << 7,
-        EnumLiteral             = 1 << 8,   // Always combined with StringLiteral, NumberLiteral, or Union
-        ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
-        UniqueESSymbol          = 1 << 10,  // unique symbol
-        Void                    = 1 << 11,
-        Undefined               = 1 << 12,
-        Null                    = 1 << 13,
-        Never                   = 1 << 14,  // Never type
-        TypeParameter           = 1 << 15,  // Type parameter
-        Object                  = 1 << 16,  // Object type
-        Union                   = 1 << 17,  // Union (T | U)
-        Intersection            = 1 << 18,  // Intersection (T & U)
-        Index                   = 1 << 19,  // keyof T
-        IndexedAccess           = 1 << 20,  // T[K]
-        Conditional             = 1 << 21,  // T extends U ? X : Y
-        Substitution            = 1 << 22,  // Type parameter substitution
+        Unknown                 = 1 << 1,
+        String                  = 1 << 2,
+        Number                  = 1 << 3,
+        Boolean                 = 1 << 4,
+        Enum                    = 1 << 5,
+        StringLiteral           = 1 << 6,
+        NumberLiteral           = 1 << 7,
+        BooleanLiteral          = 1 << 8,
+        EnumLiteral             = 1 << 9,   // Always combined with StringLiteral, NumberLiteral, or Union
+        ESSymbol                = 1 << 10,  // Type of symbol primitive introduced in ES6
+        UniqueESSymbol          = 1 << 11,  // unique symbol
+        Void                    = 1 << 12,
+        Undefined               = 1 << 13,
+        Null                    = 1 << 14,
+        Never                   = 1 << 15,  // Never type
+        TypeParameter           = 1 << 16,  // Type parameter
+        Object                  = 1 << 17,  // Object type
+        Union                   = 1 << 18,  // Union (T | U)
+        Intersection            = 1 << 19,  // Intersection (T & U)
+        Index                   = 1 << 20,  // keyof T
+        IndexedAccess           = 1 << 21,  // T[K]
+        Conditional             = 1 << 22,  // T extends U ? X : Y
+        Substitution            = 1 << 23,  // Type parameter substitution
+        NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
-        FreshLiteral            = 1 << 23,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 25,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
+        UnionOfUnitTypes        = 1 << 26,  // Type is union of unit types
         /* @internal */
-        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
+        ContainsWideningType    = 1 << 27,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 27,  // intrinsic object type
+        ContainsObjectLiteral   = 1 << 28,  // Type is or contains object literal type
         /* @internal */
-        UnionOfUnitTypes        = 1 << 28,  // Type is union of unit types
-        /* @internal */
-        GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
+        ContainsAnyFunctionType = 1 << 29,  // Type is or contains the anyFunctionType
 
+        /* @internal */
+        AnyOrUnknown = Any | Unknown,
         /* @internal */
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral,
@@ -3712,7 +3725,7 @@ namespace ts {
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
+        Intrinsic = Any | Unknown | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
         StringLike = String | StringLiteral,
@@ -3733,8 +3746,8 @@ namespace ts {
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
-        NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
+        Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
+        NotUnionOrUnit = Any | Unknown | ESSymbol | Object | NonPrimitive,
         /* @internal */
         NotUnit = Any | String | Number | Boolean | Enum | ESSymbol | Void | Never | StructuredOrInstantiable,
         /* @internal */
@@ -3749,7 +3762,10 @@ namespace ts {
         /* @internal */
         EmptyObject = ContainsAnyFunctionType,
         /* @internal */
-        ConstructionFlags = NonWideningType | Wildcard | EmptyObject
+        ConstructionFlags = NonWideningType | Wildcard | EmptyObject,
+        // The following flag is used for different purposes by maybeTypeOfKind
+        /* @internal */
+        GenericMappedType = ContainsWideningType
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -5012,8 +5028,9 @@ namespace ts {
     }
 
     /* @internal */
-    export interface EmitHost extends ScriptReferenceHost {
+    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        getCurrentDirectory(): string;
 
         /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
@@ -5275,11 +5292,15 @@ namespace ts {
         isAtStartOfLine(): boolean;
     }
 
-    /* @internal */
-    export interface ModuleNameResolverHost {
-        getCanonicalFileName(f: string): string;
-        getCommonSourceDirectory(): string;
-        getCurrentDirectory(): string;
+    export interface GetEffectiveTypeRootsHost {
+        directoryExists?(directoryName: string): boolean;
+        getCurrentDirectory?(): string;
+    }
+    /** @internal */
+    export interface ModuleSpecifierResolutionHost extends GetEffectiveTypeRootsHost {
+        useCaseSensitiveFileNames?(): boolean;
+        fileExists?(path: string): boolean;
+        readFile?(path: string): string | undefined;
     }
 
     /** @deprecated See comment on SymbolWriter */
@@ -5293,7 +5314,7 @@ namespace ts {
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
         /* @internal */
-        moduleResolverHost?: ModuleNameResolverHost;
+        moduleResolverHost?: ModuleSpecifierResolutionHost;
         /* @internal */
         trackReferencedAmbientModule?(decl: ModuleDeclaration): void;
     }
@@ -5447,8 +5468,12 @@ namespace ts {
     }
 
     /* @internal */
-    export interface PragmaDefinition<T1 extends string = string, T2 extends string = string, T3 extends string = string> {
-        args?: [PragmaArgumentSpecification<T1>] | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>] | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>];
+    export interface PragmaDefinition<T1 extends string = string, T2 extends string = string, T3 extends string = string, T4 extends string = string> {
+        args?:
+            | [PragmaArgumentSpecification<T1>]
+            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>]
+            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>]
+            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>, PragmaArgumentSpecification<T4>];
         // If not present, defaults to PragmaKindFlags.Default
         kind?: PragmaKindFlags;
     }
@@ -5457,7 +5482,7 @@ namespace ts {
      * This function only exists to cause exact types to be inferred for all the literals within `commentPragmas`
      */
     /* @internal */
-    function _contextuallyTypePragmas<T extends {[name: string]: PragmaDefinition<K1, K2, K3>}, K1 extends string, K2 extends string, K3 extends string>(args: T): T {
+    function _contextuallyTypePragmas<T extends {[name: string]: PragmaDefinition<K1, K2, K3, K4>}, K1 extends string, K2 extends string, K3 extends string, K4 extends string>(args: T): T {
         return args;
     }
 
@@ -5468,6 +5493,7 @@ namespace ts {
         "reference": {
             args: [
                 { name: "types", optional: true, captureSpan: true },
+                { name: "lib", optional: true, captureSpan: true },
                 { name: "path", optional: true, captureSpan: true },
                 { name: "no-default-lib", optional: true }
             ],
@@ -5508,13 +5534,15 @@ namespace ts {
      */
     /* @internal */
     type PragmaArgumentType<T extends PragmaDefinition> =
-        T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>] }
-        ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3>
-        : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>] }
-            ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2>
-            : T extends { args: [PragmaArgumentSpecification<infer TName>] }
-                ? PragmaArgTypeOptional<T["args"][0], TName>
-                : object;
+        T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>, PragmaArgumentSpecification<infer TName4>] }
+            ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3> & PragmaArgTypeOptional<T["args"][2], TName4>
+            : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>] }
+                ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3>
+                : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>] }
+                    ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2>
+                    : T extends { args: [PragmaArgumentSpecification<infer TName>] }
+                        ? PragmaArgTypeOptional<T["args"][0], TName>
+                        : object;
     // The above fallback to `object` when there's no args to allow `{}` (as intended), but not the number 2, for example
     // TODO: Swap to `undefined` for a cleaner API once strictNullChecks is enabled
 

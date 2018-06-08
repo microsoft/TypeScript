@@ -11,7 +11,7 @@ var i: I;
 
 var o: Object;
 >o : Symbol(o, Decl(parserAutomaticSemicolonInsertion1.ts, 5, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 o = i;
 >o : Symbol(o, Decl(parserAutomaticSemicolonInsertion1.ts, 5, 3))

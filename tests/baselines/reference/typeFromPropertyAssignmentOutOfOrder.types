@@ -1,30 +1,30 @@
 === tests/cases/conformance/salsa/index.js ===
-Common.Item = class I {}
->Common.Item = class I {} : typeof I
->Common.Item : typeof I
->Common : typeof Common
+First.Item = class I {}
+>First.Item = class I {} : typeof I
+>First.Item : typeof I
+>First : { [x: string]: any; Item: typeof I; }
 >Item : typeof I
 >class I {} : typeof I
 >I : typeof I
 
-Common.Object = class extends Common.Item {}
->Common.Object = class extends Common.Item {} : typeof Object
+Common.Object = class extends First.Item {}
+>Common.Object = class extends First.Item {} : typeof Object
 >Common.Object : typeof Object
->Common : typeof Common
+>Common : { [x: string]: any; Object: typeof Object; }
 >Object : typeof Object
->class extends Common.Item {} : typeof Object
->Common.Item : I
->Common : typeof Common
+>class extends First.Item {} : typeof Object
+>First.Item : I
+>First : { [x: string]: any; Item: typeof I; }
 >Item : typeof I
 
 Workspace.Object = class extends Common.Object {}
 >Workspace.Object = class extends Common.Object {} : typeof Object
 >Workspace.Object : typeof Object
->Workspace : typeof Workspace
+>Workspace : { [x: string]: any; Object: typeof Object; }
 >Object : typeof Object
 >class extends Common.Object {} : typeof Object
 >Common.Object : Object
->Common : typeof Common
+>Common : { [x: string]: any; Object: typeof Object; }
 >Object : typeof Object
 
 /** @type {Workspace.Object} */
@@ -32,11 +32,15 @@ var am;
 >am : Object
 
 === tests/cases/conformance/salsa/roots.js ===
+var First = {};
+>First : { [x: string]: any; Item: typeof I; }
+>{} : { [x: string]: any; Item: typeof I; }
+
 var Common = {};
->Common : typeof Common
->{} : { [x: string]: any; Item: typeof I; Object: typeof Object; }
+>Common : { [x: string]: any; Object: typeof Object; }
+>{} : { [x: string]: any; Object: typeof Object; }
 
 var Workspace = {};
->Workspace : typeof Workspace
+>Workspace : { [x: string]: any; Object: typeof Object; }
 >{} : { [x: string]: any; Object: typeof Object; }
 

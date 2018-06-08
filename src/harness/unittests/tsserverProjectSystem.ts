@@ -19,6 +19,7 @@ namespace ts.projectSystem {
     export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
     export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     import safeList = TestFSWithWatch.safeList;
+    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
     export const customTypesMap = {
         path: <Path>"/typesMap.json",
@@ -465,7 +466,7 @@ namespace ts.projectSystem {
         return newRequest;
     }
 
-    export function openFilesForSession(files: File[], session: server.Session) {
+    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session) {
         for (const file of files) {
             const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
@@ -6191,6 +6192,69 @@ namespace ts.projectSystem {
                 renameLocation: { line: 2, offset: 3 },
             });
         });
+
+        it("handles text changes in tsconfig.json", () => {
+            const aTs = {
+                path: "/a.ts",
+                content: "export const a = 0;",
+            };
+            const tsconfig = {
+                path: "/tsconfig.json",
+                content: '{ "files": ["./a.ts"] }',
+            };
+
+            const session = createSession(createServerHost([aTs, tsconfig]));
+            openFilesForSession([aTs], session);
+
+            const response1 = session.executeCommandSeq<server.protocol.GetEditsForRefactorRequest>({
+                command: server.protocol.CommandTypes.GetEditsForRefactor,
+                arguments: {
+                    refactor: "Move to a new file",
+                    action: "Move to a new file",
+                    file: "/a.ts",
+                    startLine: 1,
+                    startOffset: 1,
+                    endLine: 1,
+                    endOffset: 20,
+                },
+            }).response;
+            assert.deepEqual(response1, {
+                edits: [
+                    {
+                        fileName: "/a.ts",
+                        textChanges: [
+                            {
+                                start: { line: 1, offset: 1 },
+                                end: { line: 1, offset: 20 },
+                                newText: "",
+                            },
+                        ],
+                    },
+                    {
+                        fileName: "/tsconfig.json",
+                        textChanges: [
+                            {
+                                start: { line: 1, offset: 21 },
+                                end: { line: 1, offset: 21 },
+                                newText: ", \"./a.1.ts\"",
+                            },
+                        ],
+                    },
+                    {
+                        fileName: "/a.1.ts",
+                        textChanges: [
+                            {
+                              start: { line: 0, offset: 0 },
+                              end: { line: 0, offset: 0 },
+                              newText: "export const a = 0;",
+                            },
+                        ],
+                    }
+                ],
+                renameFilename: undefined,
+                renameLocation: undefined,
+            });
+        });
     });
 
     describe("tsserverProjectSystem CachingFileSystemInformation", () => {
@@ -6259,7 +6323,7 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: ReadonlyArray<string>, nTimes: number) {
-                TestFSWithWatch.checkMultiMapEachKeyWithCount(callback, calledMaps[callback], expectedKeys, nTimes);
+                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {
@@ -7500,8 +7564,8 @@ namespace ts.projectSystem {
     });
 
     describe("tsserverProjectSystem Watched recursive directories with windows style file system", () => {
-        function verifyWatchedDirectories(useProjectAtRoot: boolean) {
-            const root = useProjectAtRoot ? "c:/" : "c:/myfolder/allproject/";
+        function verifyWatchedDirectories(rootedPath: string, useProjectAtRoot: boolean) {
+            const root = useProjectAtRoot ? rootedPath : `${rootedPath}myfolder/allproject/`;
             const configFile: File = {
                 path: root + "project/tsconfig.json",
                 content: "{}"
@@ -7530,12 +7594,22 @@ namespace ts.projectSystem {
             ].concat(useProjectAtRoot ? [] : [root + nodeModulesAtTypes]), /*recursive*/ true);
         }
 
-        it("When project is in rootFolder", () => {
-            verifyWatchedDirectories(/*useProjectAtRoot*/ true);
+        function verifyRootedDirectoryWatch(rootedPath: string) {
+            it("When project is in rootFolder of style c:/", () => {
+                verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ true);
+            });
+
+            it("When files at some folder other than root", () => {
+                verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ false);
+            });
+        }
+
+        describe("for rootFolder of style c:/", () => {
+            verifyRootedDirectoryWatch("c:/");
         });
 
-        it("When files at some folder other than root", () => {
-            verifyWatchedDirectories(/*useProjectAtRoot*/ false);
+        describe("for rootFolder of style c:/users/username", () => {
+            verifyRootedDirectoryWatch("c:/users/username/");
         });
     });
 
@@ -7813,14 +7887,10 @@ new C();`
                 checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
-            function createSingleWatchMap(paths: string[]) {
-                return arrayToMap(paths, p => p, () => 1);
-            }
-
             function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], directories: string[]) {
-                checkWatchedFilesDetailed(host, createSingleWatchMap(files.filter(f => f !== recognizersDateTimeSrcFile.path)));
+                checkWatchedFilesDetailed(host, files.filter(f => f !== recognizersDateTimeSrcFile.path), 1);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, createSingleWatchMap(directories), /*recursive*/ true);
+                checkWatchedDirectoriesDetailed(host, directories, 1, /*recursive*/ true);
             }
 
             function createSessionAndOpenFile(host: TestServerHost) {
@@ -7842,7 +7912,7 @@ new C();`
                     const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
                     const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, withPathMapping ? packages : recognizersDateTime, ...getTypeRootsFromLocation(recognizersDateTime)];
-                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...(withPathMapping ? [recognizersText] : emptyArray), ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
                         const projectService = session.getProjectService();
@@ -8314,8 +8384,8 @@ new C();`
         });
     });
 
-    describe("watchDirectories implementation", () => {
-        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
+    describe("tsserverProjectSystem watchDirectories implementation", () => {
+        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
@@ -8336,9 +8406,9 @@ new C();`
             // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
             const expectedWatchedFiles = arrayToMap(fileNames.slice(1), s => s, () => 1);
             const expectedWatchedDirectories = createMap<number>();
-            const mapOfDirectories = tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
+            const mapOfDirectories = tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
                 expectedWatchedDirectories :
-                tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.WatchFile ?
+                tscWatchDirectory === Tsc_WatchDirectory.WatchFile ?
                     expectedWatchedFiles :
                     createMap();
             // For failed resolution lookup and tsconfig files
@@ -8385,15 +8455,15 @@ new C();`
         }
 
         it("uses watchFile when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.WatchFile);
+            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.WatchFile);
         });
 
         it("uses non recursive watchDirectory when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.NonRecursiveWatchDirectory);
         });
 
         it("uses dynamic polling when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
+            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.DynamicPolling);
         });
     });
 
@@ -8403,15 +8473,23 @@ new C();`
                 path: "/user.ts",
                 content: 'import { x } from "./old";',
             };
+            const newTs: File = {
+                path: "/new.ts",
+                content: "export const x = 0;",
+            };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: "{}",
+            };
 
-            const host = createServerHost([userTs]);
+            const host = createServerHost([userTs, newTs, tsconfig]);
             const projectService = createProjectService(host);
             projectService.openClientFile(userTs.path);
-            const project = first(projectService.inferredProjects);
+            const project = projectService.configuredProjects.get(tsconfig.path)!;
 
             Debug.assert(!!project.resolveModuleNames);
 
-            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions);
+            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions, defaultPreferences);
             assert.deepEqual<ReadonlyArray<FileTextChanges>>(edits, [{
                 fileName: "/user.ts",
                 textChanges: [{
@@ -8422,7 +8500,7 @@ new C();`
         });
     });
 
-    describe("document registry in project service", () => {
+    describe("tsserverProjectSystem document registry in project service", () => {
         const projectRootPath = "/user/username/projects/project";
         const importModuleContent = `import {a} from "./module1"`;
         const file: File = {

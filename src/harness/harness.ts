@@ -1270,7 +1270,7 @@ namespace Harness {
                         throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                     }
                 }
-                else if (result.dts.size !== result.js.size) {
+                else if (result.dts.size !== result.getNumberOfJsFiles()) {
                     throw new Error("There were no errors and declFiles generated did not match number of js files generated");
                 }
             }
@@ -1469,7 +1469,14 @@ namespace Harness {
 
                 // Verify we didn't miss any errors in this file
                 assert.equal(markedErrorCount, fileErrors.length, "count of errors in " + inputFile.unitName);
+                const isDupe = dupeCase.has(sanitizeTestFilePath(inputFile.unitName));
                 yield [checkDuplicatedFileName(inputFile.unitName, dupeCase), outputLines, errorsReported];
+                if (isDupe && !(options && options.caseSensitive)) {
+                    // Case-duplicated files on a case-insensitive build will have errors reported in both the dupe and the original
+                    // thanks to the canse-insensitive path comparison on the error file path - We only want to count those errors once
+                    // for the assert below, so we subtract them here.
+                    totalErrorsReportedInNonLibraryFiles -= errorsReported;
+                }
                 outputLines = "";
                 errorsReported = 0;
             }
@@ -1638,7 +1645,7 @@ namespace Harness {
                 return;
             }
             else if (options.sourceMap || declMaps) {
-                if (result.maps.size !== (result.js.size * (declMaps && options.sourceMap ? 2 : 1))) {
+                if (result.maps.size !== (result.getNumberOfJsFiles() * (declMaps && options.sourceMap ? 2 : 1))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 

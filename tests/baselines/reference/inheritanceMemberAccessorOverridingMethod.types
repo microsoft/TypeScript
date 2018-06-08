@@ -15,14 +15,15 @@ class b extends a {
 >a : a
 
     get x() {
->x : string
+>x : () => string
 
-        return "20";
+        return () => "20";
+>() => "20" : () => string
 >"20" : "20"
     }
-    set x(aValue: string) {
->x : string
->aValue : string
-
+    set x(aValue) {
+>x : () => string
+>aValue : () => string
+        
     }
 }

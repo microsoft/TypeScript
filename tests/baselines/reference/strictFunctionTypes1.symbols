@@ -59,7 +59,7 @@ declare function f4<T>(f1: Func<T>, f2: Func<T>): Func<T>;
 declare function fo(x: Object): void;
 >fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
 >x : Symbol(x, Decl(strictFunctionTypes1.ts, 8, 20))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare function fs(x: string): void;
 >fs : Symbol(fs, Decl(strictFunctionTypes1.ts, 8, 37))
@@ -117,7 +117,7 @@ declare function foo<T>(a: ReadonlyArray<T>): T;
 >foo : Symbol(foo, Decl(strictFunctionTypes1.ts, 20, 30))
 >T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
 >a : Symbol(a, Decl(strictFunctionTypes1.ts, 24, 24))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
 >T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
 

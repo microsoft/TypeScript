@@ -818,6 +818,13 @@ namespace ts.server {
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSuggestionDiagnostics(file), !!args.includeLinePosition);
         }
 
+        private getJsxClosingTag(args: protocol.JsxClosingTagRequestArgs): TextInsertion | undefined {
+            const { file, project } = this.getFileAndProject(args);
+            const position = this.getPositionInFile(args, file);
+            const tag = project.getLanguageService().getJsxClosingTagAtPosition(file, position);
+            return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
+        }
+
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DocumentHighlightsItem> | ReadonlyArray<DocumentHighlights> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
@@ -1025,13 +1032,10 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
             if (simplifiedResult) {
                 const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
-                if (!nameInfo) {
-                    return undefined;
-                }
-                const displayString = displayPartsToString(nameInfo.displayParts);
-                const nameSpan = nameInfo.textSpan;
-                const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
-                const nameText = scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan));
+                const displayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
+                const nameSpan = nameInfo && nameInfo.textSpan;
+                const nameColStart = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
+                const nameText = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
                 const refs = combineProjectOutput<NormalizedPath, protocol.ReferencesResponseItem>(
                     file,
                     path => this.projectService.getScriptInfoForPath(path)!.fileName,
@@ -1503,6 +1507,7 @@ namespace ts.server {
                 kind: tree.kind,
                 kindModifiers: tree.kindModifiers,
                 spans: tree.spans.map(span => this.toLocationTextSpan(span, scriptInfo)),
+                nameSpan: tree.nameSpan && this.toLocationTextSpan(tree.nameSpan, scriptInfo),
                 childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
             };
         }
@@ -1695,7 +1700,7 @@ namespace ts.server {
 
         private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
             const { file, project } = this.getFileAndProject(args);
-            const changes = project.getLanguageService().getEditsForFileRename(args.oldFilePath, args.newFilePath, this.getFormatOptions(file));
+            const changes = project.getLanguageService().getEditsForFileRename(args.oldFilePath, args.newFilePath, this.getFormatOptions(file), this.getPreferences(file));
             return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
         }
 
@@ -1766,20 +1771,10 @@ namespace ts.server {
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
-            return textChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))!));
-        }
-
-        private mapTextChangesToCodeEditsUsingScriptinfo(textChanges: FileTextChanges, scriptInfo: ScriptInfo | undefined): protocol.FileCodeEdits {
-            Debug.assert(!!textChanges.isNewFile === !scriptInfo);
-            if (scriptInfo) {
-                return {
-                    fileName: textChanges.fileName,
-                    textChanges: textChanges.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
-                };
-            }
-            else {
-                return this.convertNewFileTextChangeToCodeEdit(textChanges);
-            }
+            return textChanges.map(change => {
+                const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
+                return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
+            });
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
@@ -1788,13 +1783,6 @@ namespace ts.server {
                 end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
                 newText: change.newText ? change.newText : ""
             };
-        }
-
-        private convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): protocol.FileCodeEdits {
-            Debug.assert(textChanges.textChanges.length === 1);
-            const change = first(textChanges.textChanges);
-            Debug.assert(change.span.start === 0 && change.span.length === 0);
-            return { fileName: textChanges.fileName, textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: change.newText }] };
         }
 
         private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] | undefined {
@@ -2133,6 +2121,9 @@ namespace ts.server {
                 this.projectService.reloadProjects();
                 return this.notRequired();
             },
+            [CommandNames.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
+                return this.requiredResponse(this.getJsxClosingTag(request.arguments));
+            },
             [CommandNames.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
             },
@@ -2270,6 +2261,34 @@ namespace ts.server {
         private getPreferences(file: NormalizedPath): UserPreferences {
             return this.projectService.getPreferences(file);
         }
+    }
+
+    function mapTextChangesToCodeEdits(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
+        Debug.assert(!!textChanges.isNewFile === !sourceFile);
+        if (sourceFile) {
+            return {
+                fileName: textChanges.fileName,
+                textChanges: textChanges.textChanges.map(textChange => convertTextChangeToCodeEdit(textChange, sourceFile)),
+            };
+        }
+        else {
+            return convertNewFileTextChangeToCodeEdit(textChanges);
+        }
+    }
+
+    function convertTextChangeToCodeEdit(change: TextChange, sourceFile: SourceFile): protocol.CodeEdit {
+        return {
+            start: convertToLocation(sourceFile.getLineAndCharacterOfPosition(change.span.start)),
+            end: convertToLocation(sourceFile.getLineAndCharacterOfPosition(change.span.start + change.span.length)),
+            newText: change.newText ? change.newText : "",
+        };
+    }
+
+    function convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): protocol.FileCodeEdits {
+        Debug.assert(textChanges.textChanges.length === 1);
+        const change = first(textChanges.textChanges);
+        Debug.assert(change.span.start === 0 && change.span.length === 0);
+        return { fileName: textChanges.fileName, textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: change.newText }] };
     }
 
     export interface HandlerResponse {

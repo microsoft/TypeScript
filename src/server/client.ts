@@ -451,6 +451,7 @@ namespace ts.server {
                 kind: tree.kind,
                 kindModifiers: tree.kindModifiers,
                 spans: tree.spans.map(span => this.decodeSpan(span, fileName, lineMap)),
+                nameSpan: tree.nameSpan && this.decodeSpan(tree.nameSpan, fileName, lineMap),
                 childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap))
             };
         }
@@ -549,6 +550,10 @@ namespace ts.server {
         }
 
         isValidBraceCompletionAtPosition(_fileName: string, _position: number, _openingBrace: number): boolean {
+            return notImplemented();
+        }
+
+        getJsxClosingTagAtPosition(_fileName: string, _position: number): never {
             return notImplemented();
         }
 

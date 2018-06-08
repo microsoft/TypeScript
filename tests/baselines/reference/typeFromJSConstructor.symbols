@@ -28,7 +28,7 @@ function Installer () {
 Installer.prototype.first = function () {
 >Installer.prototype : Symbol(Installer.first, Decl(a.js, 11, 1))
 >Installer : Symbol(Installer, Decl(a.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >first : Symbol(Installer.first, Decl(a.js, 11, 1))
 
     this.arg = 'hi' // error
@@ -60,7 +60,7 @@ Installer.prototype.first = function () {
 Installer.prototype.second = function () {
 >Installer.prototype : Symbol(Installer.second, Decl(a.js, 18, 1))
 >Installer : Symbol(Installer, Decl(a.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >second : Symbol(Installer.second, Decl(a.js, 18, 1))
 
     this.arg = false // error
@@ -89,11 +89,11 @@ Installer.prototype.second = function () {
 >twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
 
     this.twices.push(1) // error: Object is possibly null
->this.twices.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>this.twices.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
 >this : Symbol(Installer, Decl(a.js, 0, 0))
 >twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     if (this.twices != null) {
 >this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
@@ -101,11 +101,11 @@ Installer.prototype.second = function () {
 >twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
 
         this.twices.push('hi')
->this.twices.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>this.twices.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
 >this : Symbol(Installer, Decl(a.js, 0, 0))
 >twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
     }
 }
 

@@ -60,15 +60,12 @@ namespace ts {
         watcher: FileWatcher;
         /** ref count keeping this directory watch alive */
         refCount: number;
-        /** map of refcount for the subDirectory */
-        subDirectoryMap?: Map<number>;
     }
 
     interface DirectoryOfFailedLookupWatch {
         dir: string;
         dirPath: Path;
         ignore?: true;
-        subDirectory?: Path;
     }
 
     export const maxNumberOfFilesToIterateForInvalidation = 256;
@@ -352,8 +349,32 @@ namespace ts {
             return endsWith(dirPath, "/node_modules/@types");
         }
 
-        function isDirectoryAtleastAtLevelFromFSRoot(dirPath: Path, minLevels: number) {
-            for (let searchIndex = getRootLength(dirPath); minLevels > 0; minLevels--) {
+        /**
+         * Filter out paths like
+         * "/", "/user", "/user/username", "/user/username/folderAtRoot",
+         * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
+         * @param dirPath
+         */
+        function canWatchDirectory(dirPath: Path) {
+            const rootLength = getRootLength(dirPath);
+            if (dirPath.length === rootLength) {
+                // Ignore "/", "c:/"
+                return false;
+            }
+
+            const nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
+            if (nextDirectorySeparator === -1) {
+                // ignore "/user", "c:/users" or "c:/folderAtRoot"
+                return false;
+            }
+
+            if (dirPath.charCodeAt(0) !== CharacterCodes.slash &&
+                dirPath.substr(rootLength, nextDirectorySeparator).search(/users/i) === -1) {
+                // Paths like c:/folderAtRoot/subFolder are allowed
+                return true;
+            }
+
+            for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
                 searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
                 if (searchIndex === 0) {
                     // Folder isnt at expected minimun levels
@@ -361,15 +382,6 @@ namespace ts {
                 }
             }
             return true;
-        }
-
-        function canWatchDirectory(dirPath: Path) {
-            return isDirectoryAtleastAtLevelFromFSRoot(dirPath,
-                // When root is "/" do not watch directories like:
-                // "/", "/user", "/user/username", "/user/username/folderAtRoot"
-                // When root is "c:/" do not watch directories like:
-                // "c:/", "c:/folderAtRoot"
-                dirPath.charCodeAt(0) === CharacterCodes.slash ? 3 : 1);
         }
 
         function filterFSRootDirectoriesToWatch(watchPath: DirectoryOfFailedLookupWatch, dirPath: Path): DirectoryOfFailedLookupWatch {
@@ -403,20 +415,21 @@ namespace ts {
             }
 
             // Use some ancestor of the root directory
-            let subDirectory: Path | undefined;
+            let subDirectoryPath: Path | undefined, subDirectory: string | undefined;
             if (rootPath !== undefined) {
                 while (!isInDirectoryPath(dirPath, rootPath)) {
                     const parentPath = getDirectoryPath(dirPath);
                     if (parentPath === dirPath) {
                         break;
                     }
-                    subDirectory = dirPath.slice(parentPath.length + directorySeparator.length) as Path;
+                    subDirectoryPath = dirPath;
+                    subDirectory = dir;
                     dirPath = parentPath;
                     dir = getDirectoryPath(dir);
                 }
             }
 
-            return filterFSRootDirectoriesToWatch({ dir, dirPath, subDirectory }, dirPath);
+            return filterFSRootDirectoriesToWatch({ dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath }, dirPath);
         }
 
         function isPathWithDefaultFailedLookupExtension(path: Path) {
@@ -439,7 +452,7 @@ namespace ts {
             let setAtRoot = false;
             for (const failedLookupLocation of failedLookupLocations) {
                 const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
-                const { dir, dirPath, ignore , subDirectory } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                const { dir, dirPath, ignore } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
                 if (!ignore) {
                     // If the failed lookup location path is not one of the supported extensions,
                     // store it in the custom path
@@ -451,7 +464,7 @@ namespace ts {
                         setAtRoot = true;
                     }
                     else {
-                        setDirectoryWatcher(dir, dirPath, subDirectory);
+                        setDirectoryWatcher(dir, dirPath);
                     }
                 }
             }
@@ -461,20 +474,13 @@ namespace ts {
             }
         }
 
-        function setDirectoryWatcher(dir: string, dirPath: Path, subDirectory?: Path) {
-            let dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
+        function setDirectoryWatcher(dir: string, dirPath: Path) {
+            const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
             if (dirWatcher) {
                 dirWatcher.refCount++;
             }
             else {
-                dirWatcher = { watcher: createDirectoryWatcher(dir, dirPath), refCount: 1 };
-                directoryWatchesOfFailedLookups.set(dirPath, dirWatcher);
-            }
-
-            if (subDirectory) {
-                const subDirectoryMap = dirWatcher.subDirectoryMap || (dirWatcher.subDirectoryMap = createMap());
-                const existing = subDirectoryMap.get(subDirectory) || 0;
-                subDirectoryMap.set(subDirectory, existing + 1);
+                directoryWatchesOfFailedLookups.set(dirPath, { watcher: createDirectoryWatcher(dir, dirPath), refCount: 1 });
             }
         }
 
@@ -492,7 +498,7 @@ namespace ts {
             let removeAtRoot = false;
             for (const failedLookupLocation of failedLookupLocations) {
                 const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
-                const { dirPath, ignore, subDirectory } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                const { dirPath, ignore } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
                 if (!ignore) {
                     const refCount = customFailedLookupPaths.get(failedLookupLocationPath);
                     if (refCount) {
@@ -509,7 +515,7 @@ namespace ts {
                         removeAtRoot = true;
                     }
                     else {
-                        removeDirectoryWatcher(dirPath, subDirectory);
+                        removeDirectoryWatcher(dirPath);
                     }
                 }
             }
@@ -518,28 +524,10 @@ namespace ts {
             }
         }
 
-        function removeDirectoryWatcher(dirPath: string, subDirectory?: Path) {
+        function removeDirectoryWatcher(dirPath: string) {
             const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath)!;
-            if (subDirectory) {
-                const existing = dirWatcher.subDirectoryMap!.get(subDirectory)!;
-                if (existing === 1) {
-                    dirWatcher.subDirectoryMap!.delete(subDirectory);
-                }
-                else {
-                    dirWatcher.subDirectoryMap!.set(subDirectory, existing - 1);
-                }
-            }
             // Do not close the watcher yet since it might be needed by other failed lookup locations.
             dirWatcher.refCount--;
-        }
-
-        function inWatchedSubdirectory(dirPath: Path, fileOrDirectoryPath: Path) {
-            const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
-            if (!dirWatcher || !dirWatcher.subDirectoryMap) return false;
-            return forEachKey(dirWatcher.subDirectoryMap, subDirectory => {
-                const fullSubDirectory = `${dirPath}/${subDirectory}` as Path;
-                return fullSubDirectory === fileOrDirectoryPath || isInDirectoryPath(fullSubDirectory, fileOrDirectoryPath);
-            });
         }
 
         function createDirectoryWatcher(directory: string, dirPath: Path) {
@@ -550,13 +538,8 @@ namespace ts {
                     cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
-                // If the files are added to project root or node_modules directory, always run through the invalidation process
-                // Otherwise run through invalidation only if adding to the immediate directory
-                if (!allFilesHaveInvalidatedResolution &&
-                    (dirPath === rootPath || isNodeModulesDirectory(dirPath) || getDirectoryPath(fileOrDirectoryPath) === dirPath || inWatchedSubdirectory(dirPath, fileOrDirectoryPath))) {
-                    if (invalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath, dirPath === fileOrDirectoryPath)) {
-                        resolutionHost.onInvalidatedResolution();
-                    }
+                if (!allFilesHaveInvalidatedResolution && invalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath, dirPath === fileOrDirectoryPath)) {
+                    resolutionHost.onInvalidatedResolution();
                 }
             }, WatchDirectoryFlags.Recursive);
         }

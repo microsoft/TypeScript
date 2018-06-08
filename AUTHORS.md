@@ -52,6 +52,7 @@ TypeScript is authored by:
 * Bill Ticehurst
 * Blaine Bublitz 
 * Blake Embrey
+* @bluelovers
 * @bootstraponline
 * Bowden Kelly
 * Bowden Kenny

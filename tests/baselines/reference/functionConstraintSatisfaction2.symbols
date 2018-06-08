@@ -4,7 +4,7 @@
 function foo<T extends Function>(x: T): T { return x; }
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction2.ts, 0, 0))
 >T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 2, 13))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 2, 33))
 >T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 2, 13))
 >T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 2, 13))
@@ -58,7 +58,7 @@ var b2: { new <T>(x: T): T };
 var r = foo2(new Function());
 >r : Symbol(r, Decl(functionConstraintSatisfaction2.ts, 22, 3))
 >foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r2 = foo2((x: string[]) => x);
 >r2 : Symbol(r2, Decl(functionConstraintSatisfaction2.ts, 23, 3))
@@ -107,7 +107,7 @@ var r14 = foo2(b2);
 
 interface F2 extends Function { foo: string; }
 >F2 : Symbol(F2, Decl(functionConstraintSatisfaction2.ts, 29, 19))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(F2.foo, Decl(functionConstraintSatisfaction2.ts, 31, 31))
 
 var f2: F2;
