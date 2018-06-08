@@ -8,3 +8,5 @@ function bar({ enum, case }: Foo) {
         //
     }
 }
+
+const enum = 123;
