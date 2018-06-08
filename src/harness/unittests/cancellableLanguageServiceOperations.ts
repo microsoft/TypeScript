@@ -56,9 +56,19 @@ namespace ts {
                 r => assert.exists(r.displayParts)
             );
         });
+
+        it("can cancel suggestion diagnostics mid-request", () => {
+            verifyOperationCancelledAfter(file, 1, service => // The LS doesn't do any top-level checks on the token for suggestion diagnostics, so the first check is within the checker
+                service.getSuggestionDiagnostics("file.js"),
+                r => assert.notEqual(r.length, 0),
+                "file.js",
+                "function foo() { let a = 10; }",
+                { allowJs: true }
+            );
+        });
     });
 
-    function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, operation: (service: LanguageService) => T, validator: (arg: T) => void) {
+    function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, operation: (service: LanguageService) => T, validator: (arg: T) => void, fileName?: string, fileContent?: string, options?: CompilerOptions) {
         let checks = 0;
         const token: HostCancellationToken = {
             isCancellationRequested() {
@@ -70,9 +80,9 @@ namespace ts {
                 return result;
             }
         };
-        const adapter = new Harness.LanguageService.NativeLanguageServiceAdapter(token);
+        const adapter = new Harness.LanguageService.NativeLanguageServiceAdapter(token, options);
         const host = adapter.getHost();
-        host.addScript("file.ts", content, /*isRootFile*/ true);
+        host.addScript(fileName || "file.ts", fileContent || content, /*isRootFile*/ true);
         const service = adapter.getLanguageService();
         assertCancelled(() => operation(service));
         validator(operation(service));

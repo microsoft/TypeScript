@@ -45,6 +45,7 @@
         "builderState.ts",
         "builder.ts",
         "resolutionCache.ts",
+        "moduleSpecifiers.ts",
         "watch.ts",
         "commandLineParser.ts",
         "tsc.ts"

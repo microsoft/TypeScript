@@ -219,6 +219,10 @@
         "category": "Error",
         "code": 1068
     },
+    "Unexpected token. A type parameter name was expected without curly braces.": {
+        "category": "Error",
+        "code": 1069
+    },
     "'{0}' modifier cannot appear on a type member.": {
         "category": "Error",
         "code": 1070
@@ -2024,6 +2028,10 @@
         "category": "Error",
         "code": 2570
     },
+    "Object is of type 'unknown'.": {
+        "category": "Error",
+        "code": 2571
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2357,6 +2365,19 @@
         "category": "Error",
         "code": 2724
     },
+    "Class name cannot be 'Object' when targeting ES5 with module {0}.": {
+        "category": "Error",
+        "code": 2725
+    },
+    "Cannot find lib definition for '{0}'.": {
+        "category": "Error",
+        "code": 2726
+    },
+    "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2727
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -4280,5 +4301,17 @@
     "Remove all unused labels": {
         "category": "Message",
         "code": 95054
+    },
+    "Convert '{0}' to mapped object type": {
+        "category": "Message",
+        "code": 95055
+    },
+    "Convert namespace import to named imports": {
+        "category": "Message",
+        "code": 95056
+    },
+    "Convert named imports to namespace import": {
+        "category": "Message",
+        "code": 95057
     }
 }

@@ -69,9 +69,7 @@ declare module ts {
         writeByteOrderMark: boolean;
         text: string;
     }
-}
 
-declare namespace ts {
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -176,6 +174,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
@@ -340,6 +339,7 @@ declare namespace FourSlashInterface {
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
     }

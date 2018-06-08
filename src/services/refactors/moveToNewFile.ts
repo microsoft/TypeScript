@@ -10,12 +10,13 @@ namespace ts.refactor {
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName);
             const statements = Debug.assertDefined(getStatementsToMove(context));
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });
 
-    function getRangeToMove(context: RefactorContext): ReadonlyArray<Statement> | undefined {
+    interface RangeToMove { readonly toMove: ReadonlyArray<Statement>; readonly afterLast: Statement | undefined; }
+    function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
         const { file } = context;
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
         const { statements } = file;
@@ -25,7 +26,7 @@ namespace ts.refactor {
 
         const startStatement = statements[startNodeIndex];
         if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
-            return [statements[startNodeIndex]];
+            return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
         }
 
         // Can't only partially include the start node or be partially into the next node
@@ -34,10 +35,13 @@ namespace ts.refactor {
         // Can't be partially into the next node
         if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
 
-        return statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex);
+        return {
+            toMove: statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex),
+            afterLast: afterEndNodeIndex === -1 ? undefined : statements[afterEndNodeIndex],
+        };
     }
 
-    function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost): void {
+    function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
         const checker = program.getTypeChecker();
         const usage = getUsageInfo(oldFile, toMove.all, checker);
 
@@ -47,14 +51,14 @@ namespace ts.refactor {
         const newFileNameWithExtension = newModuleName + extension;
 
         // If previous file was global, this is easy.
-        changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileNameWithExtension), getNewStatements(oldFile, usage, changes, toMove, program, newModuleName));
+        changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileNameWithExtension), getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, newModuleName, preferences));
 
         addNewFileToTsconfig(program, changes, oldFile.fileName, newFileNameWithExtension, hostGetCanonicalFileName(host));
     }
 
     interface StatementRange {
         readonly first: Statement;
-        readonly last: Statement;
+        readonly afterLast: Statement | undefined;
     }
     interface ToMove {
         readonly all: ReadonlyArray<Statement>;
@@ -67,9 +71,10 @@ namespace ts.refactor {
         if (rangeToMove === undefined) return undefined;
         const all: Statement[] = [];
         const ranges: StatementRange[] = [];
-        getRangesWhere(rangeToMove, s => !isPureImport(s), (start, afterEnd) => {
-            for (let i = start; i < afterEnd; i++) all.push(rangeToMove[i]);
-            ranges.push({ first: rangeToMove[start], last: rangeToMove[afterEnd - 1] });
+        const { toMove, afterLast } = rangeToMove;
+        getRangesWhere(toMove, s => !isPureImport(s), (start, afterEndIndex) => {
+            for (let i = start; i < afterEndIndex; i++) all.push(toMove[i]);
+            ranges.push({ first: toMove[start], afterLast });
         });
         return all.length === 0 ? undefined : { all, ranges };
     }
@@ -102,8 +107,8 @@ namespace ts.refactor {
         }
     }
 
-    function getNewStatements(
-        oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string,
+    function getNewStatementsAndRemoveFromOldFile(
+        oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
     ): ReadonlyArray<Statement> {
         const checker = program.getTypeChecker();
 
@@ -113,7 +118,8 @@ namespace ts.refactor {
         }
 
         const useEs6ModuleSyntax = !!oldFile.externalModuleIndicator;
-        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax);
+        const quotePreference = getQuotePreference(oldFile, preferences);
+        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
         if (importsFromNewFile) {
             changes.insertNodeBefore(oldFile, oldFile.statements[0], importsFromNewFile, /*blankLineBetween*/ true);
         }
@@ -124,14 +130,14 @@ namespace ts.refactor {
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
         return [
-            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax),
+            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference),
             ...addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax),
         ];
     }
 
     function deleteMovedStatements(sourceFile: SourceFile, moved: ReadonlyArray<StatementRange>, changes: textChanges.ChangeTracker) {
-        for (const { first, last } of moved) {
-            changes.deleteNodeRange(sourceFile, first, last);
+        for (const { first, afterLast } of moved) {
+            changes.deleteNodeRangeExcludingEnd(sourceFile, first, afterLast);
         }
     }
 
@@ -148,6 +154,8 @@ namespace ts.refactor {
             if (sourceFile === oldFile) continue;
             for (const statement of sourceFile.statements) {
                 forEachImportInStatement(statement, importNode => {
+                    if (checker.getSymbolAtLocation(moduleSpecifierFromImport(importNode)) !== oldFile.symbol) return;
+
                     const shouldMove = (name: Identifier): boolean => {
                         const symbol = isBindingElement(name.parent)
                             ? getPropertySymbolFromBindingElement(checker, name.parent as BindingElement & { name: Identifier })
@@ -158,8 +166,73 @@ namespace ts.refactor {
                     const newModuleSpecifier = combinePaths(getDirectoryPath(moduleSpecifierFromImport(importNode).text), newModuleName);
                     const newImportDeclaration = filterImport(importNode, createLiteral(newModuleSpecifier), shouldMove);
                     if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
+
+                    const ns = getNamespaceLikeImport(importNode);
+                    if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleName, newModuleSpecifier, ns, importNode);
                 });
             }
+        }
+    }
+
+    function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                return node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
+                    node.importClause.namedBindings.name : undefined;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node.name;
+            case SyntaxKind.VariableDeclaration:
+                return tryCast(node.name, isIdentifier);
+            default:
+                return Debug.assertNever(node);
+        }
+    }
+
+    function updateNamespaceLikeImport(
+        changes: textChanges.ChangeTracker,
+        sourceFile: SourceFile,
+        checker: TypeChecker,
+        movedSymbols: ReadonlySymbolSet,
+        newModuleName: string,
+        newModuleSpecifier: string,
+        oldImportId: Identifier,
+        oldImportNode: SupportedImport,
+    ): void {
+        const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleName, ScriptTarget.ESNext);
+        let needUniqueName = false;
+        const toChange: Identifier[] = [];
+        FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
+            if (!isPropertyAccessExpression(ref.parent)) return;
+            needUniqueName = needUniqueName || !!checker.resolveName(preferredNewNamespaceName, ref, SymbolFlags.All, /*excludeGlobals*/ true);
+            if (movedSymbols.has(checker.getSymbolAtLocation(ref.parent.name)!)) {
+                toChange.push(ref);
+            }
+        });
+
+        if (toChange.length) {
+            const newNamespaceName = needUniqueName ? getUniqueName(preferredNewNamespaceName, sourceFile) : preferredNewNamespaceName;
+            for (const ref of toChange) {
+                changes.replaceNode(sourceFile, ref, createIdentifier(newNamespaceName));
+            }
+            changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, newModuleName, newModuleSpecifier));
+        }
+    }
+
+    function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string): Node {
+        const newNamespaceId = createIdentifier(newNamespaceName);
+        const newModuleString = createLiteral(newModuleSpecifier);
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                return createImportDeclaration(
+                    /*decorators*/ undefined, /*modifiers*/ undefined,
+                    createImportClause(/*name*/ undefined, createNamespaceImport(newNamespaceId)),
+                    newModuleString);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newNamespaceId, createExternalModuleReference(newModuleString));
+            case SyntaxKind.VariableDeclaration:
+                return createVariableDeclaration(newNamespaceId, /*type*/ undefined, createRequireCall(newModuleString));
+            default:
+                return Debug.assertNever(node);
         }
     }
 
@@ -196,7 +269,7 @@ namespace ts.refactor {
         | ImportEqualsDeclaration
         | VariableStatement;
 
-    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean): Statement | undefined {
+    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
         let defaultImport: Identifier | undefined;
         const imports: string[] = [];
         newFileNeedExport.forEach(symbol => {
@@ -207,14 +280,14 @@ namespace ts.refactor {
                 imports.push(symbol.name);
             }
         });
-        return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports);
+        return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, quotePreference);
     }
 
-    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean): Statement | undefined {
+    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
         path = ensurePathIsNonModuleName(path);
         if (useEs6Imports) {
             const specifiers = imports.map(i => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(i)));
-            return makeImportIfNecessary(defaultImport, specifiers, path);
+            return makeImportIfNecessary(defaultImport, specifiers, path, quotePreference);
         }
         else {
             Debug.assert(!defaultImport); // If there's a default export, it should have been an es6 module.
@@ -320,6 +393,7 @@ namespace ts.refactor {
         changes: textChanges.ChangeTracker,
         checker: TypeChecker,
         useEs6ModuleSyntax: boolean,
+        quotePreference: QuotePreference,
     ): ReadonlyArray<SupportedImportStatement> {
         const copiedOldImports: SupportedImportStatement[] = [];
         for (const oldStatement of oldFile.statements) {
@@ -351,7 +425,7 @@ namespace ts.refactor {
             }
         });
 
-        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax));
+        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax, quotePreference));
         return copiedOldImports;
     }
 
@@ -398,7 +472,7 @@ namespace ts.refactor {
                     if (isInImport(decl)) {
                         oldImportsNeededByNewFile.add(symbol);
                     }
-                    else if (isTopLevelDeclaration(decl) && !movedSymbols.has(symbol)) {
+                    else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
                         newFileImportsFromOldFile.add(symbol);
                     }
                 }
@@ -540,7 +614,11 @@ namespace ts.refactor {
     interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
     type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration;
     function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
-        return isNonVariableTopLevelDeclaration(node) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
+        return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
+    }
+
+    function sourceFileOfTopLevelDeclaration(node: TopLevelDeclaration): Node {
+        return isVariableDeclaration(node) ? node.parent.parent.parent : node.parent;
     }
 
     function isTopLevelDeclarationStatement(node: Node): node is TopLevelDeclarationStatement {

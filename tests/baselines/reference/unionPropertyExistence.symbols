@@ -67,9 +67,9 @@ bFoo.onlyInB;
 >bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))
 
 x.length; // Ok
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(unionPropertyExistence.ts, 23, 13))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 bFoo.length;
 >bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))

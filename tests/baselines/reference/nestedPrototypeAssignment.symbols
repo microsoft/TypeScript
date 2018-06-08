@@ -1,0 +1,16 @@
+=== tests/cases/conformance/salsa/mod.js ===
+// #24111 -- shouldn't assert
+C.prototype = {}
+>C.prototype : Symbol(C.prototype, Decl(mod.js, 0, 0), Decl(mod.js, 2, 2))
+>C : Symbol(C, Decl(mod.js, 0, 0), Decl(mod.js, 1, 16))
+>prototype : Symbol(C.prototype, Decl(mod.js, 0, 0), Decl(mod.js, 2, 2))
+
+C.prototype.bar.foo = {};
+>C.prototype.bar.foo : Symbol(C.prototype.bar.foo, Decl(mod.js, 1, 16))
+>C.prototype.bar : Symbol(C.prototype.bar, Decl(mod.js, 2, 12))
+>C.prototype : Symbol(C.prototype, Decl(mod.js, 0, 0), Decl(mod.js, 2, 2))
+>C : Symbol(C, Decl(mod.js, 0, 0), Decl(mod.js, 1, 16))
+>prototype : Symbol(C.prototype, Decl(mod.js, 0, 0), Decl(mod.js, 2, 2))
+>bar : Symbol(C.prototype.bar, Decl(mod.js, 2, 12))
+>foo : Symbol(C.prototype.bar.foo, Decl(mod.js, 1, 16))
+

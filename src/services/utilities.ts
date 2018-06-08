@@ -423,6 +423,10 @@ namespace ts {
         return r.pos <= pos && pos <= r.end;
     }
 
+    export function rangeContainsPositionExclusive(r: TextRange, pos: number) {
+        return r.pos < pos && pos < r.end;
+    }
+
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
         return start <= range.pos && end >= range.end;
     }
@@ -644,8 +648,8 @@ namespace ts {
      * Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
      */
-    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
+        return getTouchingToken(sourceFile, position, /*includeJsDocComment*/ true, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
     }
 
     /**
@@ -830,7 +834,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
         if (previousToken && isStringTextContainingNode(previousToken)) {
-            const start = previousToken.getStart();
+            const start = previousToken.getStart(sourceFile);
             const end = previousToken.getEnd();
 
             // To be "in" one of these literals, the position has to be:
@@ -920,7 +924,11 @@ namespace ts {
         }
     }
 
-    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): boolean {
+    export interface PossibleTypeArgumentInfo {
+        readonly called: Identifier;
+        readonly nTypeArguments: number;
+    }
+    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         let token: Node | undefined = tokenIn;
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
@@ -928,15 +936,15 @@ namespace ts {
         // scanning of the previous identifier followed by "<" before current node would give us better result
         // Note that we also balance out the already provided type arguments, arrays, object literals while doing so
         let remainingLessThanTokens = 0;
+        let nTypeArguments = 0;
         while (token) {
             switch (token.kind) {
                 case SyntaxKind.LessThanToken:
                     // Found the beginning of the generic argument expression
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
-                    if (!token) return false;
-                    const tokenIsIdentifier = isIdentifier(token);
-                    if (!remainingLessThanTokens || !tokenIsIdentifier) {
-                        return tokenIsIdentifier;
+                    if (!token || !isIdentifier(token)) return undefined;
+                    if (!remainingLessThanTokens) {
+                        return { called: token, nTypeArguments };
                     }
                     remainingLessThanTokens--;
                     break;
@@ -957,25 +965,28 @@ namespace ts {
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 case SyntaxKind.CloseParenToken:
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 case SyntaxKind.CloseBracketToken:
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 // Valid tokens in a type name. Skip.
                 case SyntaxKind.CommaToken:
+                    nTypeArguments++;
+                    break;
+
                 case SyntaxKind.EqualsGreaterThanToken:
 
                 case SyntaxKind.Identifier:
@@ -999,13 +1010,13 @@ namespace ts {
                     }
 
                     // Invalid token in type
-                    return false;
+                    return undefined;
             }
 
             token = findPrecedingToken(token.getFullStart(), sourceFile);
         }
 
-        return false;
+        return undefined;
     }
 
     /**
@@ -1086,9 +1097,9 @@ namespace ts {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
 
-    export function isInsideTemplateLiteral(node: LiteralExpression, position: number) {
+    export function isInsideTemplateLiteral(node: TemplateLiteralToken, position: number, sourceFile: SourceFile): boolean {
         return isTemplateLiteralKind(node.kind)
-            && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
+            && (node.getStart(sourceFile) < position && position < node.end) || (!!node.isUnterminated && position === node.end);
     }
 
     export function isAccessibilityModifier(kind: SyntaxKind) {
@@ -1185,6 +1196,7 @@ namespace ts {
         SyntaxKind.VoidKeyword,
         SyntaxKind.UndefinedKeyword,
         SyntaxKind.UniqueKeyword,
+        SyntaxKind.UnknownKeyword,
     ];
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
@@ -1245,18 +1257,34 @@ namespace ts {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
     }
 
-    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration | undefined {
-        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier) : undefined;
+    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
+        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
 
-    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression): ImportDeclaration {
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference): ImportDeclaration {
         return createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
                 ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
                 : undefined,
-            typeof moduleSpecifier === "string" ? createLiteral(moduleSpecifier) : moduleSpecifier);
+            typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
+    }
+
+    export function makeStringLiteral(text: string, quotePreference: QuotePreference): StringLiteral {
+        return createLiteral(text, quotePreference === QuotePreference.Single);
+    }
+
+    export const enum QuotePreference { Single, Double }
+
+    export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
+        if (preferences.quotePreference) {
+            return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
+        }
+        else {
+            const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
+            return !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile) ? QuotePreference.Single : QuotePreference.Double;
+        }
     }
 
     export function symbolNameNoDefault(symbol: Symbol): string | undefined {
@@ -1286,6 +1314,38 @@ namespace ts {
         return propSymbol;
     }
 
+    /**
+     * Find symbol of the given property-name and add the symbol to the given result array
+     * @param symbol a symbol to start searching for the given propertyName
+     * @param propertyName a name of property to search for
+     * @param result an array of symbol of found property symbols
+     * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
+     *                                The value of previousIterationSymbol is undefined when the function is first called.
+     */
+    export function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
+        const seen = createMap<true>();
+        return recur(symbol);
+
+        function recur(symbol: Symbol): T | undefined {
+            // Use `addToSeen` to ensure we don't infinitely recurse in this situation:
+            //      interface C extends C {
+            //          /*findRef*/propName: string;
+            //      }
+            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
+
+            return firstDefined(symbol.declarations, declaration => firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
+                const type = checker.getTypeAtLocation(typeReference);
+                const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
+                // Visit the typeReference as well to see if it directly or indirectly uses that property
+                return type && propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
+            }));
+        }
+    }
+
+    export function isMemberSymbolInBaseType(memberSymbol: Symbol, checker: TypeChecker): boolean {
+        return getPropertySymbolsFromBaseTypes(memberSymbol.parent!, memberSymbol.name, checker, _ => true) || false;
+    }
+
     export class NodeSet {
         private map = createMap<Node>();
 
@@ -1301,6 +1361,23 @@ namespace ts {
         some(pred: (node: Node) => boolean): boolean {
             return forEachEntry(this.map, pred) || false;
         }
+    }
+
+    export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {
+        if (!node) return undefined;
+
+        while (node.parent) {
+            if (isSourceFile(node.parent) || !spanContainsNode(span, node.parent, file)) {
+                return node;
+            }
+
+            node = node.parent;
+        }
+    }
+
+    function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
+        return textSpanContainsPosition(span, node.getStart(file)) &&
+            node.getEnd() <= textSpanEnd(span);
     }
 }
 
@@ -1466,7 +1543,7 @@ namespace ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
+            typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
         });
     }
 
@@ -1603,9 +1680,9 @@ namespace ts {
     }
 
     /* @internal */
-    export function getUniqueName(baseName: string, fileText: string): string {
+    export function getUniqueName(baseName: string, sourceFile: SourceFile): string {
         let nameText = baseName;
-        for (let i = 1; stringContains(fileText, nameText); i++) {
+        for (let i = 1; !isFileLevelUniqueName(sourceFile, nameText); i++) {
             nameText = `${baseName}_${i}`;
         }
         return nameText;
@@ -1624,7 +1701,7 @@ namespace ts {
             Debug.assert(fileName === renameFilename);
             for (const change of textChanges) {
                 const { span, newText } = change;
-                const index = newText.indexOf(name);
+                const index = indexInTextChange(newText, name);
                 if (index !== -1) {
                     lastPos = span.start + delta + index;
 
@@ -1641,5 +1718,14 @@ namespace ts {
         Debug.assert(preferLastLocation);
         Debug.assert(lastPos >= 0);
         return lastPos;
+    }
+
+    function indexInTextChange(change: string, name: string): number {
+        if (startsWith(change, name)) return 0;
+        // Add a " " to avoid references inside words
+        let idx = change.indexOf(" " + name);
+        if (idx === -1) idx = change.indexOf("." + name);
+        if (idx === -1) idx = change.indexOf('"' + name);
+        return idx === -1 ? -1 : idx + 1;
     }
 }

@@ -44,7 +44,7 @@ class C2<T> {
 class C3<T extends String> {
 >C3 : Symbol(C3, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 13, 1))
 >T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 15, 9))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo(x: 'a');
 >foo : Symbol(C3.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 15, 28), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 16, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 17, 14))
@@ -102,7 +102,7 @@ interface I2<T> {
 interface I3<T extends String> {
 >I3 : Symbol(I3, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 33, 1))
 >T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 35, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     (x: 'a');
 >x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 36, 5))
@@ -179,7 +179,7 @@ var a3: {
     foo<T extends String>(x: T);
 >foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 58, 14), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 59, 16))
 >T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 60, 8))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 60, 26))
 >T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 60, 8))
 }

@@ -529,7 +529,7 @@ namespace ts {
                     createVariableStatement(/*modifiers*/ undefined,
                         createVariableDeclarationList(taggedTemplateStringDeclarations)));
             }
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
@@ -837,7 +837,7 @@ namespace ts {
             setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
 
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
 
             const block = createBlock(setTextRange(createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
             setEmitFlags(block, EmitFlags.NoComments);
@@ -980,7 +980,7 @@ namespace ts {
                 );
             }
 
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
 
             if (constructor) {
                 prependCaptureNewTargetIfNeeded(statements, constructor, /*copyOnWrite*/ false);
@@ -1832,6 +1832,7 @@ namespace ts {
             let statementsLocation: TextRange;
             let closeBraceLocation: TextRange | undefined;
 
+            const leadingStatements: Statement[] = [];
             const statements: Statement[] = [];
             const body = node.body!;
             let statementOffset: number | undefined;
@@ -1840,21 +1841,16 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
-                statementOffset = addStandardPrologue(statements, body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addStandardPrologue(leadingStatements, body.statements, /*ensureUseStrict*/ false);
             }
 
-            addCaptureThisForNodeIfNeeded(statements, node);
-            addDefaultValueAssignmentsIfNeeded(statements, node);
-            addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
-
-            // If we added any generated statements, this must be a multi-line block.
-            if (!multiLine && statements.length > 0) {
-                multiLine = true;
-            }
+            addCaptureThisForNodeIfNeeded(leadingStatements, node);
+            addDefaultValueAssignmentsIfNeeded(leadingStatements, node);
+            addRestParameterIfNeeded(leadingStatements, node, /*inConstructorWithSynthesizedSuper*/ false);
 
             if (isBlock(body)) {
                 // addCustomPrologue puts already-existing directives at the beginning of the target statement-array
-                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor);
+                statementOffset = addCustomPrologue(leadingStatements, body.statements, statementOffset, visitor);
 
                 statementsLocation = body.statements;
                 addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
@@ -1896,16 +1892,15 @@ namespace ts {
             }
 
             const lexicalEnvironment = context.endLexicalEnvironment();
-            prependRange(statements, lexicalEnvironment);
-
+            prependStatements(statements, lexicalEnvironment);
             prependCaptureNewTargetIfNeeded(statements, node, /*copyOnWrite*/ false);
 
             // If we added any final generated statements, this must be a multi-line block
-            if (!multiLine && lexicalEnvironment && lexicalEnvironment.length) {
+            if (some(leadingStatements) || some(lexicalEnvironment)) {
                 multiLine = true;
             }
 
-            const block = createBlock(setTextRange(createNodeArray(statements), statementsLocation), multiLine);
+            const block = createBlock(setTextRange(createNodeArray([...leadingStatements, ...statements]), statementsLocation), multiLine);
             setTextRange(block, node.body);
             if (!multiLine && singleLine) {
                 setEmitFlags(block, EmitFlags.SingleLine);
@@ -2712,7 +2707,7 @@ namespace ts {
                 if (loopOutParameters.length) {
                     copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
                 }
-                prependRange(statements, lexicalEnvironment);
+                prependStatements(statements, lexicalEnvironment);
                 loopBody = createBlock(statements, /*multiline*/ true);
             }
 

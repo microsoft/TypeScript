@@ -88,7 +88,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return { renameFilename, renameLocation, edits };
     }
 
-    function isConvertableName (name: DeclarationName): name is AcceptedNameType {
+    function isConvertibleName (name: DeclarationName): name is AcceptedNameType {
         return isIdentifier(name) || isStringLiteral(name);
     }
 
@@ -125,12 +125,12 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
         if (!declaration || !rangeOverlapsWithStartEnd(declaration.name, startPosition, endPosition!) // TODO: GH#18217
-            || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
+            || !isConvertibleName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
-        const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file.text), declaration.name);
-        const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file.text) : name, declaration.name);
+        const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
+        const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
             isStatic: hasStaticModifier(declaration),
             isReadonly: hasReadonlyModifier(declaration),

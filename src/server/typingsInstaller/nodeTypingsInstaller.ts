@@ -2,8 +2,7 @@
 
 namespace ts.server.typingsInstaller {
     const fs: {
-        appendFileSync(file: string, content: string): void;
-        existsSync(path: string): boolean;
+        appendFileSync(file: string, content: string): void
     } = require("fs");
 
     const path: {
@@ -33,12 +32,11 @@ namespace ts.server.typingsInstaller {
     /** Used if `--npmLocation` is not passed. */
     function getDefaultNPMLocation(processName: string) {
         if (path.basename(processName).indexOf("node") === 0) {
-            const npmPath = `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
-            if (fs.existsSync(npmPath)) {
-                return npmPath;
-            }
+            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
         }
-        return "npm";
+        else {
+            return "npm";
+        }
     }
 
     interface TypesRegistryFile {
@@ -108,7 +106,7 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
                 }
-                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}`, { cwd: globalTypingsCacheLocation });
+                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, { cwd: globalTypingsCacheLocation });
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
                 }

@@ -59,6 +59,14 @@ namespace ts {
         return result;
     }
 
+    export function createMapFromEntries<T>(entries: [string, T][]): Map<T> {
+        const map = createMap<T>();
+        for (const [key, value] of entries) {
+            map.set(key, value);
+        }
+        return map;
+    }
+
     export function createMapFromTemplate<T>(template: MapLike<T>): Map<T> {
         const map: Map<T> = new MapCtr<T>();
 
@@ -167,6 +175,10 @@ namespace ts {
 
     export function length(array: ReadonlyArray<any> | undefined): number {
         return array ? array.length : 0;
+    }
+
+    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
+        return !!map && !!map.size;
     }
 
     /**
@@ -965,7 +977,8 @@ namespace ts {
     export function append<T>(to: T[], value: T | undefined): T[];
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
-    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    export function append<T>(to: Push<T>, value: T | undefined): void;
+    export function append<T>(to: T[], value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
         if (to === undefined) return [value];
         to.push(value);
@@ -1002,21 +1015,6 @@ namespace ts {
                 to.push(from[i]);
             }
         }
-        return to;
-    }
-
-    /**
-     * Appends a range of value to begin of an array, returning the array.
-     *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
-     * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
-     * appended. If an element of `from` is `undefined`, that element is not appended.
-     */
-    export function prependRange<T>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
-        if (from === undefined || from.length === 0) return to;
-        if (to === undefined) return from.slice();
-        to.unshift(...from);
         return to;
     }
 
@@ -1806,7 +1804,7 @@ namespace ts {
      * Case-insensitive comparisons compare both strings one code-point at a time using the integer
      * value of each code-point after applying `toUpperCase` to each string. We always map both
      * strings to their upper-case form as some unicode characters do not properly round-trip to
-     * lowercase (such as `ẞ` (German sharp capital s)).
+     * lowercase (such as `áºž` (German sharp capital s)).
      */
     export function compareStringsCaseInsensitive(a: string, b: string) {
         if (a === b) return Comparison.EqualTo;
@@ -1878,7 +1876,7 @@ namespace ts {
             //
             // For case insensitive comparisons we always map both strings to their
             // upper-case form as some unicode characters do not properly round-trip to
-            // lowercase (such as `ẞ` (German sharp capital s)).
+            // lowercase (such as `áºž` (German sharp capital s)).
             return (a, b) => compareWithCallback(a, b, compareDictionaryOrder);
 
             function compareDictionaryOrder(a: string, b: string) {
@@ -2001,6 +1999,103 @@ namespace ts {
 
         // We still have one chain remaining.  The shorter chain should come first.
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
+    }
+
+    /**
+     * Given a name and a list of names that are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
+     * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     *
+     * If there is a candidate that's the same except for case, return that.
+     * If there is a candidate that's within one edit of the name, return that.
+     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     *    except for candidates:
+     *      * With no name
+     *      * Whose length differs from the target name by more than 0.34 of the length of the name.
+     *      * Whose levenshtein distance is more than 0.4 of the length of the name
+     *        (0.4 allows 1 substitution/transposition for every 5 characters,
+     *         and 1 insertion/deletion at 3 characters)
+     */
+    export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
+        const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
+        let bestCandidate: T | undefined;
+        let justCheckExactMatches = false;
+        const nameLowerCase = name.toLowerCase();
+        for (const candidate of candidates) {
+            const candidateName = getName(candidate);
+            if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
+                const candidateNameLowerCase = candidateName.toLowerCase();
+                if (candidateNameLowerCase === nameLowerCase) {
+                    return candidate;
+                }
+                if (justCheckExactMatches) {
+                    continue;
+                }
+                if (candidateName.length < 3) {
+                    // Don't bother, user would have noticed a 2-character name having an extra character
+                    continue;
+                }
+                // Only care about a result better than the best so far.
+                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
+                if (distance === undefined) {
+                    continue;
+                }
+                if (distance < 3) {
+                    justCheckExactMatches = true;
+                    bestCandidate = candidate;
+                }
+                else {
+                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+                    bestDistance = distance;
+                    bestCandidate = candidate;
+                }
+            }
+        }
+        return bestCandidate;
+    }
+
+    function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
+        let previous = new Array(s2.length + 1);
+        let current = new Array(s2.length + 1);
+        /** Represents any value > max. We don't care about the particular value. */
+        const big = max + 1;
+
+        for (let i = 0; i <= s2.length; i++) {
+            previous[i] = i;
+        }
+
+        for (let i = 1; i <= s1.length; i++) {
+            const c1 = s1.charCodeAt(i - 1);
+            const minJ = i > max ? i - max : 1;
+            const maxJ = s2.length > max + i ? max + i : s2.length;
+            current[0] = i;
+            /** Smallest value of the matrix in the ith column. */
+            let colMin = i;
+            for (let j = 1; j < minJ; j++) {
+                current[j] = big;
+            }
+            for (let j = minJ; j <= maxJ; j++) {
+                const dist = c1 === s2.charCodeAt(j - 1)
+                    ? previous[j - 1]
+                    : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
+                current[j] = dist;
+                colMin = Math.min(colMin, dist);
+            }
+            for (let j = maxJ + 1; j <= s2.length; j++) {
+                current[j] = big;
+            }
+            if (colMin > max) {
+                // Give up -- everything in this column is > max and it can't get better in future columns.
+                return undefined;
+            }
+
+            const temp = previous;
+            previous = current;
+            current = temp;
+        }
+
+        const res = previous[s2.length];
+        return res > max ? undefined : res;
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
@@ -2602,6 +2697,22 @@ namespace ts {
         return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
+    export function tryRemovePrefix(str: string, prefix: string): string | undefined {
+        return startsWith(str, prefix) ? str.substring(prefix.length) : undefined;
+    }
+
+    export function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined {
+        const a = tryRemovePrefix(path, dirPath);
+        if (a === undefined) return undefined;
+        switch (a.charCodeAt(0)) {
+            case CharacterCodes.slash:
+            case CharacterCodes.backslash:
+                return a.slice(1);
+            default:
+                return undefined;
+        }
+    }
+
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
@@ -2609,6 +2720,10 @@ namespace ts {
 
     export function removeSuffix(str: string, suffix: string): string {
         return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
+    }
+
+    export function tryRemoveSuffix(str: string, suffix: string): string | undefined {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : undefined;
     }
 
     export function stringContains(str: string, substring: string): boolean {
@@ -2653,7 +2768,7 @@ namespace ts {
         /**
          * Matches any single directory segment unless it is the last segment and a .min.js file
          * Breakdown:
-         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  [^./]                   # matches everything up to the first . character (excluding directory separators)
          *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
          */
         singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
@@ -2811,6 +2926,7 @@ namespace ts {
         basePaths: ReadonlyArray<string>;
     }
 
+    /** @param path directory of the tsconfig.json */
     export function getFileMatcherPatterns(path: string, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
@@ -2825,16 +2941,20 @@ namespace ts {
         };
     }
 
+    export function getRegexFromPattern(pattern: string, useCaseSensitiveFileNames: boolean): RegExp {
+        return new RegExp(pattern, useCaseSensitiveFileNames ? "" : "i");
+    }
+
+    /** @param path directory of the tsconfig.json */
     export function matchFiles(path: string, extensions: ReadonlyArray<string> | undefined, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
-        const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
-        const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
-        const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
+        const includeDirectoryRegex = patterns.includeDirectoryPattern && getRegexFromPattern(patterns.includeDirectoryPattern, useCaseSensitiveFileNames);
+        const excludeRegex = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, useCaseSensitiveFileNames);
 
         // Associate an array of results with each include regex. This keeps results in order of the "include" order.
         // If there are no "includes", then just put everything in results[0].

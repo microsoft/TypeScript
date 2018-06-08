@@ -236,7 +236,7 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
-                    (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     symbol.valueDeclaration = node;
                 }
@@ -1698,6 +1698,7 @@ namespace ts {
                 symbol.parent = container.symbol;
             }
             addDeclarationToSymbol(symbol, node, symbolFlags);
+            return symbol;
         }
 
         function bindBlockScopedDeclaration(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
@@ -2317,13 +2318,11 @@ namespace ts {
             // expression is the declaration
             setCommonJsModuleIndicator(node);
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            const symbol = forEachIdentifierInEntityName(lhs.expression, (id, original) => {
-                if (!original) {
-                    return undefined;
+            const symbol = forEachIdentifierInEntityName(lhs.expression, /*parent*/ undefined, (id, symbol) => {
+                if (symbol) {
+                    addDeclarationToSymbol(symbol, id, SymbolFlags.Module | SymbolFlags.JSContainer);
                 }
-                const s = getJSInitializerSymbol(original)!;
-                addDeclarationToSymbol(s, id, SymbolFlags.Module | SymbolFlags.JSContainer);
-                return s;
+                return symbol;
             });
             if (symbol) {
                 const flags = isClassExpression(node.right) ?
@@ -2359,12 +2358,12 @@ namespace ts {
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    let constructorSymbol = thisContainer.symbol;
+                    let constructorSymbol: Symbol | undefined = thisContainer.symbol;
                     // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
                     if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
                         const l = thisContainer.parent.left;
                         if (isPropertyAccessEntityNameExpression(l) && isPrototypeAccess(l.expression)) {
-                            constructorSymbol = getJSInitializerSymbolFromName(l.expression.expression, thisParentContainer)!;
+                            constructorSymbol = lookupSymbolForPropertyAccess(l.expression.expression, thisParentContainer);
                         }
                     }
 
@@ -2463,46 +2462,68 @@ namespace ts {
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
         }
 
-        function getJSInitializerSymbolFromName(name: EntityNameExpression, lookupContainer?: Node): Symbol | undefined {
-            return getJSInitializerSymbol(lookupSymbolForPropertyAccess(name, lookupContainer));
-        }
-
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
-            let symbol = getJSInitializerSymbolFromName(name);
+            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
                     !!getJavascriptInitializer(getInitializerOfBinaryExpression(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
+            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
-                forEachIdentifierInEntityName(propertyAccess.expression, (id, original) => {
-                    if (original) {
-                        // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
-                        addDeclarationToSymbol(original, id, flags);
-                        return original;
+                namespaceSymbol = forEachIdentifierInEntityName(propertyAccess.expression, namespaceSymbol, (id, symbol, parent) => {
+                    if (symbol) {
+                        addDeclarationToSymbol(symbol, id, flags);
+                        return symbol;
                     }
                     else {
-                        return symbol = declareSymbol(symbol ? symbol.exports! : container.locals!, symbol, id, flags, excludeFlags);
+                        return declareSymbol(parent ? parent.exports! : container.locals!, parent, id, flags, excludeFlags);
                     }
                 });
             }
-            if (!symbol || !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ObjectLiteral))) {
+            if (!namespaceSymbol || !isJavascriptContainer(namespaceSymbol)) {
                 return;
             }
 
             // Set up the members collection if it doesn't exist already
             const symbolTable = isPrototypeProperty ?
-                (symbol.members || (symbol.members = createSymbolTable())) :
-                (symbol.exports || (symbol.exports = createSymbolTable()));
+                (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
+                (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
             // Declare the method/property
             const jsContainerFlag = isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0;
-            const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!); // TODO: GH#18217
+            const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
             const symbolFlags = (isMethod ? SymbolFlags.Method : SymbolFlags.Property) | jsContainerFlag;
             const symbolExcludes = (isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes) & ~jsContainerFlag;
-            declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
+            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, symbolFlags, symbolExcludes);
+        }
+
+        /**
+         * Javascript containers are:
+         * - Functions
+         * - classes
+         * - namespaces
+         * - variables initialized with function expressions
+         * -                       with class expressions
+         * -                       with empty object literals
+         * -                       with non-empty object literals if assigned to the prototype property
+         */
+        function isJavascriptContainer(symbol: Symbol): boolean {
+            if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule)) {
+                return true;
+            }
+            const node = symbol.valueDeclaration;
+            const init = !node ? undefined :
+                isVariableDeclaration(node) ? node.initializer :
+                isBinaryExpression(node) ? node.right :
+                isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
+                undefined;
+            if (init) {
+                const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
+                return !!getJavascriptInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, isPrototypeAssignment);
+            }
+            return false;
         }
 
         function getParentOfBinaryExpression(expr: BinaryExpression) {
@@ -2517,22 +2538,22 @@ namespace ts {
                 return lookupSymbolForNameWorker(lookupContainer, node.escapedText);
             }
             else {
-                const symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(node.expression));
+                const symbol = lookupSymbolForPropertyAccess(node.expression);
                 return symbol && symbol.exports && symbol.exports.get(node.name.escapedText);
             }
         }
 
-        function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol | undefined) => Symbol | undefined): Symbol | undefined {
+        function forEachIdentifierInEntityName(e: EntityNameExpression, parent: Symbol | undefined, action: (e: Identifier, symbol: Symbol | undefined, parent: Symbol | undefined) => Symbol | undefined): Symbol | undefined {
             if (isExportsOrModuleExportsOrAlias(file, e)) {
                 return file.symbol;
             }
             else if (isIdentifier(e)) {
-                return action(e, lookupSymbolForPropertyAccess(e));
+                return action(e, lookupSymbolForPropertyAccess(e), parent);
             }
             else {
-                const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
+                const s = forEachIdentifierInEntityName(e.expression, parent, action);
                 if (!s || !s.exports) return Debug.fail();
-                return action(e.name, s.exports.get(e.name.escapedText));
+                return action(e.name, s.exports.get(e.name.escapedText), s);
             }
         }
 
@@ -2596,7 +2617,7 @@ namespace ts {
                     bindBlockScopedVariableDeclaration(node);
                 }
                 else if (isParameterDeclaration(node)) {
-                    // It is safe to walk up parent chain to find whether the node is a destructing parameter declaration
+                    // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
                     // because its parent chain has already been set up, since parents are set before descending into children.
                     //
                     // If node is a binding element in parameter declaration, we need to use ParameterExcludes.
@@ -3722,6 +3743,10 @@ namespace ts {
                 break;
 
             case SyntaxKind.ReturnStatement:
+                // Return statements may require an `await` in ESNext.
+                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion | TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;

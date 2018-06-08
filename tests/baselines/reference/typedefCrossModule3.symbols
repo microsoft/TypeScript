@@ -4,9 +4,9 @@ const ns = {};
 >ns : Symbol(ns, Decl(mod2.js, 1, 5), Decl(mod2.js, 1, 14))
 
 ns.Foo = class {}
->ns.Foo : Symbol(Foo, Decl(mod2.js, 1, 14))
+>ns.Foo : Symbol(ns.Foo, Decl(mod2.js, 1, 14))
 >ns : Symbol(ns, Decl(mod2.js, 1, 5), Decl(mod2.js, 1, 14))
->Foo : Symbol(Foo, Decl(mod2.js, 1, 14))
+>Foo : Symbol(ns.Foo, Decl(mod2.js, 1, 14))
 
 module.exports = ns;
 >module : Symbol(export=, Decl(mod2.js, 2, 17))

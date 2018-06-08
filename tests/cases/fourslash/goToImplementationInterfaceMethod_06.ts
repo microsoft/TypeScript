@@ -11,19 +11,19 @@
 //// }
 ////
 //// class Bar implements Foo {
-////      [|hello() {}|]
+////      [|hello|]() {}
 ////      someOtherFunction() {}
 //// }
 ////
 //// function createFoo(): Foo {
 ////     return {
-////         [|hello() {}|],
+////         [|hello|]() {},
 ////         someOtherFunction() {}
 ////     };
 //// }
 ////
 //// var y: Foo = {
-////     [|hello() {}|],
+////     [|hello|]() {},
 ////     someOtherFunction() {}
 //// };
 ////

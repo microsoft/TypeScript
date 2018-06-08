@@ -384,6 +384,7 @@ namespace ts {
                 case SyntaxKind.TypePredicate:
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
@@ -551,7 +552,9 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile) {
             const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
-                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
+                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
+                !isJsonSourceFile(node);
+
             return updateSourceFileNode(
                 node,
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
@@ -669,7 +672,7 @@ namespace ts {
                 setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
                 statements.push(statement);
 
-                prependRange(statements, context.endLexicalEnvironment());
+                prependStatements(statements, context.endLexicalEnvironment());
 
                 const iife = createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
@@ -1907,7 +1910,9 @@ namespace ts {
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ImportType:
                     break;
 
                 default:
@@ -2693,7 +2698,7 @@ namespace ts {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             const members = map(node.members, transformEnumMember);
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
             addRange(statements, members);
 
             currentNamespaceContainerName = savedCurrentNamespaceLocalName;
@@ -3008,7 +3013,7 @@ namespace ts {
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
 
-            prependRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
             currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;

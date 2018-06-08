@@ -550,6 +550,12 @@ namespace ts.server {
             return this.program.getSourceFileByPath(path);
         }
 
+        /* @internal */
+        getSourceFileOrConfigFile(path: Path): SourceFile | undefined {
+            const options = this.program.getCompilerOptions();
+            return path === options.configFilePath ? options.configFile : this.getSourceFile(path);
+        }
+
         close() {
             if (this.program) {
                 // if we have a program - release all files that are enlisted in program but arent root

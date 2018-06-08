@@ -125,6 +125,7 @@ namespace ts {
         "typeof": SyntaxKind.TypeOfKeyword,
         "undefined": SyntaxKind.UndefinedKeyword,
         "unique": SyntaxKind.UniqueKeyword,
+        "unknown": SyntaxKind.UnknownKeyword,
         "var": SyntaxKind.VarKeyword,
         "void": SyntaxKind.VoidKeyword,
         "while": SyntaxKind.WhileKeyword,
@@ -1366,7 +1367,7 @@ namespace ts {
             let isPreviousTokenSeparator = false;
             while (true) {
                 const ch = text.charCodeAt(pos);
-                // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
+                // Numeric separators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
                 if (ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     if (separatorAllowed) {

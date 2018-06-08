@@ -5,7 +5,7 @@
 //// interface Foo { hello: number }
 ////
 //// class Bar implements Foo {
-////     [|hello = 5 * 9;|]
+////     [|hello|] = 5 * 9;
 //// }
 ////
 //// function whatever(foo: Foo) {
