@@ -16,17 +16,40 @@ namespace ts.codefix {
         //add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert)
 
+        let retArrayRes:[NodeArray<Statement>, string, TextRange][] = [];
+        //let retArrayRej:[NodeArray<Statement>, string, TextRange][] = [];
+        let retArrayCatch:[NodeArray<Statement>, string, TextRange][] = [];
+
+
         //collect what to put in the try block
         let callToAwait = findCallToAwait(funcToConvert, checker);
-        let onResTuple:[NodeArray<Statement>, string, TextRange] = findDotThen(funcToConvert, checker, true);
-        let onResBody:NodeArray<Statement> = onResTuple[0];
-        let onResFuncName:string = onResTuple[1];
-        let onResTextRange:TextRange = onResTuple[2];
+    
+    
+        findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Then, retArrayRes);
+        let onResTuple:[NodeArray<Statement>, string, TextRange] = retArrayRes[0]; 
+        let onResBody:NodeArray<Statement>, onResFuncName:string, onResTextRange:TextRange = undefined;
 
-        let onRejTuple:[NodeArray<Statement>, string, TextRange] = findDotThen(funcToConvert, checker, false);
-        let onRejBody:NodeArray<Statement> = onRejTuple[0];
+        if(onResTuple){
+            onResBody = onResTuple[0];
+            onResFuncName = onResTuple[1];
+            onResTextRange = onResTuple[2];
+        }
+
+        /*
+        findDotThen(funcToConvert, checker, false, PromiseMemberFunc.Then, retArrayRej);
+        let onRejTuple:[NodeArray<Statement>, string, TextRange] = retArrayRej[0];
+        let onRejBody:NodeArray<Statement> = onRejTuple[0];*/
         //let onRejFuncName:string = onRejTuple[1];
         //let onRejTextRange:TextRange = onRejTuple[2];
+        
+        
+        findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Catch, retArrayCatch);
+        let onCatchTuple:[NodeArray<Statement>, string, TextRange] = retArrayCatch[0];
+
+        let onCatchTextRange = undefined;
+        if(onCatchTuple){
+            onCatchTextRange = onCatchTuple[2];
+        }
 
         let tryBlock:Block = undefined;
         let catchBlock:CatchClause = undefined;
@@ -37,7 +60,7 @@ namespace ts.codefix {
 
         let awaitNode = createAwait(callToAwait);
 
-        if(onResTuple && onResBody.length > 0){
+        if(onResTuple && onResBody && onResBody.length > 0){
             let awaitDecl = createVariableDeclarationList(createNodeArray([createVariableDeclaration(onResFuncName, undefined, awaitNode)]));
             let awaitDeclStmt = createVariableStatement(undefined, awaitDecl);
             let stmts = createNodeArray([<Statement>awaitDeclStmt]).concat(getSynthesizedDeepClones(onResBody));
@@ -47,14 +70,37 @@ namespace ts.codefix {
         }
 
 
+        catchBlock = createCatchClause("e", createBlock(createCascadingCatches(retArrayCatch)));
+
+        
+        /*
         if(onRejTuple && onRejBody.length > 0){
             let stmts = createNodeArray(onRejBody);
             catchBlock = createCatchClause("e", createBlock(stmts));
         }else{
             catchBlock = createCatchClause("e", createBlock(createNodeArray()));
+        }*/
+
+        let range = onResTextRange ? onResTextRange : onCatchTextRange;
+        changes.replaceRange(sourceFile, range, createTry(tryBlock, catchBlock, undefined));
+    }
+
+    function createCascadingCatches(catchArray:[NodeArray<Statement>, string, TextRange][]): NodeArray<Statement>{
+
+        if(catchArray.length == 0){
+            return undefined;
         }
 
-        changes.replaceRange(sourceFile, onResTextRange, createTry(tryBlock, catchBlock, undefined));
+        if(catchArray.length == 1){
+            return getSynthesizedDeepClones(catchArray.pop()[0]);
+            //just add the function call
+        }
+
+        let catchItem = catchArray.pop();
+        let cascadingCatches = createCascadingCatches(catchArray);
+        let catchBlock = createBlock(cascadingCatches);
+
+        return createNodeArray([createTry(createBlock(getSynthesizedDeepClones(catchItem[0])), createCatchClause("e", catchBlock), undefined)]);
     }
 
 
@@ -81,7 +127,7 @@ namespace ts.codefix {
         Catch = "catch",
     }
 
-    function findDotThen(node:Node, checker:TypeChecker, onRes:boolean, memberFunc:PromiseMemberFunc): [NodeArray<Statement>, string, TextRange]{
+    function findDotThen(node:Node, checker:TypeChecker, onRes:boolean, memberFunc:PromiseMemberFunc, retArray:[NodeArray<Statement>, string, TextRange][]):void{ //[[NodeArray<Statement>, string, TextRange]]{
 
         const index:number = onRes ? 0 : 1;
 
@@ -93,12 +139,14 @@ namespace ts.codefix {
                         //inlined function definitiion
                         let funcDecl:FunctionLikeDeclaration = parNode.arguments[index] as FunctionLikeDeclaration;
                         let funcBody:FunctionBody = funcDecl.body as FunctionBody;
-                        return [createNodeArray(funcBody.statements), funcDecl.parameters[0].symbol.name, createTextRange(parNode.getStart(), parNode.end)];
+                        retArray.push([createNodeArray(funcBody.statements), funcDecl.parameters[0].symbol.name, createTextRange(parNode.getStart(), parNode.end)]);
+                        //return [createNodeArray(funcBody.statements), funcDecl.parameters[0].symbol.name, createTextRange(parNode.getStart(), parNode.end)];
                     }else if(parNode.arguments.length > index &&  isIdentifier(parNode.arguments[index])){
                         //reference to an elsewhere declared function
                         let argName = (<Identifier>(<FunctionLikeDeclaration>checker.getTypeAtLocation(parNode.arguments[index]).symbol.valueDeclaration).parameters[0].name)
                         let callExpr = createCall(parNode.arguments[index], undefined, [argName]);
-                        return [createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(parNode.getStart(), parNode.end)]
+                        retArray.push([createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(parNode.getStart(), parNode.end)]);
+                        //return [createNodeArray([<Statement>createStatement(callExpr)]), argName.text, createTextRange(parNode.getStart(), parNode.end)]
                     }
                 }
                 break;
@@ -106,12 +154,12 @@ namespace ts.codefix {
 
         //recurse
         for( let child of node.getChildren() ){
-            let ret = findDotThen(child, checker, onRes);
+            /*let ret = findDotThen(child, checker, onRes, memberFunc);
             if(ret){
                 return ret;
-            }
+            }*/
+            findDotThen(child, checker, onRes, memberFunc, retArray);
         }
-
     }
 
     function isPromiseType(T:Type):boolean{
