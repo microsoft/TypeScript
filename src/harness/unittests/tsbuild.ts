@@ -2,6 +2,13 @@ namespace ts {
     let currentTime = 100;
     let lastDiagnostics: Diagnostic[] = [];
     const reportDiagnostic: DiagnosticReporter = diagnostic => lastDiagnostics.push(diagnostic);
+    const report = (message: DiagnosticMessage, ...args: string[]) => reportDiagnostic(createCompilerDiagnostic(message, ...args));
+    const buildHost: BuildHost = {
+        error: report,
+        verbose: report,
+        message: report,
+        errorDiagnostic: d => reportDiagnostic(d)
+    };
 
     export namespace Sample1 {
         tick();
@@ -15,7 +22,7 @@ namespace ts {
             it("can build the sample project 'sample1' without error", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
+                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
 
                 clearDiagnostics();
                 builder.buildAllProjects();
@@ -33,7 +40,7 @@ namespace ts {
                 clearDiagnostics();
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: true, force: false, verbose: false });
+                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: true, force: false, verbose: false });
                 builder.buildAllProjects();
                 assertDiagnosticMessages(Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0);
 
@@ -48,12 +55,12 @@ namespace ts {
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
 
-                let builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
+                let builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
                 tick();
 
                 clearDiagnostics();
-                builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: true, force: false, verbose: false });
+                builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: true, force: false, verbose: false });
                 builder.buildAllProjects();
                 assertDiagnosticMessages(Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date);
             });
@@ -65,7 +72,7 @@ namespace ts {
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
 
-                const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
+                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
                 // Verify they exist
                 for (const output of allExpectedOutputs) {
@@ -86,7 +93,7 @@ namespace ts {
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
 
-                const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: true, verbose: false });
+                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: true, verbose: false });
                 builder.buildAllProjects();
                 let currentTime = time();
                 checkOutputTimestamps(currentTime);
@@ -110,7 +117,7 @@ namespace ts {
         describe("tsbuild - can detect when and what to rebuild", () => {
             const fs = projFs.shadow();
             const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: true });
+            const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: true });
 
             it("Builds the project", () => {
                 clearDiagnostics();
@@ -174,7 +181,7 @@ namespace ts {
             it("won't build downstream projects if upstream projects have errors", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: true });
+                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: true });
 
                 clearDiagnostics();
 
@@ -198,7 +205,7 @@ namespace ts {
             it("invalidates projects correctly", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], reportDiagnostic, { dry: false, force: false, verbose: false });
+                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
 
                 clearDiagnostics();
                 builder.buildAllProjects();
@@ -234,7 +241,7 @@ namespace ts {
         describe("tsbuild - baseline sectioned sourcemaps", () => {
             const fs = outFileFs.shadow();
             const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, ["/src/third"], reportDiagnostic, { dry: false, force: false, verbose: false });
+            const builder = createSolutionBuilder(host, buildHost, ["/src/third"], { dry: false, force: false, verbose: false });
             clearDiagnostics();
             builder.buildAllProjects();
             assertDiagnosticMessages(/*none*/);
@@ -292,7 +299,7 @@ namespace ts {
         });
 
         function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {
-            const builder = createSolutionBuilder(host, rootNames, reportDiagnostic, { dry: true, force: false, verbose: false });
+            const builder = createSolutionBuilder(host, buildHost, rootNames, { dry: true, force: false, verbose: false });
 
             const projFileNames = rootNames.map(getProjectFileName);
             const graph = builder.getBuildGraph(projFileNames);

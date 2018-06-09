@@ -50,7 +50,15 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            return performBuild(createCompilerHost({}), createDiagnosticReporter(sys), args.slice(1), sys);
+            const reportDiag = createDiagnosticReporter(sys, /*pretty*/ true);
+            const report = (message: DiagnosticMessage, ...args: string[]) => reportDiag(createCompilerDiagnostic(message, ...args));
+            const buildHost: BuildHost = {
+                error: report,
+                verbose: report,
+                message: report,
+                errorDiagnostic: d => reportDiag(d)
+            };
+            return performBuild(args.slice(1), createCompilerHost({}), buildHost, sys);
         }
 
         const commandLine = parseCommandLine(args);
