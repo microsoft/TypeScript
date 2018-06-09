@@ -35,3 +35,37 @@ function f2<T extends { foo: unknown; 0: unknown }>(_a: T, b: Exclude<keyof T, s
 >b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 5, 58))
 }
 
+function f3<T extends number | string>(
+>f3 : Symbol(f3, Decl(conditionalTypeGenericAssignability.ts, 8, 1))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    i: T & string,
+>i : Symbol(i, Decl(conditionalTypeGenericAssignability.ts, 10, 39))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    j: T,
+>j : Symbol(j, Decl(conditionalTypeGenericAssignability.ts, 11, 18))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    b: { x: T } extends { x: string } ? { y: { x: T } } : never) {
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 12, 9))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 13, 8))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 13, 25))
+>y : Symbol(y, Decl(conditionalTypeGenericAssignability.ts, 13, 41))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 13, 46))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    b = { y: { x: i } }; // success
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 12, 9))
+>y : Symbol(y, Decl(conditionalTypeGenericAssignability.ts, 14, 9))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 14, 14))
+>i : Symbol(i, Decl(conditionalTypeGenericAssignability.ts, 10, 39))
+
+    b = { y: { x: j } }; // failure
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 12, 9))
+>y : Symbol(y, Decl(conditionalTypeGenericAssignability.ts, 15, 9))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 15, 14))
+>j : Symbol(j, Decl(conditionalTypeGenericAssignability.ts, 11, 18))
+}
+
