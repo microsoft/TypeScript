@@ -320,7 +320,7 @@ type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
 >D : D
 
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
->T62 : any
+>T62 : {} | any
 >T : T
 >U : No type information available!
 >U : U

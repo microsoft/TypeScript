@@ -1,0 +1,45 @@
+=== tests/cases/compiler/conditionalTypeGenericAssignability.ts ===
+function f1<T extends { foo: unknown; 0: unknown }>(_a: T, b: Extract<keyof T, string>) {
+>f1 : <T extends { foo: unknown; 0: unknown; }>(_a: T, b: Extract<keyof T, string>) => void
+>T : T
+>foo : unknown
+>0 : unknown
+>_a : T
+>T : T
+>b : Extract<keyof T, string>
+>Extract : Extract<T, U>
+>T : T
+
+    b = "foo"; // succeeds
+>b = "foo" : "foo"
+>b : Extract<keyof T, string>
+>"foo" : "foo"
+
+    b = 0; // errors
+>b = 0 : 0
+>b : Extract<keyof T, string>
+>0 : 0
+}
+
+function f2<T extends { foo: unknown; 0: unknown }>(_a: T, b: Exclude<keyof T, string>) {
+>f2 : <T extends { foo: unknown; 0: unknown; }>(_a: T, b: Exclude<keyof T, string>) => void
+>T : T
+>foo : unknown
+>0 : unknown
+>_a : T
+>T : T
+>b : Exclude<keyof T, string>
+>Exclude : Exclude<T, U>
+>T : T
+
+    b = "foo"; // errors
+>b = "foo" : "foo"
+>b : Exclude<keyof T, string>
+>"foo" : "foo"
+
+    b = 0; // succeeds
+>b = 0 : 0
+>b : Exclude<keyof T, string>
+>0 : 0
+}
+
