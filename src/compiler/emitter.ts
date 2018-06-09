@@ -1026,7 +1026,7 @@ namespace ts {
 
         // SyntaxKind.UnparsedSource
         function emitUnparsedSource(unparsed: UnparsedSource) {
-            write(unparsed.text);
+            writer.rawWrite(unparsed.text);
         }
 
         //

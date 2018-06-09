@@ -540,6 +540,7 @@ namespace ts {
         public _declarationBrand: any;
         public fileName: string;
         public path: Path;
+        public resolvedPath: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: ReadonlyArray<number>;

@@ -2558,6 +2558,7 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+        /* @internal */ resolvedPath: Path;
 
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.
@@ -2658,12 +2659,15 @@ namespace ts {
     export interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
         javascriptText: string;
+        javascriptMapText?: string;
         declarationText: string;
+        declarationMapText?: string;
     }
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
         text: string;
+        sourceMapText?: string;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -4297,6 +4301,9 @@ namespace ts {
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
+        /** An error if set - this should only go through the -b pipeline and not actually be observed */
+        /*@internal*/
+        build?: boolean;
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
@@ -4819,6 +4826,10 @@ namespace ts {
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
+
+        getModifiedTime?(fileName: string): Date;
+        setModifiedTime?(fileName: string, date: Date): void;
+        deleteFile?(fileName: string): void;
     }
 
     /* @internal */

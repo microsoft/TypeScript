@@ -180,7 +180,7 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        return createUnparsedSourceFile(prepend.declarationText);
+                        return createUnparsedSourceFile(prepend.declarationText, prepend.declarationMapText);
                     }
                 }));
                 bundle.syntheticFileReferences = [];
