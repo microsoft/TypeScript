@@ -372,8 +372,12 @@ namespace ts {
                     visitNode((<ArrayTypeNode>node).elementType, visitor, isTypeNode));
 
             case SyntaxKind.TupleType:
-                return updateTypleTypeNode((<TupleTypeNode>node),
+                return updateTupleTypeNode((<TupleTypeNode>node),
                     nodesVisitor((<TupleTypeNode>node).elementTypes, visitor, isTypeNode));
+
+            case SyntaxKind.OptionalType:
+                return updateOptionalTypeNode((<OptionalTypeNode>node),
+                    visitNode((<OptionalTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.UnionType:
                 return updateUnionTypeNode(<UnionTypeNode>node,

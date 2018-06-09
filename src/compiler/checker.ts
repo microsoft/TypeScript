@@ -352,7 +352,7 @@ namespace ts {
             }
         };
 
-        const tupleTypes: GenericType[] = [];
+        const tupleTypes = createMap<GenericType>();
         const unionTypes = createMap<UnionType>();
         const intersectionTypes = createMap<IntersectionType>();
         const literalTypes = createMap<LiteralType>();
@@ -3396,8 +3396,12 @@ namespace ts {
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
                         if (typeArguments.length > 0) {
-                            const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, getTypeReferenceArity(type)), context);
+                            const arity = getTypeReferenceArity(type);
+                            const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
                             if (tupleConstituentNodes && tupleConstituentNodes.length > 0) {
+                                for (let i = (<TupleType>type.target).minLength; i < arity; i++) {
+                                    tupleConstituentNodes[i] = createOptionalTypeNode(tupleConstituentNodes[i]);
+                                }
                                 return createTupleTypeNode(tupleConstituentNodes);
                             }
                         }
@@ -5406,7 +5410,7 @@ namespace ts {
         function getBaseTypes(type: InterfaceType): BaseType[] {
             if (!type.resolvedBaseTypes) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
-                    type.resolvedBaseTypes = [createArrayType(getUnionType(type.typeParameters!))];
+                    type.resolvedBaseTypes = [createArrayType(getUnionType(type.typeParameters || emptyArray))];
                 }
                 else if (type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     if (type.symbol.flags & SymbolFlags.Class) {
@@ -7663,31 +7667,39 @@ namespace ts {
             let inferences: Type[] | undefined;
             if (typeParameter.symbol) {
                 for (const declaration of typeParameter.symbol.declarations) {
-                    // When an 'infer T' declaration is immediately contained in a type reference node
-                    // (such as 'Foo<infer T>'), T's constraint is inferred from the constraint of the
-                    // corresponding type parameter in 'Foo'. When multiple 'infer T' declarations are
-                    // present, we form an intersection of the inferred constraint types.
-                    if (declaration.parent.kind === SyntaxKind.InferType && declaration.parent.parent.kind === SyntaxKind.TypeReference) {
-                        const typeReference = <TypeReferenceNode>declaration.parent.parent;
-                        const typeParameters = getTypeParametersForTypeReference(typeReference);
-                        if (typeParameters) {
-                            const index = typeReference.typeArguments!.indexOf(<TypeNode>declaration.parent);
-                            if (index < typeParameters.length) {
-                                const declaredConstraint = getConstraintOfTypeParameter(typeParameters[index]);
-                                if (declaredConstraint) {
-                                    // Type parameter constraints can reference other type parameters so
-                                    // constraints need to be instantiated. If instantiation produces the
-                                    // type parameter itself, we discard that inference. For example, in
-                                    //   type Foo<T extends string, U extends T> = [T, U];
-                                    //   type Bar<T> = T extends Foo<infer X, infer X> ? Foo<X, X> : T;
-                                    // the instantiated constraint for U is X, so we discard that inference.
-                                    const mapper = createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReference, typeParameters));
-                                    const constraint = instantiateType(declaredConstraint, mapper);
-                                    if (constraint !== typeParameter) {
-                                        inferences = append(inferences, constraint);
+                    if (declaration.parent.kind === SyntaxKind.InferType) {
+                        // When an 'infer T' declaration is immediately contained in a type reference node
+                        // (such as 'Foo<infer T>'), T's constraint is inferred from the constraint of the
+                        // corresponding type parameter in 'Foo'. When multiple 'infer T' declarations are
+                        // present, we form an intersection of the inferred constraint types.
+                        const grandParent = declaration.parent.parent;
+                        if (grandParent.kind === SyntaxKind.TypeReference) {
+                            const typeReference = <TypeReferenceNode>grandParent;
+                            const typeParameters = getTypeParametersForTypeReference(typeReference);
+                            if (typeParameters) {
+                                const index = typeReference.typeArguments!.indexOf(<TypeNode>declaration.parent);
+                                if (index < typeParameters.length) {
+                                    const declaredConstraint = getConstraintOfTypeParameter(typeParameters[index]);
+                                    if (declaredConstraint) {
+                                        // Type parameter constraints can reference other type parameters so
+                                        // constraints need to be instantiated. If instantiation produces the
+                                        // type parameter itself, we discard that inference. For example, in
+                                        //   type Foo<T extends string, U extends T> = [T, U];
+                                        //   type Bar<T> = T extends Foo<infer X, infer X> ? Foo<X, X> : T;
+                                        // the instantiated constraint for U is X, so we discard that inference.
+                                        const mapper = createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReference, typeParameters));
+                                        const constraint = instantiateType(declaredConstraint, mapper);
+                                        if (constraint !== typeParameter) {
+                                            inferences = append(inferences, constraint);
+                                        }
                                     }
                                 }
                             }
+                        }
+                        // When an 'infer T' declaration is immediately contained in a rest parameter
+                        // declaration, we infer an 'unknown[]' constraint.
+                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken) {
+                            inferences = append(inferences, createArrayType(unknownType));
                         }
                     }
                 }
@@ -8242,20 +8254,23 @@ namespace ts {
         //
         // Note that the generic type created by this function has no symbol associated with it. The same
         // is true for each of the synthesized type parameters.
-        function createTupleTypeOfArity(arity: number): GenericType {
-            const typeParameters: TypeParameter[] = [];
+        function createTupleTypeOfArity(arity: number, minLength: number): TupleType {
+            let typeParameters: TypeParameter[] | undefined;
             const properties: Symbol[] = [];
-            for (let i = 0; i < arity; i++) {
-                const typeParameter = <TypeParameter>createType(TypeFlags.TypeParameter);
-                typeParameters.push(typeParameter);
-                const property = createSymbol(SymbolFlags.Property, "" + i as __String);
-                property.type = typeParameter;
-                properties.push(property);
+            if (arity) {
+                typeParameters = new Array(arity);
+                for (let i = 0; i < arity; i++) {
+                    const property = createSymbol(SymbolFlags.Property | (i >= minLength ? SymbolFlags.Optional : 0), "" + i as __String);
+                    property.type = typeParameters[i] = <TypeParameter>createType(TypeFlags.TypeParameter);
+                    properties.push(property);
+                }
             }
+            const literalTypes = [];
+            for (let i = minLength; i <= arity; i++) literalTypes.push(getLiteralType(i));
             const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String);
-            lengthSymbol.type = getLiteralType(arity);
+            lengthSymbol.type = getUnionType(literalTypes);
             properties.push(lengthSymbol);
-            const type = <GenericType & InterfaceTypeWithDeclaredMembers>createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference);
+            const type = <TupleType & InterfaceTypeWithDeclaredMembers>createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference);
             type.typeParameters = typeParameters;
             type.outerTypeParameters = undefined;
             type.localTypeParameters = typeParameters;
@@ -8271,23 +8286,36 @@ namespace ts {
             type.declaredConstructSignatures = emptyArray;
             type.declaredStringIndexInfo = undefined;
             type.declaredNumberIndexInfo = undefined;
+            type.minLength = minLength;
             return type;
         }
 
-        function getTupleTypeOfArity(arity: number): GenericType {
-            return tupleTypes[arity] || (tupleTypes[arity] = createTupleTypeOfArity(arity));
+        function getTupleTypeOfArity(arity: number, minLength: number): GenericType {
+            const key = arity + "," + minLength;
+            let type = tupleTypes.get(key);
+            if (!type) {
+                tupleTypes.set(key, type = createTupleTypeOfArity(arity, minLength));
+            }
+            return type;
         }
 
-        function createTupleType(elementTypes: Type[]) {
-            return createTypeReference(getTupleTypeOfArity(elementTypes.length), elementTypes);
+        function createTupleType(elementTypes: Type[], minLength = elementTypes.length) {
+            const tupleType = getTupleTypeOfArity(elementTypes.length, minLength);
+            return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
         }
 
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNode));
+                const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType) + 1;
+                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNode), minLength);
             }
             return links.resolvedType;
+        }
+
+        function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
+            const type = getTypeFromTypeNode(node.type);
+            return strictNullChecks ? getOptionalType(type) : type;
         }
 
         function getTypeId(type: Type) {
@@ -9480,6 +9508,8 @@ namespace ts {
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return getTypeFromTupleTypeNode(<TupleTypeNode>node);
+                case SyntaxKind.OptionalType:
+                    return getTypeFromOptionalTypeNode(<OptionalTypeNode>node);
                 case SyntaxKind.UnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
@@ -10100,8 +10130,13 @@ namespace ts {
 
             const sourceCount = getParameterCount(source);
             const targetCount = getParameterCount(target);
-
             if (!hasEffectiveRestParameter(target) && getMinArgumentCount(source) > targetCount) {
+                return Ternary.False;
+            }
+
+            const sourceRestTypeParameter = getRestTypeParameter(source);
+            const targetRestTypeParameter = sourceRestTypeParameter ? getRestTypeParameter(target) : undefined;
+            if (sourceRestTypeParameter && !(targetRestTypeParameter && sourceCount === targetCount)) {
                 return Ternary.False;
             }
 
@@ -10133,19 +10168,10 @@ namespace ts {
             }
 
             const paramCount = Math.max(sourceCount, targetCount);
+            const lastIndex = paramCount - 1;
             for (let i = 0; i < paramCount; i++) {
-                let targetType;
-                let sourceType = getGenericRestTypeAtPosition(source, i);
-                if (sourceType) {
-                    targetType = getGenericRestTypeAtPosition(target, i);
-                    if (!targetType) {
-                        return Ternary.False;
-                    }
-                }
-                else {
-                    sourceType = getTypeAtPosition(source, i);
-                    targetType = getTypeAtPosition(target, i);
-                }
+                const sourceType = i === lastIndex && sourceRestTypeParameter || getTypeAtPosition(source, i);
+                const targetType = i === lastIndex && targetRestTypeParameter || getTypeAtPosition(target, i);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -11921,7 +11947,7 @@ namespace ts {
         }
 
         function isTupleLikeType(type: Type): boolean {
-            return !!getPropertyOfType(type, "0" as __String);
+            return isTupleType(type) || !!getPropertyOfType(type, "0" as __String);
         }
 
         function isNeitherUnitTypeNorNever(type: Type): boolean {
@@ -12312,24 +12338,26 @@ namespace ts {
 
         function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
             const sourceCount = getParameterCount(source);
-            for (let i = 0; i < sourceCount; i++) {
-                const targetRest = getGenericRestTypeAtPosition(target, i);
-                if (targetRest) {
-                    const sourceRest = getTypeOfRestParameter(source);
-                    if (sourceRest && i === source.parameters.length - 1) {
-                        callback(sourceRest, targetRest);
-                    }
-                    else {
-                        const types: Type[] = [];
-                        for (let j = i; j < sourceCount; j++) {
-                            types.push(getTypeAtPosition(source, j));
-                        }
-                        const rest = !sourceRest || isTupleType(sourceRest) ? createTupleType(types) : createArrayType(getUnionType(types));
-                        callback(rest, targetRest);
-                    }
-                    break;
-                }
+            const targetRest = getRestTypeParameter(target);
+            const paramCount = targetRest ? Math.min(getParameterCount(target) - 1, sourceCount) : sourceCount;
+            for (let i = 0; i < paramCount; i++) {
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
+            }
+            if (targetRest) {
+                const sourceRest = getRestTypeParameter(source);
+                if (sourceRest && paramCount === sourceCount - 1) {
+                    callback(sourceRest, targetRest);
+                }
+                else {
+                    const types: Type[] = [];
+                    for (let i = paramCount; i < sourceCount; i++) {
+                        types.push(getTypeAtPosition(source, i));
+                    }
+                    const minArgumentCount = getMinArgumentCount(source);
+                    const minLength = minArgumentCount < paramCount ? 0 : minArgumentCount - paramCount;
+                    const rest = hasEffectiveRestParameter(source) ? createArrayType(getUnionType(types)) : createTupleType(types, minLength);
+                    callback(rest, targetRest);
+                }
             }
         }
 
@@ -15852,9 +15880,7 @@ namespace ts {
                             }
                         }
                     }
-                    if (elementTypes.length) {
-                        return createTupleType(elementTypes);
-                    }
+                    return createTupleType(elementTypes);
                 }
             }
             return createArrayType(elementTypes.length ?
@@ -17823,7 +17849,9 @@ namespace ts {
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
-            const argCount = getEffectiveArgumentCount(node, args, signature);
+            const effectiveArgCount = getEffectiveArgumentCount(node, args, signature);
+            const restTypeParameter = getRestTypeParameter(signature);
+            const argCount = restTypeParameter ? Math.min(getParameterCount(signature) - 1, effectiveArgCount) : effectiveArgCount;
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
@@ -17833,23 +17861,18 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        const restType = getGenericRestTypeAtPosition(signature, i);
-                        if (!restType) {
-                            // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
-                            // context sensitive function expressions as wildcards
-                            const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
-                            argType = checkExpressionWithContextualType(arg!, paramType, mapper);
-                        }
-                        else {
-                            // The parameter list ends in a rest parameter with a generic type. We consume the remainder
-                            // of the argument list an infer a tuple type or an array type.
-                            argType = inferGenericRestType(signature, args, context);
-                            paramType = restType;
-                            i = argCount;
-                        }
+                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                        // context sensitive function expressions as wildcards
+                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
+                        argType = checkExpressionWithContextualType(arg!, paramType, mapper);
                     }
                     inferTypes(context.inferences, argType, paramType);
                 }
+            }
+
+            if (restTypeParameter) {
+                const spreadType = getSpreadArgumentType(node, args, argCount, effectiveArgCount, restTypeParameter, context);
+                inferTypes(context.inferences, spreadType, restTypeParameter);
             }
 
             // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
@@ -17860,7 +17883,7 @@ namespace ts {
             if (excludeArgument) {
                 for (let i = 0; i < argCount; i++) {
                     // No need to check for omitted args and template expressions, their exclusion value is always undefined
-                    if (excludeArgument[i] === false && !getGenericRestTypeAtPosition(signature, i)) {
+                    if (excludeArgument[i] === false) {
                         const arg = args[i];
                         const paramType = getTypeAtPosition(signature, i);
                         inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, context), paramType);
@@ -17870,23 +17893,26 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function inferGenericRestType(signature: Signature, args: ReadonlyArray<Expression>, context: InferenceContext): Type {
-            const startIndex = signature.parameters.length - 1;
-            if (args[startIndex].kind === SyntaxKind.SpreadElement && args.length === startIndex + 1) {
-                // We are inferring from a spread expression in the last argument position, i.e. both the parameter
-                // and the argument are ...x forms.
-                return checkExpressionWithContextualType((<SpreadElement>args[startIndex]).expression, getTypeOfRestParameter(signature)!, context);
+        function getSpreadArgumentType(node: CallLikeExpression, args: ReadonlyArray<Expression>, index: number, argCount: number, restType: TypeParameter, context: InferenceContext | undefined) {
+            if (index === argCount - 1) {
+                const arg = getEffectiveArgument(node, args, index);
+                if (arg && arg.kind === SyntaxKind.SpreadElement) {
+                    // We are inferring from a spread expression in the last argument position, i.e. both the parameter
+                    // and the argument are ...x forms.
+                    return checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context);
+                }
             }
-            const contextualType = getTypeAtPosition(signature, startIndex);
+            const contextualType = getIndexTypeOfType(restType, IndexKind.Number) || anyType;
             const types: Type[] = [];
             let hasSpreadExpression = false;
-            for (let i = startIndex; i < args.length; i++) {
-                const arg = args[i];
-                types.push(checkExpressionWithContextualType(arg, contextualType, context));
-                hasSpreadExpression = hasSpreadExpression || arg.kind === SyntaxKind.SpreadElement;
+            for (let i = index; i < argCount; i++) {
+                let argType = getEffectiveArgumentType(node, i);
+                if (!argType) {
+                    argType = checkExpressionWithContextualType(args[i], contextualType, context);
+                    hasSpreadExpression = hasSpreadExpression || args[i].kind === SyntaxKind.SpreadElement;
+                }
+                types.push(argType);
             }
-            // If none of the remaining arguments are spread expressions, infer a tuple type. Otherwise, infer
-            // an array type.
             return hasSpreadExpression ? createArrayType(getUnionType(types)) : createTupleType(types);
         }
 
@@ -17977,17 +18003,15 @@ namespace ts {
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
             const argCount = getEffectiveArgumentCount(node, args, signature);
+            const restIndex = signature.hasRestParameter ? signature.parameters.length - 1 : -1;
+            const restType = restIndex >= 0 ? getTypeOfSymbol(signature.parameters[restIndex]) : anyType;
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
                 if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
-                    const restType = getTypeOfRestParameter(signature);
-                    if (arg && arg.kind === SyntaxKind.SpreadElement && i === argCount - 1 && restType &&
-                        signature.parameters.length === argCount && !isArrayType(restType)) {
-                        const argType = checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, /*contextualMapper*/ undefined);
-                        if (!checkTypeRelatedTo(argType, restType, relation, arg, headMessage)) {
-                            return false;
-                        }
+                    if (i === restIndex && (restType.flags & TypeFlags.TypeParameter || arg && arg.kind === SyntaxKind.SpreadElement && !isArrayType(restType))) {
+                        const spreadType = getSpreadArgumentType(node, args, i, argCount, restType, /*context*/ undefined);
+                        return checkTypeRelatedTo(spreadType, restType, relation, arg, headMessage);
                     }
                     else {
                         // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
@@ -18008,7 +18032,6 @@ namespace ts {
                     }
                 }
             }
-
             return true;
         }
 
@@ -19368,19 +19391,6 @@ namespace ts {
             return anyType;
         }
 
-        function getGenericRestTypeAtPosition(signature: Signature, pos: number) {
-            if (signature.hasRestParameter) {
-                const restIndex = signature.parameters.length - 1;
-                if (pos >= restIndex) {
-                    const restType = getTypeOfSymbol(signature.parameters[restIndex]);
-                    if (restType.flags & TypeFlags.TypeParameter) {
-                        return restType;
-                    }
-                }
-            }
-            return undefined;
-        }
-
         function getTypeOfRestParameter(signature: Signature) {
             return signature.hasRestParameter ? getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]) : undefined;
         }
@@ -19399,17 +19409,22 @@ namespace ts {
         function getMinArgumentCount(signature: Signature) {
             const restType = getTypeOfRestParameter(signature);
             if (restType && isTupleType(restType)) {
-                const elementTypes = (<TypeReference>restType).typeArguments || emptyArray;
-                let index = elementTypes.length;
-                while (index > 0) {
-                    --index;
-                    // TODO: Revise this once we have proper support for optional tuple elements
-                    if (!maybeTypeOfKind(elementTypes[index], TypeFlags.Undefined)) {
-                        return signature.parameters.length + index;
-                    }
+                const minLength = (<TupleType>(<TypeReference>restType).target).minLength;
+                if (minLength > 0) {
+                    return signature.parameters.length - 1 + minLength;
                 }
             }
             return signature.minArgumentCount;
+        }
+
+        function getRestTypeParameter(signature: Signature) {
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                if (restType.flags & TypeFlags.TypeParameter) {
+                    return <TypeParameter>restType;
+                }
+            }
+            return undefined;
         }
 
         function hasEffectiveRestParameter(signature: Signature) {
@@ -21665,12 +21680,7 @@ namespace ts {
         }
 
         function checkTupleType(node: TupleTypeNode) {
-            // Grammar checking
-            const hasErrorFromDisallowedTrailingComma = checkGrammarForDisallowedTrailingComma(node.elementTypes);
-            if (!hasErrorFromDisallowedTrailingComma && node.elementTypes.length === 0) {
-                grammarErrorOnNode(node, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
-            }
-
+            checkGrammarForDisallowedTrailingComma(node.elementTypes);
             forEach(node.elementTypes, checkSourceElement);
         }
 
@@ -25542,7 +25552,8 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                    return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                case SyntaxKind.OptionalType:
+                    return checkSourceElement((<ParenthesizedTypeNode | OptionalTypeNode>node).type);
                 case SyntaxKind.TypeOperator:
                     return checkTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.ConditionalType:

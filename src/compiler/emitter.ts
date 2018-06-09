@@ -640,6 +640,8 @@ namespace ts {
                         return emitArrayType(<ArrayTypeNode>node);
                     case SyntaxKind.TupleType:
                         return emitTupleType(<TupleTypeNode>node);
+                    case SyntaxKind.OptionalType:
+                        return emitOptionalType(<OptionalTypeNode>node);
                     case SyntaxKind.UnionType:
                         return emitUnionType(<UnionTypeNode>node);
                     case SyntaxKind.IntersectionType:
@@ -1294,6 +1296,11 @@ namespace ts {
             writePunctuation("[");
             emitList(node, node.elementTypes, ListFormat.TupleTypeElements);
             writePunctuation("]");
+        }
+
+        function emitOptionalType(node: OptionalTypeNode) {
+            emit(node.type);
+            write("?");
         }
 
         function emitUnionType(node: UnionTypeNode) {
