@@ -554,16 +554,6 @@ namespace ts {
         All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const
     }
 
-    export const enum JsxFlags {
-        None = 0,
-        /** An element from a named property of the JSX.IntrinsicElements interface */
-        IntrinsicNamedElement = 1 << 0,
-        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
-        IntrinsicIndexedElement = 1 << 1,
-
-        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
-    }
-
     /* @internal */
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
@@ -2549,6 +2539,57 @@ namespace ts {
         readonly unredirected: SourceFile;
     }
 
+    /* @internal */
+    export interface JsxDefinitions {
+        sourceFile: SourceFile | undefined;
+        checkPreconditions(node: JsxOpeningLikeElement | JsxOpeningFragment): void;
+        getMode(): JsxMode;
+        getNamespace(): string;
+        getValidateChildren(): boolean;
+        getIntrinsicElementType(intrinsicName: __String): Type;
+        getCustomElementType(tagType: Type, node: Node): Type;
+        getStatelessElementType(): Type | undefined;
+        getFragmentType(childrenTypes: { child: JsxChild, type: Type }[], node: Node): Type;
+        getIntrinsicAttributesInfo(intrinsicName: __String, errorNode?: Node): JsxIntrinsicAttributesInfo | undefined;
+        getIntrinsicChildrenType(intrinsicName: __String): Type | undefined;
+        getIntrinsicElementsType(): Type;
+        getElementClassType(): Type;
+        getElementPropertiesName(): __String | undefined;
+        getElementChildrenPropertyName(): __String | undefined;
+        getIntrinsicAttributesType(): Type;
+        getIntrinsicClassAttributesType(): Type;
+        getEmitFactoryEntity(): EntityName | undefined;
+        getEmitReactNamespace(): string;
+        getEmitFramentAsArray(): boolean;
+        getEmitElementMode(jsxElement: JsxOpeningLikeElement): JsxElementEmitMode;
+    }
+    /* @internal */
+    export const enum JsxMode {
+        Generic = 0,
+        React = 1
+    }
+    /* @internal */
+    export interface JsxGenericIntrinsicFactory {
+        factorySymbol: Symbol;
+        map: UnderscoreEscapedMap<JsxIntrinsicElement>;
+    }
+    /* @internal */
+    export interface JsxIntrinsicElement extends JsxIntrinsicAttributesInfo {
+        childrenType: Type;
+        returnedType: Type;
+    }
+    /* @internal */
+    export interface JsxIntrinsicAttributesInfo {
+        intrinsicSymbol?: Symbol;
+        attributesType: Type;
+    }
+    /* @internal */
+    export enum JsxElementEmitMode {
+        Intrinsic,
+        FactoryCall,
+        Construct,
+        FunctionCall
+    }
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -2642,8 +2683,6 @@ namespace ts {
         /* @internal */ checkJsDirective?: CheckJsDirective;
         /* @internal */ version: string;
         /* @internal */ pragmas: PragmaMap;
-        /* @internal */ localJsxNamespace?: __String;
-        /* @internal */ localJsxFactory?: EntityName;
     }
 
     export interface Bundle extends Node {
@@ -3388,7 +3427,7 @@ namespace ts {
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-        getJsxFactoryEntity(location?: Node): EntityName | undefined;
+        getJsxDefinitions(location: Node): JsxDefinitions;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     }
 
@@ -3667,7 +3706,6 @@ namespace ts {
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        jsxFlags: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
@@ -4412,7 +4450,8 @@ namespace ts {
         None = 0,
         Preserve = 1,
         React = 2,
-        ReactNative = 3
+        ReactNative = 3,
+        Transpile = 4
     }
 
     export const enum NewLineKind {
@@ -5517,6 +5556,14 @@ namespace ts {
             args: [{ name: "factory" }],
             kind: PragmaKindFlags.MultiLine
         },
+        "jsx-mode": {
+            args: [{ name: "mode" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsx-intrinsic-factory": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        }
     });
 
     /* @internal */

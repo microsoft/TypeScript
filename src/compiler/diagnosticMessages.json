@@ -2040,10 +2040,6 @@
         "category": "Error",
         "code": 2601
     },
-    "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
-        "category": "Error",
-        "code": 2602
-    },
     "Property '{0}' in type '{1}' is not assignable to type '{2}'.": {
         "category": "Error",
         "code": 2603
@@ -2072,6 +2068,14 @@
         "category": "Error",
         "code": 2609
     },
+    "JSX element '{0}' has no children.":  {
+        "category": "Error",
+        "code": 2610
+    },
+	"Failed to determine the type of JSX element.": {
+        "category": "Error",
+        "code": 2611
+	},
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
@@ -2377,7 +2381,10 @@
         "category": "Error",
         "code": 2727
     },
-
+    "Intrinsic JSX element '{0}' does not exist in factory '{1}'.": {
+        "category": "Error",
+        "code": 2728
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3105,7 +3112,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve', 'react-native', or 'react'.": {
+    "Specify JSX code generation: 'preserve', 'react-native', 'react' or 'transpile'.": {
         "category": "Message",
         "code": 6080
     },
@@ -3947,7 +3954,30 @@
         "category": "Error",
         "code": 17017
     },
-
+    "Invalid jsx-mode pragma. Must be react or generic.": {
+        "category": "Error",
+        "code": 17018
+    },
+    "Invalid factory in jsx-intrinsic-factory pragma.": {
+        "category": "Error",
+        "code": 17019
+    },
+    "Invalid factory in jsx pragma.": {
+        "category": "Error",
+        "code": 17020
+    },
+    "No JSX intrinsic factory defined.":  {
+        "category": "Error",
+        "code": 17021
+    },
+    "Invalid JSX intrinsic factory":  {
+        "category": "Error",
+        "code": 17022
+    },
+    "Missing jsx pragma":  {
+        "category": "Error",
+        "code": 17023
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000

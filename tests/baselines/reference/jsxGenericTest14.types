@@ -1,0 +1,80 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+>HTMLAttributes : HTMLAttributes
+
+    class?:     string;
+>class : string
+
+    id?:        string;
+>id : string
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : (this: HTMLElement, ev: MouseEvent) => void
+>this : HTMLElement
+>HTMLElement : HTMLElement
+>ev : MouseEvent
+>MouseEvent : MouseEvent
+}
+
+function createElement(tagName:"div", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLDivElement;
+>createElement : { (tagName: "div", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLDivElement; (tagName: "span", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLSpanElement; (tagName: "br"): HTMLBRElement; }
+>tagName : "div"
+>attrs : HTMLAttributes
+>HTMLAttributes : HTMLAttributes
+>children : HTMLElement[]
+>HTMLElement : HTMLElement
+>HTMLDivElement : HTMLDivElement
+
+function createElement(tagName:"span", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLSpanElement;
+>createElement : { (tagName: "div", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLDivElement; (tagName: "span", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLSpanElement; (tagName: "br"): HTMLBRElement; }
+>tagName : "span"
+>attrs : HTMLAttributes
+>HTMLAttributes : HTMLAttributes
+>children : HTMLElement[]
+>HTMLElement : HTMLElement
+>HTMLSpanElement : HTMLSpanElement
+
+function createElement(tagName:"br"): HTMLBRElement;
+>createElement : { (tagName: "div", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLDivElement; (tagName: "span", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLSpanElement; (tagName: "br"): HTMLBRElement; }
+>tagName : "br"
+>HTMLBRElement : HTMLBRElement
+
+function createElement(tagName:"div"|"span"|"br", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+>createElement : { (tagName: "div", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLDivElement; (tagName: "span", attrs?: HTMLAttributes, ...children: HTMLElement[]): HTMLSpanElement; (tagName: "br"): HTMLBRElement; }
+>tagName : "div" | "span" | "br"
+>attrs : HTMLAttributes
+>HTMLAttributes : HTMLAttributes
+>children : HTMLElement[]
+>HTMLElement : HTMLElement
+>HTMLElement : HTMLElement
+
+    return document.createElement(tagName);
+>document.createElement(tagName) : HTMLDivElement | HTMLSpanElement | HTMLBRElement
+>document.createElement : { <K extends "object" | "div" | "span" | "br" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends "object" | "div" | "span" | "br" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>tagName : "div" | "span" | "br"
+}
+
+function test() {
+>test : () => HTMLDivElement
+
+    return <div class="test">
+><div class="test">                <span/>                <br/>           </div> : HTMLDivElement
+>div : any
+>class : string
+
+                <span/>
+><span/> : HTMLSpanElement
+>span : any
+
+                <br/>
+><br/> : HTMLBRElement
+>br : any
+
+           </div>;
+>div : any
+}

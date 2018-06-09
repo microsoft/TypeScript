@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+
+function test() {
+>test : () => any
+
+    return <div class="test">
+><div class="test">                <span/>           </div> : any
+>div : any
+>class : string
+
+                <span/>
+><span/> : any
+>span : any
+
+           </div>;
+>div : any
+}

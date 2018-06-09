@@ -1,0 +1,12 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+
+function test() {
+>test : Symbol(test, Decl(file.tsx, 0, 0))
+
+    return <div class="test">
+>class : Symbol(class, Decl(file.tsx, 3, 15))
+
+                <span/>
+           </div>;
+}

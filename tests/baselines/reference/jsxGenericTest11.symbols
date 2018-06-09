@@ -1,0 +1,126 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+
+    class?:     string;
+>class : Symbol(HTMLAttributes.class, Decl(file.tsx, 3, 26))
+
+    id?:        string;
+>id : Symbol(HTMLAttributes.id, Decl(file.tsx, 4, 23))
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : Symbol(HTMLAttributes.onclick, Decl(file.tsx, 5, 23))
+>this : Symbol(this, Decl(file.tsx, 6, 17))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(file.tsx, 6, 35))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+ 
+export interface IContainer {
+>IContainer : Symbol(IContainer, Decl(file.tsx, 7, 1))
+
+    readonly container: HTMLElement;
+>container : Symbol(IContainer.container, Decl(file.tsx, 9, 29))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+export interface AddArray extends Array<AddNode> {}
+>AddArray : Symbol(AddArray, Decl(file.tsx, 11, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>AddNode : Symbol(AddNode, Decl(file.tsx, 12, 51))
+
+export type AddNode    = HTMLElement|string|IContainer|AddArray|false;
+>AddNode : Symbol(AddNode, Decl(file.tsx, 12, 51))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>IContainer : Symbol(IContainer, Decl(file.tsx, 7, 1))
+>AddArray : Symbol(AddArray, Decl(file.tsx, 11, 1))
+
+function createElement(tagName:"div"|"span", attrs?: HTMLAttributes, ...children:AddNode[]): HTMLElement {
+>createElement : Symbol(createElement, Decl(file.tsx, 13, 70))
+>tagName : Symbol(tagName, Decl(file.tsx, 15, 23))
+>attrs : Symbol(attrs, Decl(file.tsx, 15, 44))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+>children : Symbol(children, Decl(file.tsx, 15, 68))
+>AddNode : Symbol(AddNode, Decl(file.tsx, 12, 51))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    return document.createElement(tagName);
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(file.tsx, 15, 23))
+}
+
+function test() {
+>test : Symbol(test, Decl(file.tsx, 17, 1))
+
+    return <div class="test">
+>class : Symbol(class, Decl(file.tsx, 20, 15))
+
+                <Simple text="test"/>
+>Simple : Symbol(Simple, Decl(file.tsx, 31, 1))
+>text : Symbol(text, Decl(file.tsx, 21, 23))
+
+                <FunctionContainer>
+>FunctionContainer : Symbol(FunctionContainer, Decl(file.tsx, 35, 1))
+
+                    <span />
+                </FunctionContainer>
+>FunctionContainer : Symbol(FunctionContainer, Decl(file.tsx, 35, 1))
+
+                <ClassContainer>
+>ClassContainer : Symbol(ClassContainer, Decl(file.tsx, 39, 1))
+
+                    <span />
+                    { false }
+                </ClassContainer>
+>ClassContainer : Symbol(ClassContainer, Decl(file.tsx, 39, 1))
+
+                { false }
+           </div>;
+}
+
+function Simple(attr: { text:string }) {
+>Simple : Symbol(Simple, Decl(file.tsx, 31, 1))
+>attr : Symbol(attr, Decl(file.tsx, 33, 16))
+>text : Symbol(text, Decl(file.tsx, 33, 23))
+
+    return <span>{ attr.text }</span>;
+>attr.text : Symbol(text, Decl(file.tsx, 33, 23))
+>attr : Symbol(attr, Decl(file.tsx, 33, 16))
+>text : Symbol(text, Decl(file.tsx, 33, 23))
+}
+
+function FunctionContainer(attr: { }, ...children:AddNode[]) {
+>FunctionContainer : Symbol(FunctionContainer, Decl(file.tsx, 35, 1))
+>attr : Symbol(attr, Decl(file.tsx, 37, 27))
+>children : Symbol(children, Decl(file.tsx, 37, 37))
+>AddNode : Symbol(AddNode, Decl(file.tsx, 12, 51))
+
+    return <div>{ children }</div>;
+>children : Symbol(children, Decl(file.tsx, 37, 37))
+}
+
+class ClassContainer implements IContainer {
+>ClassContainer : Symbol(ClassContainer, Decl(file.tsx, 39, 1))
+>IContainer : Symbol(IContainer, Decl(file.tsx, 7, 1))
+
+    public container:HTMLElement;
+>container : Symbol(ClassContainer.container, Decl(file.tsx, 41, 44))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    constructor(attrs?: {}, ...children:AddNode[]) {
+>attrs : Symbol(attrs, Decl(file.tsx, 44, 16))
+>children : Symbol(children, Decl(file.tsx, 44, 27))
+>AddNode : Symbol(AddNode, Decl(file.tsx, 12, 51))
+
+        this.container = <div>{ children }</div>;
+>this.container : Symbol(ClassContainer.container, Decl(file.tsx, 41, 44))
+>this : Symbol(ClassContainer, Decl(file.tsx, 39, 1))
+>container : Symbol(ClassContainer.container, Decl(file.tsx, 41, 44))
+>children : Symbol(children, Decl(file.tsx, 44, 27))
+	}
+}
+

@@ -1,0 +1,38 @@
+tests/cases/conformance/jsxGeneric/file.tsx(10,10): error TS17022: Invalid JSX intrinsic factory
+tests/cases/conformance/jsxGeneric/file.tsx(11,35): error TS2345: Argument of type 'number | "div" | "span"' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsxGeneric/file.tsx(15,12): error TS2728: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+tests/cases/conformance/jsxGeneric/file.tsx(16,17): error TS2728: Intrinsic JSX element 'span' does not exist in factory 'createElement'.
+tests/cases/conformance/jsxGeneric/file.tsx(17,12): error TS2728: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+
+
+==== tests/cases/conformance/jsxGeneric/file.tsx (5 errors) ====
+    /* @jsx-mode generic */
+    /* @jsx-intrinsic-factory createElement */
+    
+    interface HTMLAttributes {
+        class?:     string;
+        id?:        string;
+        onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+    }
+     
+    function createElement(tagName:"div"|"span"|number, attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+             ~~~~~~~~~~~~~
+!!! error TS17022: Invalid JSX intrinsic factory
+        return document.createElement(tagName);
+                                      ~~~~~~~
+!!! error TS2345: Argument of type 'number | "div" | "span"' is not assignable to parameter of type 'string'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+    }
+    
+    function test() {
+        return <div class="test">
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS2728: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+                    <span/>
+                    ~~~~~~~
+!!! error TS2728: Intrinsic JSX element 'span' does not exist in factory 'createElement'.
+               </div>;
+               ~~~~~~
+!!! error TS2728: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+    }
