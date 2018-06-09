@@ -246,9 +246,9 @@ namespace ts {
     }
 
     export function createDependencyMapper() {
-        const childToParents: { [key: string]: ResolvedConfigFileName[] } = {};
-        const parentToChildren: { [key: string]: ResolvedConfigFileName[] } = {};
-        const allKeys: ResolvedConfigFileName[] = [];
+        const childToParents = createFileMap<ResolvedConfigFileName[]>();
+        const parentToChildren = createFileMap<ResolvedConfigFileName[]>();
+        const allKeys = createFileMap<true>();
 
         function addReference(childConfigFileName: ResolvedConfigFileName, parentConfigFileName: ResolvedConfigFileName): void {
             addEntry(childToParents, childConfigFileName, parentConfigFileName);
@@ -256,26 +256,29 @@ namespace ts {
         }
 
         function getReferencesTo(parentConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return parentToChildren[normalizePath(parentConfigFileName)] || [];
+            return parentToChildren.getValueOrUndefined(parentConfigFileName) || [];
         }
 
         function getReferencesOf(childConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return childToParents[normalizePath(childConfigFileName)] || [];
+            return childToParents.getValueOrUndefined(childConfigFileName) || [];
         }
 
         function getKeys(): ReadonlyArray<ResolvedConfigFileName> {
-            return allKeys;
+            return allKeys.getKeys() as ResolvedConfigFileName[];
         }
 
         function addEntry(mapToAddTo: typeof childToParents | typeof parentToChildren, key: ResolvedConfigFileName, element: ResolvedConfigFileName) {
             key = normalizePath(key) as ResolvedConfigFileName;
             element = normalizePath(element) as ResolvedConfigFileName;
-            const arr = (mapToAddTo[key] = mapToAddTo[key] || []);
+            let arr = mapToAddTo.getValueOrUndefined(key);
+            if (arr === undefined) {
+                mapToAddTo.setValue(key, arr = []);
+            }
             if (arr.indexOf(element) < 0) {
                 arr.push(element);
             }
-            if (allKeys.indexOf(key) < 0) allKeys.push(key);
-            if (allKeys.indexOf(element) < 0) allKeys.push(element);
+            allKeys.setValue(key, true);
+            allKeys.setValue(element, true);
         }
 
         return {
@@ -289,13 +292,13 @@ namespace ts {
     function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
-        return changeExtension(outputPath, ".d.ts");
+        return changeExtension(outputPath, Extension.Dts);
     }
 
     function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
-        return changeExtension(outputPath, (fileExtensionIs(inputFileName, ".tsx") && configFile.options.jsx === JsxEmit.Preserve) ? ".jsx" : ".js");
+        return changeExtension(outputPath, (fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve) ? Extension.Jsx : Extension.Js);
     }
 
     function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
@@ -316,12 +319,12 @@ namespace ts {
 
     function getOutFileOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
         if (!project.options.outFile) {
-            throw new Error("Assert - outFile must be set");
+            return Debug.fail("outFile must be set");
         }
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
         if (project.options.declaration) {
-            const dts = changeExtension(project.options.outFile, ".d.ts");
+            const dts = changeExtension(project.options.outFile, Extension.Dts);
             outputs.push(dts);
             if (project.options.declarationMap) {
                 outputs.push(dts + ".map");
@@ -365,7 +368,7 @@ namespace ts {
     }
 
     function isDeclarationFile(fileName: string) {
-        return fileExtensionIs(fileName, ".d.ts");
+        return fileExtensionIs(fileName, Extension.Dts);
     }
 
     export function createBuildContext(options: BuildOptions): BuildContext {
