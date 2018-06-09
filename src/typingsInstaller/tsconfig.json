@@ -1,0 +1,28 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "removeComments": true,
+        "outFile": "../built/local/typingsInstaller.js",
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
+        ]
+    },
+    "references": [
+        { "path": "../core", "prepend": true },
+        { "path": "../parser", "prepend": true },
+
+        /* todo - only need jsTyping and semver from this compilation! */
+        { "path": "../compiler", "prepend": true },
+        { "path": "../services", "prepend": true },
+        { "path": "../server", "prepend": true },
+
+        { "path": "../typingsInstallerCore", "prepend": true }
+    ],
+    "files": [
+        "nodeTypingsInstaller.ts"
+    ]
+}

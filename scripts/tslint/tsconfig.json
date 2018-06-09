@@ -1,6 +1,8 @@
 {
 	"compilerOptions": {
 		"lib": ["es6"],
+		"sourceMap": false,
+		"declaration": false,
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": true,

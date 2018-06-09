@@ -1,0 +1,18 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/parser.js"
+    },
+    "files": [
+        "types.ts",
+        "sys.ts",
+        "diagnosticInformationMap.generated.ts",
+        "scanner.ts",
+        "utilities.ts",
+        "parser.ts",
+        "commandLineParser.ts"
+    ],
+    "references": [
+        { "path": "../core" }
+    ]
+}

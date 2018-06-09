@@ -1,0 +1,39 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/run.js",
+        "composite": false,
+        "declaration": false,
+        "types": [
+            "node", "mocha", "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
+        ]
+    },
+    "references": [
+        { "path": "../core", "prepend": true },
+        { "path": "../parser", "prepend": true },
+        { "path": "../compiler", "prepend": true },
+        { "path": "../services", "prepend": true },
+        { "path": "../server", "prepend": true },
+        { "path": "../harness", "prepend": true },
+        { "path": "../typingsInstallerCore", "prepend": true }
+    ],
+
+    "files": [
+        "fourslashRunner.ts",
+        "compilerRunner.ts",
+        "projectsRunner.ts",
+        "rwcRunner.ts",
+        "externalCompileRunner.ts",
+        "test262Runner.ts",
+
+        "parallel/host.ts",
+        "parallel/worker.ts",
+        "parallel/shared.ts",
+
+        "runner.ts"
+    ]
+}

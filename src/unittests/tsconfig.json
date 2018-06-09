@@ -1,0 +1,23 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/unittests.js",
+        "types": [
+            "node", "mocha", "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
+        ]
+    },
+    "references": [
+        { "path": "../core" },
+        { "path": "../parser" },
+        { "path": "../compiler" },
+        { "path": "../services" },
+        { "path": "../server" },
+        { "path": "../typingsInstallerCore" },
+        { "path": "../harness" }
+    ],
+    "include": ["**/*.ts"]
+}

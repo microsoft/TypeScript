@@ -1,0 +1,7 @@
+{
+    "files": [],
+    "include": [],
+    "references": [
+        { "path": "./tsc" }
+    ]
+}

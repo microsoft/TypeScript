@@ -1,0 +1,19 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outDir": "../built/local/",
+        "composite": false,
+        "declaration": false,
+        "removeComments": true,
+        "module": "commonjs",
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "es6"
+        ]
+    },
+    "files": [
+        "cancellationToken.ts"
+    ]
+}

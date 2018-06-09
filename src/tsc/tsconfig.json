@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/tsc.js"
+    },
+    "files": [
+        "tsc.ts"
+    ],
+    "references": [
+        { "path": "../core", "prepend": true },
+        { "path": "../compiler", "prepend": true }
+    ]
+}
