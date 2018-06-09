@@ -1,0 +1,24 @@
+tests/cases/conformance/jsxGeneric/file.tsx(16,17): error TS2728: Intrinsic JSX element 'br' does not exist in factory 'createElement'.
+
+
+==== tests/cases/conformance/jsxGeneric/file.tsx (1 errors) ====
+    /* @jsx-mode generic */
+    /* @jsx-intrinsic-factory createElement */
+    
+    interface HTMLAttributes {
+        class?:     string;
+        id?:        string;
+        onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+    }
+     
+    function createElement(tagName:"div"|"span", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+        return document.createElement(tagName);
+    }
+    
+    function test() {
+        return <div class="test">
+                    <br/>
+                    ~~~~~
+!!! error TS2728: Intrinsic JSX element 'br' does not exist in factory 'createElement'.
+               </div>;
+    }

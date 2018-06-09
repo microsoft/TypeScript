@@ -1,0 +1,61 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+
+interface Attributes {
+>Attributes : Attributes
+
+    class?:     string;
+>class : string
+
+    id?:        string;
+>id : string
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : (this: HTMLElement, ev: MouseEvent) => void
+>this : HTMLElement
+>HTMLElement : HTMLElement
+>ev : MouseEvent
+>MouseEvent : MouseEvent
+}
+ 
+class Div {
+>Div : Div
+
+	constructor(attrs?: Attributes, ...children:Span[]) {
+>attrs : Attributes
+>Attributes : Attributes
+>children : Span[]
+>Span : Span
+	}
+	
+	public dummy() {
+>dummy : () => void
+	}
+}
+
+class Span {
+>Span : Span
+
+	constructor(attrs?: Attributes, ...children:Div[]) {
+>attrs : Attributes
+>Attributes : Attributes
+>children : Div[]
+>Div : Div
+	}
+}
+
+function test() {
+>test : () => Div
+
+    return <Div class="test">
+><Div class="test">                <Span/>           </Div> : Div
+>Div : typeof Div
+>class : string
+
+                <Span/>
+><Span/> : Span
+>Span : typeof Span
+
+           </Div>;
+>Div : typeof Div
+}

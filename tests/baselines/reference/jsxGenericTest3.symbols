@@ -1,0 +1,46 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+
+    class?:     string;
+>class : Symbol(HTMLAttributes.class, Decl(file.tsx, 3, 26))
+
+    id?:        string;
+>id : Symbol(HTMLAttributes.id, Decl(file.tsx, 4, 23))
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : Symbol(HTMLAttributes.onclick, Decl(file.tsx, 5, 23))
+>this : Symbol(this, Decl(file.tsx, 6, 17))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(file.tsx, 6, 35))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+ 
+function createElement(tagName:"div"|"span"|number, attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+>createElement : Symbol(createElement, Decl(file.tsx, 7, 1))
+>tagName : Symbol(tagName, Decl(file.tsx, 9, 23))
+>attrs : Symbol(attrs, Decl(file.tsx, 9, 51))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+>children : Symbol(children, Decl(file.tsx, 9, 75))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    return document.createElement(tagName);
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(file.tsx, 9, 23))
+}
+
+function test() {
+>test : Symbol(test, Decl(file.tsx, 11, 1))
+
+    return <div class="test">
+>class : Symbol(class, Decl(file.tsx, 14, 15))
+
+                <span/>
+           </div>;
+}

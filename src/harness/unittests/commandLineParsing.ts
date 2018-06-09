@@ -86,7 +86,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
+                            messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react', 'transpile'.",
                             category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 

@@ -2475,8 +2475,6 @@ namespace ts {
             if (node.imports !== undefined) updated.imports = node.imports;
             if (node.moduleAugmentations !== undefined) updated.moduleAugmentations = node.moduleAugmentations;
             if (node.pragmas !== undefined) updated.pragmas = node.pragmas;
-            if (node.localJsxFactory !== undefined) updated.localJsxFactory = node.localJsxFactory;
-            if (node.localJsxNamespace !== undefined) updated.localJsxNamespace = node.localJsxNamespace;
             return updateNode(updated, node);
         }
 
@@ -3162,7 +3160,7 @@ namespace ts {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
-        const react = createIdentifier(reactNamespace || "React");
+        const react = createIdentifier(reactNamespace);
         react.flags &= ~NodeFlags.Synthesized;
         // Set the parent that is in parse tree
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
@@ -3182,76 +3180,89 @@ namespace ts {
         }
     }
 
-    function createJsxFactoryExpression(jsxFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
-        return jsxFactoryEntity ?
-            createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent) :
-            createPropertyAccess(
-                createReactNamespace(reactNamespace, parent),
-                "createElement"
+    function createJsxFactoryExpression(jsxDefinitions: JsxDefinitions, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+        const jsxFactoryEntity = jsxDefinitions.getEmitFactoryEntity();
+
+        return jsxFactoryEntity
+                ? createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent)
+                : createPropertyAccess(createReactNamespace(jsxDefinitions.getEmitReactNamespace(), parent), "createElement");
+    }
+
+    export function createExpressionForJsxElement(jsxDefinitions: JsxDefinitions, jsxElement: JsxOpeningLikeElement, props: Expression, children: ReadonlyArray<Expression>, location: TextRange): LeftHandSideExpression {
+        const argumentsList = <Expression[]>[];
+
+        switch (jsxDefinitions.getEmitElementMode(jsxElement)) {
+        case JsxElementEmitMode.Intrinsic:
+            Debug.assert(isIdentifier(jsxElement.tagName));
+            argumentsList.push(createLiteral(idText(<Identifier>jsxElement.tagName)));
+            createArguments();
+            return setTextRange(createCall(createJsxFactoryExpression(jsxDefinitions, jsxElement), /*typeArguments*/ undefined, argumentsList), location);
+        case JsxElementEmitMode.FactoryCall:
+            argumentsList.push(createExpressionFromEntityName(jsxElement.tagName));
+            createArguments();
+            return setTextRange(createCall(createJsxFactoryExpression(jsxDefinitions, jsxElement), /*typeArguments*/ undefined, argumentsList), location);
+        case JsxElementEmitMode.Construct:
+            createArguments();
+            return setTextRange(createNew(createExpressionFromEntityName(jsxElement.tagName), /*typeArguments*/ undefined, argumentsList), location);
+        case JsxElementEmitMode.FunctionCall:
+            createArguments();
+            return setTextRange(createCall(createExpressionFromEntityName(jsxElement.tagName), /*typeArguments*/ undefined, argumentsList), location);
+        }
+
+        function createArguments() {
+            if (props) {
+                argumentsList.push(props);
+            }
+
+            if (children && children.length > 0) {
+                if (!props) {
+                    argumentsList.push(createNull());
+                }
+
+                if (children.length > 1) {
+                    for (const child of children) {
+                        startOnNewLine(child);
+                        argumentsList.push(child);
+                    }
+                }
+                else {
+                    argumentsList.push(children[0]);
+                }
+            }
+        }
+    }
+
+    export function createExpressionForJsxFragment(jsxDefinitions: JsxDefinitions, children: ReadonlyArray<Expression>, parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+        if (jsxDefinitions.getEmitFramentAsArray()) {
+            return setTextRange(createArrayLiteral((children && children.length > 0) ? children.map((c) => c) : [], /*multiLine*/ true), location);
+        }
+        else {
+            const tagName = createPropertyAccess(createReactNamespace(jsxDefinitions.getEmitReactNamespace(), parentElement), "Fragment");
+
+            const argumentsList = [<Expression>tagName];
+            argumentsList.push(createNull());
+
+            if (children && children.length > 0) {
+                if (children.length > 1) {
+                    for (const child of children) {
+                        startOnNewLine(child);
+                        argumentsList.push(child);
+                    }
+                }
+                else {
+                    argumentsList.push(children[0]);
+                }
+            }
+
+            return setTextRange(
+                createCall(
+                    createJsxFactoryExpression(jsxDefinitions, parentElement),
+                    /*typeArguments*/ undefined,
+                    argumentsList
+                ),
+                location
             );
-    }
-
-    export function createExpressionForJsxElement(jsxFactoryEntity: EntityName | undefined, reactNamespace: string, tagName: Expression, props: Expression, children: ReadonlyArray<Expression>, parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
-        const argumentsList = [tagName];
-        if (props) {
-            argumentsList.push(props);
         }
-
-        if (children && children.length > 0) {
-            if (!props) {
-                argumentsList.push(createNull());
-            }
-
-            if (children.length > 1) {
-                for (const child of children) {
-                    startOnNewLine(child);
-                    argumentsList.push(child);
-                }
-            }
-            else {
-                argumentsList.push(children[0]);
-            }
-        }
-
-        return setTextRange(
-            createCall(
-                createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
-                /*typeArguments*/ undefined,
-                argumentsList
-            ),
-            location
-        );
-    }
-
-    export function createExpressionForJsxFragment(jsxFactoryEntity: EntityName | undefined, reactNamespace: string, children: ReadonlyArray<Expression>, parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
-        const tagName = createPropertyAccess(
-            createReactNamespace(reactNamespace, parentElement),
-            "Fragment"
-        );
-
-        const argumentsList = [<Expression>tagName];
-        argumentsList.push(createNull());
-
-        if (children && children.length > 0) {
-            if (children.length > 1) {
-                for (const child of children) {
-                    startOnNewLine(child);
-                    argumentsList.push(child);
-                }
-            }
-            else {
-                argumentsList.push(children[0]);
-            }
-        }
-
-        return setTextRange(
-            createCall(
-                createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
-                /*typeArguments*/ undefined,
-                argumentsList
-            ),
-            location
-        );
     }
 
     // Helpers

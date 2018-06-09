@@ -448,14 +448,6 @@ declare namespace ts {
         ExportDefault = 513,
         All = 3071
     }
-    enum JsxFlags {
-        None = 0,
-        /** An element from a named property of the JSX.IntrinsicElements interface */
-        IntrinsicNamedElement = 1,
-        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
-        IntrinsicIndexedElement = 2,
-        IntrinsicElement = 3
-    }
     interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -2498,7 +2490,8 @@ declare namespace ts {
         None = 0,
         Preserve = 1,
         React = 2,
-        ReactNative = 3
+        ReactNative = 3,
+        Transpile = 4
     }
     enum NewLineKind {
         CarriageReturnLineFeed = 0,
