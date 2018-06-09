@@ -202,7 +202,7 @@ namespace ts {
      */
     function createFileMap<T>(): FileMap<T> {
         // tslint:disable-next-line:no-null-keyword
-        const lookup: { [key: string]: T } = Object.create(/*prototype*/ null);
+        const lookup = createMap<T>();
 
         return {
             setValue,
@@ -218,21 +218,21 @@ namespace ts {
         }
 
         function hasKey(fileName: string) {
-            return normalizePath(fileName) in lookup;
+            return lookup.has(normalizePath(fileName));
         }
 
         function removeKey(fileName: string) {
-            delete lookup[fileName];
+            lookup.delete(normalizePath(fileName));
         }
 
         function setValue(fileName: string, value: T) {
-            lookup[normalizePath(fileName)] = value;
+            lookup.set(normalizePath(fileName), value);
         }
 
         function getValue(fileName: string): T | never {
             const f = normalizePath(fileName);
-            if (f in lookup) {
-                return lookup[f];
+            if (lookup.has(f)) {
+                return lookup.get(f)!;
             }
             else {
                 throw new Error(`No value corresponding to ${fileName} exists in this map`);
@@ -241,12 +241,7 @@ namespace ts {
 
         function getValueOrUndefined(fileName: string): T | undefined {
             const f = normalizePath(fileName);
-            if (f in lookup) {
-                return lookup[f];
-            }
-            else {
-                return undefined;
-            }
+            return lookup.get(f);
         }
     }
 
