@@ -19,6 +19,7 @@
         { "path": "../services", "prepend": true },
         { "path": "../server", "prepend": true },
         { "path": "../harness", "prepend": true },
+        { "path": "../unittests", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true }
     ],
 

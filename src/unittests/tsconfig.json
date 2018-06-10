@@ -19,5 +19,5 @@
         { "path": "../typingsInstallerCore" },
         { "path": "../harness" }
     ],
-    "include": ["**/*.ts"]
+    "include": ["*.ts", "**/*.ts"]
 }
