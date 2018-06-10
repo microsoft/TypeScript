@@ -47,6 +47,7 @@
         "moduleSpecifiers.ts",
         "watch.ts",
         "commandLineParser.ts",
-        "tsc.ts"
+        "tsbuild.ts",
+        "tsc.ts",
     ]
 }

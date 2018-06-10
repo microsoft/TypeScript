@@ -53,6 +53,7 @@
         "../compiler/resolutionCache.ts",
         "../compiler/moduleSpecifiers.ts",
         "../compiler/watch.ts",
+        "../compiler/tsbuild.ts",
         "../compiler/commandLineParser.ts",
 
         "../services/types.ts",

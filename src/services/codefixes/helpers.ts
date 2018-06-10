@@ -112,7 +112,7 @@ namespace ts.codefix {
 
     export function createMethodFromCallExpression(
         context: CodeFixContextBase,
-        { typeArguments, arguments: args }: CallExpression,
+        { typeArguments, arguments: args, parent: parent }: CallExpression,
         methodName: string,
         inJs: boolean,
         makeStatic: boolean,
@@ -135,7 +135,7 @@ namespace ts.codefix {
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
-            /*asteriskToken*/ undefined,
+            /*asteriskToken*/ isYieldExpression(parent) ? createToken(SyntaxKind.AsteriskToken) : undefined,
             methodName,
             /*questionToken*/ undefined,
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>

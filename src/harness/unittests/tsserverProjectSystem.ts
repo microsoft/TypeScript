@@ -466,7 +466,7 @@ namespace ts.projectSystem {
         return newRequest;
     }
 
-    export function openFilesForSession(files: File[], session: server.Session) {
+    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session) {
         for (const file of files) {
             const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
@@ -6192,6 +6192,69 @@ namespace ts.projectSystem {
                 renameLocation: { line: 2, offset: 3 },
             });
         });
+
+        it("handles text changes in tsconfig.json", () => {
+            const aTs = {
+                path: "/a.ts",
+                content: "export const a = 0;",
+            };
+            const tsconfig = {
+                path: "/tsconfig.json",
+                content: '{ "files": ["./a.ts"] }',
+            };
+
+            const session = createSession(createServerHost([aTs, tsconfig]));
+            openFilesForSession([aTs], session);
+
+            const response1 = session.executeCommandSeq<server.protocol.GetEditsForRefactorRequest>({
+                command: server.protocol.CommandTypes.GetEditsForRefactor,
+                arguments: {
+                    refactor: "Move to a new file",
+                    action: "Move to a new file",
+                    file: "/a.ts",
+                    startLine: 1,
+                    startOffset: 1,
+                    endLine: 1,
+                    endOffset: 20,
+                },
+            }).response;
+            assert.deepEqual(response1, {
+                edits: [
+                    {
+                        fileName: "/a.ts",
+                        textChanges: [
+                            {
+                                start: { line: 1, offset: 1 },
+                                end: { line: 1, offset: 20 },
+                                newText: "",
+                            },
+                        ],
+                    },
+                    {
+                        fileName: "/tsconfig.json",
+                        textChanges: [
+                            {
+                                start: { line: 1, offset: 21 },
+                                end: { line: 1, offset: 21 },
+                                newText: ", \"./a.1.ts\"",
+                            },
+                        ],
+                    },
+                    {
+                        fileName: "/a.1.ts",
+                        textChanges: [
+                            {
+                              start: { line: 0, offset: 0 },
+                              end: { line: 0, offset: 0 },
+                              newText: "export const a = 0;",
+                            },
+                        ],
+                    }
+                ],
+                renameFilename: undefined,
+                renameLocation: undefined,
+            });
+        });
     });
 
     describe("tsserverProjectSystem CachingFileSystemInformation", () => {
@@ -7501,8 +7564,8 @@ namespace ts.projectSystem {
     });
 
     describe("tsserverProjectSystem Watched recursive directories with windows style file system", () => {
-        function verifyWatchedDirectories(useProjectAtRoot: boolean) {
-            const root = useProjectAtRoot ? "c:/" : "c:/myfolder/allproject/";
+        function verifyWatchedDirectories(rootedPath: string, useProjectAtRoot: boolean) {
+            const root = useProjectAtRoot ? rootedPath : `${rootedPath}myfolder/allproject/`;
             const configFile: File = {
                 path: root + "project/tsconfig.json",
                 content: "{}"
@@ -7531,12 +7594,22 @@ namespace ts.projectSystem {
             ].concat(useProjectAtRoot ? [] : [root + nodeModulesAtTypes]), /*recursive*/ true);
         }
 
-        it("When project is in rootFolder", () => {
-            verifyWatchedDirectories(/*useProjectAtRoot*/ true);
+        function verifyRootedDirectoryWatch(rootedPath: string) {
+            it("When project is in rootFolder of style c:/", () => {
+                verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ true);
+            });
+
+            it("When files at some folder other than root", () => {
+                verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ false);
+            });
+        }
+
+        describe("for rootFolder of style c:/", () => {
+            verifyRootedDirectoryWatch("c:/");
         });
 
-        it("When files at some folder other than root", () => {
-            verifyWatchedDirectories(/*useProjectAtRoot*/ false);
+        describe("for rootFolder of style c:/users/username", () => {
+            verifyRootedDirectoryWatch("c:/users/username/");
         });
     });
 
