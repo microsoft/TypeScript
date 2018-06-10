@@ -9,8 +9,7 @@ namespace FourSlash {
         ShimsWithPreprocess,
         Server
     }
-    
-    
+
     // Represents a parsed source file with metadata
     interface FourSlashFile {
         // The contents of the file (with markers, etc stripped out)

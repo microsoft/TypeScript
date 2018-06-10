@@ -62,7 +62,7 @@ namespace ts {
     export interface Push<T> {
         push(...values: T[]): void;
     }
-    
+
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
         const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword

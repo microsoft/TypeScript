@@ -6818,7 +6818,7 @@ namespace ts {
 
         lastChain.next = tailChain;
         return headChain;
-    }    
+    }
 
     function getDiagnosticFilePath(diagnostic: Diagnostic): string | undefined {
         return diagnostic.file ? diagnostic.file.path : undefined;
@@ -6924,12 +6924,6 @@ namespace ts {
         return true;
     }
 
-    
-
-    //
-    // Paths
-    //
-
     /**
      * Internally, we represent paths as strings with '/' as the directory separator.
      * When we make system calls (eg: LanguageServiceHost.getDirectory()),
@@ -6938,7 +6932,6 @@ namespace ts {
     export const directorySeparator = "/";
     const altDirectorySeparator = "\\";
     const urlSchemeSeparator = "://";
-
     const backslashRegExp = /\\/g;
 
     /**
