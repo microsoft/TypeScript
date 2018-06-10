@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+
 // @Filename: /global.d.ts
 // A local variable would prevent import completions (see `completionsImport_shadowedByLocal.ts`), but a global doesn't.
 ////declare var foo: number;

@@ -212,7 +212,7 @@ function ternaryTest(isWhile:boolean) {
 }
 
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : (expression: any, msec?: number, language?: any) => number
+>setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; (expression: any, msec?: number, language?: any): number; }
 >expression : any
 >msec : number
 >language : any
@@ -231,7 +231,7 @@ var messenger = {
 
         setTimeout(() => { this.message.toString(); }, 3000);
 >setTimeout(() => { this.message.toString(); }, 3000) : number
->setTimeout : (expression: any, msec?: number, language?: any) => number
+>setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; (expression: any, msec?: number, language?: any): number; }
 >() => { this.message.toString(); } : () => void
 >this.message.toString() : any
 >this.message.toString : any

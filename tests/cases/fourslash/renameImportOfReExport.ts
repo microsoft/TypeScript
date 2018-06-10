@@ -20,7 +20,7 @@ const ranges = test.ranges();
 const [r0, r1, r2, r3] = ranges;
 const importRanges = [r2, r3];
 const classes = { definition: "class C", ranges: [r0] };
-const bs = { definition: "(alias) class C\nimport C", ranges: [r1] };
+const bs = { definition: "(alias) class C\nexport C", ranges: [r1] };
 const imports = { definition: "(alias) class C\nimport C", ranges: importRanges };
 verify.referenceGroups(r0, [classes, bs, imports]);
 verify.referenceGroups(r1, [bs, imports, classes]);

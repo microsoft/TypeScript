@@ -42,9 +42,9 @@ var b = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     b.prototype.foo = function () {
-        var _this = this;
+        var _this_1 = this;
         var _this = 10;
-        var f = function () { return _super.prototype.foo.call(_this); };
+        var f = function () { return _super.prototype.foo.call(_this_1); };
     };
     return b;
 }(a));
@@ -54,10 +54,10 @@ var b2 = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     b2.prototype.foo = function () {
-        var _this = this;
+        var _this_1 = this;
         var f = function () {
             var _this = 10;
-            return _super.prototype.foo.call(_this);
+            return _super.prototype.foo.call(_this_1);
         };
     };
     return b2;

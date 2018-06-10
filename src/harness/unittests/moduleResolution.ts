@@ -1,7 +1,7 @@
 /// <reference path="..\harness.ts" />
 
 namespace ts {
-    export function checkResolvedModule(expected: ResolvedModuleFull, actual: ResolvedModuleFull): boolean {
+    export function checkResolvedModule(expected: ResolvedModuleFull | undefined, actual: ResolvedModuleFull): boolean {
         if (!expected === !actual) {
             if (expected) {
                 assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
@@ -16,7 +16,7 @@ namespace ts {
     export function checkResolvedModuleWithFailedLookupLocations(actual: ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ResolvedModuleFull, expectedFailedLookupLocations: string[]): void {
         assert.isTrue(actual.resolvedModule !== undefined, "module should be resolved");
         checkResolvedModule(actual.resolvedModule, expectedResolvedModule);
-        assert.deepEqual(actual.failedLookupLocations, expectedFailedLookupLocations);
+        assert.deepEqual(actual.failedLookupLocations, expectedFailedLookupLocations, `Failed lookup locations should match - expected has ${expectedFailedLookupLocations.length}, actual has ${actual.failedLookupLocations.length}`);
     }
 
     export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport = false): ResolvedModuleFull {
@@ -71,7 +71,7 @@ namespace ts {
             return file && file.content;
         }
         function realpath(path: string): string {
-            return map.get(path).name;
+            return map.get(path)!.name;
         }
     }
 
@@ -181,6 +181,13 @@ namespace ts {
                     "/a/b/foo.ts",
                     "/a/b/foo.tsx",
                     "/a/b/foo.d.ts",
+                    "/c/d",
+                    "/c/d.ts",
+                    "/c/d.tsx",
+                    "/c/d.d.ts",
+                    "/c/d/index.ts",
+                    "/c/d/index.tsx",
+                    "/c/d/index.d.ts",
                     "/a/b/foo/index.ts",
                     "/a/b/foo/index.tsx",
                 ]);
@@ -325,7 +332,7 @@ namespace ts {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
                     const file = files.get(path);
-                    return file && createSourceFile(fileName, file, languageVersion);
+                    return file ? createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -413,7 +420,7 @@ export = C;
                     }
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
                     const file = files.get(path);
-                    return file && createSourceFile(fileName, file, languageVersion);
+                    return file ? createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -441,7 +448,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
+            test(files, { module: ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
@@ -449,7 +456,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
@@ -457,7 +464,7 @@ export = C;
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
@@ -465,7 +472,7 @@ export = C;
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
@@ -474,7 +481,7 @@ export = C;
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
             });
-            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
@@ -483,7 +490,7 @@ export = C;
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
@@ -496,7 +503,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
             const files = createMapFromTemplate({
@@ -508,7 +515,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
         });
     });
 
@@ -968,9 +975,9 @@ import b = require("./moduleB");
         function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
             const host = createModuleResolutionHost(/*hasDirectoryExists*/ false, ...[initialFile, targetFile].concat(...otherFiles));
             const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, { typeRoots: [typesRoot] }, host);
-            assert(result.resolvedTypeReferenceDirective.resolvedFileName !== undefined, "expected type directive to be resolved");
-            assert.equal(result.resolvedTypeReferenceDirective.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
-            assert.equal(result.resolvedTypeReferenceDirective.primary, primary, "unexpected 'primary' value");
+            assert(result.resolvedTypeReferenceDirective!.resolvedFileName !== undefined, "expected type directive to be resolved");
+            assert.equal(result.resolvedTypeReferenceDirective!.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
+            assert.equal(result.resolvedTypeReferenceDirective!.primary, primary, "unexpected 'primary' value");
         }
 
         it("Can be resolved from primary location", () => {
@@ -1104,10 +1111,7 @@ import b = require("./moduleB");
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
                 readFile: fileName => fileName === file.fileName ? file.text : undefined,
-                resolveModuleNames() {
-                    assert(false, "resolveModuleNames should not be called");
-                    return undefined;
-                }
+                resolveModuleNames: notImplemented,
             };
             createProgram([f.name], {}, compilerHost);
         });
@@ -1138,7 +1142,7 @@ import b = require("./moduleB");
                 readFile: fileName => fileName === file.fileName ? file.text : undefined,
                 resolveModuleNames(moduleNames: string[], _containingFile: string) {
                     assert.deepEqual(moduleNames, ["fs"]);
-                    return [undefined];
+                    return [undefined!]; // TODO: GH#18217
                 }
             };
             createProgram([f.name], {}, compilerHost);

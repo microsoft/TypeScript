@@ -7,7 +7,7 @@ tests/cases/compiler/noImplicitAnyWithOverloads.ts(8,16): error TS7006: Paramete
 ==== tests/cases/compiler/noImplicitAnyWithOverloads.ts (4 errors) ====
     interface A {
         foo;
-        ~~~~
+        ~~~
 !!! error TS7008: Member 'foo' implicitly has an 'any' type.
     }
     interface B { }

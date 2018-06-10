@@ -53,16 +53,14 @@ verify.completionListContains("test2", "(method) test2(): a1.connectModule", und
 verify.not.completionListContains("connectModule");
 verify.not.completionListContains("connectExport");
 
-goTo.marker('4');
-verify.currentSignatureHelpIs("test1(res: any, req: any, next: any): void");
-
-goTo.marker('5');
-verify.currentSignatureHelpIs("test2(): a1.connectModule");
+verify.signatureHelp(
+    { marker: "4", text: "test1(res: any, req: any, next: any): void" },
+    { marker: "5", text: "test2(): a1.connectModule" },
+);
 
 verify.quickInfoAt("6", "var r1: a1.connectModule", undefined);
 
-goTo.marker('7');
-verify.currentSignatureHelpIs("a(): a1.connectExport");
+verify.signatureHelp({ marker: "7", text: "a(): a1.connectExport" });
 
 verify.quickInfoAt("8", "var r2: a1.connectExport", undefined);
 
@@ -73,16 +71,14 @@ verify.completionListContains("test2", "(method) test2(): a1.connectModule", und
 verify.not.completionListContains("connectModule");
 verify.not.completionListContains("connectExport");
 
-goTo.marker('10');
-verify.currentSignatureHelpIs("test1(res: any, req: any, next: any): void");
-
-goTo.marker('11');
-verify.currentSignatureHelpIs("test2(): a1.connectModule");
+verify.signatureHelp(
+    { marker: "10", text: "test1(res: any, req: any, next: any): void" },
+    { marker: "11", text: "test2(): a1.connectModule" },
+);
 
 verify.quickInfoAt("12", "var r3: a1.connectModule", undefined);
 
-goTo.marker('13');
-verify.currentSignatureHelpIs("a1(): a1.connectExport");
+verify.signatureHelp({ marker: "13", text: "a1(): a1.connectExport" });
 
 verify.quickInfoAt("14", "var r4: a1.connectExport", undefined);
 

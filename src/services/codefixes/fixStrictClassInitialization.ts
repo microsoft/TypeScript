@@ -1,5 +1,6 @@
 /* @internal */
 namespace ts.codefix {
+    const fixName = "strictClassInitialization";
     const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
     const fixIdAddUndefinedType = "addMissingPropertyUndefinedType";
     const fixIdAddInitializer = "addMissingPropertyInitializer";
@@ -10,27 +11,24 @@ namespace ts.codefix {
             const propertyDeclaration = getPropertyDeclaration(context.sourceFile, context.span.start);
             if (!propertyDeclaration) return;
 
-            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
             const result = [
                 getActionForAddMissingUndefinedType(context, propertyDeclaration),
-                getActionForAddMissingDefiniteAssignmentAssertion(context, propertyDeclaration, newLineCharacter)
+                getActionForAddMissingDefiniteAssignmentAssertion(context, propertyDeclaration)
             ];
 
-            append(result, getActionForAddMissingInitializer(context, propertyDeclaration, newLineCharacter));
+            append(result, getActionForAddMissingInitializer(context, propertyDeclaration));
 
             return result;
         },
         fixIds: [fixIdAddDefiniteAssignmentAssertions, fixIdAddUndefinedType, fixIdAddInitializer],
         getAllCodeActions: context => {
-            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
-
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const propertyDeclaration = getPropertyDeclaration(diag.file, diag.start);
                 if (!propertyDeclaration) return;
 
                 switch (context.fixId) {
                     case fixIdAddDefiniteAssignmentAssertions:
-                        addDefiniteAssignmentAssertion(changes, diag.file, propertyDeclaration, newLineCharacter);
+                        addDefiniteAssignmentAssertion(changes, diag.file, propertyDeclaration);
                         break;
                     case fixIdAddUndefinedType:
                         addUndefinedType(changes, diag.file, propertyDeclaration);
@@ -40,7 +38,7 @@ namespace ts.codefix {
                         const initializer = getInitializer(checker, propertyDeclaration);
                         if (!initializer) return;
 
-                        addInitializer(changes, diag.file, propertyDeclaration, initializer, newLineCharacter);
+                        addInitializer(changes, diag.file, propertyDeclaration, initializer);
                         break;
                     default:
                         Debug.fail(JSON.stringify(context.fixId));
@@ -54,13 +52,12 @@ namespace ts.codefix {
         return isIdentifier(token) ? cast(token.parent, isPropertyDeclaration) : undefined;
     }
 
-    function getActionForAddMissingDefiniteAssignmentAssertion (context: CodeFixContext, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): CodeFixAction {
-        const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_definite_assignment_assertion_to_property_0), [propertyDeclaration.getText()]);
-        const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration, newLineCharacter));
-        return { description, changes, fixId: fixIdAddDefiniteAssignmentAssertions };
+    function getActionForAddMissingDefiniteAssignmentAssertion (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
+        const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration));
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, propertyDeclaration.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
     }
 
-    function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): void {
+    function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
         const property = updateProperty(
             propertyDeclaration,
             propertyDeclaration.decorators,
@@ -70,32 +67,31 @@ namespace ts.codefix {
             propertyDeclaration.type,
             propertyDeclaration.initializer
         );
-        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property, { suffix: newLineCharacter });
+        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
     }
 
     function getActionForAddMissingUndefinedType (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
-        const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_undefined_type_to_property_0), [propertyDeclaration.name.getText()]);
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration));
-        return { description, changes, fixId: fixIdAddUndefinedType };
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, propertyDeclaration.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
     }
 
     function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
         const undefinedTypeNode = createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
-        const types = isUnionTypeNode(propertyDeclaration.type) ? propertyDeclaration.type.types.concat(undefinedTypeNode) : [propertyDeclaration.type, undefinedTypeNode];
-        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration.type, createUnionTypeNode(types));
+        const type = propertyDeclaration.type!; // TODO: GH#18217
+        const types = isUnionTypeNode(type) ? type.types.concat(undefinedTypeNode) : [type, undefinedTypeNode];
+        changeTracker.replaceNode(propertyDeclarationSourceFile, type, createUnionTypeNode(types));
     }
 
-    function getActionForAddMissingInitializer (context: CodeFixContext, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): CodeFixAction | undefined {
+    function getActionForAddMissingInitializer(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction | undefined {
         const checker = context.program.getTypeChecker();
         const initializer = getInitializer(checker, propertyDeclaration);
         if (!initializer) return undefined;
 
-        const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_initializer_to_property_0), [propertyDeclaration.name.getText()]);
-        const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, propertyDeclaration, initializer, newLineCharacter));
-        return { description, changes, fixId: fixIdAddInitializer };
+        const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, propertyDeclaration, initializer));
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, propertyDeclaration.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
     }
 
-    function addInitializer (changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression, newLineCharacter: string): void {
+    function addInitializer (changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
         const property = updateProperty(
             propertyDeclaration,
             propertyDeclaration.decorators,
@@ -105,11 +101,11 @@ namespace ts.codefix {
             propertyDeclaration.type,
             initializer
         );
-        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property, { suffix: newLineCharacter });
+        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
     }
 
     function getInitializer(checker: TypeChecker, propertyDeclaration: PropertyDeclaration): Expression | undefined {
-        return getDefaultValueFromType(checker, checker.getTypeFromTypeNode(propertyDeclaration.type));
+        return getDefaultValueFromType(checker, checker.getTypeFromTypeNode(propertyDeclaration.type!)); // TODO: GH#18217
     }
 
     function getDefaultValueFromType (checker: TypeChecker, type: Type): Expression | undefined {
@@ -122,17 +118,17 @@ namespace ts.codefix {
         else if (type.flags & TypeFlags.Boolean) {
             return createFalse();
         }
-        else if (type.flags & TypeFlags.Literal) {
-            return createLiteral((<LiteralType>type).value);
+        else if (type.isLiteral()) {
+            return createLiteral(type.value);
         }
-        else if (type.flags & TypeFlags.Union) {
-            return firstDefined((<UnionType>type).types, t => getDefaultValueFromType(checker, t));
+        else if (type.isUnion()) {
+            return firstDefined(type.types, t => getDefaultValueFromType(checker, t));
         }
-        else if (getObjectFlags(type) & ObjectFlags.Class) {
+        else if (type.isClass()) {
             const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
             if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 
-            const constructorDeclaration = find<ClassElement, ConstructorDeclaration>(classDeclaration.members, (m): m is ConstructorDeclaration => isConstructorDeclaration(m) && !!m.body)!;
+            const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
             return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);

@@ -2,24 +2,24 @@
 exports.x = 0;
 >exports.x = 0 : 0
 >exports.x : number
->exports : typeof "/a"
+>exports : typeof import("/a")
 >x : number
 >0 : 0
 
 exports.x;
 >exports.x : number
->exports : typeof "/a"
+>exports : typeof import("/a")
 >x : number
 
 // Works nested
 {
     // 'exports' does not provide a contextual type to a function-class
     exports.Cls = function() {
->exports.Cls = function() {        this.x = 0;    } : () => void
->exports.Cls : () => void
->exports : typeof "/a"
->Cls : () => void
->function() {        this.x = 0;    } : () => void
+>exports.Cls = function() {        this.x = 0;    } : typeof Cls
+>exports.Cls : typeof Cls
+>exports : typeof import("/a")
+>Cls : typeof Cls
+>function() {        this.x = 0;    } : typeof Cls
 
         this.x = 0;
 >this.x = 0 : 0
@@ -31,9 +31,9 @@ exports.x;
 }
 
 const instance = new exports.Cls();
->instance : { x: number; }
->new exports.Cls() : { x: number; }
->exports.Cls : () => void
->exports : typeof "/a"
->Cls : () => void
+>instance : Cls
+>new exports.Cls() : Cls
+>exports.Cls : typeof Cls
+>exports : typeof import("/a")
+>Cls : typeof Cls
 

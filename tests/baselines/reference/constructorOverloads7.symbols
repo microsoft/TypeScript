@@ -16,11 +16,9 @@ declare class Point
 >add : Symbol(Point.add, Decl(constructorOverloads7.ts, 4, 38))
 >dx : Symbol(dx, Decl(constructorOverloads7.ts, 6, 9))
 >dy : Symbol(dy, Decl(constructorOverloads7.ts, 6, 20))
->Point : Symbol(Point, Decl(constructorOverloads7.ts, 0, 0))
 
      origin: Point;
 >origin : Symbol(Point.origin, Decl(constructorOverloads7.ts, 6, 40))
->Point : Symbol(Point, Decl(constructorOverloads7.ts, 0, 0))
 
 }
 

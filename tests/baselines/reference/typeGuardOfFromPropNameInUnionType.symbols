@@ -10,12 +10,12 @@ class B { b: number; }
 class C { b: Object; }
 >C : Symbol(C, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 22))
 >b : Symbol(C.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 9))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 class D { a: Date; }
 >D : Symbol(D, Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 22))
 >a : Symbol(D.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 function namedClasses(x: A | B) {
 >namedClasses : Symbol(namedClasses, Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 20))
@@ -52,7 +52,7 @@ function multipleClasses(x: A | B | C | D) {
 
         let y: string | Date = x.a;
 >y : Symbol(y, Decl(typeGuardOfFromPropNameInUnionType.ts, 15, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >x.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9), Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))
 >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 13, 25))
 >a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9), Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))
@@ -60,7 +60,7 @@ function multipleClasses(x: A | B | C | D) {
     } else {
         let z: number | Object = x.b;
 >z : Symbol(z, Decl(typeGuardOfFromPropNameInUnionType.ts, 17, 11))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x.b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9), Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 9))
 >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 13, 25))
 >b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9), Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 9))

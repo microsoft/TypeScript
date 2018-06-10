@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(11,21): error TS2559: Type '{ prop1: string; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(11,10): error TS2559: Type '{ prop1: string; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -13,7 +13,7 @@ tests/cases/conformance/jsx/file.tsx(11,21): error TS2559: Type '{ prop1: string
     
     // Error
     let a = <BigGreeter prop1="hello" />
-                        ~~~~~~~~~~~~~
+             ~~~~~~~~~~
 !!! error TS2559: Type '{ prop1: string; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
     
     // OK

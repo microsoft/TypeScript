@@ -1,13 +1,13 @@
 /// <reference path="fourslash.ts"/>
 
-// @Filename: test/my fil"e.ts
+// @Filename: test/my fil	e.ts
 ////export class Bar {
 ////    public s: string;
 ////}
 ////export var x: number;
 
 verify.navigationTree({
-    "text": "\"my fil\\\"e\"",
+    "text": "\"my fil\\te\"",
     "kind": "module",
     "childItems": [
         {
@@ -32,7 +32,7 @@ verify.navigationTree({
 
 verify.navigationBar([
     {
-        "text": "\"my fil\\\"e\"",
+        "text": "\"my fil\\te\"",
         "kind": "module",
         "childItems": [
             {

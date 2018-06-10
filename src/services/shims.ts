@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-/// <reference path='services.ts' />
-
 /* @internal */
 let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
 
@@ -144,6 +142,7 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
+        getSuggestionDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
@@ -151,8 +150,8 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined): string;
+        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -307,14 +306,14 @@ namespace ts {
             return this.scriptSnapshotShim.getLength();
         }
 
-        public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
+        public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined {
             const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             if (encoded === null) {
-                return null;
+                return null!; // TODO: GH#18217
             }
 
-            const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
+            const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded!); // TODO: GH#18217
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
@@ -323,7 +322,7 @@ namespace ts {
             // if scriptSnapshotShim is a COM object then property check becomes method call with no arguments
             // 'in' does not have this effect
             if ("dispose" in this.scriptSnapshotShim) {
-                this.scriptSnapshotShim.dispose();
+                this.scriptSnapshotShim.dispose!(); // TODO: GH#18217 Can we just use `if (this.scriptSnapshotShim.dispose)`?
             }
         }
     }
@@ -342,10 +341,10 @@ namespace ts {
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames: string[], containingFile: string): ResolvedModuleFull[] => {
-                    const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                    const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile!(containingFile)); // TODO: GH#18217
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
-                        return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
+                        return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined!; // TODO: GH#18217
                     });
                 };
             }
@@ -354,8 +353,8 @@ namespace ts {
             }
             if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
                 this.resolveTypeReferenceDirectives = (typeDirectiveNames: string[], containingFile: string) => {
-                    const typeDirectivesForFile = <MapLike<ResolvedTypeReferenceDirective>>JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile(containingFile));
-                    return map(typeDirectiveNames, name => getProperty(typeDirectivesForFile, name));
+                    const typeDirectivesForFile = <MapLike<ResolvedTypeReferenceDirective>>JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)); // TODO: GH#18217
+                    return map(typeDirectiveNames, name => getProperty(typeDirectivesForFile, name)!); // TODO: GH#18217
                 };
             }
         }
@@ -379,7 +378,7 @@ namespace ts {
         public getProjectVersion(): string {
             if (!this.shimHost.getProjectVersion) {
                 // shimmed host does not support getProjectVersion
-                return undefined;
+                return undefined!; // TODO: GH#18217
             }
 
             return this.shimHost.getProjectVersion();
@@ -412,14 +411,14 @@ namespace ts {
             return this.files = JSON.parse(encoded);
         }
 
-        public getScriptSnapshot(fileName: string): IScriptSnapshot {
+        public getScriptSnapshot(fileName: string): IScriptSnapshot | undefined {
             const scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
         public getScriptKind(fileName: string): ScriptKind {
             if ("getScriptKind" in this.shimHost) {
-                return this.shimHost.getScriptKind(fileName);
+                return this.shimHost.getScriptKind!(fileName); // TODO: GH#18217
             }
             else {
                 return ScriptKind.Unknown;
@@ -464,7 +463,7 @@ namespace ts {
 
         public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: string[], include?: string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(path, exclude, include,
-                this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+                this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(
                 path,
                 JSON.stringify(extensions),
@@ -497,13 +496,13 @@ namespace ts {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
             if ("realpath" in this.shimHost) {
-                this.realpath = path => this.shimHost.realpath(path);
+                this.realpath = path => this.shimHost.realpath!(path); // TODO: GH#18217
             }
         }
 
         public readDirectory(rootDir: string, extensions: ReadonlyArray<string>, exclude: ReadonlyArray<string>, include: ReadonlyArray<string>, depth?: number): string[] {
             const pattern = getFileMatcherPatterns(rootDir, exclude, include,
-                this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+                this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(
                 rootDir,
                 JSON.stringify(extensions),
@@ -529,7 +528,7 @@ namespace ts {
     }
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
-        let start: number;
+        let start: number | undefined;
         if (logPerformance) {
             logger.log(actionDescription);
             start = timestamp();
@@ -539,7 +538,7 @@ namespace ts {
 
         if (logPerformance) {
             const end = timestamp();
-            logger.log(`${actionDescription} completed in ${end - start} msec`);
+        logger.log(`${actionDescription} completed in ${end - start!} msec`);
             if (isString(result)) {
                 let str = result;
                 if (str.length > 128) {
@@ -552,7 +551,7 @@ namespace ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => {} | null | undefined, logPerformance: boolean): string {
         return <string>forwardCall(logger, actionDescription, /*returnJson*/ true, action, logPerformance);
     }
 
@@ -587,6 +586,7 @@ namespace ts {
         length: number;
         category: string;
         code: number;
+        reportsUnnecessary?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
@@ -595,11 +595,11 @@ namespace ts {
     function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDiagnostic {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
-            start: diagnostic.start,
-            length: diagnostic.length,
-            /// TODO: no need for the tolowerCase call
-            category: DiagnosticCategory[diagnostic.category].toLowerCase(),
-            code: diagnostic.code
+            start: diagnostic.start!, // TODO: GH#18217
+            length: diagnostic.length!, // TODO: GH#18217
+            category: diagnosticCategoryName(diagnostic),
+            code: diagnostic.code,
+            reportsUnnecessary: diagnostic.reportsUnnecessary,
         };
     }
 
@@ -614,7 +614,7 @@ namespace ts {
             this.logger = this.host;
         }
 
-        public forwardJSONCall(actionDescription: string, action: () => {}): string {
+        public forwardJSONCall(actionDescription: string, action: () => {} | null | undefined): string {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
@@ -627,7 +627,7 @@ namespace ts {
         public dispose(dummy: {}): void {
             this.logger.log("dispose()");
             this.languageService.dispose();
-            this.languageService = null;
+            this.languageService = null!;
 
             // force a GC
             if (debugObjectHost && debugObjectHost.CollectGarbage) {
@@ -635,7 +635,7 @@ namespace ts {
                 this.logger.log("CollectGarbage()");
             }
 
-            this.logger = null;
+            this.logger = null!;
 
             super.dispose(dummy);
         }
@@ -663,7 +663,7 @@ namespace ts {
 
         private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
-            return ts.realizeDiagnostics(diagnostics, newLine);
+            return realizeDiagnostics(diagnostics, newLine);
         }
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
@@ -714,6 +714,10 @@ namespace ts {
                     const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
+        }
+
+        public getSuggestionDiagnostics(fileName: string): string {
+            return this.forwardJSONCall(`getSuggestionDiagnostics('${fileName}')`, () => this.realizeDiagnostics(this.languageService.getSuggestionDiagnostics(fileName)));
         }
 
         public getCompilerOptionsDiagnostics(): string {
@@ -909,20 +913,20 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined) {
+        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position}, ${options})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position, options)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences)
             );
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined) {
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = options === undefined ? undefined : JSON.parse(options);
-                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source);
+                    const localOptions: FormatCodeOptions = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
+                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, preferences);
                 }
             );
         }
@@ -931,7 +935,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                 });
         }
@@ -940,7 +944,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForDocument('${fileName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                 });
         }
@@ -949,7 +953,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                 });
         }
@@ -1030,14 +1034,14 @@ namespace ts {
             this.classifier = createClassifier();
         }
 
-        public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
+        public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent = false): string {
             return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
                 () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
                 this.logPerformance);
         }
 
         /// COLORIZATION
-        public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
+        public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics = false): string {
             const classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
             let result = "";
             for (const item of classification.entries) {
@@ -1100,7 +1104,8 @@ namespace ts {
                         importedFiles: this.convertFileReferences(result.importedFiles),
                         ambientExternalModules: result.ambientExternalModules,
                         isLibFile: result.isLibFile,
-                        typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives)
+                        typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives),
+                        libReferenceDirectives: this.convertFileReferences(result.libReferenceDirectives)
                     };
                 });
         }
@@ -1115,7 +1120,7 @@ namespace ts {
             );
         }
 
-        private convertFileReferences(refs: FileReference[]): ShimsFileReference[] {
+        private convertFileReferences(refs: FileReference[]): ShimsFileReference[] | undefined {
             if (!refs) {
                 return undefined;
             }
@@ -1143,7 +1148,7 @@ namespace ts {
                         typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
-                        errors: realizeDiagnostics(result.parseDiagnostics.concat(configFile.errors), "\r\n")
+                        errors: realizeDiagnostics([...result.parseDiagnostics, ...configFile.errors], "\r\n")
                     };
                 });
         }
@@ -1193,7 +1198,7 @@ namespace ts {
                     this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
                 const hostAdapter = new LanguageServiceShimHostAdapter(host);
-                const languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnly*/ false);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {
@@ -1226,7 +1231,7 @@ namespace ts {
         public close(): void {
             // Forget all the registered shims
             clear(this._shims);
-            this.documentRegistry = undefined;
+            this.documentRegistry = undefined!;
         }
 
         public registerShim(shim: Shim): void {

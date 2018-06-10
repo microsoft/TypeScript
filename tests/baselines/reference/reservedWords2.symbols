@@ -1,11 +1,11 @@
 === tests/cases/compiler/reservedWords2.ts ===
 import while = require("dfdf");
 import * as  while from "foo"
-> : Symbol((Missing), Decl(reservedWords2.ts, 1, 6), Decl(reservedWords2.ts, 3, 16))
+> : Symbol((Missing), Decl(reservedWords2.ts, 3, 16), Decl(reservedWords2.ts, 1, 6))
 
 var typeof = 10;
 function throw() {}
-> : Symbol((Missing), Decl(reservedWords2.ts, 1, 6), Decl(reservedWords2.ts, 3, 16))
+> : Symbol((Missing), Decl(reservedWords2.ts, 3, 16), Decl(reservedWords2.ts, 1, 6))
 
 module void {}
 var {while, return} = { while: 1, return: 2 };

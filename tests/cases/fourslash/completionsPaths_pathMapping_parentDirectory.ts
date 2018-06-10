@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /src/a.ts
-////import { } from "foo/[|/**/|]";
+////import { } from "foo//**/";
 
 // @Filename: /oof/x.ts
 ////export const x = 0;
@@ -16,5 +16,4 @@
 ////    }
 ////}
 
-const [replacementSpan] = test.ranges();
-verify.completionsAt("", [{ name: "x", replacementSpan }]);
+verify.completionsAt("", ["x"], { isNewIdentifierLocation: true });

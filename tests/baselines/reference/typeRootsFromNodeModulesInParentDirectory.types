@@ -7,7 +7,7 @@ x;
 
 === /node_modules/@types/foo/index.d.ts ===
 declare module "xyz" {
->"xyz" : typeof "xyz"
+>"xyz" : typeof import("xyz")
 
     export const x: number;
 >x : number

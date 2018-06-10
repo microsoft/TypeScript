@@ -1,7 +1,3 @@
-/// <reference path="../../factory.ts" />
-/// <reference path="../../visitor.ts" />
-/// <reference path="../destructuring.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformModule(context: TransformationContext) {
@@ -42,14 +38,14 @@ namespace ts {
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
         const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
-        const deferredExports: Statement[][] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         /**
          * Transforms the module aspects of a SourceFile.
@@ -68,8 +64,8 @@ namespace ts {
             // Perform the transformation.
             const transformModule = getTransformModuleDelegate(moduleKind);
             const updated = transformModule(node);
-            currentSourceFile = undefined;
-            currentModuleInfo = undefined;
+            currentSourceFile = undefined!;
+            currentModuleInfo = undefined!;
             needUMDDynamicImportHelper = false;
             return aggregateTransformFlags(updated);
         }
@@ -101,7 +97,7 @@ namespace ts {
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
-            addRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -395,7 +391,7 @@ namespace ts {
             if (isImportEqualsDeclaration(node) || isExportDeclaration(node) || !getExternalModuleNameLiteral(node, currentSourceFile, host, resolver, compilerOptions)) {
                 return undefined;
             }
-            const name = getLocalNameForExternalImport(node, currentSourceFile);
+            const name = getLocalNameForExternalImport(node, currentSourceFile)!; // TODO: GH#18217
             const expr = getHelperExpressionForImport(node, name);
             if (expr === name) {
                 return undefined;
@@ -430,7 +426,7 @@ namespace ts {
 
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
-            addRange(statements, endLexicalEnvironment());
+            prependStatements(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -455,7 +451,7 @@ namespace ts {
          */
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (currentModuleInfo.exportEquals) {
-                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, importCallExpressionVisitor);
+                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, moduleExpressionElementVisitor);
                 if (expressionResult) {
                     if (emitAsReturn) {
                         const statement = createReturn(expressionResult);
@@ -521,27 +517,82 @@ namespace ts {
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
                 default:
-                    return visitEachChild(node, importCallExpressionVisitor, context);
+                    return visitEachChild(node, moduleExpressionElementVisitor, context);
             }
         }
 
-        function importCallExpressionVisitor(node: Expression): VisitResult<Expression> {
-            // This visitor does not need to descend into the tree if there is no dynamic import,
+        function moduleExpressionElementVisitor(node: Expression): VisitResult<Expression> {
+            // This visitor does not need to descend into the tree if there is no dynamic import or destructuring assignment,
             // as export/import statements are only transformed at the top level of a file.
-            if (!(node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+            if (!(node.transformFlags & TransformFlags.ContainsDynamicImport) && !(node.transformFlags & TransformFlags.ContainsDestructuringAssignment)) {
                 return node;
             }
 
             if (isImportCall(node)) {
                 return visitImportCallExpression(node);
             }
+            else if (node.transformFlags & TransformFlags.DestructuringAssignment && isBinaryExpression(node)) {
+                return visitDestructuringAssignment(node as DestructuringAssignment);
+            }
             else {
-                return visitEachChild(node, importCallExpressionVisitor, context);
+                return visitEachChild(node, moduleExpressionElementVisitor, context);
             }
         }
 
+        function destructuringNeedsFlattening(node: Expression): boolean {
+            if (isObjectLiteralExpression(node)) {
+                for (const elem of node.properties) {
+                    switch (elem.kind) {
+                        case SyntaxKind.PropertyAssignment:
+                            if (destructuringNeedsFlattening(elem.initializer)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.ShorthandPropertyAssignment:
+                            if (destructuringNeedsFlattening(elem.name)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.SpreadAssignment:
+                            if (destructuringNeedsFlattening(elem.expression)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            return false;
+                        default: Debug.assertNever(elem, "Unhandled object member kind");
+                    }
+                }
+            }
+            else if (isArrayLiteralExpression(node)) {
+                for (const elem of node.elements) {
+                    if (isSpreadElement(elem)) {
+                        if (destructuringNeedsFlattening(elem.expression)) {
+                            return true;
+                        }
+                    }
+                    else if (destructuringNeedsFlattening(elem)) {
+                        return true;
+                    }
+                }
+            }
+            else if (isIdentifier(node)) {
+                return length(getExports(node)) > (isExportName(node) ? 1 : 0);
+            }
+            return false;
+        }
+
+        function visitDestructuringAssignment(node: DestructuringAssignment): Expression {
+            if (destructuringNeedsFlattening(node.left)) {
+                return flattenDestructuringAssignment(node, moduleExpressionElementVisitor, context, FlattenLevel.All, /*needsValue*/ false, createAllExportExpressions);
+            }
+            return visitEachChild(node, moduleExpressionElementVisitor, context);
+        }
+
         function visitImportCallExpression(node: ImportCall): Expression {
-            const argument = visitNode(firstOrUndefined(node.arguments), importCallExpressionVisitor);
+            const argument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
             const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
@@ -554,7 +605,7 @@ namespace ts {
             }
         }
 
-        function createImportCallExpressionUMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
+        function createImportCallExpressionUMD(arg: Expression, containsLexicalThis: boolean): Expression {
             // (function (factory) {
             //      ... (regular UMD)
             // }
@@ -711,7 +762,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             const namespaceDeclaration = getNamespaceDeclarationNode(node);
             if (moduleKind !== ModuleKind.AMD) {
                 if (!node.importClause) {
@@ -825,7 +876,7 @@ namespace ts {
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
@@ -958,15 +1009,15 @@ namespace ts {
                 return undefined;
             }
 
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             const original = node.original;
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, moduleExpressionElementVisitor), /*location*/ node, /*allowComments*/ true);
             }
             else {
-                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
+                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, moduleExpressionElementVisitor), /*location*/ node, /*allowComments*/ true);
             }
 
             return singleOrMany(statements);
@@ -978,7 +1029,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
@@ -989,9 +1040,9 @@ namespace ts {
                                 node.asteriskToken,
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.parameters, importCallExpressionVisitor),
+                                visitNodes(node.parameters, moduleExpressionElementVisitor),
                                 /*type*/ undefined,
-                                visitEachChild(node.body, importCallExpressionVisitor, context)
+                                visitEachChild(node.body, moduleExpressionElementVisitor, context)
                             ),
                             /*location*/ node
                         ),
@@ -1000,7 +1051,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
+                statements = append(statements, visitEachChild(node, moduleExpressionElementVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -1021,7 +1072,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
@@ -1031,8 +1082,8 @@ namespace ts {
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.heritageClauses, importCallExpressionVisitor),
-                                visitNodes(node.members, importCallExpressionVisitor)
+                                visitNodes(node.heritageClauses, moduleExpressionElementVisitor),
+                                visitNodes(node.members, moduleExpressionElementVisitor)
                             ),
                             node
                         ),
@@ -1041,7 +1092,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
+                statements = append(statements, visitEachChild(node, moduleExpressionElementVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -1062,12 +1113,12 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
-            let statements: Statement[];
-            let variables: VariableDeclaration[];
-            let expressions: Expression[];
+            let statements: Statement[] | undefined;
+            let variables: VariableDeclaration[] | undefined;
+            let expressions: Expression[] | undefined;
 
             if (hasModifier(node, ModifierFlags.Export)) {
-                let modifiers: NodeArray<Modifier>;
+                let modifiers: NodeArray<Modifier> | undefined;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
                 // We only want to emit assignments for variables with initializers.
@@ -1093,7 +1144,7 @@ namespace ts {
                 }
             }
             else {
-                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
+                statements = append(statements, visitEachChild(node, moduleExpressionElementVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -1108,6 +1159,22 @@ namespace ts {
             return singleOrMany(statements);
         }
 
+        function createAllExportExpressions(name: Identifier, value: Expression, location?: TextRange) {
+            const exportedNames = getExports(name);
+            if (exportedNames) {
+                // For each additional export of the declaration, apply an export assignment.
+                let expression: Expression = isExportName(name) ? value : createAssignment(name, value);
+                for (const exportName of exportedNames) {
+                    // Mark the node to prevent triggering substitution.
+                    setEmitFlags(expression, EmitFlags.NoSubstitution);
+                    expression = createExportExpression(exportName, expression, /*location*/ location);
+                }
+
+                return expression;
+            }
+            return createAssignment(name, value);
+        }
+
         /**
          * Transforms an exported variable with an initializer into an expression.
          *
@@ -1116,12 +1183,12 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    visitNode(node, importCallExpressionVisitor),
+                    visitNode(node, moduleExpressionElementVisitor),
                     /*visitor*/ undefined,
                     context,
                     FlattenLevel.All,
                     /*needsValue*/ false,
-                    createExportExpression
+                    createAllExportExpressions
                 );
             }
             else {
@@ -1133,7 +1200,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    visitNode(node.initializer, importCallExpressionVisitor)
+                    visitNode(node.initializer, moduleExpressionElementVisitor)
                 );
             }
         }
@@ -1152,7 +1219,7 @@ namespace ts {
             //
             // To balance the declaration, add the exports of the elided variable
             // statement.
-            if (hasAssociatedEndOfDeclarationMarker(node) && node.original.kind === SyntaxKind.VariableStatement) {
+            if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
                 deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original);
             }
@@ -1465,9 +1532,9 @@ namespace ts {
 
                 previousOnEmitNode(hint, node, emitCallback);
 
-                currentSourceFile = undefined;
-                currentModuleInfo = undefined;
-                noSubstitution = undefined;
+                currentSourceFile = undefined!;
+                currentModuleInfo = undefined!;
+                noSubstitution = undefined!;
             }
             else {
                 previousOnEmitNode(hint, node, emitCallback);
@@ -1698,8 +1765,7 @@ namespace ts {
         text: `
             function __export(m) {
                 for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-            }
-        `
+            }`
     };
 
     function createExportStarHelper(context: TransformationContext, module: Expression) {

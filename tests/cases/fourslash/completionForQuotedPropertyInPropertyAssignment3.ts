@@ -15,5 +15,5 @@
 ////         '/*1*/': ""
 ////  }
 
-verify.completionsAt("0", ["jspm", '"jspm:browser"'], { isNewIdentifierLocation: true });
-verify.completionsAt("1", ["jspm", "jspm:browser"], { isNewIdentifierLocation: true });
+verify.completionsAt("0", ["jspm", '"jspm:browser"']);
+verify.completionsAt("1", ["jspm", "jspm:browser"]);

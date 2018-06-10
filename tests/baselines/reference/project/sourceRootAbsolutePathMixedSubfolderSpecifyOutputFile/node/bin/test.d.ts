@@ -1,3 +1,4 @@
+/// <reference path="../ref/m2.d.ts" />
 declare var m1_a1: number;
 declare class m1_c1 {
     m1_c1_p1: number;

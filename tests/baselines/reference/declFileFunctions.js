@@ -172,8 +172,8 @@ function globalfooWithOverloads(a) {
 export declare function foo(): void;
 /** This is comment for function signature*/
 export declare function fooWithParameters(/** this is comment about a*/ a: string, 
-    /** this is comment for b*/
-    b: number): void;
+/** this is comment for b*/
+b: number): void;
 export declare function fooWithRestParameters(a: string, ...rests: string[]): string;
 export declare function fooWithOverloads(a: string): string;
 export declare function fooWithOverloads(a: number): number;
@@ -187,8 +187,8 @@ export declare function fooWithTypeTypePredicateAndRestParam(a: any, ...rest: an
 declare function globalfoo(): void;
 /** This is comment for function signature*/
 declare function globalfooWithParameters(/** this is comment about a*/ a: string, 
-    /** this is comment for b*/
-    b: number): void;
+/** this is comment for b*/
+b: number): void;
 declare function globalfooWithRestParameters(a: string, ...rests: string[]): string;
 declare function globalfooWithOverloads(a: string): string;
 declare function globalfooWithOverloads(a: number): number;

@@ -3,13 +3,13 @@ function C() {
 >C : Symbol(C, Decl(input.js, 0, 0))
 
     this.m = null;
->m : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
+>m : Symbol(C.m, Decl(input.js, 0, 14))
 }
 C.prototype.m = function() {
->C.prototype : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
+>C.prototype : Symbol(C.m, Decl(input.js, 2, 1))
 >C : Symbol(C, Decl(input.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
->m : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(C.m, Decl(input.js, 2, 1))
 
     this.nothing();
 >this : Symbol(C, Decl(input.js, 0, 0))
@@ -22,11 +22,11 @@ class X {
 >this.m : Symbol(X.m, Decl(input.js, 10, 5))
 >this : Symbol(X, Decl(input.js, 5, 1))
 >m : Symbol(X.m, Decl(input.js, 7, 19))
->this.m.bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>this.m.bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >this.m : Symbol(X.m, Decl(input.js, 10, 5))
 >this : Symbol(X, Decl(input.js, 5, 1))
 >m : Symbol(X.m, Decl(input.js, 10, 5))
->bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(X, Decl(input.js, 5, 1))
 
         this.mistake = 'frankly, complete nonsense';
@@ -76,11 +76,11 @@ class Y {
 >this.m : Symbol(Y.m, Decl(input.js, 22, 5))
 >this : Symbol(Y, Decl(input.js, 19, 10))
 >m : Symbol(Y.m, Decl(input.js, 22, 5))
->this.m.bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>this.m.bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >this.m : Symbol(Y.m, Decl(input.js, 22, 5))
 >this : Symbol(Y, Decl(input.js, 19, 10))
 >m : Symbol(Y.m, Decl(input.js, 22, 5))
->bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(Y, Decl(input.js, 19, 10))
 
         this.mistake = 'even more nonsense';

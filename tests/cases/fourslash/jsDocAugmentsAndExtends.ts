@@ -6,7 +6,7 @@
 
 //// /**
 ////  * @augments {Thing<number>}
-////  * @extends {Thing<string>}
+////  * [|@extends {Thing<string>}|]
 ////  */
 //// class MyStringThing extends Thing {
 ////     constructor() {
@@ -27,8 +27,5 @@ goTo.marker();
 verify.quickInfoIs("(local var) x: number");
 verify.getSemanticDiagnostics([{
     message: "Class declarations cannot have more than one \`@augments\` or \`@extends\` tag.",
-    start: 36,
-    length: 24,
-    category: "error",
     code: 8025
 }]);

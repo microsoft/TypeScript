@@ -13,7 +13,15 @@ Outer.Inner = class {
     }
 }
 
+/** @type {Outer.Inner} */
+var local
+local.y
+var inner = new Outer.Inner()
+inner.y
+
 // @Filename: b.js
 /** @type {Outer.Inner} */
-var x;
+var x
 x.y
+var z = new Outer.Inner()
+z.y

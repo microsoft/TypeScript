@@ -34,7 +34,7 @@ export declare module a {
     enum weekend {
         Friday = 0,
         Saturday = 1,
-        Sunday = 2,
+        Sunday = 2
     }
 }
 export import b = a.weekend;

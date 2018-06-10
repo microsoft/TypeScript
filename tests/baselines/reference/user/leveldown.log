@@ -1,8 +1,0 @@
-Exit Code: 1
-Standard output:
-node_modules/abstract-leveldown/index.d.ts(43,27): error TS1005: ',' expected.
-node_modules/abstract-leveldown/index.d.ts(43,28): error TS1139: Type parameter declaration expected.
-
-
-
-Standard error:

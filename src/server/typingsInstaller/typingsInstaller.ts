@@ -17,7 +17,7 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
+    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
         try {
             const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
             return result.resolvedModule && result.resolvedModule.resolvedFileName;
@@ -30,6 +30,31 @@ namespace ts.server.typingsInstaller {
         }
     }
 
+    /*@internal*/
+    export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+        let hasError = false;
+        for (let remaining = packageNames.length; remaining > 0;) {
+            const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
+            remaining = result.remaining;
+            hasError = install(result.command) || hasError;
+        }
+        return hasError;
+    }
+
+    /*@internal*/
+    export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
+        const sliceStart = packageNames.length - remaining;
+        let command: string, toSlice = remaining;
+        while (true) {
+            command = `${npmPath} install --ignore-scripts ${(toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")} --save-dev --user-agent="typesInstaller/${tsVersion}"`;
+            if (command.length < 8000) {
+                break;
+            }
+
+            toSlice = toSlice - Math.floor(toSlice / 2);
+        }
+        return { command, remaining: remaining - toSlice };
+    }
 
     export type RequestCompletedAction = (success: boolean) => void;
     interface PendingRequest {
@@ -39,13 +64,31 @@ namespace ts.server.typingsInstaller {
         onRequestCompleted: RequestCompletedAction;
     }
 
+    function isPackageOrBowerJson(fileName: string) {
+        const base = getBaseFileName(fileName);
+        return base === "package.json" || base === "bower.json";
+    }
+
+    function getDirectoryExcludingNodeModulesOrBowerComponents(f: string) {
+        const indexOfNodeModules = f.indexOf("/node_modules/");
+        const indexOfBowerComponents = f.indexOf("/bower_components/");
+        const subStrLength = indexOfNodeModules === -1 || indexOfBowerComponents === -1 ?
+            Math.max(indexOfNodeModules, indexOfBowerComponents) :
+            Math.min(indexOfNodeModules, indexOfBowerComponents);
+        return subStrLength === -1 ? f : f.substr(0, subStrLength);
+    }
+
+    type ProjectWatchers = Map<FileWatcher> & { isInvoked?: boolean; };
+
     export abstract class TypingsInstaller {
         private readonly packageNameToTypingLocation: Map<JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
         private readonly missingTypingsSet: Map<true> = createMap<true>();
         private readonly knownCachesSet: Map<true> = createMap<true>();
-        private readonly projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
+        private readonly projectWatchers = createMap<ProjectWatchers>();
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
+        private readonly toCanonicalFileName: GetCanonicalFileName;
+        private readonly globalCacheCanonicalPackageJsonPath: string;
 
         private installRunCount = 1;
         private inFlightRequestCount = 0;
@@ -59,6 +102,8 @@ namespace ts.server.typingsInstaller {
             private readonly typesMapLocation: Path,
             private readonly throttleLimit: number,
             protected readonly log = nullLog) {
+            this.toCanonicalFileName = createGetCanonicalFileName(installTypingHost.useCaseSensitiveFileNames);
+            this.globalCacheCanonicalPackageJsonPath = combinePaths(this.toCanonicalFileName(globalCachePath), "package.json");
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
             }
@@ -80,10 +125,7 @@ namespace ts.server.typingsInstaller {
                 }
                 return;
             }
-            for (const w of watchers) {
-                w.close();
-            }
-
+            clearMap(watchers, closeFileWatcher);
             this.projectWatchers.delete(projectName);
 
             if (this.log.isEnabled()) {
@@ -112,7 +154,7 @@ namespace ts.server.typingsInstaller {
                 this.log.isEnabled() ? (s => this.log.writeLine(s)) : undefined,
                 req.fileNames,
                 req.projectRootPath,
-                this.safeList,
+                this.safeList!,
                 this.packageNameToTypingLocation,
                 req.typeAcquisition,
                 req.unresolvedImports,
@@ -123,7 +165,7 @@ namespace ts.server.typingsInstaller {
             }
 
             // start watching files
-            this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
+            this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch, req.projectRootPath);
 
             // install typings
             if (discoverTypingsResult.newTypingNames.length) {
@@ -167,8 +209,8 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
             }
             if (this.installTypingHost.fileExists(packageJson) && this.installTypingHost.fileExists(packageLockJson)) {
-                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson));
-                const npmLock = <NpmLock>JSON.parse(this.installTypingHost.readFile(packageLockJson));
+                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson)!); // TODO: GH#18217
+                const npmLock = <NpmLock>JSON.parse(this.installTypingHost.readFile(packageLockJson)!); // TODO: GH#18217
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
                     this.log.writeLine(`Loaded content of '${packageLockJson}'`);
@@ -204,7 +246,7 @@ namespace ts.server.typingsInstaller {
                         }
                         const info = getProperty(npmLock.dependencies, key);
                         const version = info && info.version;
-                        const semver = Semver.parse(version);
+                        const semver = Semver.parse(version!); // TODO: GH#18217
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: semver };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                     }
@@ -233,7 +275,7 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
                     return false;
                 }
-                if (this.packageNameToTypingLocation.get(typing) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typing), this.typesRegistry.get(typing))) {
+                if (this.packageNameToTypingLocation.get(typing) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typing)!, this.typesRegistry.get(typing)!)) {
                     if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has an up-to-date typing - skipping...`);
                     return false;
                 }
@@ -277,7 +319,7 @@ namespace ts.server.typingsInstaller {
             this.sendResponse(<BeginInstallTypes>{
                 kind: EventBeginInstallTypes,
                 eventId: requestId,
-                typingsInstallerVersion: ts.version, // qualified explicitly to prevent occasional shadowing
+                typingsInstallerVersion: ts.version, // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
                 projectName: req.projectName
             });
 
@@ -307,8 +349,8 @@ namespace ts.server.typingsInstaller {
                         }
 
                         // packageName is guaranteed to exist in typesRegistry by filterTypings
-                        const distTags = this.typesRegistry.get(packageName);
-                        const newVersion = Semver.parse(distTags[`ts${ts.versionMajorMinor}`] || distTags[latestDistTag]);
+                        const distTags = this.typesRegistry.get(packageName)!;
+                        const newVersion = Semver.parse(distTags[`ts${versionMajorMinor}`] || distTags[this.latestDistTag]);
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                         installedTypingFiles.push(typingFile);
@@ -326,7 +368,7 @@ namespace ts.server.typingsInstaller {
                         projectName: req.projectName,
                         packagesToInstall: scopedTypings,
                         installSuccess: ok,
-                        typingsInstallerVersion: ts.version // qualified explicitly to prevent occasional shadowing
+                        typingsInstallerVersion: ts.version // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
                     };
                     this.sendResponse(response);
                 }
@@ -343,29 +385,112 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private watchFiles(projectName: string, files: string[]) {
+        private watchFiles(projectName: string, files: string[], projectRootPath: Path) {
             if (!files.length) {
+                // shut down existing watchers
+                this.closeWatchers(projectName);
                 return;
             }
-            // shut down existing watchers
-            this.closeWatchers(projectName);
+
+            let watchers = this.projectWatchers.get(projectName)!;
+            const toRemove = createMap<FileWatcher>();
+            if (!watchers) {
+                watchers = createMap();
+                this.projectWatchers.set(projectName, watchers);
+            }
+            else {
+                copyEntries(watchers, toRemove);
+            }
 
             // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
-            let isInvoked = false;
-            const watchers: FileWatcher[] = [];
-            for (const file of files) {
-                const w = this.installTypingHost.watchFile(file, f => {
-                    if (this.log.isEnabled()) {
-                        this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
+            watchers.isInvoked = false;
+
+            const isLoggingEnabled = this.log.isEnabled();
+            const createProjectWatcher = (path: string, createWatch: (path: string) => FileWatcher) => {
+                toRemove.delete(path);
+                if (watchers.has(path)) {
+                    return;
+                }
+
+                watchers.set(path, createWatch(path));
+            };
+            const createProjectFileWatcher = (file: string): FileWatcher => {
+                if (isLoggingEnabled) {
+                    this.log.writeLine(`FileWatcher:: Added:: WatchInfo: ${file}`);
+                }
+                const watcher = this.installTypingHost.watchFile!(file, (f, eventKind) => { // TODO: GH#18217
+                    if (isLoggingEnabled) {
+                        this.log.writeLine(`FileWatcher:: Triggered with ${f} eventKind: ${FileWatcherEventKind[eventKind]}:: WatchInfo: ${file}:: handler is already invoked '${watchers.isInvoked}'`);
                     }
-                    if (!isInvoked) {
-                        this.sendResponse({ projectName, kind: server.ActionInvalidate });
-                        isInvoked = true;
+                    if (!watchers.isInvoked) {
+                        watchers.isInvoked = true;
+                        this.sendResponse({ projectName, kind: ActionInvalidate });
                     }
                 }, /*pollingInterval*/ 2000);
-                watchers.push(w);
+
+                return isLoggingEnabled ? {
+                    close: () => {
+                        this.log.writeLine(`FileWatcher:: Closed:: WatchInfo: ${file}`);
+                        watcher.close();
+                    }
+                } : watcher;
+            };
+            const createProjectDirectoryWatcher = (dir: string): FileWatcher => {
+                if (isLoggingEnabled) {
+                    this.log.writeLine(`DirectoryWatcher:: Added:: WatchInfo: ${dir} recursive`);
+                }
+                const watcher = this.installTypingHost.watchDirectory!(dir, f => { // TODO: GH#18217
+                    if (isLoggingEnabled) {
+                        this.log.writeLine(`DirectoryWatcher:: Triggered with ${f} :: WatchInfo: ${dir} recursive :: handler is already invoked '${watchers.isInvoked}'`);
+                    }
+                    if (watchers.isInvoked) {
+                        return;
+                    }
+                    f = this.toCanonicalFileName(f);
+                    if (f !== this.globalCacheCanonicalPackageJsonPath && isPackageOrBowerJson(f)) {
+                        watchers.isInvoked = true;
+                        this.sendResponse({ projectName, kind: ActionInvalidate });
+                    }
+                }, /*recursive*/ true);
+
+                return isLoggingEnabled ? {
+                    close: () => {
+                        this.log.writeLine(`DirectoryWatcher:: Closed:: WatchInfo: ${dir} recursive`);
+                        watcher.close();
+                    }
+                } : watcher;
+            };
+
+            // Create watches from list of files
+            for (const file of files) {
+                const filePath = this.toCanonicalFileName(file);
+                if (isPackageOrBowerJson(filePath)) {
+                    // package.json or bower.json exists, watch the file to detect changes and update typings
+                    createProjectWatcher(filePath, createProjectFileWatcher);
+                    continue;
+                }
+
+                // path in projectRoot, watch project root
+                if (containsPath(projectRootPath, filePath, projectRootPath, !this.installTypingHost.useCaseSensitiveFileNames)) {
+                    createProjectWatcher(projectRootPath, createProjectDirectoryWatcher);
+                    continue;
+                }
+
+                // path in global cache, watch global cache
+                if (containsPath(this.globalCachePath, filePath, projectRootPath, !this.installTypingHost.useCaseSensitiveFileNames)) {
+                    createProjectWatcher(this.globalCachePath, createProjectDirectoryWatcher);
+                    continue;
+                }
+
+                // Get path without node_modules and bower_components
+                createProjectWatcher(getDirectoryExcludingNodeModulesOrBowerComponents(getDirectoryPath(filePath)), createProjectDirectoryWatcher);
             }
-            this.projectWatchers.set(projectName, watchers);
+
+            // Remove unused watches
+            toRemove.forEach((watch, path) => {
+                watch.close();
+                watchers.delete(path);
+            });
         }
 
         private createSetTypings(request: DiscoverTypings, typings: string[]): SetTypings {
@@ -387,7 +512,7 @@ namespace ts.server.typingsInstaller {
         private executeWithThrottling() {
             while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
                 this.inFlightRequestCount++;
-                const request = this.pendingRunRequests.pop();
+                const request = this.pendingRunRequests.pop()!;
                 this.installWorker(request.requestId, request.packageNames, request.cwd, ok => {
                     this.inFlightRequestCount--;
                     request.onRequestCompleted(ok);
@@ -398,12 +523,12 @@ namespace ts.server.typingsInstaller {
 
         protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
+
+        protected readonly latestDistTag = "latest";
     }
 
     /* @internal */
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
-
-    const latestDistTag = "latest";
 }

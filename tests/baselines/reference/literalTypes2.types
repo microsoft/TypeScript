@@ -555,7 +555,7 @@ class C2 {
 >bar : () => 1 | 0
 
         return cond ? 0 : 1;
->cond ? 0 : 1 : 1 | 0
+>cond ? 0 : 1 : 0 | 1
 >cond : boolean
 >0 : 0
 >1 : 1

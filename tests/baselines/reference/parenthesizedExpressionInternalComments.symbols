@@ -1,0 +1,13 @@
+=== tests/cases/compiler/parenthesizedExpressionInternalComments.ts ===
+/*1*/(/*2*/ "foo" /*3*/)/*4*/
+No type information for this code.;
+No type information for this code.
+No type information for this code.// open
+No type information for this code./*1*/(
+No type information for this code.    // next
+No type information for this code.    /*2*/"foo"
+No type information for this code.    //close
+No type information for this code.    /*3*/)/*4*/
+No type information for this code.;
+No type information for this code.
+No type information for this code.

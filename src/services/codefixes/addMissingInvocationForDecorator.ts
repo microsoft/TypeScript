@@ -6,10 +6,10 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: (context) => {
             const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Call_decorator_expression), changes, fixId }];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Call_decorator_expression, fixId, Diagnostics.Add_to_all_uncalled_decorators)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file!, diag.start!)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start)),
     });
 
     function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {

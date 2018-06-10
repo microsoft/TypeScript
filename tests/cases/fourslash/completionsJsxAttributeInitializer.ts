@@ -12,12 +12,12 @@ verify.completionListContains("x", "(parameter) x: number", "", "parameter", und
     insertText: "{x}",
 });
 
-verify.completionListContains("p", "(property) p: number", "", "property", undefined, undefined, {
+verify.completionListContains("p", "(JSX attribute) p: number", "", "JSX attribute", undefined, undefined, {
     includeInsertTextCompletions: true,
     insertText: "{this.p}",
 });
 
-verify.completionListContains("a b", '(property) "a b": number', "", "property", undefined, undefined, {
+verify.completionListContains("a b", '(JSX attribute) "a b": number', "", "JSX attribute", undefined, undefined, {
     includeInsertTextCompletions: true,
     insertText: '{this["a b"]}',
 });

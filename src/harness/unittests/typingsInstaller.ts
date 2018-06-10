@@ -30,7 +30,7 @@ namespace ts.projectSystem {
         }
     }
 
-    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: File[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
                 host.ensureFileOrFolder(file);
@@ -142,11 +142,28 @@ namespace ts.projectSystem {
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
+            const expectedWatchedFiles = createMap<number>();
+            expectedWatchedFiles.set(tsconfig.path, 1); // tsserver
+            expectedWatchedFiles.set(libFile.path, 1); // tsserver
+            expectedWatchedFiles.set(packageJson.path, 1); // typing installer
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+
+            const expectedWatchedDirectoriesRecursive = createMap<number>();
+            expectedWatchedDirectoriesRecursive.set("/a/b", 2); // TypingInstaller and wild card
+            expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
+
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
+            // should not watch jquery
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
         });
 
         it("inferred project (typings installed)", () => {
@@ -188,7 +205,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path]);
 
             installer.installAll(/*expectedCount*/ 1);
-
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
@@ -400,7 +417,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -443,7 +460,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -680,7 +697,7 @@ namespace ts.projectSystem {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
                 }
                 installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
-                    let typingFiles: (FileOrFolder & { typings: string })[] = [];
+                    let typingFiles: (File & { typings: string })[] = [];
                     if (args.indexOf(typingsName("commander")) >= 0) {
                         typingFiles = [commander, jquery, lodash, cordova];
                     }
@@ -824,7 +841,17 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
-            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
+
+            const watchedFilesExpected = createMap<number>();
+            watchedFilesExpected.set(jsconfig.path, 1); // project files
+            watchedFilesExpected.set(libFile.path, 1); // project files
+            checkWatchedFilesDetailed(host, watchedFilesExpected);
+
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+
+            const watchedRecursiveDirectoriesExpected = createMap<number>();
+            watchedRecursiveDirectoriesExpected.set("/", 2); // wild card + type installer
+            checkWatchedDirectoriesDetailed(host, watchedRecursiveDirectoriesExpected, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 
@@ -961,6 +988,7 @@ namespace ts.projectSystem {
             assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
             assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");
 
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
         });
 
@@ -995,14 +1023,14 @@ namespace ts.projectSystem {
             proj.updateGraph();
 
             assert.deepEqual(
-                proj.getCachedUnresolvedImportsPerFile_TestOnly().get(<Path>f1.path),
+                proj.cachedUnresolvedImportsPerFile.get(<Path>f1.path),
                 ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
             );
 
             installer.installAll(/*expectedCount*/ 1);
         });
 
-        it("should recompute resolutions after typings are installed", () => {
+        it("cached unresolved typings are not recomputed if program structure did not change", () => {
             const host = createServerHost([]);
             const session = createSession(host);
             const f = {
@@ -1025,7 +1053,7 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const proj = projectService.inferredProjects[0];
-            const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+            const version1 = proj.lastCachedUnresolvedImportsList;
 
             // make a change that should not affect the structure of the program
             const changeRequest: server.protocol.ChangeRequest = {
@@ -1043,8 +1071,8 @@ namespace ts.projectSystem {
             };
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
-            const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.notEqual(version1, version2, "set of unresolved imports should change");
+            const version2 = proj.lastCachedUnresolvedImportsList;
+            assert.strictEqual(version1, version2, "set of unresolved imports should change");
         });
 
         it("expired cache entry (inferred project, should install typings)", () => {
@@ -1106,7 +1134,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path]);
 
             installer.installAll(/*expectedCount*/ 1);
-
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
@@ -1165,7 +1193,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings: string[] = [];
-                    const typingFiles: FileOrFolder[] = [];
+                    const typingFiles: File[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -1312,6 +1340,27 @@ namespace ts.projectSystem {
             assert.deepEqual(result.newTypingNames, ["bar"]);
         });
 
+        it("should gracefully handle packages that have been removed from the types-registry", () => {
+            const f = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const node = {
+                path: "/a/b/node.d.ts",
+                content: ""
+            };
+            const host = createServerHost([f, node]);
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: Semver.parse("1.3.0") } });
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap);
+            assert.deepEqual(logger.finish(), [
+                'Inferred typings from unresolved imports: ["node","bar"]',
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["node","bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
+            ]);
+            assert.deepEqual(result.cachedTypingPaths, []);
+            assert.deepEqual(result.newTypingNames, ["node", "bar"]);
+        });
+
         it("should search only 2 levels deep", () => {
             const app = {
                 path: "/app.js",
@@ -1387,7 +1436,7 @@ namespace ts.projectSystem {
                 node: { typingLocation: node.path, version: Semver.parse("1.0.0") }
             });
             const registry = createTypesRegistry("node");
-            registry.delete(`ts${ts.versionMajorMinor}`);
+            registry.delete(`ts${versionMajorMinor}`);
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http"], registry);
             assert.deepEqual(logger.finish(), [
@@ -1419,7 +1468,7 @@ namespace ts.projectSystem {
                 commander: { typingLocation: commander.path, version: Semver.parse("1.3.0-next.0") }
             });
             const registry = createTypesRegistry("node", "commander");
-            registry.get("node")[`ts${ts.versionMajorMinor}`] = "1.3.0-next.1";
+            registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
             assert.deepEqual(logger.finish(), [
@@ -1507,8 +1556,8 @@ namespace ts.projectSystem {
                 content: "export let x: number"
             };
             const host = createServerHost([f1, packageFile, packageLockFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent!: server.BeginInstallTypes;
+            let endEvent!: server.EndInstallTypes;
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1555,8 +1604,8 @@ namespace ts.projectSystem {
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);
-            let beginEvent: server.BeginInstallTypes;
-            let endEvent: server.EndInstallTypes;
+            let beginEvent: server.BeginInstallTypes | undefined;
+            let endEvent: server.EndInstallTypes | undefined;
             const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1583,10 +1632,109 @@ namespace ts.projectSystem {
 
             assert.isTrue(!!beginEvent);
             assert.isTrue(!!endEvent);
-            assert.isTrue(beginEvent.eventId === endEvent.eventId);
-            assert.isFalse(endEvent.installSuccess);
+            assert.isTrue(beginEvent!.eventId === endEvent!.eventId);
+            assert.isFalse(endEvent!.installSuccess);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
+        });
+    });
+
+    describe("typing installer's npm installation command", () => {
+        const npmPath = "npm", tsVersion = "2.9.0-dev.20180410";
+        const packageNames = ["@types/graphql@ts2.8", "@types/highlight.js@ts2.8", "@types/jest@ts2.8", "@types/mini-css-extract-plugin@ts2.8", "@types/mongoose@ts2.8", "@types/pg@ts2.8", "@types/webpack-bundle-analyzer@ts2.8", "@types/enhanced-resolve@ts2.8", "@types/eslint-plugin-prettier@ts2.8", "@types/friendly-errors-webpack-plugin@ts2.8", "@types/hammerjs@ts2.8", "@types/history@ts2.8", "@types/image-size@ts2.8", "@types/js-cookie@ts2.8", "@types/koa-compress@ts2.8", "@types/less@ts2.8", "@types/material-ui@ts2.8", "@types/mysql@ts2.8", "@types/nodemailer@ts2.8", "@types/prettier@ts2.8", "@types/query-string@ts2.8", "@types/react-places-autocomplete@ts2.8", "@types/react-router@ts2.8", "@types/react-router-config@ts2.8", "@types/react-select@ts2.8", "@types/react-transition-group@ts2.8", "@types/redux-form@ts2.8", "@types/abbrev@ts2.8", "@types/accepts@ts2.8", "@types/acorn@ts2.8", "@types/ansi-regex@ts2.8", "@types/ansi-styles@ts2.8", "@types/anymatch@ts2.8", "@types/apollo-codegen@ts2.8", "@types/are-we-there-yet@ts2.8", "@types/argparse@ts2.8", "@types/arr-union@ts2.8", "@types/array-find-index@ts2.8", "@types/array-uniq@ts2.8", "@types/array-unique@ts2.8", "@types/arrify@ts2.8", "@types/assert-plus@ts2.8", "@types/async@ts2.8", "@types/autoprefixer@ts2.8", "@types/aws4@ts2.8", "@types/babel-code-frame@ts2.8", "@types/babel-generator@ts2.8", "@types/babel-plugin-syntax-jsx@ts2.8", "@types/babel-template@ts2.8", "@types/babel-traverse@ts2.8", "@types/babel-types@ts2.8", "@types/babylon@ts2.8", "@types/base64-js@ts2.8", "@types/basic-auth@ts2.8", "@types/big.js@ts2.8", "@types/bl@ts2.8", "@types/bluebird@ts2.8", "@types/body-parser@ts2.8", "@types/bonjour@ts2.8", "@types/boom@ts2.8", "@types/brace-expansion@ts2.8", "@types/braces@ts2.8", "@types/brorand@ts2.8", "@types/browser-resolve@ts2.8", "@types/bson@ts2.8", "@types/buffer-equal@ts2.8", "@types/builtin-modules@ts2.8", "@types/bytes@ts2.8", "@types/callsites@ts2.8", "@types/camelcase@ts2.8", "@types/camelcase-keys@ts2.8", "@types/caseless@ts2.8", "@types/change-emitter@ts2.8", "@types/check-types@ts2.8", "@types/cheerio@ts2.8", "@types/chokidar@ts2.8", "@types/chownr@ts2.8", "@types/circular-json@ts2.8", "@types/classnames@ts2.8", "@types/clean-css@ts2.8", "@types/clone@ts2.8", "@types/co-body@ts2.8", "@types/color@ts2.8", "@types/color-convert@ts2.8", "@types/color-name@ts2.8", "@types/color-string@ts2.8", "@types/colors@ts2.8", "@types/combined-stream@ts2.8", "@types/common-tags@ts2.8", "@types/component-emitter@ts2.8", "@types/compressible@ts2.8", "@types/compression@ts2.8", "@types/concat-stream@ts2.8", "@types/connect-history-api-fallback@ts2.8", "@types/content-disposition@ts2.8", "@types/content-type@ts2.8", "@types/convert-source-map@ts2.8", "@types/cookie@ts2.8", "@types/cookie-signature@ts2.8", "@types/cookies@ts2.8", "@types/core-js@ts2.8", "@types/cosmiconfig@ts2.8", "@types/create-react-class@ts2.8", "@types/cross-spawn@ts2.8", "@types/cryptiles@ts2.8", "@types/css-modules-require-hook@ts2.8", "@types/dargs@ts2.8", "@types/dateformat@ts2.8", "@types/debug@ts2.8", "@types/decamelize@ts2.8", "@types/decompress@ts2.8", "@types/decompress-response@ts2.8", "@types/deep-equal@ts2.8", "@types/deep-extend@ts2.8", "@types/deepmerge@ts2.8", "@types/defined@ts2.8", "@types/del@ts2.8", "@types/depd@ts2.8", "@types/destroy@ts2.8", "@types/detect-indent@ts2.8", "@types/detect-newline@ts2.8", "@types/diff@ts2.8", "@types/doctrine@ts2.8", "@types/download@ts2.8", "@types/draft-js@ts2.8", "@types/duplexer2@ts2.8", "@types/duplexer3@ts2.8", "@types/duplexify@ts2.8", "@types/ejs@ts2.8", "@types/end-of-stream@ts2.8", "@types/entities@ts2.8", "@types/escape-html@ts2.8", "@types/escape-string-regexp@ts2.8", "@types/escodegen@ts2.8", "@types/eslint-scope@ts2.8", "@types/eslint-visitor-keys@ts2.8", "@types/esprima@ts2.8", "@types/estraverse@ts2.8", "@types/etag@ts2.8", "@types/events@ts2.8", "@types/execa@ts2.8", "@types/exenv@ts2.8", "@types/exit@ts2.8", "@types/exit-hook@ts2.8", "@types/expect@ts2.8", "@types/express@ts2.8", "@types/express-graphql@ts2.8", "@types/extend@ts2.8", "@types/extract-zip@ts2.8", "@types/fancy-log@ts2.8", "@types/fast-diff@ts2.8", "@types/fast-levenshtein@ts2.8", "@types/figures@ts2.8", "@types/file-type@ts2.8", "@types/filenamify@ts2.8", "@types/filesize@ts2.8", "@types/finalhandler@ts2.8", "@types/find-root@ts2.8", "@types/find-up@ts2.8", "@types/findup-sync@ts2.8", "@types/forever-agent@ts2.8", "@types/form-data@ts2.8", "@types/forwarded@ts2.8", "@types/fresh@ts2.8", "@types/from2@ts2.8", "@types/fs-extra@ts2.8", "@types/get-caller-file@ts2.8", "@types/get-stdin@ts2.8", "@types/get-stream@ts2.8", "@types/get-value@ts2.8", "@types/glob-base@ts2.8", "@types/glob-parent@ts2.8", "@types/glob-stream@ts2.8", "@types/globby@ts2.8", "@types/globule@ts2.8", "@types/got@ts2.8", "@types/graceful-fs@ts2.8", "@types/gulp-rename@ts2.8", "@types/gulp-sourcemaps@ts2.8", "@types/gulp-util@ts2.8", "@types/gzip-size@ts2.8", "@types/handlebars@ts2.8", "@types/has-ansi@ts2.8", "@types/hasha@ts2.8", "@types/he@ts2.8", "@types/hoek@ts2.8", "@types/html-entities@ts2.8", "@types/html-minifier@ts2.8", "@types/htmlparser2@ts2.8", "@types/http-assert@ts2.8", "@types/http-errors@ts2.8", "@types/http-proxy@ts2.8", "@types/http-proxy-middleware@ts2.8", "@types/indent-string@ts2.8", "@types/inflected@ts2.8", "@types/inherits@ts2.8", "@types/ini@ts2.8", "@types/inline-style-prefixer@ts2.8", "@types/inquirer@ts2.8", "@types/internal-ip@ts2.8", "@types/into-stream@ts2.8", "@types/invariant@ts2.8", "@types/ip@ts2.8", "@types/ip-regex@ts2.8", "@types/is-absolute-url@ts2.8", "@types/is-binary-path@ts2.8", "@types/is-finite@ts2.8", "@types/is-glob@ts2.8", "@types/is-my-json-valid@ts2.8", "@types/is-number@ts2.8", "@types/is-object@ts2.8", "@types/is-path-cwd@ts2.8", "@types/is-path-in-cwd@ts2.8", "@types/is-promise@ts2.8", "@types/is-scoped@ts2.8", "@types/is-stream@ts2.8", "@types/is-svg@ts2.8", "@types/is-url@ts2.8", "@types/is-windows@ts2.8", "@types/istanbul-lib-coverage@ts2.8", "@types/istanbul-lib-hook@ts2.8", "@types/istanbul-lib-instrument@ts2.8", "@types/istanbul-lib-report@ts2.8", "@types/istanbul-lib-source-maps@ts2.8", "@types/istanbul-reports@ts2.8", "@types/jest-diff@ts2.8", "@types/jest-docblock@ts2.8", "@types/jest-get-type@ts2.8", "@types/jest-matcher-utils@ts2.8", "@types/jest-validate@ts2.8", "@types/jpeg-js@ts2.8", "@types/js-base64@ts2.8", "@types/js-string-escape@ts2.8", "@types/js-yaml@ts2.8", "@types/jsbn@ts2.8", "@types/jsdom@ts2.8", "@types/jsesc@ts2.8", "@types/json-parse-better-errors@ts2.8", "@types/json-schema@ts2.8", "@types/json-stable-stringify@ts2.8", "@types/json-stringify-safe@ts2.8", "@types/json5@ts2.8", "@types/jsonfile@ts2.8", "@types/jsontoxml@ts2.8", "@types/jss@ts2.8", "@types/keygrip@ts2.8", "@types/keymirror@ts2.8", "@types/keyv@ts2.8", "@types/klaw@ts2.8", "@types/koa-send@ts2.8", "@types/leven@ts2.8", "@types/listr@ts2.8", "@types/load-json-file@ts2.8", "@types/loader-runner@ts2.8", "@types/loader-utils@ts2.8", "@types/locate-path@ts2.8", "@types/lodash-es@ts2.8", "@types/lodash.assign@ts2.8", "@types/lodash.camelcase@ts2.8", "@types/lodash.clonedeep@ts2.8", "@types/lodash.debounce@ts2.8", "@types/lodash.escape@ts2.8", "@types/lodash.flowright@ts2.8", "@types/lodash.get@ts2.8", "@types/lodash.isarguments@ts2.8", "@types/lodash.isarray@ts2.8", "@types/lodash.isequal@ts2.8", "@types/lodash.isobject@ts2.8", "@types/lodash.isstring@ts2.8", "@types/lodash.keys@ts2.8", "@types/lodash.memoize@ts2.8", "@types/lodash.merge@ts2.8", "@types/lodash.mergewith@ts2.8", "@types/lodash.pick@ts2.8", "@types/lodash.sortby@ts2.8", "@types/lodash.tail@ts2.8", "@types/lodash.template@ts2.8", "@types/lodash.throttle@ts2.8", "@types/lodash.unescape@ts2.8", "@types/lodash.uniq@ts2.8", "@types/log-symbols@ts2.8", "@types/log-update@ts2.8", "@types/loglevel@ts2.8", "@types/loud-rejection@ts2.8", "@types/lru-cache@ts2.8", "@types/make-dir@ts2.8", "@types/map-obj@ts2.8", "@types/media-typer@ts2.8", "@types/mem@ts2.8", "@types/mem-fs@ts2.8", "@types/memory-fs@ts2.8", "@types/meow@ts2.8", "@types/merge-descriptors@ts2.8", "@types/merge-stream@ts2.8", "@types/methods@ts2.8", "@types/micromatch@ts2.8", "@types/mime@ts2.8", "@types/mime-db@ts2.8", "@types/mime-types@ts2.8", "@types/minimatch@ts2.8", "@types/minimist@ts2.8", "@types/minipass@ts2.8", "@types/mkdirp@ts2.8", "@types/mongodb@ts2.8", "@types/morgan@ts2.8", "@types/move-concurrently@ts2.8", "@types/ms@ts2.8", "@types/msgpack-lite@ts2.8", "@types/multimatch@ts2.8", "@types/mz@ts2.8", "@types/negotiator@ts2.8", "@types/node-dir@ts2.8", "@types/node-fetch@ts2.8", "@types/node-forge@ts2.8", "@types/node-int64@ts2.8", "@types/node-ipc@ts2.8", "@types/node-notifier@ts2.8", "@types/nomnom@ts2.8", "@types/nopt@ts2.8", "@types/normalize-package-data@ts2.8", "@types/normalize-url@ts2.8", "@types/number-is-nan@ts2.8", "@types/object-assign@ts2.8", "@types/on-finished@ts2.8", "@types/on-headers@ts2.8", "@types/once@ts2.8", "@types/onetime@ts2.8", "@types/opener@ts2.8", "@types/opn@ts2.8", "@types/optimist@ts2.8", "@types/ora@ts2.8", "@types/os-homedir@ts2.8", "@types/os-locale@ts2.8", "@types/os-tmpdir@ts2.8", "@types/p-cancelable@ts2.8", "@types/p-each-series@ts2.8", "@types/p-event@ts2.8", "@types/p-lazy@ts2.8", "@types/p-limit@ts2.8", "@types/p-locate@ts2.8", "@types/p-map@ts2.8", "@types/p-map-series@ts2.8", "@types/p-reduce@ts2.8", "@types/p-timeout@ts2.8", "@types/p-try@ts2.8", "@types/pako@ts2.8", "@types/parse-glob@ts2.8", "@types/parse-json@ts2.8", "@types/parseurl@ts2.8", "@types/path-exists@ts2.8", "@types/path-is-absolute@ts2.8", "@types/path-parse@ts2.8", "@types/pg-pool@ts2.8", "@types/pg-types@ts2.8", "@types/pify@ts2.8", "@types/pixelmatch@ts2.8", "@types/pkg-dir@ts2.8", "@types/pluralize@ts2.8", "@types/pngjs@ts2.8", "@types/prelude-ls@ts2.8", "@types/pretty-bytes@ts2.8", "@types/pretty-format@ts2.8", "@types/progress@ts2.8", "@types/promise-retry@ts2.8", "@types/proxy-addr@ts2.8", "@types/pump@ts2.8", "@types/q@ts2.8", "@types/qs@ts2.8", "@types/range-parser@ts2.8", "@types/rc@ts2.8", "@types/rc-select@ts2.8", "@types/rc-slider@ts2.8", "@types/rc-tooltip@ts2.8", "@types/rc-tree@ts2.8", "@types/react-event-listener@ts2.8", "@types/react-side-effect@ts2.8", "@types/react-slick@ts2.8", "@types/read-chunk@ts2.8", "@types/read-pkg@ts2.8", "@types/read-pkg-up@ts2.8", "@types/recompose@ts2.8", "@types/recursive-readdir@ts2.8", "@types/relateurl@ts2.8", "@types/replace-ext@ts2.8", "@types/request@ts2.8", "@types/request-promise-native@ts2.8", "@types/require-directory@ts2.8", "@types/require-from-string@ts2.8", "@types/require-relative@ts2.8", "@types/resolve@ts2.8", "@types/resolve-from@ts2.8", "@types/retry@ts2.8", "@types/rx@ts2.8", "@types/rx-lite@ts2.8", "@types/rx-lite-aggregates@ts2.8", "@types/safe-regex@ts2.8", "@types/sane@ts2.8", "@types/sass-graph@ts2.8", "@types/sax@ts2.8", "@types/scriptjs@ts2.8", "@types/semver@ts2.8", "@types/send@ts2.8", "@types/serialize-javascript@ts2.8", "@types/serve-index@ts2.8", "@types/serve-static@ts2.8", "@types/set-value@ts2.8", "@types/shallowequal@ts2.8", "@types/shelljs@ts2.8", "@types/sockjs@ts2.8", "@types/sockjs-client@ts2.8", "@types/source-list-map@ts2.8", "@types/source-map-support@ts2.8", "@types/spdx-correct@ts2.8", "@types/spdy@ts2.8", "@types/split@ts2.8", "@types/sprintf@ts2.8", "@types/sprintf-js@ts2.8", "@types/sqlstring@ts2.8", "@types/sshpk@ts2.8", "@types/stack-utils@ts2.8", "@types/stat-mode@ts2.8", "@types/statuses@ts2.8", "@types/strict-uri-encode@ts2.8", "@types/string-template@ts2.8", "@types/strip-ansi@ts2.8", "@types/strip-bom@ts2.8", "@types/strip-json-comments@ts2.8", "@types/supports-color@ts2.8", "@types/svg2png@ts2.8", "@types/svgo@ts2.8", "@types/table@ts2.8", "@types/tapable@ts2.8", "@types/tar@ts2.8", "@types/temp@ts2.8", "@types/tempfile@ts2.8", "@types/through@ts2.8", "@types/through2@ts2.8", "@types/tinycolor2@ts2.8", "@types/tmp@ts2.8", "@types/to-absolute-glob@ts2.8", "@types/tough-cookie@ts2.8", "@types/trim@ts2.8", "@types/tryer@ts2.8", "@types/type-check@ts2.8", "@types/type-is@ts2.8", "@types/ua-parser-js@ts2.8", "@types/uglify-js@ts2.8", "@types/uglifyjs-webpack-plugin@ts2.8", "@types/underscore@ts2.8", "@types/uniq@ts2.8", "@types/uniqid@ts2.8", "@types/untildify@ts2.8", "@types/urijs@ts2.8", "@types/url-join@ts2.8", "@types/url-parse@ts2.8", "@types/url-regex@ts2.8", "@types/user-home@ts2.8", "@types/util-deprecate@ts2.8", "@types/util.promisify@ts2.8", "@types/utils-merge@ts2.8", "@types/uuid@ts2.8", "@types/vali-date@ts2.8", "@types/vary@ts2.8", "@types/verror@ts2.8", "@types/vinyl@ts2.8", "@types/vinyl-fs@ts2.8", "@types/warning@ts2.8", "@types/watch@ts2.8", "@types/watchpack@ts2.8", "@types/webpack-dev-middleware@ts2.8", "@types/webpack-sources@ts2.8", "@types/which@ts2.8", "@types/window-size@ts2.8", "@types/wrap-ansi@ts2.8", "@types/write-file-atomic@ts2.8", "@types/ws@ts2.8", "@types/xml2js@ts2.8", "@types/xmlbuilder@ts2.8", "@types/xtend@ts2.8", "@types/yallist@ts2.8", "@types/yargs@ts2.8", "@types/yauzl@ts2.8", "@types/yeoman-generator@ts2.8", "@types/zen-observable@ts2.8", "@types/react-content-loader@ts2.8"];
+        const expectedCommands = [
+            TI.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length).command,
+            TI.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length - Math.ceil(packageNames.length / 2)).command
+        ];
+        it("works when the command is too long to install all packages at once", () => {
+            const commands: string[] = [];
+            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
+                commands.push(command);
+                return false;
+            });
+            assert.isFalse(hasError);
+            assert.deepEqual(commands, expectedCommands, "commands");
+        });
+
+        it("installs remaining packages when one of the partial command fails", () => {
+            const commands: string[] = [];
+            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
+                commands.push(command);
+                return commands.length === 1;
+            });
+            assert.isTrue(hasError);
+            assert.deepEqual(commands, expectedCommands, "commands");
+        });
+    });
+
+    describe("recomputing resolutions of unresolved imports", () => {
+        const globalTypingsCacheLocation = "/tmp";
+        const appPath = "/a/b/app.js" as Path;
+        const foooPath = "/a/b/node_modules/fooo/index.d.ts";
+        function verifyResolvedModuleOfFooo(project: server.Project) {
+            const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo")!;
+            assert.equal(foooResolution.resolvedFileName, foooPath);
+            return foooResolution;
+        }
+
+        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: File[]) {
+            const app: File = {
+                path: appPath,
+                content: `${appContents}import * as x from "fooo";`
+            };
+            const fooo: File = {
+                path: foooPath,
+                content: `export var x: string;`
+            };
+            const host = createServerHost([app, fooo]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("foo") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    executeCommand(this, host, typingNames, typingFiles, cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            checkProjectActualFiles(proj, [app.path, fooo.path]);
+            const foooResolution1 = verifyResolvedModuleOfFooo(proj);
+
+            installer.installAll(/*expectedCount*/ 1);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, typingFiles.map(f => f.path).concat(app.path, fooo.path));
+            const foooResolution2 = verifyResolvedModuleOfFooo(proj);
+            assert.strictEqual(foooResolution1, foooResolution2);
+        }
+
+        it("correctly invalidate the resolutions with typing names", () => {
+            verifyUnresolvedImportResolutions('import * as a from "foo";', ["foo"], [{
+                path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
+                content: "export function a(): void;"
+            }]);
+        });
+
+        it("correctly invalidate the resolutions with typing names that are trimmed", () => {
+            const fooAA: File = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/a.d.ts`,
+                content: "export function a (): void;"
+            };
+            const fooAB: File = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/b.d.ts`,
+                content: "export function b (): void;"
+            };
+            const fooAC: File = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/c.d.ts`,
+                content: "export function c (): void;"
+            };
+            verifyUnresolvedImportResolutions(`
+                    import * as a from "foo/a/a";
+                    import * as b from "foo/a/b";
+                    import * as c from "foo/a/c";
+            `, ["foo"], [fooAA, fooAB, fooAC]);
         });
     });
 }

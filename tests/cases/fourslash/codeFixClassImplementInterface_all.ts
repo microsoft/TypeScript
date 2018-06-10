@@ -7,6 +7,7 @@
 
 verify.codeFixAll({
     fixId: "fixClassIncorrectlyImplementsInterface",
+    fixAllDescription: "Implement all unimplemented interfaces",
     newFileContent:
 `interface I { i(): void; }
 interface J { j(): void; }

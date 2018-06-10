@@ -1,9 +1,7 @@
-tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(27,24): error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
-  Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'LinkProps'.
-    Property 'goTo' is missing in type '{ extra: true; onClick: (k: "left" | "right") => void; }'.
-tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(28,24): error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
-  Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'LinkProps'.
-    Property 'goTo' is missing in type '{ onClick: (k: "left" | "right") => void; extra: true; }'.
+tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(27,13): error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'LinkProps'.
+  Property 'goTo' is missing in type '{ extra: true; onClick: (k: "left" | "right") => void; }'.
+tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(28,13): error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'LinkProps'.
+  Property 'goTo' is missing in type '{ onClick: (k: "left" | "right") => void; extra: true; }'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(29,43): error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(30,36): error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(33,65): error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
@@ -38,15 +36,13 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(36,44): err
     }
     
     const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
-!!! error TS2322:   Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'LinkProps'.
-!!! error TS2322:     Property 'goTo' is missing in type '{ extra: true; onClick: (k: "left" | "right") => void; }'.
+                ~~~~~~~~~~
+!!! error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'LinkProps'.
+!!! error TS2322:   Property 'goTo' is missing in type '{ extra: true; onClick: (k: "left" | "right") => void; }'.
     const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
-!!! error TS2322:   Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'LinkProps'.
-!!! error TS2322:     Property 'goTo' is missing in type '{ onClick: (k: "left" | "right") => void; extra: true; }'.
+                ~~~~~~~~~~
+!!! error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'LinkProps'.
+!!! error TS2322:   Property 'goTo' is missing in type '{ onClick: (k: "left" | "right") => void; extra: true; }'.
     const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
                                               ~~~~~
 !!! error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.

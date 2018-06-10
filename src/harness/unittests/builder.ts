@@ -120,7 +120,7 @@ namespace ts {
                 operationWasCancelled = true;
             }
             assert.equal(cancel, operationWasCancelled);
-            assert.equal(operationWasCancelled, fileNames.length > cancelAfterEmitLength);
+            assert.equal(operationWasCancelled, fileNames.length > cancelAfterEmitLength!);
             assert.deepEqual(outputFileNames, fileNames.slice(0, cancelAfterEmitLength));
         };
     }

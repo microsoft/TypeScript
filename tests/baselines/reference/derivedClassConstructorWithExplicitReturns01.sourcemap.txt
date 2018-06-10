@@ -60,20 +60,17 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 ---
 >>>        return {
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^->
+2 >        ^^^^^^^
+3 >               ^^^^^^^^^^^->
 1 >
   >
   >    foo() { return "this never gets used."; }
   >
   >    constructor(value: number) {
   >        
-2 >        return
-3 >               
+2 >        return 
 1 >Emitted(14, 9) Source(7, 9) + SourceIndex(0)
-2 >Emitted(14, 15) Source(7, 15) + SourceIndex(0)
-3 >Emitted(14, 16) Source(7, 16) + SourceIndex(0)
+2 >Emitted(14, 16) Source(7, 16) + SourceIndex(0)
 ---
 >>>            cProp: value,
 1->^^^^^^^^^^^^
@@ -103,21 +100,18 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 ---
 >>>                return "well this looks kinda C-ish.";
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^
-3 >                      ^
-4 >                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                     ^
+2 >                ^^^^^^^
+3 >                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                     ^
 1->() {
   >                
-2 >                return
-3 >                       
-4 >                       "well this looks kinda C-ish."
-5 >                                                     ;
+2 >                return 
+3 >                       "well this looks kinda C-ish."
+4 >                                                     ;
 1->Emitted(17, 17) Source(10, 17) + SourceIndex(0)
-2 >Emitted(17, 23) Source(10, 23) + SourceIndex(0)
-3 >Emitted(17, 24) Source(10, 24) + SourceIndex(0)
-4 >Emitted(17, 54) Source(10, 54) + SourceIndex(0)
-5 >Emitted(17, 55) Source(10, 55) + SourceIndex(0)
+2 >Emitted(17, 24) Source(10, 24) + SourceIndex(0)
+3 >Emitted(17, 54) Source(10, 54) + SourceIndex(0)
+4 >Emitted(17, 55) Source(10, 55) + SourceIndex(0)
 ---
 >>>            }
 1 >^^^^^^^^^^^^
@@ -152,32 +146,29 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >    ^^^^^^^^^^^^^^^
 3 >                   ^^^
 4 >                      ^^^^^^^^^^^^^^
-5 >                                    ^^^^^^
-6 >                                          ^
-7 >                                           ^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                  ^
-9 >                                                                   ^
-10>                                                                    ^
+5 >                                    ^^^^^^^
+6 >                                           ^^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                  ^
+8 >                                                                   ^
+9 >                                                                    ^
 1->
 2 >    foo
 3 >                   
 4 >                      foo() { 
-5 >                                    return
-6 >                                           
-7 >                                           "this never gets used."
-8 >                                                                  ;
-9 >                                                                    
-10>                                                                    }
+5 >                                    return 
+6 >                                           "this never gets used."
+7 >                                                                  ;
+8 >                                                                    
+9 >                                                                    }
 1->Emitted(21, 5) Source(4, 5) + SourceIndex(0)
 2 >Emitted(21, 20) Source(4, 8) + SourceIndex(0)
 3 >Emitted(21, 23) Source(4, 5) + SourceIndex(0)
 4 >Emitted(21, 37) Source(4, 13) + SourceIndex(0)
-5 >Emitted(21, 43) Source(4, 19) + SourceIndex(0)
-6 >Emitted(21, 44) Source(4, 20) + SourceIndex(0)
-7 >Emitted(21, 67) Source(4, 43) + SourceIndex(0)
-8 >Emitted(21, 68) Source(4, 44) + SourceIndex(0)
-9 >Emitted(21, 69) Source(4, 45) + SourceIndex(0)
-10>Emitted(21, 70) Source(4, 46) + SourceIndex(0)
+5 >Emitted(21, 44) Source(4, 20) + SourceIndex(0)
+6 >Emitted(21, 67) Source(4, 43) + SourceIndex(0)
+7 >Emitted(21, 68) Source(4, 44) + SourceIndex(0)
+8 >Emitted(21, 69) Source(4, 45) + SourceIndex(0)
+9 >Emitted(21, 70) Source(4, 46) + SourceIndex(0)
 ---
 >>>    return C;
 1 >^^^^
@@ -336,55 +327,43 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 ---
 >>>        if (Math.random() < 0.5) {
 1 >^^^^^^^^
-2 >        ^^
-3 >          ^
-4 >           ^
-5 >            ^^^^
-6 >                ^
-7 >                 ^^^^^^
-8 >                       ^^
-9 >                         ^^^
-10>                            ^^^
-11>                               ^
-12>                                ^
-13>                                 ^
+2 >        ^^^^
+3 >            ^^^^
+4 >                ^
+5 >                 ^^^^^^
+6 >                       ^^
+7 >                         ^^^
+8 >                            ^^^
+9 >                               ^^
 1 >
   >
   >    constructor(a = 100) {
   >        super(a);
   >
   >        
-2 >        if
-3 >           
-4 >           (
-5 >            Math
-6 >                .
-7 >                 random
-8 >                       ()
-9 >                          < 
-10>                            0.5
-11>                               )
-12>                                 
-13>                                 {
+2 >        if (
+3 >            Math
+4 >                .
+5 >                 random
+6 >                       ()
+7 >                          < 
+8 >                            0.5
+9 >                               ) 
 1 >Emitted(30, 9) Source(22, 9) + SourceIndex(0)
-2 >Emitted(30, 11) Source(22, 11) + SourceIndex(0)
-3 >Emitted(30, 12) Source(22, 12) + SourceIndex(0)
-4 >Emitted(30, 13) Source(22, 13) + SourceIndex(0)
-5 >Emitted(30, 17) Source(22, 17) + SourceIndex(0)
-6 >Emitted(30, 18) Source(22, 18) + SourceIndex(0)
-7 >Emitted(30, 24) Source(22, 24) + SourceIndex(0)
-8 >Emitted(30, 26) Source(22, 26) + SourceIndex(0)
-9 >Emitted(30, 29) Source(22, 29) + SourceIndex(0)
-10>Emitted(30, 32) Source(22, 32) + SourceIndex(0)
-11>Emitted(30, 33) Source(22, 33) + SourceIndex(0)
-12>Emitted(30, 34) Source(22, 34) + SourceIndex(0)
-13>Emitted(30, 35) Source(22, 35) + SourceIndex(0)
+2 >Emitted(30, 13) Source(22, 13) + SourceIndex(0)
+3 >Emitted(30, 17) Source(22, 17) + SourceIndex(0)
+4 >Emitted(30, 18) Source(22, 18) + SourceIndex(0)
+5 >Emitted(30, 24) Source(22, 24) + SourceIndex(0)
+6 >Emitted(30, 26) Source(22, 26) + SourceIndex(0)
+7 >Emitted(30, 29) Source(22, 29) + SourceIndex(0)
+8 >Emitted(30, 32) Source(22, 32) + SourceIndex(0)
+9 >Emitted(30, 34) Source(22, 34) + SourceIndex(0)
 ---
 >>>            "You win!";
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^
 3 >                      ^
-1 >
+1 >{
   >            
 2 >            "You win!"
 3 >                      
@@ -394,16 +373,13 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 ---
 >>>            return {
 1 >^^^^^^^^^^^^
-2 >            ^^^^^^
-3 >                  ^
-4 >                   ^^^^^^^->
+2 >            ^^^^^^^
+3 >                   ^^^^^^^->
 1 >
   >            
-2 >            return
-3 >                   
+2 >            return 
 1 >Emitted(32, 13) Source(24, 13) + SourceIndex(0)
-2 >Emitted(32, 19) Source(24, 19) + SourceIndex(0)
-3 >Emitted(32, 20) Source(24, 20) + SourceIndex(0)
+2 >Emitted(32, 20) Source(24, 20) + SourceIndex(0)
 ---
 >>>                cProp: 1,
 1->^^^^^^^^^^^^^^^^
@@ -453,31 +429,28 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^
 3 >                   ^^^^^^^^^^^^^^^^
-4 >                                   ^^^^^^
-5 >                                         ^
-6 >                                          ^^^^^^^^^^^^^^
-7 >                                                        ^
-8 >                                                         ^
-9 >                                                          ^
+4 >                                   ^^^^^^^
+5 >                                          ^^^^^^^^^^^^^^
+6 >                                                        ^
+7 >                                                         ^
+8 >                                                          ^
 1->,
   >                
 2 >                foo
 3 >                   () { 
-4 >                                   return
-5 >                                          
-6 >                                          "You win!!!!!"
-7 >                                                        
-8 >                                                          
-9 >                                                          }
+4 >                                   return 
+5 >                                          "You win!!!!!"
+6 >                                                        
+7 >                                                          
+8 >                                                          }
 1->Emitted(35, 17) Source(27, 17) + SourceIndex(0)
 2 >Emitted(35, 20) Source(27, 20) + SourceIndex(0)
 3 >Emitted(35, 36) Source(27, 25) + SourceIndex(0)
-4 >Emitted(35, 42) Source(27, 31) + SourceIndex(0)
-5 >Emitted(35, 43) Source(27, 32) + SourceIndex(0)
-6 >Emitted(35, 57) Source(27, 46) + SourceIndex(0)
-7 >Emitted(35, 58) Source(27, 46) + SourceIndex(0)
-8 >Emitted(35, 59) Source(27, 47) + SourceIndex(0)
-9 >Emitted(35, 60) Source(27, 48) + SourceIndex(0)
+4 >Emitted(35, 43) Source(27, 32) + SourceIndex(0)
+5 >Emitted(35, 57) Source(27, 46) + SourceIndex(0)
+6 >Emitted(35, 58) Source(27, 46) + SourceIndex(0)
+7 >Emitted(35, 59) Source(27, 47) + SourceIndex(0)
+8 >Emitted(35, 60) Source(27, 48) + SourceIndex(0)
 ---
 >>>            };
 1 >^^^^^^^^^^^^^
@@ -489,42 +462,28 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >Emitted(36, 15) Source(28, 15) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^
-2 >        ^
-3 >         ^^^^->
+1 >^^^^^^^^^
+2 >         ^^^^->
 1 >
-  >        
-2 >        }
-1 >Emitted(37, 9) Source(29, 9) + SourceIndex(0)
-2 >Emitted(37, 10) Source(29, 10) + SourceIndex(0)
+  >        }
+1 >Emitted(37, 10) Source(29, 10) + SourceIndex(0)
 ---
 >>>        else
-1->^^^^^^^^
-2 >        ^^^^
-3 >            ^^^^^^^^^^^^^->
-1->
-  >        
-2 >        else
-1->Emitted(38, 9) Source(30, 9) + SourceIndex(0)
-2 >Emitted(38, 13) Source(30, 13) + SourceIndex(0)
----
 >>>            return null;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^
-3 >                  ^
-4 >                   ^^^^
-5 >                       ^
+2 >            ^^^^^^^
+3 >                   ^^^^
+4 >                       ^
 1->
+  >        else
   >            
-2 >            return
-3 >                   
-4 >                   null
-5 >                       ;
+2 >            return 
+3 >                   null
+4 >                       ;
 1->Emitted(39, 13) Source(31, 13) + SourceIndex(0)
-2 >Emitted(39, 19) Source(31, 19) + SourceIndex(0)
-3 >Emitted(39, 20) Source(31, 20) + SourceIndex(0)
-4 >Emitted(39, 24) Source(31, 24) + SourceIndex(0)
-5 >Emitted(39, 25) Source(31, 25) + SourceIndex(0)
+2 >Emitted(39, 20) Source(31, 20) + SourceIndex(0)
+3 >Emitted(39, 24) Source(31, 24) + SourceIndex(0)
+4 >Emitted(39, 25) Source(31, 25) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^

@@ -178,7 +178,7 @@ interface i1 {
     /**indexer property*/
     [a: number]: string;
     /** function property;*/
-    myFoo(a: number): string;
+    myFoo(/*param prop*/ a: number): string;
     /** prop*/
     prop: string;
 }

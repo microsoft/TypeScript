@@ -36,9 +36,9 @@ verify.codeFix({
         /**close-brace prefix*/ }
 /**close-brace prefix*/ }
 class C implements N.I {
-    /** property prefix */ a /** colon prefix */: N.E.a;
-    /** property prefix */ b /** colon prefix */: N.E;
-    /**method signature prefix */ foo /**open angle prefix */<X>(a: X): string {
+    a: N.E.a;
+    b: N.E;
+    foo<X>(a: X): string {
         throw new Error("Method not implemented.");
     }
 }`,

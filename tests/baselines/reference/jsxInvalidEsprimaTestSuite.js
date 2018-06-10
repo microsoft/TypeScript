@@ -82,7 +82,7 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
  < ;
 a /  > ;
 //// [4.jsx]
-<a b={d /  > }/>;
+<a b d/>;
 //// [5.jsx]
 <a>;</>;
 //// [6.jsx]
@@ -148,10 +148,10 @@ var x = <div>one</div> /* intervening comment */, /* intervening comment */ <div
 //// [27.jsx]
 <a> ></a>;
 //// [28.jsx]
-<a b=>;
+<a b>;
 </>;
 //// [29.jsx]
-<a b={ < }>;
+<a b/>, <>;
 </>;
 //// [30.jsx]
 <a>}</a>;

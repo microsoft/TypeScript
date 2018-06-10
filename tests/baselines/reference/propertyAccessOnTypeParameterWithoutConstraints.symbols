@@ -13,13 +13,13 @@ class C<T> {
         var a = x['toString'](); // should be string
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 3, 11))
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 2, 11))
->'toString' : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
         return a + x.toString();
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 3, 11))
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 2, 11))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -43,18 +43,18 @@ var i: I<number>;
 
 var r2 = i.foo.toString();
 >r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 14, 3))
->i.foo.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>i.foo.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
 >i : Symbol(i, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 13, 3))
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var r2b = i.foo['toString']();
 >r2b : Symbol(r2b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 15, 3))
 >i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
 >i : Symbol(i, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 13, 3))
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
->'toString' : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var a: {
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 17, 3))
@@ -65,14 +65,14 @@ var a: {
 }
 var r3: string = a().toString();
 >r3 : Symbol(r3, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 20, 3))
->a().toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>a().toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 17, 3))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var r3b: string = a()['toString']();
 >r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 21, 3))
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 17, 3))
->'toString' : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var b = {
 >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 3))
@@ -86,13 +86,13 @@ var b = {
         var a = x['toString'](); // should be string
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 25, 11))
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 13))
->'toString' : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
         return a + x.toString();
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 25, 11))
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 13))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
     }
 }
 

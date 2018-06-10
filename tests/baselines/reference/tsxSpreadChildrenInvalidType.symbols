@@ -39,11 +39,11 @@ function Todo(prop: { key: number, todo: string }) {
 
     return <div>{prop.key.toString() + prop.todo}</div>;
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxSpreadChildrenInvalidType.tsx, 1, 22))
->prop.key.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>prop.key.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >prop.key : Symbol(key, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 21))
 >prop : Symbol(prop, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 14))
 >key : Symbol(key, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 21))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >prop.todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 34))
 >prop : Symbol(prop, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 14))
 >todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 34))

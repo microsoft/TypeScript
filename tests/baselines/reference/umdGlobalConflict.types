@@ -1,13 +1,13 @@
 === tests/cases/compiler/v1/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof "tests/cases/compiler/v1/index"
+>Alpha : typeof import("tests/cases/compiler/v1/index")
 
 export var x: string;
 >x : string
 
 === tests/cases/compiler/v2/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof "tests/cases/compiler/v2/index"
+>Alpha : typeof import("tests/cases/compiler/v2/index")
 
 export var y: number;
 >y : number

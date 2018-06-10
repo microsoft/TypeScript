@@ -20,7 +20,7 @@ export function Component(x: Config): any;`
         // Regression test for GH #18245 - bug in single line comment writer caused a debug assertion when attempting
         //  to write an alias to a module's default export was referrenced across files and had no default export
         it("should be able to create a language service which can respond to deinition requests without throwing", () => {
-            const languageService = ts.createLanguageService({
+            const languageService = createLanguageService({
                 getCompilationSettings() {
                     return {};
                 },
@@ -32,13 +32,13 @@ export function Component(x: Config): any;`
                 },
                 getScriptSnapshot(fileName) {
                     if (fileName === ".ts") {
-                        return ts.ScriptSnapshot.fromString("");
+                        return ScriptSnapshot.fromString("");
                     }
-                    return ts.ScriptSnapshot.fromString(files[fileName] || "");
+                    return ScriptSnapshot.fromString(files[fileName] || "");
                 },
                 getCurrentDirectory: () => ".",
                 getDefaultLibFileName(options) {
-                    return ts.getDefaultLibFilePath(options);
+                    return getDefaultLibFilePath(options);
                 },
             });
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position

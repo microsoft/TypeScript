@@ -49,21 +49,21 @@ var class1 = /** @class */ (function () {
     }
     Object.defineProperty(class1.prototype, "a", {
         get: function () {
-            var _this = this;
+            var _this_1 = this;
             var x2 = {
                 doStuff: function (callback) { return function () {
                     var _this = 2;
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
             return 10;
         },
         set: function (val) {
-            var _this = this;
+            var _this_1 = this;
             var x2 = {
                 doStuff: function (callback) { return function () {
                     var _this = 2;
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
         },
@@ -77,21 +77,21 @@ var class2 = /** @class */ (function () {
     }
     Object.defineProperty(class2.prototype, "a", {
         get: function () {
-            var _this = this;
+            var _this_1 = this;
             var _this = 2;
             var x2 = {
                 doStuff: function (callback) { return function () {
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
             return 10;
         },
         set: function (val) {
-            var _this = this;
+            var _this_1 = this;
             var _this = 2;
             var x2 = {
                 doStuff: function (callback) { return function () {
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
         },

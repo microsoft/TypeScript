@@ -311,7 +311,7 @@ goToMarkAndGeneralVerify('class', { isClassScope: true });
 //verify.not.completionListContains('ceVar');
 
 // from interface in mod1
-goToMarkAndGeneralVerify('interface', { insideMod1: true });
+verify.completionsAt("interface", ["readonly"], { isNewIdentifierLocation: true });
 
 // from namespace in mod1
 verifyNamespaceInMod1('namespace');
@@ -348,7 +348,7 @@ verify.not.completionListContains('ceFunc');
 verify.not.completionListContains('ceVar');
 
 // from exported interface in mod1
-goToMarkAndGeneralVerify('exportedInterface', { insideMod1: true });
+verify.completionsAt("exportedInterface", ["readonly"], { isNewIdentifierLocation: true });
 
 // from exported namespace in mod1
 verifyExportedNamespace('exportedNamespace');

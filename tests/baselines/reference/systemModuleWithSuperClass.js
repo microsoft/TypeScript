@@ -14,8 +14,8 @@ export class Bar extends Foo {
 //// [foo.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var Foo;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
@@ -41,8 +41,8 @@ System.register(["./foo"], function (exports_1, context_1) {
             d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
         };
     })();
-    var __moduleName = context_1 && context_1.id;
     var foo_1, Bar;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [
             function (foo_1_1) {

@@ -10,22 +10,22 @@ let x: Observable;
 
 x.foo().x;
 >x.foo().x : number
->x.foo() : Cls
->x.foo : () => Cls
+>x.foo() : import("M").Cls
+>x.foo : () => import("M").Cls
 >x : Observable
->foo : () => Cls
+>foo : () => import("M").Cls
 >x : number
 
 === tests/cases/compiler/O.d.ts ===
 declare module "Observable" {
->"Observable" : typeof "Observable"
+>"Observable" : typeof import("Observable")
 
     class Observable {}
 >Observable : Observable
 }
 
 declare module "M" {
->"M" : typeof "M"
+>"M" : typeof import("M")
 
     class Cls { x: number }
 >Cls : Cls
@@ -33,13 +33,13 @@ declare module "M" {
 }
 
 declare module "Map" {
->"Map" : typeof "Map"
+>"Map" : typeof import("Map")
 
     import { Cls } from "M";
 >Cls : typeof Cls
 
     module "Observable" {
->"Observable" : typeof "Observable"
+>"Observable" : typeof import("Observable")
 
         interface Observable {
 >Observable : Observable

@@ -10,7 +10,7 @@ function ff<T, U>(x: T, y: U) {
 
     var z: Object;
 >z : Symbol(z, Decl(typeParametersShouldNotBeEqual.ts, 1, 7))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x = x;  // Ok
 >x : Symbol(x, Decl(typeParametersShouldNotBeEqual.ts, 0, 18))

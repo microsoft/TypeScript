@@ -11,5 +11,4 @@
 ////	}
 ////}
 
-goTo.marker('1');
-verify.signatureHelpCountIs(0);
+verify.noSignatureHelp("1");

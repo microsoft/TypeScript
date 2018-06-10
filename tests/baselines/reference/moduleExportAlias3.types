@@ -1,0 +1,17 @@
+=== tests/cases/conformance/salsa/bug24062.js ===
+// #24062
+class C {
+>C : C
+}
+module.exports = {
+>module.exports = {    C} : { [x: string]: any; C: typeof C; }
+>module.exports : any
+>module : any
+>exports : any
+>{    C} : { [x: string]: any; C: typeof C; }
+
+    C
+>C : typeof C
+
+};
+

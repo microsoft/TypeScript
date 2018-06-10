@@ -55,7 +55,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
         case "fourslash-server":
             return new FourSlashRunner(FourSlashTestType.Server);
         case "project":
-            return new ProjectRunner();
+            return new project.ProjectRunner();
         case "rwc":
             return new RWCRunner();
         case "test262":
@@ -65,11 +65,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
         case "dt":
             return new DefinitelyTypedRunner();
     }
-    ts.Debug.fail(`Unknown runner kind ${kind}`);
-}
-
-if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
-    Harness.IO.tryEnableSourceMapsForHost();
+    return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
 
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
@@ -80,14 +76,15 @@ const testconfigFileName = "test.config";
 const customConfig = tryGetConfig(Harness.IO.args());
 let testConfigContent =
     customConfig && Harness.IO.fileExists(customConfig)
-        ? Harness.IO.readFile(customConfig)
+        ? Harness.IO.readFile(customConfig)!
         : Harness.IO.fileExists(mytestconfigFileName)
-            ? Harness.IO.readFile(mytestconfigFileName)
-            : Harness.IO.fileExists(testconfigFileName) ? Harness.IO.readFile(testconfigFileName) : "";
+            ? Harness.IO.readFile(mytestconfigFileName)!
+            : Harness.IO.fileExists(testconfigFileName) ? Harness.IO.readFile(testconfigFileName)! : "";
 
 let taskConfigsFolder: string;
 let workerCount: number;
 let runUnitTests: boolean | undefined;
+let stackTraceLimit: number | "full" | undefined;
 let noColors = false;
 
 interface TestConfig {
@@ -132,9 +129,11 @@ function handleTestConfig() {
 
         if (testConfig.stackTraceLimit === "full") {
             (<any>Error).stackTraceLimit = Infinity;
+            stackTraceLimit = testConfig.stackTraceLimit;
         }
-        else if ((+testConfig.stackTraceLimit | 0) > 0) {
-            (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
+        else if ((+testConfig.stackTraceLimit! | 0) > 0) {
+            (<any>Error).stackTraceLimit = +testConfig.stackTraceLimit! | 0;
+            stackTraceLimit = +testConfig.stackTraceLimit! | 0;
         }
         if (testConfig.listenForWork) {
             return true;
@@ -158,13 +157,13 @@ function handleTestConfig() {
                     case "compiler":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
-                        runners.push(new ProjectRunner());
+                        runners.push(new project.ProjectRunner());
                         break;
                     case "conformance":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                         break;
                     case "project":
-                        runners.push(new ProjectRunner());
+                        runners.push(new project.ProjectRunner());
                         break;
                     case "fourslash":
                         runners.push(new FourSlashRunner(FourSlashTestType.Native));
@@ -205,7 +204,7 @@ function handleTestConfig() {
 
         // TODO: project tests don"t work in the browser yet
         if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
-            runners.push(new ProjectRunner());
+            runners.push(new project.ProjectRunner());
         }
 
         // language services
@@ -223,6 +222,7 @@ function handleTestConfig() {
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
     }
+    return false;
 }
 
 function beginTests() {
@@ -242,7 +242,7 @@ function beginTests() {
 
     if (!runUnitTests) {
         // patch `describe` to skip unit tests
-        describe = ts.noop as any;
+        (global as any).describe = ts.noop;
     }
 }
 

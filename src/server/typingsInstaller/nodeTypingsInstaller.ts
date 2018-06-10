@@ -1,4 +1,4 @@
-/// <reference types="node" />
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
 
 namespace ts.server.typingsInstaller {
     const fs: {
@@ -21,7 +21,7 @@ namespace ts.server.typingsInstaller {
         }
         writeLine = (text: string) => {
             try {
-                fs.appendFileSync(this.logFile, text + sys.newLine);
+                fs.appendFileSync(this.logFile!, `[${nowString()}] ${text}${sys.newLine}`); // TODO: GH#18217
             }
             catch (e) {
                 this.logEnabled = false;
@@ -51,7 +51,7 @@ namespace ts.server.typingsInstaller {
             return createMap<MapLike<string>>();
         }
         try {
-            const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath));
+            const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
             return createMapFromTemplate(content.entries);
         }
         catch (e) {
@@ -106,7 +106,7 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
                 }
-                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}`, { cwd: globalTypingsCacheLocation });
+                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, { cwd: globalTypingsCacheLocation });
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
                 }
@@ -174,7 +174,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
             }
-            process.send(response);
+            process.send!(response); // TODO: GH#18217
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Response has been sent.`);
             }
@@ -184,9 +184,8 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
             }
-            const command = `${this.npmPath} install --ignore-scripts ${packageNames.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
-            const hasError = this.execSyncAndLog(command, { cwd });
+            const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
             if (this.log.isEnabled()) {
                 this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
             }
@@ -221,11 +220,11 @@ namespace ts.server.typingsInstaller {
         });
     }
 
-    const logFilePath = findArgument(server.Arguments.LogFile);
-    const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
-    const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
-    const typesMapLocation = findArgument(server.Arguments.TypesMapLocation);
-    const npmLocation = findArgument(server.Arguments.NpmLocation);
+    const logFilePath = findArgument(Arguments.LogFile);
+    const globalTypingsCacheLocation = findArgument(Arguments.GlobalCacheLocation);
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation);
+    const npmLocation = findArgument(Arguments.NpmLocation);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
@@ -239,7 +238,7 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, /*throttleLimit*/5, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
     installer.listen();
 
     function indent(newline: string, str: string): string {

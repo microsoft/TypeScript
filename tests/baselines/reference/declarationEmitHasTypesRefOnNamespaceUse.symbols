@@ -1,0 +1,15 @@
+=== /src/index.ts ===
+class Src implements NS.Dep { }
+>Src : Symbol(Src, Decl(index.ts, 0, 0))
+>NS.Dep : Symbol(NS.Dep, Decl(dep.d.ts, 0, 22))
+>NS : Symbol(NS, Decl(dep.d.ts, 0, 0))
+>Dep : Symbol(NS.Dep, Decl(dep.d.ts, 0, 22))
+
+=== /deps/dep/dep.d.ts ===
+declare namespace NS {
+>NS : Symbol(NS, Decl(dep.d.ts, 0, 0))
+
+    interface Dep {
+>Dep : Symbol(Dep, Decl(dep.d.ts, 0, 22))
+    }
+}

@@ -7,7 +7,7 @@ No type information for this code.
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/f1.d.ts ===
 declare module "A" {
->"A" : typeof "A"
+>"A" : typeof import("A")
 
     global {
 >global : any
@@ -19,7 +19,7 @@ declare module "A" {
 }
 === tests/cases/compiler/f2.d.ts ===
 declare module "B" {
->"B" : typeof "B"
+>"B" : typeof import("B")
 
     global {
 >global : any

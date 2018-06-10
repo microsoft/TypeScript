@@ -1,0 +1,105 @@
+=== tests/cases/conformance/types/keyof/keyofIntersection.ts ===
+type A = { a: string };
+>A : A
+>a : string
+
+type B = { b: string };
+>B : B
+>b : string
+
+type T01 = keyof (A & B);  // "a" | "b"
+>T01 : "b" | "a"
+>A : A
+>B : B
+
+type T02<T> = keyof (T & B);  // "b" | keyof T
+>T02 : keyof T | "b"
+>T : T
+>T : T
+>B : B
+
+type T03<U> = keyof (A & U);  // "a" | keyof U
+>T03 : "a" | keyof U
+>U : U
+>A : A
+>U : U
+
+type T04<T, U> = keyof (T & U);  // keyof T | keyof U
+>T04 : keyof T | keyof U
+>T : T
+>U : U
+>T : T
+>U : U
+
+type T05 = T02<A>;  // "a" | "b"
+>T05 : "b" | "a"
+>T02 : keyof T | "b"
+>A : A
+
+type T06 = T03<B>;  // "a" | "b"
+>T06 : "b" | "a"
+>T03 : "a" | keyof U
+>B : B
+
+type T07 = T04<A, B>;  // "a" | "b"
+>T07 : "b" | "a"
+>T04 : keyof T | keyof U
+>A : A
+>B : B
+
+// Repros from #22291
+
+type Example1<T extends string, U extends string> = keyof (Record<T, any> & Record<U, any>);
+>Example1 : T | U
+>T : T
+>U : U
+>Record : Record<K, T>
+>T : T
+>Record : Record<K, T>
+>U : U
+
+type Result1 = Example1<'x', 'y'>;  // "x" | "y"
+>Result1 : "x" | "y"
+>Example1 : T | U
+
+type Result2 = keyof (Record<'x', any> & Record<'y', any>);  // "x" | "y"
+>Result2 : "x" | "y"
+>Record : Record<K, T>
+>Record : Record<K, T>
+
+type Example3<T extends string> = keyof (Record<T, any>);
+>Example3 : T
+>T : T
+>Record : Record<K, T>
+>T : T
+
+type Result3 = Example3<'x' | 'y'>;  // "x" | "y"
+>Result3 : "x" | "y"
+>Example3 : T
+
+type Example4<T extends string, U extends string> = (Record<T, any> & Record<U, any>);
+>Example4 : Record<T, any> & Record<U, any>
+>T : T
+>U : U
+>Record : Record<K, T>
+>T : T
+>Record : Record<K, T>
+>U : U
+
+type Result4 = keyof Example4<'x', 'y'>;  // "x" | "y"
+>Result4 : "x" | "y"
+>Example4 : Record<T, any> & Record<U, any>
+
+type Example5<T, U> = keyof (T & U);
+>Example5 : keyof T | keyof U
+>T : T
+>U : U
+>T : T
+>U : U
+
+type Result5 = Example5<Record<'x', any>, Record<'y', any>>;  // "x" | "y"
+>Result5 : "x" | "y"
+>Example5 : keyof T | keyof U
+>Record : Record<K, T>
+>Record : Record<K, T>
+

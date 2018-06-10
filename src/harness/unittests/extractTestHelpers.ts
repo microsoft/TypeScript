@@ -34,7 +34,7 @@ namespace ts {
                     const name = s === e
                         ? source.charCodeAt(saved + 1) === CharacterCodes.hash ? "selection" : "extracted"
                         : source.substring(s, e);
-                    activeRanges.push({ name, pos: text.length, end: undefined });
+                    activeRanges.push({ name, pos: text.length, end: undefined! }); // TODO: GH#18217
                     lastPos = pos;
                     continue;
                 }
@@ -45,7 +45,7 @@ namespace ts {
             else if (source.charCodeAt(pos) === CharacterCodes.bar && source.charCodeAt(pos + 1) === CharacterCodes.closeBracket) {
                 text += source.substring(lastPos, pos);
                 activeRanges[activeRanges.length - 1].end = text.length;
-                const range = activeRanges.pop();
+                const range = activeRanges.pop()!;
                 if (range.name in ranges) {
                     throw new Error(`Duplicate name of range ${range.name}`);
                 }
@@ -67,12 +67,12 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export const testFormatOptions: ts.FormatCodeSettings = {
+    export const testFormatOptions: FormatCodeSettings = {
         indentSize: 4,
         tabSize: 4,
         newLineCharacter,
         convertTabsToSpaces: true,
-        indentStyle: ts.IndentStyle.Smart,
+        indentStyle: IndentStyle.Smart,
         insertSpaceAfterConstructor: false,
         insertSpaceAfterCommaDelimiter: true,
         insertSpaceAfterSemicolonInForStatements: true,
@@ -100,7 +100,7 @@ namespace ts {
 
     export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = extractTest(text);
-        const selectionRange = t.ranges.get("selection");
+        const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
             throw new Error(`Test ${caption} does not specify selection range`);
         }
@@ -118,7 +118,7 @@ namespace ts {
                 return;
             }
 
-            const sourceFile = program.getSourceFile(path);
+            const sourceFile = program.getSourceFile(path)!;
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 program,
@@ -127,18 +127,19 @@ namespace ts {
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
+                preferences: defaultPreferences,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
-            const infos = refactor.extractSymbol.getAvailableActions(context);
-            const actions = find(infos, info => info.description === description.message).actions;
+            const infos = refactor.extractSymbol.getAvailableActions(context)!;
+            const actions = find(infos, info => info.description === description.message)!.actions;
 
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
                 const data: string[] = [];
                 data.push(`// ==ORIGINAL==`);
                 data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
                 for (const action of actions) {
-                    const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name);
+                    const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name)!;
                     assert.lengthOf(edits, 1);
                     data.push(`// ==SCOPE::${action.description}==`);
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
@@ -156,7 +157,7 @@ namespace ts {
             const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
-            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
+            const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
             return program;
         }
 
@@ -180,8 +181,8 @@ namespace ts {
             const host = projectSystem.createServerHost([f, projectSystem.libFile]);
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
-            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
-            const sourceFile = program.getSourceFile(f.path);
+            const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
+            const sourceFile = program.getSourceFile(f.path)!;
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 program,
@@ -190,10 +191,11 @@ namespace ts {
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
+                preferences: defaultPreferences,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
-            const infos = refactor.extractSymbol.getAvailableActions(context);
+            const infos = refactor.extractSymbol.getAvailableActions(context)!;
             assert.isUndefined(find(infos, info => info.description === description.message));
         });
     }

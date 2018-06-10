@@ -1,0 +1,95 @@
+=== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts ===
+let named = "foo";
+>named : Symbol(named, Decl(lateBoundDestructuringImplicitAnyError.ts, 0, 3))
+
+let {[named]: prop} = {prop: "foo"};
+>named : Symbol(named, Decl(lateBoundDestructuringImplicitAnyError.ts, 0, 3))
+>prop : Symbol(prop, Decl(lateBoundDestructuringImplicitAnyError.ts, 1, 5))
+>prop : Symbol(prop, Decl(lateBoundDestructuringImplicitAnyError.ts, 1, 23))
+
+void prop;
+>prop : Symbol(prop, Decl(lateBoundDestructuringImplicitAnyError.ts, 1, 5))
+
+const numIndexed: {[idx: number]: string} = null as any;
+>numIndexed : Symbol(numIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 4, 5))
+>idx : Symbol(idx, Decl(lateBoundDestructuringImplicitAnyError.ts, 4, 20))
+
+const strIndexed: {[idx: string]: string} = null as any;
+>strIndexed : Symbol(strIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 5, 5))
+>idx : Symbol(idx, Decl(lateBoundDestructuringImplicitAnyError.ts, 5, 20))
+
+let numed = 6;
+>numed : Symbol(numed, Decl(lateBoundDestructuringImplicitAnyError.ts, 7, 3))
+
+const symed = Symbol();
+>symed : Symbol(symed, Decl(lateBoundDestructuringImplicitAnyError.ts, 9, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+let symed2 = Symbol();
+>symed2 : Symbol(symed2, Decl(lateBoundDestructuringImplicitAnyError.ts, 10, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+let {[named]: prop2} = numIndexed;
+>named : Symbol(named, Decl(lateBoundDestructuringImplicitAnyError.ts, 0, 3))
+>prop2 : Symbol(prop2, Decl(lateBoundDestructuringImplicitAnyError.ts, 12, 5))
+>numIndexed : Symbol(numIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 4, 5))
+
+void prop2;
+>prop2 : Symbol(prop2, Decl(lateBoundDestructuringImplicitAnyError.ts, 12, 5))
+
+let {[numed]: prop3} = numIndexed;
+>numed : Symbol(numed, Decl(lateBoundDestructuringImplicitAnyError.ts, 7, 3))
+>prop3 : Symbol(prop3, Decl(lateBoundDestructuringImplicitAnyError.ts, 14, 5))
+>numIndexed : Symbol(numIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 4, 5))
+
+void prop3;
+>prop3 : Symbol(prop3, Decl(lateBoundDestructuringImplicitAnyError.ts, 14, 5))
+
+let {[named]: prop4} = strIndexed;
+>named : Symbol(named, Decl(lateBoundDestructuringImplicitAnyError.ts, 0, 3))
+>prop4 : Symbol(prop4, Decl(lateBoundDestructuringImplicitAnyError.ts, 16, 5))
+>strIndexed : Symbol(strIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 5, 5))
+
+void prop4;
+>prop4 : Symbol(prop4, Decl(lateBoundDestructuringImplicitAnyError.ts, 16, 5))
+
+let {[numed]: prop5} = strIndexed;
+>numed : Symbol(numed, Decl(lateBoundDestructuringImplicitAnyError.ts, 7, 3))
+>prop5 : Symbol(prop5, Decl(lateBoundDestructuringImplicitAnyError.ts, 18, 5))
+>strIndexed : Symbol(strIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 5, 5))
+
+void prop5;
+>prop5 : Symbol(prop5, Decl(lateBoundDestructuringImplicitAnyError.ts, 18, 5))
+
+let {[symed]: prop6} = numIndexed;
+>symed : Symbol(symed, Decl(lateBoundDestructuringImplicitAnyError.ts, 9, 5))
+>prop6 : Symbol(prop6, Decl(lateBoundDestructuringImplicitAnyError.ts, 20, 5))
+>numIndexed : Symbol(numIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 4, 5))
+
+void prop6;
+>prop6 : Symbol(prop6, Decl(lateBoundDestructuringImplicitAnyError.ts, 20, 5))
+
+let {[symed]: prop7} = strIndexed;
+>symed : Symbol(symed, Decl(lateBoundDestructuringImplicitAnyError.ts, 9, 5))
+>prop7 : Symbol(prop7, Decl(lateBoundDestructuringImplicitAnyError.ts, 22, 5))
+>strIndexed : Symbol(strIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 5, 5))
+
+void prop7;
+>prop7 : Symbol(prop7, Decl(lateBoundDestructuringImplicitAnyError.ts, 22, 5))
+
+let {[symed2]: prop8} = numIndexed;
+>symed2 : Symbol(symed2, Decl(lateBoundDestructuringImplicitAnyError.ts, 10, 3))
+>prop8 : Symbol(prop8, Decl(lateBoundDestructuringImplicitAnyError.ts, 24, 5))
+>numIndexed : Symbol(numIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 4, 5))
+
+void prop8;
+>prop8 : Symbol(prop8, Decl(lateBoundDestructuringImplicitAnyError.ts, 24, 5))
+
+let {[symed2]: prop9} = strIndexed;
+>symed2 : Symbol(symed2, Decl(lateBoundDestructuringImplicitAnyError.ts, 10, 3))
+>prop9 : Symbol(prop9, Decl(lateBoundDestructuringImplicitAnyError.ts, 26, 5))
+>strIndexed : Symbol(strIndexed, Decl(lateBoundDestructuringImplicitAnyError.ts, 5, 5))
+
+void prop9;
+>prop9 : Symbol(prop9, Decl(lateBoundDestructuringImplicitAnyError.ts, 26, 5))
+

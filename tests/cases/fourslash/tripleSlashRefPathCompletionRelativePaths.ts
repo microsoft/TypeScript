@@ -17,8 +17,8 @@
 // @Filename: d1/d2/test.ts
 //// /// <reference path="/*0*/
 //// /// <reference path=".//*1*/
-//// /// <reference path="./*2*/
-//// /// <reference path="../*3*/
+//// /// <reference path="[|./*2*/|]
+//// /// <reference path="[|../*3*/|]
 //// /// <reference path="d3/*4*/
 
 //// /// <reference path="..//*5*/
@@ -32,46 +32,15 @@
 //// /// <reference path="d3/d4//*10*/
 //// /// <reference path="./d3/d4//*11*/
 
-workingDirCompletions();
-parentDirCompletions();
-childDirCompletions();
+// working dir completions
+verify.completionsAt(["0", "1", "4"], ["h.ts", "d3"], { isNewIdentifierLocation: true });
+verify.completionsAt("2", ["h.ts", "d3"].map(name => ({ name, replacementSpan: test.ranges()[0] })), { isNewIdentifierLocation: true });
+verify.completionsAt("3", ["h.ts", "d3"].map(name => ({ name, replacementSpan: test.ranges()[1] })), { isNewIdentifierLocation: true });
 
-function workingDirCompletions() {
-    for (let m = 0; m < 5; ++m) {
-        goTo.marker("" + m);
-        verify.completionListContains("h.ts");
-        verify.completionListContains("d3");
-        verify.not.completionListItemsCountIsGreaterThan(2);
-    }
-}
+// parent dir completions
+verify.completionsAt(["5", "6"], ["g.ts", "d2"], { isNewIdentifierLocation: true });
+verify.completionsAt("7", ["f.ts", "d1"], { isNewIdentifierLocation: true });
 
-function parentDirCompletions() {
-
-    for (let m of ["5", "6"]) {
-        goTo.marker(m);
-        verify.completionListContains("g.ts");
-        verify.completionListContains("d2");
-        verify.not.completionListItemsCountIsGreaterThan(2);
-    }
-
-    goTo.marker("7");
-    verify.completionListContains("f.ts");
-    verify.completionListContains("d1");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-}
-
-function childDirCompletions() {
-
-    for (let m of ["8", "9"]) {
-        goTo.marker(m);
-        verify.completionListContains("i.ts");
-        verify.completionListContains("d4");
-        verify.not.completionListItemsCountIsGreaterThan(2);
-    }
-
-    for (let m of ["10", "11"]) {
-        goTo.marker(m);
-        verify.completionListContains("j.ts");
-        verify.not.completionListItemsCountIsGreaterThan(1);
-    }
-}
+// child dir completions
+verify.completionsAt(["8", "9"], ["i.ts", "d4"], { isNewIdentifierLocation: true });
+verify.completionsAt(["10", "11"], ["j.ts"], { isNewIdentifierLocation: true });
