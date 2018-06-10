@@ -47,9 +47,12 @@ const Paths = {
     builtLocalRun: "built/local/run.js",
     locLcg: "built/local/enu/diagnosticMessages.generated.json.lcg",
     typesMapOutput: "built/local/typesMap.json",
+    
     servicesFile: "built/local/typescriptServices.js",
     servicesDefinitionFile: "built/local/typescriptServices.d.ts",
 
+    tsserverGlobalLibraryFile: "built/local/tsserverGlobalLibrary.js",
+    tsserverGlobalLibraryDefinitionFile: "built/local/tsserverGlobalLibrary.d.ts",
     tsserverLibraryFile: "built/local/tsserverlibrary.js",
     tsserverLibraryDefinitionFile: "built/local/tsserverlibrary.d.ts",
 
@@ -161,7 +164,7 @@ task(TaskNames.lkg, [
     const sizeBefore = getDirSize(Paths.lkg);
     const localizationTargets = locales.map(f => path.join(Paths.builtLocal, f)).concat(path.dirname(Paths.locLcg));
 
-    const copyrightContent = fs.readFileSync(Paths.copyright, { encoding: 'utf-8' });
+    const copyrightContent = readFileSync(Paths.copyright);
 
     const expectedFiles = [...libraryTargets, ...ExpectedLKGFiles, ...localizationTargets];
     const missingFiles = expectedFiles.filter(f => !fs.existsSync(f));
@@ -172,7 +175,7 @@ task(TaskNames.lkg, [
     // Copy all the targets into the LKG directory
     jake.mkdirP(Paths.lkg);
     expectedFiles.forEach(f => {
-        let content = fs.readFileSync(f, { encoding: 'utf-8' });
+        let content = readFileSync(f);
 
         // If this is a .d.ts file, run remove-internal on it
         if (f.endsWith(".d.ts")) {
@@ -282,7 +285,7 @@ file(Paths.diagnosticInformationMap, [Paths.diagnosticMessagesJson], function (c
 }, { async: true });
 
 file(Paths.typesMapOutput, /** @type {*} */(function () {
-    var content = fs.readFileSync(path.join(Paths.srcServer, 'typesMap.json'));
+    var content = readFileSync(path.join(Paths.srcServer, 'typesMap.json'));
     // Validate that it's valid JSON
     try {
         JSON.parse(content.toString());
@@ -293,18 +296,21 @@ file(Paths.typesMapOutput, /** @type {*} */(function () {
 }));
 
 file(Paths.tsserverLibraryFile, [TaskNames.coreBuild, Paths.copyright, ...libraryTargets], function() {
-    // fs.writeFileSync(Paths.tsserverLibraryFile, fs.readFileSync(path.join(Paths.builtLocal, "server.js"), { encoding: 'utf-8'}));
-    fs.writeFileSync(Paths.tsserverLibraryFile, "wat");
+    const originalContent = readFileSync(Paths.tsserverGlobalLibraryFile);
+    const newContent =
+        readFileSync(Paths.copyright) +
+        originalContent;
+    writeFileSync(Paths.tsserverLibraryFile, newContent);
 });
 
 file(Paths.tsserverLibraryDefinitionFile, [TaskNames.coreBuild, Paths.copyright, ...libraryTargets], function () {
-    const content = fs.readFileSync(Paths.servicesFile, { encoding: 'utf-8' });
+    const content = readFileSync(Paths.tsserverGlobalLibraryDefinitionFile);
     const newContent =
         removeConstModifierFromEnumDeclarations(content) +
         `\nexport = ts` +
         `\nexport as namespace ts;`;
 
-    fs.writeFileSync(Paths.tsserverLibraryDefinitionFile, newContent, { encoding: 'utf-8' });
+    writeFileSync(Paths.tsserverLibraryDefinitionFile, newContent);
 });
 
 function getLibraryTargets() {
@@ -656,4 +662,19 @@ function getDiffTool() {
 
 function removeConstModifierFromEnumDeclarations(text) {
     return text.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+}
+
+/**
+ * @param {string} path 
+ */
+function readFileSync(path) {
+    return fs.readFileSync(path, { encoding: "utf-8" });
+}
+
+/**
+ * @param {string} path 
+ * @param {string} contents
+ */
+function writeFileSync(path, contents) {
+    fs.writeFileSync(path, contents, { encoding: "utf-8" });
 }
