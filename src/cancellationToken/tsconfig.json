@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../built/local/",
+        "outDir": "../../built/local/",
         "composite": false,
         "declaration": false,
         "removeComments": true,

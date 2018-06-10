@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../built/local/harness.js",
+        "outFile": "../../built/local/harness.js",
         "types": [
             "node", "mocha", "chai"
         ],
@@ -16,7 +16,7 @@
         { "path": "../compiler" },
         { "path": "../services" },
         { "path": "../server" },
-        { "path": "../typingsInstallerCore" },
+        { "path": "../typingsInstallerCore" }
     ],
 
     "files": [

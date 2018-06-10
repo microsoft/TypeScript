@@ -2,6 +2,11 @@
     "files": [],
     "include": [],
     "references": [
-        { "path": "./tsc" }
+        { "path": "./tsc" },
+        { "path": "./tsserver" },
+        { "path": "./typingsInstaller" },
+        { "path": "./watchGuard" },
+        { "path": "./cancellationToken" },
+        { "path": "./testRunner" }
     ]
 }

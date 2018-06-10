@@ -2,7 +2,7 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": true,
-        "outFile": "../built/local/watchGuard.js",
+        "outFile": "../../built/local/watchGuard.js",
         "types": [
             "node"
         ],
