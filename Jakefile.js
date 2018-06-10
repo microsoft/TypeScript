@@ -127,6 +127,22 @@ task(TaskNames.runtests, [TaskNames.lib], function () {
     runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);;
 }, { async: true });
 
+// Makes the test results the new baseline
+desc("Makes the most recent test results the new baseline, overwriting the old baseline");
+task("baseline-accept", function () {
+    acceptBaseline(Paths.baselines.local, Paths.baselines.reference);
+});
+
+desc("Makes the most recent rwc test results the new baseline, overwriting the old baseline");
+task("baseline-accept-rwc", function () {
+    acceptBaseline(Paths.baselines.localRwc, Paths.baselines.referenceRwc);
+});
+
+desc("Makes the most recent test262 test results the new baseline, overwriting the old baseline");
+task("baseline-accept-test262", function () {
+    acceptBaseline(Paths.baselines.localTest262, Paths.baselines.referenceTest262);
+});
+
 const libraryTargets = getLibraryTargets();
 desc("Builds the library targets");
 task(TaskNames.lib, libraryTargets);
@@ -393,7 +409,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
             Travis.measure(startTime);
             finish(status);
         });
-
     }
     else {
         var savedNodeEnv = process.env.NODE_ENV;
@@ -578,6 +593,40 @@ function diagnosticsToString(diagnostics, pretty) {
     };
     return pretty ? ts.formatDiagnosticsWithColorAndContext(diagnostics, host) :
         ts.formatDiagnostics(diagnostics, host);
+}
+
+function acceptBaseline(sourceFolder, targetFolder) {
+    console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
+    var deleteEnding = '.delete';
+
+    acceptBaselineFolder(sourceFolder, targetFolder);
+
+    function acceptBaselineFolder(sourceFolder, targetFolder) {
+        var files = fs.readdirSync(sourceFolder);
+
+        for (var i in files) {
+            var filename = files[i];
+            var fullLocalPath = path.join(sourceFolder, filename);
+            var stat = fs.statSync(fullLocalPath);
+            if (stat.isFile()) {
+                if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
+                    filename = filename.substr(0, filename.length - deleteEnding.length);
+                    fs.unlinkSync(path.join(targetFolder, filename));
+                }
+                else {
+                    var target = path.join(targetFolder, filename);
+                    if (fs.existsSync(target)) {
+                        fs.unlinkSync(target);
+                    }
+                    jake.mkdirP(path.dirname(target));
+                    fs.renameSync(path.join(sourceFolder, filename), target);
+                }
+            }
+            else if (stat.isDirectory()) {
+                acceptBaselineFolder(fullLocalPath, path.join(targetFolder, filename));
+            }
+        }
+    }
 }
 
 // concatenate a list of sourceFiles to a destinationFile
