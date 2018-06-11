@@ -1,31 +1,3 @@
-
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-
-/// <reference path="..\services\services.ts" />
-/// <reference path="..\services\shims.ts" />
-/// <reference path="..\server\session.ts" />
-/// <reference path="..\server\client.ts" />
-/// <reference path="sourceMapRecorder.ts"/>
-/// <reference path="runnerbase.ts"/>
-/// <reference path="./vfs.ts" />
-/// <reference types="node" />
-/// <reference types="mocha" />
-/// <reference types="chai" />
-
-
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
 
@@ -35,7 +7,7 @@ var assert: typeof _chai.assert = _chai.assert;
 {
     // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
     // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
-    assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
+    assert.isFalse = (expr: any, msg: string) => { if (expr !== false) throw new Error(msg); };
 
     const assertDeepImpl = assert.deepEqual;
     assert.deepEqual = (a, b, msg) => {

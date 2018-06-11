@@ -1,0 +1,196 @@
+typescript_standalone.d.ts(21,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(21,41): error TS1005: ';' expected.
+typescript_standalone.d.ts(8910,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(8910,42): error TS1005: ';' expected.
+typescript_standalone.d.ts(9170,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(9170,46): error TS1005: ';' expected.
+typescript_standalone.d.ts(9520,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(9520,36): error TS1005: ';' expected.
+typescript_standalone.d.ts(9544,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(9544,36): error TS1005: ';' expected.
+typescript_standalone.d.ts(9631,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(9631,38): error TS1005: ';' expected.
+typescript_standalone.d.ts(10796,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(10796,57): error TS1005: ';' expected.
+typescript_standalone.d.ts(10807,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(10807,41): error TS1005: ';' expected.
+typescript_standalone.d.ts(10817,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(10817,48): error TS1005: ';' expected.
+typescript_standalone.d.ts(10892,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(10892,47): error TS1005: ';' expected.
+typescript_standalone.d.ts(10949,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(10949,47): error TS1005: ';' expected.
+typescript_standalone.d.ts(11003,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11003,52): error TS1005: ';' expected.
+typescript_standalone.d.ts(11023,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11023,44): error TS1005: ';' expected.
+typescript_standalone.d.ts(11033,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11033,35): error TS1005: ';' expected.
+typescript_standalone.d.ts(11067,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11067,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11070,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11070,43): error TS1005: ';' expected.
+typescript_standalone.d.ts(11074,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11074,45): error TS1005: ';' expected.
+typescript_standalone.d.ts(11092,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11092,56): error TS1005: ';' expected.
+typescript_standalone.d.ts(11118,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11118,36): error TS1005: ';' expected.
+typescript_standalone.d.ts(11121,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11121,43): error TS1005: ';' expected.
+typescript_standalone.d.ts(11133,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11133,43): error TS1005: ';' expected.
+typescript_standalone.d.ts(11163,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11163,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11197,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11197,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11208,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11208,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11232,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11232,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11240,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11240,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11244,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11244,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11274,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11274,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11317,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11317,41): error TS1005: ';' expected.
+typescript_standalone.d.ts(11504,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11504,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11506,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11506,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11510,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11510,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11512,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11512,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11514,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11514,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11516,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11516,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11518,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11518,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11527,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11527,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11529,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11529,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11531,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11531,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11533,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11533,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11535,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11535,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11537,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11537,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11539,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11539,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11541,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11541,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11543,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11543,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11545,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11545,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11547,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11547,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11549,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11549,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11551,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11551,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11553,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11553,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11555,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11555,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11565,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11565,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11567,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11567,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11569,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11569,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11571,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11571,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11573,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11573,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11575,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11575,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11577,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11577,37): error TS1005: ';' expected.
+typescript_standalone.d.ts(11579,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11579,72): error TS1005: ';' expected.
+typescript_standalone.d.ts(11581,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11581,52): error TS1005: ';' expected.
+typescript_standalone.d.ts(11653,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11653,72): error TS1005: ';' expected.
+typescript_standalone.d.ts(11655,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11655,38): error TS1005: ';' expected.
+typescript_standalone.d.ts(11657,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11657,71): error TS1005: ';' expected.
+typescript_standalone.d.ts(11659,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11659,40): error TS1005: ';' expected.
+typescript_standalone.d.ts(11735,28): error TS1005: ';' expected.
+typescript_standalone.d.ts(11735,48): error TS1005: ';' expected.
+
+
+==== tests/cases/compiler/APISample_linter.ts (0 errors) ====
+    /*
+     * Note: This test is a public API sample. The sample sources can be found 
+             at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
+     *       Please log a "breaking change" issue for any API breaking change affecting this issue
+     */
+    
+    declare var process: any;
+    declare var console: any;
+    declare var readFileSync: any;
+    
+    import * as ts from "typescript";
+    
+    export function delint(sourceFile: ts.SourceFile) {
+        delintNode(sourceFile);
+    
+        function delintNode(node: ts.Node) {
+            switch (node.kind) {
+                case ts.SyntaxKind.ForStatement:
+                case ts.SyntaxKind.ForInStatement:
+                case ts.SyntaxKind.WhileStatement:
+                case ts.SyntaxKind.DoStatement:
+                    if ((<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block) {
+                        report(node, "A looping statement's contents should be wrapped in a block body.");
+                    }
+                    break;
+    
+                case ts.SyntaxKind.IfStatement:
+                    let ifStatement = (<ts.IfStatement>node);
+                    if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
+                        report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
+                    }
+                    if (ifStatement.elseStatement &&
+                        ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&
+                        ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
+                        report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
+                    }
+                    break;
+    
+                case ts.SyntaxKind.BinaryExpression:
+                    let op = (<ts.BinaryExpression>node).operatorToken.kind;
+                    if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
+                        report(node, "Use '===' and '!=='.")
+                    }
+                    break;
+            }
+    
+            ts.forEachChild(node, delintNode);
+        }
+    
+        function report(node: ts.Node, message: string) {
+            let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+            console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
+        }
+    }
+    
+    const fileNames: string[] = process.argv.slice(2);
+    fileNames.forEach(fileName => {
+        // Parse a file
+        let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
+    
+        // delint it
+        delint(sourceFile);
+    });
