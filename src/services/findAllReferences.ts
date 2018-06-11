@@ -1040,7 +1040,7 @@ namespace ts.FindAllReferences.Core {
                     if (node.kind === SyntaxKind.ThisKeyword) {
                         addRef(node);
                     }
-                    else if (!isFunctionLike(node)) {
+                    else if (!isFunctionLike(node) && !isClassLike(node)) {
                         node.forEachChild(cb);
                     }
                 });
