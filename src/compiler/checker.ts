@@ -4093,7 +4093,14 @@ namespace ts {
                     }
                     else {
                         const contextFile = getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration))!;
-                        return `"${file.moduleName || moduleSpecifiers.getModuleSpecifier(compilerOptions, contextFile, contextFile.path, file.path, context!.tracker.moduleResolverHost!)}"`;
+                        return `"${file.moduleName || moduleSpecifiers.getModuleSpecifiers(
+                            symbol,
+                            compilerOptions,
+                            contextFile,
+                            context!.tracker.moduleResolverHost!,
+                            context!.tracker.moduleResolverHost!.getSourceFiles!(),
+                            { importModuleSpecifierPreference: "non-relative" }
+                        )[0]}"`;
                     }
                 }
                 const declaration = symbol.declarations[0];
