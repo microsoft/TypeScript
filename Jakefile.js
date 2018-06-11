@@ -160,7 +160,7 @@ compileOutputConfigFile('src/tsserverLibrary/tsconfig.json', [], [], function ()
         "\nexport as namespace ts;";
     tsserverLibraryDefinitionFileContents = removeConstModifierFromEnumDeclarations(tsserverLibraryDefinitionFileContents);
     // Normalize line endings
-    tsserverLibraryDefinitionFileContents = tsserverLibraryDefinitionFile.replace(/\r\n/g, "\n");
+    tsserverLibraryDefinitionFileContents = tsserverLibraryDefinitionFileContents.replace(/\r\n/g, "\n");
 
     fs.writeFileSync(tsserverLibraryDefinitionFile, tsserverLibraryDefinitionFileContents);
 });
