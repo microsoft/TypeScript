@@ -941,6 +941,7 @@
   "Unexpected_end_of_text_1126": "文本意外结束。",
   "Unexpected_token_1012": "意外的标记。",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "意外的标记。应为构造函数、方法、访问器或属性。",
+  "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "意外的标记。类型参数名不应包含大括号。",
   "Unexpected_token_expected_1179": "意外标记。应为 \"{\"。",
   "Unknown_compiler_option_0_5023": "未知的编译器选项“{0}”。",
   "Unknown_option_excludes_Did_you_mean_exclude_6114": "未知的 \"excludes\" 选项。你的意思是 \"exclude\"?",

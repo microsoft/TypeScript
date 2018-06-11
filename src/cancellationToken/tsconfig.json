@@ -4,6 +4,7 @@
         "outDir": "../../built/local/",
         "composite": false,
         "declaration": false,
+        "declarationMap": false,
         "removeComments": true,
         "module": "commonjs",
         "types": [
