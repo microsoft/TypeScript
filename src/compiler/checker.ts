@@ -4943,10 +4943,10 @@ namespace ts {
                 // * this.p = expr
                 // * className.prototype.method = expr
                 if (isBinaryExpression(declaration)) {
-                    type = getJSInitializerType(symbol, getAssignedJavascriptInitializer(declaration.left)) || getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                    type = getJSInitializerType(declaration, symbol, getAssignedJavascriptInitializer(declaration.left)) || getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else if (isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent)) {
-                    type = getJSInitializerType(symbol, getAssignedJavascriptInitializer(declaration)) || getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                    type = getJSInitializerType(declaration, symbol, getAssignedJavascriptInitializer(declaration)) || getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else if (isJSDocPropertyLikeTag(declaration)
                     || isPropertyAccessExpression(declaration)
@@ -4979,7 +4979,8 @@ namespace ts {
                     || isPropertySignature(declaration)
                     || isVariableDeclaration(declaration)
                     || isBindingElement(declaration)) {
-                    type = getJSInitializerType(symbol, getDeclaredJavascriptInitializer(declaration)) ||
+                    // TODO: This is super slow -- move this into a special JS-only check before the push/pop section (and maybe put it in getWidenedTypeFromJSSpecialPropertyDeclarations...?
+                    type = getJSInitializerType(declaration, symbol, getDeclaredJavascriptInitializer(declaration)) ||
                         getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
                 }
                 else {
@@ -4994,9 +4995,21 @@ namespace ts {
             return links.type;
         }
 
-        function getJSInitializerType(symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init) && hasEntries(symbol.exports)) {
-                return createAnonymousType(symbol, symbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+        function getJSInitializerType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
+            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init)) {
+                const exports = createSymbolTable();
+                while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
+                    const s = getSymbolOfNode(decl);
+                    if (s && hasEntries(s.exports)) {
+                        mergeSymbolTable(exports, s.exports);
+                    }
+                    decl = isBinaryExpression(decl) ? decl.parent : decl.parent.parent;
+                }
+                const s = getSymbolOfNode(decl);
+                if (s && hasEntries(s.exports)) {
+                    mergeSymbolTable(exports, s.exports);
+                }
+                return createAnonymousType(symbol, exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
             }
         }
 
