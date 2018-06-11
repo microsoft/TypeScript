@@ -3627,7 +3627,7 @@ namespace ts {
                     typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
                 }
 
-                const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
+                const parameters = getExpandedParameters(signature).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
                 if (signature.thisParameter) {
                     const thisParameter = symbolToParameterDeclaration(signature.thisParameter, context);
                     parameters.unshift(thisParameter);
@@ -3696,7 +3696,7 @@ namespace ts {
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(getSynthesizedClone) : undefined;
-                const isRest = parameterDeclaration ? isRestParameter(parameterDeclaration) : (parameterSymbol as TransientSymbol).isRestParameter;
+                const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
                 const dotDotDotToken = isRest ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration
                     ? parameterDeclaration.name ?
@@ -3705,7 +3705,8 @@ namespace ts {
                             cloneBindingName(parameterDeclaration.name) :
                         symbolName(parameterSymbol)
                     : symbolName(parameterSymbol);
-                const questionToken = parameterDeclaration && isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
+                const isOptional = parameterDeclaration && isOptionalParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.OptionalParameter;
+                const questionToken = isOptional ? createToken(SyntaxKind.QuestionToken) : undefined;
                 const parameterNode = createParameter(
                     /*decorators*/ undefined,
                     modifiers,
@@ -6198,6 +6199,27 @@ namespace ts {
                 /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes);
         }
 
+        function getExpandedParameters(sig: Signature): Symbol[] {
+            if (sig.hasRestParameter) {
+                const restIndex = sig.parameters.length - 1;
+                const restParameter = sig.parameters[restIndex];
+                const restType = getTypeOfSymbol(restParameter);
+                if (isTupleType(restType)) {
+                    const elementTypes = (<TypeReference>restType).typeArguments || emptyArray;
+                    const minLength = (<TupleType>(<TypeReference>restType).target).minLength;
+                    const restParams = map(elementTypes, (t, i) => {
+                        const name = restParameter.escapedName + "_" + i as __String;
+                        const checkFlags = i >= minLength ? CheckFlags.OptionalParameter : 0;
+                        const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
+                        symbol.type = t;
+                        return symbol;
+                    });
+                    return concatenate(sig.parameters.slice(0, restIndex), restParams);
+                }
+            }
+            return sig.parameters;
+        }
+
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -7376,9 +7398,8 @@ namespace ts {
             const lastParamVariadicType = firstDefined(lastParamTags, p =>
                 p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
 
-            const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
+            const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String, CheckFlags.RestParameter);
             syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
-            syntheticArgsSymbol.isRestParameter = true;
             if (lastParamVariadicType) {
                 // Replace the last parameter with a rest parameter.
                 parameters.pop();
@@ -9716,7 +9737,7 @@ namespace ts {
             }
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
-            const result = createSymbol(symbol.flags, symbol.escapedName, CheckFlags.Instantiated | (getCheckFlags(symbol) & CheckFlags.Late));
+            const result = createSymbol(symbol.flags, symbol.escapedName, CheckFlags.Instantiated | getCheckFlags(symbol) & (CheckFlags.Late | CheckFlags.OptionalParameter | CheckFlags.RestParameter));
             result.declarations = symbol.declarations;
             result.parent = symbol.parent;
             result.target = symbol;
@@ -9726,11 +9747,6 @@ namespace ts {
             }
             if (symbol.nameType) {
                 result.nameType = symbol.nameType;
-            }
-            if (isTransientSymbol(symbol)) {
-                if (symbol.isRestParameter) {
-                    result.isRestParameter = symbol.isRestParameter;
-                }
             }
             return result;
         }
@@ -21034,7 +21050,7 @@ namespace ts {
         }
 
         function isRestParameterType(type: Type) {
-            return isArrayType(type) || type.flags & TypeFlags.TypeParameter && isArrayType(getConstraintOfType(type) || unknownType);
+            return isArrayType(type) || isTupleType(type) || type.flags & TypeFlags.TypeParameter && isArrayType(getBaseConstraintOfType(type) || unknownType);
         }
 
         function checkParameter(node: ParameterDeclaration) {
