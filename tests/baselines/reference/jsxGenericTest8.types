@@ -1,0 +1,73 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+>HTMLAttributes : HTMLAttributes
+
+    class?:     string;
+>class : string
+
+    id?:        string;
+>id : string
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : (this: HTMLElement, ev: MouseEvent) => void
+>this : HTMLElement
+>HTMLElement : HTMLElement
+>ev : MouseEvent
+>MouseEvent : MouseEvent
+}
+ 
+export interface AddArray extends Array<AddNode> {}
+>AddArray : AddArray
+>Array : T[]
+>AddNode : AddNode
+
+export type AddNode    = HTMLElement|string|AddArray|false;
+>AddNode : AddNode
+>HTMLElement : HTMLElement
+>AddArray : AddArray
+>false : false
+
+function createElement(tagName:"div"|"span", attrs?: HTMLAttributes, ...children:AddNode[]): HTMLElement {
+>createElement : (tagName: "div" | "span", attrs?: HTMLAttributes, ...children: AddNode[]) => HTMLElement
+>tagName : "div" | "span"
+>attrs : HTMLAttributes
+>HTMLAttributes : HTMLAttributes
+>children : AddNode[]
+>AddNode : AddNode
+>HTMLElement : HTMLElement
+
+    return document.createElement(tagName);
+>document.createElement(tagName) : HTMLDivElement | HTMLSpanElement
+>document.createElement : { <K extends "object" | "div" | "span" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends "object" | "div" | "span" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>tagName : "div" | "span"
+}
+
+function test() {
+>test : () => HTMLElement
+
+    return <div class="test">
+><div class="test">                { x() }           </div> : HTMLElement
+>div : any
+>class : string
+
+                { x() }
+>x() : AddNode
+>x : () => AddNode
+
+           </div>;
+>div : any
+}
+
+function x(): AddNode {
+>x : () => AddNode
+>AddNode : AddNode
+
+    return <span/>;
+><span/> : HTMLElement
+>span : any
+}

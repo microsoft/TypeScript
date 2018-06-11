@@ -1,0 +1,19 @@
+tests/cases/conformance/jsxGeneric/file.tsx(4,12): error TS17021: No JSX intrinsic factory defined.
+tests/cases/conformance/jsxGeneric/file.tsx(5,17): error TS17021: No JSX intrinsic factory defined.
+tests/cases/conformance/jsxGeneric/file.tsx(6,12): error TS17021: No JSX intrinsic factory defined.
+
+
+==== tests/cases/conformance/jsxGeneric/file.tsx (3 errors) ====
+    /* @jsx-mode generic */
+    
+    function test() {
+        return <div class="test">
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS17021: No JSX intrinsic factory defined.
+                    <span/>
+                    ~~~~~~~
+!!! error TS17021: No JSX intrinsic factory defined.
+               </div>;
+               ~~~~~~
+!!! error TS17021: No JSX intrinsic factory defined.
+    }

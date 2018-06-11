@@ -1,0 +1,154 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+>HTMLAttributes : HTMLAttributes
+
+    class?:     string;
+>class : string
+
+    id?:        string;
+>id : string
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : (this: HTMLElement, ev: MouseEvent) => void
+>this : HTMLElement
+>HTMLElement : HTMLElement
+>ev : MouseEvent
+>MouseEvent : MouseEvent
+}
+ 
+export interface IContainer {
+>IContainer : IContainer
+
+    readonly container: HTMLElement;
+>container : HTMLElement
+>HTMLElement : HTMLElement
+}
+export interface AddArray extends Array<AddNode> {}
+>AddArray : AddArray
+>Array : T[]
+>AddNode : AddNode
+
+export type AddNode    = HTMLElement|string|IContainer|AddArray|false;
+>AddNode : AddNode
+>HTMLElement : HTMLElement
+>IContainer : IContainer
+>AddArray : AddArray
+>false : false
+
+function createElement(tagName:"div"|"span", attrs?: HTMLAttributes, ...children:AddNode[]): HTMLElement {
+>createElement : (tagName: "div" | "span", attrs?: HTMLAttributes, ...children: AddNode[]) => HTMLElement
+>tagName : "div" | "span"
+>attrs : HTMLAttributes
+>HTMLAttributes : HTMLAttributes
+>children : AddNode[]
+>AddNode : AddNode
+>HTMLElement : HTMLElement
+
+    return document.createElement(tagName);
+>document.createElement(tagName) : HTMLDivElement | HTMLSpanElement
+>document.createElement : { <K extends "object" | "div" | "span" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends "object" | "div" | "span" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>tagName : "div" | "span"
+}
+
+function test() {
+>test : () => HTMLElement
+
+    return <div class="test">
+><div class="test">                <Simple text="test"/>                <FunctionContainer>                    <span />                </FunctionContainer>                <ClassContainer>                    <span />                    { false }                </ClassContainer>                { false }           </div> : HTMLElement
+>div : any
+>class : string
+
+                <Simple text="test"/>
+><Simple text="test"/> : HTMLElement
+>Simple : (attr: { text: string; }) => HTMLElement
+>text : string
+
+                <FunctionContainer>
+><FunctionContainer>                    <span />                </FunctionContainer> : HTMLElement
+>FunctionContainer : (attr: {}, ...children: AddNode[]) => HTMLElement
+
+                    <span />
+><span /> : HTMLElement
+>span : any
+
+                </FunctionContainer>
+>FunctionContainer : (attr: {}, ...children: AddNode[]) => HTMLElement
+
+                <ClassContainer>
+><ClassContainer>                    <span />                    { false }                </ClassContainer> : ClassContainer
+>ClassContainer : typeof ClassContainer
+
+                    <span />
+><span /> : HTMLElement
+>span : any
+
+                    { false }
+>false : false
+
+                </ClassContainer>
+>ClassContainer : typeof ClassContainer
+
+                { false }
+>false : false
+
+           </div>;
+>div : any
+}
+
+function Simple(attr: { text:string }) {
+>Simple : (attr: { text: string; }) => HTMLElement
+>attr : { text: string; }
+>text : string
+
+    return <span>{ attr.text }</span>;
+><span>{ attr.text }</span> : HTMLElement
+>span : any
+>attr.text : string
+>attr : { text: string; }
+>text : string
+>span : any
+}
+
+function FunctionContainer(attr: { }, ...children:AddNode[]) {
+>FunctionContainer : (attr: {}, ...children: AddNode[]) => HTMLElement
+>attr : {}
+>children : AddNode[]
+>AddNode : AddNode
+
+    return <div>{ children }</div>;
+><div>{ children }</div> : HTMLElement
+>div : any
+>children : AddNode[]
+>div : any
+}
+
+class ClassContainer implements IContainer {
+>ClassContainer : ClassContainer
+>IContainer : IContainer
+
+    public container:HTMLElement;
+>container : HTMLElement
+>HTMLElement : HTMLElement
+
+    constructor(attrs?: {}, ...children:AddNode[]) {
+>attrs : {}
+>children : AddNode[]
+>AddNode : AddNode
+
+        this.container = <div>{ children }</div>;
+>this.container = <div>{ children }</div> : HTMLElement
+>this.container : HTMLElement
+>this : this
+>container : HTMLElement
+><div>{ children }</div> : HTMLElement
+>div : any
+>children : AddNode[]
+>div : any
+	}
+}
+

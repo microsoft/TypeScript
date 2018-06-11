@@ -1,7 +1,6 @@
 /*@internal*/
 namespace ts {
     export function transformJsx(context: TransformationContext) {
-        const compilerOptions = context.getCompilerOptions();
         let currentSourceFile: SourceFile;
 
         return chainBundle(transformSourceFile);
@@ -85,7 +84,6 @@ namespace ts {
         }
 
         function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild> | undefined, isChild: boolean, location: TextRange) {
-            const tagName = getTagName(node);
             let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
             if (attrs.length === 0) {
@@ -117,12 +115,10 @@ namespace ts {
             }
 
             const element = createExpressionForJsxElement(
-                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
-                compilerOptions.reactNamespace!, // TODO: GH#18217
-                tagName,
+                context.getEmitResolver().getJsxDefinitions(currentSourceFile),
+                node,
                 objectProperties,
                 mapDefined(children, transformJsxChildToExpression),
-                node,
                 location
             );
 
@@ -135,8 +131,7 @@ namespace ts {
 
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
-                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
-                compilerOptions.reactNamespace!, // TODO: GH#18217
+                context.getEmitResolver().getJsxDefinitions(currentSourceFile),
                 mapDefined(children, transformJsxChildToExpression),
                 node,
                 location
@@ -270,21 +265,6 @@ namespace ts {
         function tryDecodeEntities(text: string): string | undefined {
             const decoded = decodeEntities(text);
             return decoded === text ? undefined : decoded;
-        }
-
-        function getTagName(node: JsxElement | JsxOpeningLikeElement): Expression {
-            if (node.kind === SyntaxKind.JsxElement) {
-                return getTagName(node.openingElement);
-            }
-            else {
-                const name = node.tagName;
-                if (isIdentifier(name) && isIntrinsicJsxName(name.escapedText)) {
-                    return createLiteral(idText(name));
-                }
-                else {
-                    return createExpressionFromEntityName(name);
-                }
-            }
         }
 
         /**

@@ -1,0 +1,45 @@
+tests/cases/conformance/jsxGeneric/file.tsx(25,17): error TS2322: Type '(HTMLElement | 10)[]' is not assignable to type 'AddNode'.
+  Type '(HTMLElement | 10)[]' is not assignable to type 'AddArray'.
+    Types of property 'push' are incompatible.
+      Type '(...items: (HTMLElement | 10)[]) => number' is not assignable to type '(...items: AddNode[]) => number'.
+        Types of parameters 'items' and 'items' are incompatible.
+          Type 'AddNode' is not assignable to type 'HTMLElement | 10'.
+            Type 'string' is not assignable to type 'HTMLElement | 10'.
+
+
+==== tests/cases/conformance/jsxGeneric/file.tsx (1 errors) ====
+    /* @jsx-mode generic */
+    /* @jsx-intrinsic-factory createElement */
+    
+    interface HTMLAttributes {
+        class?:     string;
+        id?:        string;
+        onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+    }
+    
+    export interface AddArray extends Array<AddNode> {}
+    export type AddNode    = HTMLElement|string|AddArray|false;
+    
+    function createElement(tagName:"div"|"span", attrs?: HTMLAttributes, ...children:AddNode[]): HTMLElement {
+        return document.createElement(tagName);
+    }
+    
+    function test() {
+        const f = <>
+                    <span>1</span>
+                    { 10 }
+                  </>;
+    
+        return <div class="test">
+                    <span/>
+                    { f }
+                    ~~~~~
+!!! error TS2322: Type '(HTMLElement | 10)[]' is not assignable to type 'AddNode'.
+!!! error TS2322:   Type '(HTMLElement | 10)[]' is not assignable to type 'AddArray'.
+!!! error TS2322:     Types of property 'push' are incompatible.
+!!! error TS2322:       Type '(...items: (HTMLElement | 10)[]) => number' is not assignable to type '(...items: AddNode[]) => number'.
+!!! error TS2322:         Types of parameters 'items' and 'items' are incompatible.
+!!! error TS2322:           Type 'AddNode' is not assignable to type 'HTMLElement | 10'.
+!!! error TS2322:             Type 'string' is not assignable to type 'HTMLElement | 10'.
+               </div>;
+    }

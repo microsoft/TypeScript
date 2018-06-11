@@ -1,0 +1,59 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+
+interface Attributes {
+>Attributes : Symbol(Attributes, Decl(file.tsx, 0, 0))
+
+    class?:     string;
+>class : Symbol(Attributes.class, Decl(file.tsx, 2, 22))
+
+    id?:        string;
+>id : Symbol(Attributes.id, Decl(file.tsx, 3, 23))
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : Symbol(Attributes.onclick, Decl(file.tsx, 4, 23))
+>this : Symbol(this, Decl(file.tsx, 5, 17))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(file.tsx, 5, 35))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+ 
+class Div {
+>Div : Symbol(Div, Decl(file.tsx, 6, 1))
+
+	constructor(attrs?: Attributes, ...children:Span[]) {
+>attrs : Symbol(attrs, Decl(file.tsx, 9, 13))
+>Attributes : Symbol(Attributes, Decl(file.tsx, 0, 0))
+>children : Symbol(children, Decl(file.tsx, 9, 32))
+>Span : Symbol(Span, Decl(file.tsx, 14, 1))
+	}
+	
+	public dummy() {
+>dummy : Symbol(Div.dummy, Decl(file.tsx, 10, 2))
+	}
+}
+
+class Span {
+>Span : Symbol(Span, Decl(file.tsx, 14, 1))
+
+	constructor(attrs?: Attributes, ...children:Div[]) {
+>attrs : Symbol(attrs, Decl(file.tsx, 17, 13))
+>Attributes : Symbol(Attributes, Decl(file.tsx, 0, 0))
+>children : Symbol(children, Decl(file.tsx, 17, 32))
+>Div : Symbol(Div, Decl(file.tsx, 6, 1))
+	}
+}
+
+function test() {
+>test : Symbol(test, Decl(file.tsx, 19, 1))
+
+    return <Div class="test">
+>Div : Symbol(Div, Decl(file.tsx, 6, 1))
+>class : Symbol(class, Decl(file.tsx, 22, 15))
+
+                <Span/>
+>Span : Symbol(Span, Decl(file.tsx, 14, 1))
+
+           </Div>;
+>Div : Symbol(Div, Decl(file.tsx, 6, 1))
+}

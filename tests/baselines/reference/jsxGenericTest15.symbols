@@ -1,0 +1,76 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+
+    class?:     string;
+>class : Symbol(HTMLAttributes.class, Decl(file.tsx, 3, 26))
+
+    id?:        string;
+>id : Symbol(HTMLAttributes.id, Decl(file.tsx, 4, 23))
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : Symbol(HTMLAttributes.onclick, Decl(file.tsx, 5, 23))
+>this : Symbol(this, Decl(file.tsx, 6, 17))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(file.tsx, 6, 35))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+
+
+
+function createElement(tagName:"div", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLDivElement;
+>createElement : Symbol(createElement, Decl(file.tsx, 7, 1), Decl(file.tsx, 11, 105), Decl(file.tsx, 12, 107), Decl(file.tsx, 13, 52))
+>tagName : Symbol(tagName, Decl(file.tsx, 11, 23))
+>attrs : Symbol(attrs, Decl(file.tsx, 11, 37))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+>children : Symbol(children, Decl(file.tsx, 11, 61))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+function createElement(tagName:"span", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLSpanElement;
+>createElement : Symbol(createElement, Decl(file.tsx, 7, 1), Decl(file.tsx, 11, 105), Decl(file.tsx, 12, 107), Decl(file.tsx, 13, 52))
+>tagName : Symbol(tagName, Decl(file.tsx, 12, 23))
+>attrs : Symbol(attrs, Decl(file.tsx, 12, 38))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+>children : Symbol(children, Decl(file.tsx, 12, 62))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLSpanElement : Symbol(HTMLSpanElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+function createElement(tagName:"br"): HTMLBRElement;
+>createElement : Symbol(createElement, Decl(file.tsx, 7, 1), Decl(file.tsx, 11, 105), Decl(file.tsx, 12, 107), Decl(file.tsx, 13, 52))
+>tagName : Symbol(tagName, Decl(file.tsx, 13, 23))
+>HTMLBRElement : Symbol(HTMLBRElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+function createElement(tagName:"div"|"span"|"br", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+>createElement : Symbol(createElement, Decl(file.tsx, 7, 1), Decl(file.tsx, 11, 105), Decl(file.tsx, 12, 107), Decl(file.tsx, 13, 52))
+>tagName : Symbol(tagName, Decl(file.tsx, 14, 23))
+>attrs : Symbol(attrs, Decl(file.tsx, 14, 49))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(file.tsx, 0, 0))
+>children : Symbol(children, Decl(file.tsx, 14, 73))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    return document.createElement(tagName);
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(file.tsx, 14, 23))
+}
+
+function test() {
+>test : Symbol(test, Decl(file.tsx, 16, 1))
+
+    return <div class="test">
+>class : Symbol(class, Decl(file.tsx, 19, 15))
+
+                <span/>
+                <br>
+                    <span class=""/>
+>class : Symbol(class, Decl(file.tsx, 22, 25))
+
+                </br>
+           </div>;
+}

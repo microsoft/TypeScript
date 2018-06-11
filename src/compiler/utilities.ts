@@ -2065,6 +2065,15 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    export function getFullEntityName(entityName: EntityName | undefined): string {
+        if (entityName) {
+            return (entityName.kind === SyntaxKind.QualifiedName) ? getFullEntityName(entityName.left) + "." + unescapeLeadingUnderscores(entityName.right.escapedText) : unescapeLeadingUnderscores(entityName.escapedText);
+        }
+        else {
+            return "[undefined]";
+        }
+    }
+
     export type NodeWithPossibleHoistedDeclaration =
         | Block
         | VariableStatement
