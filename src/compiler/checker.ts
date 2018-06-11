@@ -7564,7 +7564,7 @@ namespace ts {
         }
 
         function getRestTypeOfSignature(signature: Signature) {
-            let type = getTypeOfRestParameter(signature);
+            const type = getTypeOfRestParameter(signature);
             return type && getIndexTypeOfType(type, IndexKind.Number) || anyType;
         }
 
@@ -17876,7 +17876,7 @@ namespace ts {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
                 if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
-                    let paramType = getTypeAtPosition(signature, i);
+                    const paramType = getTypeAtPosition(signature, i);
                     let argType = getEffectiveArgumentType(node, i);
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
