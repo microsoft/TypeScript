@@ -1,12 +1,13 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/typescriptServices.js"
+        "outFile": "../../built/local/services.js"
     },
     "references": [
         { "path": "../core" },
         { "path": "../parser" },
-        { "path": "../compiler" }
+        { "path": "../compiler" },
+        { "path": "../jsTyping" },
     ],
     "files": [
         "types.ts",
@@ -21,8 +22,6 @@
         "getEditsForFileRename.ts",
         "goToDefinition.ts",
         "jsDoc.ts",
-        "semver.ts",
-        "jsTyping.ts",
         "navigateTo.ts",
         "navigationBar.ts",
         "organizeImports.ts",

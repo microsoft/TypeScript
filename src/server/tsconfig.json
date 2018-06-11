@@ -12,11 +12,11 @@
         { "path": "../core" },
         { "path": "../parser" },
         { "path": "../compiler" },
+        { "path": "../jsTyping" },
         { "path": "../services" }
     ],
     "files": [
         "types.ts",
-        "shared.ts",
         "utilities.ts",
         "protocol.ts",
         "scriptInfo.ts",

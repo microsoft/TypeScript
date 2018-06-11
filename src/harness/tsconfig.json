@@ -15,6 +15,7 @@
         { "path": "../parser" },
         { "path": "../compiler" },
         { "path": "../services" },
+        { "path": "../jsTyping" },
         { "path": "../server" },
         { "path": "../typingsInstallerCore" }
     ],

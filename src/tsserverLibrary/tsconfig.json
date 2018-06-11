@@ -2,7 +2,7 @@
     "extends": "../tsconfig-base",
  
     "compilerOptions": {
-        "outFile": "../../built/local/tsserverGlobalLibrary.js",
+        "outFile": "../../built/local/tsserverlibrary.js",
         "types": [
             "node"
         ]
@@ -13,6 +13,7 @@
         { "path": "../parser", "prepend": true },
         { "path": "../compiler", "prepend": true },
         { "path": "../services", "prepend": true },
+        { "path": "../jsTyping", "prepend": true },
         { "path": "../server", "prepend": true }
     ]
 }

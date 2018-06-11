@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/typingsInstallerCore.js",
+        "outFile": "../../built/local/jsTyping.js",
         "types": [
             "node"
         ],
@@ -12,10 +12,12 @@
     },
     "references": [
         { "path": "../core" },
-        { "path": "../parser" },
-        { "path": "../jsTyping" }
+        { "path": "../parser" }
     ],
     "files": [
-        "typingsInstaller.ts"
+        "shared.ts",
+        "types.ts",
+        "jsTyping.ts",
+        "semver.ts"
     ]
 }

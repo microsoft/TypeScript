@@ -10,7 +10,8 @@
         "scanner.ts",
         "utilities.ts",
         "parser.ts",
-        "commandLineParser.ts"
+        "commandLineParser.ts",
+        "moduleNameResolver.ts"
     ],
     "references": [
         { "path": "../core" }

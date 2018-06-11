@@ -6,7 +6,6 @@
     "files": [
         "binder.ts",
         "symbolWalker.ts",
-        "moduleNameResolver.ts",
         "checker.ts",
         "factory.ts",
         "visitor.ts",

@@ -14,12 +14,7 @@
     "references": [
         { "path": "../core", "prepend": true },
         { "path": "../parser", "prepend": true },
-
-        /* todo - only need jsTyping and semver from this compilation! */
-        { "path": "../compiler", "prepend": true },
-        { "path": "../services", "prepend": true },
-        { "path": "../server", "prepend": true },
-
+        { "path": "../jsTyping", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true }
     ],
     "files": [

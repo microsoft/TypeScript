@@ -2,20 +2,19 @@
     "extends": "../tsconfig-base",
  
     "compilerOptions": {
-        "outFile": "../../built/local/tsserver.js",
+        "outFile": "../../built/local/typescriptServices.js",
         "types": [
             "node"
         ]
     },
     "files": [
-        "server.ts"
+        "empty.ts"
     ],
     "references": [
         { "path": "../core", "prepend": true },
         { "path": "../parser", "prepend": true },
         { "path": "../compiler", "prepend": true },
-        { "path": "../services", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
-        { "path": "../server", "prepend": true }
+        { "path": "../services", "prepend": true },
     ]
 }
