@@ -388,6 +388,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
     const runners = process.env.runners || process.env.runner || process.env.ru;
     const tests = process.env.test || process.env.tests || process.env.t;
     const light = process.env.light === undefined || process.env.light !== "false";
+    const failed = process.env.failed;
+    const keepFailed = process.env.keepFailed || failed;
     const stackTraceLimit = process.env.stackTraceLimit;
     const colorsFlag = process.env.color || process.env.colors;
     const colors = colorsFlag !== "false" && colorsFlag !== "0";
@@ -418,8 +420,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         testTimeout = 800000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder) {
-        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors, testTimeout);
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors, testTimeout, keepFailed);
     }
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
@@ -427,7 +429,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
     if (!runInParallel) {
         var startTime = Travis.mark();
         var args = [];
-        args.push("-R", reporter);
+        args.push("-R", "scripts/failed-tests");
+        args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) args.push("-g", `"${tests}"`);
         args.push(colors ? "--colors" : "--no-colors");
         if (bail) args.push("--bail");
@@ -438,7 +441,14 @@ function runConsoleTests(defaultReporter, runInParallel) {
         }
         args.push(Paths.builtLocalRun);
 
-        var cmd = "mocha " + args.join(" ");
+        var cmd;
+        if (failed) {
+            args.unshift("scripts/run-failed-tests.js");
+            cmd = host + " " + args.join(" ");
+        }
+        else {
+            cmd = "mocha " + args.join(" ");
+        }
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
         exec(cmd, function () {
@@ -499,7 +509,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors, testTimeout) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors, testTimeout, keepFailed) {
     var testConfigContents = JSON.stringify({
         runners: runners ? runners.split(",") : undefined,
         test: tests ? [tests] : undefined,
@@ -508,7 +518,8 @@ function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCou
         taskConfigsFolder: taskConfigsFolder,
         stackTraceLimit: stackTraceLimit,
         noColor: !colors,
-        timeout: testTimeout
+        timeout: testTimeout,
+        keepFailed: keepFailed
     });
     fs.writeFileSync('test.config', testConfigContents, { encoding: "utf-8" });
 }

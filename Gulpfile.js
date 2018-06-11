@@ -38,7 +38,7 @@ const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
 const constEnumReplacement = "$1$2enum $3 {$4";
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "fix"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "fix", "failed", "keepFailed"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         "b": "browser",
@@ -598,7 +598,6 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
     return seq;
 });
 
-
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
 gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
@@ -653,10 +652,12 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
         let testTimeout = cmdLineOptions.timeout;
         const debug = cmdLineOptions.debug;
         const inspect = cmdLineOptions.inspect;
-        const tests = cmdLineOptions.tests;
+        let tests = cmdLineOptions.tests;
         const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const stackTraceLimit = cmdLineOptions.stackTraceLimit;
+        const failed = cmdLineOptions.failed;
+        const keepFailed = cmdLineOptions.keepFailed || failed;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -679,8 +680,8 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
             testTimeout = 400000;
         }
 
-        if (tests || runners || light || testTimeout || taskConfigsFolder) {
-            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout);
+        if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed) {
+            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
         }
 
         const colors = cmdLineOptions.colors;
@@ -690,7 +691,8 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            args.push("-R", reporter);
+            args.push("-R", "scripts/failed-tests");
+            args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
             if (tests) {
                 args.push("-g", `"${tests}"`);
             }
@@ -711,8 +713,12 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            exec(mocha, args, lintThenFinish, finish);
-
+            if (failed) {
+                exec(host, ["scripts/run-failed-tests.js"].concat(args), lintThenFinish, finish);
+            }
+            else {
+                exec(mocha, args, lintThenFinish, finish);
+            }
         }
         else {
             // run task to load all tests and partition them between workers
@@ -888,8 +894,9 @@ function cleanTestDirs(done) {
  * @param {number=} workerCount
  * @param {string=} stackTraceLimit
  * @param {number=} timeout
+ * @param {boolean=} keepFailed
  */
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runner: runners ? runners.split(",") : undefined,
@@ -899,6 +906,7 @@ function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCou
         taskConfigsFolder,
         noColor: !cmdLineOptions.colors,
         timeout,
+        keepFailed
     });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
