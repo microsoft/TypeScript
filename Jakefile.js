@@ -233,7 +233,8 @@ function compileOutputConfigFile(configFile, prereqs, prefixes, callback) {
 
 function compileConfigFile(outFile, prereqs, configFile, prefixes, useBuiltCompiler = false, callback) {
     const allPrereqs = filesFromConfig(configFile).concat(prereqs || []).concat(configFile);
-    outFile = outFile.replace(/\//g, "\\");
+    outFile = outFile.replace(/\//g, path.sep);
+    console.log(`Task ${outFile} genned from ${configFile}`);
     file(outFile, allPrereqs, function () {
         const startCompileTime = mark();
         const compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
