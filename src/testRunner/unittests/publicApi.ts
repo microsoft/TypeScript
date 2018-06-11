@@ -5,6 +5,7 @@ describe("Public APIs", () => {
         let fileContent: string;
         before(() => {
             fileContent = Harness.IO.readFile(builtFile)!;
+            fileContent = fileContent.replace(/\r\n/g, "\n");
         });
 
         it("should be acknowledged when they change", () => {

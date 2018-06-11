@@ -3002,7 +3002,7 @@ declare namespace ts {
         AliasExcludes = 2097152,
         ModuleMember = 2623475,
         ExportHasLocal = 944,
-        HasExports = 1952,
+        HasExports = 1955,
         HasMembers = 6240,
         BlockScoped = 418,
         PropertyOrAccessor = 98308,
