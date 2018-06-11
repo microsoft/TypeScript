@@ -5312,6 +5312,7 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
+        getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
     }
 
     /** @deprecated See comment on SymbolWriter */

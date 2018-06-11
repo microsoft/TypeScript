@@ -1136,6 +1136,7 @@ namespace Harness {
             { name: "noImplicitReferences", type: "boolean" },
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
+            { name: "link", type: "string" },
             // Emitted js baseline will print full paths for every output file
             { name: "fullEmitPaths", type: "boolean" }
         ];
@@ -1207,7 +1208,9 @@ namespace Harness {
             harnessSettings: TestCaseParser.CompilerSettings | undefined,
             compilerOptions: ts.CompilerOptions | undefined,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-            currentDirectory: string | undefined): compiler.CompilationResult {
+            currentDirectory: string | undefined,
+            symlinks?: vfs.FileSet
+        ): compiler.CompilationResult {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -1244,6 +1247,9 @@ namespace Harness {
 
             const docs = inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile);
             const fs = vfs.createFromFileSystem(IO, !useCaseSensitiveFileNames, { documents: docs, cwd: currentDirectory });
+            if (symlinks) {
+                fs.apply(symlinks);
+            }
             const host = new fakes.CompilerHost(fs, options);
             return compiler.compileFiles(host, programFileNames, options);
         }
@@ -1864,6 +1870,7 @@ namespace Harness {
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
+        const linkRegex = /^[\/]{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
         export function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
@@ -1883,6 +1890,7 @@ namespace Harness {
             testUnitData: TestUnitData[];
             tsConfig: ts.ParsedCommandLine | undefined;
             tsConfigFileUnitData: TestUnitData | undefined;
+            symlinks?: vfs.FileSet;
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
@@ -1897,10 +1905,16 @@ namespace Harness {
             let currentFileOptions: any = {};
             let currentFileName: any;
             let refs: string[] = [];
+            let symlinks: vfs.FileSet | undefined;
 
             for (const line of lines) {
-                const testMetaData = optionRegex.exec(line);
-                if (testMetaData) {
+                let testMetaData: RegExpExecArray | null;
+                const linkMetaData = linkRegex.exec(line);
+                if (linkMetaData) {
+                    if (!symlinks) symlinks = {};
+                    symlinks[linkMetaData[2].trim()] = new vfs.Symlink(linkMetaData[1].trim());
+                }
+                else if (testMetaData = optionRegex.exec(line)) {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     const metaDataName = testMetaData[1].toLowerCase();
@@ -1989,7 +2003,7 @@ namespace Harness {
                     break;
                 }
             }
-            return { settings, testUnitData, tsConfig, tsConfigFileUnitData };
+            return { settings, testUnitData, tsConfig, tsConfigFileUnitData, symlinks };
         }
     }
 

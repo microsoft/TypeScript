@@ -911,7 +911,7 @@ namespace vfs {
                     if (this.stringComparer(vpath.dirname(path), path) === 0) {
                         throw new TypeError("Roots cannot be symbolic links.");
                     }
-                    this.symlinkSync(entry.symlink, path);
+                    this.symlinkSync(vpath.resolve(dirname, entry.symlink), path);
                     this._applyFileExtendedOptions(path, entry);
                 }
                 else if (entry instanceof Link) {
@@ -1078,8 +1078,7 @@ namespace vfs {
                 if (symlink) {
                     for (const link of symlink.split(",").map(link => link.trim())) {
                         fs.mkdirpSync(vpath.dirname(link));
-                        fs.symlinkSync(document.file, link);
-                        fs.filemeta(link).set("document", document);
+                        fs.symlinkSync(vpath.resolve(fs.cwd(), document.file), link);
                     }
                 }
             }
