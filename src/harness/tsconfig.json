@@ -53,6 +53,7 @@
         "../compiler/resolutionCache.ts",
         "../compiler/moduleSpecifiers.ts",
         "../compiler/watch.ts",
+        "../compiler/tsbuild.ts",
         "../compiler/commandLineParser.ts",
 
         "../services/types.ts",
@@ -124,6 +125,7 @@
         "../services/refactors/extractSymbol.ts",
         "../services/refactors/generateGetAccessorAndSetAccessor.ts",
         "../services/refactors/moveToNewFile.ts",
+        "../services/refactors/addOrRemoveBracesToArrowFunction.ts",
         "../services/sourcemaps.ts",
         "../services/services.ts",
         "../services/breakpoints.ts",

@@ -72,6 +72,7 @@ process.on("message", ({ method, params }) => {
                 base: params.base
             });
             file.contents = fs.readFileSync(file.path);
+            if (params.sourceMap) file.sourceMap = params.sourceMap; 
             inputStream.push(/** @type {*} */(file));
         }
         else if (method === "final") {

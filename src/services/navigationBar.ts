@@ -36,6 +36,7 @@ namespace ts.NavigationBar {
      */
     interface NavigationBarNode {
         node: Node;
+        name: DeclarationName | undefined;
         additionalNodes: Node[] | undefined;
         parent: NavigationBarNode | undefined; // Present for all but root node
         children: NavigationBarNode[] | undefined;
@@ -91,7 +92,7 @@ namespace ts.NavigationBar {
 
     function rootNavigationBarNode(sourceFile: SourceFile): NavigationBarNode {
         Debug.assert(!parentsStack.length);
-        const root: NavigationBarNode = { node: sourceFile, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
+        const root: NavigationBarNode = { node: sourceFile, name: undefined, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
         parent = root;
         for (const statement of sourceFile.statements) {
             addChildrenRecursively(statement);
@@ -108,6 +109,7 @@ namespace ts.NavigationBar {
     function emptyNavigationBarNode(node: Node): NavigationBarNode {
         return {
             node,
+            name: isDeclaration(node) || isExpression(node) ? getNameOfDeclaration(node) : undefined,
             additionalNodes: undefined,
             parent,
             children: undefined,
@@ -420,12 +422,11 @@ namespace ts.NavigationBar {
         }
     }
 
-    function getItemName(node: Node): string {
+    function getItemName(node: Node, name: Node | undefined): string {
         if (node.kind === SyntaxKind.ModuleDeclaration) {
             return getModuleName(<ModuleDeclaration>node);
         }
 
-        const name = getNameOfDeclaration(<Declaration>node);
         if (name) {
             const text = nodeText(name);
             if (text.length > 0) {
@@ -534,17 +535,18 @@ namespace ts.NavigationBar {
 
     function convertToTree(n: NavigationBarNode): NavigationTree {
         return {
-            text: getItemName(n.node),
+            text: getItemName(n.node, n.name),
             kind: getNodeKind(n.node),
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
+            nameSpan: n.name && getNodeSpan(n.name),
             childItems: map(n.children, convertToTree)
         };
     }
 
     function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
         return {
-            text: getItemName(n.node),
+            text: getItemName(n.node, n.name),
             kind: getNodeKind(n.node),
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
@@ -556,7 +558,7 @@ namespace ts.NavigationBar {
 
         function convertToChildItem(n: NavigationBarNode): NavigationBarItem {
             return {
-                text: getItemName(n.node),
+                text: getItemName(n.node, n.name),
                 kind: getNodeKind(n.node),
                 kindModifiers: getNodeModifiers(n.node),
                 spans: getSpans(n),
