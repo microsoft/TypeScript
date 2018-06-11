@@ -10,7 +10,7 @@ const test = Object.assign({}, { test: true });
 >test : true
 >true : true
 
-const p: Promise<number>;
+declare const p: Promise<number>;
 >p : Promise<number>
 >Promise : Promise<T>
 
