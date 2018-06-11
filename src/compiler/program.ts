@@ -349,7 +349,7 @@ namespace ts {
 
             output += host.getNewLine();
         }
-        return output + host.getNewLine();
+        return output;
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
