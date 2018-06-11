@@ -15,15 +15,30 @@ namespace ts.codefix {
         const funcToConvert = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, false)).valueDeclaration;
         //add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert)
-
+/*
         //containers to hold the resolve handlers, rejection handlers, and catch handlers
         let resCallbacks:callbackFunction[] = [];
         let rejCallbacks:callbackFunction[] = [];
         let catchCallbacks:callbackFunction[] = [];
 
         //find the function call that returns a promise
-        let callToAwait:Expression = getSynthesizedDeepClone(findCallToAwait(funcToConvert, checker));
-    
+        let callToAwait:Expression = findCallToAwait(funcToConvert, checker);
+        */
+        
+       for(let child of funcToConvert.getChildren()){
+            if(child.kind === SyntaxKind.Block){
+                for(let stmt of (<Block>child).statements){
+                    if(stmt.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>stmt).expression.kind === SyntaxKind.CallExpression){
+                        let newNode = parseCallback((<ExpressionStatement>stmt).expression as CallExpression, checker);
+                        if(newNode){
+                            changes.replaceNode(sourceFile, child, createBlock(newNode));
+                        }
+                    }
+                }
+            }
+        }
+        
+        /*
         findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Then, resCallbacks); //get the resolve handlers
         findDotThen(funcToConvert, checker, false, PromiseMemberFunc.Then, rejCallbacks); //get the rejection handlers
         findDotThen(funcToConvert, checker, true, PromiseMemberFunc.Catch, catchCallbacks); //get the catch handlers
@@ -40,6 +55,10 @@ namespace ts.codefix {
         }
 
         let awaitNode = createAwait(callToAwait);
+        let children = callToAwait.getChildren();
+        if(children){
+
+        }
         
         //get the cascading catch block
         let catchParam = catchCallbacks.length > 0 ? catchCallbacks[catchCallbacks.length-1].argName : "e";
@@ -64,11 +83,12 @@ namespace ts.codefix {
             topLevelTryStmts = createNodeArray([createStatement(awaitNode)]);
         }
 
-        let topLevelTryBlock:Block = createBlock(topLevelTryStmts); //add the onRes try block
-        let topLevelCatchClause:CatchClause = undefined; //add the onRej try block
+         let topLevelTryBlock:Block = createBlock(topLevelTryStmts); //add the onRes try block
+         let topLevelCatchClause:CatchClause = undefined; //add the onRej try block
 
         
        // if(onRejTuple && onRejBody && onRejBody.length > 0){
+           
         if(rejCallback){
             let onRejTryBlock = createTry(createBlock(rejCallback.body), getSynthesizedDeepClone(cascadingCatchBlock), undefined)
             topLevelCatchClause = createCatchClause(rejCallback.argName, createBlock(createNodeArray([onRejTryBlock])));
@@ -168,10 +188,53 @@ namespace ts.codefix {
         for( let child of node.getChildren() ){
             findDotThen(child, checker, onRes, memberFunc, retArray);
         }
+        */
+    }
+    
+    
+    function parseCallback(node:Expression, checker:TypeChecker): Statement[]{
+        if(node.kind === SyntaxKind.CallExpression && isPromiseType(checker.getTypeAtLocation(node)) && (<CallExpression>node).expression.kind !== SyntaxKind.PropertyAccessExpression){
+            return parsePromiseCall(node as CallExpression);
+        }else if(node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "then", checker)){
+            return parseThen(node as CallExpression, checker);
+        }else if(node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "catch", checker)){
+            return parseCatch(node as CallExpression, checker);
+        }else if(node.kind === SyntaxKind.PropertyAccessExpression){
+            return parseCallback((<PropertyAccessExpression>node).expression, checker)
+        }
     }
 
+    function parseCatch(node:CallExpression, checker:TypeChecker): Statement[]{
+        let func:Identifier = node.arguments[0] as Identifier;
+
+        let tryBlock = createBlock(parseCallback(node.expression, checker));
+        let catchClause = createCatchClause("e", createBlock([createReturn(createCall(func, undefined, [createIdentifier("idk")]))]))
+
+        return [createTry(tryBlock, catchClause, undefined)]
+    }
+
+    function parseThen(node:CallExpression, checker:TypeChecker): Statement[]{
+        let res:Identifier = node.arguments[0] as Identifier;
+        let rej:Identifier = node.arguments[1] as Identifier;
+
+        let tryBlock = createBlock(parseCallback(node.expression, checker));
+        let catchClause = createCatchClause("e", createBlock([createStatement(createCall(rej, undefined, [createIdentifier("e")]))]));
+
+        return [createTry(tryBlock, catchClause, undefined) as Statement, createStatement(createCall(res, undefined, [createIdentifier("val")])) as Statement];
+    }
+
+    function parsePromiseCall(node:CallExpression): Statement[]{
+        return [createVariableStatement(undefined, [createVariableDeclaration(createIdentifier("val"), undefined, createAwait(node.expression))])];
+    }
+   
+    function isCallback(node:CallExpression, funcName:string, checker:TypeChecker):boolean{
+        if(node.expression.kind !== SyntaxKind.PropertyAccessExpression){
+            return false;
+        }
+        return (<PropertyAccessExpression>node.expression).name.text === funcName && isPromiseType(checker.getTypeAtLocation(node));
+    }
+    
     function isPromiseType(T:Type):boolean{
         return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
-
 }
