@@ -75,6 +75,7 @@
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
         "q": "latest",
+        "remove-internal": "^2.9.2",
         "run-sequence": "latest",
         "sorcery": "latest",
         "source-map-support": "latest",
