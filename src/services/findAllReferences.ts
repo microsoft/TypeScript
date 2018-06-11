@@ -1035,14 +1035,16 @@ namespace ts.FindAllReferences.Core {
             if (!(isMethodOrAccessor(member) && hasModifier(member, ModifierFlags.Static))) {
                 continue;
             }
-            member.body!.forEachChild(function cb(node) {
-                if (node.kind === SyntaxKind.ThisKeyword) {
-                    addRef(node);
-                }
-                else if (!isFunctionLike(node)) {
-                    node.forEachChild(cb);
-                }
-            });
+            if (member.body) {
+                member.body.forEachChild(function cb(node) {
+                    if (node.kind === SyntaxKind.ThisKeyword) {
+                        addRef(node);
+                    }
+                    else if (!isFunctionLike(node) && !isClassLike(node)) {
+                        node.forEachChild(cb);
+                    }
+                });
+            }
         }
     }
 
