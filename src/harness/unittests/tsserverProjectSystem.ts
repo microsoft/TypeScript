@@ -62,6 +62,18 @@ namespace ts.projectSystem {
         getLogFileName: () => undefined,
     };
 
+    function createHasErrorMessageLogger() {
+        let hasErrorMsg = false;
+        const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
+        const logger: server.Logger = {
+            close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
+            msg: () => {
+                hasErrorMsg = true;
+            }
+        };
+        return { logger, hasErrorMsg: () => hasErrorMsg };
+    }
+
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
         constructor(
@@ -2917,14 +2929,7 @@ namespace ts.projectSystem {
         });
 
         it("Getting errors from closed script info does not throw exception (because of getting project from orphan script info)", () => {
-            let hasErrorMsg = false;
-            const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
-            const logger: server.Logger = {
-                close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
-                msg: () => {
-                    hasErrorMsg = true;
-                }
-            };
+            const { logger, hasErrorMsg } = createHasErrorMessageLogger();
             const f1 = {
                 path: "/a/b/app.ts",
                 content: "let x = 1;"
@@ -2954,7 +2959,7 @@ namespace ts.projectSystem {
                     files: [f1.path]
                 }
             });
-            assert.isFalse(hasErrorMsg);
+            assert.isFalse(hasErrorMsg());
         });
 
         it("Changed module resolution reflected when specifying files list", () => {
@@ -3318,6 +3323,129 @@ namespace ts.projectSystem {
             function verifyFile2InfoIsOrphan() {
                 const info = Debug.assertDefined(service.getScriptInfoForPath(file2.path as Path));
                 assert.equal(info.containingProjects.length, 0);
+            }
+        });
+
+        it("handles delayed directory watch invoke on file creation", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const fileB: File = {
+                path: `${projectRootPath}/b.ts`,
+                content: "export const b = 10;"
+            };
+            const fileA: File = {
+                path: `${projectRootPath}/a.ts`,
+                content: "export const a = 10;"
+            };
+            const fileSubA: File = {
+                path: `${projectRootPath}/sub/a.ts`,
+                content: fileA.content
+            };
+            const config: File = {
+                path: `${projectRootPath}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [fileSubA, fileB, config, libFile];
+            const host = createServerHost(files);
+            const { logger, hasErrorMsg } = createHasErrorMessageLogger();
+            const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger });
+            openFile(fileB);
+            openFile(fileSubA);
+
+            const services = session.getProjectService();
+            checkNumberOfProjects(services, { configuredProjects: 1 });
+            checkProjectActualFiles(services.configuredProjects.get(config.path)!, files.map(f => f.path));
+            host.checkTimeoutQueueLengthAndRun(0);
+
+            // This should schedule 2 timeouts for ensuring project structure and ensuring projects for open file
+            const filesWithFileA = files.map(f => f === fileSubA ? fileA : f);
+            host.reloadFS(files.map(f => f === fileSubA ? fileA : f));
+            host.checkTimeoutQueueLength(2);
+
+            closeFile(fileSubA);
+            // This should cancel existing updates and schedule new ones
+            host.checkTimeoutQueueLength(2);
+            checkNumberOfProjects(services, { configuredProjects: 1 });
+            checkProjectActualFiles(services.configuredProjects.get(config.path)!, files.map(f => f.path));
+
+            // Open the fileA (as if rename)
+            openFile(fileA);
+
+            // config project is updated to check if fileA is present in it
+            checkNumberOfProjects(services, { configuredProjects: 1 });
+            checkProjectActualFiles(services.configuredProjects.get(config.path)!, filesWithFileA.map(f => f.path));
+
+            // Run the timeout for updating configured project and ensuring projects for open file
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(services.configuredProjects.get(config.path)!, filesWithFileA.map(f => f.path));
+
+            // file is deleted but watches are not yet invoked
+            const originalFileExists = host.fileExists;
+            host.fileExists = s => s === fileA.path ? false : originalFileExists.call(host, s);
+            closeFile(fileA);
+            host.checkTimeoutQueueLength(2); // Update configured project and projects for open file
+            checkProjectActualFiles(services.configuredProjects.get(config.path)!, filesWithFileA.map(f => f.path));
+
+           // host.fileExists = originalFileExists;
+            openFile(fileSubA);
+            // This should create inferred project since fileSubA not on the disk
+            checkProjectActualFiles(services.configuredProjects.get(config.path)!, mapDefined(filesWithFileA, f => f === fileA ? undefined : f.path));
+            checkProjectActualFiles(services.inferredProjects[0], [fileSubA.path, libFile.path]);
+
+            host.checkTimeoutQueueLengthAndRun(2); // Update configured project and projects for open file
+            host.fileExists = originalFileExists;
+
+            // Actually trigger the file move
+            host.reloadFS(files);
+            host.checkTimeoutQueueLength(2);
+            const fileBErrorTimeoutId = host.getNextTimeoutId();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: protocol.CommandTypes.Geterr,
+                arguments: {
+                    files: [fileB.path, fileSubA.path],
+                    delay: 0
+                }
+            });
+            const getErrSeqId = session.getSeq();
+            host.checkTimeoutQueueLength(3);
+
+            session.clearMessages();
+            host.runQueuedTimeoutCallbacks(fileBErrorTimeoutId);
+            checkErrorMessage(session, "syntaxDiag", { file: fileB.path, diagnostics: [] });
+
+            session.clearMessages();
+            host.runQueuedImmediateCallbacks();
+            checkErrorMessage(session, "semanticDiag", { file: fileB.path, diagnostics: [] });
+
+            session.clearMessages();
+            const fileSubAErrorTimeoutId = host.getNextTimeoutId();
+            host.runQueuedImmediateCallbacks();
+            checkErrorMessage(session, "suggestionDiag", { file: fileB.path, diagnostics: [] });
+
+            session.clearMessages();
+            host.checkTimeoutQueueLength(3);
+            host.runQueuedTimeoutCallbacks(fileSubAErrorTimeoutId);
+            checkCompleteEvent(session, 1, getErrSeqId);
+            assert.isFalse(hasErrorMsg());
+
+            function openFile(file: File) {
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: {
+                        file: file.path,
+                        fileContent: file.content,
+                        projectRootPath
+                    }
+                });
+            }
+
+            function closeFile(file: File) {
+                session.executeCommandSeq<protocol.CloseRequest>({
+                    command: protocol.CommandTypes.Close,
+                    arguments: {
+                        file: file.path
+                    }
+                });
             }
         });
     });
