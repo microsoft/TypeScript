@@ -4402,5 +4402,17 @@
     "Convert named imports to namespace import": {
         "category": "Message",
         "code": 95057
+    },
+    "Add or remove braces in an arrow function": {
+        "category": "Message",
+        "code": 95058
+    },
+    "Add braces to arrow function": {
+        "category": "Message",
+        "code": 95059
+    },
+    "Remove braces from arrow function": {
+        "category": "Message",
+        "code": 95060
     }
 }
