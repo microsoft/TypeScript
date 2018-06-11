@@ -3894,6 +3894,7 @@ namespace ts {
 
     export interface TupleType extends GenericType {
         minLength: number;
+        associatedNames?: __String[];
     }
 
     export interface UnionOrIntersectionType extends Type {

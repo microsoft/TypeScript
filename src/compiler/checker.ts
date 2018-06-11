@@ -6208,7 +6208,7 @@ namespace ts {
                     const elementTypes = (<TypeReference>restType).typeArguments || emptyArray;
                     const minLength = (<TupleType>(<TypeReference>restType).target).minLength;
                     const restParams = map(elementTypes, (t, i) => {
-                        const name = restParameter.escapedName + "_" + i as __String;
+                        const name = getParameterNameAtPosition(sig, restIndex + i);
                         const checkFlags = i >= minLength ? CheckFlags.OptionalParameter : 0;
                         const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
                         symbol.type = t;
@@ -8275,7 +8275,7 @@ namespace ts {
         //
         // Note that the generic type created by this function has no symbol associated with it. The same
         // is true for each of the synthesized type parameters.
-        function createTupleTypeOfArity(arity: number, minLength: number): TupleType {
+        function createTupleTypeOfArity(arity: number, minLength: number, associatedNames: __String[] | undefined): TupleType {
             let typeParameters: TypeParameter[] | undefined;
             const properties: Symbol[] = [];
             if (arity) {
@@ -8308,20 +8308,21 @@ namespace ts {
             type.declaredStringIndexInfo = undefined;
             type.declaredNumberIndexInfo = undefined;
             type.minLength = minLength;
+            type.associatedNames = associatedNames;
             return type;
         }
 
-        function getTupleTypeOfArity(arity: number, minLength: number): GenericType {
-            const key = arity + "," + minLength;
+        function getTupleTypeOfArity(arity: number, minLength: number, associatedNames?: __String[]): GenericType {
+            const key = arity + "," + minLength + (associatedNames && associatedNames.length ? "," + associatedNames.join(",") : "");
             let type = tupleTypes.get(key);
             if (!type) {
-                tupleTypes.set(key, type = createTupleTypeOfArity(arity, minLength));
+                tupleTypes.set(key, type = createTupleTypeOfArity(arity, minLength, associatedNames));
             }
             return type;
         }
 
-        function createTupleType(elementTypes: Type[], minLength = elementTypes.length) {
-            const tupleType = getTupleTypeOfArity(elementTypes.length, minLength);
+        function createTupleType(elementTypes: Type[], minLength = elementTypes.length, associatedNames?: __String[]) {
+            const tupleType = getTupleTypeOfArity(elementTypes.length, minLength, associatedNames);
             return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
         }
 
@@ -10207,7 +10208,8 @@ namespace ts {
                 if (!related) {
                     if (reportErrors) {
                         errorReporter!(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
-                            getParameterNameAtPosition(source, i), getParameterNameAtPosition(target, i));
+                            unescapeLeadingUnderscores(getParameterNameAtPosition(source, i)),
+                            unescapeLeadingUnderscores(getParameterNameAtPosition(target, i)));
                     }
                     return Ternary.False;
                 }
@@ -12365,13 +12367,15 @@ namespace ts {
                     callback(sourceRest, targetRest);
                 }
                 else {
-                    const types: Type[] = [];
+                    const types = [];
+                    const names = [];
                     for (let i = paramCount; i < sourceCount; i++) {
                         types.push(getTypeAtPosition(source, i));
+                        names.push(getParameterNameAtPosition(source, i));
                     }
                     const minArgumentCount = getMinArgumentCount(source);
                     const minLength = minArgumentCount < paramCount ? 0 : minArgumentCount - paramCount;
-                    const rest = hasEffectiveRestParameter(source) ? createArrayType(getUnionType(types)) : createTupleType(types, minLength);
+                    const rest = hasEffectiveRestParameter(source) ? createArrayType(getUnionType(types)) : createTupleType(types, minLength, names);
                     callback(rest, targetRest);
                 }
             }
@@ -19382,11 +19386,16 @@ namespace ts {
         function getParameterNameAtPosition(signature: Signature, pos: number) {
             const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (pos < paramCount) {
-                return symbolName(signature.parameters[pos]);
+                return signature.parameters[pos].escapedName;
             }
             const restParameter = signature.parameters[paramCount] || unknownSymbol;
-            const restName = symbolName(restParameter);
-            return isTupleType(getTypeOfSymbol(restParameter)) ? `${restName}[${pos - paramCount}]` : restName;
+            const restType = getTypeOfSymbol(restParameter);
+            if (isTupleType(restType)) {
+                const associatedNames = (<TupleType>(<TypeReference>restType).target).associatedNames;
+                const index = pos - paramCount;
+                return associatedNames ? associatedNames[index] : restParameter.escapedName + "_" + index as __String;
+            }
+            return restParameter.escapedName;
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
