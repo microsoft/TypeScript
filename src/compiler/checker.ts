@@ -18097,7 +18097,25 @@ namespace ts {
                 return node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
             }
             else {
-                return node.arguments || emptyArray;
+                const args = node.arguments || emptyArray;
+                const length = args.length;
+                if (length && args[length - 1].kind === SyntaxKind.SpreadElement && getSpreadArgumentIndex(args) === length - 1) {
+                    // We have a spread argument in the last position and no other spread arguments. If the type
+                    // of the argument is a tuple type, spread the tuple elements into the argument list. We can
+                    // call checkExpressionCached because spread expressions never have a contextual type.
+                    const spreadArgument = <SpreadElement>args[length - 1];
+                    const type = checkExpressionCached(spreadArgument.expression);
+                    if (isTupleType(type)) {
+                        const syntheticArgs = map((<TypeReference>type).typeArguments || emptyArray, t => {
+                            const arg = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, spreadArgument.pos, spreadArgument.end);
+                            arg.parent = spreadArgument;
+                            arg.type = t;
+                            return arg;
+                        });
+                        return concatenate(args.slice(0, length - 1), syntheticArgs);
+                    }
+                }
+                return args;
             }
         }
 
@@ -21015,6 +21033,8 @@ namespace ts {
                     return undefinedWideningType;
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(<YieldExpression>node);
+                case SyntaxKind.SyntheticExpression:
+                    return (<SyntheticExpression>node).type;
                 case SyntaxKind.JsxExpression:
                     return checkJsxExpression(<JsxExpression>node, checkMode);
                 case SyntaxKind.JsxElement:
@@ -21059,7 +21079,7 @@ namespace ts {
         }
 
         function isRestParameterType(type: Type) {
-            return isArrayType(type) || isTupleType(type) || type.flags & TypeFlags.TypeParameter && isArrayType(getBaseConstraintOfType(type) || unknownType);
+            return isArrayType(type) || isTupleType(type) || type.flags & TypeFlags.Instantiable && isTypeAssignableTo(type, anyArrayType);
         }
 
         function checkParameter(node: ParameterDeclaration) {

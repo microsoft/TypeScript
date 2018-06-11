@@ -320,6 +320,7 @@ namespace ts {
         AsExpression,
         NonNullExpression,
         MetaProperty,
+        SyntheticExpression,
 
         // Misc
         TemplateSpan,
@@ -1336,6 +1337,11 @@ namespace ts {
         kind: SyntaxKind.YieldExpression;
         asteriskToken?: AsteriskToken;
         expression?: Expression;
+    }
+
+    export interface SyntheticExpression extends Expression {
+        kind: SyntaxKind.SyntheticExpression;
+        type: Type;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
