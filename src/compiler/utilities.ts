@@ -4177,6 +4177,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2018:
+                return "lib.es2018.full.d.ts";
             case ScriptTarget.ES2017:
                 return "lib.es2017.full.d.ts";
             case ScriptTarget.ES2016:

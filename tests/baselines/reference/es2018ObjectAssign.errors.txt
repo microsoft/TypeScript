@@ -1,0 +1,10 @@
+tests/cases/compiler/es2018ObjectAssign.ts(3,7): error TS1155: 'const' declarations must be initialized.
+
+
+==== tests/cases/compiler/es2018ObjectAssign.ts (1 errors) ====
+    const test = Object.assign({}, { test: true });
+    
+    const p: Promise<number>;
+          ~
+!!! error TS1155: 'const' declarations must be initialized.
+    p.finally();
