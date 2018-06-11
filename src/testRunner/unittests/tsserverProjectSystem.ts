@@ -415,6 +415,23 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
+    function protocolLocationFromSubstring(str: string, substring: string) {
+        const start = str.indexOf(substring);
+        Debug.assert(start !== -1);
+        return protocolToLocation(str)(start);
+    }
+    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+        const lineStarts = computeLineStarts(text);
+        return pos => {
+            const x = computeLineAndCharacterOfPosition(lineStarts, pos);
+            return { line: x.line + 1, offset: x.character + 1 };
+        };
+    }
+    function protocolTextSpanFromSubstring(str: string, substring: string): protocol.TextSpan {
+        const span = textSpanFromSubstring(str, substring);
+        const toLocation = protocolToLocation(str);
+        return { start: toLocation(span.start), end: toLocation(span.start + span.length) };
+    }
     function textSpanFromSubstring(str: string, substring: string): TextSpan {
         const start = str.indexOf(substring);
         Debug.assert(start !== -1);
@@ -8774,6 +8791,64 @@ export const x = 10;`
             assert.notEqual(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
             assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile.sourceFile);
             assert.equal(moduleInfo.cacheSourceFile.sourceFile.text, updatedModuleContent);
+        });
+    });
+
+    describe("tsserverProjectSystem project references", () => {
+        it("goToDefinition", () => {
+            const aTs: File = {
+                path: "/a/a.ts",
+                content: "export function a() {}",
+            };
+            const aDts: File = {
+                path: "/a/bin/a.d.ts",
+                // Need to mangle the sourceMappingURL part or it breaks the build
+                content: `export declare function a(): void;\n//# source${""}MappingURL=a.d.ts.map`,
+            };
+            const aDtsMap: File = {
+                path: "/a/bin/a.d.ts.map",
+                content: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,kCAAsB"}',
+            };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "outDir": "bin",
+                        "declaration": true,
+                        "declarationMap": true,
+                        "composite": true,
+                    }
+                }`,
+            };
+
+            const bTs: File = {
+                path: "/b/b.ts",
+                content: 'import { a } from "../a/a";\na();',
+            };
+            const bTsconfig: File = {
+                path: "/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "outDir": "bin",
+                    },
+                    "references": [
+                        { "path": "../a" }
+                    ]
+                }`,
+            };
+
+            const host = createServerHost([aTs, aDts, aDtsMap, aTsconfig, bTs, bTsconfig]);
+            const session = createSession(host);
+            openFilesForSession([bTs], session);
+
+            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, { file: bTs.path, ...protocolLocationFromSubstring(bTs.content, "a()") });
+            const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
+
+            const _desiredResponse: protocol.FileSpan = { file: aTs.path, ...protocolTextSpanFromSubstring(aTs.content, "a") };
+            _desiredResponse; // tslint:disable-line no-unused-expression
+            // TODO: GH#24866 The definition is past the end of the file!
+            const expectedResponse: protocol.FileSpan = { file: aTs.path, start: { line: 1, offset: aTs.content.length + 1, }, end: { line: 1, offset: aTs.content.length + 2 } };
+            assert.deepEqual(definitionResponse, [expectedResponse]);
         });
     });
 }
