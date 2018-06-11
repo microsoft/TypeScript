@@ -17122,20 +17122,28 @@ namespace ts {
 
             // Find the first enclosing class that has the declaring classes of the protected constituents
             // of the property as base classes
-            const enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
+            let enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
                 const enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration)!);
                 return isClassDerivedFromDeclaringClasses(enclosingClass, prop) ? enclosingClass : undefined;
             });
             // A protected property is accessible if the property is within the declaring class or classes derived from it
             if (!enclosingClass) {
-                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
-                return false;
+                // allow PropertyAccessibility if context is in function with this parameter
+                // static member access is disallow
+                let thisParameter: ParameterDeclaration | undefined;
+                if (flags & ModifierFlags.Static || !(thisParameter = getThisParameterFromNodeContext(node)) || !thisParameter.type) {
+                    error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
+                    return false;
+                }
+
+                const thisType = getTypeFromTypeNode(thisParameter.type);
+                enclosingClass = ((thisType.flags & TypeFlags.TypeParameter) ? getConstraintFromTypeParameter(<TypeParameter>thisType) : thisType) as InterfaceType;
             }
             // No further restrictions for static properties
             if (flags & ModifierFlags.Static) {
                 return true;
             }
-             if (type.flags & TypeFlags.TypeParameter) {
+            if (type.flags & TypeFlags.TypeParameter) {
                 // get the original type -- represented as the type constraint of the 'this' type
                 type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(<TypeParameter>type)! : getBaseConstraintOfType(<TypeParameter>type)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
             }
@@ -17144,6 +17152,11 @@ namespace ts {
                 return false;
             }
             return true;
+        }
+
+        function getThisParameterFromNodeContext (node: Node) {
+            const thisContainer = getThisContainer(node, /* includeArrowFunctions */ false);
+            return thisContainer && isFunctionLike(thisContainer) ? getThisParameter(thisContainer) : undefined;
         }
 
         function symbolHasNonMethodDeclaration(symbol: Symbol) {
