@@ -648,7 +648,7 @@ namespace FourSlash {
         }
 
         private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | undefined, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
-            if (endMarkerNames) {
+            if (endMarkerNames !== undefined) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {

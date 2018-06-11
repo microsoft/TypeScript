@@ -1304,7 +1304,7 @@ namespace ts {
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
             const result = callback(value, key as (string & __String));
-            if (result) {
+            if (result !== undefined && result !== false as any) {
                 return result;
             }
         }
