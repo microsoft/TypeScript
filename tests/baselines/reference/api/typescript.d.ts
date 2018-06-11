@@ -5896,6 +5896,9 @@ declare namespace ts {
         Convert_0_to_mapped_object_type: DiagnosticMessage;
         Convert_namespace_import_to_named_imports: DiagnosticMessage;
         Convert_named_imports_to_namespace_import: DiagnosticMessage;
+        Add_or_remove_braces_in_an_arrow_function: DiagnosticMessage;
+        Add_braces_to_arrow_function: DiagnosticMessage;
+        Remove_braces_from_arrow_function: DiagnosticMessage;
     };
 }
 declare namespace ts {
@@ -10781,6 +10784,7 @@ declare namespace ts {
      * user was before extracting it.
      */
     function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, preferLastLocation: boolean): number;
+    function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean): void;
 }
 declare namespace ts {
     function createClassifier(): Classifier;
@@ -11649,6 +11653,8 @@ declare namespace ts.refactor.extractSymbol {
 declare namespace ts.refactor.generateGetAccessorAndSetAccessor {
 }
 declare namespace ts.refactor {
+}
+declare namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 }
 declare namespace ts.sourcemaps {
     interface SourceMapData {
