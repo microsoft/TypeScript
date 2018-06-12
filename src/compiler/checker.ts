@@ -11250,7 +11250,7 @@ namespace ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
-                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source);
+                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
@@ -12963,17 +12963,14 @@ namespace ts {
             if (!inferredType) {
                 const signature = context.signature;
                 if (signature) {
+                    if (inference.contraCandidates) {
+                        // If we have contravariant inferences we find the best common subtype and treat
+                        // that as a single covariant candidate.
+                        inference.candidates = append(inference.candidates, getContravariantInference(inference));
+                        inference.contraCandidates = undefined;
+                    }
                     if (inference.candidates) {
                         inferredType = getCovariantInference(inference, context, signature);
-                        // If we have inferred 'never' but have contravariant candidates. To get a more specific type we
-                        // infer from the contravariant candidates instead.
-                        if (inferredType.flags & TypeFlags.Never && inference.contraCandidates) {
-                            inferredType = getContravariantInference(inference);
-                        }
-                    }
-                    else if (inference.contraCandidates) {
-                        // We only have contravariant inferences, infer the best common subtype of those
-                        inferredType = getContravariantInference(inference);
                     }
                     else if (context.flags & InferenceFlags.NoDefault) {
                         // We use silentNeverType as the wildcard that signals no inferences.
