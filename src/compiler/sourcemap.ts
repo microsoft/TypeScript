@@ -397,7 +397,7 @@ namespace ts {
                             combinedPath,
                             host.getCurrentDirectory(),
                             host.getCanonicalFileName,
-                            /*isAbsolutePathAnUrl*/ true)
+                            /*isAbsolutePathAnUrl*/ true);
                         setupSourceEntry(resolvedPath, ""); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
                         return {
