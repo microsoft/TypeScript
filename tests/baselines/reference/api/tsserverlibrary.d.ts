@@ -8496,6 +8496,56 @@ declare namespace ts {
     }
 }
 declare namespace ts {
+    interface SourceFileLikeCache {
+        get(path: Path): SourceFileLike | undefined;
+    }
+    function createSourceFileLikeCache(host: {
+        readFile?: (path: string) => string | undefined;
+        fileExists?: (path: string) => boolean;
+    }): SourceFileLikeCache;
+}
+declare namespace ts.sourcemaps {
+    interface SourceMapData {
+        version?: number;
+        file?: string;
+        sourceRoot?: string;
+        sources: string[];
+        sourcesContent?: string[];
+        names?: string[];
+        mappings: string;
+    }
+    interface SourceMappableLocation {
+        fileName: string;
+        position: number;
+    }
+    interface SourceMapper {
+        getOriginalPosition(input: SourceMappableLocation): SourceMappableLocation;
+        getGeneratedPosition(input: SourceMappableLocation): SourceMappableLocation;
+    }
+    const identitySourceMapper: {
+        getOriginalPosition: typeof identity;
+        getGeneratedPosition: typeof identity;
+    };
+    interface SourceMapDecodeHost {
+        readFile(path: string): string | undefined;
+        fileExists(path: string): boolean;
+        getCanonicalFileName(path: string): string;
+        log(text: string): void;
+    }
+    function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache?: SourceFileLikeCache): SourceMapper;
+    function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: {
+        log?(s: string): void;
+    }): T[];
+    interface RawSourceMapPosition {
+        emittedLine: number;
+        emittedColumn: number;
+        sourceLine: number;
+        sourceColumn: number;
+        sourceIndex: number;
+        nameIndex?: number;
+    }
+}
+declare namespace ts {
     function getOriginalNodeId(node: Node): number;
     interface ExternalModuleInfo {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
@@ -11479,36 +11529,6 @@ declare namespace ts.refactor {
 }
 declare namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 }
-declare namespace ts.sourcemaps {
-    interface SourceMapData {
-        version?: number;
-        file?: string;
-        sourceRoot?: string;
-        sources: string[];
-        sourcesContent?: string[];
-        names?: string[];
-        mappings: string;
-    }
-    interface SourceMappableLocation {
-        fileName: string;
-        position: number;
-    }
-    interface SourceMapper {
-        getOriginalPosition(input: SourceMappableLocation): SourceMappableLocation;
-        getGeneratedPosition(input: SourceMappableLocation): SourceMappableLocation;
-    }
-    const identitySourceMapper: {
-        getOriginalPosition: typeof identity;
-        getGeneratedPosition: typeof identity;
-    };
-    interface SourceMapDecodeHost {
-        readFile(path: string): string | undefined;
-        fileExists(path: string): boolean;
-        getCanonicalFileName(path: string): string;
-        log(text: string): void;
-    }
-    function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache?: SourceFileLikeCache): SourceMapper;
-}
 declare namespace ts {
     /** The version of the language service API */
     const servicesVersion = "0.8";
@@ -11532,13 +11552,6 @@ declare namespace ts {
         isCancellationRequested(): boolean;
         throwIfCancellationRequested(): void;
     }
-    interface SourceFileLikeCache {
-        get(path: Path): SourceFileLike | undefined;
-    }
-    function createSourceFileLikeCache(host: {
-        readFile?: (path: string) => string | undefined;
-        fileExists?: (path: string) => boolean;
-    }): SourceFileLikeCache;
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnly?: boolean): LanguageService;
     /** Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`. */
     function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number>;
