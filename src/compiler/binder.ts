@@ -2514,11 +2514,12 @@ namespace ts {
                 return true;
             }
             const node = symbol.valueDeclaration;
-            const init = !node ? undefined :
+            let init = !node ? undefined :
                 isVariableDeclaration(node) ? node.initializer :
                 isBinaryExpression(node) ? node.right :
                 isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
                 undefined;
+            init = init && getRightMostAssignedExpression(init);
             if (init) {
                 const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
                 return !!getJavascriptInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, isPrototypeAssignment);

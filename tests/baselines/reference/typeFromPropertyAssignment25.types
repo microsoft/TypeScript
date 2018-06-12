@@ -1,12 +1,12 @@
 === tests/cases/conformance/salsa/bug24703.js ===
 var Common = {};
->Common : { [x: string]: any; I: typeof I; O: typeof O; }
->{} : { [x: string]: any; I: typeof I; O: typeof O; }
+>Common : typeof Common
+>{} : { [x: string]: any; }
 
 Common.I = class {
 >Common.I = class {    constructor() {        this.i = 1    }} : typeof I
 >Common.I : typeof I
->Common : { [x: string]: any; I: typeof I; O: typeof O; }
+>Common : typeof Common
 >I : typeof I
 >class {    constructor() {        this.i = 1    }} : typeof I
 
@@ -22,11 +22,11 @@ Common.I = class {
 Common.O = class extends Common.I {
 >Common.O = class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
 >Common.O : typeof O
->Common : { [x: string]: any; I: typeof I; O: typeof O; }
+>Common : typeof Common
 >O : typeof O
 >class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
 >Common.I : I
->Common : { [x: string]: any; I: typeof I; O: typeof O; }
+>Common : typeof Common
 >I : typeof I
 
     constructor() {
@@ -46,14 +46,14 @@ var o = new Common.O()
 >o : O
 >new Common.O() : O
 >Common.O : typeof O
->Common : { [x: string]: any; I: typeof I; O: typeof O; }
+>Common : typeof Common
 >O : typeof O
 
 var i = new Common.I()
 >i : I
 >new Common.I() : I
 >Common.I : typeof I
->Common : { [x: string]: any; I: typeof I; O: typeof O; }
+>Common : typeof Common
 >I : typeof I
 
 o.i
