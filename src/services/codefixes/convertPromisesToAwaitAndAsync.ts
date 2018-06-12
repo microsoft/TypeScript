@@ -31,7 +31,8 @@ namespace ts.codefix {
                     if(stmt.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>stmt).expression.kind === SyntaxKind.CallExpression){
                         let newNode = parseCallback((<ExpressionStatement>stmt).expression as CallExpression, checker);
                         if(newNode){
-                            changes.replaceNode(sourceFile, child, createBlock(newNode));
+                            changes.replaceNodeWithNodes(sourceFile, stmt, newNode);
+                            //changes.replaceNode(sourceFile, child, createBlock(newNode));
                         }
                     }
                 }
@@ -205,26 +206,35 @@ namespace ts.codefix {
     }
 
     function parseCatch(node:CallExpression, checker:TypeChecker): Statement[]{
-        let func:Identifier = node.arguments[0] as Identifier;
+        let func= node.arguments[0];
 
         let tryBlock = createBlock(parseCallback(node.expression, checker));
-        let catchClause = createCatchClause("e", createBlock([createReturn(createCall(func, undefined, [createIdentifier("idk")]))]))
-
+        let catchClause = createCatchClause("e", createBlock(getCallbackBody(func, "e")))
         return [createTry(tryBlock, catchClause, undefined)]
     }
 
     function parseThen(node:CallExpression, checker:TypeChecker): Statement[]{
-        let res:Identifier = node.arguments[0] as Identifier;
-        let rej:Identifier = node.arguments[1] as Identifier;
+        let res = node.arguments[0];
+        let rej = node.arguments[1];
 
         let tryBlock = createBlock(parseCallback(node.expression, checker));
-        let catchClause = createCatchClause("e", createBlock([createStatement(createCall(rej, undefined, [createIdentifier("e")]))]));
+        let catchClause = createCatchClause("e", createBlock(getCallbackBody(rej, "e")));
 
         return [createTry(tryBlock, catchClause, undefined) as Statement, createStatement(createCall(res, undefined, [createIdentifier("val")])) as Statement];
     }
 
     function parsePromiseCall(node:CallExpression): Statement[]{
-        return [createVariableStatement(undefined, [createVariableDeclaration(createIdentifier("val"), undefined, createAwait(node.expression))])];
+        return [createVariableStatement(undefined, [createVariableDeclaration(createIdentifier("val"), undefined, createAwait(node))])];
+    }
+
+    function getCallbackBody(func: Node, argName: string): NodeArray<Statement>{
+        switch(func.kind){
+            case SyntaxKind.Identifier:
+                return createNodeArray([createStatement(createCall(func as Identifier, undefined, [createIdentifier(argName)]))]);
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ArrowFunction:
+                return (<FunctionDeclaration>func).body.statements;
+        }
     }
    
     function isCallback(node:CallExpression, funcName:string, checker:TypeChecker):boolean{
