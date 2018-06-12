@@ -11,6 +11,7 @@ var ts = require("./lib/typescript");
 const getDirSize = require("./scripts/build/getDirSize");
 
 // Variables
+var coreDirectory = "src/core/";
 var parserDirectory = "src/parser/";
 var compilerDirectory = "src/compiler/";
 var serverDirectory = "src/server/";
@@ -516,7 +517,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var configurePrereleaseJs = path.join(scriptsDirectory, "configurePrerelease.js");
 var configurePrereleaseTs = path.join(scriptsDirectory, "configurePrerelease.ts");
 var packageJson = "package.json";
-var versionFile = path.join(compilerDirectory, "core.ts");
+var versionFile = path.join(coreDirectory, "core.ts");
 
 file(configurePrereleaseTs);
 
