@@ -4467,7 +4467,6 @@ declare namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
-        getSourceFiles?(): ReadonlyArray<SourceFile>;
     }
     /** @deprecated See comment on SymbolWriter */
     interface SymbolTracker {
@@ -6223,8 +6222,6 @@ declare namespace ts {
     function getDeclarationOfJSInitializer(node: Node): Node | undefined;
     /** Get the initializer, taking into account defaulted Javascript initializers */
     function getEffectiveInitializer(node: HasExpressionInitializer): Expression | undefined;
-    /** Get the declaration initializer when it is container-like (See getJavascriptInitializer). */
-    function getDeclaredJavascriptInitializer(node: HasExpressionInitializer): Expression | undefined;
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
@@ -9175,7 +9172,7 @@ declare namespace ts.moduleSpecifiers {
         importModuleSpecifierPreference?: "relative" | "non-relative";
     }
     function getModuleSpecifier(compilerOptions: CompilerOptions, fromSourceFile: SourceFile, fromSourceFileName: string, toFileName: string, host: ModuleSpecifierResolutionHost, preferences?: ModuleSpecifierPreferences): string;
-    function getModuleSpecifiers(moduleSymbol: Symbol, compilerOptions: CompilerOptions, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
+    function getModuleSpecifiers(moduleSymbol: Symbol, program: Program, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
 }
 declare namespace ts {
     /**
@@ -9685,7 +9682,7 @@ declare namespace ts {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
     }
-    const defaultPreferences: UserPreferences;
+    const emptyOptions: {};
     interface LanguageService {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
@@ -9709,7 +9706,7 @@ declare namespace ts {
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
@@ -9770,12 +9767,23 @@ declare namespace ts {
     type OrganizeImportsScope = CombinedCodeFixScope;
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
-        /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
+        /**
+         * If the editor is asking for completions because a certain character was typed
+         * (as opposed to when the user explicitly requested them) this should be set.
+         */
         triggerCharacter?: CompletionsTriggerCharacter;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+    type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    interface SignatureHelpItemsOptions {
+        /**
+         * If the editor is asking for signature help because a certain character was typed
+         * (as opposed to when the user explicitly requested them) this should be set.
+         */
+        triggerCharacter?: SignatureHelpTriggerCharacter;
     }
     interface ApplyCodeActionCommandResult {
         successMessage: string;
@@ -10942,7 +10950,7 @@ declare namespace ts.Rename {
     function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo;
 }
 declare namespace ts.SignatureHelp {
-    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
+    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerCharacter: SignatureHelpTriggerCharacter | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
     interface ArgumentInfoForCompletions {
         readonly invocation: CallLikeExpression;
         readonly argumentIndex: number;
@@ -11670,7 +11678,7 @@ declare namespace ts {
         getQuickInfoAtPosition(fileName: string, position: number): string;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
-        getSignatureHelpItems(fileName: string, position: number): string;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string;
         /**
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
@@ -12874,7 +12882,9 @@ declare namespace ts.server.protocol {
         argumentIndex: number;
         argumentCount: number;
     }
+    type SignatureHelpTriggerCharacter = "," | "(" | "<";
     interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+        triggerCharacter?: SignatureHelpTriggerCharacter;
     }
     interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;
