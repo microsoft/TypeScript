@@ -262,7 +262,8 @@ declare namespace FourSlashInterface {
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         noSignatureHelp(...markers: string[]): void;
-        signatureHelp(...options: VerifySignatureHelpOptions[]): void;
+        noSignatureHelpForTriggerCharacter(triggerCharacter: string, ...markers: string[]): void
+        signatureHelp(...options: VerifySignatureHelpOptions[], ): void;
         // Checks that there are no compile errors.
         noErrors(): void;
         numberOfErrorsInCurrentFile(expected: number): void;
@@ -560,6 +561,7 @@ declare namespace FourSlashInterface {
         argumentCount?: number;
         isVariadic?: boolean;
         tags?: ReadonlyArray<JSDocTagInfo>;
+        triggerCharacter?: string;
     }
 
     interface JSDocTagInfo {

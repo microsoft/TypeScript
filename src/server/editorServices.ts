@@ -471,7 +471,7 @@ namespace ts.server {
 
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
-                preferences: defaultPreferences,
+                preferences: emptyOptions,
                 hostInfo: "Unknown host",
                 extraFileExtensions: []
             };

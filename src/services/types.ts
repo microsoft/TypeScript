@@ -242,7 +242,7 @@ namespace ts {
         readonly allowTextChangesInNewFiles?: boolean;
     }
     /* @internal */
-    export const defaultPreferences: UserPreferences = {};
+    export const emptyOptions = {};
 
     //
     // Public services of a language service instance associated
@@ -292,7 +292,7 @@ namespace ts {
 
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
 
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
@@ -371,12 +371,25 @@ namespace ts {
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
 
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
-        /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
+        /**
+         * If the editor is asking for completions because a certain character was typed
+         * (as opposed to when the user explicitly requested them) this should be set.
+         */
         triggerCharacter?: CompletionsTriggerCharacter;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+
+    export type SignatureHelpTriggerCharacter = "," | "(" | "<";
+
+    export interface SignatureHelpItemsOptions {
+        /**
+         * If the editor is asking for signature help because a certain character was typed
+         * (as opposed to when the user explicitly requested them) this should be set.
+         */
+        triggerCharacter?: SignatureHelpTriggerCharacter;
     }
 
     export interface ApplyCodeActionCommandResult {

@@ -1787,6 +1787,10 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * Character that was responsible for triggering completion.
+         * Should be `undefined` if a user manually requested completion.
+         */
         triggerCharacter?: CompletionsTriggerCharacter;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
@@ -2048,10 +2052,17 @@ namespace ts.server.protocol {
         argumentCount: number;
     }
 
+    export type SignatureHelpTriggerCharacter = "," | "(" | "<";
+
     /**
      * Arguments of a signature help request.
      */
     export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Character that was responsible for triggering signature help.
+         * Should be `undefined` if a user manually requested completion.
+         */
+        triggerCharacter?: SignatureHelpTriggerCharacter;
     }
 
     /**

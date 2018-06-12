@@ -1425,7 +1425,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = defaultPreferences): CompletionInfo | undefined {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions): CompletionInfo | undefined {
             // Convert from deprecated options names to new names
             const fullPreferences: UserPreferences = {
                 ...identity<UserPreferences>(options), // avoid excess property check
@@ -1443,7 +1443,7 @@ namespace ts {
                 options.triggerCharacter);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = defaultPreferences): CompletionEntryDetails | undefined {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions): CompletionEntryDetails | undefined {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
@@ -1769,12 +1769,12 @@ namespace ts {
         /**
          * This is a semantic operation.
          */
-        function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined {
+        function getSignatureHelpItems(fileName: string, position: number, { triggerCharacter }: SignatureHelpItemsOptions = emptyOptions): SignatureHelpItems | undefined {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
 
-            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, cancellationToken);
+            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, triggerCharacter, cancellationToken);
         }
 
         /// Syntactic features
@@ -1953,7 +1953,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<CodeFixAction> {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1965,7 +1965,7 @@ namespace ts {
             });
         }
 
-        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): CombinedCodeActions {
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): CombinedCodeActions {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
@@ -1974,7 +1974,7 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<FileTextChanges> {
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): ReadonlyArray<FileTextChanges> {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
@@ -1983,7 +1983,7 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
-        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<FileTextChanges> {
+        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): ReadonlyArray<FileTextChanges> {
             return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences);
         }
 
@@ -2233,7 +2233,7 @@ namespace ts {
             };
         }
 
-        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = defaultPreferences): ApplicableRefactorInfo[] {
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
             return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences));
@@ -2245,7 +2245,7 @@ namespace ts {
             positionOrRange: number | TextRange,
             refactorName: string,
             actionName: string,
-            preferences: UserPreferences = defaultPreferences,
+            preferences: UserPreferences = emptyOptions,
         ): RefactorEditInfo | undefined {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);

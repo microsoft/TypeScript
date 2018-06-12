@@ -19,13 +19,18 @@ namespace ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerCharacter: SignatureHelpTriggerCharacter | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
         const typeChecker = program.getTypeChecker();
 
         // Decide whether to show signature help
         const startingToken = findTokenOnLeftOfPosition(sourceFile, position);
         if (!startingToken) {
             // We are at the beginning of the file
+            return undefined;
+        }
+
+        // In the middle of a string, don't provide signature help unless the user explicitly requested it.
+        if (triggerCharacter !== undefined && isInString(sourceFile, position, startingToken)) {
             return undefined;
         }
 

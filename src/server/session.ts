@@ -1398,7 +1398,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
-            const helpItems = project.getLanguageService().getSignatureHelpItems(file, position);
+            const helpItems = project.getLanguageService().getSignatureHelpItems(file, position, args);
             if (!helpItems) {
                 return undefined;
             }
