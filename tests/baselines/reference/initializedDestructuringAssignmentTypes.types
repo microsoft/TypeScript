@@ -3,7 +3,7 @@ const [, a = ''] = ''.match('') || [];
 > : undefined
 >a : string
 >'' : ""
->''.match('') || [] : RegExpMatchArray | [undefined, ""]
+>''.match('') || [] : RegExpMatchArray
 >''.match('') : RegExpMatchArray
 >''.match : (regexp: string | RegExp) => RegExpMatchArray
 >'' : ""
