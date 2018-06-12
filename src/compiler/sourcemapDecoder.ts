@@ -35,7 +35,7 @@ namespace ts.sourcemaps {
         file?: string;
         sourceRoot?: string;
         sources: string[];
-        sourcesContent?: string[];
+        sourcesContent?: (string | null)[];
         names?: string[];
         mappings: string;
     }

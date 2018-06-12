@@ -223,7 +223,7 @@ namespace ts {
             sources: string[];
             names?: string[];
             mappings: string;
-            sourcesContent?: string[];
+            sourcesContent?: (string | null)[];
             sections?: undefined;
         }
 
@@ -398,7 +398,7 @@ namespace ts {
                             host.getCurrentDirectory(),
                             host.getCanonicalFileName,
                             /*isAbsolutePathAnUrl*/ true);
-                        setupSourceEntry(resolvedPath, ""); // TODO: Lookup content for inlining?
+                        setupSourceEntry(resolvedPath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
                         return {
                             ...raw,
@@ -510,7 +510,7 @@ namespace ts {
             setupSourceEntry(sourceFile.fileName, sourceFile.text);
         }
 
-        function setupSourceEntry(fileName: string, content: string) {
+        function setupSourceEntry(fileName: string, content: string | null) {
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
             // otherwise source locations relative to map file location

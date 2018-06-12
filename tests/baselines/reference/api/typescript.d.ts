@@ -2520,7 +2520,7 @@ declare namespace ts {
         sourceMapFile: string;
         sourceMapSourceRoot: string;
         sourceMapSources: string[];
-        sourceMapSourcesContent?: string[];
+        sourceMapSourcesContent?: (string | null)[];
         inputSourceFileNames: string[];
         sourceMapNames?: string[];
         sourceMapMappings: string;
@@ -8510,7 +8510,7 @@ declare namespace ts.sourcemaps {
         file?: string;
         sourceRoot?: string;
         sources: string[];
-        sourcesContent?: string[];
+        sourcesContent?: (string | null)[];
         names?: string[];
         mappings: string;
     }
