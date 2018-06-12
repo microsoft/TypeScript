@@ -179,7 +179,9 @@ class CompilerTest {
             this.otherFiles,
             this.harnessSettings,
             /*options*/ tsConfigOptions,
-            /*currentDirectory*/ this.harnessSettings.currentDirectory);
+            /*currentDirectory*/ this.harnessSettings.currentDirectory,
+            testCaseContent.symlinks
+        );
 
         this.options = this.result.options;
     }

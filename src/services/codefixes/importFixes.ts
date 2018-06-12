@@ -247,7 +247,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<NewImportInfo> {
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
-            const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program, sourceFile, host, preferences);
+            const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences);
             return modulePathsGroups.map(group => group.map(moduleSpecifier => ({ moduleSpecifier, importKind })));
         });
         // Sort to keep the shortest paths first, but keep [relativePath, importRelativeToBaseUrl] groups together
