@@ -4092,7 +4092,15 @@ namespace ts {
                         // ambient module, just use declaration/symbol name (fallthrough)
                     }
                     else {
-                        return `"${getResolvedExternalModuleName(context.tracker.moduleResolverHost, file, getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration)))}"`;
+                        const contextFile = getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration))!;
+                        return `"${file.moduleName || moduleSpecifiers.getModuleSpecifiers(
+                            symbol,
+                            compilerOptions,
+                            contextFile,
+                            context!.tracker.moduleResolverHost!,
+                            context!.tracker.moduleResolverHost!.getSourceFiles!(),
+                            { importModuleSpecifierPreference: "non-relative" }
+                        )[0]}"`;
                     }
                 }
                 const declaration = symbol.declarations[0];
