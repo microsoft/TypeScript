@@ -202,22 +202,6 @@ namespace ts.codefix {
         }
     }
 
-    function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile) {
-        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
-            if (kind === SyntaxKind.MultiLineCommentTrivia) {
-                // Remove leading /*
-                pos += 2;
-                // Remove trailing */
-                end -= 2;
-            }
-            else {
-                // Remove leading //
-                pos += 2;
-            }
-            addSyntheticLeadingComment(targetNode, kind, sourceFile.text.slice(pos, end), htnl);
-        });
-    }
-
     function getModifierKindFromSource(source: Node, kind: SyntaxKind): ReadonlyArray<Modifier> | undefined {
         return filter(source.modifiers, modifier => modifier.kind === kind);
     }

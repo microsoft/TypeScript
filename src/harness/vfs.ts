@@ -6,6 +6,11 @@ namespace vfs {
     export const builtFolder = "/.ts";
 
     /**
+     * Posix-style path to additional mountable folders (./tests/projects in this repo)
+     */
+    export const projectsFolder = "/.projects";
+
+    /**
      * Posix-style path to additional test libraries
      */
     export const testLibFolder = "/.lib";
@@ -348,10 +353,7 @@ namespace vfs {
             if (!result.node) this._mkdir(result);
         }
 
-        /**
-         * Print diagnostic information about the structure of the file system to the console.
-         */
-        public debugPrint(): void {
+        public getFileListing(): string {
             let result = "";
             const printLinks = (dirname: string | undefined, links: collections.SortedMap<string, Inode>) => {
                 const iterator = collections.getIterator(links);
@@ -379,7 +381,14 @@ namespace vfs {
                 }
             };
             printLinks(/*dirname*/ undefined, this._getRootLinks());
-            console.log(result);
+            return result;
+        }
+
+        /**
+         * Print diagnostic information about the structure of the file system to the console.
+         */
+        public debugPrint(): void {
+            console.log(this.getFileListing());
         }
 
         // POSIX API (aligns with NodeJS "fs" module API)
@@ -404,7 +413,25 @@ namespace vfs {
         }
 
         /**
-         * Get file status.
+         * Change file access times
+         *
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
+         */
+        public utimesSync(path: string, atime: Date, mtime: Date) {
+            if (this.isReadonly) throw createIOError("EROFS");
+            if (!isFinite(+atime) || !isFinite(+mtime)) throw createIOError("EINVAL");
+
+            const entry = this._walk(this._resolve(path));
+            if (!entry || !entry.node) {
+                throw createIOError("ENOENT");
+            }
+            entry.node.atimeMs = +atime;
+            entry.node.mtimeMs = +mtime;
+            entry.node.ctimeMs = this.time();
+        }
+
+        /**
+         * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html
          *
@@ -414,9 +441,10 @@ namespace vfs {
             return this._stat(this._walk(this._resolve(path), /*noFollow*/ true));
         }
 
+
         private _stat(entry: WalkResult) {
             const node = entry.node;
-            if (!node) throw createIOError("ENOENT");
+            if (!node) throw createIOError(`ENOENT`, entry.realpath);
             return new Stats(
                 node.dev,
                 node.ino,
@@ -1127,8 +1155,8 @@ namespace vfs {
         EROFS: "file system is read-only"
     });
 
-    export function createIOError(code: keyof typeof IOErrorMessages) {
-        const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]}`);
+    export function createIOError(code: keyof typeof IOErrorMessages, details = "") {
+        const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]} ${details}`);
         err.code = code;
         if (Error.captureStackTrace) Error.captureStackTrace(err, createIOError);
         return err;
@@ -1282,6 +1310,7 @@ namespace vfs {
                 files: {
                     [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                     [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
+                    [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
                     [srcFolder]: {}
                 },
                 cwd: srcFolder,

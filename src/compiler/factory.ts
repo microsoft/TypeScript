@@ -2599,16 +2599,19 @@ namespace ts {
         return node;
     }
 
-    export function createUnparsedSourceFile(text: string): UnparsedSource {
+    export function createUnparsedSourceFile(text: string, map?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         node.text = text;
+        node.sourceMapText = map;
         return node;
     }
 
-    export function createInputFiles(javascript: string, declaration: string): InputFiles {
+    export function createInputFiles(javascript: string, declaration: string, javascriptMapText?: string, declarationMapText?: string): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
         node.javascriptText = javascript;
+        node.javascriptMapText = javascriptMapText;
         node.declarationText = declaration;
+        node.declarationMapText = declarationMapText;
         return node;
     }
 

@@ -15,3 +15,20 @@ let c, d;
 ({...d,} = {});
 >d : Symbol(d, Decl(trailingCommasInBindingPatterns.ts, 2, 6))
 
+// Allowed for non-rest elements
+const [e,] = <any>[];
+>e : Symbol(e, Decl(trailingCommasInBindingPatterns.ts, 7, 7))
+
+const {f,} = <any>{};
+>f : Symbol(f, Decl(trailingCommasInBindingPatterns.ts, 8, 7))
+
+let g, h;
+>g : Symbol(g, Decl(trailingCommasInBindingPatterns.ts, 9, 3))
+>h : Symbol(h, Decl(trailingCommasInBindingPatterns.ts, 9, 6))
+
+([g,] = <any>[]);
+>g : Symbol(g, Decl(trailingCommasInBindingPatterns.ts, 9, 3))
+
+({h,} = <any>{});
+>h : Symbol(h, Decl(trailingCommasInBindingPatterns.ts, 11, 2))
+

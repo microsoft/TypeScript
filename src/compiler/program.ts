@@ -189,7 +189,10 @@ namespace ts {
             getEnvironmentVariable: name => sys.getEnvironmentVariable ? sys.getEnvironmentVariable(name) : "",
             getDirectories: (path: string) => sys.getDirectories(path),
             realpath,
-            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth)
+            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth),
+            getModifiedTime: sys.getModifiedTime && (path => sys.getModifiedTime!(path)),
+            setModifiedTime: sys.setModifiedTime && ((path, date) => sys.setModifiedTime!(path, date)),
+            deleteFile: sys.deleteFile && (path => sys.deleteFile!(path))
         };
     }
 
@@ -346,7 +349,7 @@ namespace ts {
 
             output += host.getNewLine();
         }
-        return output + host.getNewLine();
+        return output;
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
@@ -613,27 +616,29 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        const resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
+        let resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
         const projectReferenceRedirects: Map<string> = createMap();
-        if (projectReferences) {
-            for (const ref of projectReferences) {
-                const parsedRef = parseProjectReferenceConfigFile(ref);
-                resolvedProjectReferences!.push(parsedRef);
-                if (parsedRef) {
-                    if (parsedRef.commandLine.options.outFile) {
-                        const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
-                        processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
-                    }
-                    addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
-                }
-            }
-        }
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];
+
+            if (projectReferences) {
+                for (const ref of projectReferences) {
+                    const parsedRef = parseProjectReferenceConfigFile(ref);
+                    resolvedProjectReferences!.push(parsedRef);
+                    if (parsedRef) {
+                        if (parsedRef.commandLine.options.outFile) {
+                            const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
+                            processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                        }
+                        addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
+                    }
+                }
+            }
+
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
@@ -1021,7 +1026,7 @@ namespace ts {
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath || oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
                     : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
@@ -1185,6 +1190,7 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+            resolvedProjectReferences = oldProgram.getProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsSet = oldProgram.redirectTargetsSet;
@@ -1207,6 +1213,9 @@ namespace ts {
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
+                readFile: f => host.readFile(f),
+                fileExists: f => host.fileExists(f),
+                ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
             };
         }
 
@@ -1231,8 +1240,10 @@ namespace ts {
 
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
+                    const jsMap = host.readFile(resolvedRefOpts.options.outFile + ".map"); // TODO: try to read sourceMappingUrl comment from the js file
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const node = createInputFiles(js, dts);
+                    const dtsMap = host.readFile(dtsFilename + ".map");
+                    const node = createInputFiles(js, dts, jsMap, dtsMap);
                     nodes.push(node);
                 }
             }
@@ -2044,6 +2055,7 @@ namespace ts {
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
+                file.resolvedPath = toPath(fileName);
 
                 if (host.useCaseSensitiveFileNames()) {
                     const pathLowerCase = path.toLowerCase();
@@ -2778,7 +2790,7 @@ namespace ts {
     /**
      * Returns the target config filename of a project reference
      */
-    function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
+    export function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
         if (!host.fileExists(ref.path)) {
             return combinePaths(ref.path, "tsconfig.json");
         }
