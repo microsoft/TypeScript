@@ -6222,6 +6222,8 @@ declare namespace ts {
     function getDeclarationOfJSInitializer(node: Node): Node | undefined;
     /** Get the initializer, taking into account defaulted Javascript initializers */
     function getEffectiveInitializer(node: HasExpressionInitializer): Expression | undefined;
+    /** Get the declaration initializer when it is container-like (See getJavascriptInitializer). */
+    function getDeclaredJavascriptInitializer(node: HasExpressionInitializer): Expression | undefined;
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
