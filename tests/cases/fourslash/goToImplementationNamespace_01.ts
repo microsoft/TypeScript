@@ -3,7 +3,7 @@
 // Should handle property access expressions on namespaces
 
 //// namespace Foo {
-////     [|export function hello() {}|]
+////     export function [|hello|]() {}
 //// }
 ////
 //// Foo.hell/*reference*/o();

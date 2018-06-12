@@ -90,18 +90,18 @@ let b = a.foo().n;
 let c = a.bar().a;
 >c : number
 >a.bar().a : number
->a.bar() : N.Ifc
->a.bar : () => N.Ifc
+>a.bar() : import("tests/cases/compiler/f3").N.Ifc
+>a.bar : () => import("tests/cases/compiler/f3").N.Ifc
 >a : A
->bar : () => N.Ifc
+>bar : () => import("tests/cases/compiler/f3").N.Ifc
 >a : number
 
 let d = a.baz().b;
 >d : number
 >a.baz().b : number
->a.baz() : N.Cls
->a.baz : () => N.Cls
+>a.baz() : import("tests/cases/compiler/f3").N.Cls
+>a.baz : () => import("tests/cases/compiler/f3").N.Cls
 >a : A
->baz : () => N.Cls
+>baz : () => import("tests/cases/compiler/f3").N.Cls
 >b : number
 

@@ -4,12 +4,12 @@
 // @Filename: templateTagOnConstructorFunctions.js
 
 /**
- * @template {U}
+ * @template U
  * @typedef {(u: U) => U} Id
  */
 /**
  * @param {T} t
- * @template {T}
+ * @template T
  */
 function Zet(t) {
     /** @type {T} */

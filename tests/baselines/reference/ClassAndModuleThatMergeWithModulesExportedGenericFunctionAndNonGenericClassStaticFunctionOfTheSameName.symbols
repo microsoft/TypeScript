@@ -20,7 +20,7 @@ module clodule {
 
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): T {
->fn : Symbol(clodule.fn, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 7, 16))
+>fn : Symbol(fn, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 7, 16))
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 9, 23))
 >x : Symbol(x, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 9, 26))
 >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 9, 23))

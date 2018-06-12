@@ -21,4 +21,4 @@ exports.thing = umd_1.makeThing();
 
 
 //// [index.d.ts]
-export declare const thing: import("./node_modules/umd").Thing;
+export declare const thing: import("umd").Thing;

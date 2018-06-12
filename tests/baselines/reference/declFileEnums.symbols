@@ -34,9 +34,9 @@ enum e3 {
 
     b = Math.PI,
 >b : Symbol(e3.b, Decl(declFileEnums.ts, 13, 11))
->Math.PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 
     c = a + 3
 >c : Symbol(e3.c, Decl(declFileEnums.ts, 14, 16))

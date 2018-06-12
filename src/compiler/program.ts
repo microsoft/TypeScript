@@ -16,7 +16,7 @@ namespace ts {
 
     /* @internal */
     export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
-        let commonPathComponents: string[];
+        let commonPathComponents: string[] | undefined;
         const failed = forEach(fileNames, sourceFile => {
             // Each file contributes into common source file path
             const sourcePathComponents = getNormalizedPathComponents(sourceFile, currentDirectory);
@@ -75,8 +75,8 @@ namespace ts {
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
-            let text: string;
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined {
+            let text: string | undefined;
             try {
                 performance.mark("beforeIORead");
                 text = sys.readFile(fileName, options.charset);
@@ -119,8 +119,8 @@ namespace ts {
                 outputFingerprints = createMap<OutputFingerprint>();
             }
 
-            const hash = sys.createHash(data);
-            const mtimeBefore = sys.getModifiedTime(fileName);
+            const hash = sys.createHash!(data); // TODO: GH#18217
+            const mtimeBefore = sys.getModifiedTime!(fileName); // TODO: GH#18217
 
             if (mtimeBefore) {
                 const fingerprint = outputFingerprints.get(fileName);
@@ -135,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime(fileName);
+            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
@@ -171,7 +171,7 @@ namespace ts {
         }
 
         const newLine = getNewLineCharacter(options);
-        const realpath = sys.realpath && ((path: string) => sys.realpath(path));
+        const realpath = sys.realpath && ((path: string) => sys.realpath!(path));
 
         return {
             getSourceFile,
@@ -189,7 +189,10 @@ namespace ts {
             getEnvironmentVariable: name => sys.getEnvironmentVariable ? sys.getEnvironmentVariable(name) : "",
             getDirectories: (path: string) => sys.getDirectories(path),
             realpath,
-            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth)
+            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth),
+            getModifiedTime: sys.getModifiedTime && (path => sys.getModifiedTime!(path)),
+            setModifiedTime: sys.setModifiedTime && ((path, date) => sys.setModifiedTime!(path, date)),
+            deleteFile: sys.deleteFile && (path => sys.deleteFile!(path))
         };
     }
 
@@ -228,7 +231,7 @@ namespace ts {
         const errorMessage = `${diagnosticCategoryName(diagnostic)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
 
         if (diagnostic.file) {
-            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start!); // TODO: GH#18217
             const fileName = diagnostic.file.fileName;
             const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
             return `${relativeFileName}(${line + 1},${character + 1}): ` + errorMessage;
@@ -276,8 +279,8 @@ namespace ts {
             let context = "";
             if (diagnostic.file) {
                 const { start, length, file } = diagnostic;
-                const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
-                const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
+                const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start!); // TODO: GH#18217
+                const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start! + length!);
                 const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
                 const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
@@ -346,10 +349,10 @@ namespace ts {
 
             output += host.getNewLine();
         }
-        return output + host.getNewLine();
+        return output;
     }
 
-    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
+    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
         if (isString(messageText)) {
             return messageText;
         }
@@ -384,7 +387,7 @@ namespace ts {
         for (const name of names) {
             let result: T;
             if (cache.has(name)) {
-                result = cache.get(name);
+                result = cache.get(name)!;
             }
             else {
                 cache.set(name, result = loader(name, containingFile));
@@ -394,8 +397,8 @@ namespace ts {
         return resolutions;
     }
 
-    interface DiagnosticCache {
-        perFile?: Map<Diagnostic[]>;
+    interface DiagnosticCache<T extends Diagnostic> {
+        perFile?: Map<T[]>;
         allDiagnostics?: Diagnostic[];
     }
 
@@ -407,7 +410,7 @@ namespace ts {
         program: Program | undefined,
         rootFileNames: string[],
         newOptions: CompilerOptions,
-        getSourceVersion: (path: Path) => string,
+        getSourceVersion: (path: Path) => string | undefined,
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
@@ -454,14 +457,14 @@ namespace ts {
 
     export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic> {
         return configFileParseResult.options.configFile ?
-            configFileParseResult.options.configFile.parseDiagnostics.concat(configFileParseResult.errors) :
+            [...configFileParseResult.options.configFile.parseDiagnostics, ...configFileParseResult.errors] :
             configFileParseResult.errors;
     }
 
     /**
      * Determined if source file needs to be re-created even if its text hasn't changed
      */
-    function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
+    function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOptions: CompilerOptions) {
         // If any of these options change, we can't reuse old source file even if version match
         // The change in options like these could result in change in syntax tree change
         const oldOptions = program && program.getCompilerOptions();
@@ -495,6 +498,17 @@ namespace ts {
      * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
      * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
      *
+     * @param createProgramOptions - The options for creating a program.
+     * @returns A 'Program' object.
+     */
+    export function createProgram(createProgramOptions: CreateProgramOptions): Program;
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
      * @param rootNames - A set of root files.
      * @param options - The compiler options which should be used.
      * @param host - The host interacts with the underlying file system.
@@ -502,23 +516,24 @@ namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(createProgramOptions: CreateProgramOptions): Program;
     export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
     export function createProgram(rootNamesOrOptions: ReadonlyArray<string> | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
-        const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions;
+        const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
         const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
-        let { host, oldProgram } = createProgramOptions;
+        let { oldProgram } = createProgramOptions;
 
         let program: Program;
-        let files: SourceFile[] = [];
+        let processingDefaultLibFiles: SourceFile[] | undefined;
+        let processingOtherFiles: SourceFile[] | undefined;
+        let files: SourceFile[];
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: UnderscoreEscapedMap<true>;
         let modifiedFilePaths: Path[] | undefined;
 
-        const cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
-        const cachedDeclarationDiagnosticsForFile: DiagnosticCache = {};
+        const cachedSemanticDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
+        const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
@@ -542,7 +557,7 @@ namespace ts {
 
         performance.mark("beforeProgram");
 
-        host = host || createCompilerHost(options);
+        const host = createProgramOptions.host || createCompilerHost(options);
         const configParsingHost = parseConfigHostFromCompilerHost(host);
 
         let skipDefaultLib = options.noLib;
@@ -554,14 +569,14 @@ namespace ts {
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createMap<boolean>();
-        let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression;
-        let _referencesArrayLiteralSyntax: ArrayLiteralExpression;
+        let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | null | undefined;
+        let _referencesArrayLiteralSyntax: ArrayLiteralExpression | null | undefined;
 
-        let moduleResolutionCache: ModuleResolutionCache;
+        let moduleResolutionCache: ModuleResolutionCache | undefined;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames(Debug.assertEachDefined(moduleNames), containingFile, reusedNames).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -573,17 +588,17 @@ namespace ts {
         }
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x));
-            const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache).resolvedModule;
-            resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache(Debug.assertEachDefined(moduleNames), containingFile, loader);
+            const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache).resolvedModule!; // TODO: GH#18217
+            resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, loader);
         }
 
         let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives(Debug.assertEachDefined(typeDirectiveNames), containingFile);
+            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile);
         }
         else {
-            const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective;
-            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(Debug.assertEachDefined(typeReferenceDirectiveNames), containingFile, loader);
+            const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective!; // TODO: GH#18217
+            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.assertEachDefined(typeReferenceDirectiveNames), containingFile, loader);
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -595,32 +610,36 @@ namespace ts {
         let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();
-        let missingFilePaths: ReadonlyArray<Path>;
+        let missingFilePaths: ReadonlyArray<Path> | undefined;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        const resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
+        let resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
         const projectReferenceRedirects: Map<string> = createMap();
-        if (projectReferences) {
-            for (const ref of projectReferences) {
-                const parsedRef = parseProjectReferenceConfigFile(ref);
-                resolvedProjectReferences.push(parsedRef);
-                if (parsedRef) {
-                    if (parsedRef.commandLine.options.outFile) {
-                        const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
-                        processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*packageId*/ undefined);
-                    }
-                    addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
-                }
-            }
-        }
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
-            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+            processingDefaultLibFiles = [];
+            processingOtherFiles = [];
+
+            if (projectReferences) {
+                for (const ref of projectReferences) {
+                    const parsedRef = parseProjectReferenceConfigFile(ref);
+                    resolvedProjectReferences!.push(parsedRef);
+                    if (parsedRef) {
+                        if (parsedRef.commandLine.options.outFile) {
+                            const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
+                            processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                        }
+                        addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
+                    }
+                }
+            }
+
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
             const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
@@ -644,16 +663,19 @@ namespace ts {
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
                 const defaultLibraryFileName = getDefaultLibraryFileName();
                 if (!options.lib && defaultLibraryFileName) {
-                    processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true);
+                    processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
                 }
                 else {
                     forEach(options.lib, libFileName => {
-                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true);
+                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
                     });
                 }
             }
 
             missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
+            files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
+            processingDefaultLibFiles = undefined;
+            processingOtherFiles = undefined;
         }
 
         Debug.assert(!!missingFilePaths);
@@ -677,12 +699,13 @@ namespace ts {
             getSourceFile,
             getSourceFileByPath,
             getSourceFiles: () => files,
-            getMissingFilePaths: () => missingFilePaths,
+            getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
             getGlobalDiagnostics,
             getSemanticDiagnostics,
+            getSuggestionDiagnostics,
             getDeclarationDiagnostics,
             getTypeChecker,
             getClassifiableNames,
@@ -700,6 +723,7 @@ namespace ts {
             isSourceFileDefaultLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
+            getLibFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
             isEmittedFile,
@@ -714,7 +738,22 @@ namespace ts {
 
         return program;
 
-        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
+        function compareDefaultLibFiles(a: SourceFile, b: SourceFile) {
+            return compareValues(getDefaultLibFilePriority(a), getDefaultLibFilePriority(b));
+        }
+
+        function getDefaultLibFilePriority(a: SourceFile) {
+            if (containsPath(defaultLibraryPath, a.fileName, /*ignoreCase*/ false)) {
+                const basename = getBaseFileName(a.fileName);
+                if (basename === "lib.d.ts" || basename === "lib.es6.d.ts") return 0;
+                const name = removeSuffix(removePrefix(basename, "lib."), ".d.ts");
+                const index = libs.indexOf(name);
+                if (index !== -1) return index + 1;
+            }
+            return libs.length + 2;
+        }
+
+        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined {
             return moduleResolutionCache && resolveModuleNameFromCache(moduleName, containingFile, moduleResolutionCache);
         }
 
@@ -731,7 +770,7 @@ namespace ts {
                 }
                 else if (options.composite) {
                     // Project compilations never infer their root from the input source paths
-                    commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
+                    commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath!)); // TODO: GH#18217
                     checkSourceFilesBelongToPath(emittedFiles, commonSourceDirectory);
                 }
                 else {
@@ -755,7 +794,7 @@ namespace ts {
                 classifiableNames = createUnderscoreEscapedMap<true>();
 
                 for (const sourceFile of files) {
-                    copyEntries(sourceFile.classifiableNames, classifiableNames);
+                    copyEntries(sourceFile.classifiableNames!, classifiableNames);
                 }
             }
 
@@ -766,7 +805,7 @@ namespace ts {
             program: Program | undefined;
             oldSourceFile: SourceFile | undefined;
             /** The collection of paths modified *since* the old program. */
-            modifiedFilePaths: Path[];
+            modifiedFilePaths: Path[] | undefined;
         }
 
         function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState: OldProgramState) {
@@ -788,7 +827,7 @@ namespace ts {
                 // it is safe to reuse resolutions from the earlier call.
                 const result: ResolvedModuleFull[] = [];
                 for (const moduleName of moduleNames) {
-                    const resolvedModule = file.resolvedModules.get(moduleName);
+                    const resolvedModule = file.resolvedModules.get(moduleName)!;
                     result.push(resolvedModule);
                 }
                 return result;
@@ -799,7 +838,7 @@ namespace ts {
             // With this information, we can infer some module resolutions without performing resolution.
 
             /** An ordered list of module names for which we cannot recover the resolution. */
-            let unknownModuleNames: string[];
+            let unknownModuleNames: string[] | undefined;
             /**
              * The indexing of elements in this list matches that of `moduleNames`.
              *
@@ -809,8 +848,8 @@ namespace ts {
              * Needs to be reset to undefined before returning,
              * * ResolvedModuleFull instance: can be reused.
              */
-            let result: ResolvedModuleFull[];
-            let reusedNames: string[];
+            let result: ResolvedModuleFull[] | undefined;
+            let reusedNames: string[] | undefined;
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
 
@@ -818,7 +857,7 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
-                    const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
+                    const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules!.get(moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
                             trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
@@ -869,7 +908,7 @@ namespace ts {
                     // `result[i]` is either a `ResolvedModuleFull` or a marker.
                     // If it is the former, we can leave it as is.
                     if (result[i] === predictedToResolveToAmbientModuleMarker) {
-                        result[i] = undefined;
+                        result[i] = undefined!; // TODO: GH#18217
                     }
                 }
                 else {
@@ -884,7 +923,7 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
-                const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile, moduleName);
+                const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile!, moduleName); // TODO: GH#18217
                 const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
                     // In the old program, we resolved to an ambient module that was in the same
@@ -927,7 +966,7 @@ namespace ts {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
-            Debug.assert(!(oldProgram.structureIsReused & (StructureIsReused.Completely | StructureIsReused.SafeModules)));
+            Debug.assert(!(oldProgram.structureIsReused! & (StructureIsReused.Completely | StructureIsReused.SafeModules)));
 
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
@@ -987,8 +1026,8 @@ namespace ts {
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target, /*onError*/ undefined, shouldCreateNewSourceFile)
-                    : host.getSourceFile(oldSourceFile.fileName, options.target, /*onError*/ undefined, shouldCreateNewSourceFile);
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath || oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1035,6 +1074,11 @@ namespace ts {
 
                 if (fileChanged) {
                     // The `newSourceFile` object was created for the new program.
+
+                    if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
+                        // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
                         // value of no-default-lib has changed
@@ -1134,7 +1178,7 @@ namespace ts {
             for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
                 // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePaths[i]))) {
+                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePaths[i])!)) {
                     sourceFilesFoundSearchingNodeModules.set(filePaths[i], true);
                 }
             }
@@ -1146,6 +1190,7 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+            resolvedProjectReferences = oldProgram.getProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsSet = oldProgram.redirectTargetsSet;
@@ -1168,6 +1213,9 @@ namespace ts {
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
+                readFile: f => host.readFile(f),
+                fileExists: f => host.fileExists(f),
+                ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
             };
         }
 
@@ -1185,15 +1233,17 @@ namespace ts {
             const nodes: InputFiles[] = [];
             for (let i = 0; i < projectReferences.length; i++) {
                 const ref = projectReferences[i];
-                const resolvedRefOpts = resolvedProjectReferences[i].commandLine;
+                const resolvedRefOpts = resolvedProjectReferences![i]!.commandLine;
                 if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
                     // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
                     if (!resolvedRefOpts.options.outFile) continue;
 
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
+                    const jsMap = host.readFile(resolvedRefOpts.options.outFile + ".map"); // TODO: try to read sourceMappingUrl comment from the js file
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const node = createInputFiles(js, dts);
+                    const dtsMap = host.readFile(dtsFilename + ".map");
+                    const node = createInputFiles(js, dts, jsMap, dtsMap);
                     nodes.push(node);
                 }
             }
@@ -1201,7 +1251,7 @@ namespace ts {
         }
 
         function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
-            return sourceFilesFoundSearchingNodeModules.get(file.path);
+            return !!sourceFilesFoundSearchingNodeModules.get(file.path);
         }
 
         function isSourceFileDefaultLibrary(file: SourceFile): boolean {
@@ -1220,7 +1270,7 @@ namespace ts {
                 return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
+                return some(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
             }
         }
 
@@ -1229,7 +1279,7 @@ namespace ts {
         }
 
         function dropDiagnosticsProducingTypeChecker() {
-            diagnosticsProducingTypeChecker = undefined;
+            diagnosticsProducingTypeChecker = undefined!;
         }
 
         function getTypeChecker() {
@@ -1244,7 +1294,7 @@ namespace ts {
             return hasEmitBlockingDiagnostics.has(toPath(emitFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
             if (!emitOnlyDtsFiles) {
@@ -1294,7 +1344,7 @@ namespace ts {
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
-                sourceFile,
+                sourceFile!, // TODO: GH#18217
                 emitOnlyDtsFiles,
                 transformers,
                 customTransformers && customTransformers.afterDeclarations
@@ -1313,10 +1363,10 @@ namespace ts {
             return filesByName.get(path);
         }
 
-        function getDiagnosticsHelper(
+        function getDiagnosticsHelper<T extends Diagnostic>(
             sourceFile: SourceFile,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => ReadonlyArray<Diagnostic>,
-            cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => ReadonlyArray<T>,
+            cancellationToken: CancellationToken): ReadonlyArray<T> {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
@@ -1328,7 +1378,7 @@ namespace ts {
             }));
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
+        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
@@ -1336,7 +1386,7 @@ namespace ts {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
+        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
@@ -1347,7 +1397,7 @@ namespace ts {
             }
         }
 
-        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<Diagnostic> {
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<DiagnosticWithLocation> {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
             if (isSourceFileJavaScript(sourceFile)) {
@@ -1374,19 +1424,19 @@ namespace ts {
                     // cancel when the user has made a change anyways.  And, in that case, we (the
                     // program instance) will get thrown away anyways.  So trying to keep one of
                     // these type checkers alive doesn't serve much purpose.
-                    noDiagnosticsTypeChecker = undefined;
-                    diagnosticsProducingTypeChecker = undefined;
+                    noDiagnosticsTypeChecker = undefined!;
+                    diagnosticsProducingTypeChecker = undefined!;
                 }
 
                 throw e;
             }
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
         }
 
-        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
             return runWithCancellationToken(() => {
                 // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
                 // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
@@ -1403,15 +1453,28 @@ namespace ts {
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
                     sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
-                const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                const bindDiagnostics: ReadonlyArray<Diagnostic> = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-                let diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
-                if (isCheckJs) {
-                    diagnostics = concatenate(diagnostics, sourceFile.jsDocDiagnostics);
+
+                let diagnostics: Diagnostic[] | undefined;
+                for (const diags of [bindDiagnostics, checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
+                    if (diags) {
+                        for (const diag of diags) {
+                            if (shouldReportDiagnostic(diag)) {
+                                diagnostics = append(diagnostics, diag);
+                            }
+                        }
+                    }
                 }
-                return filter(diagnostics, shouldReportDiagnostic);
+                return diagnostics;
+            });
+        }
+
+        function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+            return runWithCancellationToken(() => {
+                return getDiagnosticsProducingTypeChecker().getSuggestionDiagnostics(sourceFile, cancellationToken);
             });
         }
 
@@ -1422,7 +1485,7 @@ namespace ts {
             const { file, start } = diagnostic;
             if (file) {
                 const lineStarts = getLineStarts(file);
-                let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
+                let { line } = computeLineAndCharacterOfPosition(lineStarts, start!); // TODO: GH#18217
                 while (line > 0) {
                     const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
                     const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
@@ -1440,9 +1503,9 @@ namespace ts {
             return true;
         }
 
-        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
-                const diagnostics: Diagnostic[] = [];
+                const diagnostics: DiagnosticWithLocation[] = [];
                 let parent: Node = sourceFile;
                 walk(sourceFile);
 
@@ -1610,20 +1673,20 @@ namespace ts {
                     }
                 }
 
-                function createDiagnosticForNodeArray(nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+                function createDiagnosticForNodeArray(nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
                     const start = nodes.pos;
                     return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2);
                 }
 
                 // Since these are syntactic diagnostics, parent might not have been set
                 // this means the sourceFile cannot be infered from the node
-                function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+                function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
                     return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
                 }
             });
         }
 
-        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken): Diagnostic[] {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
@@ -1635,23 +1698,24 @@ namespace ts {
             });
         }
 
-        function getAndCacheDiagnostics(
+        function getAndCacheDiagnostics<T extends Diagnostic>(
             sourceFile: SourceFile | undefined,
             cancellationToken: CancellationToken,
-            cache: DiagnosticCache,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[]) {
+            cache: DiagnosticCache<T>,
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => T[] | undefined,
+        ): ReadonlyArray<T> {
 
             const cachedResult = sourceFile
                 ? cache.perFile && cache.perFile.get(sourceFile.path)
-                : cache.allDiagnostics;
+                : cache.allDiagnostics as T[];
 
             if (cachedResult) {
                 return cachedResult;
             }
-            const result = getDiagnostics(sourceFile, cancellationToken) || emptyArray;
+            const result = getDiagnostics(sourceFile!, cancellationToken) || emptyArray; // TODO: GH#18217
             if (sourceFile) {
                 if (!cache.perFile) {
-                    cache.perFile = createMap<Diagnostic[]>();
+                    cache.perFile = createMap<T[]>();
                 }
                 cache.perFile.set(sourceFile.path, result);
             }
@@ -1661,7 +1725,7 @@ namespace ts {
             return result;
         }
 
-        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 
@@ -1683,8 +1747,8 @@ namespace ts {
             return configFileParsingDiagnostics || emptyArray;
         }
 
-        function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib, /*packageId*/ undefined);
+        function processRootFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean) {
+            processSourceFile(normalizePath(fileName), isDefaultLib, ignoreNoDefaultLib, /*packageId*/ undefined);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -1707,8 +1771,8 @@ namespace ts {
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: StringLiteralLike[] | undefined;
-            let moduleAugmentations: (StringLiteral | Identifier)[];
-            let ambientModules: string[];
+            let moduleAugmentations: (StringLiteral | Identifier)[] | undefined;
+            let ambientModules: string[] | undefined;
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
             // helpers library.
@@ -1794,16 +1858,22 @@ namespace ts {
                 else if (isLiteralImportTypeNode(node)) {
                     imports = append(imports, node.argument.literal);
                 }
-                else {
-                    collectDynamicImportOrRequireCallsForEachChild(node);
-                    if (hasJSDocNodes(node)) {
-                        forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
-                    }
+                collectDynamicImportOrRequireCallsForEachChild(node);
+                if (hasJSDocNodes(node)) {
+                    forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
                 }
             }
 
             function collectDynamicImportOrRequireCallsForEachChild(node: Node) {
                 forEachChild(node, collectDynamicImportOrRequireCalls);
+            }
+        }
+
+        function getLibFileFromReference(ref: FileReference) {
+            const libName = ref.fileName.toLocaleLowerCase();
+            const libFileName = libMap.get(libName);
+            if (libFileName) {
+                return getSourceFile(combinePaths(defaultLibraryPath, libFileName));
             }
         }
 
@@ -1857,9 +1927,9 @@ namespace ts {
         }
 
         /** This has side effects through `findSourceFile`. */
-        function processSourceFile(fileName: string, isDefaultLib: boolean, packageId: PackageId | undefined, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, packageId: PackageId | undefined, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
             getSourceFileFromReferenceWorker(fileName,
-                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, refFile, refPos, refEnd, packageId),
+                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, ignoreNoDefaultLib, refFile!, refPos!, refEnd!, packageId), // TODO: GH#18217
                 (diagnostic, ...args) => {
                     fileProcessingDiagnostics.add(refFile !== undefined && refEnd !== undefined && refPos !== undefined
                         ? createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...args)
@@ -1885,19 +1955,19 @@ namespace ts {
             redirect.redirectInfo = { redirectTarget, unredirected };
             Object.defineProperties(redirect, {
                 id: {
-                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.id; },
-                    set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo.redirectTarget.id = value; },
+                    get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
+                    set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo!.redirectTarget.id = value; },
                 },
                 symbol: {
-                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.symbol; },
-                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo.redirectTarget.symbol = value; },
+                    get(this: SourceFile) { return this.redirectInfo!.redirectTarget.symbol; },
+                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo!.redirectTarget.symbol = value; },
                 },
             });
             return redirect;
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile: SourceFile, refPos: number, refEnd: number, packageId: PackageId | undefined): SourceFile | undefined {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: SourceFile, refPos: number, refEnd: number, packageId: PackageId | undefined): SourceFile | undefined {
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1914,6 +1984,8 @@ namespace ts {
                         processReferencedFiles(file, isDefaultLib);
                         processTypeReferenceDirectives(file);
                     }
+
+                    processLibReferenceDirectives(file);
 
                     modulesWithElidedImports.set(file.path, false);
                     processImportedModules(file);
@@ -1945,7 +2017,7 @@ namespace ts {
             }
 
             // We haven't looked for this file, do so now and cache result
-            const file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
+            const file = host.getSourceFile(fileName, options.target!, hostErrorMessage => { // TODO: GH#18217
                 if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
                     fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
                         Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
@@ -1961,11 +2033,11 @@ namespace ts {
                 if (fileFromPackageId) {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
-                    const dupFile = createRedirectSourceFile(fileFromPackageId, file, fileName, path);
+                    const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path); // TODO: GH#18217
                     redirectTargetsSet.set(fileFromPackageId.path, true);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageName.set(path, packageId.name);
-                    files.push(dupFile);
+                    processingOtherFiles!.push(dupFile);
                     return dupFile;
                 }
                 else if (file) {
@@ -1983,34 +2055,37 @@ namespace ts {
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
+                file.resolvedPath = toPath(fileName);
 
                 if (host.useCaseSensitiveFileNames()) {
                     const pathLowerCase = path.toLowerCase();
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
-                    const existingFile = filesByNameIgnoreCase.get(pathLowerCase);
+                    const existingFile = filesByNameIgnoreCase!.get(pathLowerCase);
                     if (existingFile) {
                         reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile, refPos, refEnd);
                     }
                     else {
-                        filesByNameIgnoreCase.set(pathLowerCase, file);
+                        filesByNameIgnoreCase!.set(pathLowerCase, file);
                     }
                 }
 
-                skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
+                skipDefaultLib = skipDefaultLib || (file.hasNoDefaultLib && !ignoreNoDefaultLib);
 
                 if (!options.noResolve) {
                     processReferencedFiles(file, isDefaultLib);
                     processTypeReferenceDirectives(file);
                 }
 
+                processLibReferenceDirectives(file);
+
                 // always process imported modules to record module name resolutions
                 processImportedModules(file);
 
                 if (isDefaultLib) {
-                    files.unshift(file);
+                    processingDefaultLibFiles!.push(file);
                 }
                 else {
-                    files.push(file);
+                    processingOtherFiles!.push(file);
                 }
             }
 
@@ -2037,7 +2112,7 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, isDefaultLib, /*packageId*/ undefined, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, isDefaultLib, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined, file, ref.pos, ref.end);
             });
         }
 
@@ -2072,7 +2147,7 @@ namespace ts {
             if (resolvedTypeReferenceDirective) {
                 if (resolvedTypeReferenceDirective.primary) {
                     // resolved from the primary path
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
+                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd); // TODO: GH#18217
                 }
                 else {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
@@ -2080,9 +2155,9 @@ namespace ts {
                     if (previousResolution) {
                         // Don't bother reading the file again if it's the same file.
                         if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
-                            const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
-                            if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
-                                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
+                            const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName!);
+                            if (otherFileText !== getSourceFile(previousResolution.resolvedFileName!)!.text) {
+                                fileProcessingDiagnostics.add(createDiagnostic(refFile!, refPos!, refEnd!, // TODO: GH#18217
                                     Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
                                     typeReferenceDirective,
                                     resolvedTypeReferenceDirective.resolvedFileName,
@@ -2095,17 +2170,34 @@ namespace ts {
                     }
                     else {
                         // First resolution of this library
-                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
+                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
                     }
                 }
             }
             else {
-                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_type_definition_file_for_0, typeReferenceDirective));
+                fileProcessingDiagnostics.add(createDiagnostic(refFile!, refPos!, refEnd!, Diagnostics.Cannot_find_type_definition_file_for_0, typeReferenceDirective)); // TODO: GH#18217
             }
 
             if (saveResolution) {
                 resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
             }
+        }
+
+        function processLibReferenceDirectives(file: SourceFile) {
+            forEach(file.libReferenceDirectives, libReference => {
+                const libName = libReference.fileName.toLocaleLowerCase();
+                const libFileName = libMap.get(libName);
+                if (libFileName) {
+                    // we ignore any 'no-default-lib' reference set on this file.
+                    processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true);
+                }
+                else {
+                    const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
+                    const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
+                    const message = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
+                    fileProcessingDiagnostics.add(createDiagnostic(file, libReference.pos, libReference.end, message, libName, suggestion));
+                }
+            });
         }
 
         function createDiagnostic(refFile: SourceFile, refPos: number, refEnd: number, message: DiagnosticMessage, ...args: any[]): Diagnostic {
@@ -2168,7 +2260,7 @@ namespace ts {
                     else if (shouldAddFile) {
                         const path = toPath(resolvedFileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);
-                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, file, pos, file.imports[i].end, resolution.packageId);
+                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, file, pos, file.imports[i].end, resolution.packageId);
                     }
 
                     if (isFromNodeModulesSearch) {
@@ -2213,7 +2305,7 @@ namespace ts {
 
         function parseProjectReferenceConfigFile(ref: ProjectReference): { commandLine: ParsedCommandLine, sourceFile: SourceFile } | undefined {
             // The actual filename (i.e. add "/tsconfig.json" if necessary)
-            const refPath = resolveProjectReferencePath(host, ref);
+            const refPath = resolveProjectReferencePath(host, ref)!; // TODO: GH#18217
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
             const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile;
@@ -2226,14 +2318,14 @@ namespace ts {
         }
 
         function addProjectReferenceRedirects(referencedProject: ParsedCommandLine, target: Map<string>) {
-            const rootDir = normalizePath(referencedProject.options.rootDir || getDirectoryPath(referencedProject.options.configFilePath));
+            const rootDir = normalizePath(referencedProject.options.rootDir || getDirectoryPath(referencedProject.options.configFilePath!)); // TODO: GH#18217
             target.set(rootDir, getDeclarationOutputDirectory(referencedProject));
         }
 
         function getDeclarationOutputDirectory(proj: ParsedCommandLine) {
             return proj.options.declarationDir ||
                 proj.options.outDir ||
-                getDirectoryPath(proj.options.configFilePath);
+                getDirectoryPath(proj.options.configFilePath!); // TODO: GH#18217
         }
 
         function verifyCompilerOptions() {
@@ -2281,7 +2373,7 @@ namespace ts {
             if (projectReferences) {
                 for (let i = 0; i < projectReferences.length; i++) {
                     const ref = projectReferences[i];
-                    const resolvedRefOpts = resolvedProjectReferences[i] && resolvedProjectReferences[i].commandLine.options;
+                    const resolvedRefOpts = resolvedProjectReferences![i] && resolvedProjectReferences![i]!.commandLine.options;
                     if (resolvedRefOpts === undefined) {
                         createDiagnosticForReference(i, Diagnostics.File_0_does_not_exist, ref.path);
                         continue;
@@ -2401,7 +2493,7 @@ namespace ts {
             }
             else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
-                const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator);
+                const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
                 programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
             }
 
@@ -2411,7 +2503,7 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile", "module");
                 }
                 else if (options.module === undefined && firstNonAmbientExternalModuleSourceFile) {
-                    const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator);
+                    const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
                     programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, options.out ? "out" : "outFile"));
                 }
             }
@@ -2485,12 +2577,12 @@ namespace ts {
             }
 
             // Verify that all the emit files are unique and don't overwrite input files
-            function verifyEmitFilePath(emitFileName: string, emitFilesSeen: Map<true>) {
+            function verifyEmitFilePath(emitFileName: string | undefined, emitFilesSeen: Map<true>) {
                 if (emitFileName) {
                     const emitFilePath = toPath(emitFileName);
                     // Report error if the output overwrites input file
                     if (filesByName.has(emitFilePath)) {
-                        let chain: DiagnosticMessageChain;
+                        let chain: DiagnosticMessageChain | undefined;
                         if (!options.configFilePath) {
                             // The program is from either an inferred project or an external project
                             chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
@@ -2518,9 +2610,9 @@ namespace ts {
             for (const pathProp of pathsSyntax) {
                 if (isObjectLiteralExpression(pathProp.initializer)) {
                     for (const keyProps of getPropertyAssignment(pathProp.initializer, key)) {
-                        if (isArrayLiteralExpression(keyProps.initializer) &&
-                            keyProps.initializer.elements.length > valueIndex) {
-                            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, keyProps.initializer.elements[valueIndex], message, arg0, arg1, arg2));
+                        const initializer = keyProps.initializer;
+                        if (isArrayLiteralExpression(initializer) && initializer.elements.length > valueIndex) {
+                            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, initializer.elements[valueIndex], message, arg0, arg1, arg2));
                             needCompilerDiagnostic = false;
                         }
                     }
@@ -2578,7 +2670,7 @@ namespace ts {
             programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
         }
 
-        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
+        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
                 !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
@@ -2592,7 +2684,7 @@ namespace ts {
             if (_referencesArrayLiteralSyntax === undefined) {
                 _referencesArrayLiteralSyntax = null; // tslint:disable-line:no-null-keyword
                 if (options.configFile) {
-                    const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile);
+                    const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile)!; // TODO: GH#18217
                     for (const prop of getPropertyAssignment(jsonObjectLiteral, "references")) {
                         if (isArrayLiteralExpression(prop.initializer)) {
                             _referencesArrayLiteralSyntax = prop.initializer;
@@ -2620,20 +2712,21 @@ namespace ts {
             return _compilerOptionsObjectLiteralSyntax;
         }
 
-        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
+        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
             const props = getPropertyAssignment(objectLiteral, key1, key2);
             for (const prop of props) {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
         }
 
-        function createOptionDiagnosticInArrayLiteralSyntax(arrayLiteral: ArrayLiteralExpression, index: number, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
+        function createOptionDiagnosticInArrayLiteralSyntax(arrayLiteral: ArrayLiteralExpression, index: number, message: DiagnosticMessage, arg0: string | number | undefined, arg1?: string | number, arg2?: string | number): boolean {
             if (arrayLiteral.elements.length <= index) {
                 // Out-of-bounds
                 return false;
             }
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, arrayLiteral.elements[index], message, arg0, arg1, arg2));
+            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, arrayLiteral.elements[index], message, arg0, arg1, arg2));
+            return false; // TODO: GH#18217 This function always returns `false`!`
         }
 
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
@@ -2641,7 +2734,7 @@ namespace ts {
             programDiagnostics.add(diag);
         }
 
-        function isEmittedFile(file: string) {
+        function isEmittedFile(file: string): boolean {
             if (options.noEmit) {
                 return false;
             }
@@ -2658,6 +2751,11 @@ namespace ts {
                 return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
             }
 
+            // If declarationDir is specified, return if its a file in that directory
+            if (options.declarationDir && containsPath(options.declarationDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames())) {
+                return true;
+            }
+
             // If --outDir, check if file is in that directory
             if (options.outDir) {
                 return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
@@ -2666,8 +2764,8 @@ namespace ts {
             if (fileExtensionIsOneOf(filePath, supportedJavascriptExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
                 // Otherwise just check if sourceFile with the name exists
                 const filePathWithoutExtension = removeFileExtension(filePath);
-                return !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Ts) as Path) ||
-                    !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Tsx) as Path);
+                return !!getSourceFileByPath((filePathWithoutExtension + Extension.Ts) as Path) ||
+                    !!getSourceFileByPath((filePathWithoutExtension + Extension.Tsx) as Path);
             }
             return false;
         }
@@ -2692,7 +2790,7 @@ namespace ts {
     /**
      * Returns the target config filename of a project reference
      */
-    function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
+    export function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
         if (!host.fileExists(ref.path)) {
             return combinePaths(ref.path, "tsconfig.json");
         }

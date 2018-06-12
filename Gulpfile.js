@@ -11,6 +11,8 @@ const concat = require("gulp-concat");
 const clone = require("gulp-clone");
 const newer = require("gulp-newer");
 const tsc = require("gulp-typescript");
+const tsc_oop = require("./scripts/build/gulp-typescript-oop");
+const getDirSize = require("./scripts/build/getDirSize");
 const insert = require("gulp-insert");
 const sourcemaps = require("gulp-sourcemaps");
 const Q = require("q");
@@ -36,7 +38,7 @@ const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
 const constEnumReplacement = "$1$2enum $3 {$4";
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "fix"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         "b": "browser",
@@ -47,6 +49,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         "r": "reporter",
         "c": "colors", "color": "colors",
         "w": "workers",
+        "f": "fix",
     },
     default: {
         soft: false,
@@ -61,6 +64,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
+        fix: process.env.fix || process.env.f,
         workers: process.env.workerCount || os.cpus().length,
     }
 });
@@ -260,6 +264,7 @@ function getCompilerSettings(base, useBuiltCompiler) {
     for (const key in base) {
         copy[key] = base[key];
     }
+    copy.strictNullChecks = true;
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
     }
@@ -409,6 +414,10 @@ function prependCopyright(outputCopyright = !useDebugMode) {
     return insert.prepend(outputCopyright ? (copyrightContent || (copyrightContent = fs.readFileSync(copyright).toString())) : "");
 }
 
+function getCompilerPath(useBuiltCompiler) {
+    return useBuiltCompiler ? "./built/local/typescript.js" : "./lib/typescript.js";
+}
+
 gulp.task(builtLocalCompiler, /*help*/ false, [servicesFile], () => {
     const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return localCompilerProject.src()
@@ -421,7 +430,7 @@ gulp.task(builtLocalCompiler, /*help*/ false, [servicesFile], () => {
 });
 
 gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
-    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ false));
+    const servicesProject = tsc_oop.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }), { typescript: getCompilerPath(/*useBuiltCompiler*/ false) });
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
@@ -496,7 +505,7 @@ const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js")
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
 gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (done) => {
-    const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ true));
+    const serverLibraryProject = tsc_oop.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }), { typescript: getCompilerPath(/*useBuiltCompiler*/ true) });
     /** @type {{ js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream }} */
     const {js, dts} = serverLibraryProject.src()
         .pipe(sourcemaps.init())
@@ -580,14 +589,20 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
 gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
 
 gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
-    return runSequence("LKGInternal", "VerifyLKG");
+    const sizeBefore = getDirSize(lkgDirectory);
+    const seq = runSequence("LKGInternal", "VerifyLKG");
+    const sizeAfter = getDirSize(lkgDirectory);
+    if (sizeAfter > (sizeBefore * 1.10)) {
+        throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+    }
+    return seq;
 });
 
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
 gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
-    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
+    const testProject = tsc_oop.createProject("src/harness/tsconfig.json", getCompilerSettings({}), { typescript: getCompilerPath(/*useBuiltCompiler*/ true) });
     return testProject.src()
         .pipe(newer(run))
         .pipe(sourcemaps.init())
@@ -1069,7 +1084,7 @@ gulp.task("build-rules", "Compiles tslint rules to js", () => {
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
     for (const project of ["scripts/tslint/tsconfig.json", "src/tsconfig-base.json"]) {
-        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish${cmdLineOptions.fix ? " --fix" : ""}`;
         console.log("Linting: " + cmd);
         child_process.execSync(cmd, { stdio: [0, 1, 2] });
     }

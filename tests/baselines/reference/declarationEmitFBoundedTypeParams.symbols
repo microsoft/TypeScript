@@ -13,9 +13,9 @@ function append<a, b extends a>(result: a[], value: b): a[] {
 >a : Symbol(a, Decl(declarationEmitFBoundedTypeParams.ts, 2, 16))
 
     result.push(value);
->result.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(declarationEmitFBoundedTypeParams.ts, 2, 32))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(declarationEmitFBoundedTypeParams.ts, 2, 44))
 
     return result;

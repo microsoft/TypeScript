@@ -7,10 +7,10 @@ class a {
 
 class b extends a {
     get x() {
-        return "20";
+        return () => "20";
     }
-    set x(aValue: string) {
-
+    set x(aValue) {
+        
     }
 }
 
@@ -40,7 +40,7 @@ var b = /** @class */ (function (_super) {
     }
     Object.defineProperty(b.prototype, "x", {
         get: function () {
-            return "20";
+            return function () { return "20"; };
         },
         set: function (aValue) {
         },

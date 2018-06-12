@@ -1,3 +1,6 @@
+import path = require("path");
+import fs = require("fs");
+
 interface DiagnosticDetails {
     category: string;
     code: number;
@@ -5,32 +8,36 @@ interface DiagnosticDetails {
     isEarly?: boolean;
 }
 
-type InputDiagnosticMessageTable = ts.Map<DiagnosticDetails>;
+type InputDiagnosticMessageTable = Map<string, DiagnosticDetails>;
 
 function main(): void {
-    const sys = ts.sys;
-    if (sys.args.length < 1) {
-        sys.write("Usage:" + sys.newLine);
-        sys.write("\tnode processDiagnosticMessages.js <diagnostic-json-input-file>" + sys.newLine);
+    if (process.argv.length < 3) {
+        console.log("Usage:");
+        console.log("\tnode processDiagnosticMessages.js <diagnostic-json-input-file>");
         return;
     }
 
     function writeFile(fileName: string, contents: string) {
-        const inputDirectory = ts.getDirectoryPath(inputFilePath);
-        const fileOutputPath = ts.combinePaths(inputDirectory, fileName);
-        sys.writeFile(fileOutputPath, contents);
+        fs.writeFile(path.join(path.dirname(inputFilePath), fileName), contents, { encoding: "utf-8" }, err => {
+            if (err) throw err;
+        })
     }
 
-    const inputFilePath = sys.args[0].replace(/\\/g, "/");
-    const inputStr = sys.readFile(inputFilePath);
+    const inputFilePath = process.argv[2].replace(/\\/g, "/");
+    console.log(`Reading diagnostics from ${inputFilePath}`);
+    const inputStr = fs.readFileSync(inputFilePath, { encoding: "utf-8" });
 
     const diagnosticMessagesJson: { [key: string]: DiagnosticDetails } = JSON.parse(inputStr);
 
-    const diagnosticMessages: InputDiagnosticMessageTable = ts.createMapFromTemplate(diagnosticMessagesJson);
+    const diagnosticMessages: InputDiagnosticMessageTable = new Map();
+    for (const key in diagnosticMessagesJson) {
+        if (Object.hasOwnProperty.call(diagnosticMessagesJson, key)) {
+            diagnosticMessages.set(key, diagnosticMessagesJson[key]);
+        }
+    }
 
-    const outputFilesDir = ts.getDirectoryPath(inputFilePath);
-    const thisFilePathRel = ts.getRelativePathToDirectoryOrUrl(outputFilesDir, sys.getExecutingFilePath(),
-        sys.getCurrentDirectory(), ts.createGetCanonicalFileName(sys.useCaseSensitiveFileNames), /* isAbsolutePathAnUrl */ false);
+    const outputFilesDir = path.dirname(inputFilePath);
+    const thisFilePathRel = path.relative(process.cwd(), outputFilesDir);
 
     const infoFileOutput = buildInfoFileOutput(diagnosticMessages, "./diagnosticInformationMap.generated.ts", thisFilePathRel);
     checkForUniqueCodes(diagnosticMessages);

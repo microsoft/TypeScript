@@ -29,8 +29,8 @@ export declare module M { var v: number; }
 
 //// [file1.js]
 System.register([], function (exports_1, context_1) {
-    var promise, foo, c, e;
     "use strict";
+    var promise, foo, c, e;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

@@ -1,0 +1,4 @@
+=== tests/cases/conformance/externalModules/exportClassNameWithObjectAMD.ts ===
+export class Object {}
+>Object : Object
+

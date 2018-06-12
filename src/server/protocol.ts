@@ -6,6 +6,7 @@
 namespace ts.server.protocol {
     // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     export const enum CommandTypes {
+        JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         /* @internal */
         BraceFull = "brace-full",
@@ -890,6 +891,17 @@ namespace ts.server.protocol {
         openingBrace: string;
     }
 
+    export interface JsxClosingTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.JsxClosingTag;
+        readonly arguments: JsxClosingTagRequestArgs;
+    }
+
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+
+    export interface JsxClosingTagResponse extends Response {
+        readonly body: TextInsertion;
+    }
+
     /**
      * @deprecated
      * Get occurrences request; value of command field is
@@ -1201,7 +1213,7 @@ namespace ts.server.protocol {
         /**
          * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
          */
-        lastFileExceededProgramSize: string | undefined;
+        lastFileExceededProgramSize?: string;
     }
 
     /**
@@ -1809,7 +1821,7 @@ namespace ts.server.protocol {
 
     export interface CompletionEntryIdentifier {
         name: string;
-        source: string;
+        source?: string;
     }
 
     /**
@@ -1853,7 +1865,7 @@ namespace ts.server.protocol {
         /**
          * Optional modifiers for the kind (such as 'public').
          */
-        kindModifiers: string;
+        kindModifiers?: string;
         /**
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
@@ -1912,12 +1924,12 @@ namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[];
+        documentation?: SymbolDisplayPart[];
 
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
 
         /**
          * The associated code actions for this entry
@@ -2543,6 +2555,7 @@ namespace ts.server.protocol {
         kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
+        nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
     }
 

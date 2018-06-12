@@ -28,7 +28,7 @@ namespace ts.codefix {
         const variations: CodeFixAction[] = [];
 
         // import Bluebird from "bluebird";
-        variations.push(createAction(context, sourceFile, node, makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier)));
+        variations.push(createAction(context, sourceFile, node, makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier, getQuotePreference(sourceFile, context.preferences))));
 
         if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
             // import Bluebird = require("bluebird");
@@ -64,12 +64,12 @@ namespace ts.codefix {
             return [];
         }
         const expr = node.expression;
-        const type = context.program.getTypeChecker().getTypeAtLocation(expr);
+        const type = context.program.getTypeChecker().getTypeAtLocation(expr)!; // TODO: GH#18217
         if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
             return [];
         }
         const fixes: CodeFixAction[] = [];
-        const relatedImport = (type.symbol as TransientSymbol).originatingImport;
+        const relatedImport = (type.symbol as TransientSymbol).originatingImport!; // TODO: GH#18217
         if (!isImportCall(relatedImport)) {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }

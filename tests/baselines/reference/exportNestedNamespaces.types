@@ -1,24 +1,24 @@
 === tests/cases/conformance/salsa/mod.js ===
 exports.n = {};
->exports.n = {} : typeof __object
->exports.n : typeof __object
+>exports.n = {} : { [x: string]: any; K: typeof K; }
+>exports.n : { [x: string]: any; K: typeof K; }
 >exports : typeof import("tests/cases/conformance/salsa/mod")
->n : typeof __object
->{} : typeof __object
+>n : { [x: string]: any; K: typeof K; }
+>{} : { [x: string]: any; K: typeof K; }
 
 exports.n.K = function () {
 >exports.n.K = function () {    this.x = 10;} : typeof K
 >exports.n.K : typeof K
->exports.n : typeof __object
+>exports.n : { [x: string]: any; K: typeof K; }
 >exports : typeof import("tests/cases/conformance/salsa/mod")
->n : typeof __object
+>n : { [x: string]: any; K: typeof K; }
 >K : typeof K
 >function () {    this.x = 10;} : typeof K
 
     this.x = 10;
 >this.x = 10 : 10
 >this.x : any
->this : typeof __object
+>this : { [x: string]: any; K: typeof K; }
 >x : any
 >10 : 10
 }
@@ -47,9 +47,9 @@ var k = new s.n.K()
 >k : K
 >new s.n.K() : K
 >s.n.K : typeof K
->s.n : typeof __object
+>s.n : { [x: string]: any; K: typeof K; }
 >s : typeof s
->n : typeof __object
+>n : { [x: string]: any; K: typeof K; }
 >K : typeof K
 
 k.x

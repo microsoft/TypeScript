@@ -1,22 +1,11 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": true,
-        "outFile": "../../built/local/tsc.js",
-        "declaration": true
+        "outFile": "../../built/local/compiler.js"
     },
     "files": [
-        "types.ts",
-        "performance.ts",
-        "core.ts",
-        "sys.ts",
-        "diagnosticInformationMap.generated.ts",
-        "scanner.ts",
-        "utilities.ts",
-        "parser.ts",
         "binder.ts",
         "symbolWalker.ts",
-        "moduleNameResolver.ts",
         "checker.ts",
         "factory.ts",
         "visitor.ts",
@@ -44,8 +33,12 @@
         "builderState.ts",
         "builder.ts",
         "resolutionCache.ts",
+        "moduleSpecifiers.ts",
         "watch.ts",
-        "commandLineParser.ts",
-        "tsc.ts"
+        "tsbuild.ts"
+    ],
+    "references": [
+        { "path": "../core" },
+        { "path": "../parser" }
     ]
 }
