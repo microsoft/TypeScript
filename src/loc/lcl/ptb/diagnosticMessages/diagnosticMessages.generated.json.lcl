@@ -1970,6 +1970,9 @@
       <Item ItemId=";Cannot_find_lib_definition_for_0_Did_you_mean_1_2727" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for '{0}'. Did you mean '{1}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Não é possível encontrar a definição de lib para '{0}'. Você quis dizer '{1}'?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
