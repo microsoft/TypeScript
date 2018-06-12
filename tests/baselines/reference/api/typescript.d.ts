@@ -4467,6 +4467,7 @@ declare namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
+        getSourceFiles?(): ReadonlyArray<SourceFile>;
     }
     /** @deprecated See comment on SymbolWriter */
     interface SymbolTracker {
@@ -9174,7 +9175,7 @@ declare namespace ts.moduleSpecifiers {
         importModuleSpecifierPreference?: "relative" | "non-relative";
     }
     function getModuleSpecifier(compilerOptions: CompilerOptions, fromSourceFile: SourceFile, fromSourceFileName: string, toFileName: string, host: ModuleSpecifierResolutionHost, preferences?: ModuleSpecifierPreferences): string;
-    function getModuleSpecifiers(moduleSymbol: Symbol, program: Program, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
+    function getModuleSpecifiers(moduleSymbol: Symbol, compilerOptions: CompilerOptions, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
 }
 declare namespace ts {
     /**
