@@ -1,4 +1,34 @@
 /* @internal */
+namespace ts {
+    export interface SourceFileLikeCache {
+        get(path: Path): SourceFileLike | undefined;
+    }
+
+    export function createSourceFileLikeCache(host: { readFile?: (path: string) => string | undefined, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
+        const cached = createMap<SourceFileLike>();
+        return {
+            get(path: Path) {
+                if (cached.has(path)) {
+                    return cached.get(path);
+                }
+                if (!host.fileExists || !host.readFile || !host.fileExists(path)) return;
+                // And failing that, check the disk
+                const text = host.readFile(path)!; // TODO: GH#18217
+                const file = {
+                    text,
+                    lineMap: undefined,
+                    getLineAndCharacterOfPosition(pos: number) {
+                        return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
+                    }
+                } as SourceFileLike;
+                cached.set(path, file);
+                return file;
+            }
+        };
+    }
+}
+
+/* @internal */
 namespace ts.sourcemaps {
     export interface SourceMapData {
         version?: number;
@@ -86,7 +116,7 @@ namespace ts.sourcemaps {
         }
 
         function getDecodedMappings() {
-            return decodedMappings || (decodedMappings = calculateDecodedMappings());
+            return decodedMappings || (decodedMappings = calculateDecodedMappings(map, processPosition, host));
         }
 
         function getSourceOrderedMappings() {
@@ -95,30 +125,6 @@ namespace ts.sourcemaps {
 
         function getGeneratedOrderedMappings() {
             return generatedOrderedMappings || (generatedOrderedMappings = getDecodedMappings().slice().sort(compareProcessedPositionEmittedPositions));
-        }
-
-        function calculateDecodedMappings(): ProcessedSourceMapPosition[] {
-            const state: DecoderState<ProcessedSourceMapPosition> = {
-                encodedText: map.mappings,
-                currentNameIndex: undefined,
-                sourceMapNamesLength: map.names ? map.names.length : undefined,
-                currentEmittedColumn: 0,
-                currentEmittedLine: 0,
-                currentSourceColumn: 0,
-                currentSourceLine: 0,
-                currentSourceIndex: 0,
-                positions: [],
-                decodingIndex: 0,
-                processPosition,
-            };
-            while (!hasCompletedDecoding(state)) {
-                decodeSinglePosition(state);
-                if (state.error) {
-                    host.log(`Encountered error while decoding sourcemap found at ${mapPath}: ${state.error}`);
-                    return [];
-                }
-            }
-            return state.positions;
         }
 
         function compareProcessedPositionSourcePositions(a: ProcessedSourceMapPosition, b: ProcessedSourceMapPosition) {
@@ -140,6 +146,32 @@ namespace ts.sourcemaps {
                 // name: position.nameIndex ? map.names[position.nameIndex] : undefined
             };
         }
+    }
+
+    export function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
+        const state: DecoderState<T> = {
+            encodedText: map.mappings,
+            currentNameIndex: undefined,
+            sourceMapNamesLength: map.names ? map.names.length : undefined,
+            currentEmittedColumn: 0,
+            currentEmittedLine: 0,
+            currentSourceColumn: 0,
+            currentSourceLine: 0,
+            currentSourceIndex: 0,
+            positions: [],
+            decodingIndex: 0,
+            processPosition,
+        };
+        while (!hasCompletedDecoding(state)) {
+            decodeSinglePosition(state);
+            if (state.error) {
+                if (host && host.log) {
+                    host.log(`Encountered error while decoding sourcemap: ${state.error}`);
+                }
+                return [];
+            }
+        }
+        return state.positions;
     }
 
     interface ProcessedSourceMapPosition {
