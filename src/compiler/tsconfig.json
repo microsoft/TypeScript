@@ -3,7 +3,22 @@
     "compilerOptions": {
         "outFile": "../../built/local/compiler.js"
     },
+
+    "references": [],
+
     "files": [
+        "core.ts",
+        "performance.ts",
+
+        "types.ts",
+        "sys.ts",
+        "diagnosticInformationMap.generated.ts",
+        "scanner.ts",
+        "utilities.ts",
+        "parser.ts",
+        "commandLineParser.ts",
+        "moduleNameResolver.ts",
+
         "binder.ts",
         "symbolWalker.ts",
         "checker.ts",
@@ -36,9 +51,5 @@
         "moduleSpecifiers.ts",
         "watch.ts",
         "tsbuild.ts"
-    ],
-    "references": [
-        { "path": "../core" },
-        { "path": "../parser" }
     ]
 }

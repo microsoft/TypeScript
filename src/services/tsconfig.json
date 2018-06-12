@@ -4,10 +4,8 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
-        { "path": "../core" },
-        { "path": "../parser" },
         { "path": "../compiler" },
-        { "path": "../jsTyping" },
+        { "path": "../jsTyping" }
     ],
     "files": [
         "types.ts",
