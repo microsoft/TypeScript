@@ -42,7 +42,7 @@ namespace ts.sourcemaps {
         };
 
         function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = getGeneratedOrderedMappings();
+            const maps = getSourceOrderedMappings();
             if (!length(maps)) return loc;
             let targetIndex = binarySearch(maps, { sourcePath: loc.fileName, sourcePosition: loc.position }, identity, compareProcessedPositionSourcePositions);
             if (targetIndex < 0 && maps.length > 0) {
@@ -56,7 +56,7 @@ namespace ts.sourcemaps {
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = getSourceOrderedMappings();
+            const maps = getGeneratedOrderedMappings();
             if (!length(maps)) return loc;
             let targetIndex = binarySearch(maps, { emittedPosition: loc.position }, identity, compareProcessedPositionEmittedPositions);
             if (targetIndex < 0 && maps.length > 0) {
