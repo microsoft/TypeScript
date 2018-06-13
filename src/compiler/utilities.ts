@@ -5037,6 +5037,7 @@ namespace ts {
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
+/* @internal */
 namespace ts {
     // Literals
     export function isNumericLiteral(node: Node): node is NumericLiteral {
@@ -5738,6 +5739,7 @@ namespace ts {
 //
 // All node tests in the following list should *not* reference parent pointers so that
 // they may be used with transformations.
+/* @internal */
 namespace ts {
     /* @internal */
     export function isSyntaxList(n: Node): n is SyntaxList {
