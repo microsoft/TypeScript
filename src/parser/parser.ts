@@ -6777,7 +6777,7 @@ namespace ts {
                     const tag = <JSDocThisTag>createNode(SyntaxKind.JSDocThisTag, atToken.pos);
                     tag.atToken = atToken;
                     tag.tagName = tagName;
-                    tag.typeExpression = tryParseTypeExpression();
+                    tag.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
                     return finishNode(tag);
                 }
