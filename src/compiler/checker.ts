@@ -14136,7 +14136,8 @@ namespace ts {
                 const valueType = getTypeOfExpression(value);
                 if (valueType.flags & TypeFlags.Nullable) {
                     if (!strictNullChecks) {
-                        return type;
+                        // === undefined/null gets rid of the entire union without strict null checks
+                        return assumeTrue ? valueType : type;
                     }
                     const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
                     const facts = doubleEquals ?
