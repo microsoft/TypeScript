@@ -245,7 +245,7 @@ namespace ts {
         }
     }
 
-    export function createDependencyMapper() {
+    function createDependencyMapper() {
         const childToParents = createFileMap<ResolvedConfigFileName[]>();
         const parentToChildren = createFileMap<ResolvedConfigFileName[]>();
         const allKeys = createFileMap<true>();
@@ -422,7 +422,7 @@ namespace ts {
         }
     ];
 
-    export function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number {
+    export function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number | undefined {
         let verbose = false;
         let dry = false;
         let force = false;
@@ -489,14 +489,13 @@ namespace ts {
         if (clean) {
             return builder.cleanAllProjects();
         }
-        else {
-            return builder.buildAllProjects();
-        }
 
         if (watch) {
             builder.startWatching();
-            return ExitStatus.Success;            
+            return undefined;
         }
+
+        return builder.buildAllProjects();
 
         function addProject(projectSpecification: string) {
             const fileName = resolvePath(compilerHost.getCurrentDirectory(), projectSpecification);

@@ -1,10 +1,5 @@
 /** Non-internal stuff goes here */
 namespace ts {
-    export const emptyArray: never[] = [] as never[];
-    export function closeFileWatcher(watcher: FileWatcher) {
-        watcher.close();
-    }
-
     export function isExternalModuleNameRelative(moduleName: string): boolean {
         // TypeScript 1.0 spec (April 2014): 11.2.1
         // An external module name is "relative" if the first term is "." or "..".
@@ -15,21 +10,11 @@ namespace ts {
     export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[] {
         return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
     }
-
-    export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
-        const nonCanonicalizedPath = isRootedDiskPath(fileName)
-            ? normalizePath(fileName)
-            : getNormalizedAbsolutePath(fileName, basePath);
-        return <Path>getCanonicalFileName(nonCanonicalizedPath);
-    }
-
-    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
-        return !!map && !!map.size;
-    }
 }
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
@@ -52,6 +37,10 @@ namespace ts {
     /** Create a new escaped identifier map. */
     export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
         return new MapCtr<T>() as UnderscoreEscapedMap<T>;
+    }
+
+    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
+        return !!map && !!map.size;
     }
 
     export function createSymbolTable(symbols?: ReadonlyArray<Symbol>): SymbolTable {
@@ -101,6 +90,13 @@ namespace ts {
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
+    }
+
+    export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
+        const nonCanonicalizedPath = isRootedDiskPath(fileName)
+            ? normalizePath(fileName)
+            : getNormalizedAbsolutePath(fileName, basePath);
+        return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
     export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
@@ -4089,6 +4085,10 @@ namespace ts {
         return options.watch && options.hasOwnProperty("watch");
     }
 
+    export function closeFileWatcher(watcher: FileWatcher) {
+        watcher.close();
+    }
+
     export function getCheckFlags(symbol: Symbol): CheckFlags {
         return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
     }
@@ -6647,7 +6647,11 @@ namespace ts {
     export function isStringLiteralLike(node: Node): node is StringLiteralLike {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
+}
 
+
+/* @internal */
+namespace ts {
     /** @internal */
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
@@ -6712,6 +6716,7 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
+    /* @internal */
     export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => Debug.assertDefined(args[+index + baseIndex]));
     }
@@ -6722,6 +6727,7 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
+    /* @internal */
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
         Debug.assertGreaterThanOrEqual(start, 0);
@@ -6761,6 +6767,7 @@ namespace ts {
         return text;
     }
 
+    /* @internal */
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
@@ -6781,6 +6788,7 @@ namespace ts {
         };
     }
 
+    /* @internal */
     export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
         return {
             file: undefined,
@@ -6793,6 +6801,7 @@ namespace ts {
         };
     }
 
+    /* @internal */
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
@@ -6824,6 +6833,7 @@ namespace ts {
         return diagnostic.file ? diagnostic.file.path : undefined;
     }
 
+    /* @internal */
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
             compareValues(d1.start, d2.start) ||
@@ -7122,6 +7132,7 @@ namespace ts {
         return rootLength > 0 && rootLength === path.length;
     }
 
+    /* @internal */
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
         return !isRootedDiskPath(absoluteOrRelativePath)
             ? absoluteOrRelativePath

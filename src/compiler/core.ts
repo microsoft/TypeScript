@@ -55,6 +55,7 @@ namespace ts {
     /* @internal */
     export type Comparer<T> = (a: T, b: T) => Comparison;
 
+    /* @internal */
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
