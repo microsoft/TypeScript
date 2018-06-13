@@ -34,47 +34,55 @@ const TaskNames = {
     lkg: "LKG",
     release: "release",
     lssl: "lssl",
-    lint: "lint"
+    lint: "lint",
+    scripts: "scripts",
+    localize:" localize"
 };
 
-const Paths = {
-    lkg: "lib",
-    lkgCompiler: "lib/tsc.js",
-
-    built: "built",
-    builtLocal: "built/local",
-    builtLocalCompiler: "built/local/tsc.js",
-    builtLocalRun: "built/local/run.js",
-    locLcg: "built/local/enu/diagnosticMessages.generated.json.lcg",
-    typesMapOutput: "built/local/typesMap.json",
-    servicesFile: "built/local/typescriptServices.js",
-    servicesDefinitionFile: "built/local/typescriptServices.d.ts",
-
-    baselines: {
-        local: "tests/baselines/local",
-        localTest262: "tests/baselines/test262/local",
-        localRwc: "tests/baselines/rwc/local",
-        reference: "tests/baselines/reference",
-        referenceTest262: "tests/baselines/test262/reference",
-        referenceRwc: "tests/baselines/rwc/reference"
-    },
-    copyright: "CopyrightNotice.txt",
-    thirdParty: "ThirdPartyNoticeText.txt",
-    library: "src/lib",
-
-    processDiagnosticMessagesJs: "scripts/processDiagnosticMessages.js",
-    diagnosticInformationMap: "src/compiler/diagnosticInformationMap.generated.ts",
-    diagnosticMessagesJson: "src/compiler/diagnosticMessages.json",
-
-    srcServer: "src/server",
-
-};
+const Paths = {};
+Paths.lkg = "lib";
+Paths.lkgCompiler = "lib/tsc.js";
+Paths.built = "built";
+Paths.builtLocal = "built/local";
+Paths.builtLocalCompiler = "built/local/tsc.js";
+Paths.builtLocalTSServer = "built/local/tsserver.js";
+Paths.builtLocalRun = "built/local/run.js";
+Paths.typesMapOutput = "built/local/typesMap.json";
+Paths.servicesFile = "built/local/typescriptServices.js";
+Paths.servicesDefinitionFile = "built/local/typescriptServices.d.ts";
+Paths.typescriptDefinitionFile = "built/local/typescript.d.ts";
+Paths.typescriptStandaloneDefinitionFile = "built/local/typescript_standalone.d.ts";
+Paths.tsserverLibraryDefinitionFile = "built/local/tsserverlibrary.d.ts";
+Paths.baselines = {};
+Paths.baselines.local = "tests/baselines/local";
+Paths.baselines.localTest262 = "tests/baselines/test262/local";
+Paths.baselines.localRwc = "tests/baselines/rwc/local";
+Paths.baselines.reference = "tests/baselines/reference";
+Paths.baselines.referenceTest262 = "tests/baselines/test262/reference";
+Paths.baselines.referenceRwc = "tests/baselines/rwc/reference";
+Paths.copyright = "CopyrightNotice.txt";
+Paths.thirdParty = "ThirdPartyNoticeText.txt";
+Paths.processDiagnosticMessagesJs = "scripts/processDiagnosticMessages.js";
+Paths.diagnosticInformationMap = "src/compiler/diagnosticInformationMap.generated.ts";
+Paths.diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
+Paths.diagnosticGeneratedJson = "src/compiler/diagnosticMessages.generated.json";
+Paths.builtDiagnosticGeneratedJson = "built/local/diagnosticMessages.generated.json";
+Paths.lcl = "src/loc/lcl"
+Paths.locLcg = "built/local/enu/diagnosticMessages.generated.json.lcg";
+Paths.generatedLCGFile = path.join(Paths.builtLocal, "enu", "diagnosticMessages.generated.json.lcg");
+Paths.library = "src/lib";
+Paths.srcServer = "src/server";
+Paths.scripts = {};
+Paths.scripts.generateLocalizedDiagnosticMessages = "scripts/generateLocalizedDiagnosticMessages.js";
+Paths.scripts.processDiagnosticMessagesJs = "scripts/processDiagnosticMessages.js";
+Paths.scripts.produceLKG = "scripts/produceLKG.js";
 
 const ConfigFileFor = {
     tsc: "src/tsc",
     tsserver: "src/tsserver",
     runjs: "src/testRunner",
     lint: "scripts/tslint",
+    scripts: "scripts",
     all: "src"
 };
 
@@ -91,46 +99,51 @@ const ExpectedLKGFiles = [
     "watchGuard.js"
 ];
 
-/** @type {{ libs: string[], paths?: Record<string, string>, sources?: Record<string, string[]> }} */
-const libraries = readJson("./src/lib/libs.json");
-
 directory(Paths.builtLocal);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
 task(TaskNames.local, [
     TaskNames.buildFoldStart,
-    TaskNames.generateDiagnostics,
-    TaskNames.lib,
     TaskNames.coreBuild,
+    TaskNames.localize,
     TaskNames.buildFoldEnd
 ]);
 
+const RunTestsPrereqs = [TaskNames.lib, Paths.servicesDefinitionFile, Paths.tsserverLibraryDefinitionFile];
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
-task(TaskNames.runtestsParallel, [TaskNames.lib], function () {
-    tsbuild([ConfigFileFor.runjs, ConfigFileFor.lint], undefined, () => {
+task(TaskNames.runtestsParallel, RunTestsPrereqs, function () {
+    tsbuild([ConfigFileFor.runjs, ConfigFileFor.lint], true, () => {
         runConsoleTests("min", /*parallel*/ true);
     });
 }, { async: true });
 
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
-task(TaskNames.runtests, [TaskNames.lib], function () {
-    tsbuild([ConfigFileFor.runjs, ConfigFileFor.lint], undefined, () => {
-        runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);;
+task(TaskNames.runtests, RunTestsPrereqs, function () {
+    tsbuild([ConfigFileFor.runjs, ConfigFileFor.lint], true, () => {
+        runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
     });
 }, { async: true });
+
+desc("Generates a diagnostic file in TypeScript based on an input JSON file");
+task(TaskNames.generateDiagnostics, [Paths.diagnosticInformationMap]);
 
 const libraryTargets = getLibraryTargets();
 desc("Builds the library targets");
 task(TaskNames.lib, libraryTargets);
 
-// desc("Builds language service server library");
-// task("lssl", [Paths.tsserverLibraryFile, Paths.tsserverLibraryDefinitionFile, Paths.typesMapOutput]);
+desc("Builds internal scripts");
+task(TaskNames.scripts, [], function() {
+    tsbuild([ConfigFileFor.scripts], false, () => {
+        complete();
+    });
+}, { async: true });
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task(TaskNames.lkg, [
-    TaskNames.clean,
+    // TaskNames.clean,
+    TaskNames.scripts,
     TaskNames.release,
     TaskNames.local,
     ...libraryTargets
@@ -138,39 +151,32 @@ task(TaskNames.lkg, [
     const sizeBefore = getDirSize(Paths.lkg);
     const localizationTargets = locales.map(f => path.join(Paths.builtLocal, f)).concat(path.dirname(Paths.locLcg));
 
-    const copyrightContent = readFileSync(Paths.copyright);
-
-    const expectedFiles = [...libraryTargets, ...ExpectedLKGFiles, ...localizationTargets];
-    const missingFiles = expectedFiles.filter(f => !fs.existsSync(f));
-    if (missingFiles.length > 0) {
-        fail(new Error("Cannot replace the LKG unless all built targets are present in directory " + Paths.builtLocal +
-            ". The following files are missing:\n" + missingFiles.join("\n")));
-    }
-    // Copy all the targets into the LKG directory
-    jake.mkdirP(Paths.lkg);
-    expectedFiles.forEach(f => {
-        let content = readFileSync(f);
-
-        // If this is a .d.ts file, run remove-internal on it
-        if (f.endsWith(".d.ts")) {
-            content = removeInternal.elide(content).result;
+    exec(`${host} ${Paths.scripts.produceLKG}`, () => {
+        const sizeAfter = getDirSize(Paths.lkg);
+        if (sizeAfter > (sizeBefore * 1.10)) {
+            // throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+            console.log("Seems too big");
         }
-
-        if (f.endsWith(".d.ts") || f.endsWith(".js")) {
-            // Prepend the copyright header to it
-            content = copyrightContent + content;
-        }
-
-        fs.writeFile(path.join(Paths.lkg, path.basename(f)), content, { encoding: 'utf-8' }, (err) => {
-            if (err) throw err;
-        });
+    
+        complete();
     });
+}, { async: true });
 
-    const sizeAfter = getDirSize(Paths.lkg);
-    if (sizeAfter > (sizeBefore * 1.10)) {
-        throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
-    }
+desc("Makes the most recent test results the new baseline, overwriting the old baseline");
+task("baseline-accept", function () {
+    acceptBaseline(Paths.baselines.local, Paths.baselines.reference);
 });
+
+desc("Makes the most recent rwc test results the new baseline, overwriting the old baseline");
+task("baseline-accept-rwc", function () {
+    acceptBaseline(Paths.baselines.localRwc, Paths.baselines.referenceRwc);
+});
+
+desc("Makes the most recent test262 test results the new baseline, overwriting the old baseline");
+task("baseline-accept-test262", function () {
+    acceptBaseline(Paths.baselines.localTest262, Paths.baselines.referenceTest262);
+});
+
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task(TaskNames.lint, [TaskNames.buildRules], () => {
@@ -208,6 +214,9 @@ task("setDebugMode", function () {
     useDebugMode = true;
 });
 
+desc("Generates localized diagnostic messages");
+task(TaskNames.localize, [Paths.generatedLCGFile]);
+
 desc("Emit the start of the build fold");
 task(TaskNames.buildFoldStart, [], function () {
     if (fold.isTravis()) console.log(fold.start("build"));
@@ -220,7 +229,7 @@ task(TaskNames.buildFoldEnd, [], function () {
 
 desc("Compiles tslint rules to js");
 task(TaskNames.buildRules, [], function () {
-    tsbuild(ConfigFileFor.lint);
+    tsbuild(ConfigFileFor.lint, false, () => complete());
 }, { async: true });
 
 desc("Cleans the compiler output, declare files, and tests");
@@ -228,32 +237,16 @@ task(TaskNames.clean, function () {
     jake.rmRf(Paths.built);
 });
 
-desc("Generates a diagnostic file in TypeScript based on an input JSON file");
-task(TaskNames.generateDiagnostics, [Paths.diagnosticInformationMap]);
+desc("Generates the LCG file for localization");
+task("localize", [Paths.generatedLCGFile]);
 
-task(TaskNames.coreBuild, function () {
-    tsbuild(ConfigFileFor.all);
-});
-
-file(Paths.diagnosticMessagesJson);
-file(Paths.diagnosticInformationMap, [Paths.diagnosticMessagesJson], function (complete) {
-    tsbuild("scripts/processDiagnosticMessages.tsconfig.json", /*lkg*/ true, function () {
-        const cmd = `${host} scripts/processDiagnosticMessages.js ${Paths.diagnosticMessagesJson}`;
-        exec(cmd, complete, complete);
-        var ex = jake.createExec([cmd]);
-        // Add listeners for output and error
-        ex.addListener("stdout", function (output) {
-            process.stdout.write(output);
-        });
-        ex.addListener("stderr", function (error) {
-            process.stderr.write(error);
-        });
-        ex.addListener("cmdEnd", function () {
-            complete();
-        });
-        ex.run();
+task(TaskNames.coreBuild, [Paths.diagnosticInformationMap, TaskNames.lib], function () {
+    tsbuild(ConfigFileFor.all, true, () => {
+        complete();
     });
 }, { async: true });
+
+file(Paths.diagnosticMessagesJson);
 
 file(Paths.typesMapOutput, /** @type {*} */(function () {
     var content = readFileSync(path.join(Paths.srcServer, 'typesMap.json'));
@@ -265,6 +258,81 @@ file(Paths.typesMapOutput, /** @type {*} */(function () {
     }
     fs.writeFileSync(Paths.typesMapOutput, content);
 }));
+
+file(Paths.builtDiagnosticGeneratedJson, [Paths.diagnosticGeneratedJson], function () {
+    if (fs.existsSync(Paths.builtLocal)) {
+        jake.cpR(Paths.diagnosticGeneratedJson, Paths.builtDiagnosticGeneratedJson);
+    }
+});
+
+// Localized diagnostics
+file(Paths.generatedLCGFile, [TaskNames.scripts, Paths.diagnosticInformationMap, Paths.diagnosticGeneratedJson], function () {
+    const cmd = `${host} ${Paths.scripts.generateLocalizedDiagnosticMessages} ${Paths.lcl} ${Paths.builtLocal} ${Paths.diagnosticGeneratedJson}`
+    exec(cmd, complete);
+}, { async: true });
+
+
+// The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
+file(Paths.diagnosticInformationMap, [Paths.diagnosticMessagesJson], function () {
+    tsbuild(ConfigFileFor.scripts, false, () => {
+        const cmd = `${host} ${Paths.scripts.processDiagnosticMessagesJs} ${Paths.diagnosticMessagesJson}`;
+        exec(cmd, complete);
+    });
+}, { async: true });
+
+// tsserverlibrary.d.ts
+file(Paths.tsserverLibraryDefinitionFile, [TaskNames.coreBuild], function() {
+    const sources = ["compiler.d.ts", "jsTyping.d.ts", "services.d.ts", "server.d.ts"].map(f => path.join(Paths.builtLocal, f));
+    let output = "";
+    for (const f of sources) {
+        output = output + "\n" + removeConstModifierFromEnumDeclarations(readFileSync(f));
+    }
+    output = output + "\nexport = ts;\nexport as namespace ts;";
+    fs.writeFileSync(Paths.tsserverLibraryDefinitionFile, output, { encoding: "utf-8" });
+});
+
+// typescriptservices.d.ts
+file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
+    // Generate a config file
+    const files = [];
+    recur(`src/services/tsconfig.json`);
+
+    const config = {
+        extends: "../../src/tsconfig-base",
+        compilerOptions: {
+            "stripInternal": true,
+            "outFile": "typescriptservices.js"
+        },
+        files
+    };
+    
+    const configFilePath = `built/local/typescriptServices.tsconfig.json`;
+    fs.writeFileSync(configFilePath, JSON.stringify(config, undefined, 2));
+    tsbuild(configFilePath, false, () => {
+        const servicesContent = readFileSync(Paths.servicesDefinitionFile);
+        const servicesContentWithoutConstEnums = removeConstModifierFromEnumDeclarations(servicesContent);
+        fs.writeFileSync(Paths.servicesDefinitionFile, servicesContentWithoutConstEnums);
+
+        // Also build typescript.d.ts
+        fs.writeFileSync(Paths.typescriptDefinitionFile, servicesContentWithoutConstEnums + "\r\nexport = ts", { encoding: "utf-8" });
+        // And typescript_standalone.d.ts
+        fs.writeFileSync(Paths.typescriptStandaloneDefinitionFile, servicesContentWithoutConstEnums.replace(/declare (namespace|module) ts(\..+)? \{/g, 'declare module "typescript" {'), { encoding: "utf-8"});
+
+        complete();
+    });
+
+    function recur(configPath) {
+        const cfgFile = readJson(configPath);
+        if (cfgFile.references) {
+            for (const ref of cfgFile.references) {
+                recur(path.join(path.dirname(configPath), ref.path, "tsconfig.json"));
+            }
+        }
+        for (const file of cfgFile.files) {
+            files.push(path.join(`../../`, path.dirname(configPath), file));
+        }
+    }
+}, { async: true });
 
 /*
 file(Paths.tsserverLibraryDefinitionFile, [TaskNames.coreBuild, Paths.copyright, ...libraryTargets], function () {
@@ -278,12 +346,16 @@ file(Paths.tsserverLibraryDefinitionFile, [TaskNames.coreBuild, Paths.copyright,
 });
 */
 
+
+
 function getLibraryTargets() {
+    /** @type {{ libs: string[], paths?: Record<string, string>, sources?: Record<string, string[]> }} */
+    const libraries = readJson("./src/lib/libs.json");
     return libraries.libs.map(function (lib) {
-        var relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
-        var relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
-        var sources = [Paths.copyright].concat(relativeSources.map(s => path.join(Paths.library, s)));
-        var target = path.join(Paths.builtLocal, relativeTarget);
+        const relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
+        const relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
+        const sources = [Paths.copyright].concat(relativeSources.map(s => path.join(Paths.library, s)));
+        const target = path.join(Paths.builtLocal, relativeTarget);
         file(target, [Paths.builtLocal].concat(sources), function () {
             concatenateFiles(target, sources);
         });
@@ -455,8 +527,8 @@ function tsbuild(tsconfigPath, useLkg = true, done = undefined) {
         done ? done() : complete();
     }, () => {
         // Fail
-        fail(`Compilation of ${tsconfigPath} unsuccessful`);
         Travis.measure(startCompileTime);
+        fail(`Compilation of ${tsconfigPath} unsuccessful`);
     });
 }
 
@@ -478,6 +550,19 @@ const Travis = {
         console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
     }
 };
+
+function buildLocalizedTargets() {
+    /**
+     * The localization target produces the two following transformations:
+     *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
+     *       convert localized resources into a .json file the compiler can understand
+     *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
+     *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
+     */
+    const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
+        .map(f => path.join(Paths.builtLocal,f))
+        .concat(path.dirname(Paths.generatedLCGFile));
+}
 
 function toNs(diff) {
     return diff[0] * 1e9 + diff[1];
@@ -508,6 +593,40 @@ function exec(cmd, successHandler, errorHandler) {
 
     console.log(cmd);
     ex.run();
+}
+
+function acceptBaseline(sourceFolder, targetFolder) {
+    console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
+    var deleteEnding = '.delete';
+
+    acceptBaselineFolder(sourceFolder, targetFolder);
+
+    function acceptBaselineFolder(sourceFolder, targetFolder) {
+        var files = fs.readdirSync(sourceFolder);
+
+        for (var i in files) {
+            var filename = files[i];
+            var fullLocalPath = path.join(sourceFolder, filename);
+            var stat = fs.statSync(fullLocalPath);
+            if (stat.isFile()) {
+                if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
+                    filename = filename.substr(0, filename.length - deleteEnding.length);
+                    fs.unlinkSync(path.join(targetFolder, filename));
+                }
+                else {
+                    var target = path.join(targetFolder, filename);
+                    if (fs.existsSync(target)) {
+                        fs.unlinkSync(target);
+                    }
+                    jake.mkdirP(path.dirname(target));
+                    fs.renameSync(path.join(sourceFolder, filename), target);
+                }
+            }
+            else if (stat.isDirectory()) {
+                acceptBaselineFolder(fullLocalPath, path.join(targetFolder, filename));
+            }
+        }
+    }
 }
 
 /** @param jsonPath {string} */
@@ -544,8 +663,9 @@ function diagnosticsToString(diagnostics, pretty) {
  * Concatenate a list of sourceFiles to a destinationFile
  * @param {string} destinationFile 
  * @param {string[]} sourceFiles 
+ * @param {string} extraContent
  */
-function concatenateFiles(destinationFile, sourceFiles) {
+function concatenateFiles(destinationFile, sourceFiles, extraContent) {
     var temp = "temptemp";
     // append all files in sequence
     var text = "";
@@ -556,9 +676,16 @@ function concatenateFiles(destinationFile, sourceFiles) {
         if (i > 0) { text += "\n\n"; }
         text += readFileSync(sourceFiles[i]).replace(/\r?\n/g, "\n");
     }
+    if (extraContent) {
+        text += extraContent;
+    }
     fs.writeFileSync(temp, text);
     // Move the file to the final destination
     fs.renameSync(temp, destinationFile);
+}
+
+function appendToFile(path, content) {
+    fs.writeFileSync(path, readFileSync(path) + "\r\n" + content);
 }
 
 /**
