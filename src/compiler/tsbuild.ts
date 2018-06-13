@@ -773,8 +773,10 @@ namespace ts {
             }
 
             let pseudoUpToDate = false;
+            let usesPrepend = false;
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
+                    usesPrepend = usesPrepend || ref.prepend;
                     const resolvedRef = resolveProjectReferencePath(compilerHost, ref) as ResolvedConfigFileName;
                     const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
 
@@ -830,6 +832,10 @@ namespace ts {
                     outOfDateOutputFileName: oldestOutputFileName,
                     newerInputFileName: newestInputFileName
                 };
+            }
+
+            if (usesPrepend) {
+                psuedoUpToDate = false;
             }
 
             // Up to date
