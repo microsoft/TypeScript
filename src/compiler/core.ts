@@ -48,10 +48,7 @@ namespace ts {
     export interface Push<T> {
         push(...values: T[]): void;
     }
-}
 
-/* @internal */
-namespace ts {
     /* @internal */
     export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
@@ -63,6 +60,10 @@ namespace ts {
         EqualTo     = 0,
         GreaterThan = 1
     }
+}
+
+/* @internal */
+namespace ts {
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
