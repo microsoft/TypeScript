@@ -329,7 +329,7 @@ file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
         extends: "../../src/tsconfig-base",
         compilerOptions: {
             "stripInternal": true,
-            "outFile": "typescriptservices.js"
+            "outFile": "typescriptServices.js"
         },
         files
     };
