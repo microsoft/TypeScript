@@ -146,6 +146,8 @@ task(TaskNames.lkg, [
     TaskNames.scripts,
     TaskNames.release,
     TaskNames.local,
+    Paths.servicesDefinitionFile,
+    Paths.tsserverLibraryDefinitionFile,
     ...libraryTargets
 ], () => {
     const sizeBefore = getDirSize(Paths.lkg);
