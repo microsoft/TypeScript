@@ -4115,6 +4115,7 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap {
     "touchend": TouchEvent;
     "touchmove": TouchEvent;
     "touchstart": TouchEvent;
+    "visibilitychange": Event;
     "volumechange": Event;
     "waiting": Event;
     "webkitfullscreenchange": Event;
