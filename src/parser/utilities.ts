@@ -4970,6 +4970,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocClassTag);
     }
 
+    /** Gets the JSDoc this tag for the node if present */
+    export function getJSDocThisTag(node: Node): JSDocThisTag | undefined {
+        return getFirstJSDocTag(node, isJSDocThisTag);
+    }
+
     /** Gets the JSDoc return tag for the node if present */
     export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
         return getFirstJSDocTag(node, isJSDocReturnTag);
@@ -5699,6 +5704,10 @@ namespace ts {
 
     export function isJSDocClassTag(node: Node): node is JSDocClassTag {
         return node.kind === SyntaxKind.JSDocClassTag;
+    }
+
+    export function isJSDocThisTag(node: Node): node is JSDocThisTag {
+        return node.kind === SyntaxKind.JSDocThisTag;
     }
 
     export function isJSDocParameterTag(node: Node): node is JSDocParameterTag {

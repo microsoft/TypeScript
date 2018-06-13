@@ -14890,6 +14890,10 @@ namespace ts {
                     return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type!);
                 }
             }
+            const thisTag = getJSDocThisTag(node);
+            if (thisTag && thisTag.typeExpression) {
+                return getTypeFromTypeNode(thisTag.typeExpression);
+            }
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
