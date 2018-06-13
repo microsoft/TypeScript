@@ -36,7 +36,11 @@ const TaskNames = {
     lssl: "lssl",
     lint: "lint",
     scripts: "scripts",
-    localize:" localize"
+    localize: "localize",
+    configureInsiders: "configure-insiders",
+    publishInsiders: "publish-insiders",
+    configureNightly: "configure-nightly",
+    publishNightly: "publish-nightly"
 };
 
 const Paths = {};
@@ -76,6 +80,9 @@ Paths.scripts = {};
 Paths.scripts.generateLocalizedDiagnosticMessages = "scripts/generateLocalizedDiagnosticMessages.js";
 Paths.scripts.processDiagnosticMessagesJs = "scripts/processDiagnosticMessages.js";
 Paths.scripts.produceLKG = "scripts/produceLKG.js";
+Paths.scripts.configurePrereleaseJs = "scripts/configurePrelease.js";
+Paths.packageJson = "package.json";
+Paths.versionFile = "src/compiler/core.ts";
 
 const ConfigFileFor = {
     tsc: "src/tsc",
@@ -179,7 +186,6 @@ task("baseline-accept-test262", function () {
     acceptBaseline(Paths.baselines.localTest262, Paths.baselines.referenceTest262);
 });
 
-
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task(TaskNames.lint, [TaskNames.buildRules], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
@@ -205,6 +211,31 @@ task('diff-rwc', function () {
     var cmd = `"${getDiffTool()} ${Paths.baselines.referenceRwc} ${Paths.baselines.localRwc}`;
     exec(cmd);
 }, { async: true });
+
+task(TaskNames.configureNightly, [TaskNames.scripts], function () {
+    const cmd = `${host} ${Paths.scripts.configurePrelease} dev ${Paths.packageJson} ${Paths.versionFile}`;
+    exec(cmd, () => complete());
+}, { async: true });
+
+desc("Configure, build, test, and publish the nightly release.");
+task(TaskNames.publishNightly, [TaskNames.configureNightly, TaskNames.lkg, TaskNames.clean, "setDebugMode", "runtests-parallel"], function () {
+    var cmd = "npm publish --tag next";
+    console.log(cmd);
+    exec(cmd);
+});
+
+task(TaskNames.configureInsiders, [TaskNames.scripts], function () {
+    const cmd = `${host} ${Paths.scripts.configurePrelease} insiders ${Paths.packageJson} ${Paths.versionFile}`;
+    exec(cmd, () => complete());
+}, { async: true });
+
+desc("Configure, build, test, and publish the insiders release.");
+task(TaskNames.publishInsiders, [TaskNames.configureInsiders, TaskNames.lkg, TaskNames.clean, "setDebugMode", "runtests-parallel"], function () {
+    var cmd = "npm publish --tag insiders";
+    console.log(cmd);
+    exec(cmd);
+});
+
 
 desc("Sets the release mode flag");
 task("release", function () {
