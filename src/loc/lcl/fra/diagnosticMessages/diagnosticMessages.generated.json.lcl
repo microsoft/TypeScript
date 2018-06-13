@@ -9633,6 +9633,9 @@
       <Item ItemId=";delete_this_Project_0_is_up_to_date_because_it_was_previously_built_6360" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[delete this - Project '{0}' is up to date because it was previously built]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[supprimer ceci - Le projet '{0}' est à jour car il a déjà été généré]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
