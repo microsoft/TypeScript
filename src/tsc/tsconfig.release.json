@@ -1,0 +1,17 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../lib/tsc.js",
+        "stripInternal": true,
+        "preserveConstEnums": false,
+        "declaration": false,
+        "declarationMap": false,
+        "composite": false
+    },
+    "files": [
+        "tsc.ts"
+    ],
+    "references": [
+        { "path": "../compiler/tsconfig.release.json", "prepend": true }
+    ]
+}

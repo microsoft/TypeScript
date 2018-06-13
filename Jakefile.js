@@ -113,14 +113,14 @@ task(TaskNames.local, [
 const RunTestsPrereqs = [TaskNames.lib, Paths.servicesDefinitionFile, Paths.tsserverLibraryDefinitionFile];
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task(TaskNames.runtestsParallel, RunTestsPrereqs, function () {
-    tsbuild([ConfigFileFor.runjs, ConfigFileFor.lint], true, () => {
+    tsbuild([ConfigFileFor.runjs], true, () => {
         runConsoleTests("min", /*parallel*/ true);
     });
 }, { async: true });
 
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task(TaskNames.runtests, RunTestsPrereqs, function () {
-    tsbuild([ConfigFileFor.runjs, ConfigFileFor.lint], true, () => {
+    tsbuild([ConfigFileFor.runjs], true, () => {
         runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
     });
 }, { async: true });

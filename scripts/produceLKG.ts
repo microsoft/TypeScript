@@ -6,8 +6,9 @@ import path = require('path');
 import removeInternal = require('remove-internal');
 import glob = require('glob');
 
-const source = path.join(__dirname, "../built/local");
-const dest = path.join(__dirname, "../lib");
+const root = path.join(__dirname, "..");
+const source = path.join(root, "built/local");
+const dest = path.join(root, "lib");
 const copyright = fs.readFileSync(path.join(__dirname, "../CopyrightNotice.txt"), "utf-8");
 
 async function produceLKG() {
@@ -16,6 +17,7 @@ async function produceLKG() {
     await copyLocalizedDiagnostics();
     await buildProtocol();
     await copyScriptOutputs();
+    await buildTsc();
     await copyDeclarationOutputs();
     await writeGitAttributes();
 }
@@ -55,6 +57,10 @@ async function copyScriptOutputs() {
     await copyWithCopyright("watchGuard.js");
     await copyWithCopyright("cancellationToken.js");
     await copyWithCopyright("typingsInstaller.js");
+}
+
+async function buildTsc() {
+    await exec(path.join(source, "tsc.js"), [`-b -f ${path.join(root, "src/tsc/tsconfig.release.json")}`]);
 }
 
 async function copyDeclarationOutputs() {
