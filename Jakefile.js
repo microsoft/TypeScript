@@ -141,7 +141,7 @@ task(TaskNames.lib, libraryTargets);
 
 desc("Builds internal scripts");
 task(TaskNames.scripts, [TaskNames.coreBuild], function() {
-    tsbuild([ConfigFileFor.scripts], false, () => {
+    tsbuild([ConfigFileFor.scripts], true, () => {
         complete();
     });
 }, { async: true });
