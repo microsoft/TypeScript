@@ -356,7 +356,7 @@ namespace ts {
             }
         }
 
-        function isReasonablySourceMap(x: {}): x is SourceMapSection {
+        function isPossiblySourceMap(x: {}): x is SourceMapSection {
             return typeof x === "object" && !!(x as any).mappings && typeof (x as any).mappings === "string" && !!(x as any).sources;
         }
 
@@ -382,37 +382,39 @@ namespace ts {
                     catch {
                         // empty
                     }
-                    if (!parsed || !isReasonablySourceMap(parsed)) {
+                    if (!parsed || !isPossiblySourceMap(parsed)) {
                         return emitCallback(hint, node);
                     }
                     const offsetLine = writer.getLine();
                     const firstLineColumnOffset = writer.getColumn();
                     // First, decode the old component sourcemap
                     const originalMap = parsed;
-                    const spans = sourcemaps.calculateDecodedMappings(originalMap, (raw): SourceMapSpan => {
+                    sourcemaps.calculateDecodedMappings(originalMap, (raw): void => {
                         // Apply offsets to each position and fixup source entries
                         const rawPath = originalMap.sources[raw.sourceIndex];
-                        const combinedPath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
-                        const resolvedPath = getRelativePathToDirectoryOrUrl(compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir,
+                        const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
+                        const combinedPath =  combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
+                        const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+                        const resolvedPath = getRelativePathToDirectoryOrUrl(
+                            sourcesDirectoryPath,
                             combinedPath,
                             host.getCurrentDirectory(),
                             host.getCanonicalFileName,
-                            /*isAbsolutePathAnUrl*/ true);
+                            /*isAbsolutePathAnUrl*/ true
+                        );
+                        const absolutePath = toPath(resolvedPath, sourcesDirectoryPath, host.getCanonicalFileName);
                         // tslint:disable-next-line:no-null-keyword
-                        setupSourceEntry(resolvedPath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
+                        setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
-                        return {
+                        // Then reencode all the updated spans into the overall map
+                        encodeLastRecordedSourceMapSpan();
+                        lastRecordedSourceMapSpan = {
                             ...raw,
                             emittedLine: raw.emittedLine + offsetLine - 1,
                             emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset - 1) : raw.emittedColumn,
                             sourceIndex: newIndex,
                         };
                     });
-                    // Then reencode all the updated spans into the overall map
-                    for (const span of spans) {
-                        encodeLastRecordedSourceMapSpan();
-                        lastRecordedSourceMapSpan = span;
-                    }
                     // And actually emit the text these sourcemaps are for
                     return emitCallback(hint, node);
                 }

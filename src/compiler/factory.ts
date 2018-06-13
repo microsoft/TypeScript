@@ -2587,18 +2587,28 @@ namespace ts {
         return node;
     }
 
-    export function createUnparsedSourceFile(text: string, map?: string): UnparsedSource {
+    export function createUnparsedSourceFile(text: string, mapPath?: string, map?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         node.text = text;
+        node.sourceMapPath = mapPath;
         node.sourceMapText = map;
         return node;
     }
 
-    export function createInputFiles(javascript: string, declaration: string, javascriptMapText?: string, declarationMapText?: string): InputFiles {
+    export function createInputFiles(
+        javascript: string,
+        declaration: string,
+        javascriptMapPath?: string,
+        javascriptMapText?: string,
+        declarationMapPath?: string,
+        declarationMapText?: string
+    ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
         node.javascriptText = javascript;
+        node.javascriptMapPath = javascriptMapPath;
         node.javascriptMapText = javascriptMapText;
         node.declarationText = declaration;
+        node.declarationMapPath = declarationMapPath;
         node.declarationMapText = declarationMapText;
         return node;
     }
