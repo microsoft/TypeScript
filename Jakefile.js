@@ -302,7 +302,7 @@ file(Paths.generatedLCGFile, [TaskNames.scripts, Paths.diagnosticInformationMap,
 
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(Paths.diagnosticInformationMap, [Paths.diagnosticMessagesJson], function () {
-    tsbuild(ConfigFileFor.scripts, false, () => {
+    tsbuild(ConfigFileFor.scripts, true, () => {
         const cmd = `${host} ${Paths.scripts.processDiagnosticMessages} ${Paths.diagnosticMessagesJson}`;
         exec(cmd, complete);
     });
