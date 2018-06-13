@@ -398,6 +398,7 @@ namespace ts {
                             host.getCurrentDirectory(),
                             host.getCanonicalFileName,
                             /*isAbsolutePathAnUrl*/ true);
+                        // tslint:disable-next-line:no-null-keyword
                         setupSourceEntry(resolvedPath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
                         return {
