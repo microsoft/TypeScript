@@ -671,6 +671,160 @@ namespace vfs {
             node.ctimeMs = time;
         }
 
+        /**
+         * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
+         * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
+         */
+        public diff(base = this.shadowRoot) {
+            const differences: FileSet = {};
+            const hasDifferences = base ? FileSystem.rootDiff(differences, this, base) : FileSystem.trackCreatedInodes(differences, this, this._getRootLinks());
+            return hasDifferences ? differences : undefined;
+        }
+
+        /**
+         * Generates a `FileSet` patch containing all the entries in `chagned` that are not in `base`.
+         */
+        public static diff(changed: FileSystem, base: FileSystem) {
+            const differences: FileSet = {};
+            return FileSystem.rootDiff(differences, changed, base) ? differences : undefined;
+        }
+
+        private static diffWorker(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode> | undefined, base: FileSystem, baseLinks: ReadonlyMap<string, Inode> | undefined) {
+            if (changedLinks && !baseLinks) return FileSystem.trackCreatedInodes(container, changed, changedLinks);
+            if (baseLinks && !changedLinks) return FileSystem.trackDeletedInodes(container, baseLinks);
+            if (changedLinks && baseLinks) {
+                let hasChanges = false;
+                // track base items missing in changed
+                baseLinks.forEach((node, basename) => {
+                    if (!changedLinks.has(basename)) {
+                        container[basename] = isDirectory(node) ? new Rmdir() : new Unlink();
+                        hasChanges = true;
+                    }
+                });
+                // track changed items missing or differing in base
+                changedLinks.forEach((changedNode, basename) => {
+                    const baseNode = baseLinks.get(basename);
+                    if (baseNode) {
+                        if (isDirectory(changedNode) && isDirectory(baseNode)) {
+                            return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode) || hasChanges;
+                        }
+                        if (isFile(changedNode) && isFile(baseNode)) {
+                            return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode) || hasChanges;
+                        }
+                        if (isSymlink(changedNode) && isSymlink(baseNode)) {
+                            return hasChanges = FileSystem.symlinkDiff(container, basename, changedNode, baseNode) || hasChanges;
+                        }
+                    }
+                    return hasChanges = FileSystem.trackCreatedInode(container, basename, changed, changedNode) || hasChanges;
+                });
+                return hasChanges;
+            }
+            return false;
+        }
+
+        private static rootDiff(container: FileSet, changed: FileSystem, base: FileSystem) {
+            while (!changed._lazy.links && changed._shadowRoot) changed = changed._shadowRoot;
+            while (!base._lazy.links && base._shadowRoot) base = base._shadowRoot;
+
+            // no difference if the file systems are the same reference
+            if (changed === base) return false;
+
+            // no difference if the root links are empty and unshadowed
+            if (!changed._lazy.links && !changed._shadowRoot && !base._lazy.links && !base._shadowRoot) return false;
+
+            return FileSystem.diffWorker(container, changed, changed._getRootLinks(), base, base._getRootLinks());
+        }
+
+        private static directoryDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: DirectoryInode, base: FileSystem, baseNode: DirectoryInode) {
+            while (!changedNode.links && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
+            while (!baseNode.links && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
+
+            // no difference if the nodes are the same reference
+            if (changedNode === baseNode) return false;
+
+            // no difference if both nodes are non shadowed and have no entries
+            if (isEmptyNonShadowedDirectory(changedNode) && isEmptyNonShadowedDirectory(baseNode)) return false;
+
+            // no difference if both nodes are unpopulated and point to the same mounted file system
+            if (!changedNode.links && !baseNode.links &&
+                changedNode.resolver && changedNode.source !== undefined &&
+                baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source) return false;
+
+            // no difference if both nodes have identical children
+            const children: FileSet = {};
+            if (!FileSystem.diffWorker(children, changed, changed._getLinks(changedNode), base, base._getLinks(baseNode))) {
+                return false;
+            }
+
+            container[basename] = new Directory(children);
+            return true;
+        }
+
+        private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode) {
+            while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
+            while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
+
+            // no difference if the nodes are the same reference
+            if (changedNode === baseNode) return false;
+
+            // no difference if both nodes are non shadowed and have no entries
+            if (isEmptyNonShadowedFile(changedNode) && isEmptyNonShadowedFile(baseNode)) return false;
+
+            // no difference if both nodes are unpopulated and point to the same mounted file system
+            if (!changedNode.buffer && !baseNode.buffer &&
+                changedNode.resolver && changedNode.source !== undefined &&
+                baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source) return false;
+
+            const changedBuffer = changed._getBuffer(changedNode);
+            const baseBuffer = base._getBuffer(baseNode);
+
+            // no difference if both buffers are the same reference
+            if (changedBuffer === baseBuffer) return false;
+
+            // no difference if both buffers are identical
+            if (Buffer.compare(changedBuffer, baseBuffer) === 0) return false;
+
+            container[basename] = new File(changedBuffer);
+            return true;
+        }
+
+        private static symlinkDiff(container: FileSet, basename: string, changedNode: SymlinkInode, baseNode: SymlinkInode) {
+            // no difference if the nodes are the same reference
+            if (changedNode.symlink === baseNode.symlink) return false;
+            container[basename] = new Symlink(changedNode.symlink);
+            return true;
+        }
+
+        private static trackCreatedInode(container: FileSet, basename: string, changed: FileSystem, node: Inode) {
+            if (isDirectory(node)) {
+                const children: FileSet = {};
+                FileSystem.trackCreatedInodes(children, changed, changed._getLinks(node));
+                container[basename] = new Directory(children);
+            }
+            else if (isSymlink(node)) {
+                container[basename] = new Symlink(node.symlink);
+            }
+            else {
+                container[basename] = new File(node.buffer || "");
+            }
+            return true;
+        }
+
+        private static trackCreatedInodes(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode>) {
+            // no difference if links are empty
+            if (!changedLinks.size) return false;
+
+            changedLinks.forEach((node, basename) => { FileSystem.trackCreatedInode(container, basename, changed, node); });
+            return true;
+        }
+
+        private static trackDeletedInodes(container: FileSet, baseLinks: ReadonlyMap<string, Inode>) {
+            // no difference if links are empty
+            if (!baseLinks.size) return false;
+            baseLinks.forEach((node, basename) => { container[basename] = isDirectory(node) ? new Rmdir() : new Unlink(); });
+            return true;
+        }
+
         private _mknod(dev: number, type: typeof S_IFREG, mode: number, time?: number): FileInode;
         private _mknod(dev: number, type: typeof S_IFDIR, mode: number, time?: number): DirectoryInode;
         private _mknod(dev: number, type: typeof S_IFLNK, mode: number, time?: number): SymlinkInode;
@@ -940,10 +1094,10 @@ namespace vfs {
 
         private _applyFilesWorker(files: FileSet, dirname: string, deferred: [Symlink | Link | Mount, string][]) {
             for (const key of Object.keys(files)) {
-                const value = this._normalizeFileSetEntry(files[key]);
+                const value = normalizeFileSetEntry(files[key]);
                 const path = dirname ? vpath.resolve(dirname, key) : key;
                 vpath.validate(path, vpath.ValidationFlags.Absolute);
-                if (value === null || value === undefined) {
+                if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
                     if (this.stringComparer(vpath.dirname(path), path) === 0) {
                         throw new TypeError("Roots cannot be deleted.");
                     }
@@ -967,19 +1121,6 @@ namespace vfs {
                 }
             }
         }
-
-        private _normalizeFileSetEntry(value: FileSet[string]) {
-            if (value === undefined ||
-                value === null ||
-                value instanceof Directory ||
-                value instanceof File ||
-                value instanceof Link ||
-                value instanceof Symlink ||
-                value instanceof Mount) {
-                return value;
-            }
-            return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);
-        }
     }
 
     export interface FileSystemOptions {
@@ -997,12 +1138,9 @@ namespace vfs {
         meta?: Record<string, any>;
     }
 
-    export interface FileSystemCreateOptions {
+    export interface FileSystemCreateOptions extends FileSystemOptions {
         // Sets the documents to add to the file system.
         documents?: ReadonlyArray<documents.TextDocument>;
-
-        // Sets the initial working directory for the file system.
-        cwd?: string;
     }
 
     export type Axis = "ancestors" | "ancestors-or-self" | "self" | "descendants-or-self" | "descendants";
@@ -1062,8 +1200,16 @@ namespace vfs {
      *
      * Unless overridden, `/.src` will be the current working directory for the virtual file system.
      */
-    export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, cwd }: FileSystemCreateOptions = {}) {
+    export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, files, cwd, time, meta }: FileSystemCreateOptions = {}) {
         const fs = getBuiltLocal(host, ignoreCase).shadow();
+        if (meta) {
+            for (const key of Object.keys(meta)) {
+                fs.meta.set(key, meta[key]);
+            }
+        }
+        if (time) {
+            fs.time(time);
+        }
         if (cwd) {
             fs.mkdirpSync(cwd);
             fs.chdir(cwd);
@@ -1082,6 +1228,9 @@ namespace vfs {
                     }
                 }
             }
+        }
+        if (files) {
+            fs.apply(files);
         }
         return fs;
     }
@@ -1165,7 +1314,7 @@ namespace vfs {
      * A template used to populate files, directories, links, etc. in a virtual file system.
      */
     export interface FileSet {
-        [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | null | undefined;
+        [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | Rmdir | Unlink | null | undefined;
     }
 
     export type DirectoryLike = FileSet | Directory;
@@ -1199,6 +1348,24 @@ namespace vfs {
         constructor(path: string) {
             this.path = path;
         }
+    }
+
+    /** Removes a directory in a `FileSet` */
+    export class Rmdir {
+        private _rmdirBrand?: never; // brand necessary for proper type guards
+    }
+
+    /** Unlinks a file in a `FileSet` */
+    export class Unlink {
+        private _unlinkBrand?: never; // brand necessary for proper type guards
+    }
+
+    // prevents compiler errors due to unused brand properties
+    if (!0) {
+        // tslint:disable-next-line:no-string-literal
+        ignoreUnused(Rmdir.prototype["_rmdirBrand"]);
+        // tslint:disable-next-line:no-string-literal
+        ignoreUnused(Unlink.prototype["_unlinkBrand"]);
     }
 
     /** Extended options for a symbolic link in a `FileSet` */
@@ -1273,6 +1440,14 @@ namespace vfs {
         meta?: collections.Metadata;
     }
 
+    function isEmptyNonShadowedDirectory(node: DirectoryInode) {
+        return !node.links && !node.shadowRoot && !node.resolver && !node.source;
+    }
+
+    function isEmptyNonShadowedFile(node: FileInode) {
+        return !node.buffer && !node.shadowRoot && !node.resolver && !node.source;
+    }
+
     function isFile(node: Inode | undefined): node is FileInode {
         return node !== undefined && (node.mode & S_IFMT) === S_IFREG;
     }
@@ -1324,5 +1499,57 @@ namespace vfs {
         }
         return builtLocalCS;
     }
+
+    function normalizeFileSetEntry(value: FileSet[string]) {
+        if (value === undefined ||
+            value === null ||
+            value instanceof Directory ||
+            value instanceof File ||
+            value instanceof Link ||
+            value instanceof Symlink ||
+            value instanceof Mount ||
+            value instanceof Rmdir ||
+            value instanceof Unlink) {
+            return value;
+        }
+        return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);
+    }
+
+    export function formatPatch(patch: FileSet) {
+        return formatPatchWorker("", patch);
+    }
+
+    function formatPatchWorker(dirname: string, container: FileSet): string {
+        let text = "";
+        for (const name of Object.keys(container)) {
+            const entry = normalizeFileSetEntry(container[name]);
+            const file = dirname ? vpath.combine(dirname, name) : name;
+            if (entry === null || entry === undefined || entry instanceof Unlink || entry instanceof Rmdir) {
+                text += `//// [${file}] unlink\r\n`;
+            }
+            else if (entry instanceof Rmdir) {
+                text += `//// [${vpath.addTrailingSeparator(file)}] rmdir\r\n`;
+            }
+            else if (entry instanceof Directory) {
+                text += formatPatchWorker(file, entry.files);
+            }
+            else if (entry instanceof File) {
+                const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");
+                text += `//// [${file}]\r\n${content}\r\n\r\n`;
+            }
+            else if (entry instanceof Link) {
+                text += `//// [${file}] link(${entry.path})\r\n`;
+            }
+            else if (entry instanceof Symlink) {
+                text += `//// [${file}] symlink(${entry.symlink})\r\n`;
+            }
+            else if (entry instanceof Mount) {
+                text += `//// [${file}] mount(${entry.source})\r\n`;
+            }
+        }
+        return text;
+    }
+
+    function ignoreUnused(_: void) { /*empty*/ }
 }
 // tslint:enable:no-null-keyword
