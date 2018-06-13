@@ -8011,10 +8011,10 @@ new C();`
                 checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
-            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], directories: string[]) {
+            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: string[], nonRecursiveDirectories: string[]) {
                 checkWatchedFilesDetailed(host, files.filter(f => f !== recognizersDateTimeSrcFile.path), 1);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, directories, 1, /*recursive*/ true);
+                checkWatchedDirectoriesDetailed(host, nonRecursiveDirectories, 1,  /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(host, recursiveDirectories, 1, /*recursive*/ true);
             }
 
             function createSessionAndOpenFile(host: TestServerHost) {
@@ -8035,14 +8035,15 @@ new C();`
                     const filesWithNodeModulesSetup = [...filesWithSources, nodeModulesRecorgnizersText];
                     const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
-                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, withPathMapping ? packages : recognizersDateTime, ...getTypeRootsFromLocation(recognizersDateTime)];
+                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, ...(withPathMapping ? emptyArray : [recognizersDateTime]), ...getTypeRootsFromLocation(recognizersDateTime)];
                     const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...(withPathMapping ? [recognizersText] : emptyArray), ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+                    const nonRecursiveWatchedDirectories = withPathMapping ? [packages] : emptyArray;
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithResolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule, nonRecursiveWatchedDirectories);
                         verifyErrors(session, []);
                     }
 
@@ -8050,7 +8051,7 @@ new C();`
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithUnresolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
                         const startOffset = recognizersDateTimeSrcFile.content.indexOf('"') + 1;
                         verifyErrors(session, [
                             createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0, [moduleName])
@@ -8557,11 +8558,10 @@ export const x = 10;`
             service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, projectRoot);
             checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
             checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, [`${projectRoot}`], 1,  /*recursive*/ false); // failed lookup for fs
             const expectedWatchedDirectories = createMap<number>();
             expectedWatchedDirectories.set(`${projectRoot}/src`, 2); // Wild card and failed lookup
             expectedWatchedDirectories.set(`${projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
-            expectedWatchedDirectories.set(`${projectRoot}`, 1); // failed lookup for fs
             expectedWatchedDirectories.set(`${projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
             expectedWatchedDirectories.set(`${projectRoot}/src/typings`, 1); // typeroot directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
