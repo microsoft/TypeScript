@@ -5000,7 +5000,7 @@ namespace ts {
             // * className.prototype.method = expr
             else if (isBinaryExpression(decl) ||
                 isPropertyAccessExpression(decl) && isBinaryExpression(decl.parent)) {
-                return getJSInitializerType(decl, symbol, getAssignedJavascriptInitializer(isBinaryExpression(decl) ? decl.left : decl)) ||
+                return getJSObjectLiteralInitializerType(decl, symbol, getAssignedJavascriptInitializer(isBinaryExpression(decl) ? decl.left : decl)) ||
                     getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
             }
             else if (isParameter(decl)
@@ -5008,31 +5008,67 @@ namespace ts {
                 || isPropertySignature(decl)
                 || isVariableDeclaration(decl)
                 || isBindingElement(decl)) {
-                // Use type from type annotation if one is present
+                // In order, use
+                // 1. type from type annotation if one is present
+                // 2. Type of js container, if the initializer is an object literal
+                // 3. Type of js container intersected with initializer, if function expression, class expression, or IIFE.
                 const isOptional = isParameter(decl) && isJSDocOptionalParameter(decl) ||
                     !isBindingElement(decl) && !isVariableDeclaration(decl) && !!decl.questionToken;
                 const declaredType = tryGetTypeFromEffectiveTypeNode(decl);
-                return declaredType && addOptionality(declaredType, isOptional) ||
-                    getJSInitializerType(decl, symbol, getDeclaredJavascriptInitializer(decl)) ||
-                    getWidenedTypeForVariableLikeDeclaration(decl, /*includeOptionality*/ true);
+                if (declaredType) {
+                    return addOptionality(declaredType, isOptional);
+                }
+                const init = getDeclaredJavascriptInitializer(decl);
+                const initializerType = getJSObjectLiteralInitializerType(decl, symbol, init);
+                if (initializerType) {
+                    return initializerType;
+                }
+                const widened = getWidenedTypeForVariableLikeDeclaration(decl, /*includeOptionality*/ true);
+                if (init && getJavascriptInitializer(init, isPrototypeAccess(decl.name))) {
+                    if (symbol.flags & SymbolFlags.Transient && hasEntries(symbol.exports) && widened.flags & TypeFlags.StructuredType) {
+                        resolveStructuredTypeMembers(widened as StructuredType);
+                        const exports = createSymbolTable();
+                        forEachDeclarationInChain(decl, s => {
+                            if (s.exports) {
+                                s.exports.forEach((sourceSymbol, id) => {
+                                    if (!(widened as ResolvedType).members.has(id)) {
+                                        exports.set(id, exports.has(id) ? mergeSymbol(exports.get(id)!, sourceSymbol) : sourceSymbol);
+                                    }
+                                });
+                            }
+                        });
+                        if (hasEntries(exports)) {
+                            return getIntersectionType([widened, createAnonymousType(symbol, exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined)]);
+                        }
+                    }
+                }
+                return widened;
             }
         }
 
-        function getJSInitializerType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init)) {
+        function getJSObjectLiteralInitializerType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
+            if (init && isObjectLiteralExpression(init)) {
                 const exports = createSymbolTable();
-                while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
-                    const s = getSymbolOfNode(decl);
-                    if (s && hasEntries(s.exports)) {
+                forEachDeclarationInChain(decl, s => {
+                    if (hasEntries(s.exports)) {
                         mergeSymbolTable(exports, s.exports);
                     }
-                    decl = isBinaryExpression(decl) ? decl.parent : decl.parent.parent;
-                }
-                const s = getSymbolOfNode(decl);
-                if (s && hasEntries(s.exports)) {
-                    mergeSymbolTable(exports, s.exports);
-                }
+                });
                 return createAnonymousType(symbol, exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+            }
+        }
+
+        function forEachDeclarationInChain(decl: Node, merge: (s: Symbol) => void): void {
+            while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
+                const s = getSymbolOfNode(isBinaryExpression(decl) ? decl.left : decl);
+                if (s) {
+                    merge(s);
+                }
+                decl = isBinaryExpression(decl) ? decl.parent : decl.parent.parent;
+            }
+            const s = getSymbolOfNode(decl);
+            if (s) {
+                merge(s);
             }
         }
 
@@ -5129,28 +5165,26 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                const jsDeclaration = getDeclarationOfJSInitializer(symbol.valueDeclaration);
-                if (jsDeclaration) {
-                    const jsSymbol = getSymbolOfNode(jsDeclaration);
-                    if (jsSymbol && (hasEntries(jsSymbol.exports) || hasEntries(jsSymbol.members))) {
-                        symbol = cloneSymbol(symbol);
-                        // note:we overwrite links because we just cloned the symbol
-                        links = symbol as TransientSymbol;
-                        if (hasEntries(jsSymbol.exports)) {
+                const decl: Node = symbol.valueDeclaration;
+                if (isInJavaScriptFile(decl) && (isFunctionExpression(decl) || isClassExpression(decl) || isArrowFunction(decl))) {
+                    symbol = cloneSymbol(symbol);
+                    links = symbol as TransientSymbol;
+                    forEachDeclarationInChain(decl.parent, s => {
+                        if (s && hasEntries(s.exports)) {
                             symbol.exports = symbol.exports || createSymbolTable();
-                            mergeSymbolTable(symbol.exports, jsSymbol.exports);
+                            mergeSymbolTable(symbol.exports, s.exports);
                         }
-                        if (hasEntries(jsSymbol.members)) {
+                        if (s && hasEntries(s.members)) {
                             symbol.members = symbol.members || createSymbolTable();
-                            mergeSymbolTable(symbol.members, jsSymbol.members);
+                            mergeSymbolTable(symbol.members, s.members);
                         }
-                    }
+                    });
                 }
                 if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
-                else if (symbol.valueDeclaration.kind === SyntaxKind.BinaryExpression ||
-                         symbol.valueDeclaration.kind === SyntaxKind.PropertyAccessExpression && symbol.valueDeclaration.parent.kind === SyntaxKind.BinaryExpression) {
+                else if (decl.kind === SyntaxKind.BinaryExpression ||
+                    decl.kind === SyntaxKind.PropertyAccessExpression && decl.parent.kind === SyntaxKind.BinaryExpression) {
                     links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else {

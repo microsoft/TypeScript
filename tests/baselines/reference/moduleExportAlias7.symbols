@@ -1,0 +1,38 @@
+=== tests/cases/conformance/salsa/use.js ===
+var w = require('./bug24754')
+>w : Symbol(w, Decl(use.js, 0, 3))
+>require : Symbol(require)
+>'./bug24754' : Symbol("tests/cases/conformance/salsa/bug24754", Decl(bug24754.js, 0, 0))
+
+var n = w.version * w.WebpackOptionsDefaulter * w.n
+>n : Symbol(n, Decl(use.js, 1, 3))
+>w.version : Symbol(version, Decl(bug24754.js, 2, 35))
+>w : Symbol(w, Decl(use.js, 0, 3))
+>version : Symbol(version, Decl(bug24754.js, 2, 35))
+>w.WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 3, 23))
+>w : Symbol(w, Decl(use.js, 0, 3))
+>WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 3, 23))
+>w.n : Symbol(n, Decl(bug24754.js, 1, 39))
+>w : Symbol(w, Decl(use.js, 0, 3))
+>n : Symbol(n, Decl(bug24754.js, 1, 39))
+
+=== tests/cases/conformance/salsa/bug24754.js ===
+// #24754
+const webpack = (function () { return { n: 12 } })()
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
+>n : Symbol(n, Decl(bug24754.js, 1, 39))
+
+exports = module.exports = webpack;
+>exports : Symbol("tests/cases/conformance/salsa/bug24754", Decl(bug24754.js, 0, 0))
+>module : Symbol(export=, Decl(bug24754.js, 2, 9))
+>exports : Symbol(export=, Decl(bug24754.js, 2, 9))
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
+
+exports.version = 1001;
+>exports.version : Symbol(version, Decl(bug24754.js, 2, 35))
+>exports : Symbol(version, Decl(bug24754.js, 2, 35))
+>version : Symbol(version, Decl(bug24754.js, 2, 35))
+
+webpack.WebpackOptionsDefaulter = 1111;
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
+

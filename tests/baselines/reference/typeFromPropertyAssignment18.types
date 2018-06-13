@@ -3,12 +3,15 @@ var GLOBSTAR = m.GLOBSTAR = {}
 >GLOBSTAR : { [x: string]: any; q: number; p: number; }
 >m.GLOBSTAR = {} : { [x: string]: any; q: number; p: number; }
 >m.GLOBSTAR : { [x: string]: any; q: number; p: number; }
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
+>m : { (): number; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
 >GLOBSTAR : { [x: string]: any; q: number; p: number; }
 >{} : { [x: string]: any; }
 
 function m() {
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
+>m : { (): number; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
+
+    return 11
+>11 : 11
 }
 GLOBSTAR.p = 1
 >GLOBSTAR.p = 1 : 1
@@ -21,7 +24,7 @@ m.GLOBSTAR.q = 2
 >m.GLOBSTAR.q = 2 : 2
 >m.GLOBSTAR.q : number
 >m.GLOBSTAR : { [x: string]: any; q: number; p: number; }
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
+>m : { (): number; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
 >GLOBSTAR : { [x: string]: any; q: number; p: number; }
 >q : number
 >2 : 2
@@ -39,14 +42,71 @@ GLOBSTAR.q
 m.GLOBSTAR.p
 >m.GLOBSTAR.p : number
 >m.GLOBSTAR : { [x: string]: any; q: number; p: number; }
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
+>m : { (): number; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
 >GLOBSTAR : { [x: string]: any; q: number; p: number; }
 >p : number
 
 m.GLOBSTAR.q
 >m.GLOBSTAR.q : number
 >m.GLOBSTAR : { [x: string]: any; q: number; p: number; }
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
+>m : { (): number; GLOBSTAR: { [x: string]: any; q: number; p: number; }; }
 >GLOBSTAR : { [x: string]: any; q: number; p: number; }
+>q : number
+
+var snd = f.snd = function() {
+>snd : { (): number; q: number; p: number; }
+>f.snd = function() {    return 101} : { (): number; q: number; p: number; }
+>f.snd : { (): number; q: number; p: number; }
+>f : { (): number; snd: { (): number; q: number; p: number; }; }
+>snd : { (): number; q: number; p: number; }
+>function() {    return 101} : { (): number; q: number; p: number; }
+
+    return 101
+>101 : 101
+}
+function f() {
+>f : { (): number; snd: { (): number; q: number; p: number; }; }
+
+    return 1001
+>1001 : 1001
+}
+snd.p = 3
+>snd.p = 3 : 3
+>snd.p : number
+>snd : { (): number; q: number; p: number; }
+>p : number
+>3 : 3
+
+f.snd.q = 4
+>f.snd.q = 4 : 4
+>f.snd.q : number
+>f.snd : { (): number; q: number; p: number; }
+>f : { (): number; snd: { (): number; q: number; p: number; }; }
+>snd : { (): number; q: number; p: number; }
+>q : number
+>4 : 4
+
+snd.p
+>snd.p : number
+>snd : { (): number; q: number; p: number; }
+>p : number
+
+snd.q
+>snd.q : number
+>snd : { (): number; q: number; p: number; }
+>q : number
+
+f.snd.p
+>f.snd.p : number
+>f.snd : { (): number; q: number; p: number; }
+>f : { (): number; snd: { (): number; q: number; p: number; }; }
+>snd : { (): number; q: number; p: number; }
+>p : number
+
+f.snd.q
+>f.snd.q : number
+>f.snd : { (): number; q: number; p: number; }
+>f : { (): number; snd: { (): number; q: number; p: number; }; }
+>snd : { (): number; q: number; p: number; }
 >q : number
 

@@ -1,0 +1,64 @@
+=== tests/cases/conformance/salsa/use.js ===
+var w = require('./bug24754')
+>w : typeof webpack & { [x: string]: any; version: number; }
+>require('./bug24754') : typeof webpack & { [x: string]: any; version: number; }
+>require : any
+>'./bug24754' : "./bug24754"
+
+var p = new w();
+>p : webpack
+>new w() : webpack
+>w : typeof webpack & { [x: string]: any; version: number; }
+
+var n = w.version * w.WebpackOptionsDefaulter * p.x
+>n : number
+>w.version * w.WebpackOptionsDefaulter * p.x : number
+>w.version * w.WebpackOptionsDefaulter : number
+>w.version : number
+>w : typeof webpack & { [x: string]: any; version: number; }
+>version : number
+>w.WebpackOptionsDefaulter : number
+>w : typeof webpack & { [x: string]: any; version: number; }
+>WebpackOptionsDefaulter : number
+>p.x : number
+>p : webpack
+>x : number
+
+=== tests/cases/conformance/salsa/bug24754.js ===
+// #24754
+const webpack = class {
+>webpack : typeof webpack & { [x: string]: any; version: number; }
+>class {    constructor() {        this.x = 1    }} : typeof webpack
+
+    constructor() {
+        this.x = 1
+>this.x = 1 : 1
+>this.x : number
+>this : this
+>x : number
+>1 : 1
+    }
+}
+exports = module.exports = webpack;
+>exports = module.exports = webpack : typeof webpack
+>exports : typeof import("tests/cases/conformance/salsa/bug24754")
+>module.exports = webpack : typeof webpack
+>module.exports : any
+>module : any
+>exports : any
+>webpack : typeof webpack
+
+exports.version = 1001;
+>exports.version = 1001 : 1001
+>exports.version : number
+>exports : typeof import("tests/cases/conformance/salsa/bug24754")
+>version : number
+>1001 : 1001
+
+webpack.WebpackOptionsDefaulter = 1111;
+>webpack.WebpackOptionsDefaulter = 1111 : 1111
+>webpack.WebpackOptionsDefaulter : number
+>webpack : typeof webpack
+>WebpackOptionsDefaulter : number
+>1111 : 1111
+

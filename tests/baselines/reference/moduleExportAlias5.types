@@ -1,17 +1,40 @@
+=== tests/cases/conformance/salsa/use.js ===
+var w = require('./bug24754')
+>w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>require('./bug24754') : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>require : any
+>'./bug24754' : "./bug24754"
+
+var n = w.version * w.WebpackOptionsDefaulter * w()
+>n : number
+>w.version * w.WebpackOptionsDefaulter * w() : number
+>w.version * w.WebpackOptionsDefaulter : number
+>w.version : number
+>w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>version : number
+>w.WebpackOptionsDefaulter : number
+>w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>WebpackOptionsDefaulter : number
+>w() : number
+>w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+
 === tests/cases/conformance/salsa/bug24754.js ===
 // #24754
 const webpack = function (){
->webpack : { (): void; WebpackOptionsDefaulter: number; }
->function (){} : { (): void; WebpackOptionsDefaulter: number; }
+>webpack : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>function (){    return 1;} : { (): number; WebpackOptionsDefaulter: number; }
+
+    return 1;
+>1 : 1
 }
 exports = module.exports = webpack;
->exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
+>exports = module.exports = webpack : { (): number; WebpackOptionsDefaulter: number; }
 >exports : typeof import("tests/cases/conformance/salsa/bug24754")
->module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
+>module.exports = webpack : { (): number; WebpackOptionsDefaulter: number; }
 >module.exports : any
 >module : any
 >exports : any
->webpack : { (): void; WebpackOptionsDefaulter: number; }
+>webpack : { (): number; WebpackOptionsDefaulter: number; }
 
 exports.version = 1001;
 >exports.version = 1001 : 1001
@@ -23,7 +46,7 @@ exports.version = 1001;
 webpack.WebpackOptionsDefaulter = 1111;
 >webpack.WebpackOptionsDefaulter = 1111 : 1111
 >webpack.WebpackOptionsDefaulter : number
->webpack : { (): void; WebpackOptionsDefaulter: number; }
+>webpack : { (): number; WebpackOptionsDefaulter: number; }
 >WebpackOptionsDefaulter : number
 >1111 : 1111
 
