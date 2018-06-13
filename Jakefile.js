@@ -149,7 +149,6 @@ task(TaskNames.scripts, [TaskNames.coreBuild], function() {
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task(TaskNames.lkg, [
-    TaskNames.clean,
     TaskNames.scripts,
     TaskNames.release,
     TaskNames.local,
@@ -217,9 +216,8 @@ task(TaskNames.configureNightly, [TaskNames.scripts], function () {
 }, { async: true });
 
 desc("Configure, build, test, and publish the nightly release.");
-task(TaskNames.publishNightly, [TaskNames.configureNightly, TaskNames.lkg, "setDebugMode", "runtests-parallel"], function () {
+task(TaskNames.publishNightly, [TaskNames.coreBuild, TaskNames.configureNightly, TaskNames.lkg, "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag next";
-    console.log(cmd);
     exec(cmd, () => complete());
 }, { async: true });
 
@@ -229,9 +227,8 @@ task(TaskNames.configureInsiders, [TaskNames.scripts], function () {
 }, { async: true });
 
 desc("Configure, build, test, and publish the insiders release.");
-task(TaskNames.publishInsiders, [TaskNames.configureInsiders, TaskNames.lkg, "setDebugMode", "runtests-parallel"], function () {
+task(TaskNames.publishInsiders, [TaskNames.coreBuild, TaskNames.configureInsiders, TaskNames.lkg, "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag insiders";
-    console.log(cmd);
     exec(cmd, () => complete());
 }, { async: true });
 

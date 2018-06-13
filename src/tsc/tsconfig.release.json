@@ -6,6 +6,7 @@
         "preserveConstEnums": false,
         "declaration": false,
         "declarationMap": false,
+        "sourceMap": false,
         "composite": false
     },
     "files": [
