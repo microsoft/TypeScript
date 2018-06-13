@@ -44,6 +44,7 @@ scripts/configurePrerelease.js
 scripts/open-user-pr.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
+scripts/produceLKG.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 scripts/generateLocalizedDiagnosticMessages.js
 scripts/*.js.map
