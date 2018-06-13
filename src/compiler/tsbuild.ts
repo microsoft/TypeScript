@@ -422,7 +422,7 @@ namespace ts {
         }
     ];
 
-    export function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System) {
+    export function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number {
         let verbose = false;
         let dry = false;
         let force = false;
@@ -455,7 +455,8 @@ namespace ts {
                 case "--?":
                 case "-?":
                 case "--help":
-                    return printHelp(buildOpts, "--build ");
+                    printHelp(buildOpts, "--build ");
+                    return ExitStatus.Success;
             }
             // Not a flag, parse as filename
             addProject(arg);
@@ -463,16 +464,20 @@ namespace ts {
 
         // Nonsensical combinations
         if (clean && force) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (clean && verbose) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (clean && watch) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (watch && dry) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
 
         if (projects.length === 0) {
@@ -482,14 +487,15 @@ namespace ts {
 
         const builder = createSolutionBuilder(compilerHost, buildHost, projects, { dry, force, verbose }, system);
         if (clean) {
-            builder.cleanAllProjects();
+            return builder.cleanAllProjects();
         }
         else {
-            builder.buildAllProjects();
+            return builder.buildAllProjects();
         }
 
         if (watch) {
-            return builder.startWatching();
+            builder.startWatching();
+            return ExitStatus.Success;            
         }
 
         function addProject(projectSpecification: string) {
@@ -503,7 +509,6 @@ namespace ts {
                 return buildHost.error(Diagnostics.File_0_does_not_exist, fileName);
             }
             projects.push(refPath);
-
         }
     }
 
@@ -776,7 +781,7 @@ namespace ts {
             let usesPrepend = false;
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
-                    usesPrepend = usesPrepend || ref.prepend;
+                    usesPrepend = usesPrepend || !!(ref.prepend);
                     const resolvedRef = resolveProjectReferencePath(compilerHost, ref) as ResolvedConfigFileName;
                     const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
 
@@ -835,7 +840,7 @@ namespace ts {
             }
 
             if (usesPrepend) {
-                psuedoUpToDate = false;
+                pseudoUpToDate = false;
             }
 
             // Up to date
@@ -1054,16 +1059,19 @@ namespace ts {
         function cleanAllProjects() {
             const resolvedNames: ReadonlyArray<ResolvedConfigFileName> | undefined = getAllProjectsInScope();
             if (resolvedNames === undefined) {
-                return buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
 
             const filesToDelete = getFilesToClean(resolvedNames);
             if (filesToDelete === undefined) {
-                return buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
 
             if (context.options.dry) {
-                return buildHost.message(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
+                buildHost.message(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
+                return ExitStatus.Success;
             }
 
             // Do this check later to allow --clean --dry to function even if the host can't delete files
@@ -1074,6 +1082,8 @@ namespace ts {
             for (const output of filesToDelete) {
                 compilerHost.deleteFile(output);
             }
+
+            return ExitStatus.Success;
         }
 
         function resolveProjectName(name: string): ResolvedConfigFileName | undefined {
@@ -1101,16 +1111,18 @@ namespace ts {
             return resolvedNames;
         }
 
-        function buildAllProjects() {
+        function buildAllProjects(): number {
             const graph = getGlobalDependencyGraph();
-            if (graph === undefined) return;
+            if (graph === undefined) return ExitStatus.DiagnosticsPresent_OutputsSkipped;
 
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
 
+            let anyFailed = false;
             for (const next of queue) {
                 const proj = configFileCache.parseConfigFile(next);
                 if (proj === undefined) {
+                    anyFailed = true;
                     break;
                 }
                 const status = getUpToDateStatus(proj);
@@ -1142,8 +1154,10 @@ namespace ts {
                     continue;
                 }
 
-                buildSingleProject(next);
+                const buildResult = buildSingleProject(next);
+                anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
+            return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
         /**

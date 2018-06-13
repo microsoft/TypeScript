@@ -58,7 +58,7 @@ namespace ts {
                 message: report,
                 errorDiagnostic: d => reportDiag(d)
             };
-            return performBuild(args.slice(1), createCompilerHost({}), buildHost, sys);
+            return sys.exit(performBuild(args.slice(1), createCompilerHost({}), buildHost, sys));
         }
 
         const commandLine = parseCommandLine(args);
