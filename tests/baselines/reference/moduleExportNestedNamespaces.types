@@ -1,12 +1,12 @@
 === tests/cases/conformance/salsa/mod.js ===
 module.exports.n = {};
->module.exports.n = {} : { [x: string]: any; K: typeof C; }
+>module.exports.n = {} : any
 >module.exports.n : any
 >module.exports : any
 >module : any
 >exports : any
 >n : any
->{} : { [x: string]: any; K: typeof C; }
+>{} : { [x: string]: any; }
 
 module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : typeof C
@@ -54,9 +54,9 @@ var k = new s.n.K()
 >k : C
 >new s.n.K() : C
 >s.n.K : typeof C
->s.n : { [x: string]: any; K: typeof C; }
+>s.n : typeof s.n
 >s : typeof s
->n : { [x: string]: any; K: typeof C; }
+>n : typeof s.n
 >K : typeof C
 
 k.x

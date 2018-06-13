@@ -1,21 +1,21 @@
 === tests/cases/conformance/jsdoc/mod2.js ===
 /** @typedef {number} Foo */
 const ns = {};
->ns : { [x: string]: any; Foo: typeof Foo; }
->{} : { [x: string]: any; Foo: typeof Foo; }
+>ns : typeof ns
+>{} : { [x: string]: any; }
 
 ns.Foo = class {}
 >ns.Foo = class {} : typeof Foo
 >ns.Foo : typeof Foo
->ns : { [x: string]: any; Foo: typeof Foo; }
+>ns : typeof ns
 >Foo : typeof Foo
 >class {} : typeof Foo
 
 module.exports = ns;
->module.exports = ns : { [x: string]: any; Foo: typeof Foo; }
+>module.exports = ns : typeof ns
 >module.exports : any
 >module : any
 >exports : any
->ns : { [x: string]: any; Foo: typeof Foo; }
+>ns : typeof ns
 
 

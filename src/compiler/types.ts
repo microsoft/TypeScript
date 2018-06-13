@@ -371,6 +371,7 @@ namespace ts {
         JSDocCallbackTag,
         JSDocParameterTag,
         JSDocReturnTag,
+        JSDocThisTag,
         JSDocTypeTag,
         JSDocTemplateTag,
         JSDocTypedefTag,
@@ -2321,6 +2322,11 @@ namespace ts {
 
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+
+    export interface JSDocThisTag extends JSDocTag {
+        kind: SyntaxKind.JSDocThisTag;
+        typeExpression?: JSDocTypeExpression;
     }
 
     export interface JSDocTemplateTag extends JSDocTag {
@@ -5255,6 +5261,7 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
+        getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
     }
 
     /** @deprecated See comment on SymbolWriter */

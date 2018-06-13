@@ -475,7 +475,6 @@ namespace ts {
         {
             name: "sourceRoot",
             type: "string",
-            isFilePath: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
@@ -483,7 +482,6 @@ namespace ts {
         {
             name: "mapRoot",
             type: "string",
-            isFilePath: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,

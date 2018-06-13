@@ -4,7 +4,6 @@
 ////{
 ////    "compilerOptions": {
 ////        "baseUrl": "./old",
-////        "mapRoot": "../src/old",
 ////        "paths": {
 ////            "foo": ["old"],
 ////        },
@@ -25,7 +24,6 @@ verify.getEditsForFileRename({
 `{
     "compilerOptions": {
         "baseUrl": "new",
-        "mapRoot": "new",
         "paths": {
             "foo": ["new"],
         },
