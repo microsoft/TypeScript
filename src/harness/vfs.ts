@@ -127,6 +127,24 @@ namespace vfs {
         }
 
         /**
+         * Snapshots the current file system, effectively shadowing itself. This is useful for
+         * generating file system patches using `.diff()` from one snapshot to the next. Performs
+         * no action if this file system is read-only.
+         */
+        public snapshot() {
+            if (this.isReadonly) return;
+            const fs = new FileSystem(this.ignoreCase, { time: this._time });
+            fs._lazy = this._lazy;
+            fs._cwd = this._cwd;
+            fs._time = this._time;
+            fs._shadowRoot = this._shadowRoot;
+            fs._dirStack = this._dirStack;
+            fs.makeReadonly();
+            this._lazy = {};
+            this._shadowRoot = fs;
+        }
+
+        /**
          * Gets a shadow copy of this file system. Changes to the shadow copy do not affect the
          * original, allowing multiple copies of the same core file system without multiple copies
          * of the same data.
