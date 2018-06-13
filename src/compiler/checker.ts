@@ -10152,21 +10152,21 @@ namespace ts {
                 return Ternary.True;
             }
 
-            const sourceCount = getParameterCount(source);
             const targetCount = getParameterCount(target);
             if (!hasEffectiveRestParameter(target) && getMinArgumentCount(source) > targetCount) {
-                return Ternary.False;
-            }
-
-            const sourceRestTypeParameter = getRestTypeParameter(source);
-            const targetRestTypeParameter = sourceRestTypeParameter ? getRestTypeParameter(target) : undefined;
-            if (sourceRestTypeParameter && !(targetRestTypeParameter && sourceCount === targetCount)) {
                 return Ternary.False;
             }
 
             if (source.typeParameters && source.typeParameters !== target.typeParameters) {
                 target = getCanonicalSignature(target);
                 source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
+            }
+
+            const sourceCount = getParameterCount(source);
+            const sourceRestTypeParameter = getRestTypeParameter(source);
+            const targetRestTypeParameter = sourceRestTypeParameter ? getRestTypeParameter(target) : undefined;
+            if (sourceRestTypeParameter && !(targetRestTypeParameter && sourceCount === targetCount)) {
+                return Ternary.False;
             }
 
             const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
@@ -12374,27 +12374,34 @@ namespace ts {
 
         function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
             const sourceCount = getParameterCount(source);
-            const targetRest = getRestTypeParameter(target);
-            const paramCount = targetRest ? Math.min(getParameterCount(target) - 1, sourceCount) : sourceCount;
+            const targetCount = getParameterCount(target);
+            const sourceHasRest = hasEffectiveRestParameter(source);
+            const targetHasRest = hasEffectiveRestParameter(target);
+            const maxCount = sourceHasRest && targetHasRest ? Math.max(sourceCount, targetCount) :
+                sourceHasRest ? targetCount :
+                targetHasRest ? sourceCount :
+                Math.min(sourceCount, targetCount);
+            const targetRestTypeVariable = getRestTypeParameter(target);
+            const paramCount = targetRestTypeVariable ? Math.min(targetCount - 1, maxCount) : maxCount;
             for (let i = 0; i < paramCount; i++) {
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
-            if (targetRest) {
-                const sourceRest = getRestTypeParameter(source);
-                if (sourceRest && paramCount === sourceCount - 1) {
-                    callback(sourceRest, targetRest);
+            if (targetRestTypeVariable) {
+                const sourceRestTypeVariable = getRestTypeParameter(source);
+                if (sourceRestTypeVariable && paramCount === sourceCount - 1) {
+                    callback(sourceRestTypeVariable, targetRestTypeVariable);
                 }
                 else {
                     const types = [];
                     const names = [];
-                    for (let i = paramCount; i < sourceCount; i++) {
+                    for (let i = paramCount; i < maxCount; i++) {
                         types.push(getTypeAtPosition(source, i));
                         names.push(getParameterNameAtPosition(source, i));
                     }
                     const minArgumentCount = getMinArgumentCount(source);
                     const minLength = minArgumentCount < paramCount ? 0 : minArgumentCount - paramCount;
-                    const rest = hasEffectiveRestParameter(source) ? createArrayType(getUnionType(types)) : createTupleType(types, minLength, names);
-                    callback(rest, targetRest);
+                    const rest = sourceHasRest ? createArrayType(getUnionType(types)) : createTupleType(types, minLength, names);
+                    callback(rest, targetRestTypeVariable);
                 }
             }
         }
@@ -17824,9 +17831,10 @@ namespace ts {
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper?: TypeMapper, compareTypes?: TypeComparer): Signature {
             const context = createInferenceContext(signature.typeParameters!, signature, InferenceFlags.InferUnionTypes, compareTypes);
-            forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
+            const sourceSignature = contextualMapper ? instantiateSignature(contextualSignature, contextualMapper) : contextualSignature;
+            forEachMatchingParameterType(sourceSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypes(context.inferences, instantiateType(source, contextualMapper || identityMapper), target);
+                inferTypes(context.inferences, source, target);
             });
             if (!contextualMapper) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
