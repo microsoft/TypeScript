@@ -78,9 +78,9 @@ Paths.library = "src/lib";
 Paths.srcServer = "src/server";
 Paths.scripts = {};
 Paths.scripts.generateLocalizedDiagnosticMessages = "scripts/generateLocalizedDiagnosticMessages.js";
-Paths.scripts.processDiagnosticMessagesJs = "scripts/processDiagnosticMessages.js";
+Paths.scripts.processDiagnosticMessages = "scripts/processDiagnosticMessages.js";
 Paths.scripts.produceLKG = "scripts/produceLKG.js";
-Paths.scripts.configurePrereleaseJs = "scripts/configurePrelease.js";
+Paths.scripts.configurePrerelease = "scripts/configurePrerelease.js";
 Paths.packageJson = "package.json";
 Paths.versionFile = "src/compiler/core.ts";
 
@@ -140,7 +140,7 @@ desc("Builds the library targets");
 task(TaskNames.lib, libraryTargets);
 
 desc("Builds internal scripts");
-task(TaskNames.scripts, [], function() {
+task(TaskNames.scripts, [TaskNames.coreBuild], function() {
     tsbuild([ConfigFileFor.scripts], false, () => {
         complete();
     });
@@ -149,7 +149,7 @@ task(TaskNames.scripts, [], function() {
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task(TaskNames.lkg, [
-    // TaskNames.clean,
+    TaskNames.clean,
     TaskNames.scripts,
     TaskNames.release,
     TaskNames.local,
@@ -158,7 +158,6 @@ task(TaskNames.lkg, [
     ...libraryTargets
 ], () => {
     const sizeBefore = getDirSize(Paths.lkg);
-    const localizationTargets = locales.map(f => path.join(Paths.builtLocal, f)).concat(path.dirname(Paths.locLcg));
 
     exec(`${host} ${Paths.scripts.produceLKG}`, () => {
         const sizeAfter = getDirSize(Paths.lkg);
@@ -213,29 +212,28 @@ task('diff-rwc', function () {
 }, { async: true });
 
 task(TaskNames.configureNightly, [TaskNames.scripts], function () {
-    const cmd = `${host} ${Paths.scripts.configurePrelease} dev ${Paths.packageJson} ${Paths.versionFile}`;
+    const cmd = `${host} ${Paths.scripts.configurePrerelease} dev ${Paths.packageJson} ${Paths.versionFile}`;
     exec(cmd, () => complete());
 }, { async: true });
 
 desc("Configure, build, test, and publish the nightly release.");
-task(TaskNames.publishNightly, [TaskNames.configureNightly, TaskNames.lkg, TaskNames.clean, "setDebugMode", "runtests-parallel"], function () {
+task(TaskNames.publishNightly, [TaskNames.configureNightly, TaskNames.lkg, "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag next";
     console.log(cmd);
-    exec(cmd);
-});
+    exec(cmd, () => complete());
+}, { async: true });
 
 task(TaskNames.configureInsiders, [TaskNames.scripts], function () {
-    const cmd = `${host} ${Paths.scripts.configurePrelease} insiders ${Paths.packageJson} ${Paths.versionFile}`;
+    const cmd = `${host} ${Paths.scripts.configurePrerelease} insiders ${Paths.packageJson} ${Paths.versionFile}`;
     exec(cmd, () => complete());
 }, { async: true });
 
 desc("Configure, build, test, and publish the insiders release.");
-task(TaskNames.publishInsiders, [TaskNames.configureInsiders, TaskNames.lkg, TaskNames.clean, "setDebugMode", "runtests-parallel"], function () {
+task(TaskNames.publishInsiders, [TaskNames.configureInsiders, TaskNames.lkg, "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag insiders";
     console.log(cmd);
-    exec(cmd);
-});
-
+    exec(cmd, () => complete());
+}, { async: true });
 
 desc("Sets the release mode flag");
 task("release", function () {
@@ -308,7 +306,7 @@ file(Paths.generatedLCGFile, [TaskNames.scripts, Paths.diagnosticInformationMap,
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(Paths.diagnosticInformationMap, [Paths.diagnosticMessagesJson], function () {
     tsbuild(ConfigFileFor.scripts, false, () => {
-        const cmd = `${host} ${Paths.scripts.processDiagnosticMessagesJs} ${Paths.diagnosticMessagesJson}`;
+        const cmd = `${host} ${Paths.scripts.processDiagnosticMessages} ${Paths.diagnosticMessagesJson}`;
         exec(cmd, complete);
     });
 }, { async: true });
