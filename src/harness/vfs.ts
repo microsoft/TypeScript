@@ -1352,20 +1352,12 @@ namespace vfs {
 
     /** Removes a directory in a `FileSet` */
     export class Rmdir {
-        private _rmdirBrand?: never; // brand necessary for proper type guards
+        public _rmdirBrand?: never; // brand necessary for proper type guards
     }
 
     /** Unlinks a file in a `FileSet` */
     export class Unlink {
-        private _unlinkBrand?: never; // brand necessary for proper type guards
-    }
-
-    // prevents compiler errors due to unused brand properties
-    if (!0) {
-        // tslint:disable-next-line:no-string-literal
-        ignoreUnused(Rmdir.prototype["_rmdirBrand"]);
-        // tslint:disable-next-line:no-string-literal
-        ignoreUnused(Unlink.prototype["_unlinkBrand"]);
+        public _unlinkBrand?: never; // brand necessary for proper type guards
     }
 
     /** Extended options for a symbolic link in a `FileSet` */
@@ -1549,7 +1541,5 @@ namespace vfs {
         }
         return text;
     }
-
-    function ignoreUnused(_: void) { /*empty*/ }
 }
 // tslint:enable:no-null-keyword

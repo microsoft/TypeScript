@@ -398,7 +398,7 @@ namespace ts {
         const resolver = vfs.createResolver(Harness.IO);
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files: {
-                ["/lib"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), "built/local"), patchResolver(resolver)),
+                ["/lib"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), "built/local"), resolver),
                 ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
             },
             cwd: "/",
@@ -407,15 +407,5 @@ namespace ts {
         });
         fs.makeReadonly();
         return fs;
-        function patchResolver(resolver: vfs.FileSystemResolver): vfs.FileSystemResolver {
-            const allowedFiles = ["lib.d.ts", "lib.dom.d.ts", "lib.es5.d.ts", "lib.scripthost.d.ts", "lib.webworker.importscripts.d.ts"];
-            return {
-                ...resolver,
-                readdirSync(path: string) {
-                    const files = resolver.readdirSync(path);
-                    return files.filter(file => allowedFiles.indexOf(file) !== -1);
-                }
-            };
-        }
     }
 }
