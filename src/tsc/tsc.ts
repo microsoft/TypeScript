@@ -58,7 +58,14 @@ namespace ts {
                 message: report,
                 errorDiagnostic: d => reportDiag(d)
             };
-            return sys.exit(performBuild(args.slice(1), createCompilerHost({}), buildHost, sys));
+            const result = performBuild(args.slice(1), createCompilerHost({}), buildHost, sys);
+            // undefined = in watch mode, do not exit
+            if (result !== undefined) {
+                return sys.exit(result);
+            }
+            else {
+                return;
+            }
         }
 
         const commandLine = parseCommandLine(args);
