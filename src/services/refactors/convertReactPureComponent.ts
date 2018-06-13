@@ -23,27 +23,86 @@ namespace ts.refactor.convertReactPureComponent {
 
     /**
      * This refactor follows this rule.
-     * * Is optional.
+     * 0. [ ] Continue if we are in a .jsx or .tsx file.
+     * 1. [ ] Get the current JSX config (reactNamespace, jsxFactory, jsx).
+     *            Continue if there is a JSX provider
+     *            ? It's better be React, ReactNative and Preact ?
+     * 2. [ ] Continue if the selection include a SFCLikeDeclaration | ClassLikeDeclaration
+     *        [ ] and the declaration is the direct child of the current SourceFile
+     *        [ ] and we can find the name (Class name, or variable name) in the declaration
      *
-     * 1. [x] Check if JSX Factory is React. If not, no actions will be provided
-     * 2. [x] If the selection is a function declaration of type `React.SFC`
-     *        [ ] Provide an action to convert it to `React.PureComponent`
-     *        [ ] * Make a function with 1 to 2 arguments (treat as props & context)
-     *              and explicit returnType T and T subtypeable to React.Element also convertible
-     * 3. [x] If the selection is a subclass of `React.Component` or `React.PureComponent`
-     *        [x] and if it satisifies `isConvertableClass()`
-     *        [ ] Provide an action to convert it to `React.SFC` or `React.PureComponent` (if it is `React.Component`)
-     * 4. [x] Resolve React by `getReferenceToReact()`
-     * 5. [ ] * Also support `propTypes`, `contextTypes`, `defaultProps`, `displayName` (Only Class -> Function)
-     * 6. [ ] * Also support convert of reference to `this.context` (in both ways)
+     * For ClassLikeDeclaration detection:
+     * A. [ ] Continue if the declaration is a subclass of `PureComponent` or `Component`
+     * B. [ ] Continue if there is no reference to `this.state` or `this.setState`
+     * C. [ ] Continue if there is no any property more than listed below
+     *            [ ] `render`
+     *            [ ] static `propTypes`
+     *            [ ] static `contextTypes`
+     *            [ ] static `defaultProps`
+     *            [ ] static `displayName`
+     *            [ ] static `childContextTypes`
+     * D. [ ] Continue if the `render` method is not invalid
+     * E. [ ] Provide an action, Convert `PureComponent` or `Component` to SFC
+     *
+     * For SFCLikeDeclaration detection:
+     * a. [ ] Goto c, if the selection is a function declaration of type `React.SFC`.
+     * b. [ ] Continue if we guess the selection is an SFC
+     *            In @types/react, ReactNode is =
+     *                ReactElement<any> | ReactText (number | string) // ReactChild
+     *                | {} | ReactNode[] // ReactFragment
+     *                | { key: Key | null; children: ReactNode; } // ReactPortal
+     *                | string
+     *                | number | boolean | null | undefined
+     *         define type MeaningfulReactNode =
+     *                     ReactElement<any> | MeaningfulReactNode[] | ReactPortal | string
+     *         Guess as follow rules.
+     *             [ ] i. Check all return path, make then an union undefined
+     *             [ ] ii. Continue if parameters length < 3 (props?, context?)
+     *             [ ] iii. Continue if all of member of U is compatiable with ReactNode
+     *             [ ] iv. Continue if there is MeaningfulReactNode in U
+     *             [ ] v. Continue if there is no reference to `this`
+     *             [ ] vi. This is an SFC
+     * c. [ ] Continue if there is a body
+     * c. [ ] Provide an action, Convert SFC to `PureComponent` or `Component`
+     *
+     * For ClassLikeDeclaration transformation:
+     * A. [ ] Get the Class `C`, get the class name `Name` (by ClassDeclaration, or variable declaration)
+     * B. [ ] Collect the properties below
+     *            [ ] `render`
+     *            [ ] static `propTypes`?
+     *            [ ] static `contextTypes`?
+     *            [ ] static `defaultProps`?
+     *            [ ] static `displayName`?
+     *            [ ] static `childContextTypes`?
+     * C. [ ] Replace
+     *        [ ] all `this.props` to `props` in `render`,
+     *        [ ] all `this.context` to `context` in `render`,
+     *        [ ] and make sure there is no name conflict in the current lexical scope
+     *        [ ] if there is, generate a random name other than `props` and `context`?
+     * D. [ ] Create a FunctionDeclaration `F` named `Name`, with body `render`
+     *        [ ] In .tsx file, add type annoation
+     *        [ ] In .jsx file, add JSDoc Type annoation?
+     * E. [ ] For those static properties, add something like `Name`.propTypes = ...
+     * F. [ ] Replace `C` with `F`
+     *
+     * For SFCLikeDeclaration transformation:
+     * A. [ ] Get the SFC `F`, get the class name `Name` (by FunctionDeclaration, or variable declaration)
+     * B. [ ] Collect the properties below
+     *            [ ] function body as `render`
+     * C. [ ] Replace
+     *        [ ] first parameter to `this.props` in `render`,
+     *        [ ] second parameter to `this.context` in `render`,
+     * D. [ ] Create a ClassDeclaration `C` named `Name` extends (React|Preact).PureComponent
+     *        [ ] In .tsx file, add type arguments `T` if `F` is typed `(React|Preact).(Pure)?Component<T>`
+     * E. [ ] Replace `F` with `C`
      */
 
     registerRefactor(refactorName, {
         getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-            // if (!checkJSXFactoryIsReact(context.host)) return;
-            if (!getReferenceToReact(context.file)) return;
+            // if (!checkJSXFactoryIsReact(context.host)) return undefined;
+            if (!getReferenceToReact(context.file)) return undefined;
             const node = getSelectedNode(context);
-            if (!node) { return; }
+            if (!node) { return undefined; }
 
             if (isConvertibleReactClassComponent(node, context.file)) {
                 // const description = Diagnostics.???
@@ -73,7 +132,7 @@ namespace ts.refactor.convertReactPureComponent {
             else if (actionName === actionNameComponentToSFC) {
                 return transformComponentToSFC(isConvertibleReactClassComponent(node, context.file)!, context);
             }
-            return;
+            return undefined;
         }
     });
 
@@ -105,9 +164,9 @@ namespace ts.refactor.convertReactPureComponent {
         } as any;
         let importClause: ImportClause;
         sourcefile.forEachChild(c => {
-            if (!isImportDeclaration(c)) { return; }
-            if (!c.importClause) { return; }
-            if ((c.moduleSpecifier as StringLiteral).text !== "react") { return; }
+            if (!isImportDeclaration(c)) { return undefined; }
+            if (!c.importClause) { return undefined; }
+            if ((c.moduleSpecifier as StringLiteral).text !== "react") { return undefined; }
             const { name, namedBindings } = c.importClause;
             importClause = c.importClause;
             const names: (keyof typeof result)[] = ["Component", "PureComponent", "SFC", "StatelessComponent"];
@@ -147,16 +206,14 @@ namespace ts.refactor.convertReactPureComponent {
     }
 
     function isReactSFCDeclaration(node: Node, sourcefile: SourceFile): Component | undefined {
-        if (!isSFCLikeDeclaration(node)) { return; }
-        if (node.asteriskToken) { return; }
-        if (!node.body) { return; }
+        if (!isSFCLikeDeclaration(node) || node.asteriskToken || !node.body) { return undefined; }
 
         // TODO: Should also check the actual type insteadof only receive explicit typed
         const typeNode = node.type;
-        if (!typeNode) { return; }
+        if (!typeNode) { return undefined; }
         const binding = getReferenceToReact(sourcefile)!;
         const type = removeEmpty(typeNode.getFullText(sourcefile));
-        if (type !== binding.SFC && type !== binding.Component) { return; }
+        if (type !== binding.SFC && type !== binding.Component) { return undefined; }
 
         let propsType: TypeNode | undefined;
         if (isTypeReferenceNode(typeNode)) {
@@ -179,7 +236,7 @@ namespace ts.refactor.convertReactPureComponent {
     }
 
     function isConvertibleReactClassComponent(node: Node, sourcefile: SourceFile): Component | undefined {
-        if (!isClassLike(node)) { return; }
+        if (!isClassLike(node)) { return undefined; }
         /** Check if expression is a React Component Class, then get its name and PropType */
         function isReactComponentClass(expression: ClassLikeDeclaration, sourcefile: SourceFile) {
             let is = false;
@@ -207,7 +264,7 @@ namespace ts.refactor.convertReactPureComponent {
             return undefined;
         }
         const ircs = isReactComponentClass(node, sourcefile);
-        if (!ircs) return;
+        if (!ircs) return undefined;
         /**
          * 1. If have any property than `render`, return false
          * 2. If have reference to `setState` or `state`, return false
@@ -237,7 +294,7 @@ namespace ts.refactor.convertReactPureComponent {
             return { convertable, render: render! };
         }
         const icc = isConvertibleComponent(node, sourcefile);
-        if (!icc.convertable) return;
+        if (!icc.convertable) return undefined;
         return { name: ircs.name, propsType: ircs.propsType, render: icc.render, originNode: node };
     }
 

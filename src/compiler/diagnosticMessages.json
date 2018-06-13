@@ -4314,11 +4314,11 @@
         "category": "Message",
         "code": 95057
     },
-    "Covert React.Component to SFC": {
+    "Convert component to a Stateless Functional Component (SFC)": {
         "category": "Message",
         "code": 95058
     },
-    "Covert React.SFC to PureComponent": {
+    "Convert Stateless Functional Component to a Pure component": {
         "category": "Message",
         "code": 95059
     }
