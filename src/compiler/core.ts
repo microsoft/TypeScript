@@ -19,21 +19,7 @@ namespace ts {
     export interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
-}
 
-/* @internal */
-namespace ts {
-    /* @internal */
-    export type EqualityComparer<T> = (a: T, b: T) => boolean;
-
-    /* @internal */
-    export type Comparer<T> = (a: T, b: T) => Comparison;
-
-    export const enum Comparison {
-        LessThan    = -1,
-        EqualTo     = 0,
-        GreaterThan = 1
-    }
 
     /** ES6 Map interface, only read methods included. */
     export interface ReadonlyMap<T> {
@@ -61,6 +47,21 @@ namespace ts {
     /** Array that is only intended to be pushed to, never read. */
     export interface Push<T> {
         push(...values: T[]): void;
+    }
+}
+
+/* @internal */
+namespace ts {
+    /* @internal */
+    export type EqualityComparer<T> = (a: T, b: T) => boolean;
+
+    /* @internal */
+    export type Comparer<T> = (a: T, b: T) => Comparison;
+
+    export const enum Comparison {
+        LessThan    = -1,
+        EqualTo     = 0,
+        GreaterThan = 1
     }
 
     /** Create a MapLike with good performance. */
