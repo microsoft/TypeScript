@@ -491,6 +491,8 @@ namespace ts {
             case SyntaxKind.JSDocCallbackTag:
                 return visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
+            case SyntaxKind.JSDocThisTag:
+                return visitNode(cbNode, (node as JSDocThisTag).typeExpression);
             case SyntaxKind.JSDocSignature:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -6497,6 +6499,9 @@ namespace ts {
                         case "constructor":
                             tag = parseClassTag(atToken, tagName);
                             break;
+                        case "this":
+                            tag = parseThisTag(atToken, tagName);
+                            break;
                         case "arg":
                         case "argument":
                         case "param":
@@ -6765,6 +6770,15 @@ namespace ts {
                     const tag = <JSDocClassTag>createNode(SyntaxKind.JSDocClassTag, atToken.pos);
                     tag.atToken = atToken;
                     tag.tagName = tagName;
+                    return finishNode(tag);
+                }
+
+                function parseThisTag(atToken: AtToken, tagName: Identifier): JSDocThisTag {
+                    const tag = <JSDocThisTag>createNode(SyntaxKind.JSDocThisTag, atToken.pos);
+                    tag.atToken = atToken;
+                    tag.tagName = tagName;
+                    tag.typeExpression = tryParseTypeExpression();
+                    skipWhitespace();
                     return finishNode(tag);
                 }
 
