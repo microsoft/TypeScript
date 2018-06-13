@@ -5,8 +5,8 @@ function foo(args: { (x): number }[]) {
 >x : Symbol(x, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 22))
 
     return args.length;
->args.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >args : Symbol(args, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 13))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 }
 

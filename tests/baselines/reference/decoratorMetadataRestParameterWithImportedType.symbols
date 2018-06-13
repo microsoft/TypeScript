@@ -30,7 +30,7 @@ import { SomeClass1 } from './aux1';
 
 function annotation(): ClassDecorator {
 >annotation : Symbol(annotation, Decl(main.ts, 1, 36))
->ClassDecorator : Symbol(ClassDecorator, Decl(lib.d.ts, --, --))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
 
     return (target: any): void => { };
 >target : Symbol(target, Decl(main.ts, 4, 12))
@@ -38,7 +38,7 @@ function annotation(): ClassDecorator {
 
 function annotation1(): MethodDecorator {
 >annotation1 : Symbol(annotation1, Decl(main.ts, 5, 1))
->MethodDecorator : Symbol(MethodDecorator, Decl(lib.d.ts, --, --))
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.es5.d.ts, --, --))
 
     return (target: any): void => { };
 >target : Symbol(target, Decl(main.ts, 8, 12))

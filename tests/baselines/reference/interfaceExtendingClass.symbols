@@ -15,7 +15,7 @@ class Foo {
     }
     [x: string]: Object;
 >x : Symbol(x, Decl(interfaceExtendingClass.ts, 6, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 interface I extends Foo {

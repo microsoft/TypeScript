@@ -26,3 +26,34 @@ let c, d;
 >d : any
 >{} : {}
 
+// Allowed for non-rest elements
+const [e,] = <any>[];
+>e : any
+><any>[] : any
+>[] : undefined[]
+
+const {f,} = <any>{};
+>f : any
+><any>{} : any
+>{} : {}
+
+let g, h;
+>g : any
+>h : any
+
+([g,] = <any>[]);
+>([g,] = <any>[]) : any
+>[g,] = <any>[] : any
+>[g,] : [any]
+>g : any
+><any>[] : any
+>[] : undefined[]
+
+({h,} = <any>{});
+>({h,} = <any>{}) : any
+>{h,} = <any>{} : any
+>{h,} : { h: any; }
+>h : any
+><any>{} : any
+>{} : {}
+

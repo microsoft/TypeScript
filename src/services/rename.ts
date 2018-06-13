@@ -2,7 +2,7 @@
 namespace ts.Rename {
     export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo {
         const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(normalizePath(defaultLibFileName)));
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
         const renameInfo = node && nodeIsEligibleForRename(node)
             ? getRenameInfoForNode(node, typeChecker, sourceFile, isDefinedInLibraryFile)
             : undefined;

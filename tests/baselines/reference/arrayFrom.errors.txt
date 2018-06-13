@@ -1,7 +1,7 @@
-tests/cases/compiler/arrayFrom.ts(19,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
+tests/cases/compiler/arrayFrom.ts(20,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
   Type 'A' is not assignable to type 'B'.
     Property 'b' is missing in type 'A'.
-tests/cases/compiler/arrayFrom.ts(22,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
+tests/cases/compiler/arrayFrom.ts(23,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
 
 
 ==== tests/cases/compiler/arrayFrom.ts (2 errors) ====
@@ -20,6 +20,7 @@ tests/cases/compiler/arrayFrom.ts(22,7): error TS2322: Type 'A[]' is not assigna
     const inputB: B[] = [];
     const inputALike: ArrayLike<A> = { length: 0 };
     const inputARand = getEither(inputA, inputALike);
+    const inputASet = new Set<A>();
     
     const result1: A[] = Array.from(inputA);
     const result2: A[] = Array.from(inputA.values());
@@ -36,6 +37,8 @@ tests/cases/compiler/arrayFrom.ts(22,7): error TS2322: Type 'A[]' is not assigna
     const result7: B[] = Array.from(inputALike, ({ a }): B => ({ b: a }));
     const result8: A[] = Array.from(inputARand);
     const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
+    const result10: A[] = Array.from(new Set<A>());
+    const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
     
     // if this is written inline, the compiler seems to infer
     // the ?: as always taking the false branch, narrowing to ArrayLike<T>,

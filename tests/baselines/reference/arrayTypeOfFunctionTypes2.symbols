@@ -33,7 +33,7 @@ var r4b = new r3();
 
 var x3: Array<new () => string>;
 >x3 : Symbol(x3, Decl(arrayTypeOfFunctionTypes2.ts, 12, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r5 = x2[1];
 >r5 : Symbol(r5, Decl(arrayTypeOfFunctionTypes2.ts, 13, 3))

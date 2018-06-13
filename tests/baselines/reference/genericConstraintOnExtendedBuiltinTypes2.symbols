@@ -11,7 +11,7 @@ module EndGate {
 }
 
 interface Number extends EndGate.ICloneable { }
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 4, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 4, 1))
 >EndGate.ICloneable : Symbol(EndGate.ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
 >EndGate : Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 16, 1))
 >ICloneable : Symbol(EndGate.ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
@@ -51,7 +51,7 @@ module EndGate.Tweening {
     export class NumberTween extends Tween<Number>{
 >NumberTween : Symbol(NumberTween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 18, 25))
 >Tween : Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 25))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 4, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 4, 1))
 
         constructor(from: number) {
 >from : Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 20, 20))

@@ -85,21 +85,21 @@ let a: A;
 
 let b = a.getB().x.toFixed();
 >b : Symbol(b, Decl(main.ts, 5, 3))
->a.getB().x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>a.getB().x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >a.getB().x : Symbol(B.x, Decl(b.ts, 0, 16))
 >a.getB : Symbol(A.getB, Decl(d.ts, 8, 17))
 >a : Symbol(a, Decl(main.ts, 4, 3))
 >getB : Symbol(A.getB, Decl(d.ts, 8, 17))
 >x : Symbol(B.x, Decl(b.ts, 0, 16))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 let c = a.getCls().y.toLowerCase();
 >c : Symbol(c, Decl(main.ts, 6, 3))
->a.getCls().y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>a.getCls().y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >a.getCls().y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 >a.getCls : Symbol(A.getCls, Decl(e.ts, 6, 17))
 >a : Symbol(a, Decl(main.ts, 4, 3))
 >getCls : Symbol(A.getCls, Decl(e.ts, 6, 17))
 >y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 

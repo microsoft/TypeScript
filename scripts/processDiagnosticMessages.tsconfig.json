@@ -1,20 +1,15 @@
 {
     "compilerOptions": {
         "removeComments": false,
-        "outFile": "processDiagnosticMessages.js",
         "target": "es5",
         "declaration": false,
         "lib": [
             "es6",
             "scripthost"
-        ]
+        ],
+        "types": ["node"]
     },
     "files": [
-        "../src/compiler/types.ts",
-        "../src/compiler/performance.ts",
-        "../src/compiler/core.ts",
-        "../src/compiler/sys.ts",
-
         "processDiagnosticMessages.ts"
     ]
 }
