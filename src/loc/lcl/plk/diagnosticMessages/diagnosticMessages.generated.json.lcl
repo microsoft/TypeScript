@@ -479,12 +479,18 @@
       <Item ItemId=";A_non_dry_build_would_build_project_0_6357" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kompilacja inna niż DRY spowodowałaby skompilowanie projektu „{0}”]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";A_non_dry_build_would_delete_the_following_files_Colon_0_6356" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kompilacja inna niż DRY spowodowałaby usunięcie następujących plików: {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1799,6 +1805,9 @@
       <Item ItemId=";Building_project_0_6358" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Building project '{0}'...]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Trwa kompilowanie projektu „{0}”...]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6308,6 +6317,9 @@
       <Item ItemId=";Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2_6351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Projekt „{0}” jest aktualny, ponieważ najnowsze dane wejściowe „{1}” są starsze niż najstarsze dane wyjściowe „{2}”]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7385,6 +7397,9 @@
       <Item ItemId=";Show_what_would_be_built_or_deleted_if_specified_with_clean_6367" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Show what would be built (or deleted, if specified with '--clean')]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pokaż, co zostanie skompilowane (lub usunięte, jeśli określono opcję „--clean”)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7418,6 +7433,9 @@
       <Item ItemId=";Skipping_clean_because_not_all_projects_could_be_located_6371" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Skipping clean because not all projects could be located]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pomijanie czyszczenia, ponieważ nie można zlokalizować wszystkich projektów]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
