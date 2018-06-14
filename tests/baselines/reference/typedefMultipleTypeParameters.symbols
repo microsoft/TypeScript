@@ -11,14 +11,13 @@
 var tuvwx;
 >tuvwx : Symbol(tuvwx, Decl(a.js, 9, 3))
 
-// TODO: will error when #24592 is fixed
 /** @type {Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>} */
 var wrong;
->wrong : Symbol(wrong, Decl(a.js, 13, 3))
+>wrong : Symbol(wrong, Decl(a.js, 12, 3))
 
 /** @type {Everything<{ a: number  }>} */
 var insufficient;
->insufficient : Symbol(insufficient, Decl(a.js, 16, 3))
+>insufficient : Symbol(insufficient, Decl(a.js, 15, 3))
 
 === tests/cases/conformance/jsdoc/test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
