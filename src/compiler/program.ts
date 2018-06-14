@@ -616,7 +616,7 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        const resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
+        let resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
         const projectReferenceRedirects: Map<string> = createMap();
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
@@ -1190,6 +1190,7 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+            resolvedProjectReferences = oldProgram.getProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsSet = oldProgram.redirectTargetsSet;
@@ -1239,10 +1240,12 @@ namespace ts {
 
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
-                    const jsMap = host.readFile(resolvedRefOpts.options.outFile + ".map"); // TODO: try to read sourceMappingUrl comment from the js file
+                    const jsMapPath = resolvedRefOpts.options.outFile + ".map"; // TODO: try to read sourceMappingUrl comment from the file
+                    const jsMap = host.readFile(jsMapPath);
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const dtsMap = host.readFile(dtsFilename + ".map");
-                    const node = createInputFiles(js, dts, jsMap, dtsMap);
+                    const dtsMapPath = dtsFilename + ".map";
+                    const dtsMap = host.readFile(dtsMapPath);
+                    const node = createInputFiles(js, dts, jsMap && jsMapPath, jsMap, dtsMap && dtsMapPath, dtsMap);
                     nodes.push(node);
                 }
             }

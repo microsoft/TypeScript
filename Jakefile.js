@@ -11,6 +11,7 @@ var ts = require("./lib/typescript");
 const getDirSize = require("./scripts/build/getDirSize");
 
 // Variables
+var coreDirectory = "src/core/";
 var parserDirectory = "src/parser/";
 var compilerDirectory = "src/compiler/";
 var serverDirectory = "src/server/";
@@ -138,11 +139,6 @@ compileOutputConfigFile('src/typescriptServices/tsconfig.json', [], [copyright],
     // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
     var nodeDefinitionsFileContents = definitionFileContents + "\nexport = ts;";
     fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
-
-    // Node package definition file to be distributed without the package. Created by replacing
-    // 'ts' namespace with '"typescript"' as a module.
-    var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
-    fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
 });
 compileOutputConfigFile('src/core/tsconfig.json');
 compileOutputConfigFile('src/harness/tsconfig.json');
@@ -516,7 +512,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var configurePrereleaseJs = path.join(scriptsDirectory, "configurePrerelease.js");
 var configurePrereleaseTs = path.join(scriptsDirectory, "configurePrerelease.ts");
 var packageJson = "package.json";
-var versionFile = path.join(compilerDirectory, "core.ts");
+var versionFile = path.join(coreDirectory, "core.ts");
 
 file(configurePrereleaseTs);
 
@@ -583,7 +579,6 @@ var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
-var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_standalone.d.ts");
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 

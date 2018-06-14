@@ -1761,6 +1761,12 @@ namespace ts {
         return node.initializer;
     }
 
+    /** Get the declaration initializer when it is container-like (See getJavascriptInitializer). */
+    export function getDeclaredJavascriptInitializer(node: HasExpressionInitializer) {
+        const init = getEffectiveInitializer(node);
+        return init && getJavascriptInitializer(init, isPrototypeAccess(node.name));
+    }
+
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
@@ -2713,7 +2719,7 @@ namespace ts {
         return getOperatorPrecedence(expression.kind, operator, hasArguments);
     }
 
-    export function getOperator(expression: Expression) {
+    export function getOperator(expression: Expression): SyntaxKind {
         if (expression.kind === SyntaxKind.BinaryExpression) {
             return (<BinaryExpression>expression).operatorToken.kind;
         }
@@ -4325,6 +4331,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2018:
+                return "lib.es2018.full.d.ts";
             case ScriptTarget.ES2017:
                 return "lib.es2017.full.d.ts";
             case ScriptTarget.ES2016:
@@ -4960,6 +4968,11 @@ namespace ts {
     /** Gets the JSDoc class tag for the node if present */
     export function getJSDocClassTag(node: Node): JSDocClassTag | undefined {
         return getFirstJSDocTag(node, isJSDocClassTag);
+    }
+
+    /** Gets the JSDoc this tag for the node if present */
+    export function getJSDocThisTag(node: Node): JSDocThisTag | undefined {
+        return getFirstJSDocTag(node, isJSDocThisTag);
     }
 
     /** Gets the JSDoc return tag for the node if present */
@@ -5691,6 +5704,10 @@ namespace ts {
 
     export function isJSDocClassTag(node: Node): node is JSDocClassTag {
         return node.kind === SyntaxKind.JSDocClassTag;
+    }
+
+    export function isJSDocThisTag(node: Node): node is JSDocThisTag {
+        return node.kind === SyntaxKind.JSDocThisTag;
     }
 
     export function isJSDocParameterTag(node: Node): node is JSDocParameterTag {
