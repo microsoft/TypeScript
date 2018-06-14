@@ -1380,6 +1380,7 @@ namespace ts {
             node.getEnd() <= textSpanEnd(span);
     }
 
+    /* @internal */
     export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void {
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
         if (lastImportDeclaration) {
