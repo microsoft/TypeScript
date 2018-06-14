@@ -2615,14 +2615,17 @@ namespace ts {
     export interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
         javascriptText: string;
+        javascriptMapPath?: string;
         javascriptMapText?: string;
         declarationText: string;
+        declarationMapPath?: string;
         declarationMapText?: string;
     }
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
         text: string;
+        sourceMapPath?: string;
         sourceMapText?: string;
     }
 
@@ -2807,7 +2810,7 @@ namespace ts {
         sourceMapFile: string;               // Source map's file field - .js file name
         sourceMapSourceRoot: string;         // Source map's sourceRoot field - location where the sources will be present if not ""
         sourceMapSources: string[];          // Source map's sources field - list of sources that can be indexed in this source map
-        sourceMapSourcesContent?: string[];  // Source map's sourcesContent field - list of the sources' text to be embedded in the source map
+        sourceMapSourcesContent?: (string | null)[];  // Source map's sourcesContent field - list of the sources' text to be embedded in the source map
         inputSourceFileNames: string[];      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
         sourceMapNames?: string[];           // Source map's names field - list of names that can be indexed in this source map
         sourceMapMappings: string;           // Source map's mapping field - encoded source map spans

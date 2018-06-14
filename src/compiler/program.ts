@@ -1240,10 +1240,12 @@ namespace ts {
 
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
-                    const jsMap = host.readFile(resolvedRefOpts.options.outFile + ".map"); // TODO: try to read sourceMappingUrl comment from the js file
+                    const jsMapPath = resolvedRefOpts.options.outFile + ".map"; // TODO: try to read sourceMappingUrl comment from the file
+                    const jsMap = host.readFile(jsMapPath);
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const dtsMap = host.readFile(dtsFilename + ".map");
-                    const node = createInputFiles(js, dts, jsMap, dtsMap);
+                    const dtsMapPath = dtsFilename + ".map";
+                    const dtsMap = host.readFile(dtsMapPath);
+                    const node = createInputFiles(js, dts, jsMap && jsMapPath, jsMap, dtsMap && dtsMapPath, dtsMap);
                     nodes.push(node);
                 }
             }
