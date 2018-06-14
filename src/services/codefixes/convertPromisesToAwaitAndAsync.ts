@@ -12,30 +12,24 @@ namespace ts.codefix {
     });
     function convertToAsyncAwait(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         // get the function declaration - returns a promise
-        const funcToConvert = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeEndPosition*/ false)).valueDeclaration;
+        const funcToConvert: FunctionLikeDeclaration = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeEndPosition*/ false)).valueDeclaration as FunctionLikeDeclaration;
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);
-        for (const child of funcToConvert.getChildren()) {
-            if (child.kind === SyntaxKind.Block) {
-                for (const stmt of (<Block>child).statements) {
-                    const promiseCall: CallExpression = getPromiseCall(stmt);
-                    const newNode = parseCallback(promiseCall, checker);
 
+
+        const stmts: NodeArray<Statement> = (<FunctionBody>funcToConvert.body).statements;
+        for (const stmt of stmts) {
+            forEachChild(stmt, function visit(node: Node) {
+                if (node.kind === SyntaxKind.CallExpression) {
+                    const newNode = parseCallback(node as CallExpression, checker);
                     if (newNode) {
-                       changes.replaceNodeWithNodes(sourceFile, stmt, newNode);
+                        changes.replaceNodeWithNodes(sourceFile, stmt, newNode);
                     }
                 }
-            }
-        }
-    }
-
-    function getPromiseCall(node: Node): CallExpression {
-        if (node.kind === SyntaxKind.CallExpression) {
-            return node as CallExpression;
-        }
-
-        for (const child of node.getChildren().filter(node => isNode(node))) {
-            return getPromiseCall(child);
+                else if (!isFunctionLike(node)) {
+                    forEachChild(node, visit);
+                }
+            });
         }
     }
 
@@ -113,7 +107,7 @@ namespace ts.codefix {
         }
         return (<PropertyAccessExpression>node.expression).name.text === funcName && isPromiseType(checker.getTypeAtLocation(node));
     }
-   function isPromiseType(T: Type): boolean {
+    function isPromiseType(T: Type): boolean {
         return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
 }

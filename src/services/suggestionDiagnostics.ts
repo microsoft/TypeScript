@@ -38,14 +38,7 @@ namespace ts {
                     const retStmts: ReturnStatement[] = [];
                     getReturnStmts(node, retStmts);
 
-                    let isCallback = false;
-                    for (const stmt of retStmts) {
-                        if (hasCallback(stmt)) {
-                            isCallback = true;
-                            break;
-                        }
-                    }
-                    if (isPromiseType(returnType) && isCallback) {
+                    if (isPromiseType(returnType) && retStmts.length > 0) {
                         diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
                     }
                     break;
@@ -134,25 +127,29 @@ namespace ts {
         return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
 
-    function hasCallback(stmt: Node): boolean {
-        if (stmt.kind === SyntaxKind.CallExpression && (<CallExpression>stmt).expression.kind === SyntaxKind.PropertyAccessExpression &&
-            ((<PropertyAccessExpression>(<CallExpression>stmt).expression).name.text === "then" || (<PropertyAccessExpression>(<CallExpression>stmt).expression).name.text === "catch")) {
-                return true;
-        }
-
-        for (const child of stmt.getChildren().filter(node => isNode(node))) {
-            return hasCallback(child);
-        }
-    }
-
     function getReturnStmts(node: Node, retStmts: ReturnStatement[]) {
-        for (const child of node.getChildren().filter(node => isNode(node))) {
-            if (child.kind === SyntaxKind.ReturnStatement) {
-                retStmts.push(child as ReturnStatement);
+        forEachChild(node, visit);
+
+        function visit(node: Node) {
+            if (isFunctionLike(node)) {
+                return;
             }
-            else {
-                getReturnStmts(child, retStmts);
+
+            if (node.kind === SyntaxKind.ReturnStatement) {
+                forEachChild(node, hasCallback);
             }
+
+            function hasCallback(child: Node) {
+                if (child.kind === SyntaxKind.CallExpression && (<CallExpression>child).expression.kind === SyntaxKind.PropertyAccessExpression &&
+                    ((<PropertyAccessExpression>(<CallExpression>child).expression).name.text === "then" || (<PropertyAccessExpression>(<CallExpression>child).expression).name.text === "catch")) {
+                    retStmts.push(node as ReturnStatement);
+                }
+                else if (!isFunctionLike(child)) {
+                    forEachChild(child, hasCallback);
+                }
+            }
+
+            forEachChild(node, visit);
         }
     }
 }
