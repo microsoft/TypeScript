@@ -10810,7 +10810,7 @@ namespace ts {
 
                                         const name = propDeclaration.name!;
                                         if (isIdentifier(name)) {
-                                            suggestion = getSuggestionForNonexistentProperty(idText(name), target);
+                                            suggestion = getSuggestionForNonexistentProperty(name, target);
                                         }
                                     }
 
@@ -17403,12 +17403,12 @@ namespace ts {
                 errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await, declarationNameToString(propNode), typeToString(containingType));
             }
             else {
-                const suggestion = getSuggestionForNonexistentProperty(idText(propNode), containingType);
+                const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
                 if (suggestion !== undefined) {
                     errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
                 }
                 else {
-                    const suggestion = getSuggestionForNonexistentProperty(idText(propNode), containingType);
+                    const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
                     if (suggestion !== undefined) {
                         errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
                     }
@@ -17421,8 +17421,8 @@ namespace ts {
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
 
-        function getSuggestionForNonexistentProperty(name: string, containingType: Type): string | undefined {
-            const suggestion = getSpellingSuggestionForName(name, getPropertiesOfType(containingType), SymbolFlags.Value);
+        function getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined {
+            const suggestion = getSpellingSuggestionForName(isString(name) ? name :idText(name), getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && symbolName(suggestion);
         }
 
