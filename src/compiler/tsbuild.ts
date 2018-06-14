@@ -641,7 +641,6 @@ namespace ts {
 
             // Mark all downstream projects of this one needing to be built "later"
             function queueBuildForDownstreamReferences(root: ResolvedConfigFileName) {
-                debugger;
                 const deps = graph.dependencyMap.getReferencesTo(root);
                 for (const ref of deps) {
                     // Can skip circular references
