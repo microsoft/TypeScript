@@ -8,6 +8,15 @@ class Y extends Z {
   }
 }
 
+import X2 from 'file2';
+import X3 from 'file3';
+class Q extends Z {
+  constructor() {
+    super(X2, X3);
+  }
+}
+
+
 //// [importNotElidedWhenNotFound.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -29,4 +38,13 @@ var Y = /** @class */ (function (_super) {
         return _super.call(this, file_1["default"]) || this;
     }
     return Y;
+}(other_file_1["default"]));
+var file2_1 = require("file2");
+var file3_1 = require("file3");
+var Q = /** @class */ (function (_super) {
+    __extends(Q, _super);
+    function Q() {
+        return _super.call(this, file2_1["default"], file3_1["default"]) || this;
+    }
+    return Q;
 }(other_file_1["default"]));

@@ -492,6 +492,11 @@ node_modules/npm/lib/ls.js(152,11): error TS2339: Property 'config' does not exi
 node_modules/npm/lib/ls.js(180,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(191,52): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(254,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/ls.js(260,16): error TS2339: Property 'problems' does not exist on type 'string | { [x: string]: any; name: any; version: any; extraneous: boolean; problems: any; invalid...'.
+  Property 'problems' does not exist on type 'string'.
+node_modules/npm/lib/ls.js(262,54): error TS2339: Property 'problems' does not exist on type 'string | { [x: string]: any; name: any; version: any; extraneous: boolean; problems: any; invalid...'.
+  Property 'problems' does not exist on type 'string'.
+node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ [x: string]: any; name: any; version: any; extraneous: boolean; problems: any; invalid: boolean...' cannot be used as an index type.
 node_modules/npm/lib/ls.js(357,40): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(362,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(365,15): error TS2339: Property 'color' does not exist on type 'EventEmitter'.

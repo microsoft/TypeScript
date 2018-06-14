@@ -57,7 +57,7 @@ verify.codeFixAll({
     x; z;
 }
 {
-    const [x,] = o;
+    const [x] = o;
     x;
 }
 {
@@ -65,7 +65,7 @@ verify.codeFixAll({
     y;
 }
 {
-    const [, y,] = o;
+    const [, y] = o;
     y;
 }
 {

@@ -21,7 +21,7 @@ function Zet(t) {
 Zet.prototype.add = function(v, o) {
 >Zet.prototype : Symbol(Zet.add, Decl(templateTagWithNestedTypeLiteral.js, 8, 1))
 >Zet : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >add : Symbol(Zet.add, Decl(templateTagWithNestedTypeLiteral.js, 8, 1))
 >v : Symbol(v, Decl(templateTagWithNestedTypeLiteral.js, 14, 29))
 >o : Symbol(o, Decl(templateTagWithNestedTypeLiteral.js, 14, 31))

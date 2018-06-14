@@ -148,34 +148,22 @@ namespace ts.codefix {
         return false;
     }
 
-    function tryDeleteDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): void {
-        switch (token.kind) {
-            case SyntaxKind.Identifier:
-                tryDeleteIdentifier(changes, sourceFile, <Identifier>token, deletedAncestors, checker, isFixAll);
-                break;
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.NamespaceImport:
-                if (deletedAncestors) deletedAncestors.add(token.parent);
-                changes.deleteNode(sourceFile, token.parent);
-                break;
-            default:
-                tryDeleteDefault(changes, sourceFile, token, deletedAncestors);
-        }
+    function tryDeleteDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean) {
+        tryDeleteDeclarationWorker(changes, sourceFile, token, deletedAncestors, checker, isFixAll);
+        if (isIdentifier(token)) deleteAssignments(changes, sourceFile, token, checker);
     }
 
-    function tryDeleteDefault(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined): void {
-        if (isDeclarationName(token)) {
-            if (deletedAncestors) deletedAncestors.add(token.parent);
-            changes.deleteNode(sourceFile, token.parent);
-        }
-        else if (isLiteralComputedPropertyDeclarationName(token)) {
-            if (deletedAncestors) deletedAncestors.add(token.parent.parent);
-            changes.deleteNode(sourceFile, token.parent.parent);
-        }
+    function deleteAssignments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier, checker: TypeChecker) {
+        FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
+            if (ref.parent.kind === SyntaxKind.PropertyAccessExpression) ref = ref.parent;
+            if (ref.parent.kind === SyntaxKind.BinaryExpression && ref.parent.parent.kind === SyntaxKind.ExpressionStatement) {
+                changes.deleteNode(sourceFile, ref.parent.parent);
+            }
+        });
     }
 
-    function tryDeleteIdentifier(changes: textChanges.ChangeTracker, sourceFile: SourceFile, identifier: Identifier, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): void {
-        const parent = identifier.parent;
+    function tryDeleteDeclarationWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): void {
+        const parent = token.parent;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
                 tryDeleteVariableDeclaration(changes, sourceFile, <VariableDeclaration>parent, deletedAncestors);
@@ -228,22 +216,19 @@ namespace ts.codefix {
 
             case SyntaxKind.BindingElement: {
                 const pattern = (parent as BindingElement).parent;
-                switch (pattern.kind) {
-                    case SyntaxKind.ArrayBindingPattern:
-                        changes.deleteNode(sourceFile, parent); // Don't delete ','
-                        break;
-                    case SyntaxKind.ObjectBindingPattern:
-                        changes.deleteNodeInList(sourceFile, parent);
-                        break;
-                    default:
-                        return Debug.assertNever(pattern);
+                const preserveComma = pattern.kind === SyntaxKind.ArrayBindingPattern && parent !== last(pattern.elements);
+                if (preserveComma) {
+                    changes.deleteNode(sourceFile, parent);
+                }
+                else {
+                    changes.deleteNodeInList(sourceFile, parent);
                 }
                 break;
             }
 
             // handle case where 'import a = A;'
             case SyntaxKind.ImportEqualsDeclaration:
-                const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration)!;
+                const importEquals = getAncestor(token, SyntaxKind.ImportEqualsDeclaration)!;
                 changes.deleteNode(sourceFile, importEquals);
                 break;
 
@@ -283,7 +268,14 @@ namespace ts.codefix {
                 break;
 
             default:
-                tryDeleteDefault(changes, sourceFile, identifier, deletedAncestors);
+                if (isDeclarationName(token)) {
+                    if (deletedAncestors) deletedAncestors.add(token.parent);
+                    changes.deleteNode(sourceFile, token.parent);
+                }
+                else if (isLiteralComputedPropertyDeclarationName(token)) {
+                    if (deletedAncestors) deletedAncestors.add(token.parent.parent);
+                    changes.deleteNode(sourceFile, token.parent.parent);
+                }
                 break;
         }
     }

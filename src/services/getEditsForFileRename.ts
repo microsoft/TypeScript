@@ -123,7 +123,7 @@ namespace ts {
                         // TODO:GH#18217
                         ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
                         : getSourceFileToImport(importLiteral, sourceFile, program, host, oldToNew);
-                    return toImport === undefined ? undefined : moduleSpecifiers.getModuleSpecifier(program, sourceFile, newImportFromPath, toImport, host, preferences);
+                    return toImport === undefined ? undefined : moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport, host, preferences);
                 });
         }
     }

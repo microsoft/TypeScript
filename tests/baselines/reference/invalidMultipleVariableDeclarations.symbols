@@ -62,9 +62,9 @@ module M {
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(invalidMultipleVariableDeclarations.ts, 24, 5))
 >x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 26, 23))
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 26, 23))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 // all of these are errors
@@ -127,7 +127,7 @@ var arr2 = [new D<string>()];
 
 var arr2 = new Array<D<number>>();
 >arr2 : Symbol(arr2, Decl(invalidMultipleVariableDeclarations.ts, 48, 3), Decl(invalidMultipleVariableDeclarations.ts, 49, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
 
 var m: typeof M;

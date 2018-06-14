@@ -39,17 +39,17 @@ module Bugs {
 >IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
 
                                 tokens.push({ startIndex: 1, type: '', bracket: 3 });
->tokens.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>tokens.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >tokens : Symbol(tokens, Decl(overloadResolutionOverNonCTObjectLit.ts, 16, 35))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >startIndex : Symbol(startIndex, Decl(overloadResolutionOverNonCTObjectLit.ts, 17, 45))
 >type : Symbol(type, Decl(overloadResolutionOverNonCTObjectLit.ts, 17, 60))
 >bracket : Symbol(bracket, Decl(overloadResolutionOverNonCTObjectLit.ts, 17, 70))
 
                                 tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }));
->tokens.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>tokens.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >tokens : Symbol(tokens, Decl(overloadResolutionOverNonCTObjectLit.ts, 16, 35))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
 >startIndex : Symbol(startIndex, Decl(overloadResolutionOverNonCTObjectLit.ts, 18, 54))
 >type : Symbol(type, Decl(overloadResolutionOverNonCTObjectLit.ts, 18, 69))

@@ -103,12 +103,12 @@ type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : 
 type UnexpectedError<T extends PropertyKey> = T
 >UnexpectedError : Symbol(UnexpectedError, Decl(intersectionWithUnionConstraint.ts, 30, 96))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 32, 21))
->PropertyKey : Symbol(PropertyKey, Decl(lib.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 32, 21))
 
 type NoErrorHere<T extends PropertyKey> = T
 >NoErrorHere : Symbol(NoErrorHere, Decl(intersectionWithUnionConstraint.ts, 32, 47))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 33, 17))
->PropertyKey : Symbol(PropertyKey, Decl(lib.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 33, 17))
 

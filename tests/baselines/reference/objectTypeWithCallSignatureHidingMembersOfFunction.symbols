@@ -39,9 +39,9 @@ var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
 
 var r1c = i.arguments;
 >r1c : Symbol(r1c, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 12, 3))
->i.arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>i.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 9, 3))
->arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 
 var x: {
 >x : Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 14, 3))
@@ -76,7 +76,7 @@ var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
 
 var r2c = x.arguments;
 >r2c : Symbol(r2c, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 22, 3))
->x.arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>x.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 14, 3))
->arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 

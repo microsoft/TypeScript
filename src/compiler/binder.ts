@@ -236,7 +236,7 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
-                    (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     symbol.valueDeclaration = node;
                 }
@@ -2514,11 +2514,12 @@ namespace ts {
                 return true;
             }
             const node = symbol.valueDeclaration;
-            const init = !node ? undefined :
+            let init = !node ? undefined :
                 isVariableDeclaration(node) ? node.initializer :
                 isBinaryExpression(node) ? node.right :
                 isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
                 undefined;
+            init = init && getRightMostAssignedExpression(init);
             if (init) {
                 const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
                 return !!getJavascriptInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, isPrototypeAssignment);

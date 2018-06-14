@@ -39,7 +39,7 @@ type Property2Type = Properties["__property2"];
 // And should work with partial
 const partial: Partial<Properties> = {
 >partial : Symbol(partial, Decl(doubleUnderscoreMappedTypes.ts, 19, 5))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))
 
     property1: "",
