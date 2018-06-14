@@ -35,6 +35,8 @@
 ////     k: AT;
 ////
 ////     l: Foo;
+////
+////     m: number[];
 //// }
 
 verify.codeFixAll({
@@ -73,5 +75,7 @@ class T {
     k: AT = new AT;
 
     l: Foo = new Foo;
+
+    m: number[] = [];
 }`
 });

@@ -540,6 +540,7 @@ namespace ts {
         public _declarationBrand: any;
         public fileName: string;
         public path: Path;
+        public resolvedPath: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: ReadonlyArray<number>;
@@ -1108,35 +1109,6 @@ namespace ts {
                 throw new OperationCanceledException();
             }
         }
-    }
-
-    /* @internal */
-    export interface SourceFileLikeCache {
-        get(path: Path): SourceFileLike | undefined;
-    }
-
-    /* @internal */
-    export function createSourceFileLikeCache(host: { readFile?: (path: string) => string | undefined, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
-        const cached = createMap<SourceFileLike>();
-        return {
-            get(path: Path) {
-                if (cached.has(path)) {
-                    return cached.get(path);
-                }
-                if (!host.fileExists || !host.readFile || !host.fileExists(path)) return;
-                // And failing that, check the disk
-                const text = host.readFile(path)!; // TODO: GH#18217
-                const file: SourceFileLike = {
-                    text,
-                    lineMap: undefined,
-                    getLineAndCharacterOfPosition(pos) {
-                        return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
-                    }
-                };
-                cached.set(path, file);
-                return file;
-            }
-        };
     }
 
     export function createLanguageService(

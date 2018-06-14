@@ -1,7 +1,14 @@
+//// [tests/cases/compiler/APISample_watcher.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_watcher.ts]
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -113,7 +120,7 @@ watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
 "use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;

@@ -511,6 +511,8 @@ namespace ts.server {
 
                 const { fileName, project } = checkList[index];
                 index++;
+                // Ensure the project is upto date before checking if this file is present in the project
+                project.updateGraph();
                 if (!project.containsFile(fileName, requireOpen)) {
                     return;
                 }
@@ -1700,7 +1702,7 @@ namespace ts.server {
 
         private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
             const { file, project } = this.getFileAndProject(args);
-            const changes = project.getLanguageService().getEditsForFileRename(args.oldFilePath, args.newFilePath, this.getFormatOptions(file), this.getPreferences(file));
+            const changes = project.getLanguageService().getEditsForFileRename(toNormalizedPath(args.oldFilePath), toNormalizedPath(args.newFilePath), this.getFormatOptions(file), this.getPreferences(file));
             return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
         }
 

@@ -127,6 +127,9 @@ namespace ts.codefix {
 
             return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
         }
+        else if (checker.isArrayLikeType(type)) {
+            return createArrayLiteral();
+        }
         return undefined;
     }
 }
