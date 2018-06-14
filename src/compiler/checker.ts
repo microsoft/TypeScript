@@ -17959,7 +17959,8 @@ namespace ts {
                 }
             }
             const contextualType = getIndexTypeOfType(restType, IndexKind.Number) || anyType;
-            const types: Type[] = [];
+            const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
+            const types = [];
             let hasSpreadExpression = false;
             for (let i = index; i < argCount; i++) {
                 let argType = getEffectiveArgumentType(node, i);
@@ -17967,7 +17968,7 @@ namespace ts {
                     argType = checkExpressionWithContextualType(args[i], contextualType, context);
                     hasSpreadExpression = hasSpreadExpression || args[i].kind === SyntaxKind.SpreadElement;
                 }
-                types.push(argType);
+                types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
             }
             return hasSpreadExpression ? createArrayType(getUnionType(types)) : createTupleType(types);
         }
