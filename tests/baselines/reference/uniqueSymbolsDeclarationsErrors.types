@@ -72,6 +72,7 @@ export interface InterfaceWithPrivateNamedProperties {
 >InterfaceWithPrivateNamedProperties : InterfaceWithPrivateNamedProperties
 
     [s]: any;
+>[s] : any
 >s : unique symbol
 }
 
@@ -79,6 +80,7 @@ export interface InterfaceWithPrivateNamedMethods {
 >InterfaceWithPrivateNamedMethods : InterfaceWithPrivateNamedMethods
 
     [s](): any;
+>[s] : () => any
 >s : unique symbol
 }
 
@@ -86,6 +88,7 @@ export type TypeLiteralWithPrivateNamedProperties = {
 >TypeLiteralWithPrivateNamedProperties : TypeLiteralWithPrivateNamedProperties
 
     [s]: any;
+>[s] : any
 >s : unique symbol
 }
 
@@ -93,6 +96,7 @@ export type TypeLiteralWithPrivateNamedMethods = {
 >TypeLiteralWithPrivateNamedMethods : TypeLiteralWithPrivateNamedMethods
 
     [s](): any;
+>[s] : () => any
 >s : unique symbol
 }
 
@@ -100,9 +104,11 @@ export class ClassWithPrivateNamedProperties {
 >ClassWithPrivateNamedProperties : ClassWithPrivateNamedProperties
 
     [s]: any;
+>[s] : any
 >s : unique symbol
 
     static [s]: any;
+>[s] : any
 >s : unique symbol
 }
 
@@ -110,9 +116,11 @@ export class ClassWithPrivateNamedMethods {
 >ClassWithPrivateNamedMethods : ClassWithPrivateNamedMethods
 
     [s]() {}
+>[s] : () => void
 >s : unique symbol
 
     static [s]() {}
+>[s] : () => void
 >s : unique symbol
 }
 
@@ -120,18 +128,22 @@ export class ClassWithPrivateNamedAccessors {
 >ClassWithPrivateNamedAccessors : ClassWithPrivateNamedAccessors
 
     get [s](): any { return undefined; }
+>[s] : any
 >s : unique symbol
 >undefined : undefined
 
     set [s](v: any) { }
+>[s] : any
 >s : unique symbol
 >v : any
 
     static get [s](): any { return undefined; }
+>[s] : any
 >s : unique symbol
 >undefined : undefined
 
     static set [s](v: any) { }
+>[s] : any
 >s : unique symbol
 >v : any
 }

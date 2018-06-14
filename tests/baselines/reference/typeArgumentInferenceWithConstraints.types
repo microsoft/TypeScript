@@ -146,28 +146,28 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3<T extends Window>(producer: () => T) { }
->someGenerics3 : <T extends any>(producer: () => T) => void
+>someGenerics3 : <T extends Window>(producer: () => T) => void
 >T : T
->Window : No type information available!
+>Window : Window
 >producer : () => T
 >T : T
 
 someGenerics3(() => ''); // Error
->someGenerics3(() => '') : void
->someGenerics3 : <T extends any>(producer: () => T) => void
+>someGenerics3(() => '') : any
+>someGenerics3 : <T extends Window>(producer: () => T) => void
 >() => '' : () => string
 >'' : ""
 
 someGenerics3<Window>(() => undefined);
 >someGenerics3<Window>(() => undefined) : void
->someGenerics3 : <T extends any>(producer: () => T) => void
->Window : No type information available!
+>someGenerics3 : <T extends Window>(producer: () => T) => void
+>Window : Window
 >() => undefined : () => any
 >undefined : undefined
 
 someGenerics3<number>(() => 3); // Error
->someGenerics3<number>(() => 3) : void
->someGenerics3 : <T extends any>(producer: () => T) => void
+>someGenerics3<number>(() => 3) : any
+>someGenerics3 : <T extends Window>(producer: () => T) => void
 >() => 3 : () => number
 >3 : 3
 
@@ -460,19 +460,19 @@ interface A92 {
 >x : number
 
     z?: Window;
->z : any
->Window : No type information available!
+>z : Window
+>Window : Window
 }
 var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
->someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: any; }
+>{ x: 6, z: window } : { x: number; z: Window; }
 >x : number
 >6 : 6
->z : any
->window : any
+>z : Window
+>window : Window
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
@@ -480,7 +480,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9f : any
@@ -488,11 +488,11 @@ var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >A92 : A92
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: any; }
+>{ x: 6, z: window } : { x: number; z: Window; }
 >x : number
 >6 : 6
->z : any
->window : any
+>z : Window
+>window : Window
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6

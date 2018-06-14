@@ -4,6 +4,7 @@ var i = {
 >{    [Symbol.iterator]: { p: null },    [Symbol.toStringTag]() { return { p: undefined }; }} : { [Symbol.iterator]: { p: null; }; [Symbol.toStringTag](): { p: any; }; }
 
     [Symbol.iterator]: { p: null },
+>[Symbol.iterator] : { p: null; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -12,6 +13,7 @@ var i = {
 >null : null
 
     [Symbol.toStringTag]() { return { p: undefined }; }
+>[Symbol.toStringTag] : () => { p: any; }
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

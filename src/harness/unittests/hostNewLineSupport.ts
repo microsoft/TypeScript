@@ -2,7 +2,7 @@
 namespace ts {
     describe("hostNewLineSupport", () => {
         function testLSWithFiles(settings: CompilerOptions, files: Harness.Compiler.TestFile[]) {
-            function snapFor(path: string): IScriptSnapshot {
+            function snapFor(path: string): IScriptSnapshot | undefined {
                 if (path === "lib.d.ts") {
                     return ScriptSnapshot.fromString("");
                 }
@@ -17,7 +17,7 @@ namespace ts {
                 getDefaultLibFileName: () => "lib.d.ts",
                 getCurrentDirectory: () => "",
             };
-            return ts.createLanguageService(lshost);
+            return createLanguageService(lshost);
         }
 
         function verifyNewLines(content: string, options: CompilerOptions) {

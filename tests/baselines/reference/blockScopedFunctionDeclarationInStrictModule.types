@@ -11,5 +11,5 @@ if (true) {
 }
 
 export = foo; // not ok
->foo : No type information available!
+>foo : any
 

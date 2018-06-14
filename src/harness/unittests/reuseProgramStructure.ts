@@ -93,7 +93,7 @@ namespace ts {
                     newLength = this.program.length;
                     break;
                 default:
-                    Debug.assert(false, "Unexpected change");
+                    return Debug.fail("Unexpected change");
             }
 
             return createTextChangeRange(oldSpan, newLength);
@@ -114,7 +114,7 @@ namespace ts {
                 if (oldFile && oldFile.redirectInfo) {
                     oldFile = oldFile.redirectInfo.unredirected;
                 }
-                if (oldFile && oldFile.sourceText.getVersion() === t.text.getVersion()) {
+                if (oldFile && oldFile.sourceText!.getVersion() === t.text.getVersion()) {
                     return oldFile;
                 }
             }
@@ -126,7 +126,7 @@ namespace ts {
             trace: s => trace.push(s),
             getTrace: () => trace,
             getSourceFile(fileName): SourceFile {
-                return files.get(fileName);
+                return files.get(fileName)!;
             },
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
@@ -156,7 +156,7 @@ namespace ts {
     }
 
     export function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
-        const host = createTestCompilerHost(texts, options.target);
+        const host = createTestCompilerHost(texts, options.target!);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host);
         program.sourceTexts = texts;
         program.host = host;
@@ -165,10 +165,10 @@ namespace ts {
 
     export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
         if (!newTexts) {
-            newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
+            newTexts = oldProgram.sourceTexts!.slice(0);
         }
         updater(newTexts);
-        const host = createTestCompilerHost(newTexts, options.target, oldProgram);
+        const host = createTestCompilerHost(newTexts, options.target!, oldProgram);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
         program.sourceTexts = newTexts;
         program.host = host;
@@ -191,16 +191,16 @@ namespace ts {
         return false;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T>, getCache: (f: SourceFile) => Map<T>, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T> | undefined, getCache: (f: SourceFile) => Map<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
-        const cache = getCache(file);
+        const cache = getCache(file!);
         if (expectedContent === undefined) {
             assert.isTrue(cache === undefined, `expected ${caption} to be undefined`);
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            assert.isTrue(mapsAreEqual(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert.isTrue(mapsAreEqual(expectedContent, cache!, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 
@@ -210,7 +210,7 @@ namespace ts {
         if (!left || !right) return false;
         const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
             if (!right.has(leftKey)) return true;
-            const rightValue = right.get(leftKey);
+            const rightValue = right.get(leftKey)!;
             return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
         });
         if (someInLeftHasNoMatch) return false;
@@ -218,11 +218,11 @@ namespace ts {
         return !someInRightHasNoMatch;
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule | undefined> | undefined): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective>): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective> | undefined): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
@@ -399,7 +399,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram('import * as aa from "a";');
             });
-            assert.isDefined(program2.getSourceFile("/a.ts").resolvedModules.get("a"), "'a' is not an unresolved module after re-use");
+            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -884,9 +884,9 @@ namespace ts {
         });
     });
 
-    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
-    import libFile = ts.TestFSWithWatch.libFile;
+    type File = TestFSWithWatch.File;
+    import createTestSystem = TestFSWithWatch.createWatchedSystem;
+    import libFile = TestFSWithWatch.libFile;
 
     describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
         function verifyProgramIsUptoDate(
@@ -896,7 +896,7 @@ namespace ts {
         ) {
             const actual = isProgramUptoDate(
                 program, newRootFileNames, newOptions,
-                path => program.getSourceFileByPath(path).version, /*fileExists*/ returnFalse,
+                path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
                 /*hasChangedAutomaticTypeDirectiveNames*/ false
             );
@@ -916,26 +916,26 @@ namespace ts {
 
         function verifyProgramWithConfigFile(system: System, configFileName: string) {
             const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, system)).getCurrentProgram().getProgram();
-            const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, system, notImplemented);
+            const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, system, notImplemented)!; // TODO: GH#18217
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
-        function verifyProgram(files: FileOrFolder[], rootFiles: string[], options: CompilerOptions, configFile: string) {
+        function verifyProgram(files: File[], rootFiles: string[], options: CompilerOptions, configFile: string) {
             const system = createTestSystem(files);
             verifyProgramWithoutConfigFile(system, rootFiles, options);
             verifyProgramWithConfigFile(system, configFile);
         }
 
         it("has empty options", () => {
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/file1.ts",
                 content: "let x = 1"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: "/a/b/file2.ts",
                 content: "let y = 1"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: "{}"
             };
@@ -944,19 +944,19 @@ namespace ts {
 
         it("has lib specified in the options", () => {
             const compilerOptions: CompilerOptions = { lib: ["es5", "es2015.promise"] };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/app.ts",
                 content: "var x: Promise<string>;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions })
             };
-            const es5Lib: FileOrFolder = {
+            const es5Lib: File = {
                 path: "/compiler/lib.es5.d.ts",
                 content: "declare const eval: any"
             };
-            const es2015Promise: FileOrFolder = {
+            const es2015Promise: File = {
                 path: "/compiler/lib.es2015.promise.d.ts",
                 content: "declare class Promise<T> {}"
             };
@@ -975,26 +975,26 @@ namespace ts {
                     ]
                 }
             };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                           import classD from "module3/file3";\
                           let x = new classc();\
                           let y = new classD();'
             };
-            const module1: FileOrFolder = {
+            const module1: File = {
                 path: "/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
-            const module2: FileOrFolder = {
+            const module2: File = {
                 path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
-            const module3: FileOrFolder = {
+            const module3: File = {
                 path: "/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions })
             };
@@ -1013,26 +1013,26 @@ namespace ts {
                     ]
                 }
             };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                           import classD from "module3/file3";\
                           let x = new classc();\
                           let y = new classD();'
             };
-            const module1: FileOrFolder = {
+            const module1: File = {
                 path: "/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
-            const module2: FileOrFolder = {
+            const module2: File = {
                 path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
-            const module3: FileOrFolder = {
+            const module3: File = {
                 path: "/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] })
             };

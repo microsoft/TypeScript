@@ -38,6 +38,7 @@ var style: IBookStyle = {
 
             {'ry': null }
 >{'ry': null } : { 'ry': null; }
+>'ry' : null
 >null : null
 
         ];

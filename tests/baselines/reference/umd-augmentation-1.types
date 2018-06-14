@@ -47,7 +47,7 @@ var t = p.x;
 
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
 export as namespace Math2d;
->Math2d : typeof "tests/cases/conformance/externalModules/node_modules/math2d/index"
+>Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index")
 
 export interface Point {
 >Point : Point
@@ -91,6 +91,8 @@ import * as Math2d from 'math2d';
 
 // Augment the module
 declare module 'math2d' {
+>'math2d' : typeof Math2d
+
 	// Add a method to the class
 	interface Vector {
 >Vector : Vector

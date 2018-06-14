@@ -6,8 +6,8 @@ for ([x] of [[1]]) {}
 //// [systemModule13.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
+    var _a, _b, x, y, z, z0, z1;
     var __moduleName = context_1 && context_1.id;
-    var x, y, z, z0, z1, _a, _b;
     return {
         setters: [],
         execute: function () {

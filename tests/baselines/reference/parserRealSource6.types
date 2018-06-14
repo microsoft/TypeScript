@@ -354,9 +354,9 @@ module TypeScript {
     }
 
     export function pushTypeCollectionScope(container: Symbol,
->pushTypeCollectionScope : (container: any, valueMembers: any, ambientValueMembers: any, enclosedTypes: any, ambientEnclosedTypes: any, context: TypeCollectionContext, thisType: any, classType: any, moduleDecl: any) => void
->container : any
->Symbol : No type information available!
+>pushTypeCollectionScope : (container: Symbol, valueMembers: any, ambientValueMembers: any, enclosedTypes: any, ambientEnclosedTypes: any, context: TypeCollectionContext, thisType: any, classType: any, moduleDecl: any) => void
+>container : Symbol
+>Symbol : Symbol
 
         valueMembers: ScopedMembers,
 >valueMembers : any
@@ -399,14 +399,14 @@ module TypeScript {
 >enclosedTypes : any
 >ambientEnclosedTypes : any
 >null : null
->container : any
+>container : Symbol
 
         var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
 >chain : any
 >ScopeChain : No type information available!
 >new ScopeChain(container, context.scopeChain, builder) : any
 >ScopeChain : any
->container : any
+>container : Symbol
 >context.scopeChain : any
 >context : TypeCollectionContext
 >scopeChain : any

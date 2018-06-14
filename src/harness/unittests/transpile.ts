@@ -24,7 +24,7 @@ namespace ts {
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
                     // use \r\n as default new line
-                    transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                    transpileOptions.compilerOptions.newLine = NewLineKind.CarriageReturnLineFeed;
                 }
 
                 transpileOptions.compilerOptions.sourceMap = true;
@@ -53,20 +53,20 @@ namespace ts {
                 });
 
                 after(() => {
-                    transpileResult = undefined;
-                    oldTranspileResult = undefined;
-                    oldTranspileDiagnostics = undefined;
+                    transpileResult = undefined!;
+                    oldTranspileResult = undefined!;
+                    oldTranspileDiagnostics = undefined!;
                 });
 
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), () => {
-                        if (transpileResult.diagnostics.length === 0) {
+                        if (transpileResult.diagnostics!.length === 0) {
                             /* tslint:disable:no-null-keyword */
                             return null;
                             /* tslint:enable:no-null-keyword */
                         }
 
-                        return Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics);
+                        return Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!);
                     });
                 });
 
@@ -85,7 +85,7 @@ namespace ts {
                 }
 
                 it("Correct output for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), () => {
                         if (transpileResult.outputText) {
                             return transpileResult.outputText;
                         }

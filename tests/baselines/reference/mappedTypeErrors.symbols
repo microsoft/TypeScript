@@ -46,12 +46,12 @@ type T01 = { [P in number]: string };  // Error
 type T02 = { [P in Date]: number };  // Error
 >T02 : Symbol(T02, Decl(mappedTypeErrors.ts, 19, 37))
 >P : Symbol(P, Decl(mappedTypeErrors.ts, 20, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type T03 = Record<Date, number>;  // Error
 >T03 : Symbol(T03, Decl(mappedTypeErrors.ts, 20, 35))
 >Record : Symbol(Record, Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type T10 = Pick<Shape, "name">;
 >T10 : Symbol(T10, Decl(mappedTypeErrors.ts, 21, 32))

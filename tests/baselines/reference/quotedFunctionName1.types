@@ -3,4 +3,5 @@ class Test1 {
 >Test1 : Test1
 
   "prop1"() { }
+>"prop1" : () => void
 }

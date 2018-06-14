@@ -748,6 +748,7 @@ module TypeScript {
 >new HashEntry[] : any
 >HashEntry[] : any
 >HashEntry : typeof HashEntry
+> : any
 
         constructor (public size: number, public hashFn: (key) =>number,
 >size : number

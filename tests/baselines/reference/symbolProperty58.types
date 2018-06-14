@@ -11,6 +11,7 @@ var obj = {
 >{    [Symbol.foo]: 0} : { [Symbol.foo]: number; }
 
     [Symbol.foo]: 0
+>[Symbol.foo] : number
 >Symbol.foo : string
 >Symbol : SymbolConstructor
 >foo : string

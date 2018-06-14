@@ -8,6 +8,8 @@ declare class Foo {
 >name : Symbol(Foo.name, Decl(file1.d.ts, 2, 19))
 
 	"some prop" = 42;
+>"some prop" : Symbol(Foo["some prop"], Decl(file1.d.ts, 3, 15))
+
 	fn(): boolean {
 >fn : Symbol(Foo.fn, Decl(file1.d.ts, 4, 18))
 

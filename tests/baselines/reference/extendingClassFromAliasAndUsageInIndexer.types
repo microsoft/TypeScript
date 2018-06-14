@@ -29,9 +29,11 @@ var moduleMap: { [key: string]: IHasVisualizationModel } = {
 >{    "moduleA": moduleA,    "moduleB": moduleB} : { "moduleA": typeof moduleA; "moduleB": typeof moduleB; }
 
     "moduleA": moduleA,
+>"moduleA" : typeof moduleA
 >moduleA : typeof moduleA
 
     "moduleB": moduleB
+>"moduleB" : typeof moduleB
 >moduleB : typeof moduleB
 
 };

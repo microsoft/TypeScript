@@ -10,6 +10,8 @@ var a: string, b: boolean[];
 >...b : boolean
 >b : boolean[]
 >{ 0: "", 1: true } : { 0: string; 1: true; }
+>0 : string
 >"" : ""
+>1 : true
 >true : true
 

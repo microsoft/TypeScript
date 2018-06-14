@@ -4,6 +4,9 @@ for (var x in String) {
 >String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     WScript.Echo(x);
+>WScript.Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
 }
 for (x in String) {
@@ -11,6 +14,9 @@ for (x in String) {
 >String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     WScript.Echo(x);
+>WScript.Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
 }
 for (var x2 in String)
@@ -18,6 +24,9 @@ for (var x2 in String)
 >String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 {
     WScript.Echo(x2);
+>WScript.Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
 >x2 : Symbol(x2, Decl(sourceMapValidationForIn.ts, 6, 8))
 }
 for (x in String)
@@ -25,5 +34,8 @@ for (x in String)
 >String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 {
     WScript.Echo(x);
+>WScript.Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
 }

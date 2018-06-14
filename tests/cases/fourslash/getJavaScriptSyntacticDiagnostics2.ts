@@ -2,14 +2,9 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// export = b;
+////[|export = b;|]
 
-verify.getSyntacticDiagnostics(`[
-  {
-    "message": "'export=' can only be used in a .ts file.",
-    "start": 0,
-    "length": 11,
-    "category": "error",
-    "code": 8003
-  }
-]`);
+verify.getSyntacticDiagnostics([{
+    message: "'export=' can only be used in a .ts file.",
+    code: 8003
+}]);

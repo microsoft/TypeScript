@@ -44,20 +44,20 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
-var b = /** @class */ (function (_super) {
-    __extends(b, _super);
+var b = /** @class */ (function (_super_1) {
+    __extends(b, _super_1);
     function b() {
-        var _this = _super.call(this) || this;
+        var _this = _super_1.call(this) || this;
         function _super() {
         }
         return _this;
     }
     return b;
 }(Foo));
-var c = /** @class */ (function (_super) {
-    __extends(c, _super);
+var c = /** @class */ (function (_super_1) {
+    __extends(c, _super_1);
     function c() {
-        var _this = _super.call(this) || this;
+        var _this = _super_1.call(this) || this;
         var x = function () {
             function _super() {
             }

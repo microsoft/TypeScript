@@ -15,5 +15,6 @@ class C {
 
     @dec public ["method"]() {}
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>["method"] : () => void
 >"method" : "method"
 }

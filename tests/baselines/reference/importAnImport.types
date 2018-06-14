@@ -17,5 +17,5 @@ module m0 {
 >c : any
 >a : any
 >b : any
->ma : No type information available!
+>ma : any
 }

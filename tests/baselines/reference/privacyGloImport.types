@@ -3,7 +3,7 @@ module m1 {
 >m1 : typeof m1
 
     export module m1_M1_public {
->m1_M1_public : typeof m1_im1_private
+>m1_M1_public : typeof m1_M1_public
 
         export class c1 {
 >c1 : c1
@@ -63,59 +63,59 @@ module m1 {
     //}
 
     import m1_im1_private = m1_M1_public;
->m1_im1_private : typeof m1_im1_private
->m1_M1_public : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
+>m1_M1_public : typeof m1_M1_public
 
     export var m1_im1_private_v1_public = m1_im1_private.c1;
 >m1_im1_private_v1_public : typeof m1_im1_private.c1
 >m1_im1_private.c1 : typeof m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >c1 : typeof m1_im1_private.c1
 
     export var m1_im1_private_v2_public = new m1_im1_private.c1();
 >m1_im1_private_v2_public : m1_im1_private.c1
 >new m1_im1_private.c1() : m1_im1_private.c1
 >m1_im1_private.c1 : typeof m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >c1 : typeof m1_im1_private.c1
 
     export var m1_im1_private_v3_public = m1_im1_private.f1;
 >m1_im1_private_v3_public : () => m1_im1_private.c1
 >m1_im1_private.f1 : () => m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >f1 : () => m1_im1_private.c1
 
     export var m1_im1_private_v4_public = m1_im1_private.f1();
 >m1_im1_private_v4_public : m1_im1_private.c1
 >m1_im1_private.f1() : m1_im1_private.c1
 >m1_im1_private.f1 : () => m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >f1 : () => m1_im1_private.c1
 
     var m1_im1_private_v1_private = m1_im1_private.c1;
 >m1_im1_private_v1_private : typeof m1_im1_private.c1
 >m1_im1_private.c1 : typeof m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >c1 : typeof m1_im1_private.c1
 
     var m1_im1_private_v2_private = new m1_im1_private.c1();
 >m1_im1_private_v2_private : m1_im1_private.c1
 >new m1_im1_private.c1() : m1_im1_private.c1
 >m1_im1_private.c1 : typeof m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >c1 : typeof m1_im1_private.c1
 
     var m1_im1_private_v3_private = m1_im1_private.f1;
 >m1_im1_private_v3_private : () => m1_im1_private.c1
 >m1_im1_private.f1 : () => m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >f1 : () => m1_im1_private.c1
 
     var m1_im1_private_v4_private = m1_im1_private.f1();
 >m1_im1_private_v4_private : m1_im1_private.c1
 >m1_im1_private.f1() : m1_im1_private.c1
 >m1_im1_private.f1 : () => m1_im1_private.c1
->m1_im1_private : typeof m1_im1_private
+>m1_im1_private : typeof m1_M1_public
 >f1 : () => m1_im1_private.c1
 
 
@@ -196,8 +196,8 @@ module m1 {
     //var m1_im4_private_v4_private = m1_im4_private.f1();
 
     export import m1_im1_public = m1_M1_public;
->m1_im1_public : typeof m1_im1_private
->m1_M1_public : typeof m1_im1_private
+>m1_im1_public : typeof m1_M1_public
+>m1_M1_public : typeof m1_M1_public
 
     export import m1_im2_public = m1_M2_private;
 >m1_im2_public : typeof m1_M2_private
@@ -230,6 +230,8 @@ module glo_M1_public {
 }
 
 declare module "glo_M2_public" {
+>"glo_M2_public" : typeof import("glo_M2_public")
+
     export function f1();
 >f1 : () => any
 
@@ -246,6 +248,8 @@ declare module "glo_M2_public" {
 }
 
 declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : typeof import("use_glo_M1_public")
+
     import use_glo_M1_public = glo_M1_public;
 >use_glo_M1_public : typeof use_glo_M1_public
 >glo_M1_public : typeof use_glo_M1_public
@@ -329,6 +333,8 @@ declare module "use_glo_M1_public" {
 }
 
 declare module "anotherParseError" {
+>"anotherParseError" : typeof import("anotherParseError")
+
     module m2 {
 >m2 : any
 

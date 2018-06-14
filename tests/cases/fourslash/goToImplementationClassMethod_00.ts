@@ -3,7 +3,7 @@
 // Should handle calls made on members declared in a class
 
 //// class Bar {
-////     [|{|"parts": ["(","method",")"," ","Bar",".","hello","(",")",":"," ","void"], "kind": "method"|}hello() {}|]
+////     [|{|"parts": ["(","method",")"," ","Bar",".","hello","(",")",":"," ","void"], "kind": "method"|}hello|]() {}
 //// }
 ////
 //// new Bar().hel/*reference*/lo;

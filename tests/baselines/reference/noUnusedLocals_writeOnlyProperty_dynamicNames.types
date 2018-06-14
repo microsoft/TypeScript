@@ -15,9 +15,11 @@ class C {
 >C : C
 
     private [x]: number;
+>[x] : number
 >x : unique symbol
 
     private [y]: number;
+>[y] : number
 >y : unique symbol
 
     m() {

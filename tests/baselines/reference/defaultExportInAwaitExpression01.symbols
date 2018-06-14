@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/modules/a.ts ===
 const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
 >x : Symbol(x, Decl(a.ts, 0, 5))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >resolve : Symbol(resolve, Decl(a.ts, 0, 24))
 >reject : Symbol(reject, Decl(a.ts, 0, 33))
 >resolve : Symbol(resolve, Decl(a.ts, 0, 24))

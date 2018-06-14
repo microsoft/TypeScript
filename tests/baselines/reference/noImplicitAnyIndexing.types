@@ -90,15 +90,19 @@ var m: MyMap<number> = {
 >{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { "0": number; "1": number; "2": number; "Okay that's enough for today.": number; }
 
     "0": 0,
+>"0" : number
 >0 : 0
 
     "1": 1,
+>"1" : number
 >1 : 1
 
     "2": 2,
+>"2" : number
 >2 : 2
 
     "Okay that's enough for today.": NaN
+>"Okay that's enough for today." : number
 >NaN : number
 
 };

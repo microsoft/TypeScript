@@ -9,13 +9,16 @@ class D {
 >foo : Symbol(D.foo, Decl(emitClassDeclarationWithMethodInES6.ts, 1, 17))
 
     ["computedName1"]() { }
+>["computedName1"] : Symbol(D["computedName1"], Decl(emitClassDeclarationWithMethodInES6.ts, 2, 13))
 >"computedName1" : Symbol(D["computedName1"], Decl(emitClassDeclarationWithMethodInES6.ts, 2, 13))
 
     ["computedName2"](a: string) { }
+>["computedName2"] : Symbol(D["computedName2"], Decl(emitClassDeclarationWithMethodInES6.ts, 3, 27))
 >"computedName2" : Symbol(D["computedName2"], Decl(emitClassDeclarationWithMethodInES6.ts, 3, 27))
 >a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 4, 22))
 
     ["computedName3"](a: string): number { return 1; }
+>["computedName3"] : Symbol(D["computedName3"], Decl(emitClassDeclarationWithMethodInES6.ts, 4, 36))
 >"computedName3" : Symbol(D["computedName3"], Decl(emitClassDeclarationWithMethodInES6.ts, 4, 36))
 >a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 5, 22))
 
@@ -35,13 +38,16 @@ class D {
         return "HELLO";
     }
     static ["computedname4"]() { }
+>["computedname4"] : Symbol(D["computedname4"], Decl(emitClassDeclarationWithMethodInES6.ts, 11, 5))
 >"computedname4" : Symbol(D["computedname4"], Decl(emitClassDeclarationWithMethodInES6.ts, 11, 5))
 
     static ["computedname5"](a: string) { }
+>["computedname5"] : Symbol(D["computedname5"], Decl(emitClassDeclarationWithMethodInES6.ts, 12, 34))
 >"computedname5" : Symbol(D["computedname5"], Decl(emitClassDeclarationWithMethodInES6.ts, 12, 34))
 >a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 13, 29))
 
     static ["computedname6"](a: string): boolean { return true; }
+>["computedname6"] : Symbol(D["computedname6"], Decl(emitClassDeclarationWithMethodInES6.ts, 13, 43))
 >"computedname6" : Symbol(D["computedname6"], Decl(emitClassDeclarationWithMethodInES6.ts, 13, 43))
 >a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 14, 29))
 

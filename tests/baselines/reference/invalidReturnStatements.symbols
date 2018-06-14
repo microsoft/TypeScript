@@ -11,7 +11,7 @@ function fn3(): boolean { }
 
 function fn4(): Date {  }
 >fn4 : Symbol(fn4, Decl(invalidReturnStatements.ts, 3, 27))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function fn7(): any {  } // should be valid: any includes void
 >fn7 : Symbol(fn7, Decl(invalidReturnStatements.ts, 4, 25))

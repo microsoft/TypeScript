@@ -64,7 +64,10 @@ interface tup {
 >tup : tup
 
     0: number[]|string[];
+>0 : number[] | string[]
+
     1: number[]|string[];
+>1 : number[] | string[]
 }
 interface myArray extends Array<Number> { }
 >myArray : myArray

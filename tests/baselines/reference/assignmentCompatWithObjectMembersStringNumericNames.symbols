@@ -7,9 +7,11 @@ module JustStrings {
 
     class S { '1': string; }
 >S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 3, 20))
+>'1' : Symbol(S['1'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 4, 13))
 
     class T { '1.': string; }
 >T : Symbol(T, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 4, 28))
+>'1.' : Symbol(T['1.'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 5, 13))
 
     var s: S;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 6, 7))
@@ -21,10 +23,12 @@ module JustStrings {
 
     interface S2 { '1': string; bar?: string }
 >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 7, 13))
+>'1' : Symbol(S2['1'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 9, 18))
 >bar : Symbol(S2.bar, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 9, 31))
 
     interface T2 { '1.0': string; baz?: string }
 >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 9, 46))
+>'1.0' : Symbol(T2['1.0'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 10, 18))
 >baz : Symbol(T2.baz, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 10, 33))
 
     var s2: S2;
@@ -37,17 +41,21 @@ module JustStrings {
 
     var a: { '1.': string; bar?: string }
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 14, 7))
+>'1.' : Symbol('1.', Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 14, 12))
 >bar : Symbol(bar, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 14, 26))
 
     var b: { '1.0': string; baz?: string }
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 15, 7))
+>'1.0' : Symbol('1.0', Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 15, 12))
 >baz : Symbol(baz, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 15, 27))
 
     var a2 = { '1.0': '' };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 17, 7))
+>'1.0' : Symbol('1.0', Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 17, 14))
 
     var b2 = { '1': '' };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 18, 7))
+>'1' : Symbol('1', Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 18, 14))
 
     s = t;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 6, 7))
@@ -131,9 +139,11 @@ module NumbersAndStrings {
 
     class S { '1': string; }
 >S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 44, 26))
+>'1' : Symbol(S['1'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 45, 13))
 
     class T { 1: string; }
 >T : Symbol(T, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 45, 28))
+>1 : Symbol(T[1], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 46, 13))
 
     var s: S;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 47, 7))
@@ -145,10 +155,12 @@ module NumbersAndStrings {
 
     interface S2 { '1': string; bar?: string }
 >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 48, 13))
+>'1' : Symbol(S2['1'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 50, 18))
 >bar : Symbol(S2.bar, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 50, 31))
 
     interface T2 { 1.0: string; baz?: string }
 >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 50, 46))
+>1.0 : Symbol(T2[1.0], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 51, 18))
 >baz : Symbol(T2.baz, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 51, 31))
 
     var s2: S2;
@@ -161,17 +173,21 @@ module NumbersAndStrings {
 
     var a: { '1.': string; bar?: string }
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 55, 7))
+>'1.' : Symbol('1.', Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 55, 12))
 >bar : Symbol(bar, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 55, 26))
 
     var b: { 1.0: string; baz?: string }
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 56, 7))
+>1.0 : Symbol(1.0, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 56, 12))
 >baz : Symbol(baz, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 56, 25))
 
     var a2 = { '1.0': '' };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 58, 7))
+>'1.0' : Symbol('1.0', Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 58, 14))
 
     var b2 = { 1.: '' };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 59, 7))
+>1. : Symbol(1., Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 59, 14))
 
     s = t; // ok
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 47, 7))

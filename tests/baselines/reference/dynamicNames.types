@@ -16,12 +16,15 @@ export interface T0 {
 >T0 : T0
 
     [c0]: number;
+>[c0] : number
 >c0 : "a"
 
     [c1]: string;
+>[c1] : string
 >c1 : 1
 
     [s0]: boolean;
+>[s0] : boolean
 >s0 : unique symbol
 }
 export declare class T1 implements T2 {
@@ -29,12 +32,15 @@ export declare class T1 implements T2 {
 >T2 : T2
 
     [c0]: number;
+>[c0] : number
 >c0 : "a"
 
     [c1]: string;
+>[c1] : string
 >c1 : 1
 
     [s0]: boolean;
+>[s0] : boolean
 >s0 : unique symbol
 }
 export declare class T2 extends T1 {
@@ -45,12 +51,15 @@ export declare type T3 = {
 >T3 : T3
 
     [c0]: number;
+>[c0] : number
 >c0 : "a"
 
     [c1]: string;
+>[c1] : string
 >c1 : 1
 
     [s0]: boolean;
+>[s0] : boolean
 >s0 : unique symbol
 
 };
@@ -88,16 +97,19 @@ namespace N {
 >T4 : T4
 
         [N.c2]: number;
+>[N.c2] : number
 >N.c2 : "a"
 >N : typeof N
 >c2 : "a"
 
         [N.c3]: string;
+>[N.c3] : string
 >N.c3 : 1
 >N : typeof N
 >c3 : 1
 
         [N.s1]: boolean;
+>[N.s1] : boolean
 >N.s1 : unique symbol
 >N : typeof N
 >s1 : unique symbol
@@ -107,16 +119,19 @@ namespace N {
 >T4 : T4
 
         [N.c2]: number;
+>[N.c2] : number
 >N.c2 : "a"
 >N : typeof N
 >c2 : "a"
 
         [N.c3]: string;
+>[N.c3] : string
 >N.c3 : 1
 >N : typeof N
 >c3 : 1
 
         [N.s1]: boolean;
+>[N.s1] : boolean
 >N.s1 : unique symbol
 >N : typeof N
 >s1 : unique symbol
@@ -129,16 +144,19 @@ namespace N {
 >T7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
 
         [N.c2]: number;
+>[N.c2] : number
 >N.c2 : "a"
 >N : typeof N
 >c2 : "a"
 
         [N.c3]: string;
+>[N.c3] : string
 >N.c3 : 1
 >N : typeof N
 >c3 : 1
 
         [N.s1]: boolean;
+>[N.s1] : boolean
 >N.s1 : unique symbol
 >N : typeof N
 >s1 : unique symbol
@@ -163,12 +181,15 @@ interface T8 {
 >T8 : T8
 
     [c4]: number;
+>[c4] : number
 >c4 : "a"
 
     [c5]: string;
+>[c5] : string
 >c5 : 1
 
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T9 implements T8 {
@@ -176,12 +197,15 @@ declare class T9 implements T8 {
 >T8 : T8
 
     [c4]: number;
+>[c4] : number
 >c4 : "a"
 
     [c5]: string;
+>[c5] : string
 >c5 : 1
 
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T10 extends T9 {
@@ -189,15 +213,18 @@ declare class T10 extends T9 {
 >T9 : T9
 }
 declare type T11 = {
->T11 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>T11 : T11
 
     [c4]: number;
+>[c4] : number
 >c4 : "a"
 
     [c5]: string;
+>[c5] : string
 >c5 : 1
 
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 
 };
@@ -209,7 +236,10 @@ interface T12 {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T13 implements T2 {
@@ -220,7 +250,10 @@ declare class T13 implements T2 {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T14 extends T13 {
@@ -228,13 +261,16 @@ declare class T14 extends T13 {
 >T13 : T13
 }
 declare type T15 = {
->T15 : { a: number; 1: string; [s2]: boolean; }
+>T15 : T15
 
     a: number;
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 
 };
@@ -246,7 +282,10 @@ declare class C {
 >a : number
 
     static 1: string;
+>1 : string
+
     static [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 
@@ -302,9 +341,9 @@ let t6: N.T6;
 >T6 : N.T6
 
 let t7: N.T7;
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >N : any
->T7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>T7 : N.T7
 
 let t8: T8;
 >t8 : T8
@@ -319,8 +358,8 @@ let t10: T10;
 >T10 : T10
 
 let t11: T11;
->t11 : { [c4]: number; [c5]: string; [s2]: boolean; }
->T11 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>t11 : T11
+>T11 : T11
 
 let t12: T12;
 >t12 : T12
@@ -335,8 +374,8 @@ let t14: T14;
 >T14 : T14
 
 let t15: T15;
->t15 : { a: number; 1: string; [s2]: boolean; }
->T15 : { a: number; 1: string; [s2]: boolean; }
+>t15 : T15
+>T15 : T15
 
 // assignability
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
@@ -392,13 +431,13 @@ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7,
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : N.T6
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : N.T5
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : N.T7
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : N.T5
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : N.T7
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : N.T6
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t5, t4 = t6, t4 = t7 : N.T7
 >t4 = t5, t4 = t6 : N.T6
 >t4 = t5 : N.T5
 >t4 : N.T4
@@ -406,35 +445,35 @@ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7,
 >t4 = t6 : N.T6
 >t4 : N.T4
 >t6 : N.T6
->t4 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t4 = t7 : N.T7
 >t4 : N.T4
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t5 = t4 : N.T4
 >t5 : N.T5
 >t4 : N.T4
 >t5 = t6 : N.T6
 >t5 : N.T5
 >t6 : N.T6
->t5 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t5 = t7 : N.T7
 >t5 : N.T5
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t6 = t4 : N.T4
 >t6 : N.T6
 >t4 : N.T4
 >t6 = t5 : N.T5
 >t6 : N.T6
 >t5 : N.T5
->t6 = t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t6 = t7 : N.T7
 >t6 : N.T6
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t7 = t4 : N.T4
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t4 : N.T4
 >t7 = t5 : N.T5
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t5 : N.T5
 >t7 = t6 : N.T6
->t7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>t7 : N.T7
 >t6 : N.T6
 
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
@@ -442,7 +481,7 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0 : T0
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0 : T0
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0 : T0
->t0 = t12, t0 = t13, t0 = t14, t0 = t15 : { a: number; 1: string; [s2]: boolean; }
+>t0 = t12, t0 = t13, t0 = t14, t0 = t15 : T15
 >t0 = t12, t0 = t13, t0 = t14 : T14
 >t0 = t12, t0 = t13 : T13
 >t0 = t12 : T12
@@ -454,9 +493,9 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t0 = t14 : T14
 >t0 : T0
 >t14 : T14
->t0 = t15 : { a: number; 1: string; [s2]: boolean; }
+>t0 = t15 : T15
 >t0 : T0
->t15 : { a: number; 1: string; [s2]: boolean; }
+>t15 : T15
 >t12 = t0 : T0
 >t12 : T12
 >t0 : T0
@@ -467,7 +506,7 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t14 : T14
 >t0 : T0
 >t15 = t0 : T0
->t15 : { a: number; 1: string; [s2]: boolean; }
+>t15 : T15
 >t0 : T0
 
 t0 = C; // static side
@@ -481,14 +520,17 @@ export const o1 = {
 >{    [c4]: 1,    [c5]: "a",    [s2]: true} : { [c4]: number; [c5]: string; [s2]: boolean; }
 
     [c4]: 1,
+>[c4] : number
 >c4 : "a"
 >1 : 1
 
     [c5]: "a",
+>[c5] : string
 >c5 : 1
 >"a" : "a"
 
     [s2]: true
+>[s2] : boolean
 >s2 : unique symbol
 >true : true
 
@@ -538,6 +580,7 @@ interface RI<T extends "a" | "b"> {
 >T : T
 
     [rI.x]: "b";
+>[rI.x] : "b"
 >rI.x : "a"
 >rI : RI<"a">
 >x : "a"
@@ -561,6 +604,7 @@ declare class RC<T extends "a" | "b"> {
 >T : T
 
     [rC.x]: "b";
+>[rC.x] : "b"
 >rC.x : "a"
 >rC : RC<"a">
 >x : "a"

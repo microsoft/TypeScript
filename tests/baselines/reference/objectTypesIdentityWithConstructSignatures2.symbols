@@ -37,7 +37,7 @@ interface I2<T> {
 var a: { new(x: Date): string }
 >a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures2.ts, 18, 3))
 >x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures2.ts, 18, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var b = { new(x: RegExp) { return ''; } }; // not a construct signature, function called new
 >b : Symbol(b, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 3))

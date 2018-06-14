@@ -13,8 +13,8 @@ export class Foo {
 //// [b.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var Foo;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
@@ -30,8 +30,8 @@ System.register([], function (exports_1, context_1) {
 //// [a.js]
 System.register(["./b"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var b_1, x;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [
             function (b_1_1) {

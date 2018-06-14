@@ -34,7 +34,7 @@ class TypeWriterWalker {
     }
 
     public *getSymbols(fileName: string): IterableIterator<TypeWriterSymbolResult> {
-        const sourceFile = this.program.getSourceFile(fileName);
+        const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ true);
         for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -43,7 +43,7 @@ class TypeWriterWalker {
     }
 
     public *getTypes(fileName: string): IterableIterator<TypeWriterTypeResult> {
-        const sourceFile = this.program.getSourceFile(fileName);
+        const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ false);
         for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -52,7 +52,7 @@ class TypeWriterWalker {
     }
 
     private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
-        if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier) {
+        if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
             const result = this.writeTypeOrSymbol(node, isSymbolWalk);
             if (result) {
                 yield result;
@@ -69,17 +69,16 @@ class TypeWriterWalker {
         }
     }
 
-    private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult {
+    private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult | undefined {
         const actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         const lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
-        const sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
-
+        const sourceText = ts.getSourceTextOfNodeFromSourceFile(this.currentSourceFile, node);
 
         if (!isSymbolWalk) {
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
             const type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
-            const typeString = type ? this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation) : "No type information available!";
+            const typeString = type ? this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType) : "No type information available!";
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,

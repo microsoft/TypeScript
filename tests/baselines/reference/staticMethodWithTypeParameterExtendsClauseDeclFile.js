@@ -59,10 +59,10 @@ exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTyp
 export declare class publicClass {
 }
 export declare class publicClassWithWithPrivateTypeParameters {
-    private static myPrivateStaticMethod1<T>();
-    private myPrivateMethod1<T>();
-    private static myPrivateStaticMethod2<T>();
-    private myPrivateMethod2<T>();
+    private static myPrivateStaticMethod1;
+    private myPrivateMethod1;
+    private static myPrivateStaticMethod2;
+    private myPrivateMethod2;
     static myPublicStaticMethod<T extends publicClass>(): void;
     myPublicMethod<T extends publicClass>(): void;
 }

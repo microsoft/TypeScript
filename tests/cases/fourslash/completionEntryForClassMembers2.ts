@@ -350,7 +350,7 @@ verifyClassElementLocations(
         value => value[0] !== "getValue"),
     ["extendsBAndImplementsI3WithSameNameMembersAndHasImplementedTheMember"]);
 
-const invalidMembersOfB0AtInstanceSide = privateMembersOfBaseClassB0.concat(validStaticMembersOfBaseClassB0); 
+const invalidMembersOfB0AtInstanceSide = privateMembersOfBaseClassB0.concat(validStaticMembersOfBaseClassB0);
 const invalidMembersOfB0AtStaticSide = privateMembersOfBaseClassB0.concat(validInstanceMembersOfBaseClassB0);
 // members of B0 and members of I4
 verifyClassElementLocations({
@@ -403,11 +403,10 @@ verifyClassElementLocations({ validMembers: membersOfI7, invalidMembers: noMembe
     "implementsIAndAlsoImplementsI7whichExtendsI"
 ]);
 
-const invalidMembersOfB0AtInstanceSideFromInterfaceExtendingB0 = invalidMembersOfB0AtInstanceSide
-    .concat(protectedPropertiesOfBaseClassB0);
+const invalidMembersOfB0AtInstanceSideFromInterfaceExtendingB0 = invalidMembersOfB0AtInstanceSide;
 // members of I5 extends B0
 verifyClassElementLocations({
-    validMembers: membersOfI5,
+    validMembers: membersOfI5.concat(protectedPropertiesOfBaseClassB0),
     invalidMembers: invalidMembersOfB0AtInstanceSideFromInterfaceExtendingB0
 }, [
         "implementsI5ThatExtendsB0",
@@ -415,7 +414,7 @@ verifyClassElementLocations({
 
 // members of I6 extends B0
 verifyClassElementLocations({
-    validMembers: membersOfI6,
+    validMembers: membersOfI6.concat(protectedPropertiesOfBaseClassB0),
     invalidMembers: invalidMembersOfB0AtInstanceSideFromInterfaceExtendingB0
 }, [
         "implementsI6ThatExtendsB0AndHasStaticMethodOfB0",

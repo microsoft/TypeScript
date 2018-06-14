@@ -6,7 +6,7 @@ const x = 0;
 exports.y = 1;
 >exports.y = 1 : 1
 >exports.y : number
->exports : typeof "/a"
+>exports : typeof import("/a")
 >y : number
 >1 : 1
 

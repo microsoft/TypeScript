@@ -43,10 +43,10 @@ function f1(a: P<A>, b: P<B>) {
 function f2(a: Promise<A>, b: Promise<B>) {
 >f2 : Symbol(f2, Decl(covariantCallbacks.ts, 12, 1))
 >a : Symbol(a, Decl(covariantCallbacks.ts, 14, 12))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
 >b : Symbol(b, Decl(covariantCallbacks.ts, 14, 26))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
 
     a = b;

@@ -15,6 +15,8 @@ var z2 = foo.y() + 10; // Should resolve
 
 === tests/cases/conformance/externalModules/foo_1.ts ===
 declare module "vs/foo_0" {
+>"vs/foo_0" : Symbol("vs/foo_0", Decl(foo_1.ts, 0, 0))
+
 	export var y: () => number;
 >y : Symbol(y, Decl(foo_1.ts, 1, 11))
 }

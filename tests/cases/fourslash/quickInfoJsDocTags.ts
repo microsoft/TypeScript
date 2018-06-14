@@ -5,7 +5,7 @@
 //// * Doc
 //// * @author Me
 //// * @augments {C<T>} Augments it
-//// * @template {T} A template
+//// * @template T A template
 //// * @type {number | string} A type
 //// * @typedef {number | string} NumOrStr
 //// * @property {number} x The prop

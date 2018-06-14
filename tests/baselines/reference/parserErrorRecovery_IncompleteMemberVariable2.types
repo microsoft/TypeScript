@@ -19,6 +19,7 @@ module Shapes {
         public con:C "hello";
 >con : any
 >C : No type information available!
+>"hello" : any
 
         // Constructor
         constructor (public x: number, public y: number) { }

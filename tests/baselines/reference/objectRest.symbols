@@ -184,8 +184,10 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 >o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
 
 ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
+>[computed] : Symbol([computed], Decl(objectRest.ts, 43, 2))
 >computed : Symbol(computed, Decl(objectRest.ts, 40, 3))
 >stillNotGreat : Symbol(stillNotGreat, Decl(objectRest.ts, 42, 5))
+>[computed2] : Symbol([computed2], Decl(objectRest.ts, 43, 29))
 >computed2 : Symbol(computed2, Decl(objectRest.ts, 41, 3))
 >soSo : Symbol(soSo, Decl(objectRest.ts, 42, 32))
 >o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))

@@ -12,4 +12,4 @@
 //// // different 'this'
 //// function f(this) { return this; }
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("this");

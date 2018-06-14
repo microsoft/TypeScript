@@ -139,11 +139,11 @@ m.x;
 >x : Symbol(m.x, Decl(constDeclarations_access_1.ts, 0, 12))
 
 m.x.toString();
->m.x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>m.x.toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 >m.x : Symbol(m.x, Decl(constDeclarations_access_1.ts, 0, 12))
 >m : Symbol(m, Decl(constDeclarations_access_2.ts, 0, 0))
 >x : Symbol(m.x, Decl(constDeclarations_access_1.ts, 0, 12))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 
 === tests/cases/compiler/constDeclarations_access_1.ts ===
 export const x = 0;

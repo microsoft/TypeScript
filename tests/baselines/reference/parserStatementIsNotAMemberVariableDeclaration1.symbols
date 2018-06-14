@@ -2,6 +2,7 @@
 return {
 
   "set": function (key, value) {
+>"set" : Symbol("set", Decl(parserStatementIsNotAMemberVariableDeclaration1.ts, 0, 8))
 >key : Symbol(key, Decl(parserStatementIsNotAMemberVariableDeclaration1.ts, 2, 19))
 >value : Symbol(value, Decl(parserStatementIsNotAMemberVariableDeclaration1.ts, 2, 23))
 

@@ -7,10 +7,4 @@
 ////
 ////declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { /*1*/ }
 
-goTo.marker("1");
-
-verify.not.completionListContains("I");
-verify.not.completionListContains("TString");
-verify.not.completionListContains("TNumber");
-verify.not.completionListContains("foo");
-verify.not.completionListContains("obj");
+verify.completionsAt("1", ["readonly"], { isNewIdentifierLocation: true });

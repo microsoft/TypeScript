@@ -3,5 +3,6 @@ class C {
 >C : C
 
    *[foo]() { }
+>[foo] : () => IterableIterator<any>
 >foo : any
 }

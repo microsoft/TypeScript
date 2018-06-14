@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsx/component.d.ts ===
+import * as React from "react";
+>React : typeof React
+
+export declare class MyComp<P> extends React.Component<P, {}> {
+>MyComp : MyComp<P>
+>P : P
+>React.Component : React.Component<P, {}>
+>React : typeof React
+>Component : typeof React.Component
+>P : P
+
+    internalProp: P;
+>internalProp : P
+>P : P
+}
+
+export interface Prop {
+>Prop : Prop
+
+    a: number,
+>a : number
+
+    b: string
+>b : string
+}
+
+=== tests/cases/conformance/jsx/file.jsx ===
+import { MyComp, Prop } from "./component";
+>MyComp : typeof MyComp
+>Prop : any
+
+import * as React from "react";
+>React : typeof React
+
+let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
+>x : JSX.Element
+><MyComp<Prop> a={10} b="hi" /> : JSX.Element
+>MyComp : typeof MyComp
+>Prop : Prop
+>a : number
+>10 : 10
+>b : string
+

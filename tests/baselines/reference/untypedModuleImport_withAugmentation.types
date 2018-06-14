@@ -1,5 +1,7 @@
 === /a.ts ===
 declare module "foo" {
+>"foo" : typeof import("foo")
+
     export const x: number;
 >x : number
 }

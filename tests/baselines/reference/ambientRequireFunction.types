@@ -2,8 +2,8 @@
 /// <reference path="node.d.ts"/>
 
 const fs = require("fs");
->fs : typeof "fs"
->require("fs") : typeof "fs"
+>fs : typeof import("fs")
+>require("fs") : typeof import("fs")
 >require : (moduleName: string) => any
 >"fs" : "fs"
 
@@ -11,7 +11,7 @@ const text = fs.readFileSync("/a/b/c");
 >text : string
 >fs.readFileSync("/a/b/c") : string
 >fs.readFileSync : (s: string) => string
->fs : typeof "fs"
+>fs : typeof import("fs")
 >readFileSync : (s: string) => string
 >"/a/b/c" : "/a/b/c"
 
@@ -21,6 +21,8 @@ declare function require(moduleName: string): any;
 >moduleName : string
 
 declare module "fs" {
+>"fs" : typeof import("fs")
+
     export function readFileSync(s: string): string;
 >readFileSync : (s: string) => string
 >s : string

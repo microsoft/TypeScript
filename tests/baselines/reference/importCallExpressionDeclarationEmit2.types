@@ -5,7 +5,7 @@ export function foo() { return "foo"; }
 
 === tests/cases/conformance/dynamicImport/1.ts ===
 var p1 = import("./0");
->p1 : Promise<typeof "tests/cases/conformance/dynamicImport/0">
->import("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>p1 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
 >"./0" : "./0"
 

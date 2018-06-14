@@ -4,15 +4,20 @@
 ////    /**
 ////     * @return {...*}
 ////     */
-////    /*1*/m(x) {
+////    m(x) {
+////        return [x];
 ////    }
 ////}
-verify.applicableRefactorAvailableAtMarker('1');
-verify.fileAfterApplyingRefactorAtMarker('1',
+
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `class C {
     /**
      * @return {...*}
      */
     m(x): any[] {
+        return [x];
     }
-}`, 'Annotate with type from JSDoc', 'annotate');
+}`,
+});

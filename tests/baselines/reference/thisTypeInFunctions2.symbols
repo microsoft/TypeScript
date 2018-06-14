@@ -89,7 +89,7 @@ extend2({
     init() {
 >init : Symbol(init, Decl(thisTypeInFunctions2.ts, 32, 9))
 
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
@@ -102,7 +102,7 @@ extend2({
     foo() {
 >foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 37, 13))
 
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine

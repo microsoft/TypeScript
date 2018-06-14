@@ -27,6 +27,7 @@ class C {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: number;
+>0 : Symbol(C[0], Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 8, 24))
 }
 
 interface I {
@@ -51,6 +52,7 @@ interface I {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: number;
+>0 : Symbol(I[0], Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 17, 24))
 }
 
 var c: C;

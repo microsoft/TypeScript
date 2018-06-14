@@ -55,7 +55,7 @@ declare namespace My.Internal {
     const enum WhichThing {
         A = 0,
         B = 1,
-        C = 2,
+        C = 2
     }
 }
 //// [usage.d.ts]

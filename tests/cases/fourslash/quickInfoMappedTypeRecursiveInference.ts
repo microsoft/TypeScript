@@ -17,23 +17,37 @@
 //// oub.b.a.n.a.n.a/*10*/
 
 verify.quickInfoAt('1', `const out: {
-    a: any;
+    a: {
+        a: any;
+    };
 }`);
 verify.quickInfoAt('2', `function foo<{
-    a: any;
+    a: {
+        a: any;
+    };
 }>(deep: Deep<{
-    a: any;
+    a: {
+        a: any;
+    };
 }>): {
-    a: any;
+    a: {
+        a: any;
+    };
 }`);
 verify.quickInfoAt('3', `(property) a: {
-    a: any;
+    a: {
+        a: any;
+    };
 }`);
 verify.quickInfoAt('4', `(property) a: {
-    a: any;
+    a: {
+        a: any;
+    };
 }`);
 verify.quickInfoAt('5', `(property) a: {
-    a: any;
+    a: {
+        a: any;
+    };
 }`);
 verify.quickInfoAt('6', `const oub: {
     [x: string]: any;

@@ -8,6 +8,7 @@ enum ENUM1 { A, B, "" };
 >ENUM1 : Symbol(ENUM1, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 2, 14))
 >A : Symbol(ENUM1.A, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 3, 12))
 >B : Symbol(ENUM1.B, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 3, 18))
 
 // enum type var
 var ResultIsNumber1 = ++ENUM;

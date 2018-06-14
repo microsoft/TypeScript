@@ -3,7 +3,7 @@ module m1 {
 >m1 : Symbol(m1, Decl(privacyGloImport.ts, 0, 0))
 
     export module m1_M1_public {
->m1_M1_public : Symbol(m1_im1_private, Decl(privacyGloImport.ts, 0, 11))
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyGloImport.ts, 0, 11))
 
         export class c1 {
 >c1 : Symbol(c1, Decl(privacyGloImport.ts, 1, 32))
@@ -62,7 +62,7 @@ module m1 {
 
     import m1_im1_private = m1_M1_public;
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyGloImport.ts, 19, 5))
->m1_M1_public : Symbol(m1_im1_private, Decl(privacyGloImport.ts, 0, 11))
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyGloImport.ts, 0, 11))
 
     export var m1_im1_private_v1_public = m1_im1_private.c1;
 >m1_im1_private_v1_public : Symbol(m1_im1_private_v1_public, Decl(privacyGloImport.ts, 38, 14))
@@ -187,7 +187,7 @@ module m1 {
 
     export import m1_im1_public = m1_M1_public;
 >m1_im1_public : Symbol(m1_im1_public, Decl(privacyGloImport.ts, 56, 56))
->m1_M1_public : Symbol(m1_im1_private, Decl(privacyGloImport.ts, 0, 11))
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyGloImport.ts, 0, 11))
 
     export import m1_im2_public = m1_M2_private;
 >m1_im2_public : Symbol(m1_im2_public, Decl(privacyGloImport.ts, 78, 47))
@@ -219,6 +219,8 @@ module glo_M1_public {
 }
 
 declare module "glo_M2_public" {
+>"glo_M2_public" : Symbol("glo_M2_public", Decl(privacyGloImport.ts, 92, 1))
+
     export function f1();
 >f1 : Symbol(f1, Decl(privacyGloImport.ts, 94, 32))
 
@@ -235,6 +237,8 @@ declare module "glo_M2_public" {
 }
 
 declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : Symbol("use_glo_M1_public", Decl(privacyGloImport.ts, 100, 1))
+
     import use_glo_M1_public = glo_M1_public;
 >use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyGloImport.ts, 102, 36))
 >glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyGloImport.ts, 82, 1))
@@ -318,6 +322,8 @@ declare module "use_glo_M1_public" {
 }
 
 declare module "anotherParseError" {
+>"anotherParseError" : Symbol("anotherParseError", Decl(privacyGloImport.ts, 128, 1))
+
     module m2 {
 >m2 : Symbol(m2, Decl(privacyGloImport.ts, 130, 36), Decl(privacyGloImport.ts, 134, 5))
 

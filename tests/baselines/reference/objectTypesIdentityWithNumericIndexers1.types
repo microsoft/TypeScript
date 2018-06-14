@@ -51,6 +51,7 @@ var b: { [x: number]: string; } = { 0: '' };
 >b : { [x: number]: string; }
 >x : number
 >{ 0: '' } : { 0: string; }
+>0 : string
 >'' : ""
 
 function foo1(x: A);

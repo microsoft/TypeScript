@@ -10,7 +10,9 @@ var a = 4; // comment 7
 ===MODIFIED===
 
 // comment 1
-var x = 1;public class class1 implements interface1
+var x = 1; // comment 2
+// comment 3
+public class class1 implements interface1
 {
     property1: boolean;
 } // comment 4

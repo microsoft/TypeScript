@@ -19,6 +19,8 @@ interface I {
     (): boolean;
     new (): boolean;
     "": string;
+>"" : string
+
     d: string;
 >d : string
 }

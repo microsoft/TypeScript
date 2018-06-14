@@ -25,19 +25,19 @@ function F1(a:any) { return a;}
 >a : any
 
 var f1 = new Foo("hey");
->f1 : Foo
->new Foo("hey") : Foo
->Foo : typeof Foo
+>f1 : any
+>new Foo("hey") : any
+>Foo : () => any
 >"hey" : "hey"
 
 
 f1.bar1();
->f1.bar1() : void
->f1.bar1 : () => void
->f1 : Foo
->bar1 : () => void
+>f1.bar1() : any
+>f1.bar1 : any
+>f1 : any
+>bar1 : any
 
 Foo();
 >Foo() : any
->Foo : typeof Foo
+>Foo : () => any
 

@@ -22,6 +22,8 @@ var z2 = foo.y() + 10; // Should resolve
 
 === tests/cases/conformance/externalModules/foo_1.ts ===
 declare module "vs/foo_0" {
+>"vs/foo_0" : typeof import("vs/foo_0")
+
 	export var y: () => number;
 >y : () => number
 }

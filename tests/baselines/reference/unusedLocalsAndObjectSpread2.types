@@ -10,7 +10,7 @@ const {
 >active : any
 >_a : any
 
-  ...rest,
+  ...rest
 >rest : any
 
 } = props;
@@ -27,10 +27,10 @@ function foo() {
 >active : any
 >_a : any
 
-    ...rest,
+        ...rest
 >rest : any
 
-  } = props;
+    } = props;
 >props : any
 }
 

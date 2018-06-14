@@ -127,3 +127,18 @@ module M {
 	export async function f1() { }
 >f1 : () => Promise<void>
 }
+
+async function f14() {
+>f14 : () => Promise<void>
+
+    block: {
+>block : any
+
+        await 1;
+>await 1 : 1
+>1 : 1
+
+        break block;
+>block : any
+    }
+}

@@ -8,6 +8,7 @@ declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX
 >l : { prop: U; "ignore-prop": string; }
 >prop : U
 >U : U
+>"ignore-prop" : string
 >JSX : any
 >Element : JSX.Element
 

@@ -210,8 +210,10 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 >({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o) : { a: number; b: string; }
 >{ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o : { a: number; b: string; }
 >{ [computed]: stillNotGreat, [computed2]: soSo, ...o } : { a: number; b: string; }
+>[computed] : any
 >computed : string
 >stillNotGreat : any
+>[computed2] : any
 >computed2 : string
 >soSo : any
 >o : { a: number; b: string; }

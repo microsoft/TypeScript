@@ -108,13 +108,16 @@ var b10: Indexed = { 0: { }, '1': { } }; // ok
 >b10 : Indexed
 >Indexed : Indexed
 >{ 0: { }, '1': { } } : { 0: {}; '1': {}; }
+>0 : {}
 >{ } : {}
+>'1' : {}
 >{ } : {}
 
 var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
 >b11 : Indexed
 >Indexed : Indexed
 >{ 0: { colour: "blue" } } : { 0: { colour: string; }; }
+>0 : { colour: string; }
 >{ colour: "blue" } : { colour: string; }
 >colour : string
 >"blue" : "blue"

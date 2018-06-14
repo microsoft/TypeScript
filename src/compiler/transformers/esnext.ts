@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="es2017.ts" />
-
 /*@internal*/
 namespace ts {
     const enum ESNextSubstitutionFlags {
@@ -30,7 +26,7 @@ namespace ts {
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -67,6 +63,8 @@ namespace ts {
                     return visitAwaitExpression(node as AwaitExpression);
                 case SyntaxKind.YieldExpression:
                     return visitYieldExpression(node as YieldExpression);
+                case SyntaxKind.ReturnStatement:
+                    return visitReturnStatement(node as ReturnStatement);
                 case SyntaxKind.LabeledStatement:
                     return visitLabeledStatement(node as LabeledStatement);
                 case SyntaxKind.ObjectLiteralExpression:
@@ -122,21 +120,38 @@ namespace ts {
         }
 
         function visitYieldExpression(node: YieldExpression) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator && node.asteriskToken) {
-                const expression = visitNode(node.expression, visitor, isExpression);
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                if (node.asteriskToken) {
+                    const expression = visitNode(node.expression, visitor, isExpression);
+
+                    return setOriginalNode(
+                        setTextRange(
+                            createYield(
+                                createAwaitHelper(context,
+                                    updateYield(
+                                        node,
+                                        node.asteriskToken,
+                                        createAsyncDelegatorHelper(
+                                            context,
+                                            createAsyncValuesHelper(context, expression, expression),
+                                            expression
+                                        )
+                                    )
+                                )
+                            ),
+                            node
+                        ),
+                        node
+                    );
+                }
+
                 return setOriginalNode(
                     setTextRange(
                         createYield(
-                            createAwaitHelper(context,
-                                updateYield(
-                                    node,
-                                    node.asteriskToken,
-                                    createAsyncDelegatorHelper(
-                                        context,
-                                        createAsyncValuesHelper(context, expression, expression),
-                                        expression
-                                    )
-                                )
+                            createDownlevelAwait(
+                                node.expression
+                                    ? visitNode(node.expression, visitor, isExpression)
+                                    : createVoidZero()
                             )
                         ),
                         node
@@ -144,6 +159,17 @@ namespace ts {
                     node
                 );
             }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitReturnStatement(node: ReturnStatement) {
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                return updateReturn(node, createDownlevelAwait(
+                    node.expression ? visitNode(node.expression, visitor, isExpression) : createVoidZero()
+                ));
+            }
+
             return visitEachChild(node, visitor, context);
         }
 
@@ -153,13 +179,13 @@ namespace ts {
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
+                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
             }
             return visitEachChild(node, visitor, context);
         }
 
         function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
-            let chunkObject: ObjectLiteralElementLike[];
+            let chunkObject: ObjectLiteralElementLike[] | undefined;
             const objects: Expression[] = [];
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
@@ -167,20 +193,13 @@ namespace ts {
                         objects.push(createObjectLiteral(chunkObject));
                         chunkObject = undefined;
                     }
-                    const target = (e as SpreadAssignment).expression;
+                    const target = e.expression;
                     objects.push(visitNode(target, visitor, isExpression));
                 }
                 else {
-                    if (!chunkObject) {
-                        chunkObject = [];
-                    }
-                    if (e.kind === SyntaxKind.PropertyAssignment) {
-                        const p = e as PropertyAssignment;
-                        chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
-                    }
-                    else {
-                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
-                    }
+                    chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
+                        ? createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
+                        : visitNode(e, visitor, isObjectLiteralElementLike));
                 }
             }
             if (chunkObject) {
@@ -287,7 +306,7 @@ namespace ts {
          *
          * @param node A ForOfStatement.
          */
-        function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement): VisitResult<Statement> {
+        function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
             if (node.initializer.transformFlags & TransformFlags.ContainsObjectRest) {
                 node = transformForOfStatementWithObjectRest(node);
             }
@@ -302,14 +321,19 @@ namespace ts {
         function transformForOfStatementWithObjectRest(node: ForOfStatement) {
             const initializerWithoutParens = skipParentheses(node.initializer) as ForInitializer;
             if (isVariableDeclarationList(initializerWithoutParens) || isAssignmentPattern(initializerWithoutParens)) {
-                let bodyLocation: TextRange;
-                let statementsLocation: TextRange;
+                let bodyLocation: TextRange | undefined;
+                let statementsLocation: TextRange | undefined;
                 const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const statements: Statement[] = [createForOfBindingStatement(initializerWithoutParens, temp)];
                 if (isBlock(node.statement)) {
                     addRange(statements, node.statement.statements);
                     bodyLocation = node.statement;
                     statementsLocation = node.statement.statements;
+                }
+                else if (node.statement) {
+                    append(statements, node.statement);
+                    bodyLocation = node.statement;
+                    statementsLocation = node.statement;
                 }
                 return updateForOf(
                     node,
@@ -339,8 +363,8 @@ namespace ts {
         function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression) {
             const binding = createForOfBindingStatement(node.initializer, boundValue);
 
-            let bodyLocation: TextRange;
-            let statementsLocation: TextRange;
+            let bodyLocation: TextRange | undefined;
+            let statementsLocation: TextRange | undefined;
             const statements: Statement[] = [visitNode(binding, visitor, isStatement)];
             const statement = visitNode(node.statement, visitor, isStatement);
             if (isBlock(statement)) {
@@ -370,7 +394,7 @@ namespace ts {
                 : createAwait(expression);
         }
 
-        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
+        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined) {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
@@ -404,7 +428,7 @@ namespace ts {
                             createLogicalNot(getDone)
                         ),
                         /*incrementor*/ undefined,
-                        /*statement*/ convertForOfStatementHead(node, createDownlevelAwait(getValue))
+                        /*statement*/ convertForOfStatementHead(node, getValue)
                     ),
                     /*location*/ node
                 ),
@@ -550,7 +574,7 @@ namespace ts {
                     ? undefined
                     : node.asteriskToken,
                 visitNode(node.name, visitor, isPropertyName),
-                visitNode(/*questionToken*/ undefined, visitor, isToken),
+                visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -628,7 +652,7 @@ namespace ts {
         function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
             resumeLexicalEnvironment();
             const statements: Statement[] = [];
-            const statementOffset = addPrologue(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologue(statements, node.body!.statements, /*ensureUseStrict*/ false, visitor);
             appendObjectRestAssignmentsIfNeeded(statements, node);
 
             statements.push(
@@ -643,16 +667,16 @@ namespace ts {
                             /*parameters*/ [],
                             /*type*/ undefined,
                             updateBlock(
-                                node.body,
-                                visitLexicalEnvironment(node.body.statements, visitor, context, statementOffset)
+                                node.body!,
+                                visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                             )
                         )
                     )
                 )
             );
 
-            addRange(statements, endLexicalEnvironment());
-            const block = updateBlock(node.body, statements);
+            prependStatements(statements, endLexicalEnvironment());
+            const block = updateBlock(node.body!, statements);
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
             // This step isn't needed if we eventually transform this to ES5.
@@ -680,17 +704,17 @@ namespace ts {
                 statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
             }
             addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
-            const trailingStatements = endLexicalEnvironment();
-            if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
+            const leadingStatements = endLexicalEnvironment();
+            if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
+                prependStatements(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
-                addRange(statements, trailingStatements);
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;
         }
 
-        function appendObjectRestAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): Statement[] {
+        function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
             for (const parameter of node.parameters) {
                 if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {
                     const temp = getGeneratedNameForNode(parameter);
@@ -877,7 +901,7 @@ namespace ts {
     };
 
     export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
-        if (context.getCompilerOptions().target >= ScriptTarget.ES2015) {
+        if (context.getCompilerOptions().target! >= ScriptTarget.ES2015) {
             return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
                               /*typeArguments*/ undefined,
                               attributesSegments);
@@ -894,8 +918,7 @@ namespace ts {
         name: "typescript:await",
         scoped: false,
         text: `
-            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
-        `
+            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
     };
 
     function createAwaitHelper(context: TransformationContext, expression: Expression) {
@@ -913,12 +936,11 @@ namespace ts {
                 return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
                 function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
                 function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
                 function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-            };
-        `
+            };`
     };
 
     function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression) {
@@ -926,7 +948,7 @@ namespace ts {
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
 
         return createCall(
             getHelperName("__asyncGenerator"),
@@ -946,9 +968,8 @@ namespace ts {
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
                 var i, p;
                 return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-                function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
-            };
-        `
+                function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+            };`
     };
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -970,10 +991,11 @@ namespace ts {
         text: `
             var __asyncValues = (this && this.__asyncValues) || function (o) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var m = o[Symbol.asyncIterator];
-                return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
-            };
-        `
+                var m = o[Symbol.asyncIterator], i;
+                return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+                function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+                function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+            };`
     };
 
     function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {

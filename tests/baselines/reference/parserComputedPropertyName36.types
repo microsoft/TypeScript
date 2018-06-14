@@ -3,5 +3,6 @@ class C {
 >C : C
 
     [public ]: string;
+>[public ] : string
 >public : any
 }

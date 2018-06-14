@@ -15,12 +15,15 @@ var obj1 = {
 >{    0O45436: "hi",    19230: "Hello",    "19230": "world",} : { 0O45436: string; }
 
     0O45436: "hi",
+>0O45436 : string
 >"hi" : "hi"
 
     19230: "Hello",
+>19230 : string
 >"Hello" : "Hello"
 
     "19230": "world",
+>"19230" : string
 >"world" : "world"
 
 };

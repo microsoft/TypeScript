@@ -9,6 +9,7 @@ module M {
 >C : Symbol(C, Decl(symbolProperty48.ts, 1, 15))
 
         [Symbol.iterator]() { }
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty48.ts, 3, 13))
 >Symbol : Symbol(Symbol, Decl(symbolProperty48.ts, 1, 7))
     }
 }

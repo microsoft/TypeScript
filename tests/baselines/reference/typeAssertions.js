@@ -106,11 +106,11 @@ var numOrStr;
 var str;
 if (is)
     string > (numOrStr === undefined);
-{
+{ // Error
     str = numOrStr; // Error, no narrowing occurred
 }
 if ((numOrStr === undefined))
     is;
 string;
-{
+{ // Error
 }

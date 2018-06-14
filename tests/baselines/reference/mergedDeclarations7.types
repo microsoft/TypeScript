@@ -1,5 +1,7 @@
 === tests/cases/compiler/passport.d.ts ===
 declare module 'passport' {
+>'passport' : typeof 'passport'
+
     namespace passport {
 >passport : PassportStatic
 

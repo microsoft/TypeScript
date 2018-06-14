@@ -5,4 +5,4 @@
 ////    [|constructor|](){}
 ////}
 
-verify.singleReferenceGroup("constructor C(n: number): C");
+verify.singleReferenceGroup("class C");

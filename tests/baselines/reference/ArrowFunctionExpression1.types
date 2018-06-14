@@ -1,6 +1,6 @@
 === tests/cases/compiler/ArrowFunctionExpression1.ts ===
 var v = (public x: string) => { };
->v : (public x: string) => void
->(public x: string) => { } : (public x: string) => void
+>v : (x: string) => void
+>(public x: string) => { } : (x: string) => void
 >x : string
 

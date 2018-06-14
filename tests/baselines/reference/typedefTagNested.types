@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @typedef {Object} App
+ * @property {string} name
+ * @property {Object} icons
+ * @property {string} icons.image32
+ * @property {string} icons.image64
+ */
+var ex;
+>ex : any
+
+/** @type {App} */
+const app = {
+>app : App
+>{    name: 'name',    icons: {        image32: 'x.png',        image64: 'y.png',    }} : { name: string; icons: { image32: string; image64: string; }; }
+
+    name: 'name',
+>name : string
+>'name' : "name"
+
+    icons: {
+>icons : { image32: string; image64: string; }
+>{        image32: 'x.png',        image64: 'y.png',    } : { image32: string; image64: string; }
+
+        image32: 'x.png',
+>image32 : string
+>'x.png' : "x.png"
+
+        image64: 'y.png',
+>image64 : string
+>'y.png' : "y.png"
+    }
+}
+
+/** @typedef {Object} Opp
+ * @property {string} name
+ * @property {Object} oops
+ * @property {string} horrible
+ * @type {string} idea
+ */
+
+/** @type {Opp} */
+var mistake;
+>mistake : Opp
+

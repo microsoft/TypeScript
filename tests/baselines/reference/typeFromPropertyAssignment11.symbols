@@ -1,0 +1,52 @@
+=== tests/cases/conformance/salsa/module.js ===
+var Inner = function() {}
+>Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
+
+Inner.prototype = {
+>Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+
+    m() { },
+>m : Symbol(m, Decl(module.js, 1, 19))
+
+    i: 1
+>i : Symbol(i, Decl(module.js, 2, 12))
+}
+// incremental assignments still work
+Inner.prototype.j = 2
+>Inner.prototype : Symbol(Inner.j, Decl(module.js, 4, 1))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+>j : Symbol(Inner.j, Decl(module.js, 4, 1))
+
+/** @type {string} */
+Inner.prototype.k;
+>Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
+>prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
+
+var inner = new Inner()
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+>Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
+
+inner.m()
+>inner.m : Symbol(m, Decl(module.js, 1, 19))
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+>m : Symbol(m, Decl(module.js, 1, 19))
+
+inner.i
+>inner.i : Symbol(i, Decl(module.js, 2, 12))
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+>i : Symbol(i, Decl(module.js, 2, 12))
+
+inner.j
+>inner.j : Symbol(Inner.j, Decl(module.js, 4, 1))
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+>j : Symbol(Inner.j, Decl(module.js, 4, 1))
+
+inner.k
+>inner.k : Symbol(Inner.k, Decl(module.js, 6, 21))
+>inner : Symbol(inner, Decl(module.js, 9, 3))
+>k : Symbol(Inner.k, Decl(module.js, 6, 21))
+

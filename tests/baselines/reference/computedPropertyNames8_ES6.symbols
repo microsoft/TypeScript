@@ -16,9 +16,11 @@ function f<T, U extends string>() {
 >v : Symbol(v, Decl(computedPropertyNames8_ES6.ts, 3, 7))
 
         [t]: 0,
+>[t] : Symbol([t], Decl(computedPropertyNames8_ES6.ts, 3, 13))
 >t : Symbol(t, Decl(computedPropertyNames8_ES6.ts, 1, 7))
 
         [u]: 1
+>[u] : Symbol([u], Decl(computedPropertyNames8_ES6.ts, 4, 15))
 >u : Symbol(u, Decl(computedPropertyNames8_ES6.ts, 2, 7))
 
     };

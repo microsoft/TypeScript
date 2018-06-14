@@ -23,6 +23,7 @@ class StringIterator {
 >0 : 0
     
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

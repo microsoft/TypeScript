@@ -234,5 +234,10 @@ declare const invalidUnion: unique symbol | unique symbol;
 declare const invalidIntersection: unique symbol | unique symbol;
 >invalidIntersection : symbol
 
-
+// initializer assignability
+// https://github.com/Microsoft/TypeScript/issues/21584
+const shouldNotBeAssignable: string = Symbol();
+>shouldNotBeAssignable : string
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
 

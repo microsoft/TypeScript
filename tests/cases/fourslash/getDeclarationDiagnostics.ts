@@ -5,8 +5,11 @@
 
 // @Filename: inputFile1.ts
 //// module m {
-////    export class C implements I { }
-////    interface I { }
+////    export function foo() {
+////        class C implements I { }
+////        interface I { }
+////        return C;
+////    }
 //// } /*1*/
 
 // @Filename: input2.ts

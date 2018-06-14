@@ -1,9 +1,11 @@
 tests/cases/compiler/constructorOverloads7.ts(1,15): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/constructorOverloads7.ts(7,35): error TS2304: Cannot find name 'Point'.
+tests/cases/compiler/constructorOverloads7.ts(8,14): error TS2304: Cannot find name 'Point'.
 tests/cases/compiler/constructorOverloads7.ts(15,10): error TS2300: Duplicate identifier 'Point'.
 tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 
 
-==== tests/cases/compiler/constructorOverloads7.ts (3 errors) ====
+==== tests/cases/compiler/constructorOverloads7.ts (5 errors) ====
     declare class Point
                   ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -13,7 +15,11 @@ tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload sig
         constructor(x: number, y: number);
     
          add(dx: number, dy: number): Point;
+                                      ~~~~~
+!!! error TS2304: Cannot find name 'Point'.
          origin: Point;
+                 ~~~~~
+!!! error TS2304: Cannot find name 'Point'.
     
     }
     

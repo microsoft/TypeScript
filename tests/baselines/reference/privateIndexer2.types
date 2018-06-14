@@ -6,6 +6,7 @@ var x = {
 >{    private [x: string]: string;} : { [x: number]: any; string: any; }
 
     private [x: string]: string;
+>[x : any
 >x : any
 >string : any
 >string : any

@@ -27,6 +27,7 @@ interface A {
 >X : Symbol(X, Decl(propertiesAndIndexers.ts, 0, 0))
 
     1: Z;
+>1 : Symbol(A[1], Decl(propertiesAndIndexers.ts, 10, 9))
 >Z : Symbol(Z, Decl(propertiesAndIndexers.ts, 3, 1))
 }
 
@@ -41,14 +42,20 @@ interface B extends A {
 >c : Symbol(B.c, Decl(propertiesAndIndexers.ts, 15, 24))
 
     3: boolean;
+>3 : Symbol(B[3], Decl(propertiesAndIndexers.ts, 16, 15))
+
     6(): string;
+>6 : Symbol(B[6], Decl(propertiesAndIndexers.ts, 17, 15))
 }
 
 interface B {
 >B : Symbol(B, Decl(propertiesAndIndexers.ts, 12, 1), Decl(propertiesAndIndexers.ts, 19, 1))
 
     4: boolean;
+>4 : Symbol(B[4], Decl(propertiesAndIndexers.ts, 21, 13))
+
     5: string;
+>5 : Symbol(B[5], Decl(propertiesAndIndexers.ts, 22, 15))
 }
 
 interface C extends A {
@@ -62,6 +69,7 @@ interface C extends A {
 >c : Symbol(C.c, Decl(propertiesAndIndexers.ts, 27, 24))
 
     3: boolean;
+>3 : Symbol(C[3], Decl(propertiesAndIndexers.ts, 28, 15))
 }
 
 interface D extends B, C {
@@ -70,6 +78,7 @@ interface D extends B, C {
 >C : Symbol(C, Decl(propertiesAndIndexers.ts, 24, 1))
 
     2: Z;
+>2 : Symbol(D[2], Decl(propertiesAndIndexers.ts, 32, 26))
 >Z : Symbol(Z, Decl(propertiesAndIndexers.ts, 3, 1))
 
     Infinity: number;
@@ -104,4 +113,6 @@ var c: {
 >c : Symbol(c, Decl(propertiesAndIndexers.ts, 47, 24))
 
     3: boolean;
+>3 : Symbol(3, Decl(propertiesAndIndexers.ts, 48, 15))
+
 };

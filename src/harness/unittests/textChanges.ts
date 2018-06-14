@@ -8,9 +8,9 @@
 namespace ts {
     describe("textChanges", () => {
         function findChild(name: string, n: Node) {
-            return find(n);
+            return find(n)!;
 
-            function find(node: Node): Node {
+            function find(node: Node): Node | undefined {
                 if (isDeclaration(node) && node.name && isIdentifier(node.name) && node.name.escapedText === name) {
                     return node;
                 }
@@ -28,17 +28,14 @@ namespace ts {
         }
 
         // validate that positions that were recovered from the printed text actually match positions that will be created if the same text is parsed.
-        function verifyPositions({ text, node }: textChanges.NonFormattedText): void {
+        function verifyPositions(node: Node, text: string): void {
             const nodeList = flattenNodes(node);
             const sourceFile = createSourceFile("f.ts", text, ScriptTarget.ES2015);
             const parsedNodeList = flattenNodes(sourceFile.statements[0]);
-            Debug.assert(nodeList.length === parsedNodeList.length);
-            for (let i = 0; i < nodeList.length; i++) {
-                const left = nodeList[i];
-                const right = parsedNodeList[i];
+            zipWith(nodeList, parsedNodeList, (left, right) => {
                 Debug.assert(left.pos === right.pos);
                 Debug.assert(left.end === right.end);
-            }
+            });
 
             function flattenNodes(n: Node) {
                 const data: (Node | NodeArray<Node>)[] = [];
@@ -57,9 +54,9 @@ namespace ts {
                 Harness.Baseline.runBaseline(`textChanges/${caption}.js`, () => {
                     const sourceFile = createSourceFile("source.ts", text, ScriptTarget.ES2015, /*setParentNodes*/ true);
                     const rulesProvider = getRuleProvider(placeOpenBraceOnNewLineForFunctions);
-                    const changeTracker = new textChanges.ChangeTracker(printerOptions.newLine, rulesProvider, validateNodes ? verifyPositions : undefined);
+                    const changeTracker = new textChanges.ChangeTracker(newLineCharacter, rulesProvider);
                     testBlock(sourceFile, changeTracker);
-                    const changes = changeTracker.getChanges();
+                    const changes = changeTracker.getChanges(validateNodes ? verifyPositions : undefined);
                     assert.equal(changes.length, 1);
                     assert.equal(changes[0].fileName, sourceFile.fileName);
                     const modified = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
@@ -91,7 +88,7 @@ namespace M
     }
 }`;
             runSingleFileTest("extractMethodLike", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                const statements = (<Block>(<FunctionDeclaration>findChild("foo", sourceFile)).body).statements.slice(1);
+                const statements = (<FunctionDeclaration>findChild("foo", sourceFile)).body!.statements.slice(1);
                 const newFunction = createFunctionDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
@@ -108,11 +105,11 @@ namespace M
                 // replace statements with return statement
                 const newStatement = createReturn(
                     createCall(
-                        /*expression*/ newFunction.name,
+                        /*expression*/ newFunction.name!,
                         /*typeArguments*/ undefined,
                         /*argumentsArray*/ emptyArray
                     ));
-                changeTracker.replaceNodeRange(sourceFile, statements[0], lastOrUndefined(statements), newStatement, { suffix: newLineCharacter });
+                changeTracker.replaceNodeRange(sourceFile, statements[0], last(statements), newStatement, { suffix: newLineCharacter });
             });
         }
         {

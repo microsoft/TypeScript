@@ -1,11 +1,11 @@
 === tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts ===
 1..toString();
->1..toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>1..toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 1.0.toString();
->1.0.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>1.0.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 1.toString();
 >toString : Symbol(toString, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 8, 14))
@@ -18,9 +18,9 @@ var i: number = 1;
 
 var test1 = i.toString();  
 >test1 : Symbol(test1, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 7, 3))
->i.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>i.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 6, 3))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var test2 = 2.toString();
 >test2 : Symbol(test2, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 8, 3))
@@ -28,35 +28,35 @@ var test2 = 2.toString();
 
 var test3 = 3 .toString();
 >test3 : Symbol(test3, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 9, 3))
->3 .toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>3 .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var test4 = 3    .toString();
 >test4 : Symbol(test4, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 10, 3))
->3    .toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>3    .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var test5 = 3	.toString(); 
 >test5 : Symbol(test5, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 11, 3))
->3	.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>3	.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var test6 = 3.['toString']();
 >test6 : Symbol(test6, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 12, 3))
->'toString' : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var test7 = 3
 >test7 : Symbol(test7, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 13, 3))
->3.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>3.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 .toString();
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var test8 = new Number(4).toString();
 >test8 : Symbol(test8, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 15, 3))
->new Number(4).toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>new Number(4).toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var test9 = 3. + 3.
 >test9 : Symbol(test9, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 16, 3))

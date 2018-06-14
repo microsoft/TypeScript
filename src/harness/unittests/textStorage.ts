@@ -16,7 +16,7 @@ namespace ts.textStorage {
 
         it("text based storage should be have exactly the same as script version cache", () => {
 
-            const host = ts.projectSystem.createServerHost([f]);
+            const host = projectSystem.createServerHost([f]);
 
             const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path));
             const ts2 = new server.TextStorage(host, server.asNormalizedPath(f.path));
@@ -51,7 +51,7 @@ namespace ts.textStorage {
         });
 
         it("should switch to script version cache if necessary", () => {
-            const host = ts.projectSystem.createServerHost([f]);
+            const host = projectSystem.createServerHost([f]);
             const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path));
 
             ts1.getSnapshot();

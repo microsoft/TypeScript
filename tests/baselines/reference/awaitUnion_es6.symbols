@@ -4,20 +4,20 @@ declare let a: number | string;
 
 declare let b: PromiseLike<number> | PromiseLike<string>;
 >b : Symbol(b, Decl(awaitUnion_es6.ts, 1, 11))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es6.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es6.d.ts, --, --))
 
 declare let c: PromiseLike<number | string>;
 >c : Symbol(c, Decl(awaitUnion_es6.ts, 2, 11))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es6.d.ts, --, --))
 
 declare let d: number | PromiseLike<string>;
 >d : Symbol(d, Decl(awaitUnion_es6.ts, 3, 11))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es6.d.ts, --, --))
 
 declare let e: number | PromiseLike<number | string>;
 >e : Symbol(e, Decl(awaitUnion_es6.ts, 4, 11))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es6.d.ts, --, --))
 
 async function f() {
 >f : Symbol(f, Decl(awaitUnion_es6.ts, 4, 53))

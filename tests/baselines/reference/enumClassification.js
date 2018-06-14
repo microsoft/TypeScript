@@ -160,28 +160,28 @@ var E20;
 
 //// [enumClassification.d.ts]
 declare enum E01 {
-    A = 0,
+    A = 0
 }
 declare enum E02 {
-    A = 123,
+    A = 123
 }
 declare enum E03 {
-    A = "hello",
+    A = "hello"
 }
 declare enum E04 {
     A = 0,
     B = 1,
-    C = 2,
+    C = 2
 }
 declare enum E05 {
     A = 0,
     B = 10,
-    C = 11,
+    C = 11
 }
 declare enum E06 {
     A = "one",
     B = "two",
-    C = "three",
+    C = "three"
 }
 declare enum E07 {
     A = 0,
@@ -189,30 +189,30 @@ declare enum E07 {
     C = "hi",
     D = 10,
     E = 11,
-    F = "bye",
+    F = "bye"
 }
 declare enum E08 {
     A = 10,
     B = "hello",
     C = 10,
     D = "hello",
-    E = 10,
+    E = 10
 }
 declare enum E10 {
 }
 declare enum E11 {
     A = 0,
     B = 1,
-    C = 2,
+    C = 2
 }
 declare enum E12 {
     A = 1,
     B = 2,
-    C = 4,
+    C = 4
 }
 declare enum E20 {
     A,
     B,
     C,
-    D,
+    D
 }

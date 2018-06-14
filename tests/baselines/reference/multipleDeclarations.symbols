@@ -3,13 +3,13 @@ function C() {
 >C : Symbol(C, Decl(input.js, 0, 0))
 
     this.m = null;
->m : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
+>m : Symbol(C.m, Decl(input.js, 0, 14))
 }
 C.prototype.m = function() {
->C.prototype : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
+>C.prototype : Symbol(C.m, Decl(input.js, 2, 1))
 >C : Symbol(C, Decl(input.js, 0, 0))
 >prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
->m : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
+>m : Symbol(C.m, Decl(input.js, 2, 1))
 
     this.nothing();
 >this : Symbol(C, Decl(input.js, 0, 0))

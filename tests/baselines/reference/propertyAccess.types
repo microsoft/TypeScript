@@ -26,7 +26,9 @@ var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 >numIndex : { [n: number]: string; }
 >n : number
 >{ 3: 'three', 'three': 'three' } : { 3: string; 'three': string; }
+>3 : string
 >'three' : "three"
+>'three' : string
 >'three' : "three"
 
 var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
@@ -34,9 +36,11 @@ var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East
 >n : string
 >Compass : Compass
 >{ 'N': Compass.North, 'E': Compass.East } : { 'N': Compass.North; 'E': Compass.East; }
+>'N' : Compass.North
 >Compass.North : Compass.North
 >Compass : typeof Compass
 >North : Compass.North
+>'E' : Compass.East
 >Compass.East : Compass.East
 >Compass : typeof Compass
 >East : Compass.East
@@ -62,6 +66,7 @@ var obj = {
 >{    10: 'ten',    x: 'hello',    y: 32,    z: { n: 'world', m: 15, o: () => false },    'literal property': 100} : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 
     10: 'ten',
+>10 : string
 >'ten' : "ten"
 
     x: 'hello',
@@ -84,6 +89,7 @@ var obj = {
 >false : false
 
     'literal property': 100
+>'literal property' : number
 >100 : 100
 
 };
@@ -133,10 +139,10 @@ var aa = obj.x;
 
 // Dotted property access of property that exists on value's apparent type
 var bb = obj.hasOwnProperty;
->bb : (v: string) => boolean
->obj.hasOwnProperty : (v: string) => boolean
+>bb : (v: string | number | symbol) => boolean
+>obj.hasOwnProperty : (v: string | number | symbol) => boolean
 >obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 
 // Dotted property access of property that doesn't exist on value's apparent type
 var cc = obj.qqq; // error

@@ -18,6 +18,7 @@ class B extends A {
 
         return class {
             [super.foo()]() {
+>[super.foo()] : Symbol((Anonymous class)[super.foo()], Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 7, 22))
 >super.foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 9))
 >super : Symbol(A, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 0))
 >foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 9))

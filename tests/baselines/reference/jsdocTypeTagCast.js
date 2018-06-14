@@ -90,13 +90,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // @ts-check
-var W = ((4));
-var W = (4); // Error
+var W = /** @type {string} */ ( /** @type {*} */(4));
+var W = /** @type {string} */ (4); // Error
 /** @type {*} */
 var a;
 /** @type {string} */
 var s;
-var a = ("" + 4);
+var a = /** @type {*} */ ("" + 4);
 var s = "" + /** @type {*} */ (4);
 var SomeBase = /** @class */ (function () {
     function SomeBase() {
@@ -146,6 +146,6 @@ someBase = /** @type {SomeBase} */ (someFakeClass);
 var numOrStr;
 /** @type {string} */
 var str;
-if ((numOrStr === undefined)) {
+if ( /** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
     str = numOrStr; // Error, no narrowing occurred
 }

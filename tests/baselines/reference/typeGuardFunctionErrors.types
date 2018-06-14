@@ -356,7 +356,7 @@ function b5({a, b, p1}, p2, p3): p1 is A {
 >p1 : any
 >p2 : any
 >p3 : any
->p1 : No type information available!
+>p1 : any
 >A : A
 
     return true;
@@ -370,7 +370,7 @@ function b6([a, b, p1], p2, p3): p1 is A {
 >p1 : any
 >p2 : any
 >p3 : any
->p1 : No type information available!
+>p1 : any
 >A : A
 
     return true;
@@ -385,7 +385,7 @@ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
 >p1 : any
 >p2 : any
 >p3 : any
->p1 : No type information available!
+>p1 : any
 >A : A
 
     return true;
@@ -434,9 +434,11 @@ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 
 type Foo = { 'a': string; }
 >Foo : Foo
+>'a' : string
 
 type Bar = { 'a': number; }
 >Bar : Bar
+>'a' : number
 
 interface NeedsFoo<T extends Foo> {
 >NeedsFoo : NeedsFoo<T>

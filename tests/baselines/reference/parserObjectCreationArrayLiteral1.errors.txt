@@ -1,10 +1,10 @@
 tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral1.ts(1,5): error TS2304: Cannot find name 'Foo'.
-tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral1.ts(1,8): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral1.ts(1,9): error TS1011: An element access expression should take an argument.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral1.ts (2 errors) ====
     new Foo[];
         ~~~
 !!! error TS2304: Cannot find name 'Foo'.
-           ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+            
+!!! error TS1011: An element access expression should take an argument.

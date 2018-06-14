@@ -7,13 +7,14 @@
 ////not read
 
 // @Filename: /a.ts
-/////**/import * as abs from "abs";
+////import * as abs from "abs";
+////abs;
 
 test.setTypesRegistry({
     "abs": undefined,
 });
 
-goTo.marker();
+goTo.file("/a.ts");
 
 verify.codeFixAvailable([{
     description: "Install '@types/abs'",

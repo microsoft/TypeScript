@@ -1,7 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="session.ts" />
-
 /*@internal*/
 namespace ts.server {
     const lineCollectionCapacity = 4;
@@ -59,7 +55,7 @@ namespace ts.server {
             this.stack = [this.lineIndex.root];
         }
 
-        insertLines(insertedText: string, suppressTrailingText: boolean) {
+        insertLines(insertedText: string | undefined, suppressTrailingText: boolean) {
             if (suppressTrailingText) {
                 this.trailingText = "";
             }
@@ -76,8 +72,8 @@ namespace ts.server {
                     lines.pop();
                 }
             }
-            let branchParent: LineNode;
-            let lastZeroCount: LineCollection;
+            let branchParent: LineNode | undefined;
+            let lastZeroCount: LineCollection | undefined;
 
             for (let k = this.endBranch.length - 1; k >= 0; k--) {
                 (<LineNode>this.endBranch[k]).updateCounts();
@@ -92,7 +88,7 @@ namespace ts.server {
                 }
             }
             if (lastZeroCount) {
-                branchParent.remove(lastZeroCount);
+                branchParent!.remove(lastZeroCount);
             }
 
             // path at least length two (root and leaf)
@@ -163,7 +159,7 @@ namespace ts.server {
                 this.lineCollectionAtBranch = lineCollection;
             }
 
-            let child: LineCollection;
+            let child: LineCollection | undefined;
             function fresh(node: LineCollection): LineCollection {
                 if (node.isLeaf()) {
                     return new LineLeaf("");
@@ -336,7 +332,7 @@ namespace ts.server {
                 if (oldVersion >= this.minVersion) {
                     const textChangeRanges: TextChangeRange[] = [];
                     for (let i = oldVersion + 1; i <= newVersion; i++) {
-                        const snap = this.versions[this.versionToIndex(i)];
+                        const snap = this.versions[this.versionToIndex(i)!]; // TODO: GH#18217
                         for (const textChange of snap.changesSincePreviousVersion) {
                             textChangeRanges.push(textChange.getTextChangeRange());
                         }
@@ -374,7 +370,7 @@ namespace ts.server {
             return this.index.getLength();
         }
 
-        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
+        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined {
             if (oldSnapshot instanceof LineIndexSnapshot && this.cache === oldSnapshot.cache) {
                 if (this.version <= oldSnapshot.version) {
                     return unchangedTextChangeRange;
@@ -401,7 +397,7 @@ namespace ts.server {
             return { line: oneBasedLine, offset: zeroBasedColumn + 1 };
         }
 
-        private positionToColumnAndLineText(position: number): { zeroBasedColumn: number, lineText: string } {
+        private positionToColumnAndLineText(position: number): { zeroBasedColumn: number, lineText: string | undefined } {
             return this.root.charOffsetToLineInfo(1, position);
         }
 
@@ -475,9 +471,10 @@ namespace ts.server {
                     this.load(LineIndex.linesFromText(newText).lines);
                     return this;
                 }
+                return undefined!; // TODO: GH#18217
             }
             else {
-                let checkText: string;
+                let checkText: string | undefined;
                 if (this.checkEdits) {
                     const source = this.getText(0, this.root.charCount());
                     checkText = source.slice(0, pos) + newText + source.slice(pos + deleteLength);
@@ -503,7 +500,7 @@ namespace ts.server {
                     const { zeroBasedColumn, lineText } = this.positionToColumnAndLineText(e);
                     if (zeroBasedColumn === 0) {
                         // move range end just past line that will merge with previous line
-                        deleteLength += lineText.length;
+                        deleteLength += lineText!.length; // TODO: GH#18217
                         // store text by appending to end of insertedText
                         newText = newText ? newText + lineText : lineText;
                     }
@@ -680,7 +677,7 @@ namespace ts.server {
 
             // Skipped all children
             const { leaf } = this.lineNumberToInfo(this.lineCount(), 0);
-            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf.charCount(), lineText: undefined };
+            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf ? leaf.charCount() : 0, lineText: undefined };
         }
 
         /**
@@ -704,7 +701,7 @@ namespace ts.server {
         }
 
         private splitAfter(childIndex: number) {
-            let splitNode: LineNode;
+            let splitNode: LineNode | undefined;
             const clen = this.children.length;
             childIndex++;
             const endLength = childIndex;
@@ -765,13 +762,13 @@ namespace ts.server {
                     for (let i = 0; i < splitNodeCount; i++) {
                         splitNodes[i] = new LineNode();
                     }
-                    let splitNode = <LineNode>splitNodes[0];
+                    let splitNode = splitNodes[0];
                     while (nodeIndex < nodeCount) {
                         splitNode.add(nodes[nodeIndex]);
                         nodeIndex++;
                         if (splitNode.children.length === lineCollectionCapacity) {
                             splitNodeIndex++;
-                            splitNode = <LineNode>splitNodes[splitNodeIndex];
+                            splitNode = splitNodes[splitNodeIndex];
                         }
                     }
                     for (let i = splitNodes.length - 1; i >= 0; i--) {
@@ -785,7 +782,7 @@ namespace ts.server {
                 }
                 this.updateCounts();
                 for (let i = 0; i < splitNodeCount; i++) {
-                    (<LineNode>splitNodes[i]).updateCounts();
+                    splitNodes[i].updateCounts();
                 }
                 return splitNodes;
             }

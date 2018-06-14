@@ -2,6 +2,8 @@
 
 // Tests that we use the name "foo".
 
+// @module: esnext
+
 // @Filename: /a.ts
 ////const foo = 0;
 ////export default foo;
@@ -11,7 +13,7 @@
 
 goTo.marker("");
 verify.completionListContains({ name: "foo", source: "/a" }, "(alias) const foo: 0\nexport default foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
+    includeCompletionsForModuleExports: true,
     sourceDisplay: "./a",
 });
 

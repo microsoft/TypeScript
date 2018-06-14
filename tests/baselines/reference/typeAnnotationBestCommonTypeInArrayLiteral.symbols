@@ -25,14 +25,29 @@ var menuData: IMenuItem[] = [
 >IMenuItem : Symbol(IMenuItem, Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 0, 0))
     {
         "id": "ourLogo",
+>"id" : Symbol("id", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 9, 5))
+
         "type": "image",
+>"type" : Symbol("type", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 10, 24))
+
         "link": "",
+>"link" : Symbol("link", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 11, 24))
+
         "icon": "modules/menu/logo.svg"
+>"icon" : Symbol("icon", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 12, 19))
+
     }, {
         "id": "productName",
+>"id" : Symbol("id", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 14, 8))
+
         "type": "default",
+>"type" : Symbol("type", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 15, 28))
+
         "link": "",
+>"link" : Symbol("link", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 16, 26))
+
         "text": "Product Name"
+>"text" : Symbol("text", Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 17, 19))
     }
 ];
 

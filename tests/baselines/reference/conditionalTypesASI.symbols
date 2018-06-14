@@ -1,0 +1,13 @@
+=== tests/cases/compiler/conditionalTypesASI.ts ===
+// Repro from #21637
+
+interface JSONSchema4 {
+>JSONSchema4 : Symbol(JSONSchema4, Decl(conditionalTypesASI.ts, 0, 0))
+
+  a?: number
+>a : Symbol(JSONSchema4.a, Decl(conditionalTypesASI.ts, 2, 23))
+
+  extends?: string | string[]
+>extends : Symbol(JSONSchema4.extends, Decl(conditionalTypesASI.ts, 3, 12))
+}
+

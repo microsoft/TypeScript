@@ -10,35 +10,55 @@ namespace ts {
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
         exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
         exportedBindings: Identifier[][]; // exported names of local declarations
-        exportedNames: Identifier[]; // all exported names local to module
+        exportedNames: Identifier[] | undefined; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
 
-    function getNamedImportCount(node: ImportDeclaration) {
-        if (!(node.importClause && node.importClause.namedBindings)) return 0;
-        const names = node.importClause.namedBindings;
-        if (!names) return 0;
-        if (!isNamedImports(names)) return 0;
-        return names.elements.length;
-    }
-
-    function containsDefaultReference(node: NamedImportBindings) {
+    function containsDefaultReference(node: NamedImportBindings | undefined) {
         if (!node) return false;
         if (!isNamedImports(node)) return false;
         return some(node.elements, isNamedDefaultReference);
     }
 
-    function isNamedDefaultReference(e: ImportSpecifier) {
-        return e.propertyName && e.propertyName.escapedText === InternalSymbolName.Default;
+    function isNamedDefaultReference(e: ImportSpecifier): boolean {
+        return e.propertyName !== undefined && e.propertyName.escapedText === InternalSymbolName.Default;
     }
 
-    export function getImportNeedsImportStarHelper(node: ImportDeclaration) {
-        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > 1 && containsDefaultReference(node.importClause.namedBindings));
+    export function chainBundle(transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
+        return transformSourceFileOrBundle;
+
+        function transformSourceFileOrBundle(node: SourceFile | Bundle) {
+            return node.kind === SyntaxKind.SourceFile ? transformSourceFile(node) : transformBundle(node);
+        }
+
+        function transformBundle(node: Bundle) {
+            return createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+        }
     }
 
-    export function getImportNeedsImportDefaultHelper(node: ImportDeclaration) {
-        return isDefaultImport(node) || (getNamedImportCount(node) === 1 && containsDefaultReference(node.importClause.namedBindings));
+    export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean {
+        if (!!getNamespaceDeclarationNode(node)) {
+            return true;
+        }
+        const bindings = node.importClause && node.importClause.namedBindings;
+        if (!bindings) {
+            return false;
+        }
+        if (!isNamedImports(bindings)) return false;
+        let defaultRefCount = 0;
+        for (const binding of bindings.elements) {
+            if (isNamedDefaultReference(binding)) {
+                defaultRefCount++;
+            }
+        }
+        // Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
+        return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
+    }
+
+    export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): boolean {
+        // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
+        return !getImportNeedsImportStarHelper(node) && (isDefaultImport(node) || (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
     }
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
@@ -46,9 +66,9 @@ namespace ts {
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: Identifier[][] = [];
         const uniqueExports = createMap<boolean>();
-        let exportedNames: Identifier[];
+        let exportedNames: Identifier[] | undefined;
         let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
+        let exportEquals: ExportAssignment | undefined;
         let hasExportStarsToExportValues = false;
         let hasImportStarOrImportDefault = false;
 
@@ -60,7 +80,7 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
-                    hasImportStarOrImportDefault = getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
+                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -85,7 +105,7 @@ namespace ts {
                     }
                     else {
                         // export { x, y }
-                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
+                        for (const specifier of (<ExportDeclaration>node).exportClause!.elements) {
                             if (!uniqueExports.get(idText(specifier.name))) {
                                 const name = specifier.propertyName || specifier.name;
                                 exportSpecifiers.add(idText(name), specifier);
@@ -130,7 +150,7 @@ namespace ts {
                         }
                         else {
                             // export function x() { }
-                            const name = (<FunctionDeclaration>node).name;
+                            const name = (<FunctionDeclaration>node).name!;
                             if (!uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(idText(name), true);
@@ -178,7 +198,7 @@ namespace ts {
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[]) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[] | undefined) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {
@@ -214,10 +234,25 @@ namespace ts {
      *  - this is mostly subjective beyond the requirement that the expression not be sideeffecting
      */
     export function isSimpleCopiableExpression(expression: Expression) {
-        return expression.kind === SyntaxKind.StringLiteral ||
+        return isStringLiteralLike(expression) ||
             expression.kind === SyntaxKind.NumericLiteral ||
-            expression.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
             isKeyword(expression.kind) ||
             isIdentifier(expression);
+    }
+
+    /**
+     * @param input Template string input strings
+     * @param args Names which need to be made file-level unique
+     */
+    export function helperString(input: TemplateStringsArray, ...args: string[]) {
+        return (uniqueName: EmitHelperUniqueNameCallback) => {
+            let result = "";
+            for (let i = 0; i < args.length; i++) {
+                result += input[i];
+                result += uniqueName(args[i]);
+            }
+            result += input[input.length - 1];
+            return result;
+        };
     }
 }

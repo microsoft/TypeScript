@@ -6,7 +6,7 @@ describe("Public APIs", () => {
         const api = `api/${fileName}`;
         let fileContent: string;
         before(() => {
-            fileContent = Harness.IO.readFile(builtFile);
+            fileContent = Harness.IO.readFile(builtFile)!;
         });
 
         it("should be acknowledged when they change", () => {
@@ -14,13 +14,12 @@ describe("Public APIs", () => {
         });
 
         it("should compile", () => {
-            const testFile: Harness.Compiler.TestFile = {
-                unitName: builtFile,
-                content: fileContent
-            };
-            const inputFiles = [testFile];
-            const output = Harness.Compiler.compileFiles(inputFiles, [], /*harnessSettings*/ undefined, /*options*/ {}, /*currentDirectory*/ undefined);
-            assert(!output.result.errors || !output.result.errors.length, Harness.Compiler.minimalDiagnosticsToString(output.result.errors, /*pretty*/ true));
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
+            fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
+            const sys = new fakes.System(fs);
+            const host = new fakes.CompilerHost(sys);
+            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], {});
+            assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
 

@@ -2,7 +2,7 @@
 function foo1(strs: TemplateStringsArray, x: number): string;
 >foo1 : Symbol(foo1, Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 0, 61), Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 1, 49))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 0, 14))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 0, 41))
 
 function foo1(strs: string[], x: number): number;
@@ -34,7 +34,7 @@ function foo2(strs: string[], x: number): number;
 function foo2(strs: TemplateStringsArray, x: number): string;
 >foo2 : Symbol(foo2, Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 7, 20), Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 9, 49), Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 10, 61))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 10, 14))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(taggedTemplateStringsWithOverloadResolution2_ES6.ts, 10, 41))
 
 function foo2(...stuff: any[]): any {

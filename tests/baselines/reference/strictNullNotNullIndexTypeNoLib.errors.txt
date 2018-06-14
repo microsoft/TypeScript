@@ -1,0 +1,55 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+tests/cases/compiler/strictNullNotNullIndexTypeNoLib.ts(10,28): error TS2339: Property 'name' does not exist on type 'T["params"]'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+==== tests/cases/compiler/strictNullNotNullIndexTypeNoLib.ts (1 errors) ====
+    type Readonly<T> = {readonly [K in keyof T]: T[K]}
+    interface A {
+        params?: { name: string; };
+    }
+    
+    class Test<T extends A> {
+        attrs: Readonly<T>;
+    
+        m() {
+            this.attrs.params!.name;
+                               ~~~~
+!!! error TS2339: Property 'name' does not exist on type 'T["params"]'.
+        }
+    }
+    
+    interface Foo {
+        foo?: number;
+    }
+    
+    class FooClass<P extends Foo = Foo> {
+        properties: Readonly<P>;
+    
+        foo(): number {
+            const { foo = 42 } = this.properties;
+            return foo;
+        }
+    }
+    
+    class Test2<T extends A> {
+        attrs: Readonly<T>;
+    
+        m() {
+            return this.attrs.params!; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
+        }
+    }
