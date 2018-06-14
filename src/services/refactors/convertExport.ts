@@ -22,6 +22,7 @@ namespace ts.refactor {
     interface Info {
         readonly exportNode: ExportToConvert;
         readonly wasDefault: boolean;
+        readonly exportingModuleSymbol: Symbol;
     }
 
     function getInfo(context: RefactorContext): Info | undefined {
@@ -29,12 +30,16 @@ namespace ts.refactor {
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start, /*includeJsDocComment*/ false);
         const exportNode = getParentNodeInSpan(token, file, span);
-        if (!exportNode || exportNode.parent !== file) return undefined;
+        if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
+            return undefined;
+        }
+
+        const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
 
         const flags = getModifierFlags(exportNode);
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
-        if (!(flags & ModifierFlags.Export) || !wasDefault && file.symbol.exports!.has(InternalSymbolName.Default)) {
+        if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
             return undefined;
         }
 
@@ -44,7 +49,7 @@ namespace ts.refactor {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
-                return isIdentifier((exportNode as ExportToConvert).name) ? { exportNode: exportNode as ExportToConvert, wasDefault } : undefined;
+                return isIdentifier((exportNode as ExportToConvert).name) ? { exportNode: exportNode as ExportToConvert, wasDefault, exportingModuleSymbol } : undefined;
             default:
                 return undefined;
         }
@@ -52,7 +57,7 @@ namespace ts.refactor {
 
     function doChange(exportingSourceFile: SourceFile, program: Program, info: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         changeExport(exportingSourceFile, info, changes);
-        changeImports(exportingSourceFile, program, info, changes, cancellationToken);
+        changeImports(program, info, changes, cancellationToken);
     }
 
     function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode }: Info, changes: textChanges.ChangeTracker): void {
@@ -64,11 +69,11 @@ namespace ts.refactor {
         }
     }
 
-    function changeImports(exportingSourceFile: SourceFile, program: Program, { wasDefault, exportNode }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+    function changeImports(program: Program, { wasDefault, exportNode, exportingModuleSymbol }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         const checker = program.getTypeChecker();
         const exportSymbol = Debug.assertDefined(checker.getSymbolAtLocation(exportNode.name));
         const exportName = exportNode.name.text;
-        FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingSourceFile.symbol, exportName, wasDefault, ref => {
+        FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName, wasDefault, ref => {
             const importingSourceFile = ref.getSourceFile();
             if (wasDefault) {
                 changeDefaultToNamedImport(importingSourceFile, ref, changes, exportName);
