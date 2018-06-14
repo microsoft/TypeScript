@@ -1,0 +1,91 @@
+=== tests/cases/compiler/experimentalDecoratorMetadataWithInference.ts ===
+namespace Reflect {
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(experimentalDecoratorMetadataWithInference.ts, 0, 0))
+
+    export declare const getMetadata: any;
+>getMetadata : Symbol(getMetadata, Decl(experimentalDecoratorMetadataWithInference.ts, 1, 24))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(experimentalDecoratorMetadataWithInference.ts, 2, 1))
+
+    @LogType public str1: string;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>str1 : Symbol(Foo.str1, Decl(experimentalDecoratorMetadataWithInference.ts, 4, 11))
+
+    @LogType public str2 = 'hello';
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>str2 : Symbol(Foo.str2, Decl(experimentalDecoratorMetadataWithInference.ts, 5, 33))
+
+    @LogType public str3 = `hello`;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>str3 : Symbol(Foo.str3, Decl(experimentalDecoratorMetadataWithInference.ts, 6, 35))
+
+    @LogType public str4 = `he${"l"}lo`;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>str4 : Symbol(Foo.str4, Decl(experimentalDecoratorMetadataWithInference.ts, 7, 35))
+
+    @LogType public num1: number;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>num1 : Symbol(Foo.num1, Decl(experimentalDecoratorMetadataWithInference.ts, 8, 40))
+
+    @LogType public num2 = 10;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>num2 : Symbol(Foo.num2, Decl(experimentalDecoratorMetadataWithInference.ts, 9, 33))
+
+    @LogType public bool1: boolean;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>bool1 : Symbol(Foo.bool1, Decl(experimentalDecoratorMetadataWithInference.ts, 10, 30))
+
+    @LogType public bool2 = true;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>bool2 : Symbol(Foo.bool2, Decl(experimentalDecoratorMetadataWithInference.ts, 11, 35))
+
+    @LogType public symbol1: symbol;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>symbol1 : Symbol(Foo.symbol1, Decl(experimentalDecoratorMetadataWithInference.ts, 12, 33))
+
+    @LogType public symbol2 = Symbol.iterator;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>symbol2 : Symbol(Foo.symbol2, Decl(experimentalDecoratorMetadataWithInference.ts, 13, 36))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    @LogType public func1: () => void;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>func1 : Symbol(Foo.func1, Decl(experimentalDecoratorMetadataWithInference.ts, 14, 46))
+
+    @LogType public func2 = () => void 0;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>func2 : Symbol(Foo.func2, Decl(experimentalDecoratorMetadataWithInference.ts, 15, 38))
+
+    @LogType public ctor1: new () => void;
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>ctor1 : Symbol(Foo.ctor1, Decl(experimentalDecoratorMetadataWithInference.ts, 16, 41))
+
+    @LogType public ctor2 = class FooInner {};
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>ctor2 : Symbol(Foo.ctor2, Decl(experimentalDecoratorMetadataWithInference.ts, 17, 42))
+>FooInner : Symbol(FooInner, Decl(experimentalDecoratorMetadataWithInference.ts, 18, 27))
+}
+
+function LogType(target: any, propertyKey: string) {
+>LogType : Symbol(LogType, Decl(experimentalDecoratorMetadataWithInference.ts, 19, 1))
+>target : Symbol(target, Decl(experimentalDecoratorMetadataWithInference.ts, 21, 17))
+>propertyKey : Symbol(propertyKey, Decl(experimentalDecoratorMetadataWithInference.ts, 21, 29))
+
+    const type = Reflect.getMetadata("design:type", target, propertyKey);
+>type : Symbol(type, Decl(experimentalDecoratorMetadataWithInference.ts, 22, 9))
+>Reflect.getMetadata : Symbol(Reflect.getMetadata, Decl(experimentalDecoratorMetadataWithInference.ts, 1, 24))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(experimentalDecoratorMetadataWithInference.ts, 0, 0))
+>getMetadata : Symbol(Reflect.getMetadata, Decl(experimentalDecoratorMetadataWithInference.ts, 1, 24))
+>target : Symbol(target, Decl(experimentalDecoratorMetadataWithInference.ts, 21, 17))
+>propertyKey : Symbol(propertyKey, Decl(experimentalDecoratorMetadataWithInference.ts, 21, 29))
+
+    console.log(type.name);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>type : Symbol(type, Decl(experimentalDecoratorMetadataWithInference.ts, 22, 9))
+}

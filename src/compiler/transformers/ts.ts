@@ -1749,6 +1749,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
+                    return serializeTypeNodeOrInitializer((<PropertyDeclaration | ParameterDeclaration>node).type, (<PropertyDeclaration | ParameterDeclaration>node).initializer);
                 case SyntaxKind.GetAccessor:
                     return serializeTypeNode((<PropertyDeclaration | ParameterDeclaration | GetAccessorDeclaration>node).type);
                 case SyntaxKind.SetAccessor:
@@ -1820,6 +1821,33 @@ namespace ts {
             }
 
             return createVoidZero();
+        }
+
+        function serializeTypeNodeOrInitializer(type: TypeNode, initializer: Expression): SerializedTypeNode {
+            if (type !== undefined) {
+                return serializeTypeNode(type);
+            }
+            const init = skipParentheses(initializer);
+            switch (init.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                    return createIdentifier("String");
+                case SyntaxKind.NumericLiteral:
+                    return createIdentifier("Number");
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                    return createIdentifier("Boolean");
+            }
+            if (isWellKnownSymbolSyntactically(initializer)) {
+                return languageVersion < ScriptTarget.ES2015
+                    ? getGlobalSymbolNameWithFallback()
+                    : createIdentifier("Symbol");
+            }
+            if (isFunctionLike(initializer) || isClassLike(initializer)) {
+                return createIdentifier("Function");
+            }
+            return createIdentifier("Object");
         }
 
         /**

@@ -1,0 +1,106 @@
+=== tests/cases/compiler/experimentalDecoratorMetadataWithInference.ts ===
+namespace Reflect {
+>Reflect : typeof Reflect
+
+    export declare const getMetadata: any;
+>getMetadata : any
+}
+
+class Foo {
+>Foo : Foo
+
+    @LogType public str1: string;
+>LogType : (target: any, propertyKey: string) => void
+>str1 : string
+
+    @LogType public str2 = 'hello';
+>LogType : (target: any, propertyKey: string) => void
+>str2 : string
+>'hello' : "hello"
+
+    @LogType public str3 = `hello`;
+>LogType : (target: any, propertyKey: string) => void
+>str3 : string
+>`hello` : "hello"
+
+    @LogType public str4 = `he${"l"}lo`;
+>LogType : (target: any, propertyKey: string) => void
+>str4 : string
+>`he${"l"}lo` : string
+>"l" : "l"
+
+    @LogType public num1: number;
+>LogType : (target: any, propertyKey: string) => void
+>num1 : number
+
+    @LogType public num2 = 10;
+>LogType : (target: any, propertyKey: string) => void
+>num2 : number
+>10 : 10
+
+    @LogType public bool1: boolean;
+>LogType : (target: any, propertyKey: string) => void
+>bool1 : boolean
+
+    @LogType public bool2 = true;
+>LogType : (target: any, propertyKey: string) => void
+>bool2 : boolean
+>true : true
+
+    @LogType public symbol1: symbol;
+>LogType : (target: any, propertyKey: string) => void
+>symbol1 : symbol
+
+    @LogType public symbol2 = Symbol.iterator;
+>LogType : (target: any, propertyKey: string) => void
+>symbol2 : symbol
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+    @LogType public func1: () => void;
+>LogType : (target: any, propertyKey: string) => void
+>func1 : () => void
+
+    @LogType public func2 = () => void 0;
+>LogType : (target: any, propertyKey: string) => void
+>func2 : () => any
+>() => void 0 : () => any
+>void 0 : undefined
+>0 : 0
+
+    @LogType public ctor1: new () => void;
+>LogType : (target: any, propertyKey: string) => void
+>ctor1 : new () => void
+
+    @LogType public ctor2 = class FooInner {};
+>LogType : (target: any, propertyKey: string) => void
+>ctor2 : typeof FooInner
+>class FooInner {} : typeof FooInner
+>FooInner : typeof FooInner
+}
+
+function LogType(target: any, propertyKey: string) {
+>LogType : (target: any, propertyKey: string) => void
+>target : any
+>propertyKey : string
+
+    const type = Reflect.getMetadata("design:type", target, propertyKey);
+>type : any
+>Reflect.getMetadata("design:type", target, propertyKey) : any
+>Reflect.getMetadata : any
+>Reflect : typeof Reflect
+>getMetadata : any
+>"design:type" : "design:type"
+>target : any
+>propertyKey : string
+
+    console.log(type.name);
+>console.log(type.name) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>type.name : any
+>type : any
+>name : any
+}
