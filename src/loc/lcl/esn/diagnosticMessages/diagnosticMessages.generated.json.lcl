@@ -1809,6 +1809,9 @@
       <Item ItemId=";Build_all_projects_including_those_that_appear_to_be_up_to_date_6368" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Compilar todos los proyectos, incluidos los que aparecen actualizados]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6330,6 +6333,9 @@
       <Item ItemId=";Project_0_is_up_to_date_6361" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El proyecto "{0}" está actualizado]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
