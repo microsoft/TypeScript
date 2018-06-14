@@ -11483,14 +11483,24 @@ namespace ts {
                     outer: for (const t of targetSignatures) {
                         // Only elaborate errors from the first failure
                         let shouldElaborateErrors = reportErrors;
+
+                        // Only consider source signatures which are maximal with regard to the target signature
+                        let maximumEffectiveCallLength = 0;
+                        for (const {minArgumentCount} of sourceSignatures) {
+                            maximumEffectiveCallLength = Math.max(maximumEffectiveCallLength, minArgumentCount);
+                        }
+                        maximumEffectiveCallLength = Math.min(maximumEffectiveCallLength, t.minArgumentCount);
+
                         for (const s of sourceSignatures) {
                             const related = signatureRelatedTo(s, t, /*erase*/ true, shouldElaborateErrors);
-                            if (related) {
-                                result &= related;
-                                errorInfo = saveErrorInfo;
-                                continue outer;
+                            if (s.hasRestParameter || s.minArgumentCount >= maximumEffectiveCallLength) {
+                                if (related) {
+                                    result &= related;
+                                    errorInfo = saveErrorInfo;
+                                    continue outer;
+                                }
+                                shouldElaborateErrors = false;
                             }
-                            shouldElaborateErrors = false;
                         }
 
                         if (shouldElaborateErrors) {

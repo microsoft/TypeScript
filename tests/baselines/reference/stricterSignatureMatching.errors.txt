@@ -1,0 +1,35 @@
+tests/cases/compiler/stricterSignatureMatching.ts(14,8): error TS2345: Argument of type 'koElement1' is not assignable to parameter of type '(c: number) => void'.
+  Types of parameters 'value' and 'c' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/stricterSignatureMatching.ts (1 errors) ====
+    interface koElement1 {
+        // Getter
+        (): string;
+        (value: string): void;
+    }
+    
+    
+    function invoke(fn: (c: number) => void) {
+        fn(4);
+    }
+    
+    var x: koElement1;
+    // Desired: error
+    invoke(x);
+           ~
+!!! error TS2345: Argument of type 'koElement1' is not assignable to parameter of type '(c: number) => void'.
+!!! error TS2345:   Types of parameters 'value' and 'c' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    
+    
+    interface koElement2 {
+        (): string;
+        (value: string): void;
+        (value: number): void;
+    }
+    
+    var y: koElement2;
+    invoke(y); // Should be OK
+    
