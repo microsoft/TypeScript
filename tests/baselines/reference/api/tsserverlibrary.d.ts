@@ -8016,8 +8016,10 @@ declare namespace ts {
     function createCommaList(elements: ReadonlyArray<Expression>): CommaListExpression;
     function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>): CommaListExpression;
     function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource | InputFiles>): Bundle;
-    function createUnparsedSourceFile(text: string, mapPath?: string, map?: string): UnparsedSource;
-    function createInputFiles(javascript: string, declaration: string, javascriptMapPath?: string, javascriptMapText?: string, declarationMapPath?: string, declarationMapText?: string): InputFiles;
+    function createUnparsedSourceFile(text: string): UnparsedSource;
+    function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    function createInputFiles(javascript: string, declaration: string): InputFiles;
+    function createInputFiles(javascript: string, declaration: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
     function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>): CallExpression;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>, param: ParameterDeclaration, paramValue: Expression): CallExpression;
