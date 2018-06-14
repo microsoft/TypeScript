@@ -2587,6 +2587,8 @@ namespace ts {
         return node;
     }
 
+    export function createUnparsedSourceFile(text: string): UnparsedSource;
+    export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath?: string, map?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         node.text = text;
@@ -2594,7 +2596,18 @@ namespace ts {
         node.sourceMapText = map;
         return node;
     }
-
+    export function createInputFiles(
+        javascript: string,
+        declaration: string
+    ): InputFiles;
+    export function createInputFiles(
+        javascript: string,
+        declaration: string,
+        javascriptMapPath: string | undefined,
+        javascriptMapText: string | undefined,
+        declarationMapPath: string | undefined,
+        declarationMapText: string | undefined
+    ): InputFiles;
     export function createInputFiles(
         javascript: string,
         declaration: string,
