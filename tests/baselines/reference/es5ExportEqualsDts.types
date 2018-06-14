@@ -3,15 +3,15 @@ class A {
 >A : A
 
     foo() {
->foo : () => A.B
+>foo : () => import("tests/cases/compiler/es5ExportEqualsDts").B
 
         var aVal: A.B;
->aVal : A.B
+>aVal : import("tests/cases/compiler/es5ExportEqualsDts").B
 >A : any
->B : A.B
+>B : import("tests/cases/compiler/es5ExportEqualsDts").B
 
         return aVal;
->aVal : A.B
+>aVal : import("tests/cases/compiler/es5ExportEqualsDts").B
     }
 }
 

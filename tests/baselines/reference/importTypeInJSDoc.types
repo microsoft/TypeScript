@@ -22,9 +22,9 @@ declare class MyClass {
 >y : number
 
     constructor(x: MyClass.Bar);
->x : MyClass.Bar
+>x : import("tests/cases/conformance/types/import/externs").Bar
 >MyClass : any
->Bar : MyClass.Bar
+>Bar : import("tests/cases/conformance/types/import/externs").Bar
 }
 declare global {
 >global : typeof global
@@ -59,8 +59,8 @@ a = new Foo({doer: Foo.Bar});
 >Bar : (x: string, y?: number) => void
 
 const q = /** @type {import("./externs").Bar} */({ doer: q => q });
->q : MyClass.Bar
->({ doer: q => q }) : MyClass.Bar
+>q : import("tests/cases/conformance/types/import/externs").Bar
+>({ doer: q => q }) : import("tests/cases/conformance/types/import/externs").Bar
 >{ doer: q => q } : { doer: (q: string) => string; }
 >doer : (q: string) => string
 >q => q : (q: string) => string

@@ -141,7 +141,7 @@ namespace N {
 >T5 : T5
     }
     export declare type T7 = {
->T7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
+>T7 : T7
 
         [N.c2]: number;
 >[N.c2] : number

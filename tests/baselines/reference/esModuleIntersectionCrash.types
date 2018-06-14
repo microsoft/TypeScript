@@ -1,13 +1,13 @@
 === tests/cases/compiler/mod.d.ts ===
 export = modObj;
->modObj : modObj.A & modObj.B
+>modObj : import("tests/cases/compiler/mod").A & import("tests/cases/compiler/mod").B
 
 declare const modObj: modObj.A & modObj.B;
->modObj : modObj.A & modObj.B
+>modObj : import("tests/cases/compiler/mod").A & import("tests/cases/compiler/mod").B
 >modObj : any
->A : modObj.A
+>A : import("tests/cases/compiler/mod").A
 >modObj : any
->B : modObj.B
+>B : import("tests/cases/compiler/mod").B
 
 declare namespace modObj {
 >modObj : A & B

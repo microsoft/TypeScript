@@ -38,11 +38,11 @@ module server {
     }
 }
 var server: {
->server : { (): server.connectExport; foo: Date; }
+>server : { (): import("tests/cases/compiler/exportEqualMemberMissing_0").connectExport; foo: Date; }
 
     (): server.connectExport;
 >server : any
->connectExport : server.connectExport
+>connectExport : import("tests/cases/compiler/exportEqualMemberMissing_0").connectExport
 
     foo: Date;
 >foo : Date
@@ -50,5 +50,5 @@ var server: {
 
 };
 export = server;
->server : { (): server.connectExport; foo: Date; }
+>server : { (): import("tests/cases/compiler/exportEqualMemberMissing_0").connectExport; foo: Date; }
 

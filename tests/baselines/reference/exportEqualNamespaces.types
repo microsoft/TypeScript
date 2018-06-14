@@ -12,7 +12,7 @@ interface server {
 
     (): server.Server;
 >server : any
->Server : server.Server
+>Server : import("tests/cases/compiler/exportEqualNamespaces").Server
 
     startTime: Date;
 >startTime : Date

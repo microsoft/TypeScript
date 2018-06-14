@@ -22,9 +22,9 @@ class Foo {
 >Foo : Foo
 
     x: Foo.Bar;
->x : Foo.Bar
+>x : import("tests/cases/compiler/exportAssignClassAndModule_0").Bar
 >Foo : any
->Bar : Foo.Bar
+>Bar : import("tests/cases/compiler/exportAssignClassAndModule_0").Bar
 }
 module Foo {
 >Foo : typeof Foo

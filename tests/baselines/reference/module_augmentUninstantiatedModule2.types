@@ -1,8 +1,8 @@
 === tests/cases/compiler/module_augmentUninstantiatedModule2.ts ===
 declare var ng: ng.IAngularStatic;
->ng : ng.IAngularStatic
+>ng : import("tests/cases/compiler/module_augmentUninstantiatedModule2").IAngularStatic
 >ng : any
->IAngularStatic : ng.IAngularStatic
+>IAngularStatic : import("tests/cases/compiler/module_augmentUninstantiatedModule2").IAngularStatic
 
 declare module ng {
 >ng : IAngularStatic
@@ -25,6 +25,6 @@ declare module ng {
 }
 
 export = ng;
->ng : ng.IAngularStatic
+>ng : import("tests/cases/compiler/module_augmentUninstantiatedModule2").IAngularStatic
 
 
