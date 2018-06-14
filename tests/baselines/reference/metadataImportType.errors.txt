@@ -1,0 +1,13 @@
+tests/cases/compiler/metadataImportType.ts(2,6): error TS2304: Cannot find name 'test'.
+tests/cases/compiler/metadataImportType.ts(3,8): error TS2307: Cannot find module './b'.
+
+
+==== tests/cases/compiler/metadataImportType.ts (2 errors) ====
+    export class A {
+        @test
+         ~~~~
+!!! error TS2304: Cannot find name 'test'.
+        b: import('./b').B
+           ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './b'.
+    }

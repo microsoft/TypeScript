@@ -6,6 +6,7 @@
 namespace ts.server.protocol {
     // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     export const enum CommandTypes {
+        JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         /* @internal */
         BraceFull = "brace-full",
@@ -889,6 +890,17 @@ namespace ts.server.protocol {
          * Kind of opening brace
          */
         openingBrace: string;
+    }
+
+    export interface JsxClosingTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.JsxClosingTag;
+        readonly arguments: JsxClosingTagRequestArgs;
+    }
+
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+
+    export interface JsxClosingTagResponse extends Response {
+        readonly body: TextInsertion;
     }
 
     /**
@@ -2566,6 +2578,7 @@ namespace ts.server.protocol {
         kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
+        nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
     }
 

@@ -9,7 +9,6 @@
 [30;47m [0m [91m~~~~~[0m
 
 
-
 ==== tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts (1 errors) ====
     const x: {c: string} = {
         a: {

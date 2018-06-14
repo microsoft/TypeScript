@@ -27,7 +27,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
     // Should be OK
     var MainMenu = function (props) { return (<div>
     <h3>Main Menu</h3>
-</div>); };
+    </div>); };
     var App = function (_a) {
         var children = _a.children;
         return (<div>

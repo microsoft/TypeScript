@@ -26,27 +26,27 @@ type T00 = keyof K0;  // Error
 
 type T01 = keyof Object;
 >T01 : Symbol(T01, Decl(keyofAndIndexedAccessErrors.ts, 9, 20))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T02 = keyof keyof Object;
 >T02 : Symbol(T02, Decl(keyofAndIndexedAccessErrors.ts, 11, 24))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T03 = keyof keyof keyof Object;
 >T03 : Symbol(T03, Decl(keyofAndIndexedAccessErrors.ts, 12, 30))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T04 = keyof keyof keyof keyof Object;
 >T04 : Symbol(T04, Decl(keyofAndIndexedAccessErrors.ts, 13, 36))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T05 = keyof keyof keyof keyof keyof Object;
 >T05 : Symbol(T05, Decl(keyofAndIndexedAccessErrors.ts, 14, 42))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
 >T06 : Symbol(T06, Decl(keyofAndIndexedAccessErrors.ts, 15, 48))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T10 = Shape["name"];
 >T10 : Symbol(T10, Decl(keyofAndIndexedAccessErrors.ts, 16, 54))
@@ -328,7 +328,7 @@ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >f3 : Symbol(f3, Decl(keyofAndIndexedAccessErrors.ts, 95, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
 >K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 98, 14))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
 >U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 98, 50))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))

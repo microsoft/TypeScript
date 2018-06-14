@@ -2,7 +2,7 @@
 // duplicate property names are an error in all types
 
 interface Number {
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicatePropertyNames.ts, 0, 0))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 0, 0))
 
     foo: string;
 >foo : Symbol(Number.foo, Decl(duplicatePropertyNames.ts, 2, 18), Decl(duplicatePropertyNames.ts, 3, 16))
@@ -12,7 +12,7 @@ interface Number {
 }
 
 interface String {
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicatePropertyNames.ts, 5, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 5, 1))
 
     foo(): string;
 >foo : Symbol(String.foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
@@ -22,16 +22,16 @@ interface String {
 }
 
 interface Array<T> {
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicatePropertyNames.ts, 10, 1))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 10, 1))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
 
     foo: T;
 >foo : Symbol(Array.foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
 
     foo: T;
 >foo : Symbol(Array.foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
 }
 
 class C {
