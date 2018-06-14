@@ -393,7 +393,7 @@ namespace ts {
                         // Apply offsets to each position and fixup source entries
                         const rawPath = originalMap.sources[raw.sourceIndex];
                         const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
-                        const combinedPath =  combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
+                        const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
                         const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
                         const resolvedPath = getRelativePathToDirectoryOrUrl(
                             sourcesDirectoryPath,
