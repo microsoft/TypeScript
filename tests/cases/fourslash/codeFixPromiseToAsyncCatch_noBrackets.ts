@@ -11,6 +11,7 @@ verify.getSuggestionDiagnostics([{
     code: 80006,
 }]);
 
+
 verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
