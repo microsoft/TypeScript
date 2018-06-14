@@ -12,9 +12,9 @@ interface Foo<T> {
 >T : T
 }
 var Foo: new () => Foo.A<Foo<string>>;
->Foo : new () => import("tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface1").A<Foo<string>>
+>Foo : new () => Foo.A<Foo<string>>
 >Foo : any
->A : import("tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface1").A<T>
+>A : Foo.A<T>
 >Foo : Foo<T>
 
 export = Foo;

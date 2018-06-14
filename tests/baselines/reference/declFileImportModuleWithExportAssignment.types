@@ -44,23 +44,23 @@ module m2 {
 
 }
 var m2: {
->m2 : { (): import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectExport; test1: import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule; test2(): import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule; }
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
     (): m2.connectExport;
 >m2 : any
->connectExport : import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectExport
+>connectExport : m2.connectExport
 
     test1: m2.connectModule;
->test1 : import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule
+>test1 : m2.connectModule
 >m2 : any
->connectModule : import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule
+>connectModule : m2.connectModule
 
     test2(): m2.connectModule;
->test2 : () => import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule
+>test2 : () => m2.connectModule
 >m2 : any
->connectModule : import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule
+>connectModule : m2.connectModule
 
 };
 export = m2;
->m2 : { (): import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectExport; test1: import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule; test2(): import("tests/cases/compiler/declFileImportModuleWithExportAssignment_0").connectModule; }
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 

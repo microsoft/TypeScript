@@ -28,7 +28,7 @@ module.exports = A;
 
 //// [es5ExportEqualsDts.d.ts]
 declare class A {
-    foo(): import("./es5ExportEqualsDts").B;
+    foo(): A.B;
 }
 declare module A {
     interface B {

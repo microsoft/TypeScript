@@ -30,13 +30,13 @@ declare namespace thing {
 >ParsedArgs : ParsedArgs
 }
 declare function thing(x: any): thing.ParsedArgs;
->thing : (x: any) => import("/node_modules/@types/minimist/minimist").ParsedArgs
+>thing : (x: any) => thing.ParsedArgs
 >x : any
 >thing : any
->ParsedArgs : import("/node_modules/@types/minimist/minimist").ParsedArgs
+>ParsedArgs : thing.ParsedArgs
 
 export = thing;
->thing : (x: any) => import("/node_modules/@types/minimist/minimist").ParsedArgs
+>thing : (x: any) => thing.ParsedArgs
 
 === /node_modules/@types/process/process.d.ts ===
 declare const thing: any;

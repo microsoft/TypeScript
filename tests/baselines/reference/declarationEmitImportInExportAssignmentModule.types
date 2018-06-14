@@ -3,7 +3,7 @@ module m {
 >m : typeof m
 
     export module c {
->c : typeof import("tests/cases/compiler/declarationEmitImportInExportAssignmentModule").c
+>c : typeof m.c
 
         export class c {
 >c : c

@@ -22,9 +22,9 @@ declare class MyClass {
 >y : number
 
     constructor(x: MyClass.Bar);
->x : import("tests/cases/conformance/types/import/externs").Bar
+>x : MyClass.Bar
 >MyClass : any
->Bar : import("tests/cases/conformance/types/import/externs").Bar
+>Bar : MyClass.Bar
 }
 declare global {
 >global : typeof global
