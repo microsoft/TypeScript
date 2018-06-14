@@ -5324,6 +5324,7 @@ declare namespace ts {
         JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property: DiagnosticMessage;
         The_global_type_JSX_0_may_not_have_more_than_one_property: DiagnosticMessage;
         JSX_spread_child_must_be_an_array_type: DiagnosticMessage;
+        Property_0_is_missing_in_the_provided_JSX_attributes: DiagnosticMessage;
         Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity: DiagnosticMessage;
         A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums: DiagnosticMessage;
         Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead: DiagnosticMessage;

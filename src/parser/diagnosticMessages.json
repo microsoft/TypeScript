@@ -2072,7 +2072,7 @@
         "category": "Error",
         "code": 2609
     },
-    "The attributes provided to '{0}' are not assignable to type '{1}'": {
+    "Property '{0}' is missing in the provided JSX attributes.": {
         "category": "Error",
         "code": 2610
     },

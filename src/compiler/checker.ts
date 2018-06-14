@@ -10710,17 +10710,15 @@ namespace ts {
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
-                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes) {
-                        const targetTypes = target.flags & TypeFlags.Intersection ? (target as IntersectionType).types : emptyArray;
+                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes && target.flags & TypeFlags.Intersection) {
+                        const targetTypes = (target as IntersectionType).types;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
-                        if ((intrinsicAttributes === errorType || !contains(targetTypes, intrinsicAttributes)) &&
-                            (intrinsicClassAttributes === errorType || !contains(targetTypes, intrinsicClassAttributes))) {
+                        if (intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
+                            (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
                             // only report an error when the target isn't the intersection type with Intrinsic[Class]Attributes
-                            Debug.assert(!!errorNode && isEntityNameExpression(errorNode));
-                            reportError(Diagnostics.The_attributes_provided_to_0_are_not_assignable_to_type_1, entityNameToString(errorNode! as EntityNameExpression), typeToString(target));
+                            return result;
                         }
-                        return result;
                     }
                     reportRelationError(headMessage, source, target);
                 }
@@ -11283,7 +11281,12 @@ namespace ts {
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(unmatchedProperty), typeToString(source));
+                        if (getObjectFlags(source) & ObjectFlags.JsxAttributes) {
+                            reportError(Diagnostics.Property_0_is_missing_in_the_provided_JSX_attributes, symbolToString(unmatchedProperty));
+                        }
+                        else {
+                            reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(unmatchedProperty), typeToString(source));
+                        }
                     }
                     return Ternary.False;
                 }

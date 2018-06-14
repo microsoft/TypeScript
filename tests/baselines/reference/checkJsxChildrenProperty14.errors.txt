@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(42,11): error TS2610: The attributes provided to 'SingleChildComp' are not assignable to type 'SingleChildProp'
+tests/cases/conformance/jsx/file.tsx(42,11): error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
   Types of property 'children' are incompatible.
     Type 'Element[]' is not assignable to type 'Element'.
       Property 'type' is missing in type 'Element[]'.
@@ -48,7 +48,7 @@ tests/cases/conformance/jsx/file.tsx(42,11): error TS2610: The attributes provid
     // Error
     let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
               ~~~~~~~~~~~~~~~
-!!! error TS2610: The attributes provided to 'SingleChildComp' are not assignable to type 'SingleChildProp'
-!!! error TS2610:   Types of property 'children' are incompatible.
-!!! error TS2610:     Type 'Element[]' is not assignable to type 'Element'.
-!!! error TS2610:       Property 'type' is missing in type 'Element[]'.
+!!! error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
+!!! error TS2322:   Types of property 'children' are incompatible.
+!!! error TS2322:     Type 'Element[]' is not assignable to type 'Element'.
+!!! error TS2322:       Property 'type' is missing in type 'Element[]'.

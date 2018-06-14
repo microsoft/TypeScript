@@ -5,8 +5,8 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2559: Type '{ y: string; }' 
 tests/cases/conformance/jsx/file.tsx(26,8): error TS2326: Types of property 'x' are incompatible.
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/jsx/file.tsx(27,2): error TS2559: Type '{ var: string; }' has no properties in common with type 'Attribs1'.
-tests/cases/conformance/jsx/file.tsx(29,2): error TS2610: The attributes provided to 'test2' are not assignable to type '{ reqd: string; }'
-  Property 'reqd' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(29,2): error TS2322: Type '{}' is not assignable to type '{ reqd: string; }'.
+  Property 'reqd' is missing in the provided JSX attributes.
 tests/cases/conformance/jsx/file.tsx(30,8): error TS2326: Types of property 'reqd' are incompatible.
   Type 'number' is not assignable to type 'string'.
 
@@ -54,8 +54,8 @@ tests/cases/conformance/jsx/file.tsx(30,8): error TS2326: Types of property 'req
     
     <test2 />; // Error, missing reqd
      ~~~~~
-!!! error TS2610: The attributes provided to 'test2' are not assignable to type '{ reqd: string; }'
-!!! error TS2610:   Property 'reqd' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{ reqd: string; }'.
+!!! error TS2322:   Property 'reqd' is missing in the provided JSX attributes.
     <test2 reqd={10} />; // Error, reqd is not string
            ~~~~~~~~~
 !!! error TS2326: Types of property 'reqd' are incompatible.
