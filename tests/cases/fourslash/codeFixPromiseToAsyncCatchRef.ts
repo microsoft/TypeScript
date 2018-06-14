@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////function f():Promise<any> {
+////function [|f|]():Promise<any> {
 ////    return fetch('http://yahoo.com').then(res).catch(catch_err)
 ////}
 ////
@@ -13,13 +13,12 @@
 ////}
 
 verify.getSuggestionDiagnostics([{
-    message: "Convert to use async and await",
-    code: 95055,
-    reportsUnnecessary: true,
+    message: "This may be converted to use async and await.",
+    code: 80006,
 }]);
 
 verify.codeFix({
-    description: "Remove unreachable code",
+    description: "Convert to use async and await",
     index: 0,
     newFileContent:
 `async function f() {
