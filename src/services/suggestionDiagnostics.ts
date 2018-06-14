@@ -24,20 +24,30 @@ namespace ts {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
                     }
-                    
-                    if(node.modifiers && containsAsync(node.modifiers)){
+                    if (node.modifiers && isAsyncFunction(node)) {
                         break;
                     }
 
-                    const returnType = checker.getReturnTypeOfSignature(checker.getSignatureFromDeclaration(<FunctionDeclaration | FunctionExpression> node))
-                    if(!returnType || !returnType.symbol){
+                    const returnType = checker.getReturnTypeOfSignature(checker.getSignatureFromDeclaration(<FunctionDeclaration | FunctionExpression>node));
+                    if (!returnType || !returnType.symbol) {
                         break;
                     }
 
-                    if(isPromiseType(returnType)){
+                    // collect all the return statements
+                    // check that a property access expression exists in there and that it is a handler
+                    const retStmts: ReturnStatement[] = [];
+                    getReturnStmts(node, retStmts);
+
+                    let isCallback = false;
+                    for (const stmt of retStmts) {
+                        if (hasCallback(stmt)) {
+                            isCallback = true;
+                            break;
+                        }
+                    }
+                    if (isPromiseType(returnType) && isCallback) {
                         diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
                     }
-                    
                     break;
             }
 
@@ -120,17 +130,29 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    function containsAsync(arr: NodeArray<Modifier>): boolean{
-        for(let modifier of arr){
-            if(modifier.kind === SyntaxKind.AsyncKeyword){
-                return true;
-            }
-        }
-
-        return false;
+    function isPromiseType(T: Type): boolean {
+        return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
 
-    function isPromiseType(T:Type):boolean{
-        return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
+    function hasCallback(stmt: Node): boolean {
+        if (stmt.kind === SyntaxKind.CallExpression && (<CallExpression>stmt).expression.kind === SyntaxKind.PropertyAccessExpression &&
+            ((<PropertyAccessExpression>(<CallExpression>stmt).expression).name.text === "then" || (<PropertyAccessExpression>(<CallExpression>stmt).expression).name.text === "catch")) {
+                return true;
+        }
+
+        for (const child of stmt.getChildren().filter(node => isNode(node))) {
+            return hasCallback(child);
+        }
+    }
+
+    function getReturnStmts(node: Node, retStmts: ReturnStatement[]) {
+        for (const child of node.getChildren().filter(node => isNode(node))) {
+            if (child.kind === SyntaxKind.ReturnStatement) {
+                retStmts.push(child as ReturnStatement);
+            }
+            else {
+                getReturnStmts(child, retStmts);
+            }
+        }
     }
 }
