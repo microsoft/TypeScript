@@ -22601,6 +22601,10 @@ namespace ts {
             checkSourceElement(node.typeExpression);
         }
 
+        function checkJSDocTypeTag(node: JSDocTypeTag) {
+            checkSourceElement(node.typeExpression);
+        }
+
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
             if (!getParameterSymbolFromJSDoc(node)) {
@@ -25560,6 +25564,8 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                     return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
+                case SyntaxKind.JSDocTypeTag:
+                    return checkJSDocTypeTag(node as JSDocTypeTag);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocFunctionType:
