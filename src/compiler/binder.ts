@@ -2305,18 +2305,22 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
+            if (file.externalModuleIndicator) {
+                return false;
+            }
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                if (!file.externalModuleIndicator) {
-                    bindSourceFileAsExternalModule();
-                }
+                bindSourceFileAsExternalModule();
             }
+            return true;
         }
 
         function bindExportsPropertyAssignment(node: BinaryExpression) {
             // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
             // expression is the declaration
-            setCommonJsModuleIndicator(node);
+            if (!setCommonJsModuleIndicator(node)) {
+                return;
+            }
             const lhs = node.left as PropertyAccessEntityNameExpression;
             const symbol = forEachIdentifierInEntityName(lhs.expression, /*parent*/ undefined, (id, symbol) => {
                 if (symbol) {
@@ -2345,7 +2349,9 @@ namespace ts {
             }
 
             // 'module.exports = expr' assignment
-            setCommonJsModuleIndicator(node);
+            if (!setCommonJsModuleIndicator(node)) {
+                return;
+            }
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
