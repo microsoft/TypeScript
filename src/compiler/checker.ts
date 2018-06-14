@@ -22895,7 +22895,11 @@ namespace ts {
                 }
 
                 for (const declaration of local.declarations) {
-                    if (isAmbientModule(declaration)) continue;
+                    if (isAmbientModule(declaration) ||
+                        (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderScore(declaration.name!)) {
+                        continue;
+                    }
+
                     if (isImportedDeclaration(declaration)) {
                         addToGroup(unusedImports, importClauseFromImported(declaration), declaration, getNodeId);
                     }
@@ -22907,9 +22911,7 @@ namespace ts {
                         }
                     }
                     else if (isVariableDeclaration(declaration)) {
-                        if (!isIdentifierThatStartsWithUnderScore(declaration.name) || !isForInOrOfStatement(declaration.parent.parent)) {
-                            addToGroup(unusedVariables, declaration.parent, declaration, getNodeId);
-                        }
+                        addToGroup(unusedVariables, declaration.parent, declaration, getNodeId);
                     }
                     else {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
