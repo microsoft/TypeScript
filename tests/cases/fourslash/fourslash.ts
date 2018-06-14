@@ -139,6 +139,7 @@ declare namespace FourSlashInterface {
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
         selectRange(range: Range): void;
+        selectAllInFile(fileName: string): void;
     }
     class verifyNegatable {
         private negative;

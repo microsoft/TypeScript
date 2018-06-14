@@ -451,6 +451,12 @@ namespace FourSlash {
             this.selectionEnd = end.position;
         }
 
+        public selectAllInFile(fileName: string) {
+            this.openFile(fileName);
+            this.goToPosition(0);
+            this.selectionEnd = this.activeFile.content.length;
+        }
+
         public selectRange(range: Range): void {
             this.goToRangeStart(range);
             this.selectionEnd = range.end;
@@ -3967,6 +3973,10 @@ namespace FourSlashInterface {
 
         public select(startMarker: string, endMarker: string) {
             this.state.select(startMarker, endMarker);
+        }
+
+        public selectAllInFile(fileName: string) {
+            this.state.selectAllInFile(fileName);
         }
 
         public selectRange(range: FourSlash.Range): void {

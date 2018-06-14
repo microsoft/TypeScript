@@ -18,9 +18,11 @@ namespace ts.refactor {
         },
     });
 
-    type ExportToConvert = (FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | NamespaceDeclaration) & { readonly name: Identifier };
+    // If a VariableStatement, will have exactly one VariableDeclaration, with an Identifier for a name.
+    type ExportToConvert = FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | NamespaceDeclaration | TypeAliasDeclaration | VariableStatement;
     interface Info {
         readonly exportNode: ExportToConvert;
+        readonly exportName: Identifier; // This is exportNode.name except for VariableStatement_s.
         readonly wasDefault: boolean;
         readonly exportingModuleSymbol: Symbol;
     }
@@ -48,35 +50,72 @@ namespace ts.refactor {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
-            case SyntaxKind.ModuleDeclaration:
-                return isIdentifier((exportNode as ExportToConvert).name) ? { exportNode: exportNode as ExportToConvert, wasDefault, exportingModuleSymbol } : undefined;
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.ModuleDeclaration: {
+                const node = exportNode as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | TypeAliasDeclaration | NamespaceDeclaration;
+                return node.name && isIdentifier(node.name) ? { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } : undefined;
+            }
+            case SyntaxKind.VariableStatement: {
+                const vs = exportNode as VariableStatement;
+                // Must be `export const x = something;`.
+                if (!(vs.declarationList.flags & NodeFlags.Const) || vs.declarationList.declarations.length !== 1) {
+                    return undefined;
+                }
+                const decl = first(vs.declarationList.declarations);
+                if (!decl.initializer) return undefined;
+                Debug.assert(!wasDefault);
+                return isIdentifier(decl.name) ? { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } : undefined;
+            }
             default:
                 return undefined;
         }
     }
 
     function doChange(exportingSourceFile: SourceFile, program: Program, info: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
-        changeExport(exportingSourceFile, info, changes);
+        changeExport(exportingSourceFile, info, changes, program.getTypeChecker());
         changeImports(program, info, changes, cancellationToken);
     }
 
-    function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode }: Info, changes: textChanges.ChangeTracker): void {
+    function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: Info, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
             changes.deleteNode(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword)));
         }
         else {
-            changes.insertNodeAfter(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword)), createToken(SyntaxKind.DefaultKeyword));
+            const exportKeyword = Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword));
+            switch (exportNode.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                    changes.insertNodeAfter(exportingSourceFile, exportKeyword, createToken(SyntaxKind.DefaultKeyword));
+                    break;
+                case SyntaxKind.VariableStatement:
+                    // If 'x' isn't used in this file, `export const x = 0;` --> `export default 0;`
+                    if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile)) {
+                        // We checked in `getInfo` that an initializer exists.
+                        changes.replaceNode(exportingSourceFile, exportNode, createExportDefault(Debug.assertDefined(first(exportNode.declarationList.declarations).initializer)));
+                        break;
+                    }
+                    // falls through
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                    // `export type T = number;` -> `type T = number; export default T;`
+                    changes.deleteModifier(exportingSourceFile, exportKeyword);
+                    changes.insertNodeAfter(exportingSourceFile, exportNode, createExportDefault(createIdentifier(exportName.text)));
+                    break;
+                default:
+                    Debug.assertNever(exportNode);
+            }
         }
     }
 
-    function changeImports(program: Program, { wasDefault, exportNode, exportingModuleSymbol }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+    function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         const checker = program.getTypeChecker();
-        const exportSymbol = Debug.assertDefined(checker.getSymbolAtLocation(exportNode.name));
-        const exportName = exportNode.name.text;
-        FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName, wasDefault, ref => {
+        const exportSymbol = Debug.assertDefined(checker.getSymbolAtLocation(exportName));
+        FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
             const importingSourceFile = ref.getSourceFile();
             if (wasDefault) {
-                changeDefaultToNamedImport(importingSourceFile, ref, changes, exportName);
+                changeDefaultToNamedImport(importingSourceFile, ref, changes, exportName.text);
             }
             else {
                 changeNamedToDefaultImport(importingSourceFile, ref, changes);
