@@ -7995,7 +7995,7 @@ namespace ts {
     }
 
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
+        return find<Extension>(extensionsToRemove, e => fileExtensionIs(path, e));
     }
 
     function getAnyExtensionFromPathWorker(path: string, extensions: string | ReadonlyArray<string>, stringEqualityComparer: (a: string, b: string) => boolean) {
