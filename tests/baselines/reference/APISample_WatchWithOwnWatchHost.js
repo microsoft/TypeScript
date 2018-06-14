@@ -1,6 +1,13 @@
+//// [tests/cases/compiler/APISample_WatchWithOwnWatchHost.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_WatchWithOwnWatchHost.ts]
 /*
- * Note: This test is a public API sample. This sample verifies creating abstract builder to watch list of root files 
+ * Note: This test is a public API sample. This sample verifies creating abstract builder to watch list of root files
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 

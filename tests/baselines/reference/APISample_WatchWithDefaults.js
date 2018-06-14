@@ -1,3 +1,10 @@
+//// [tests/cases/compiler/APISample_WatchWithDefaults.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_WatchWithDefaults.ts]
 /*
  * Note: This test is a public API sample. This uses default sys interface without having to pass anything
