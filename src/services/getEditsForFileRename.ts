@@ -16,9 +16,8 @@ namespace ts {
     function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            const canonicalPath = getCanonicalFileName(path);
-            if (canonicalPath === canonicalOldPath) return newFileOrDirPath;
-            const suffix = tryRemoveDirectoryPrefix(canonicalPath, canonicalOldPath);
+            if (getCanonicalFileName(path) === canonicalOldPath) return newFileOrDirPath;
+            const suffix = tryRemoveDirectoryPrefix(path, canonicalOldPath, getCanonicalFileName);
             return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
         };
     }

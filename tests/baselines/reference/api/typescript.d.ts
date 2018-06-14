@@ -574,7 +574,7 @@ declare namespace ts {
     function findBestPatternMatch<T>(values: ReadonlyArray<T>, getPattern: (value: T) => Pattern, candidate: string): T | undefined;
     function startsWith(str: string, prefix: string): boolean;
     function removePrefix(str: string, prefix: string): string;
-    function tryRemovePrefix(str: string, prefix: string): string | undefined;
+    function tryRemovePrefix(str: string, prefix: string, getCanonicalFileName?: GetCanonicalFileName): string | undefined;
     function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean;
     function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean;
     function assertTypeIsNever(_: never): void;
@@ -7258,7 +7258,7 @@ declare namespace ts {
     function comparePaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean): Comparison;
     function containsPath(parent: string, child: string, ignoreCase?: boolean): boolean;
     function containsPath(parent: string, child: string, currentDirectory: string, ignoreCase?: boolean): boolean;
-    function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined;
+    function tryRemoveDirectoryPrefix(path: string, dirPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined;
     function hasExtension(fileName: string): boolean;
     const commonPackageFolders: ReadonlyArray<string>;
     function getRegularExpressionForWildcard(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined;
