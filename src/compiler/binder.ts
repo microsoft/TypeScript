@@ -2341,17 +2341,15 @@ namespace ts {
             // is still pointing to 'module.exports'.
             // We do not want to consider this as 'export=' since a module can have only one of these.
             // Similarly we do not want to treat 'module.exports = exports' as an 'export='.
+            if (!setCommonJsModuleIndicator(node)) {
+                return;
+            }
             const assignedExpression = getRightMostAssignedExpression(node.right);
             if (isEmptyObjectLiteral(assignedExpression) || container === file && isExportsOrModuleExportsOrAlias(file, assignedExpression)) {
-                // Mark it as a module in case there are no other exports in the file
-                setCommonJsModuleIndicator(node);
                 return;
             }
 
             // 'module.exports = expr' assignment
-            if (!setCommonJsModuleIndicator(node)) {
-                return;
-            }
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
