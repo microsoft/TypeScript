@@ -2715,7 +2715,7 @@ namespace ts {
         return getOperatorPrecedence(expression.kind, operator, hasArguments);
     }
 
-    export function getOperator(expression: Expression) {
+    export function getOperator(expression: Expression): SyntaxKind {
         if (expression.kind === SyntaxKind.BinaryExpression) {
             return (<BinaryExpression>expression).operatorToken.kind;
         }
