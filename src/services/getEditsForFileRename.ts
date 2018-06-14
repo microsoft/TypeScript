@@ -103,13 +103,15 @@ namespace ts {
         preferences: UserPreferences,
     ): void {
         for (const sourceFile of program.getSourceFiles()) {
-            const newImportFromPath = oldToNew(sourceFile.fileName) || sourceFile.fileName;
-            const importingSourceFileMoved = newImportFromPath !== sourceFile.fileName;
+            const newFromOld = oldToNew(sourceFile.fileName);
+            const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.fileName;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
 
             const oldFromNew: string | undefined = newToOld(sourceFile.fileName);
             const oldImportFromPath: string = oldFromNew || sourceFile.fileName;
             const oldImportFromDirectory = getDirectoryPath(oldImportFromPath);
+
+            const importingSourceFileMoved = newFromOld !== undefined || oldFromNew !== undefined;
 
             updateImportsWorker(sourceFile, changeTracker,
                 referenceText => {
