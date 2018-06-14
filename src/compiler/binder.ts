@@ -2036,7 +2036,7 @@ namespace ts {
                     }
                 // falls through
                 case SyntaxKind.ThisKeyword:
-                    if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
+                    if (currentFlow) {
                         node.flowNode = currentFlow;
                     }
                     return checkStrictModeIdentifier(<Identifier>node);
