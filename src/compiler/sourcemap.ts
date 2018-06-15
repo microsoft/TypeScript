@@ -64,10 +64,10 @@ namespace ts {
 
     // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
     const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
-        emittedLine: 1,
-        emittedColumn: 1,
-        sourceLine: 1,
-        sourceColumn: 1,
+        emittedLine: 0,
+        emittedColumn: 0,
+        sourceLine: 0,
+        sourceColumn: 0,
         sourceIndex: 0
     };
 
@@ -258,6 +258,11 @@ namespace ts {
                 return;
             }
 
+            Debug.assert(lastRecordedSourceMapSpan.emittedColumn >= 0, "lastEncodedSourceMapSpan.emittedColumn was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceIndex >= 0, "lastEncodedSourceMapSpan.sourceIndex was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceLine >= 0, "lastEncodedSourceMapSpan.sourceLine was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceColumn >= 0, "lastEncodedSourceMapSpan.sourceColumn was negative");
+
             let prevEncodedEmittedColumn = lastEncodedSourceMapSpan!.emittedColumn;
             // Line/Comma delimiters
             if (lastEncodedSourceMapSpan!.emittedLine === lastRecordedSourceMapSpan.emittedLine) {
@@ -271,7 +276,7 @@ namespace ts {
                 for (let encodedLine = lastEncodedSourceMapSpan!.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
                     sourceMapData.sourceMapMappings += ";";
                 }
-                prevEncodedEmittedColumn = 1;
+                prevEncodedEmittedColumn = 0;
             }
 
             // 1. Relative Column 0 based
@@ -315,10 +320,6 @@ namespace ts {
             }
 
             const sourceLinePos = getLineAndCharacterOfPosition(currentSource, pos);
-
-            // Convert the location to be one-based.
-            sourceLinePos.line++;
-            sourceLinePos.character++;
 
             const emittedLine = writer.getLine();
             const emittedColumn = writer.getColumn();
@@ -410,8 +411,8 @@ namespace ts {
                         encodeLastRecordedSourceMapSpan();
                         lastRecordedSourceMapSpan = {
                             ...raw,
-                            emittedLine: raw.emittedLine + offsetLine - 1,
-                            emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset - 1) : raw.emittedColumn,
+                            emittedLine: raw.emittedLine + offsetLine,
+                            emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset) : raw.emittedColumn,
                             sourceIndex: newIndex,
                         };
                     });
