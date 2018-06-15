@@ -115,6 +115,8 @@ task(TaskNames.local, [
     TaskNames.buildFoldEnd
 ]);
 
+task("default", [TaskNames.local]);
+
 const RunTestsPrereqs = [TaskNames.lib, Paths.servicesDefinitionFile, Paths.tsserverLibraryDefinitionFile];
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task(TaskNames.runtestsParallel, RunTestsPrereqs, function () {
