@@ -28,16 +28,16 @@ var r1: I1<string> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >v1 : Symbol(v1, Decl(overEagerReturnTypeSpecialization.ts, 6, 11))
 >func : Symbol(I1.func, Decl(overEagerReturnTypeSpecialization.ts, 2, 17))
 >num : Symbol(num, Decl(overEagerReturnTypeSpecialization.ts, 7, 29))
->num.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>num.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >num : Symbol(num, Decl(overEagerReturnTypeSpecialization.ts, 7, 29))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
            .func(str => str.length);    // should error
 >func : Symbol(I1.func, Decl(overEagerReturnTypeSpecialization.ts, 2, 17))
 >str : Symbol(str, Decl(overEagerReturnTypeSpecialization.ts, 8, 17))
->str.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >str : Symbol(str, Decl(overEagerReturnTypeSpecialization.ts, 8, 17))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<string>
 >r2 : Symbol(r2, Decl(overEagerReturnTypeSpecialization.ts, 10, 3))
@@ -47,15 +47,15 @@ var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >v1 : Symbol(v1, Decl(overEagerReturnTypeSpecialization.ts, 6, 11))
 >func : Symbol(I1.func, Decl(overEagerReturnTypeSpecialization.ts, 2, 17))
 >num : Symbol(num, Decl(overEagerReturnTypeSpecialization.ts, 10, 29))
->num.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>num.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >num : Symbol(num, Decl(overEagerReturnTypeSpecialization.ts, 10, 29))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
            .func(str => str.length);    // should be ok 
 >func : Symbol(I1.func, Decl(overEagerReturnTypeSpecialization.ts, 2, 17))
 >str : Symbol(str, Decl(overEagerReturnTypeSpecialization.ts, 11, 17))
->str.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >str : Symbol(str, Decl(overEagerReturnTypeSpecialization.ts, 11, 17))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
  
  

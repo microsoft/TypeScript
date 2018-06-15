@@ -100,7 +100,7 @@ namespace ts {
         function transformBundle(node: Bundle) {
             return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
                 if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend.javascriptText);
+                    return createUnparsedSourceFile(prepend.javascriptText, prepend.javascriptMapPath, prepend.javascriptMapText);
                 }
                 return prepend;
             }));
@@ -1912,6 +1912,7 @@ namespace ts {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ImportType:
                     break;
 
                 default:

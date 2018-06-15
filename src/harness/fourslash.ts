@@ -1,29 +1,14 @@
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-
-/// <reference path="..\services\services.ts" />
-/// <reference path="..\services\shims.ts" />
-/// <reference path="harnessLanguageService.ts" />
-/// <reference path="harness.ts" />
-/// <reference path="fourslashRunner.ts" />
-/// <reference path="./compiler.ts" />
-
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
 
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
+
+    export const enum FourSlashTestType {
+        Native,
+        Shims,
+        ShimsWithPreprocess,
+        Server
+    }
 
     // Represents a parsed source file with metadata
     interface FourSlashFile {
@@ -522,8 +507,17 @@ namespace FourSlash {
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
-            return ts.flatMap(this.languageServiceAdapterHost.getFilenames(), fileName =>
-                ts.isAnySupportedFileExtension(fileName) ? this.getDiagnostics(fileName) : []);
+            return ts.flatMap(this.languageServiceAdapterHost.getFilenames(), fileName => {
+                if (!ts.isAnySupportedFileExtension(fileName)) {
+                    return [];
+                }
+
+                const baseName = ts.getBaseFileName(fileName);
+                if (baseName === "package.json" || baseName === "tsconfig.json" || baseName === "jsconfig.json") {
+                    return [];
+                }
+                return this.getDiagnostics(fileName);
+            });
         }
 
         public verifyErrorExistsAfterMarker(markerName: string, shouldExist: boolean, after: boolean) {
@@ -1090,7 +1084,7 @@ namespace FourSlash {
         }
 
         private getNode(): ts.Node {
-            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition, /*includeJsDocComment*/ false);
+            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition);
         }
 
         private goToAndGetNode(range: Range): ts.Node {
@@ -1317,7 +1311,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private testDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>, category: string) {
-            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected.map((e): ts.RealizedDiagnostic => ({
+            assert.deepEqual(ts.realizeDiagnostics(diagnostics, "\n"), expected.map((e): ts.RealizedDiagnostic => ({
                 message: e.message,
                 category,
                 code: e.code,
@@ -2743,6 +2737,14 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
+        public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
+            for (const markerName in map) {
+                this.goToMarker(markerName);
+                const actual = this.languageService.getJsxClosingTagAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+                assert.deepEqual(actual, map[markerName]);
+            }
+        }
+
         public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
             const actual = this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, bracePosition);
 
@@ -2861,6 +2863,7 @@ Actual: ${stringify(fullActual)}`);
             function replacer(key: string, value: any) {
                 switch (key) {
                     case "spans":
+                    case "nameSpan":
                         return options && options.checkSpans ? value : undefined;
                     case "start":
                     case "length":
@@ -3131,8 +3134,12 @@ Actual: ${stringify(fullActual)}`);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.defaultPreferences)!;
-            for (const edit of editInfo.edits) {
-                const newContent = options.newFileContents[edit.fileName];
+            this.testNewFileContents(editInfo.edits, options.newFileContents);
+        }
+
+        private testNewFileContents(edits: ReadonlyArray<ts.FileTextChanges>, newFileContents: { [fileName: string]: string }): void {
+            for (const edit of edits) {
+                const newContent = newFileContents[edit.fileName];
                 if (newContent === undefined) {
                     this.raiseError(`There was an edit in ${edit.fileName} but new content was not specified.`);
                 }
@@ -3149,8 +3156,8 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
 
-            for (const fileName in options.newFileContents) {
-                assert(editInfo.edits.some(e => e.fileName === fileName));
+            for (const fileName in newFileContents) {
+                assert(edits.some(e => e.fileName === fileName));
             }
         }
 
@@ -3360,12 +3367,8 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public getEditsForFileRename(options: FourSlashInterface.GetEditsForFileRenameOptions): void {
-            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings);
-            this.applyChanges(changes);
-            for (const fileName in options.newFileContents) {
-                this.openFile(fileName);
-                this.verifyCurrentFileContent(options.newFileContents[fileName]);
-            }
+            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings, ts.defaultPreferences);
+            this.testNewFileContents(changes, options.newFileContents);
         }
 
         private getApplicableRefactors(positionOrRange: number | ts.TextRange, preferences = ts.defaultPreferences): ReadonlyArray<ts.ApplicableRefactorInfo> {
@@ -4077,6 +4080,10 @@ namespace FourSlashInterface {
 
         public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
+        }
+
+        public jsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
+            this.state.verifyJsxClosingTag(map);
         }
 
         public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {

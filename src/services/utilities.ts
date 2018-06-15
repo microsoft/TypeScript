@@ -648,8 +648,8 @@ namespace ts {
      * Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
      */
-    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
+        return getTouchingToken(sourceFile, position, /*includeJsDocComment*/ true, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
     }
 
     /**
@@ -1196,6 +1196,7 @@ namespace ts {
         SyntaxKind.VoidKeyword,
         SyntaxKind.UndefinedKeyword,
         SyntaxKind.UniqueKeyword,
+        SyntaxKind.UnknownKeyword,
     ];
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
@@ -1256,18 +1257,34 @@ namespace ts {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
     }
 
-    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string, preferences: UserPreferences): ImportDeclaration | undefined {
-        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, preferences) : undefined;
+    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
+        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
 
-    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression, preferences: UserPreferences): ImportDeclaration {
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference): ImportDeclaration {
         return createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
                 ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
                 : undefined,
-            typeof moduleSpecifier === "string" ? createLiteral(moduleSpecifier, preferences.quotePreference === "single") : moduleSpecifier);
+            typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
+    }
+
+    export function makeStringLiteral(text: string, quotePreference: QuotePreference): StringLiteral {
+        return createLiteral(text, quotePreference === QuotePreference.Single);
+    }
+
+    export const enum QuotePreference { Single, Double }
+
+    export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
+        if (preferences.quotePreference) {
+            return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
+        }
+        else {
+            const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
+            return !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile) ? QuotePreference.Single : QuotePreference.Double;
+        }
     }
 
     export function symbolNameNoDefault(symbol: Symbol): string | undefined {
@@ -1361,6 +1378,17 @@ namespace ts {
     function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
         return textSpanContainsPosition(span, node.getStart(file)) &&
             node.getEnd() <= textSpanEnd(span);
+    }
+
+    /* @internal */
+    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void {
+        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
+        if (lastImportDeclaration) {
+            changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
+        }
+        else {
+            changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
+        }
     }
 }
 
@@ -1684,6 +1712,22 @@ namespace ts {
         Debug.assert(preferLastLocation);
         Debug.assert(lastPos >= 0);
         return lastPos;
+    }
+
+    export function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+            if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                // Remove leading /*
+                pos += 2;
+                // Remove trailing */
+                end -= 2;
+            }
+            else {
+                // Remove leading //
+                pos += 2;
+            }
+            addSyntheticLeadingComment(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
+        });
     }
 
     function indexInTextChange(change: string, name: string): number {

@@ -6,6 +6,7 @@ namespace ts {
             checkJsDirective: undefined,
             referencedFiles: [],
             typeReferenceDirectives: [],
+            libReferenceDirectives: [],
             amdDependencies: [],
             hasNoDefaultLib: undefined,
             moduleName: undefined
@@ -336,7 +337,7 @@ namespace ts {
                     importedFiles.push(decl.ref);
                 }
             }
-            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: undefined };
+            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: undefined };
         }
         else {
             // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
@@ -354,7 +355,7 @@ namespace ts {
                     }
                 }
             }
-            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
+            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
         }
     }
 }

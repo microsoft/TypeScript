@@ -6,6 +6,7 @@
 namespace ts.server.protocol {
     // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     export const enum CommandTypes {
+        JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         /* @internal */
         BraceFull = "brace-full",
@@ -465,6 +466,7 @@ namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        relatedInformation?: DiagnosticRelatedInformation[];
     }
 
     /**
@@ -888,6 +890,17 @@ namespace ts.server.protocol {
          * Kind of opening brace
          */
         openingBrace: string;
+    }
+
+    export interface JsxClosingTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.JsxClosingTag;
+        readonly arguments: JsxClosingTagRequestArgs;
+    }
+
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+
+    export interface JsxClosingTagResponse extends Response {
+        readonly body: TextInsertion;
     }
 
     /**
@@ -2204,6 +2217,11 @@ namespace ts.server.protocol {
         reportsUnnecessary?: {};
 
         /**
+         * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
+         */
+        relatedInformation?: DiagnosticRelatedInformation[];
+
+        /**
          * The error code of the diagnostic message.
          */
         code?: number;
@@ -2219,6 +2237,23 @@ namespace ts.server.protocol {
          * Name of the file the diagnostic is in
          */
         fileName: string;
+    }
+
+    /**
+     * Represents additional spans returned with a diagnostic which are relevant to it
+     * Like DiagnosticWithLinePosition, this is provided in two forms:
+     *   - start and length of the span
+     *   - startLocation and endLocation a pair of Location objects storing the start/end line offset of the span
+     */
+    export interface DiagnosticRelatedInformation {
+        /**
+         * Text of related or additional information.
+         */
+        message: string;
+        /**
+         * Associated location
+         */
+        span?: FileSpan;
     }
 
     export interface DiagnosticEventBody {
@@ -2543,6 +2578,7 @@ namespace ts.server.protocol {
         kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
+        nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
     }
 

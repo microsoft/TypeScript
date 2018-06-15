@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/core.js"
+    },
+    "files": [
+        "performance.ts",
+        "core.ts"
+    ],
+    "references": [ ]
+}

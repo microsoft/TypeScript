@@ -6,7 +6,12 @@ namespace evaluator {
     function compile(sourceText: string, options?: ts.CompilerOptions) {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
         fs.writeFileSync(sourceFile, sourceText);
-        const compilerOptions: ts.CompilerOptions = { target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS, lib: ["lib.esnext.d.ts"], ...options };
+        const compilerOptions: ts.CompilerOptions = {
+            target: ts.ScriptTarget.ES5,
+            module: ts.ModuleKind.CommonJS,
+            lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
+            ...options
+        };
         const host = new fakes.CompilerHost(fs, compilerOptions);
         return compiler.compileFiles(host, [sourceFile], compilerOptions);
     }
@@ -29,6 +34,14 @@ namespace evaluator {
 
     function evaluate(result: compiler.CompilationResult, globals?: Record<string, any>) {
         globals = { Symbol: FakeSymbol, ...globals };
+
+        if (ts.some(result.diagnostics)) {
+            assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
+                getCanonicalFileName: file => file,
+                getCurrentDirectory: () => "",
+                getNewLine: () => "\n"
+            }));
+        }
 
         const output = result.getOutput(sourceFile, "js")!;
         assert.isDefined(output);

@@ -3,7 +3,7 @@ tests/cases/conformance/jsdoc/templateTagOnClasses.js(25,1): error TS2322: Type 
 
 ==== tests/cases/conformance/jsdoc/templateTagOnClasses.js (1 errors) ====
     /**
-     * @template {T}
+     * @template T
      * @typedef {(t: T) => T} Id
      */
     /** @template T */

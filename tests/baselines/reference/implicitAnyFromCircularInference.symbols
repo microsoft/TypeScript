@@ -16,7 +16,7 @@ var c: typeof b;
 // Error expected
 var d: Array<typeof d>;
 >d : Symbol(d, Decl(implicitAnyFromCircularInference.ts, 8, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >d : Symbol(d, Decl(implicitAnyFromCircularInference.ts, 8, 3))
 
 function f() { return f; }
