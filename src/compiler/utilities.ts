@@ -795,7 +795,7 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): DiagnosticWithLocation {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
         return {
@@ -804,7 +804,8 @@ namespace ts {
             length: span.length,
             code: messageChain.code,
             category: messageChain.category,
-            messageText: messageChain.next ? messageChain : messageChain.messageText
+            messageText: messageChain.next ? messageChain : messageChain.messageText,
+            relatedInformation
         };
     }
 

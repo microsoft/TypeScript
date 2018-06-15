@@ -2363,16 +2363,19 @@ declare namespace ts {
         code: number;
         next?: DiagnosticMessageChain;
     }
-    interface Diagnostic {
-        file: SourceFile | undefined;
-        start: number | undefined;
-        length: number | undefined;
-        messageText: string | DiagnosticMessageChain;
+    interface Diagnostic extends DiagnosticRelatedInformation {
         category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         code: number;
         source?: string;
+        relatedInformation?: DiagnosticRelatedInformation[];
+    }
+    interface DiagnosticRelatedInformation {
+        file: SourceFile | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string | DiagnosticMessageChain;
     }
     interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
@@ -4547,7 +4550,7 @@ declare namespace ts {
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
     function createSolutionBuilder(compilerHost: CompilerHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System): {
-        buildAllProjects: () => number;
+        buildAllProjects: () => ExitStatus;
         getUpToDateStatus: (project: ParsedCommandLine | undefined) => UpToDateStatus;
         getUpToDateStatusOfFile: (configFileName: ResolvedConfigFileName) => UpToDateStatus;
         cleanAllProjects: () => ExitStatus.Success | ExitStatus.DiagnosticsPresent_OutputsSkipped;
