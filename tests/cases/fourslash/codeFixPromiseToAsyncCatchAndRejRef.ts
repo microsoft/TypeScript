@@ -2,16 +2,16 @@
 
 // @target: es6
 
-////function [|f|]():Promise<void> {
+////function [|f|](): Promise<void> {
 ////    return fetch('http://yahoo.com').then(res, rej).catch(catch_err)
 ////}
 ////
 ////function res(result){
-////    console.log(result);    
+////    console.log(result);
 ////}
 ////
 ////function rej(rejection){
-////   return rejection.ok; 
+////    return rejection.ok;
 ////}
 ////
 ////function catch_err(err){
@@ -34,11 +34,11 @@ verify.codeFix({
         }
         catch (rejection) {
             return rej(rejection);
-        }   
+        }
         return res(result);
-    } 
-    catch(err) {
-        return catch_err(err)
+    }
+    catch (err) {
+        return catch_err(err);
     }
 }
 

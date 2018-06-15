@@ -7,7 +7,7 @@
 ////}
 ////
 ////function res(result){
-////    return result.ok;    
+////    return result.ok;
 ////}
 
 verify.getSuggestionDiagnostics([{
@@ -20,8 +20,8 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `async function f():Promise<boolean> {
-   var result = await fetch('http://yahoo.com);
-   return res(result);
+    var result = await fetch('http://yahoo.com');
+    return res(result);
 }
 
 function res(result){

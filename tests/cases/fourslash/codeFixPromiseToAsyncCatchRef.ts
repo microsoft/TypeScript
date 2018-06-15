@@ -5,7 +5,7 @@
 ////}
 ////
 ////function res(result){
-////    console.log(result);    
+////    console.log(result);
 ////}
 ////
 ////function catch_err(err){
@@ -25,10 +25,10 @@ verify.codeFix({
     try {
         var result = await fetch('http://yahoo.com');
         return res(result);
-   } 
-   catch(err) {
-       return catch_err(err);
-   }   
+    }
+    catch (err) {
+        return catch_err(err);
+    }
 }
 
 function res(result){
