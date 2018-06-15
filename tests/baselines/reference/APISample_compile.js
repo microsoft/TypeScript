@@ -1,7 +1,14 @@
+//// [tests/cases/compiler/APISample_compile.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_compile.ts]
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -42,7 +49,7 @@ compile(process.argv.slice(2), {
 "use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;

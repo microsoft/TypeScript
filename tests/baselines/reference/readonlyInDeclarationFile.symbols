@@ -7,7 +7,7 @@ interface Foo {
 
     readonly [x: string]: Object;
 >x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 2, 14))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 class C {
@@ -15,7 +15,7 @@ class C {
 
     readonly [x: string]: Object;
 >x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 6, 14))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     private readonly a1: number;
 >a1 : Symbol(C.a1, Decl(readonlyInDeclarationFile.ts, 6, 33))
@@ -104,7 +104,7 @@ var z: {
 
     readonly [x: string]: Object;
 >x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 35, 14))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function f() {
@@ -134,7 +134,7 @@ function g() {
 
         readonly [x: string]: Object;
 >x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 49, 18))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     return x;
 >x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 47, 7))

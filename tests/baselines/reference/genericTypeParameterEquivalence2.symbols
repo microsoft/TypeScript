@@ -24,9 +24,9 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 
         return f(g.apply(null, a));
 >f : Symbol(f, Decl(genericTypeParameterEquivalence2.ts, 1, 26))
->g.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>g.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >g : Symbol(g, Decl(genericTypeParameterEquivalence2.ts, 1, 41))
->apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(genericTypeParameterEquivalence2.ts, 2, 21))
 
     };
@@ -46,9 +46,9 @@ function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
     for (var i = 0; i < list.length; ++i) {
 >i : Symbol(i, Decl(genericTypeParameterEquivalence2.ts, 9, 12))
 >i : Symbol(i, Decl(genericTypeParameterEquivalence2.ts, 9, 12))
->list.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>list.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(genericTypeParameterEquivalence2.ts, 8, 20))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(genericTypeParameterEquivalence2.ts, 9, 12))
 
         f(list[i], i);
@@ -83,9 +83,9 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 >el : Symbol(el, Decl(genericTypeParameterEquivalence2.ts, 17, 17))
 
             ret.push(el);
->ret.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>ret.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >ret : Symbol(ret, Decl(genericTypeParameterEquivalence2.ts, 16, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >el : Symbol(el, Decl(genericTypeParameterEquivalence2.ts, 17, 17))
         }
     } );
@@ -102,9 +102,9 @@ function length2<A>(ar: A[]): number {
 >A : Symbol(A, Decl(genericTypeParameterEquivalence2.ts, 27, 17))
 
     return ar.length;
->ar.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>ar.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >ar : Symbol(ar, Decl(genericTypeParameterEquivalence2.ts, 27, 20))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // curry1 :: ((a,b)->c) -> (a->(b->c))

@@ -5,9 +5,9 @@ declare function dec1<T>(target: any, propertyKey: string, descriptor: TypedProp
 >target : Symbol(target, Decl(decoratorOnClassAccessor7.ts, 0, 25))
 >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassAccessor7.ts, 0, 37))
 >descriptor : Symbol(descriptor, Decl(decoratorOnClassAccessor7.ts, 0, 58))
->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, --, --))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(decoratorOnClassAccessor7.ts, 0, 22))
->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, --, --))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(decoratorOnClassAccessor7.ts, 0, 22))
 
 declare function dec2<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
@@ -16,9 +16,9 @@ declare function dec2<T>(target: any, propertyKey: string, descriptor: TypedProp
 >target : Symbol(target, Decl(decoratorOnClassAccessor7.ts, 1, 25))
 >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassAccessor7.ts, 1, 37))
 >descriptor : Symbol(descriptor, Decl(decoratorOnClassAccessor7.ts, 1, 58))
->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, --, --))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(decoratorOnClassAccessor7.ts, 1, 22))
->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, --, --))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(decoratorOnClassAccessor7.ts, 1, 22))
 
 class A {

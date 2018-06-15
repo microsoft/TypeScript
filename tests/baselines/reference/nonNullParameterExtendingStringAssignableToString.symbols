@@ -14,7 +14,7 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 
     let three = Boolean() ? one : two;
 >three : Symbol(three, Decl(nonNullParameterExtendingStringAssignableToString.ts, 3, 7))
->Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >one : Symbol(one, Decl(nonNullParameterExtendingStringAssignableToString.ts, 2, 60))
 >two : Symbol(two, Decl(nonNullParameterExtendingStringAssignableToString.ts, 2, 67))
 

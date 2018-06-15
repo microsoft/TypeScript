@@ -5,7 +5,7 @@ interface ComponentOptions<V> {
 
     watch: Record<string, WatchHandler<any>>;
 >watch : Symbol(ComponentOptions.watch, Decl(func.ts, 0, 31))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >WatchHandler : Symbol(WatchHandler, Decl(func.ts, 2, 1))
 }
 type WatchHandler<T> = (val: T) => void;
@@ -40,7 +40,7 @@ export var a = vextend({
 >val : Symbol(val, Decl(app.js, 4, 10))
 
       this.data2 = 1;
->this : Symbol(__type, Decl(lib.d.ts, --, --))
+>this : Symbol(__type, Decl(lib.es5.d.ts, --, --))
 >data2 : Symbol(data2, Decl(app.js, 4, 16), Decl(app.js, 6, 6))
 
     },

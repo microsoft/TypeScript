@@ -1,6 +1,8 @@
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
+// @allowUnreachableCode: false
+
 // @filename: a.js
 let C = "sss";
 let C = 0;  // Error: Cannot redeclare block-scoped variable 'C'.

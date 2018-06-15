@@ -219,6 +219,10 @@
         "category": "Error",
         "code": 1068
     },
+    "Unexpected token. A type parameter name was expected without curly braces.": {
+        "category": "Error",
+        "code": 1069
+    },
     "'{0}' modifier cannot appear on a type member.": {
         "category": "Error",
         "code": 1070
@@ -2024,6 +2028,10 @@
         "category": "Error",
         "code": 2570
     },
+    "Object is of type 'unknown'.": {
+        "category": "Error",
+        "code": 2571
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2238,7 +2246,8 @@
     },
     "Left side of comma operator is unused and has no side effects.": {
         "category": "Error",
-        "code": 2695
+        "code": 2695,
+        "reportsUnnecessary": true
     },
     "The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?": {
         "category": "Error",
@@ -2356,6 +2365,19 @@
         "category": "Error",
         "code": 2724
     },
+    "Class name cannot be 'Object' when targeting ES5 with module {0}.": {
+        "category": "Error",
+        "code": 2725
+    },
+    "Cannot find lib definition for '{0}'.": {
+        "category": "Error",
+        "code": 2726
+    },
+    "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2727
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3556,6 +3578,11 @@
         "code": 6198,
         "reportsUnnecessary": true
     },
+    "All variables are unused.": {
+        "category": "Error",
+        "code": 6199,
+        "reportsUnnecessary": true
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3592,6 +3619,95 @@
     "Output file '{0}' from project '{1}' does not exist": {
         "category": "Error",
         "code": 6309
+    },
+    "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
+        "category": "Message",
+        "code": 6350
+    },
+    "Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}'": {
+        "category": "Message",
+        "code": 6351
+    },
+    "Project '{0}' is out of date because output file '{1}' does not exist": {
+        "category": "Message",
+        "code": 6352
+    },
+    "Project '{0}' is out of date because its dependency '{1}' is out of date": {
+        "category": "Message",
+        "code": 6353
+    },
+    
+    "Project '{0}' is up to date with .d.ts files from its dependencies": {
+        "category": "Message",
+        "code": 6354
+    },
+    "Projects in this build: {0}": {
+        "category": "Message",
+        "code": 6355
+    },
+    "A non-dry build would delete the following files: {0}": {
+        "category": "Message",
+        "code": 6356
+    },
+    "A non-dry build would build project '{0}'": {
+        "category": "Message",
+        "code": 6357
+    },
+    "Building project '{0}'...": {
+        "category": "Message",
+        "code": 6358
+    },
+    "Updating output timestamps of project '{0}'...": {
+        "category": "Message",
+        "code": 6359
+    },
+    "delete this - Project '{0}' is up to date because it was previously built": {
+        "category": "Message",
+        "code": 6360
+    },
+    "Project '{0}' is up to date": {
+        "category": "Message",
+        "code": 6361
+    },
+    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6362
+    },
+    "Project '{0}' can't be built because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6363
+    },
+    "Build one or more projects and their dependencies, if out of date": {
+        "category": "Message",
+        "code": 6364
+    },
+    "Delete the outputs of all projects": {
+        "category": "Message",
+        "code": 6365
+    },
+    "Enable verbose logging": {
+        "category": "Message",
+        "code": 6366
+    },
+    "Show what would be built (or deleted, if specified with '--clean')": {
+        "category": "Message",
+        "code": 6367
+    },
+    "Build all projects, including those that appear to be up to date": {
+        "category": "Message",
+        "code": 6368
+    },
+    "Option '--build' must be the first command line argument.": {
+        "category": "Error",
+        "code": 6369
+    },
+    "Options '{0}' and '{1}' cannot be combined.": {
+        "category": "Error",
+        "code": 6370
+    },
+    "Skipping clean because not all projects could be located": {
+        "category": "Error",
+        "code": 6371
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -3668,7 +3784,8 @@
     },
     "Unreachable code detected.": {
         "category": "Error",
-        "code": 7027
+        "code": 7027,
+        "reportsUnnecessary": true
     },
     "Unused label.": {
         "category": "Error",
@@ -3711,7 +3828,7 @@
         "category": "Message",
         "code": 7037
     },
-    "A namespace-style import cannot be called or constructed, and will cause a failure at runtime.": {
+    "Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.": {
         "category": "Error",
         "code": 7038
     },
@@ -3994,6 +4111,10 @@
         "category": "Message",
         "code": 90009
     },
+    "Remove variable statement": {
+        "category": "Message",
+        "code": 90010
+    },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
         "code": 90013
@@ -4258,8 +4379,40 @@
         "category": "Message",
         "code": 95051
     },
-    "Add missing typeof": {
+    "Add missing 'typeof'": {
         "category": "Message",
         "code": 95052
+    },
+    "Remove unused label": {
+        "category": "Message",
+        "code": 95053
+    },
+    "Remove all unused labels": {
+        "category": "Message",
+        "code": 95054
+    },
+    "Convert '{0}' to mapped object type": {
+        "category": "Message",
+        "code": 95055
+    },
+    "Convert namespace import to named imports": {
+        "category": "Message",
+        "code": 95056
+    },
+    "Convert named imports to namespace import": {
+        "category": "Message",
+        "code": 95057
+    },
+    "Add or remove braces in an arrow function": {
+        "category": "Message",
+        "code": 95058
+    },
+    "Add braces to arrow function": {
+        "category": "Message",
+        "code": 95059
+    },
+    "Remove braces from arrow function": {
+        "category": "Message",
+        "code": 95060
     }
 }

@@ -1,6 +1,6 @@
 System.register(["SomeOtherName"], function (exports_1, context_1) {
-    var SomeName_1;
     "use strict";
+    var SomeName_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [

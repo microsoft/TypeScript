@@ -197,89 +197,206 @@ function f5() {
 >c4 : Symbol(c4, Decl(literalTypeWidening.ts, 57, 9))
 }
 
+declare function widening<T>(x: T): T;
+>widening : Symbol(widening, Decl(literalTypeWidening.ts, 59, 1))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 61, 26))
+>x : Symbol(x, Decl(literalTypeWidening.ts, 61, 29))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 61, 26))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 61, 26))
+
+declare function nonWidening<T extends string | number | symbol>(x: T): T;
+>nonWidening : Symbol(nonWidening, Decl(literalTypeWidening.ts, 61, 38))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 62, 29))
+>x : Symbol(x, Decl(literalTypeWidening.ts, 62, 65))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 62, 29))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 62, 29))
+
+function f6(cond: boolean) {
+>f6 : Symbol(f6, Decl(literalTypeWidening.ts, 62, 74))
+>cond : Symbol(cond, Decl(literalTypeWidening.ts, 64, 12))
+
+    let x1 = widening('a');
+>x1 : Symbol(x1, Decl(literalTypeWidening.ts, 65, 7))
+>widening : Symbol(widening, Decl(literalTypeWidening.ts, 59, 1))
+
+    let x2 = widening(10);
+>x2 : Symbol(x2, Decl(literalTypeWidening.ts, 66, 7))
+>widening : Symbol(widening, Decl(literalTypeWidening.ts, 59, 1))
+
+    let x3 = widening(cond ? 'a' : 10);
+>x3 : Symbol(x3, Decl(literalTypeWidening.ts, 67, 7))
+>widening : Symbol(widening, Decl(literalTypeWidening.ts, 59, 1))
+>cond : Symbol(cond, Decl(literalTypeWidening.ts, 64, 12))
+
+    let y1 = nonWidening('a');
+>y1 : Symbol(y1, Decl(literalTypeWidening.ts, 68, 7))
+>nonWidening : Symbol(nonWidening, Decl(literalTypeWidening.ts, 61, 38))
+
+    let y2 = nonWidening(10);
+>y2 : Symbol(y2, Decl(literalTypeWidening.ts, 69, 7))
+>nonWidening : Symbol(nonWidening, Decl(literalTypeWidening.ts, 61, 38))
+
+    let y3 = nonWidening(cond ? 'a' : 10);
+>y3 : Symbol(y3, Decl(literalTypeWidening.ts, 70, 7))
+>nonWidening : Symbol(nonWidening, Decl(literalTypeWidening.ts, 61, 38))
+>cond : Symbol(cond, Decl(literalTypeWidening.ts, 64, 12))
+}
+
 // Repro from #10898
 
 type FAILURE = "FAILURE";
->FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 59, 1), Decl(literalTypeWidening.ts, 64, 5))
+>FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 71, 1), Decl(literalTypeWidening.ts, 76, 5))
 
 const FAILURE = "FAILURE";
->FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 59, 1), Decl(literalTypeWidening.ts, 64, 5))
+>FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 71, 1), Decl(literalTypeWidening.ts, 76, 5))
 
 type Result<T> = T | FAILURE;
->Result : Symbol(Result, Decl(literalTypeWidening.ts, 64, 26))
->T : Symbol(T, Decl(literalTypeWidening.ts, 66, 12))
->T : Symbol(T, Decl(literalTypeWidening.ts, 66, 12))
->FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 59, 1), Decl(literalTypeWidening.ts, 64, 5))
+>Result : Symbol(Result, Decl(literalTypeWidening.ts, 76, 26))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 78, 12))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 78, 12))
+>FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 71, 1), Decl(literalTypeWidening.ts, 76, 5))
 
 function doWork<T>(): Result<T> {
->doWork : Symbol(doWork, Decl(literalTypeWidening.ts, 66, 29))
->T : Symbol(T, Decl(literalTypeWidening.ts, 68, 16))
->Result : Symbol(Result, Decl(literalTypeWidening.ts, 64, 26))
->T : Symbol(T, Decl(literalTypeWidening.ts, 68, 16))
+>doWork : Symbol(doWork, Decl(literalTypeWidening.ts, 78, 29))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 80, 16))
+>Result : Symbol(Result, Decl(literalTypeWidening.ts, 76, 26))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 80, 16))
 
   return FAILURE;
->FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 59, 1), Decl(literalTypeWidening.ts, 64, 5))
+>FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 71, 1), Decl(literalTypeWidening.ts, 76, 5))
 }
 
 function isSuccess<T>(result: Result<T>): result is T {
->isSuccess : Symbol(isSuccess, Decl(literalTypeWidening.ts, 70, 1))
->T : Symbol(T, Decl(literalTypeWidening.ts, 72, 19))
->result : Symbol(result, Decl(literalTypeWidening.ts, 72, 22))
->Result : Symbol(Result, Decl(literalTypeWidening.ts, 64, 26))
->T : Symbol(T, Decl(literalTypeWidening.ts, 72, 19))
->result : Symbol(result, Decl(literalTypeWidening.ts, 72, 22))
->T : Symbol(T, Decl(literalTypeWidening.ts, 72, 19))
+>isSuccess : Symbol(isSuccess, Decl(literalTypeWidening.ts, 82, 1))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 84, 19))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 84, 22))
+>Result : Symbol(Result, Decl(literalTypeWidening.ts, 76, 26))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 84, 19))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 84, 22))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 84, 19))
 
   return !isFailure(result);
->isFailure : Symbol(isFailure, Decl(literalTypeWidening.ts, 74, 1))
->result : Symbol(result, Decl(literalTypeWidening.ts, 72, 22))
+>isFailure : Symbol(isFailure, Decl(literalTypeWidening.ts, 86, 1))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 84, 22))
 }
 
 function isFailure<T>(result: Result<T>): result is FAILURE {
->isFailure : Symbol(isFailure, Decl(literalTypeWidening.ts, 74, 1))
->T : Symbol(T, Decl(literalTypeWidening.ts, 76, 19))
->result : Symbol(result, Decl(literalTypeWidening.ts, 76, 22))
->Result : Symbol(Result, Decl(literalTypeWidening.ts, 64, 26))
->T : Symbol(T, Decl(literalTypeWidening.ts, 76, 19))
->result : Symbol(result, Decl(literalTypeWidening.ts, 76, 22))
->FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 59, 1), Decl(literalTypeWidening.ts, 64, 5))
+>isFailure : Symbol(isFailure, Decl(literalTypeWidening.ts, 86, 1))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 88, 19))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 88, 22))
+>Result : Symbol(Result, Decl(literalTypeWidening.ts, 76, 26))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 88, 19))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 88, 22))
+>FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 71, 1), Decl(literalTypeWidening.ts, 76, 5))
 
   return result === FAILURE;
->result : Symbol(result, Decl(literalTypeWidening.ts, 76, 22))
->FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 59, 1), Decl(literalTypeWidening.ts, 64, 5))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 88, 22))
+>FAILURE : Symbol(FAILURE, Decl(literalTypeWidening.ts, 71, 1), Decl(literalTypeWidening.ts, 76, 5))
 }
 
 function increment(x: number): number {
->increment : Symbol(increment, Decl(literalTypeWidening.ts, 78, 1))
->x : Symbol(x, Decl(literalTypeWidening.ts, 80, 19))
+>increment : Symbol(increment, Decl(literalTypeWidening.ts, 90, 1))
+>x : Symbol(x, Decl(literalTypeWidening.ts, 92, 19))
 
   return x + 1;
->x : Symbol(x, Decl(literalTypeWidening.ts, 80, 19))
+>x : Symbol(x, Decl(literalTypeWidening.ts, 92, 19))
 }
 
 let result = doWork<number>();
->result : Symbol(result, Decl(literalTypeWidening.ts, 84, 3))
->doWork : Symbol(doWork, Decl(literalTypeWidening.ts, 66, 29))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 96, 3))
+>doWork : Symbol(doWork, Decl(literalTypeWidening.ts, 78, 29))
 
 if (isSuccess(result)) {
->isSuccess : Symbol(isSuccess, Decl(literalTypeWidening.ts, 70, 1))
->result : Symbol(result, Decl(literalTypeWidening.ts, 84, 3))
+>isSuccess : Symbol(isSuccess, Decl(literalTypeWidening.ts, 82, 1))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 96, 3))
 
   increment(result);
->increment : Symbol(increment, Decl(literalTypeWidening.ts, 78, 1))
->result : Symbol(result, Decl(literalTypeWidening.ts, 84, 3))
+>increment : Symbol(increment, Decl(literalTypeWidening.ts, 90, 1))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 96, 3))
 }
 
 // Repro from #10898
 
 type TestEvent = "onmouseover" | "onmouseout";
->TestEvent : Symbol(TestEvent, Decl(literalTypeWidening.ts, 88, 1))
+>TestEvent : Symbol(TestEvent, Decl(literalTypeWidening.ts, 100, 1))
 
 function onMouseOver(): TestEvent { return "onmouseover"; }
->onMouseOver : Symbol(onMouseOver, Decl(literalTypeWidening.ts, 92, 46))
->TestEvent : Symbol(TestEvent, Decl(literalTypeWidening.ts, 88, 1))
+>onMouseOver : Symbol(onMouseOver, Decl(literalTypeWidening.ts, 104, 46))
+>TestEvent : Symbol(TestEvent, Decl(literalTypeWidening.ts, 100, 1))
 
 let x = onMouseOver();
->x : Symbol(x, Decl(literalTypeWidening.ts, 96, 3))
->onMouseOver : Symbol(onMouseOver, Decl(literalTypeWidening.ts, 92, 46))
+>x : Symbol(x, Decl(literalTypeWidening.ts, 108, 3))
+>onMouseOver : Symbol(onMouseOver, Decl(literalTypeWidening.ts, 104, 46))
+
+// Repro from #23649
+
+export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
+>Set : Symbol(Set, Decl(literalTypeWidening.ts, 108, 22))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 112, 20))
+>keys : Symbol(keys, Decl(literalTypeWidening.ts, 112, 38))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 112, 20))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 112, 20))
+
+  const result = {} as Record<K, true | undefined>
+>result : Symbol(result, Decl(literalTypeWidening.ts, 113, 7))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 112, 20))
+
+  keys.forEach(key => result[key] = true)
+>keys.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(keys, Decl(literalTypeWidening.ts, 112, 38))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(literalTypeWidening.ts, 114, 15))
+>result : Symbol(result, Decl(literalTypeWidening.ts, 113, 7))
+>key : Symbol(key, Decl(literalTypeWidening.ts, 114, 15))
+
+  return result
+>result : Symbol(result, Decl(literalTypeWidening.ts, 113, 7))
+}
+
+export function keys<K extends string, V>(obj: Record<K, V>): K[] {
+>keys : Symbol(keys, Decl(literalTypeWidening.ts, 116, 1))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
+>V : Symbol(V, Decl(literalTypeWidening.ts, 118, 38))
+>obj : Symbol(obj, Decl(literalTypeWidening.ts, 118, 42))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
+>V : Symbol(V, Decl(literalTypeWidening.ts, 118, 38))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
+
+  return Object.keys(obj) as K[]
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(literalTypeWidening.ts, 118, 42))
+>K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
+}
+
+type Obj = { code: LangCode }
+>Obj : Symbol(Obj, Decl(literalTypeWidening.ts, 120, 1))
+>code : Symbol(code, Decl(literalTypeWidening.ts, 122, 12))
+>LangCode : Symbol(LangCode, Decl(literalTypeWidening.ts, 124, 53))
+
+const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
+>langCodeSet : Symbol(langCodeSet, Decl(literalTypeWidening.ts, 124, 5))
+>Set : Symbol(Set, Decl(literalTypeWidening.ts, 108, 22))
+
+export type LangCode = keyof typeof langCodeSet
+>LangCode : Symbol(LangCode, Decl(literalTypeWidening.ts, 124, 53))
+>langCodeSet : Symbol(langCodeSet, Decl(literalTypeWidening.ts, 124, 5))
+
+export const langCodes = keys(langCodeSet)
+>langCodes : Symbol(langCodes, Decl(literalTypeWidening.ts, 126, 12))
+>keys : Symbol(keys, Decl(literalTypeWidening.ts, 116, 1))
+>langCodeSet : Symbol(langCodeSet, Decl(literalTypeWidening.ts, 124, 5))
+
+const arr: Obj[] = langCodes.map(code => ({ code }))
+>arr : Symbol(arr, Decl(literalTypeWidening.ts, 128, 5))
+>Obj : Symbol(Obj, Decl(literalTypeWidening.ts, 120, 1))
+>langCodes.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>langCodes : Symbol(langCodes, Decl(literalTypeWidening.ts, 126, 12))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>code : Symbol(code, Decl(literalTypeWidening.ts, 128, 33))
+>code : Symbol(code, Decl(literalTypeWidening.ts, 128, 43))
 

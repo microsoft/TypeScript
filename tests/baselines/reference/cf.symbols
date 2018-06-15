@@ -77,7 +77,7 @@ function f() {
 
         x++;
 >x : Symbol(x, Decl(cf.ts, 2, 7))
-    }    
+    }
     finally {
         x+=3;
 >x : Symbol(x, Decl(cf.ts, 2, 7))

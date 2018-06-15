@@ -3,12 +3,12 @@ tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js(24,1): error 
 
 ==== tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js (1 errors) ====
     /**
-     * @template {U}
+     * @template U
      * @typedef {(u: U) => U} Id
      */
     /**
      * @param {T} t
-     * @template {T}
+     * @template T
      */
     function Zet(t) {
         /** @type {T} */

@@ -78,14 +78,14 @@ function f1(x: A | B | C | undefined) {
 
 type T00 = Partial<A | B | C>;
 >T00 : Symbol(T00, Decl(mappedTypes4.ts, 24, 1))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >A : Symbol(A, Decl(mappedTypes4.ts, 16, 1))
 >B : Symbol(B, Decl(mappedTypes4.ts, 18, 23))
 >C : Symbol(C, Decl(mappedTypes4.ts, 19, 23))
 
 type T01 = Readonly<A | B | C | null | undefined>;
 >T01 : Symbol(T01, Decl(mappedTypes4.ts, 26, 30))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >A : Symbol(A, Decl(mappedTypes4.ts, 16, 1))
 >B : Symbol(B, Decl(mappedTypes4.ts, 18, 23))
 >C : Symbol(C, Decl(mappedTypes4.ts, 19, 23))
@@ -99,7 +99,7 @@ type T02 = Boxified<A | B[] | C | string>
 
 type T03 = Readonly<string | number | boolean | null | undefined | void>;
 >T03 : Symbol(T03, Decl(mappedTypes4.ts, 28, 41))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 
 type T04 = Boxified<string | number | boolean | null | undefined | void>;
 >T04 : Symbol(T04, Decl(mappedTypes4.ts, 29, 73))
@@ -107,7 +107,7 @@ type T04 = Boxified<string | number | boolean | null | undefined | void>;
 
 type T05 = Partial<"hello" | "world" | 42>;
 >T05 : Symbol(T05, Decl(mappedTypes4.ts, 30, 73))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 
 type BoxifiedWithSentinel<T, U> = {
 >BoxifiedWithSentinel : Symbol(BoxifiedWithSentinel, Decl(mappedTypes4.ts, 31, 43))

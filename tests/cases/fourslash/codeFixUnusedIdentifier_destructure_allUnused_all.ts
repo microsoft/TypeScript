@@ -6,7 +6,7 @@
 ////const { x, y } = o;
 ////const { a, b } = o;
 ////a;
-////export function f({ x, y }, { a, b }) {
+////export function f({ a, b }, { x, y }) {
 ////    a;
 ////}
 

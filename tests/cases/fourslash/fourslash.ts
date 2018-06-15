@@ -69,9 +69,7 @@ declare module ts {
         writeByteOrderMark: boolean;
         text: string;
     }
-}
 
-declare namespace ts {
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -176,6 +174,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
@@ -256,7 +255,7 @@ declare namespace FourSlashInterface {
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<FourSlashInterface.ReferenceGroup>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
@@ -340,6 +339,7 @@ declare namespace FourSlashInterface {
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
     }
@@ -511,12 +511,16 @@ declare namespace FourSlashInterface {
         text: string;
         range: Range;
     }
+    interface ReferenceGroup {
+        readonly definition: ReferencesDefinition;
+        readonly ranges: ReadonlyArray<Range>;
+    }
     interface Diagnostic {
         message: string;
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
-        unused?: true;
+        reportsUnnecessary?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
@@ -537,6 +541,7 @@ declare namespace FourSlashInterface {
         readonly insertText?: string,
         readonly replacementSpan?: Range,
         readonly hasAction?: boolean,
+        readonly isRecommended?: boolean,
         readonly kind?: string,
 
         // details
