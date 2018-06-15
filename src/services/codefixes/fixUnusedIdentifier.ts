@@ -16,6 +16,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { errorCode, sourceFile, program } = context;
             const checker = program.getTypeChecker();
+            const sourceFiles = program.getSourceFiles();
             const startToken = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
 
             const importDecl = tryGetFullImport(startToken);
@@ -23,7 +24,8 @@ namespace ts.codefix {
                 const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, importDecl));
                 return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
-            const delDestructure = textChanges.ChangeTracker.with(context, t => tryDeleteFullDestructure(t, sourceFile, startToken, /*deleted*/ undefined, checker, /*isFixAll*/ false));
+            const delDestructure = textChanges.ChangeTracker.with(context, t =>
+                tryDeleteFullDestructure(t, sourceFile, startToken, /*deleted*/ undefined, checker, sourceFiles, /*isFixAll*/ false));
             if (delDestructure.length) {
                 return [createCodeFixAction(fixName, delDestructure, Diagnostics.Remove_destructuring, fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
@@ -35,7 +37,8 @@ namespace ts.codefix {
             const token = getToken(sourceFile, textSpanEnd(context.span));
             const result: CodeFixAction[] = [];
 
-            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token, /*deleted*/ undefined, checker, /*isFixAll*/ false));
+            const deletion = textChanges.ChangeTracker.with(context, t =>
+                tryDeleteDeclaration(t, sourceFile, token, /*deleted*/ undefined, checker, sourceFiles, /*isFixAll*/ false));
             if (deletion.length) {
                 result.push(createCodeFixAction(fixName, deletion, [Diagnostics.Remove_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDelete, Diagnostics.Delete_all_unused_declarations));
             }
@@ -50,9 +53,10 @@ namespace ts.codefix {
         fixIds: [fixIdPrefix, fixIdDelete],
         getAllCodeActions: context => {
             // Track a set of deleted nodes that may be ancestors of other marked for deletion -- only delete the ancestors.
-            const deleted = new NodeSet();
+            const deletedAncestors = new NodeSet();
             const { sourceFile, program } = context;
             const checker = program.getTypeChecker();
+            const sourceFiles = program.getSourceFiles();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const startToken = getTokenAtPosition(sourceFile, diag.start, /*includeJsDocComment*/ false);
                 const token = findPrecedingToken(textSpanEnd(diag), diag.file)!;
@@ -64,15 +68,15 @@ namespace ts.codefix {
                         break;
                     case fixIdDelete:
                         // Ignore if this range was already deleted.
-                        if (deleted.some(d => rangeContainsPosition(d, diag.start))) break;
+                        if (hasDeletedAncestor(deletedAncestors, token)) break;
 
                         const importDecl = tryGetFullImport(startToken);
                         if (importDecl) {
                             changes.deleteNode(sourceFile, importDecl);
                         }
-                        else if (!tryDeleteFullDestructure(changes, sourceFile, startToken, deleted, checker, /*isFixAll*/ true) &&
-                            !tryDeleteFullVariableStatement(changes, sourceFile, startToken, deleted)) {
-                            tryDeleteDeclaration(changes, sourceFile, token, deleted, checker, /*isFixAll*/ true);
+                        else if (!tryDeleteFullDestructure(changes, sourceFile, startToken, deletedAncestors, checker, sourceFiles, /*isFixAll*/ true) &&
+                            !tryDeleteFullVariableStatement(changes, sourceFile, startToken, deletedAncestors)) {
+                            tryDeleteDeclaration(changes, sourceFile, token, deletedAncestors, checker, sourceFiles, /*isFixAll*/ true);
                         }
                         break;
                     default:
@@ -82,12 +86,16 @@ namespace ts.codefix {
         },
     });
 
+    function hasDeletedAncestor(deletedAncestors: ReadonlyNodeSet, node: Node): boolean {
+        return deletedAncestors.some(d => rangeContainsPosition(d, node.pos));
+    }
+
     // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
     function tryGetFullImport(startToken: Node): ImportDeclaration | undefined {
         return startToken.kind === SyntaxKind.ImportKeyword ? tryCast(startToken.parent, isImportDeclaration) : undefined;
     }
 
-    function tryDeleteFullDestructure(changes: textChanges.ChangeTracker, sourceFile: SourceFile, startToken: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): boolean {
+    function tryDeleteFullDestructure(changes: textChanges.ChangeTracker, sourceFile: SourceFile, startToken: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): boolean {
         if (startToken.kind !== SyntaxKind.OpenBraceToken || !isObjectBindingPattern(startToken.parent)) return false;
         const decl = cast(startToken.parent, isObjectBindingPattern).parent;
         switch (decl.kind) {
@@ -98,9 +106,10 @@ namespace ts.codefix {
                 if (!mayDeleteParameter(decl, checker, isFixAll)) break;
                 if (deletedAncestors) deletedAncestors.add(decl);
                 changes.deleteNodeInList(sourceFile, decl);
+                deleteUnusedArguments(changes, deletedAncestors, decl, sourceFiles, checker);
                 break;
             case SyntaxKind.BindingElement:
-            if (deletedAncestors) deletedAncestors.add(decl);
+                if (deletedAncestors) deletedAncestors.add(decl);
                 changes.deleteNode(sourceFile, decl);
                 break;
             default:
@@ -148,8 +157,8 @@ namespace ts.codefix {
         return false;
     }
 
-    function tryDeleteDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean) {
-        tryDeleteDeclarationWorker(changes, sourceFile, token, deletedAncestors, checker, isFixAll);
+    function tryDeleteDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean) {
+        tryDeleteDeclarationWorker(changes, sourceFile, token, deletedAncestors, checker, sourceFiles, isFixAll);
         if (isIdentifier(token)) deleteAssignments(changes, sourceFile, token, checker);
     }
 
@@ -162,7 +171,7 @@ namespace ts.codefix {
         });
     }
 
-    function tryDeleteDeclarationWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, isFixAll: boolean): void {
+    function tryDeleteDeclarationWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, deletedAncestors: NodeSet | undefined, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
         const parent = token.parent;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -212,6 +221,7 @@ namespace ts.codefix {
                 else {
                     changes.deleteNodeInList(sourceFile, parent);
                 }
+                deleteUnusedArguments(changes, deletedAncestors, parent as ParameterDeclaration, sourceFiles, checker);
                 break;
 
             case SyntaxKind.BindingElement: {
@@ -341,20 +351,22 @@ namespace ts.codefix {
         }
     }
 
-    function mayDeleteParameter(p: ParameterDeclaration, checker: TypeChecker, isFixAll: boolean) {
+    function mayDeleteParameter(p: ParameterDeclaration, checker: TypeChecker, isFixAll: boolean): boolean {
         const parent = p.parent;
         switch (parent.kind) {
             case SyntaxKind.MethodDeclaration:
-                // Don't remove a parameter if this overrides something
+                // Don't remove a parameter if this overrides something.
                 const symbol = checker.getSymbolAtLocation(parent.name)!;
                 if (isMemberSymbolInBaseType(symbol, checker)) return false;
                 // falls through
 
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionDeclaration:
+                return true;
+
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction: {
-                // Can't remove a non-last parameter. Can remove a parameter in code-fix-all if future parameters are also unused.
+                // Can't remove a non-last parameter in a callback. Can remove a parameter in code-fix-all if future parameters are also unused.
                 const { parameters } = parent;
                 const index = parameters.indexOf(p);
                 Debug.assert(index !== -1);
@@ -370,5 +382,17 @@ namespace ts.codefix {
             default:
                 return Debug.failBadSyntaxKind(parent);
         }
+    }
+
+    function deleteUnusedArguments(changes: textChanges.ChangeTracker, deletedAncestors: NodeSet | undefined, deletedParameter: ParameterDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker): void {
+        FindAllReferences.Core.eachSignatureCall(deletedParameter.parent, sourceFiles, checker, (sourceFile, call) => {
+            if (deletedAncestors && hasDeletedAncestor(deletedAncestors, call)) return;
+            const index = deletedParameter.parent.parameters.indexOf(deletedParameter);
+            if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
+                const argument = call.arguments[index];
+                changes.deleteNodeInList(sourceFile, argument);
+                if (deletedAncestors) deletedAncestors.add(argument);
+            }
+        });
     }
 }

@@ -730,6 +730,25 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (sourceFile: SourceFile, call: CallExpression) => void): void {
+        if (!signature.name || !isIdentifier(signature.name)) return;
+
+        const symbol = Debug.assertDefined(checker.getSymbolAtLocation(signature.name));
+
+        for (const sourceFile of sourceFiles) {
+            for (const name of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
+                if (!isIdentifier(name) || name === signature.name || name.escapedText !== signature.name.escapedText) continue;
+                const called = climbPastPropertyAccess(name);
+                const call = called.parent;
+                if (!isCallExpression(call) || call.expression !== called) continue;
+                const referenceSymbol = checker.getSymbolAtLocation(name);
+                if (referenceSymbol && checker.getRootSymbols(referenceSymbol).some(s => s === symbol)) {
+                    cb(sourceFile, call);
+                }
+            }
+        }
+    }
+
     function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<Node> {
         return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
     }

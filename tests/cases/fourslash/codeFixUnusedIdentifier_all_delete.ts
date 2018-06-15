@@ -17,10 +17,10 @@
 ////    n(x: number): void {}
 ////}
 ////
-////declare function f(cb: (x: number, y: string) => void): void;
-////f((x, y) => {});
-////f((x, y) => { x; });
-////f((x, y) => { y; });
+////declare function takesCb(cb: (x: number, y: string) => void): void;
+////takesCb((x, y) => {});
+////takesCb((x, y) => { x; });
+////takesCb((x, y) => { y; });
 ////
 ////{
 ////    let a, b;
@@ -44,10 +44,10 @@ class C implements I {
     n(): void {}
 }
 
-declare function f(cb: (x: number, y: string) => void): void;
-f(() => {});
-f((x) => { x; });
-f((x, y) => { y; });
+declare function takesCb(cb: (x: number, y: string) => void): void;
+takesCb(() => {});
+takesCb((x) => { x; });
+takesCb((x, y) => { y; });
 
 {
 }

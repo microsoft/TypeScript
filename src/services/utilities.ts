@@ -1346,7 +1346,13 @@ namespace ts {
         return getPropertySymbolsFromBaseTypes(memberSymbol.parent!, memberSymbol.name, checker, _ => true) || false;
     }
 
-    export class NodeSet {
+    export interface ReadonlyNodeSet {
+        has(node: Node): boolean;
+        forEach(cb: (node: Node) => void): void;
+        some(pred: (node: Node) => boolean): boolean;
+    }
+
+    export class NodeSet implements ReadonlyNodeSet {
         private map = createMap<Node>();
 
         add(node: Node): void {
