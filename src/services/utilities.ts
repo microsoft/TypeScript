@@ -1387,6 +1387,17 @@ namespace ts {
     export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
+
+    /* @internal */
+    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void {
+        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
+        if (lastImportDeclaration) {
+            changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
+        }
+        else {
+            changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
+        }
+    }
 }
 
 // Display-part writer helpers

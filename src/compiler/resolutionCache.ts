@@ -60,11 +60,14 @@ namespace ts {
         watcher: FileWatcher;
         /** ref count keeping this directory watch alive */
         refCount: number;
+        /** is the directory watched being non recursive */
+        nonRecursive?: boolean;
     }
 
     interface DirectoryOfFailedLookupWatch {
         dir: string;
         dirPath: Path;
+        nonRecursive?: boolean;
         ignore?: true;
     }
 
@@ -251,7 +254,6 @@ namespace ts {
                 perDirectoryResolution = createMap();
                 perDirectoryCache.set(dirPath, perDirectoryResolution);
             }
-
             const resolvedModules: R[] = [];
             const compilerOptions = resolutionHost.getCompilationSettings();
             const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
@@ -393,6 +395,7 @@ namespace ts {
 
         function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch {
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
+                // Always watch root directory recursively
                 return { dir: rootDir!, dirPath: rootPath }; // TODO: GH#18217
             }
 
@@ -409,11 +412,12 @@ namespace ts {
                 dirPath = getDirectoryPath(dirPath);
             }
 
-            // If the directory is node_modules use it to watch
+            // If the directory is node_modules use it to watch, always watch it recursively
             if (isNodeModulesDirectory(dirPath)) {
                 return filterFSRootDirectoriesToWatch({ dir, dirPath }, getDirectoryPath(dirPath));
             }
 
+            let nonRecursive = true;
             // Use some ancestor of the root directory
             let subDirectoryPath: Path | undefined, subDirectory: string | undefined;
             if (rootPath !== undefined) {
@@ -422,6 +426,7 @@ namespace ts {
                     if (parentPath === dirPath) {
                         break;
                     }
+                    nonRecursive = false;
                     subDirectoryPath = dirPath;
                     subDirectory = dir;
                     dirPath = parentPath;
@@ -429,7 +434,7 @@ namespace ts {
                 }
             }
 
-            return filterFSRootDirectoriesToWatch({ dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath }, dirPath);
+            return filterFSRootDirectoriesToWatch({ dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive }, dirPath);
         }
 
         function isPathWithDefaultFailedLookupExtension(path: Path) {
@@ -452,7 +457,7 @@ namespace ts {
             let setAtRoot = false;
             for (const failedLookupLocation of failedLookupLocations) {
                 const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
-                const { dir, dirPath, ignore } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                const { dir, dirPath, nonRecursive, ignore } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
                 if (!ignore) {
                     // If the failed lookup location path is not one of the supported extensions,
                     // store it in the custom path
@@ -464,23 +469,25 @@ namespace ts {
                         setAtRoot = true;
                     }
                     else {
-                        setDirectoryWatcher(dir, dirPath);
+                        setDirectoryWatcher(dir, dirPath, nonRecursive);
                     }
                 }
             }
 
             if (setAtRoot) {
+                // This is always recursive
                 setDirectoryWatcher(rootDir!, rootPath); // TODO: GH#18217
             }
         }
 
-        function setDirectoryWatcher(dir: string, dirPath: Path) {
+        function setDirectoryWatcher(dir: string, dirPath: Path, nonRecursive?: boolean) {
             const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
             if (dirWatcher) {
+                Debug.assert(!!nonRecursive === !!dirWatcher.nonRecursive);
                 dirWatcher.refCount++;
             }
             else {
-                directoryWatchesOfFailedLookups.set(dirPath, { watcher: createDirectoryWatcher(dir, dirPath), refCount: 1 });
+                directoryWatchesOfFailedLookups.set(dirPath, { watcher: createDirectoryWatcher(dir, dirPath, nonRecursive), refCount: 1, nonRecursive });
             }
         }
 
@@ -530,7 +537,7 @@ namespace ts {
             dirWatcher.refCount--;
         }
 
-        function createDirectoryWatcher(directory: string, dirPath: Path) {
+        function createDirectoryWatcher(directory: string, dirPath: Path, nonRecursive: boolean | undefined) {
             return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
                 if (cachedDirectoryStructureHost) {
@@ -541,7 +548,7 @@ namespace ts {
                 if (!allFilesHaveInvalidatedResolution && invalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath, dirPath === fileOrDirectoryPath)) {
                     resolutionHost.onInvalidatedResolution();
                 }
-            }, WatchDirectoryFlags.Recursive);
+            }, nonRecursive ? WatchDirectoryFlags.None : WatchDirectoryFlags.Recursive);
         }
 
         function removeResolutionsOfFileFromCache(cache: Map<Map<ResolutionWithFailedLookupLocations>>, filePath: Path) {

@@ -2097,7 +2097,12 @@ namespace ts {
             if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
                 isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
-                getJSDocCommentsAndTagsWorker(parent);
+                if (isBinaryExpression(parent)) {
+                    getJSDocCommentsAndTagsWorker(parent.parent);
+                }
+                else {
+                    getJSDocCommentsAndTagsWorker(parent);
+                }
             }
 
             // Pull parameter comments from declaring function as well
@@ -7995,7 +8000,7 @@ namespace ts {
     }
 
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
+        return find<Extension>(extensionsToRemove, e => fileExtensionIs(path, e));
     }
 
     function getAnyExtensionFromPathWorker(path: string, extensions: string | ReadonlyArray<string>, stringEqualityComparer: (a: string, b: string) => boolean) {

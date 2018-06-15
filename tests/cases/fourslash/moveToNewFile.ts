@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
+////// header comment
+////
 ////import './foo';
 ////import { a, b, alreadyUnused } from './other';
 ////const p = 0;
@@ -10,10 +12,11 @@
 verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
-`import { y } from './y';
+`// header comment
 
 import './foo';
 import { a, alreadyUnused } from './other';
+import { y } from './y';
 export const p = 0;
 a; y;`,
 

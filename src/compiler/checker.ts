@@ -22601,6 +22601,10 @@ namespace ts {
             checkSourceElement(node.typeExpression);
         }
 
+        function checkJSDocTypeTag(node: JSDocTypeTag) {
+            checkSourceElement(node.typeExpression);
+        }
+
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
             if (!getParameterSymbolFromJSDoc(node)) {
@@ -22895,7 +22899,11 @@ namespace ts {
                 }
 
                 for (const declaration of local.declarations) {
-                    if (isAmbientModule(declaration)) continue;
+                    if (isAmbientModule(declaration) ||
+                        (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderScore(declaration.name!)) {
+                        continue;
+                    }
+
                     if (isImportedDeclaration(declaration)) {
                         addToGroup(unusedImports, importClauseFromImported(declaration), declaration, getNodeId);
                     }
@@ -22907,9 +22915,7 @@ namespace ts {
                         }
                     }
                     else if (isVariableDeclaration(declaration)) {
-                        if (!isIdentifierThatStartsWithUnderScore(declaration.name) || !isForInOrOfStatement(declaration.parent.parent)) {
-                            addToGroup(unusedVariables, declaration.parent, declaration, getNodeId);
-                        }
+                        addToGroup(unusedVariables, declaration.parent, declaration, getNodeId);
                     }
                     else {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
@@ -25560,6 +25566,8 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                     return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
+                case SyntaxKind.JSDocTypeTag:
+                    return checkJSDocTypeTag(node as JSDocTypeTag);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocFunctionType:
