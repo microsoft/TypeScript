@@ -24,18 +24,16 @@ verify.codeFix({
 `async function f():Promise<void> {
     try {
         var result = await fetch('http://yahoo.com');
-<<<<<<< HEAD
         return await res(result);
     }
     catch (err) {
         return await catch_err(err);
-=======
+    }
         return res(result);
-    }
-    catch (err) {
-        return catch_err(err);
->>>>>>> 602a8a9941... Fixed spacing on tests and added a couple more tests
-    }
+   } 
+   catch(err) {
+       return catch_err(err);
+   }   
 }
 
 function res(result){

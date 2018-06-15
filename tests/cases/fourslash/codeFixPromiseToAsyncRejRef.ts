@@ -2,7 +2,11 @@
 
 // @target: es6
 
+<<<<<<< HEAD
 ////function [|f|]():Promise<void> {
+=======
+////function [|f|]():Promise<any> {
+>>>>>>> b806922834... Fixed formatting and spacing on tests and added es6 target
 ////    return fetch('http://yahoo.com').then(res, rej);
 ////}
 ////
@@ -23,6 +27,7 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
+<<<<<<< HEAD
 `async function f():Promise<void> {
     try {
         var result = await fetch('http://yahoo.com');
@@ -37,6 +42,16 @@ verify.codeFix({
     }
     return res(result);
 >>>>>>> 602a8a9941... Fixed spacing on tests and added a couple more tests
+=======
+`async function f() {
+   try {
+     var result = await fetch('http://yahoo.com');
+   }
+   catch(err){
+     return rej(err);
+   }   
+   return res(result);
+>>>>>>> b806922834... Fixed formatting and spacing on tests and added es6 target
 }
 
 function res(result){

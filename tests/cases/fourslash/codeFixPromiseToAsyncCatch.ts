@@ -3,11 +3,7 @@
 // @target: es6
 
 ////function [|f|]():Promise<void> {
-////    return fetch('http://yahoo.com').then(res);
-////}
-////
-////function res(result){
-////    console.log(result);
+////    return fetch('http://yahoo.com').then(result => { console.log(result); }).catch(err => { console.log(err); });
 ////}
 
 verify.getSuggestionDiagnostics([{
@@ -15,16 +11,18 @@ verify.getSuggestionDiagnostics([{
     code: 80006,
 }]);
 
+
 verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
 `async function f():Promise<void> {
-    var result = await fetch('http://yahoo.com');
-    return await res(result);
-}
-
-function res(result){
-    console.log(result);
+    try {
+        var result = await fetch('http://yahoo.com');
+        console.log(result);
+    }
+    catch (err) {
+        console.log(err);
+    }
 }`,
 });

@@ -2,12 +2,12 @@
 
 // @target: es6
 
-////function [|f|]():Promise<void> {
+////function [|f|]():Promise<boolean> {
 ////    return fetch('http://yahoo.com').then(res);
 ////}
 ////
 ////function res(result){
-////    console.log(result);
+////    return result.ok;    
 ////}
 
 verify.getSuggestionDiagnostics([{
@@ -19,12 +19,12 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
-`async function f():Promise<void> {
-    var result = await fetch('http://yahoo.com');
-    return await res(result);
+`async function f():Promise<boolean> {
+   var result = await fetch('http://yahoo.com);
+   return res(result);
 }
 
 function res(result){
-    console.log(result);
+    return result.ok;
 }`,
 });

@@ -3,11 +3,7 @@
 // @target: es6
 
 ////function [|f|]():Promise<void> {
-////    return fetch('http://yahoo.com').then(res);
-////}
-////
-////function res(result){
-////    console.log(result);
+////    return fetch('http://yahoo.com').then(result => console.log(result), rejection => console.log("rejected:", rejection));
 ////}
 
 verify.getSuggestionDiagnostics([{
@@ -20,11 +16,12 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `async function f():Promise<void> {
-    var result = await fetch('http://yahoo.com');
-    return await res(result);
-}
-
-function res(result){
+    try {
+        var result = await fetch('http://yahoo.com');
+    }
+    catch (rejection) {
+        console.log("rejected:", rejection);
+    }
     console.log(result);
 }`,
 });

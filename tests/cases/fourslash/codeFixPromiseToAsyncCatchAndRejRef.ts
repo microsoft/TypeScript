@@ -33,21 +33,18 @@ verify.codeFix({
             var result = await fetch('http://yahoo.com');
         }
         catch (rejection) {
-<<<<<<< HEAD
             return await rej(rejection);
         }
         return await res(result);
     }
     catch (err) {
         return await catch_err(err);
-=======
             return rej(rejection);
         }
         return res(result);
     }
     catch (err) {
         return catch_err(err);
->>>>>>> 602a8a9941... Fixed spacing on tests and added a couple more tests
     }
 }
 
