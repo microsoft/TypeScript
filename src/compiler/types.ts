@@ -3046,6 +3046,7 @@ namespace ts {
          * Does not include properties of primitive types.
          */
         /* @internal */ isArrayLikeType(type: Type): boolean;
+        /* @internal */ isPromiseLikeType(type: Type): boolean;
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(location?: Node): string;

@@ -16,7 +16,6 @@ namespace ts.codefix {
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);
 
-
         const stmts: NodeArray<Statement> = (<FunctionBody>funcToConvert.body).statements;
         for (const stmt of stmts) {
             forEachChild(stmt, function visit(node: Node) {
@@ -38,7 +37,7 @@ namespace ts.codefix {
             return;
         }
 
-        if (node.kind === SyntaxKind.CallExpression && isPromiseType(checker.getTypeAtLocation(node)) && (<CallExpression>node).expression.kind !== SyntaxKind.PropertyAccessExpression) {
+        if (node.kind === SyntaxKind.CallExpression && checker.isPromiseLikeType(checker.getTypeAtLocation(node)) && (<CallExpression>node).expression.kind !== SyntaxKind.PropertyAccessExpression) {
             return parsePromiseCall(node as CallExpression, argName);
         }
         else if (node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "then", checker)) {
@@ -54,9 +53,14 @@ namespace ts.codefix {
 
     function parseCatch(node: CallExpression, checker: TypeChecker): Statement[] {
         const func = node.arguments[0];
+        let argName = "e";
+        if (isFunctionLikeDeclaration(func)){
+            argName = (<Identifier>func.parameters[0].name).text;
+        }
 
         const tryBlock = createBlock(parseCallback(node.expression, checker));
-        const catchClause = createCatchClause("e", createBlock(getCallbackBody(func, "e")));
+        //instead of using e -> get the paramater of the catch function and use that
+        const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName)));
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
 
@@ -64,19 +68,24 @@ namespace ts.codefix {
         const res = node.arguments[0];
         const rej = node.arguments[1];
         // TODO - what if this is a binding pattern and not an Identifier
-        let argName = "val";
+        let argNameRes = "val";
         if (isFunctionLikeDeclaration(res)) {
-            argName = (<Identifier>res.parameters[0].name).text;
+            argNameRes = (<Identifier>res.parameters[0].name).text;
         }
 
         if (rej) {
-            const tryBlock = createBlock(parseCallback(node.expression, checker));
-            const catchClause = createCatchClause("e", createBlock(getCallbackBody(rej, "e")));
+            let argNameRej = "e";
+            if (isFunctionLikeDeclaration(rej)){
+                argNameRej = (<Identifier>rej.parameters[0].name).text;
+            }
 
-            return [createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argName));
+            const tryBlock = createBlock(parseCallback(node.expression, checker));
+            const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej)));
+
+            return [createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes));
         }
         else {
-            return parseCallback(node.expression, checker, argName).concat(getCallbackBody(res, argName));
+            return parseCallback(node.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes));
         }
     }
 
@@ -105,9 +114,6 @@ namespace ts.codefix {
         if (node.expression.kind !== SyntaxKind.PropertyAccessExpression) {
             return false;
         }
-        return (<PropertyAccessExpression>node.expression).name.text === funcName && isPromiseType(checker.getTypeAtLocation(node));
-    }
-    function isPromiseType(T: Type): boolean {
-        return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
+        return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
     }
 }
