@@ -10,6 +10,15 @@ const ts = require("./lib/typescript");
 const del = require("del");
 const getDirSize = require("./scripts/build/getDirSize");
 
+// add node_modules to path so we don't need global modules, prefer the modules by adding them first
+var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
+if (process.env.path !== undefined) {
+    process.env.path = nodeModulesPathPrefix + process.env.path;
+}
+else if (process.env.PATH !== undefined) {
+    process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
+}
+
 const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
 const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
