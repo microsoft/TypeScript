@@ -833,11 +833,12 @@ namespace ts {
             return emitResolver;
         }
 
-        function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+        function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
             const diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
             diagnostics.add(diagnostic);
+            return diagnostic;
         }
 
         function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
@@ -10491,18 +10492,21 @@ namespace ts {
                     }
                 }
 
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo)); // TODO: GH#18217
-            }
-            // Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
-            if (headMessage && errorNode && !result && source.symbol) {
-                const links = getSymbolLinks(source.symbol);
-                if (links.originatingImport && !isImportCall(links.originatingImport)) {
-                    const helpfulRetry = checkTypeRelatedTo(getTypeOfSymbol(links.target!), target, relation, /*errorNode*/ undefined);
-                    if (helpfulRetry) {
-                        // Likely an incorrect import. Issue a helpful diagnostic to produce a quickfix to change the import
-                        diagnostics.add(createDiagnosticForNode(links.originatingImport, Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime));
+                let relatedInformation: DiagnosticRelatedInformation[] | undefined;
+                // Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
+                if (headMessage && errorNode && !result && source.symbol) {
+                    const links = getSymbolLinks(source.symbol);
+                    if (links.originatingImport && !isImportCall(links.originatingImport)) {
+                        const helpfulRetry = checkTypeRelatedTo(getTypeOfSymbol(links.target!), target, relation, /*errorNode*/ undefined);
+                        if (helpfulRetry) {
+                            // Likely an incorrect import. Issue a helpful diagnostic to produce a quickfix to change the import
+                            const diag = createDiagnosticForNode(links.originatingImport, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead);
+                            relatedInformation = append(relatedInformation, diag); // Cause the error to appear with the error that triggered it
+                        }
                     }
                 }
+
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation)); // TODO: GH#18217
             }
             return result !== Ternary.False;
 
@@ -18865,14 +18869,13 @@ namespace ts {
         }
 
         function invocationError(node: Node, apparentType: Type, kind: SignatureKind) {
-            error(node, kind === SignatureKind.Call
+            invocationErrorRecovery(apparentType, kind, error(node, kind === SignatureKind.Call
                 ? Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures
                 : Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
-            , typeToString(apparentType));
-            invocationErrorRecovery(apparentType, kind);
+            , typeToString(apparentType)));
         }
 
-        function invocationErrorRecovery(apparentType: Type, kind: SignatureKind) {
+        function invocationErrorRecovery(apparentType: Type, kind: SignatureKind, diagnostic: Diagnostic) {
             if (!apparentType.symbol) {
                 return;
             }
@@ -18882,7 +18885,8 @@ namespace ts {
             if (importNode && !isImportCall(importNode)) {
                 const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target!), kind);
                 if (!sigs || !sigs.length) return;
-                error(importNode, Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime);
+                diagnostic.relatedInformation = diagnostic.relatedInformation || [];
+                diagnostic.relatedInformation.push(createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead));
             }
         }
 
@@ -18961,8 +18965,9 @@ namespace ts {
             if (!callSignatures.length) {
                 let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
                 errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
-                invocationErrorRecovery(apparentType, SignatureKind.Call);
+                const diag = createDiagnosticForNodeFromMessageChain(node, errorInfo);
+                diagnostics.add(diag);
+                invocationErrorRecovery(apparentType, SignatureKind.Call, diag);
                 return resolveErrorCall(node);
             }
 

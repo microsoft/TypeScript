@@ -3576,16 +3576,19 @@ declare namespace ts {
         code: number;
         next?: DiagnosticMessageChain;
     }
-    interface Diagnostic {
-        file: SourceFile | undefined;
-        start: number | undefined;
-        length: number | undefined;
-        messageText: string | DiagnosticMessageChain;
+    interface Diagnostic extends DiagnosticRelatedInformation {
         category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         code: number;
         source?: string;
+        relatedInformation?: DiagnosticRelatedInformation[];
+    }
+    interface DiagnosticRelatedInformation {
+        file: SourceFile | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string | DiagnosticMessageChain;
     }
     interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
@@ -5762,7 +5765,7 @@ declare namespace ts {
         Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0: DiagnosticMessage;
         Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0: DiagnosticMessage;
         Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports: DiagnosticMessage;
-        A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime: DiagnosticMessage;
+        Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead: DiagnosticMessage;
         Mapped_object_type_implicitly_has_an_any_template_type: DiagnosticMessage;
         You_cannot_rename_this_element: DiagnosticMessage;
         You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library: DiagnosticMessage;
@@ -6126,7 +6129,7 @@ declare namespace ts {
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation;
     function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic;
     function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation;
-    function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): DiagnosticWithLocation;
+    function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation;
     function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan;
     function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan;
     function isExternalOrCommonJsModule(file: SourceFile): boolean;
@@ -12382,6 +12385,7 @@ declare namespace ts.server.protocol {
         category: string;
         code: number;
         reportsUnnecessary?: {};
+        relatedInformation?: DiagnosticRelatedInformation[];
     }
     interface ProjectInfoResponse extends Response {
         body?: ProjectInfo;
@@ -12972,11 +12976,16 @@ declare namespace ts.server.protocol {
         text: string;
         category: string;
         reportsUnnecessary?: {};
+        relatedInformation?: DiagnosticRelatedInformation[];
         code?: number;
         source?: string;
     }
     interface DiagnosticWithFileName extends Diagnostic {
         fileName: string;
+    }
+    interface DiagnosticRelatedInformation {
+        message: string;
+        span?: FileSpan;
     }
     interface DiagnosticEventBody {
         file: string;
