@@ -5,6 +5,7 @@ describe("Public APIs", () => {
         let fileContent: string;
         before(() => {
             fileContent = Harness.IO.readFile(builtFile)!;
+            if (!fileContent) throw new Error(`File ${fileName} was not present in built/local`);
             fileContent = fileContent.replace(/\r\n/g, "\n");
         });
 
