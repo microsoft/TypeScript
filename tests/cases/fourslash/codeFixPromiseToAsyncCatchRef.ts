@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////function [|f|]():Promise<any> {
+////function [|f|]():Promise<void> {
 ////    return fetch('http://yahoo.com').then(res).catch(catch_err)
 ////}
 ////
@@ -21,17 +21,20 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
-`async function f() {
-   try{
-     var result = await fetch('http://yahoo.com);
-     return res(result);
-   }catch(err){
-     return catch_err(err);
+`async function f():Promise<void> {
+    try {
+        var result = await fetch('http://yahoo.com');
+        return res(result);
+   } 
+   catch(err) {
+       return catch_err(err);
    }   
 }
+
 function res(result){
     console.log(result);
 }
+
 function catch_err(err){
     console.log(err);
 }`,

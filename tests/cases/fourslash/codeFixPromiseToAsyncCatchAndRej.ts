@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-////function [|f|]():Promise<any> {
+// @target: es6
+
+////function [|f|]():Promise<void> {
 ////    return fetch('http://yahoo.com').then(result => { console.log(result); }, rejection => { console.log("rejected:", rejection); }).catch(err => { console.log(err) });
 ////}
 
@@ -14,15 +16,17 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
-`async function f() {
-    try{
-        try{
-            var result = await fetch('http://yahoo.com);
-        }catch(rejection){
-            console.log("rejected", rejection);
+`async function f():Promise<void> {
+    try {
+        try {
+            var result = await fetch('http://yahoo.com');
+        }
+        catch (rejection) {
+            console.log("rejected:", rejection);
         }
         console.log(result);
-    }catch(err){
+    }
+    catch (err) {
         console.log(err);
     }
 }`,

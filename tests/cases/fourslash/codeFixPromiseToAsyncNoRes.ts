@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @target: es6
+
 ////function [|f|]():Promise<any> {
 ////    return fetch('http://yahoo.com').then(null, rejection => console.log("rejected:", rejection); );
 ////}
@@ -15,7 +17,7 @@ verify.codeFix({
     newFileContent:
 `async function f() {
    try{
-       var result = await fetch('http://yahoo.com);
+       var result = await fetch('http://yahoo.com');
    }catch(rejection){
        console.log("rejected", rejection);
    }
