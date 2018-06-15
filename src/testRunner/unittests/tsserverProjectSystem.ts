@@ -491,10 +491,16 @@ namespace ts.projectSystem {
         return newRequest;
     }
 
-    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session) {
+    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
         for (const file of files) {
             const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
+        }
+    }
+
+    export function closeFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
+        for (const file of files) {
+            session.executeCommand(makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file.path }));
         }
     }
 
@@ -8800,15 +8806,6 @@ export const x = 10;`
                 path: "/a/a.ts",
                 content: "export function a() {}",
             };
-            const aDts: File = {
-                path: "/a/bin/a.d.ts",
-                // Need to mangle the sourceMappingURL part or it breaks the build
-                content: `export declare function a(): void;\n//# source${""}MappingURL=a.d.ts.map`,
-            };
-            const aDtsMap: File = {
-                path: "/a/bin/a.d.ts.map",
-                content: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,kCAAsB"}',
-            };
             const aTsconfig: File = {
                 path: "/a/tsconfig.json",
                 content: `{
@@ -8837,8 +8834,15 @@ export const x = 10;`
                 }`,
             };
 
-            const host = createServerHost([aTs, aDts, aDtsMap, aTsconfig, bTs, bTsconfig]);
+            const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
             const session = createSession(host);
+
+            writeDeclarationFiles(aTs, host, session, [
+                // Need to mangle the sourceMappingURL part or it breaks the build
+                { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,kCAAsB"}' },
+                { name: "/a/bin/a.d.ts", text: `export declare function a(): void;\n//# source${""}MappingURL=a.d.ts.map` },
+            ]);
+
             openFilesForSession([bTs], session);
 
             const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, { file: bTs.path, ...protocolLocationFromSubstring(bTs.content, "a()") });
@@ -8851,4 +8855,21 @@ export const x = 10;`
             assert.deepEqual(definitionResponse, [expectedResponse]);
         });
     });
+
+    function writeDeclarationFiles(file: File, host: TestServerHost, session: TestSession, expectedFiles: ReadonlyArray<{ readonly name: string, readonly text: string }>): void {
+        openFilesForSession([file], session);
+        const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
+        const program = project.getCurrentProgram();
+        const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+        closeFilesForSession([file], session);
+
+        Debug.assert(!output.emitSkipped);
+        assert.deepEqual(output.outputFiles, expectedFiles.map(e => ({ ...e, writeByteOrderMark: false })));
+
+        for (const { name, text } of output.outputFiles) {
+            const directory: Folder = { path: getDirectoryPath(name) };
+            host.ensureFileOrFolder(directory);
+            host.writeFile(name, text);
+        }
+    }
 }
