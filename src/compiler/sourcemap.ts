@@ -403,7 +403,7 @@ namespace ts {
                             host.getCanonicalFileName,
                             /*isAbsolutePathAnUrl*/ true
                         );
-                        const absolutePath = toPath(resolvedPath, sourcesDirectoryPath, host.getCanonicalFileName);
+                        const absolutePath = getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath);
                         // tslint:disable-next-line:no-null-keyword
                         setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
