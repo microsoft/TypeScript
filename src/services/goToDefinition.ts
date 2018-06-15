@@ -32,7 +32,7 @@ namespace ts.GoToDefinition {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
-            if (typeChecker.getRootSymbols(symbol).some(s => calledDeclaration.symbol === s || calledDeclaration.symbol.parent === s) ||
+            if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration)) ||
                 // TODO: GH#23742 Following check shouldn't be necessary if 'require' is an alias
                 symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
                 return [sigInfo];
@@ -93,6 +93,15 @@ namespace ts.GoToDefinition {
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
+    /**
+     * True if we should not add definitions for both the signature symbol and the definition symbol.
+     * True for `const |f = |() => 0`, false for `function |f() {} const |g = f;`.
+     */
+    function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclaration) {
+        return s === calledDeclaration.symbol || s === calledDeclaration.symbol.parent ||
+            isVariableDeclaration(calledDeclaration.parent) && s === calledDeclaration.parent.symbol;
+    }
+
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
@@ -105,6 +114,12 @@ namespace ts.GoToDefinition {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
             return file && { fileName: typeReferenceDirective.fileName, file };
+        }
+
+        const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
+        if (libReferenceDirective) {
+            const file = program.getLibFileFromReference(libReferenceDirective);
+            return file && { fileName: libReferenceDirective.fileName, file };
         }
 
         return undefined;
@@ -138,7 +153,10 @@ namespace ts.GoToDefinition {
         }
 
         // Check if position is on triple slash reference.
-        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ||
+            findReferenceInPosition(sourceFile.typeReferenceDirectives, position) ||
+            findReferenceInPosition(sourceFile.libReferenceDirectives, position);
+
         if (comment) {
             return { definitions, textSpan: createTextSpanFromRange(comment) };
         }

@@ -60,11 +60,11 @@ function goo1(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 20, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -83,11 +83,11 @@ function goo2(x: Item) {
 >kind : Symbol(kind, Decl(discriminantPropertyCheck.ts, 6, 30), Decl(discriminantPropertyCheck.ts, 13, 30))
 
         x.foo.length;  // Error, intervening discriminant guard
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 26, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -106,11 +106,11 @@ function foo1(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 32, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -129,11 +129,11 @@ function foo2(x: Item) {
 >bar : Symbol(Base.bar, Decl(discriminantPropertyCheck.ts, 2, 16))
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 38, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -152,11 +152,11 @@ function foo3(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 44, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -175,11 +175,11 @@ function foo4(x: Item) {
 >baz : Symbol(baz, Decl(discriminantPropertyCheck.ts, 8, 28), Decl(discriminantPropertyCheck.ts, 15, 28))
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 50, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -198,11 +198,11 @@ function foo5(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 56, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -221,10 +221,10 @@ function foo6(x: Item) {
 >qux : Symbol(qux, Decl(discriminantPropertyCheck.ts, 9, 17), Decl(discriminantPropertyCheck.ts, 16, 17))
 
         x.foo.length;  // Error, intervening discriminant guard
->x.foo.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 62, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }

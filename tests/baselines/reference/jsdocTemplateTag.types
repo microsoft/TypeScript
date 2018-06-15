@@ -43,11 +43,11 @@ let s = g('hi')()
  */
 Element.prototype.animate = function(keyframes) {};
 >Element.prototype.animate = function(keyframes) {} : (keyframes: any[]) => void
->Element.prototype.animate : any
+>Element.prototype.animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
 >Element.prototype : Element
 >Element : { new (): Element; prototype: Element; }
 >prototype : Element
->animate : any
+>animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
 >function(keyframes) {} : (keyframes: any[]) => void
 >keyframes : any[]
 

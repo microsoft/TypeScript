@@ -46,7 +46,7 @@ class DeclarationsWalker {
         if (!s) {
             return;
         }
-        if (s.name === "Array") {
+        if (s.name === "Array" || s.name === "ReadOnlyArray") {
             // we should process type argument instead
             return this.processType((<any>type).typeArguments[0]);
         }
@@ -55,7 +55,7 @@ class DeclarationsWalker {
             if (declarations) {
                 for (const decl of declarations) {
                     const sourceFile = decl.getSourceFile();
-                    if (sourceFile === this.protocolFile || path.basename(sourceFile.fileName) === "lib.d.ts") {
+                    if (sourceFile === this.protocolFile || /lib(\..+)?\.d.ts/.test(path.basename(sourceFile.fileName))) {
                         return;
                     }
                     if (decl.kind === ts.SyntaxKind.EnumDeclaration && !isStringEnum(decl as ts.EnumDeclaration)) {
@@ -121,23 +121,30 @@ class DeclarationsWalker {
 }
 
 function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {
-    const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: true, types: <string[]>[], stripInternal: true };
+    const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: false, types: <string[]>[], stripInternal: true };
 
     /**
      * 1st pass - generate a program from protocol.ts and typescriptservices.d.ts and emit core version of protocol.d.ts with all internal members stripped
      * @return text of protocol.d.t.s
      */
     function getInitialDtsFileForProtocol() {
-        const program = ts.createProgram([protocolTs, typeScriptServicesDts], options);
+        const program = ts.createProgram([protocolTs, typeScriptServicesDts, path.join(typeScriptServicesDts, "../lib.es5.d.ts")], options);
 
         let protocolDts: string | undefined;
-        program.emit(program.getSourceFile(protocolTs), (file, content) => {
+        const emitResult = program.emit(program.getSourceFile(protocolTs), (file, content) => {
             if (endsWith(file, ".d.ts")) {
                 protocolDts = content;
             }
         });
+
         if (protocolDts === undefined) {
-            throw new Error(`Declaration file for protocol.ts is not generated`)
+            const diagHost: ts.FormatDiagnosticsHost = {
+                getCanonicalFileName: function (f) { return f; },
+                getCurrentDirectory: function() { return '.'; },
+                getNewLine: function() { return "\r\n"; }
+            }
+            const diags = emitResult.diagnostics.map(d => ts.formatDiagnostic(d, diagHost)).join("\r\n");
+            throw new Error(`Declaration file for protocol.ts is not generated:\r\n${diags}`);
         }
         return protocolDts;
     }

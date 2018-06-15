@@ -37,9 +37,9 @@ genericFunction(genericObject, ({greeting}) => {
 
     var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
 >s : Symbol(s, Decl(destructuringWithGenericParameter.ts, 11, 7))
->greeting.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.d.ts, --, --))
+>greeting.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
 >greeting : Symbol(greeting, Decl(destructuringWithGenericParameter.ts, 10, 33))
->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.d.ts, --, --))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
 
 });
 
