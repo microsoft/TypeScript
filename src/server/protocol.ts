@@ -617,7 +617,7 @@ namespace ts.server.protocol {
     }
 
     export interface OrganizeImportsResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
 
     export interface GetEditsForFileRenameRequest extends Request {
@@ -633,7 +633,7 @@ namespace ts.server.protocol {
     }
 
     export interface GetEditsForFileRenameResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
 
     /**

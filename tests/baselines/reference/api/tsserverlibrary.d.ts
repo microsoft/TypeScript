@@ -12431,7 +12431,7 @@ declare namespace ts.server.protocol {
         scope: OrganizeImportsScope;
     }
     interface OrganizeImportsResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
     interface GetEditsForFileRenameRequest extends Request {
         command: CommandTypes.GetEditsForFileRename;
@@ -12442,7 +12442,7 @@ declare namespace ts.server.protocol {
         readonly newFilePath: string;
     }
     interface GetEditsForFileRenameResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
     interface CodeFixRequest extends Request {
         command: CommandTypes.GetCodeFixes;
