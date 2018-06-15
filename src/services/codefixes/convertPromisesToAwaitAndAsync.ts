@@ -53,12 +53,9 @@ namespace ts.codefix {
 
     function parseCatch(node: CallExpression, checker: TypeChecker): Statement[] {
         const func = node.arguments[0];
-        let argName = "e";
-        if (isFunctionLikeDeclaration(func)){
-            argName = (<Identifier>func.parameters[0].name).text;
-        }
-
-        const tryBlock = createBlock(parseCallback(node.expression, checker));
+        let argName = getArgName(func, "arg", checker);
+        
+        const tryBlock = createBlock(parseCallback(node.expression, checker, argName));
         //instead of using e -> get the paramater of the catch function and use that
         const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName)));
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
@@ -68,18 +65,12 @@ namespace ts.codefix {
         const res = node.arguments[0];
         const rej = node.arguments[1];
         // TODO - what if this is a binding pattern and not an Identifier
-        let argNameRes = "val";
-        if (isFunctionLikeDeclaration(res)) {
-            argNameRes = (<Identifier>res.parameters[0].name).text;
-        }
+        let argNameRes = getArgName(res, "val", checker);
 
         if (rej) {
-            let argNameRej = "e";
-            if (isFunctionLikeDeclaration(rej)){
-                argNameRej = (<Identifier>rej.parameters[0].name).text;
-            }
+            let argNameRej = getArgName(rej, "e", checker);
 
-            const tryBlock = createBlock(parseCallback(node.expression, checker));
+            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes));
             const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej)));
 
             return [createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes));
@@ -115,5 +106,22 @@ namespace ts.codefix {
             return false;
         }
         return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
+    }
+    function getArgName(funcNode: Node, defaultVal: string, checker:TypeChecker): string{
+        if (isFunctionLikeDeclaration(funcNode)) {
+            return (<Identifier>funcNode.parameters[0].name).text;
+        }
+        else if(checker.getTypeAtLocation(funcNode).getCallSignatures().length > 0 && checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters.length > 0) {
+            let name =  checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters[0].name
+            if (name !== "_" && name !== "()"){ //do i need this? and if i do, is this correct?
+                return name;
+            }
+            else {
+                return defaultVal;
+            }
+        }
+        else {
+            return defaultVal;
+        }
     }
 }
