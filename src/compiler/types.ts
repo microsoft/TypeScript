@@ -3066,6 +3066,7 @@ namespace ts {
         Subtype
     }
 
+    // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
     export const enum NodeBuilderFlags {
         None                                    = 0,
         // Options
