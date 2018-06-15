@@ -503,8 +503,8 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, source: undefined };
+    function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
+        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
     }
 
     function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
@@ -8011,10 +8011,10 @@ new C();`
                 checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
-            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], directories: string[]) {
+            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: string[], nonRecursiveDirectories: string[]) {
                 checkWatchedFilesDetailed(host, files.filter(f => f !== recognizersDateTimeSrcFile.path), 1);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, directories, 1, /*recursive*/ true);
+                checkWatchedDirectoriesDetailed(host, nonRecursiveDirectories, 1,  /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(host, recursiveDirectories, 1, /*recursive*/ true);
             }
 
             function createSessionAndOpenFile(host: TestServerHost) {
@@ -8035,14 +8035,15 @@ new C();`
                     const filesWithNodeModulesSetup = [...filesWithSources, nodeModulesRecorgnizersText];
                     const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
-                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, withPathMapping ? packages : recognizersDateTime, ...getTypeRootsFromLocation(recognizersDateTime)];
+                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, ...(withPathMapping ? emptyArray : [recognizersDateTime]), ...getTypeRootsFromLocation(recognizersDateTime)];
                     const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...(withPathMapping ? [recognizersText] : emptyArray), ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+                    const nonRecursiveWatchedDirectories = withPathMapping ? [packages] : emptyArray;
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithResolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule, nonRecursiveWatchedDirectories);
                         verifyErrors(session, []);
                     }
 
@@ -8050,7 +8051,7 @@ new C();`
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithUnresolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
                         const startOffset = recognizersDateTimeSrcFile.content.indexOf('"') + 1;
                         verifyErrors(session, [
                             createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0, [moduleName])
@@ -8505,6 +8506,65 @@ new C();`
                     checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
                 }
             });
+        });
+
+        it("when watching directories for failed lookup locations in amd resolution", () => {
+            const projectRoot = "/user/username/projects/project";
+            const nodeFile: File = {
+                path: `${projectRoot}/src/typings/node.d.ts`,
+                content: `
+declare module "fs" {
+    export interface something {
+    }
+}`
+            };
+            const electronFile: File = {
+                path: `${projectRoot}/src/typings/electron.d.ts`,
+                content: `
+declare module 'original-fs' {
+    import * as fs from 'fs';
+    export = fs;
+}`
+            };
+            const srcFile: File = {
+                path: `${projectRoot}/src/somefolder/srcfile.ts`,
+                content: `
+import { x } from "somefolder/module1";
+import { x } from "somefolder/module2";
+const y = x;`
+            };
+            const moduleFile: File = {
+                path: `${projectRoot}/src/somefolder/module1.ts`,
+                content: `
+export const x = 10;`
+            };
+            const configFile: File = {
+                path: `${projectRoot}/src/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "amd",
+                        moduleResolution: "classic",
+                        target: "es5",
+                        outDir: "../out",
+                        baseUrl: "./",
+                        typeRoots: ["typings"]
+
+                    }
+                })
+            };
+            const files = [nodeFile, electronFile, srcFile, moduleFile, configFile, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, projectRoot);
+            checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
+            checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
+            checkWatchedDirectoriesDetailed(host, [`${projectRoot}`], 1,  /*recursive*/ false); // failed lookup for fs
+            const expectedWatchedDirectories = createMap<number>();
+            expectedWatchedDirectories.set(`${projectRoot}/src`, 2); // Wild card and failed lookup
+            expectedWatchedDirectories.set(`${projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
+            expectedWatchedDirectories.set(`${projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
+            expectedWatchedDirectories.set(`${projectRoot}/src/typings`, 1); // typeroot directory
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
         });
     });
 

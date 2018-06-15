@@ -15,17 +15,20 @@ namespace ts.moduleSpecifiers {
     // For each symlink/original for a module, returns a list of ways to import that file.
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
-        program: Program,
+        compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
+        files: ReadonlyArray<SourceFile>,
         preferences: ModuleSpecifierPreferences,
     ): ReadonlyArray<ReadonlyArray<string>> {
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
         if (ambient) return [[ambient]];
 
-        const compilerOptions = program.getCompilerOptions();
-        const info = getInfo(compilerOptions, importingSourceFile, importingSourceFile.fileName, host);
-        const modulePaths = getAllModulePaths(program, getSourceFileOfNode(moduleSymbol.valueDeclaration));
+        const info = getInfo(compilerOptions, importingSourceFile, importingSourceFile.path, host);
+        if (!files) {
+            return Debug.fail("Files list must be present to resolve symlinks in specifier resolution");
+        }
+        const modulePaths = getAllModulePaths(files, getSourceFileOfNode(moduleSymbol.valueDeclaration), info.getCanonicalFileName, host);
 
         const global = mapDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions));
         return global.length ? global.map(g => [g]) : modulePaths.map(moduleFileName =>
@@ -130,15 +133,58 @@ namespace ts.moduleSpecifiers {
         return firstDefined(imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
     }
 
+    function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost) {
+        const symlinks = mapDefined(files, sf =>
+            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
+                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] : undefined));
+        const result = createMap<string>();
+        if (symlinks) {
+            const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+            for (const [resolvedPath, originalPath] of symlinks) {
+                const resolvedParts = getPathComponents(toPath(resolvedPath, currentDirectory, getCanonicalFileName));
+                const originalParts = getPathComponents(toPath(originalPath, currentDirectory, getCanonicalFileName));
+                while (resolvedParts[resolvedParts.length - 1] === originalParts[originalParts.length - 1]) {
+                    resolvedParts.pop();
+                    originalParts.pop();
+                }
+                result.set(getPathFromPathComponents(originalParts), getPathFromPathComponents(resolvedParts));
+            }
+        }
+        return result;
+    }
+
+    function getAllModulePathsUsingIndirectSymlinks(files: ReadonlyArray<SourceFile>, target: string, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost) {
+        const links = discoverProbableSymlinks(files, getCanonicalFileName, host);
+        const paths = arrayFrom(links.keys());
+        let options: string[] | undefined;
+        const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+        for (const path of paths) {
+            const resolved = links.get(path)!;
+            if (compareStrings(target.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo) {
+                const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
+                const option = resolvePath(path, relative);
+                if (!host.fileExists || host.fileExists(option)) {
+                    if (!options) options = [];
+                    options.push(option);
+                }
+            }
+        }
+        if (options) {
+            options.push(target); // Since these are speculative, we also include the original resolved name as a possibility
+            return options;
+        }
+        return [target];
+    }
+
     /**
      * Looks for a existing imports that use symlinks to this module.
      * Only if no symlink is available, the real path will be used.
      */
-    function getAllModulePaths(program: Program, { fileName }: SourceFile): ReadonlyArray<string> {
-        const symlinks = mapDefined(program.getSourceFiles(), sf =>
+    function getAllModulePaths(files: ReadonlyArray<SourceFile>, { fileName }: SourceFile, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost): ReadonlyArray<string> {
+        const symlinks = mapDefined(files, sf =>
             sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
                 res && res.resolvedFileName === fileName ? res.originalPath : undefined));
-        return symlinks.length === 0 ? [fileName] : symlinks;
+        return symlinks.length === 0 ? getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(fileName, host.getCurrentDirectory ? host.getCurrentDirectory() : ""), getCanonicalFileName, host) : symlinks;
     }
 
     function getRelativePathNParents(relativePath: string): number {

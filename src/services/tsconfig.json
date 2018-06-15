@@ -4,10 +4,8 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
-        { "path": "../core" },
-        { "path": "../parser" },
         { "path": "../compiler" },
-        { "path": "../jsTyping" },
+        { "path": "../jsTyping" }
     ],
     "files": [
         "types.ts",
@@ -78,7 +76,6 @@
         "refactors/generateGetAccessorAndSetAccessor.ts",
         "refactors/moveToNewFile.ts",
         "refactors/addOrRemoveBracesToArrowFunction.ts",
-        "sourcemaps.ts",
         "services.ts",
         "breakpoints.ts",
         "transform.ts",

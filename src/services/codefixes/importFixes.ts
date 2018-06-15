@@ -194,7 +194,6 @@ namespace ts.codefix {
 
     function getCodeActionForNewImport(context: SymbolContext & { preferences: UserPreferences }, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
         const { sourceFile, symbolName, preferences } = context;
-        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifierWithoutQuotes, getQuotePreference(sourceFile, preferences));
@@ -210,14 +209,7 @@ namespace ts.codefix {
                 createIdentifier(symbolName),
                 createExternalModuleReference(quotedModuleSpecifier));
 
-        const changes = ChangeTracker.with(context, changeTracker => {
-            if (lastImportDeclaration) {
-                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
-            }
-            else {
-                changeTracker.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
-            }
-        });
+        const changes = ChangeTracker.with(context, t => insertImport(t, sourceFile, importDecl));
 
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
         // between the only import statement and user code. Otherwise just insert the statement because chances
@@ -247,7 +239,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<NewImportInfo> {
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
-            const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program, sourceFile, host, preferences);
+            const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences);
             return modulePathsGroups.map(group => group.map(moduleSpecifier => ({ moduleSpecifier, importKind })));
         });
         // Sort to keep the shortest paths first, but keep [relativePath, importRelativeToBaseUrl] groups together
