@@ -2070,53 +2070,51 @@ namespace ts {
 
     export function getJSDocCommentsAndTags(hostNode: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
-        getJSDocCommentsAndTagsWorker(hostNode);
-        return result || emptyArray;
+        // Pull parameter comments from declaring function as well
+        if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
+            result = addRange(result, (hostNode.initializer as HasJSDoc).jsDoc!);
+        }
 
-        function getJSDocCommentsAndTagsWorker(node: Node): void {
-            const parent = node.parent;
-            if (!parent) return;
-            if (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent)) {
-                getJSDocCommentsAndTagsWorker(parent);
-            }
-            // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
-            // /**
-            //   * @param {number} name
-            //   * @returns {number}
-            //   */
-            // var x = function(name) { return name.length; }
-            if (parent.parent && (getSingleVariableOfVariableStatement(parent.parent) === node)) {
-                getJSDocCommentsAndTagsWorker(parent.parent);
-            }
-            if (parent.parent && parent.parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent.parent) ||
-                    getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
-                    getSourceOfDefaultedAssignment(parent.parent.parent))) {
-                getJSDocCommentsAndTagsWorker(parent.parent.parent);
-            }
-            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
-                isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
-                node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
-                if (isBinaryExpression(parent)) {
-                    getJSDocCommentsAndTagsWorker(parent.parent);
-                }
-                else {
-                    getJSDocCommentsAndTagsWorker(parent);
-                }
+        let node: Node | undefined = hostNode;
+        while (node && node.parent) {
+            if (hasJSDocNodes(node)) {
+                result = addRange(result, node.jsDoc!);
             }
 
-            // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
+                break;
             }
+            node = getNextJSDocCommentLocation(node);
+        }
+        return result || emptyArray;
+    }
 
-            if (isVariableLike(node) && hasInitializer(node) && node.initializer !== hostNode && hasJSDocNodes(node.initializer!)) {
-                result = addRange(result, (node.initializer as HasJSDoc).jsDoc);
-            }
-
-            if (hasJSDocNodes(node)) {
-                result = addRange(result, node.jsDoc);
-            }
+    function getNextJSDocCommentLocation(node: Node) {
+        const parent = node.parent;
+        if (parent.kind === SyntaxKind.PropertyAssignment ||
+            parent.kind === SyntaxKind.PropertyDeclaration ||
+            parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
+            getNestedModuleDeclaration(parent) ||
+            isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken) {
+            return parent;
+        }
+        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
+        // /**
+        //   * @param {number} name
+        //   * @returns {number}
+        //   */
+        // var x = function(name) { return name.length; }
+        else if (parent.parent &&
+            (getSingleVariableOfVariableStatement(parent.parent) === node ||
+            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
+            return parent.parent;
+        }
+        else if (parent.parent && parent.parent.parent &&
+            (getSingleVariableOfVariableStatement(parent.parent.parent) ||
+            getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
+            getSourceOfDefaultedAssignment(parent.parent.parent))) {
+            return parent.parent.parent;
         }
     }
 
