@@ -967,7 +967,7 @@
         "category": "Error",
         "code": 1339
     },
-    "Module '{0}' does not refer to a type, but is used as a type here.": {
+    "Did you mean \"typeof import('{0}')\"?": {
         "category": "Error",
         "code": 1340
     },
@@ -3636,7 +3636,7 @@
         "category": "Message",
         "code": 6353
     },
-    
+
     "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6354
