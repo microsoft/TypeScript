@@ -33,12 +33,12 @@ verify.codeFix({
             var result = await fetch('http://yahoo.com');
         }
         catch (rejection) {
-            return rej(rejection);
+            return await rej(rejection);
         }
-        return res(result);
+        return await res(result);
     }
     catch (err) {
-        return catch_err(err);
+        return await catch_err(err);
     }
 }
 

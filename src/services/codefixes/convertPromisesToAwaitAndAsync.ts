@@ -90,7 +90,7 @@ namespace ts.codefix {
     function getCallbackBody(func: Node, argName: string): NodeArray<Statement> {
         switch (func.kind) {
             case SyntaxKind.Identifier:
-                return createNodeArray([(createReturn(createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)])))]);
+                return createNodeArray([(createReturn(createAwait(createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)]))))]);
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
                 if ((<FunctionDeclaration>func).body.kind === SyntaxKind.Block) {
@@ -110,9 +110,10 @@ namespace ts.codefix {
     function getArgName(funcNode: Node, defaultVal: string, checker: TypeChecker): string {
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
             const name = (<Identifier>funcNode.parameters[0].name).text;
-            if (name !== "_"){
+            if (name !== "_") {
                 return name;
-            }else{
+            } 
+            else {
                 return defaultVal;
             }
         }

@@ -24,10 +24,10 @@ verify.codeFix({
 `async function f():Promise<void> {
     try {
         var result = await fetch('http://yahoo.com');
-        return res(result);
+        return await res(result);
     }
     catch (err) {
-        return catch_err(err);
+        return await catch_err(err);
     }
 }
 

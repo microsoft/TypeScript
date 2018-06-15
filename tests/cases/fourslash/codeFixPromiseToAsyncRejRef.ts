@@ -28,9 +28,9 @@ verify.codeFix({
         var result = await fetch('http://yahoo.com');
     }
     catch (err) {
-        return rej(err);
+        return await rej(err);
     }
-    return res(result);
+    return await res(result);
 }
 
 function res(result){
