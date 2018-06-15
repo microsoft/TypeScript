@@ -161,8 +161,7 @@ task(TaskNames.lkg, [
     exec(`${host} ${Paths.scripts.produceLKG}`, () => {
         const sizeAfter = getDirSize(Paths.lkg);
         if (sizeAfter > (sizeBefore * 1.10)) {
-            // throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
-            console.log("Seems too big");
+            throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
         }
     
         complete();
@@ -362,20 +361,6 @@ file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
     }
 }, { async: true });
 
-/*
-file(Paths.tsserverLibraryDefinitionFile, [TaskNames.coreBuild, Paths.copyright, ...libraryTargets], function () {
-    const content = fs.readFileSync(Paths.tsserverLibraryDefinitionFile, { encoding: 'utf-8' });
-    const newContent =
-        removeConstModifierFromEnumDeclarations(content) +
-        `\nexport = ts` +
-        `\nexport as namespace ts;`;
-
-    fs.writeFileSync(Paths.tsserverLibraryDefinitionFile, newContent, { encoding: 'utf-8' });
-});
-*/
-
-
-
 function getLibraryTargets() {
     /** @type {{ libs: string[], paths?: Record<string, string>, sources?: Record<string, string[]> }} */
     const libraries = readJson("./src/lib/libs.json");
@@ -540,7 +525,6 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(Paths.baselines.local);
-    jake.mkdirP(Paths.baselines.localRwc);
     jake.mkdirP(Paths.baselines.localTest262);
 }
 
@@ -627,6 +611,7 @@ function acceptBaseline(sourceFolder, targetFolder) {
     console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
     var deleteEnding = '.delete';
 
+    jake.mkdirP(targetFolder);
     acceptBaselineFolder(sourceFolder, targetFolder);
 
     function acceptBaselineFolder(sourceFolder, targetFolder) {

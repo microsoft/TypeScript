@@ -1109,7 +1109,7 @@ namespace ts {
             return resolvedNames;
         }
 
-        function buildAllProjects(): number {
+        function buildAllProjects(): ExitStatus {
             const graph = getGlobalDependencyGraph();
             if (graph === undefined) return ExitStatus.DiagnosticsPresent_OutputsSkipped;
 
