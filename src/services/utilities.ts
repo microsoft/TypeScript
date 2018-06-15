@@ -1379,6 +1379,17 @@ namespace ts {
         return textSpanContainsPosition(span, node.getStart(file)) &&
             node.getEnd() <= textSpanEnd(span);
     }
+
+    /* @internal */
+    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void {
+        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
+        if (lastImportDeclaration) {
+            changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
+        }
+        else {
+            changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
+        }
+    }
 }
 
 // Display-part writer helpers

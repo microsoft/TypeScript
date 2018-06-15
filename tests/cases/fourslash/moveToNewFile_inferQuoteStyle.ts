@@ -9,9 +9,8 @@
 verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
-`import { x } from './x';
-
-import 'unrelated';
+`import 'unrelated';
+import { x } from './x';
 
 x;`,
 

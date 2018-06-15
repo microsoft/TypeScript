@@ -8535,6 +8535,12 @@ declare namespace ts.sourcemaps {
         log(text: string): void;
     }
     function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache?: SourceFileLikeCache): SourceMapper;
+    interface MappingsDecoder extends Iterator<SourceMapSpan> {
+        readonly decodingIndex: number;
+        readonly error: string | undefined;
+        readonly lastSpan: SourceMapSpan;
+    }
+    function decodeMappings(map: SourceMapData): MappingsDecoder;
     function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: {
         log?(s: string): void;
     }): T[];
@@ -10779,6 +10785,7 @@ declare namespace ts {
         some(pred: (node: Node) => boolean): boolean;
     }
     function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined;
+    function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void;
 }
 declare namespace ts {
     function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean;
