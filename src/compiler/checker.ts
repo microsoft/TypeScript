@@ -17422,7 +17422,7 @@ namespace ts {
         }
 
         function getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined {
-            const suggestion = getSpellingSuggestionForName(isString(name) ? name :idText(name), getPropertiesOfType(containingType), SymbolFlags.Value);
+            const suggestion = getSpellingSuggestionForName(isString(name) ? name : idText(name), getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && symbolName(suggestion);
         }
 
