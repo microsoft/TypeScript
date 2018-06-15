@@ -2,9 +2,9 @@ tests/cases/conformance/jsx/file.tsx(18,10): error TS2559: Type '{ x: true; }' h
 tests/cases/conformance/jsx/file.tsx(19,27): error TS2326: Types of property 'x' are incompatible.
   Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/jsx/file.tsx(20,10): error TS2322: Type '{}' is not assignable to type '{ x: boolean; }'.
-  Property 'x' is missing in type '{}'.
+  Property 'x' is missing in the provided JSX attributes.
 tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type '{ data-prop: true; }' is not assignable to type '{ x: boolean; }'.
-  Property 'x' is missing in type '{ data-prop: true; }'.
+  Property 'x' is missing in the provided JSX attributes.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
@@ -35,10 +35,10 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type '{ data-prop: tr
     let c = <SFC2AndEmptyComp />;
              ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type '{ x: boolean; }'.
-!!! error TS2322:   Property 'x' is missing in type '{}'.
+!!! error TS2322:   Property 'x' is missing in the provided JSX attributes.
     let d = <SFC2AndEmptyComp data-prop />;
              ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ data-prop: true; }' is not assignable to type '{ x: boolean; }'.
-!!! error TS2322:   Property 'x' is missing in type '{ data-prop: true; }'.
+!!! error TS2322:   Property 'x' is missing in the provided JSX attributes.
     
     

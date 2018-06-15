@@ -1,7 +1,7 @@
 tests/cases/conformance/jsx/file.tsx(17,10): error TS2322: Type '{}' is not assignable to type 'PoisonedProp'.
-  Property 'x' is missing in type '{}'.
+  Property 'x' is missing in the provided JSX attributes.
 tests/cases/conformance/jsx/file.tsx(18,10): error TS2322: Type '{}' is not assignable to type 'PoisonedProp'.
-  Property 'x' is missing in type '{}'.
+  Property 'x' is missing in the provided JSX attributes.
 tests/cases/conformance/jsx/file.tsx(19,19): error TS2326: Types of property 'x' are incompatible.
   Type 'true' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(19,21): error TS2326: Types of property 'y' are incompatible.
@@ -34,11 +34,11 @@ tests/cases/conformance/jsx/file.tsx(21,11): error TS2322: Type '{ X: string; x:
     let p = <Poisoned {...obj} />;
              ~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'PoisonedProp'.
-!!! error TS2322:   Property 'x' is missing in type '{}'.
+!!! error TS2322:   Property 'x' is missing in the provided JSX attributes.
     let y = <Poisoned />;
              ~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'PoisonedProp'.
-!!! error TS2322:   Property 'x' is missing in type '{}'.
+!!! error TS2322:   Property 'x' is missing in the provided JSX attributes.
     let z = <Poisoned x y/>;
                       ~
 !!! error TS2326: Types of property 'x' are incompatible.

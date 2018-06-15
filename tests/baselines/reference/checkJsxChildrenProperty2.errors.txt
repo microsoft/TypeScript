@@ -1,5 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(14,10): error TS2322: Type '{ a: number; b: string; }' is not assignable to type 'Prop'.
-  Property 'children' is missing in type '{ a: number; b: string; }'.
+  Property 'children' is missing in the provided JSX attributes.
 tests/cases/conformance/jsx/file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
 tests/cases/conformance/jsx/file.tsx(31,6): error TS2322: Type '{ children: (Element | ((name: string) => Element))[]; a: number; b: string; }' is not assignable to type 'Prop'.
   Types of property 'children' are incompatible.
@@ -40,7 +40,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Elem
     let k = <Comp a={10} b="hi" />;
              ~~~~
 !!! error TS2322: Type '{ a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Property 'children' is missing in type '{ a: number; b: string; }'.
+!!! error TS2322:   Property 'children' is missing in the provided JSX attributes.
     
     let k0 =
         <Comp a={10} b="hi" children="Random" >

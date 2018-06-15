@@ -10720,7 +10720,7 @@ namespace ts {
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
                         if (intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
                             (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
-                            // do not report top error
+                            // only report an error when the target isn't the intersection type with Intrinsic[Class]Attributes
                             return result;
                         }
                     }
@@ -11285,7 +11285,12 @@ namespace ts {
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(unmatchedProperty), typeToString(source));
+                        if (getObjectFlags(source) & ObjectFlags.JsxAttributes) {
+                            reportError(Diagnostics.Property_0_is_missing_in_the_provided_JSX_attributes, symbolToString(unmatchedProperty));
+                        }
+                        else {
+                            reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(unmatchedProperty), typeToString(source));
+                        }
                     }
                     return Ternary.False;
                 }

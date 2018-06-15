@@ -2072,6 +2072,10 @@
         "category": "Error",
         "code": 2609
     },
+    "Property '{0}' is missing in the provided JSX attributes.": {
+        "category": "Error",
+        "code": 2610
+    },
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
