@@ -60,15 +60,15 @@ s = a; // expect error
 
 var numObj: Number = 123;
 >numObj : Symbol(numObj, Decl(nonPrimitiveAssignError.ts, 20, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var boolObj: Boolean = true;
 >boolObj : Symbol(boolObj, Decl(nonPrimitiveAssignError.ts, 21, 3))
->Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var strObj: String = "string";
 >strObj : Symbol(strObj, Decl(nonPrimitiveAssignError.ts, 22, 3))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 a = numObj; // ok
 >a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))

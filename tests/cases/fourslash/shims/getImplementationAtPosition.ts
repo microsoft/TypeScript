@@ -1,9 +1,9 @@
-/// <reference path='fourslash.ts' />
+/// <reference path='../fourslash.ts' />
 
 // @Filename: goToImplementationDifferentFile_Implementation.ts
-//// /*fooClassImplementation*/class FooImpl implements Foo {}
+//// class /*fooClassImplementation*/FooImpl implements Foo {}
 ////
-//// /*barClassImplementation*/class Bar {
+//// class /*barClassImplementation*/Bar {
 ////     /*barHelloFunctionImplementation*/hello() {}
 //// }
 ////
@@ -15,21 +15,14 @@
 ////
 //// x.hel/*barHelloFunctionReference*/lo();
 ////
-//// /*thisImplementation*/class SomeClass {
+//// class /*thisImplementation*/SomeClass {
 ////     someMethod() {
 ////         thi/*thisReference*/s.someMethod();
 ////     }
 //// }
 
-var markerList = [
-    "fooClass",
-    "barClass",
-    "barHelloFunction",
-    "this"
-];
-
-markerList.forEach((marker) => {
+for (const marker of ["fooClass", "barClass", "barHelloFunction", "this"]) {
     goTo.marker(marker + 'Reference');
     goTo.implementation();
     verify.caretAtMarker(marker + 'Implementation');
-});
+};

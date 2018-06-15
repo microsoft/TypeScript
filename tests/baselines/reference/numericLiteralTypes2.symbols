@@ -218,7 +218,7 @@ function assertNever(x: never): never {
 >x : Symbol(x, Decl(numericLiteralTypes2.ts, 63, 21))
 
     throw new Error("Unexpected value");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 type Tag = 0 | 1 | 2;

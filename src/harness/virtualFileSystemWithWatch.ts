@@ -1,5 +1,3 @@
-/// <reference path="harness.ts" />
-
 namespace ts.TestFSWithWatch {
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",

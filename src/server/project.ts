@@ -550,6 +550,12 @@ namespace ts.server {
             return this.program.getSourceFileByPath(path);
         }
 
+        /* @internal */
+        getSourceFileOrConfigFile(path: Path): SourceFile | undefined {
+            const options = this.program.getCompilerOptions();
+            return path === options.configFilePath ? options.configFile : this.getSourceFile(path);
+        }
+
         close() {
             if (this.program) {
                 // if we have a program - release all files that are enlisted in program but arent root
@@ -629,8 +635,8 @@ namespace ts.server {
                 return this.rootFiles;
             }
             return map(this.program.getSourceFiles(), sourceFile => {
-                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
-                Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' is missing.`);
+                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath || sourceFile.path);
+                Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
                 return scriptInfo!;
             });
         }
