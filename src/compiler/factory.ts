@@ -763,6 +763,18 @@ namespace ts {
             : node;
     }
 
+    export function createRestTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.RestType) as RestTypeNode;
+        node.type = type;
+        return node;
+    }
+
+    export function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
+        return node.type !== type
+            ? updateNode(createRestTypeNode(type), node)
+            : node;
+    }
+
     export function createUnionTypeNode(types: ReadonlyArray<TypeNode>): UnionTypeNode {
         return <UnionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types);
     }

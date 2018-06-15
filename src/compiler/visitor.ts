@@ -379,6 +379,10 @@ namespace ts {
                 return updateOptionalTypeNode((<OptionalTypeNode>node),
                     visitNode((<OptionalTypeNode>node).type, visitor, isTypeNode));
 
+            case SyntaxKind.RestType:
+                return updateRestTypeNode((<RestTypeNode>node),
+                    visitNode((<RestTypeNode>node).type, visitor, isTypeNode));
+
             case SyntaxKind.UnionType:
                 return updateUnionTypeNode(<UnionTypeNode>node,
                     nodesVisitor((<UnionTypeNode>node).types, visitor, isTypeNode));

@@ -446,12 +446,13 @@ namespace ts {
                 return visitNode(cbNode, (<JsxClosingElement>node).tagName);
 
             case SyntaxKind.OptionalType:
+            case SyntaxKind.RestType:
             case SyntaxKind.JSDocTypeExpression:
             case SyntaxKind.JSDocNonNullableType:
             case SyntaxKind.JSDocNullableType:
             case SyntaxKind.JSDocOptionalType:
             case SyntaxKind.JSDocVariadicType:
-                return visitNode(cbNode, (<OptionalTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode>node).type);
+                return visitNode(cbNode, (<OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode>node).type);
             case SyntaxKind.JSDocFunctionType:
                 return visitNodes(cbNode, cbNodes, (<JSDocFunctionType>node).parameters) ||
                     visitNode(cbNode, (<JSDocFunctionType>node).type);
@@ -2775,6 +2776,12 @@ namespace ts {
         }
 
         function parseTupleElementType() {
+            const pos = getNodePos();
+            if (parseOptional(SyntaxKind.DotDotDotToken)) {
+                const node = <RestTypeNode>createNode(SyntaxKind.RestType, pos);
+                node.type = parseType();
+                return finishNode(node);
+            }
             const type = parseType();
             if (!(contextFlags & NodeFlags.JSDoc) && type.kind === SyntaxKind.JSDocNullableType && type.pos === (<JSDocNullableType>type).type.pos) {
                 type.kind = SyntaxKind.OptionalType;

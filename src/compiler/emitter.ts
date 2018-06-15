@@ -678,8 +678,9 @@ namespace ts {
                         return emitJSDocNonNullableType(node as JSDocNonNullableType);
                     case SyntaxKind.JSDocOptionalType:
                         return emitJSDocOptionalType(node as JSDocOptionalType);
+                    case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
-                        return emitJSDocVariadicType(node as JSDocVariadicType);
+                        return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
 
                     // Binding patterns
                     case SyntaxKind.ObjectBindingPattern:
@@ -1287,7 +1288,7 @@ namespace ts {
             writePunctuation("]");
         }
 
-        function emitJSDocVariadicType(node: JSDocVariadicType) {
+        function emitRestOrJSDocVariadicType(node: RestTypeNode | JSDocVariadicType) {
             write("...");
             emit(node.type);
         }

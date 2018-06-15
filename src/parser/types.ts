@@ -226,6 +226,7 @@ namespace ts {
         ArrayType,
         TupleType,
         OptionalType,
+        RestType,
         UnionType,
         IntersectionType,
         ConditionalType,
@@ -1104,6 +1105,11 @@ namespace ts {
 
     export interface OptionalTypeNode extends TypeNode {
         kind: SyntaxKind.OptionalType;
+        type: TypeNode;
+    }
+
+    export interface RestTypeNode extends TypeNode {
+        kind: SyntaxKind.RestType;
         type: TypeNode;
     }
 
@@ -3854,6 +3860,7 @@ namespace ts {
 
     export interface TupleType extends GenericType {
         minLength: number;
+        hasRestElement: boolean;
         associatedNames?: __String[];
     }
 
