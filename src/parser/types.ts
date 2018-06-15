@@ -4193,11 +4193,7 @@ namespace ts {
         next?: DiagnosticMessageChain;
     }
 
-    export interface Diagnostic {
-        file: SourceFile | undefined;
-        start: number | undefined;
-        length: number | undefined;
-        messageText: string | DiagnosticMessageChain;
+    export interface Diagnostic extends DiagnosticRelatedInformation {
         category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
