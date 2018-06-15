@@ -8546,6 +8546,12 @@ declare namespace ts.sourcemaps {
         log(text: string): void;
     }
     function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache?: SourceFileLikeCache): SourceMapper;
+    interface MappingsDecoder extends Iterator<SourceMapSpan> {
+        readonly decodingIndex: number;
+        readonly error: string | undefined;
+        readonly lastSpan: SourceMapSpan;
+    }
+    function decodeMappings(map: SourceMapData): MappingsDecoder;
     function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: {
         log?(s: string): void;
     }): T[];
