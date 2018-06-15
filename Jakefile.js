@@ -208,13 +208,13 @@ task(TaskNames.lint, [TaskNames.buildRules], () => {
 
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
-    var cmd = `"${getDiffTool()} ${Paths.baselines.reference} ${Paths.baselines.local}`;
+    var cmd = `"${getDiffTool()}" ${Paths.baselines.reference} ${Paths.baselines.local}`;
     exec(cmd);
 }, { async: true });
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
-    var cmd = `"${getDiffTool()} ${Paths.baselines.referenceRwc} ${Paths.baselines.localRwc}`;
+    var cmd = `"${getDiffTool()}" ${Paths.baselines.referenceRwc} ${Paths.baselines.localRwc}`;
     exec(cmd);
 }, { async: true });
 
