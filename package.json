@@ -59,6 +59,7 @@
         "chalk": "latest",
         "convert-source-map": "latest",
         "del": "latest",
+        "fs-extra": "^6.0.1",
         "gulp": "3.X",
         "gulp-clone": "latest",
         "gulp-concat": "latest",
