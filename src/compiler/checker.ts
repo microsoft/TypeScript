@@ -23260,7 +23260,7 @@ namespace ts {
 
         function checkGrammarNameKeywordUsedInDeclarationName(name: Identifier | BindingPattern): boolean {
             if (name.kind === SyntaxKind.Identifier) {
-                if (name.originalKeywordKind && isNonContextualKeyword(name.originalKeywordKind)) {
+                if (name.originalKeywordKind && (isNonContextualKeyword(name.originalKeywordKind) && !isFutureReservedWord(name.originalKeywordKind))) {
                     return grammarErrorOnNode(name, Diagnostics.Keyword_0_cannot_be_used_as_a_declaration_name, formatSyntaxKind(name.originalKeywordKind));
                 }
             }
@@ -23347,7 +23347,7 @@ namespace ts {
                 }
                 return;
             }
-            if (isVariableDeclaration(node) || isBindingElement(node) || !(isParameter(node) && parameterIsThisKeyword(node))) {
+            if (isVariableDeclaration(node) || isBindingElement(node) || (isParameter(node) && !parameterIsThisKeyword(node))) {
                 if (isIdentifier(node.name) || isBindingPattern(node.name)) {
                     checkGrammarNameKeywordUsedInDeclarationName(node.name);
                 }

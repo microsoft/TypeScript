@@ -10,3 +10,7 @@ function bar({ enum, case }: Foo) {
 }
 
 const enum = 123;
+
+function enum () { }
+
+class enum { }
