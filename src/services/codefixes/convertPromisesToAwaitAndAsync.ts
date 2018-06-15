@@ -32,13 +32,13 @@ namespace ts.codefix {
         }
     }
 
-    function parseCallback(node: Expression, checker: TypeChecker, argName?: string): Statement[] {
+    function parseCallback(node: Expression, checker: TypeChecker, argName?: string, argUsed?: boolean): Statement[] {
         if (!node) {
             return;
         }
 
         if (node.kind === SyntaxKind.CallExpression && checker.isPromiseLikeType(checker.getTypeAtLocation(node)) && (<CallExpression>node).expression.kind !== SyntaxKind.PropertyAccessExpression) {
-            return parsePromiseCall(node as CallExpression, argName);
+            return parsePromiseCall(node as CallExpression, argName, argUsed);
         }
         else if (node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "then", checker)) {
             return parseThen(node as CallExpression, checker);
@@ -47,16 +47,15 @@ namespace ts.codefix {
             return parseCatch(node as CallExpression, checker);
         }
         else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return parseCallback((<PropertyAccessExpression>node).expression, checker, argName);
+            return parseCallback((<PropertyAccessExpression>node).expression, checker, argName, argUsed);
         }
     }
 
     function parseCatch(node: CallExpression, checker: TypeChecker): Statement[] {
         const func = node.arguments[0];
-        let argName = getArgName(func, "arg", checker);
-        
-        const tryBlock = createBlock(parseCallback(node.expression, checker, argName));
-        //instead of using e -> get the paramater of the catch function and use that
+        const argName = getArgName(func, "arg", checker);
+        const tryBlock = createBlock(parseCallback(node.expression, checker, argName, argName !== "arg"));
+        // instead of using e -> get the paramater of the catch function and use that
         const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName)));
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
@@ -65,26 +64,27 @@ namespace ts.codefix {
         const res = node.arguments[0];
         const rej = node.arguments[1];
         // TODO - what if this is a binding pattern and not an Identifier
-        let argNameRes = getArgName(res, "val", checker);
+        const argNameRes = getArgName(res, "val", checker);
 
         if (rej) {
-            let argNameRej = getArgName(rej, "e", checker);
+            const argNameRej = getArgName(rej, "e", checker);
 
-            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes));
+            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes, argNameRes !== "val"));
             const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej)));
 
             return [createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes));
         }
         else {
-            return parseCallback(node.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes));
+            return parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes));
         }
     }
 
-    function parsePromiseCall(node: CallExpression, argName?: string): Statement[] {
+    function parsePromiseCall(node: CallExpression, argName?: string, argUsed?: boolean): Statement[] {
         if (!argName) {
             argName = "val"; // fix this to maybe not always create a variable declaration if not necessary
         }
-        return [createVariableStatement(/*modifiers*/ undefined, [createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node))])];
+        return argUsed ? [createVariableStatement(/*modifiers*/ undefined, [createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node))])] :
+                         [createStatement(createAwait(node))];
     }
 
     function getCallbackBody(func: Node, argName: string): NodeArray<Statement> {
@@ -107,18 +107,18 @@ namespace ts.codefix {
         }
         return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
     }
-    function getArgName(funcNode: Node, defaultVal: string, checker:TypeChecker): string{
-        if (isFunctionLikeDeclaration(funcNode)) {
-            return (<Identifier>funcNode.parameters[0].name).text;
-        }
-        else if(checker.getTypeAtLocation(funcNode).getCallSignatures().length > 0 && checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters.length > 0) {
-            let name =  checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters[0].name
-            if (name !== "_" && name !== "()"){ //do i need this? and if i do, is this correct?
+    function getArgName(funcNode: Node, defaultVal: string, checker: TypeChecker): string {
+        if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
+            const name = (<Identifier>funcNode.parameters[0].name).text;
+            if (name !== "_"){
                 return name;
-            }
-            else {
+            }else{
                 return defaultVal;
             }
+        }
+        else if (checker.getTypeAtLocation(funcNode).getCallSignatures().length > 0 && checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters.length > 0) {
+            const name = checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters[0].name;
+            return name;
         }
         else {
             return defaultVal;
