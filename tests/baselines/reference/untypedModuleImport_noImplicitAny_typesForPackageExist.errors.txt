@@ -1,4 +1,5 @@
 /a.ts(2,25): error TS7016: Could not find a declaration file for module 'foo/sub'. '/node_modules/foo/sub.js' implicitly has an 'any' type.
+  If the 'foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/foo`
 /a.ts(3,25): error TS7016: Could not find a declaration file for module 'bar/sub'. '/node_modules/bar/sub.js' implicitly has an 'any' type.
   Try `npm install @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`
 
@@ -8,6 +9,7 @@
     import * as fooSub from "foo/sub";
                             ~~~~~~~~~
 !!! error TS7016: Could not find a declaration file for module 'foo/sub'. '/node_modules/foo/sub.js' implicitly has an 'any' type.
+!!! error TS7016:   If the 'foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/foo`
     import * as barSub from "bar/sub";
                             ~~~~~~~~~
 !!! error TS7016: Could not find a declaration file for module 'bar/sub'. '/node_modules/bar/sub.js' implicitly has an 'any' type.
