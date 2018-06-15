@@ -1,3 +1,4 @@
+// @pretty: true
 interface A {
     a: number;
 }

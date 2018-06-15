@@ -3710,6 +3710,11 @@
         "code": 6371
     },
 
+    "Which is from property '{0}' of type '{1}', declared here.": {
+        "category": "Message",
+        "code": 6500
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

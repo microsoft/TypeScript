@@ -10124,12 +10124,13 @@ namespace ts {
             return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputObject?: { error?: Diagnostic }): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject);
         }
 
         function checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
-            if (!isTypeAssignableTo(source, target) && !elaborateError(expr, source, target)) {
+            if (isTypeAssignableTo(source, target)) return true;
+            if (!elaborateError(expr, source, target)) {
                 return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
             }
             return false;
@@ -10165,11 +10166,6 @@ namespace ts {
                 const [prop, next, nameType] = status.value;
                 const sourcePropType = getIndexedAccessType(source, nameType);
                 const targetPropType = getIndexedAccessType(target, nameType);
-                //const rootChain = () => chainDiagnosticMessages(
-                //    /*details*/ undefined,
-                //    Diagnostics.Types_of_property_0_are_incompatible,
-                //    stripQuotes(typeToString(nameType)), // quotes removed from string literal names so they aren't double quoted in the output
-                //);
                 if (!isTypeAssignableTo(sourcePropType, targetPropType)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType);
                     if (elaborated) {
@@ -10177,7 +10173,17 @@ namespace ts {
                     }
                     else {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
-                        checkTypeAssignableTo(sourcePropType, targetPropType, prop);
+                        const resultObj: { error?: Diagnostic } = {};
+                        checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
+                        if (resultObj.error && target.symbol && length(target.symbol.declarations)) {
+                            const reportedDiag = resultObj.error;
+                            const relatededInfo = (reportedDiag.relatedInformation = reportedDiag.relatedInformation || []);
+                            const propertyName = typeToString(nameType);
+                            const targetType = typeToString(target);
+                            for (const declaration of target.symbol.declarations!) {
+                                relatededInfo.push(createDiagnosticForNode(declaration, Diagnostics.Which_is_from_property_0_of_type_1_declared_here, propertyName, targetType));
+                            }
+                        }
                         reportedError = true;
                     }
                 }
@@ -10581,7 +10587,9 @@ namespace ts {
             relation: Map<RelationComparisonResult>,
             errorNode: Node | undefined,
             headMessage?: DiagnosticMessage,
-            containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
+            containingMessageChain?: () => DiagnosticMessageChain | undefined,
+            errorOutputContainer?: { error?: Diagnostic }
+        ): boolean {
 
             let errorInfo: DiagnosticMessageChain | undefined;
             let maybeKeys: string[];
@@ -10621,7 +10629,11 @@ namespace ts {
                     }
                 }
 
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation)); // TODO: GH#18217
+                const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+                if (errorOutputContainer) {
+                    errorOutputContainer.error = diag;
+                }
+                diagnostics.add(diag); // TODO: GH#18217
             }
             return result !== Ternary.False;
 
