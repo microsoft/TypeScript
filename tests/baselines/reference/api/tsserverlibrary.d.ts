@@ -6495,7 +6495,7 @@ declare namespace ts {
      * @param pos The start position.
      * @param end The end position.
      */
-    function createRange(pos: number, end: number): TextRange;
+    function createRange(pos: number, end?: number): TextRange;
     /**
      * Creates a new TextRange from a provided range with a new end position.
      *
@@ -6603,7 +6603,6 @@ declare namespace ts {
     function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean;
     function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
     function createTextSpan(start: number, length: number): TextSpan;
-    function createTextRange(pos: number, end?: number): TextRange;
     function createTextSpanFromBounds(start: number, end: number): TextSpan;
     function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
     function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
