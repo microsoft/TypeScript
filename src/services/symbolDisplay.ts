@@ -385,11 +385,11 @@ namespace ts.SymbolDisplay {
                         const isExternalModuleDeclaration =
                             isModuleWithStringLiteralName(resolvedNode) &&
                             hasModifier(resolvedNode, ModifierFlags.Ambient);
-                        const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
+                        const shouldUseAliasName = symbol.name !== InternalSymbolName.Default && symbol.name !== InternalSymbolName.ExportEquals && !isExternalModuleDeclaration;
                         const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
                             typeChecker,
                             resolvedSymbol,
-                            getSourceFileOfNode(resolvedNode),
+                            resolvedNode.getSourceFile(),
                             resolvedNode,
                             declarationName,
                             semanticMeaning,
@@ -402,16 +402,18 @@ namespace ts.SymbolDisplay {
                 }
             }
 
-            switch (symbol.declarations[0].kind) {
+            const kind = symbol.declarations[0].kind;
+            switch (kind) {
                 case SyntaxKind.NamespaceExportDeclaration:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
                     displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
                     break;
+                case SyntaxKind.BinaryExpression: // For `module.exports =`
                 case SyntaxKind.ExportAssignment:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
-                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    displayParts.push(keywordPart(kind === SyntaxKind.BinaryExpression || (symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
                     break;
                 case SyntaxKind.ExportSpecifier:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
