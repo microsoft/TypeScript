@@ -103,12 +103,15 @@ namespace ts {
         preferences: UserPreferences,
     ): void {
         for (const sourceFile of program.getSourceFiles()) {
-            const newImportFromPath = oldToNew(sourceFile.fileName) || sourceFile.fileName;
+            const newFromOld = oldToNew(sourceFile.fileName);
+            const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.fileName;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
 
             const oldFromNew: string | undefined = newToOld(sourceFile.fileName);
             const oldImportFromPath: string = oldFromNew || sourceFile.fileName;
             const oldImportFromDirectory = getDirectoryPath(oldImportFromPath);
+
+            const importingSourceFileMoved = newFromOld !== undefined || oldFromNew !== undefined;
 
             updateImportsWorker(sourceFile, changeTracker,
                 referenceText => {
@@ -123,7 +126,10 @@ namespace ts {
                         // TODO:GH#18217
                         ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
                         : getSourceFileToImport(importLiteral, sourceFile, program, host, oldToNew);
-                    return toImport === undefined ? undefined : moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport, host, preferences);
+                    // If neither the importing source file nor the imported file moved, do nothing.
+                    return toImport === undefined || !toImport.updated && !importingSourceFileMoved
+                        ? undefined
+                        : moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, preferences);
                 });
         }
     }
@@ -135,12 +141,18 @@ namespace ts {
         return ensurePathIsNonModuleName(combineNormal(pathA, pathB));
     }
 
-    function getSourceFileToImport(importLiteral: StringLiteralLike, importingSourceFile: SourceFile, program: Program, host: LanguageServiceHost, oldToNew: PathUpdater): string | undefined {
+    interface ToImport {
+        readonly newFileName: string;
+        /** True if the imported file was renamed. */
+        readonly updated: boolean;
+    }
+    function getSourceFileToImport(importLiteral: StringLiteralLike, importingSourceFile: SourceFile, program: Program, host: LanguageServiceHost, oldToNew: PathUpdater): ToImport | undefined {
         const symbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
         if (symbol) {
             if (symbol.declarations.some(d => isAmbientModule(d))) return undefined; // No need to update if it's an ambient module
             const oldFileName = find(symbol.declarations, isSourceFile)!.fileName;
-            return oldToNew(oldFileName) || oldFileName;
+            const newFileName = oldToNew(oldFileName);
+            return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
             const resolved = host.resolveModuleNames
@@ -150,14 +162,15 @@ namespace ts {
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, program: Program): string | undefined {
+    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, program: Program): ToImport | undefined {
         return resolved && (
             (resolved.resolvedModule && getIfInProgram(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfInProgram));
 
-        function getIfInProgram(oldLocation: string): string | undefined {
+        function getIfInProgram(oldLocation: string): ToImport | undefined {
             const newLocation = oldToNew(oldLocation);
+
             return program.getSourceFile(oldLocation) || newLocation !== undefined && program.getSourceFile(newLocation)
-                ? newLocation || oldLocation
+                ? newLocation !== undefined ? { newFileName: newLocation, updated: true } : { newFileName: oldLocation, updated: false }
                 : undefined;
         }
     }

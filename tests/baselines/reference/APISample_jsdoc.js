@@ -1,3 +1,10 @@
+//// [tests/cases/compiler/APISample_jsdoc.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_jsdoc.ts]
 /*
  * Note: This test is a public API sample. The original sources can be found

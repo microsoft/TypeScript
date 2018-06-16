@@ -12,7 +12,7 @@ namespace ts {
 
     export namespace Sample1 {
         tick();
-        const projFs = loadProjectFromDisk("../../tests/projects/sample1");
+        const projFs = loadProjectFromDisk("tests/projects/sample1");
 
         const allExpectedOutputs = ["/src/tests/index.js",
             "/src/core/index.js", "/src/core/index.d.ts",
@@ -236,40 +236,33 @@ namespace ts {
     }
 
     export namespace OutFile {
-        const outFileFs = loadProjectFromDisk("../../tests/projects/outfile-concat");
+        const outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
 
         describe("tsbuild - baseline sectioned sourcemaps", () => {
-            const fs = outFileFs.shadow();
-            const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, buildHost, ["/src/third"], { dry: false, force: false, verbose: false });
-            clearDiagnostics();
-            builder.buildAllProjects();
-            assertDiagnosticMessages(/*none*/);
-
-            const files = [
-                "/src/third/thirdjs/output/third-output.js",
-                "/src/third/thirdjs/output/third-output.js.map"
-            ];
-
-            for (const file of files) {
-                it(`Generates files matching the baseline - ${file}`, () => {
-                    Harness.Baseline.runBaseline(getBaseFileName(file), () => {
-                        return fs.readFileSync(file, "utf-8");
-                    });
-                });
-            }
-
-            it(`Generates files matching the baseline - file listing for outFile-concat`, () => {
-                Harness.Baseline.runBaseline("outfile-concat-fileListing.txt", () => {
-                    return fs.getFileListing();
+            let fs: vfs.FileSystem | undefined;
+            before(() => {
+                fs = outFileFs.shadow();
+                const host = new fakes.CompilerHost(fs);
+                const builder = createSolutionBuilder(host, buildHost, ["/src/third"], { dry: false, force: false, verbose: false });
+                clearDiagnostics();
+                builder.buildAllProjects();
+                assertDiagnosticMessages(/*none*/);
+            });
+            after(() => {
+                fs = undefined;
+            });
+            it(`Generates files matching the baseline`, () => {
+                Harness.Baseline.runBaseline("outfile-concat.js", () => {
+                    const patch = fs!.diff();
+                    // tslint:disable-next-line:no-null-keyword
+                    return patch ? vfs.formatPatch(patch) : null;
                 });
             });
         });
     }
 
     describe("tsbuild - graph-ordering", () => {
-        const fs = new vfs.FileSystem(false);
-        const host = new fakes.CompilerHost(fs);
+        let host: fakes.CompilerHost | undefined;
         const deps: [string, string][] = [
             ["A", "B"],
             ["B", "C"],
@@ -280,7 +273,15 @@ namespace ts {
             ["F", "E"]
         ];
 
-        writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G"], deps);
+        before(() => {
+            const fs = new vfs.FileSystem(false);
+            host = new fakes.CompilerHost(fs);
+            writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G"], deps);
+        });
+
+        after(() => {
+            host = undefined;
+        });
 
         it("orders the graph correctly - specify two roots", () => {
             checkGraphOrdering(["A", "G"], ["A", "B", "C", "D", "E", "G"]);
@@ -299,7 +300,7 @@ namespace ts {
         });
 
         function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {
-            const builder = createSolutionBuilder(host, buildHost, rootNames, { dry: true, force: false, verbose: false });
+            const builder = createSolutionBuilder(host!, buildHost, rootNames, { dry: true, force: false, verbose: false });
 
             const projFileNames = rootNames.map(getProjectFileName);
             const graph = builder.getBuildGraph(projFileNames);
@@ -394,32 +395,17 @@ namespace ts {
     }
 
     function loadProjectFromDisk(root: string): vfs.FileSystem {
-        const fs = new vfs.FileSystem(/*ignoreCase*/ false, { time });
-        const rootPath = resolvePath(__dirname, root);
-        loadFsMirror(fs, rootPath, "/src");
-        fs.mkdirpSync("/lib");
-        const libs = ["es5", "dom", "webworker.importscripts", "scripthost"];
-        for (const lib of libs) {
-            const content = Harness.IO.readFile(combinePaths(Harness.libFolder, `lib.${lib}.d.ts`));
-            if (content === undefined) {
-                throw new Error(`Failed to read lib ${lib}`);
-            }
-            fs.writeFileSync(`/lib/lib.${lib}.d.ts`, content);
-        }
-        fs.writeFileSync("/lib/lib.d.ts", Harness.IO.readFile(combinePaths(Harness.libFolder, "lib.d.ts"))!);
-        fs.meta.set("defaultLibLocation", "/lib");
+        const resolver = vfs.createResolver(Harness.IO);
+        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+            files: {
+                ["/lib"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), "built/local"), resolver),
+                ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
+            },
+            cwd: "/",
+            meta: { defaultLibLocation: "/lib" },
+            time
+        });
         fs.makeReadonly();
         return fs;
-    }
-
-    function loadFsMirror(vfs: vfs.FileSystem, localRoot: string, virtualRoot: string) {
-        vfs.mkdirpSync(virtualRoot);
-        for (const path of Harness.IO.readDirectory(localRoot)) {
-            const file = getBaseFileName(path);
-            vfs.writeFileSync(virtualRoot + "/" + file, Harness.IO.readFile(localRoot + "/" + file)!);
-        }
-        for (const dir of Harness.IO.getDirectories(localRoot)) {
-            loadFsMirror(vfs, localRoot + "/" + dir, virtualRoot + "/" + dir);
-        }
     }
 }
