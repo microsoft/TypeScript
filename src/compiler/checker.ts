@@ -15993,7 +15993,7 @@ namespace ts {
 
         function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
             const elements = node.elements;
-            let hasSpreadElement = false;
+            let hasNonEndingSpreadElement = false;
             const elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
             const contextualType = getApparentTypeOfContextualType(node);
@@ -16024,9 +16024,9 @@ namespace ts {
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
                     elementTypes.push(type);
                 }
-                hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
+                hasNonEndingSpreadElement = hasNonEndingSpreadElement || (index < elements.length - 1 && e.kind === SyntaxKind.SpreadElement);
             }
-            if (!hasSpreadElement) {
+            if (!hasNonEndingSpreadElement) {
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
                 if (inDestructuringPattern && elementTypes.length) {
@@ -16053,7 +16053,8 @@ namespace ts {
                             }
                         }
                     }
-                    return createTupleType(elementTypes);
+                    const hasSpreadElement = elements.length > 0 && elements[elements.length - 1].kind === SyntaxKind.SpreadElement;
+                    return createTupleType(elementTypes, elementTypes.length - (hasSpreadElement ? 1 : 0), hasSpreadElement);
                 }
             }
             return createArrayType(elementTypes.length ?
