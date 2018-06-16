@@ -1,16 +1,90 @@
 /// <reference path="./host.ts" />
 /// <reference path="./worker.ts" />
 namespace Harness.Parallel {
-    export type ParallelTestMessage = { type: "test", payload: { runner: TestRunnerKind | "unittest", file: string } } | never;
-    export type ParallelBatchMessage = { type: "batch", payload: ParallelTestMessage["payload"][] } | never;
-    export type ParallelCloseMessage = { type: "close" } | never;
+    export interface RunnerTask {
+        runner: TestRunnerKind;
+        file: string;
+        size: number;
+    }
+
+    export interface UnitTestTask {
+        runner: "unittest";
+        file: string;
+        size: number;
+    }
+
+    export type Task = RunnerTask | UnitTestTask;
+
+    export interface TestInfo {
+        name: string[];
+    }
+
+    export interface ErrorInfo {
+        name: string[];
+        error: string;
+        stack: string;
+    }
+
+    export interface TaskTimeout {
+        duration: number | "reset";
+    }
+
+    export interface TaskResult {
+        passing: number;
+        errors: ErrorInfo[];
+        passes: TestInfo[];
+        duration: number;
+        task: Task;
+    }
+
+    export interface ParallelTestMessage {
+        type: "test";
+        payload: Task;
+    }
+
+    export interface ParallelBatchMessage {
+        type: "batch";
+        payload: Task[];
+    }
+
+    export interface ParallelCloseMessage {
+        type: "close";
+    }
+
     export type ParallelHostMessage = ParallelTestMessage | ParallelCloseMessage | ParallelBatchMessage;
 
-    export type ParallelErrorMessage = { type: "error", payload: { error: string, stack: string, name?: string[] } } | never;
-    export type TestInfo = { name: string[] } | never;
-    export type ErrorInfo = ParallelErrorMessage["payload"] & TestInfo;
-    export type ParallelResultMessage = { type: "result", payload: { passing: number, errors: ErrorInfo[], passes: TestInfo[], duration: number, runner: TestRunnerKind | "unittest", file: string } } | never;
-    export type ParallelBatchProgressMessage = { type: "progress", payload: ParallelResultMessage["payload"] } | never;
-    export type ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: number | "reset" } } | never;
+    export interface ParallelErrorMessage {
+        type: "error";
+        payload: { error: string, stack: string, name?: string[] };
+    }
+
+    export interface ParallelResultMessage {
+        type: "result";
+        payload: TaskResult;
+    }
+
+    export interface ParallelBatchProgressMessage {
+        type: "progress";
+        payload: TaskResult;
+    }
+
+    export interface ParallelTimeoutChangeMessage {
+        type: "timeout";
+        payload: TaskTimeout;
+    }
+
     export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage | ParallelTimeoutChangeMessage;
+
+    export function shimNoopTestInterface(global: Mocha.MochaGlobals) {
+        global.before = ts.noop;
+        global.after = ts.noop;
+        global.beforeEach = ts.noop;
+        global.afterEach = ts.noop;
+        global.describe = global.context = ((_: any, __: any) => { /*empty*/ }) as Mocha.SuiteFunction;
+        global.describe.skip = global.xdescribe = global.xcontext = ts.noop as Mocha.PendingSuiteFunction;
+        global.describe.only = ts.noop as Mocha.ExclusiveSuiteFunction;
+        global.it = global.specify = ((_: any, __: any) => { /*empty*/ }) as Mocha.TestFunction;
+        global.it.skip = global.xit = global.xspecify = ts.noop as Mocha.PendingTestFunction;
+        global.it.only = ts.noop as Mocha.ExclusiveTestFunction;
+    }
 }
