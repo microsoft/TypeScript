@@ -12952,14 +12952,18 @@ namespace ts {
                     const targetLength = getLengthOfTupleType(target);
                     const sourceRestType = getRestTypeOfTupleType(source);
                     const targetRestType = getRestTypeOfTupleType(target);
-                    const count = sourceRestType && targetRestType ? Math.max(sourceLength, targetLength) + 1 :
-                        sourceRestType ? targetLength :
-                        targetRestType ? sourceLength :
-                        Math.min(sourceLength, targetLength);
-                    for (let i = 0; i < count; i++) {
-                        const s = i < sourceLength ? source.typeArguments![i] : sourceRestType!;
-                        const t = i < targetLength ? target.typeArguments![i] : targetRestType!;
-                        inferFromTypes(s, t);
+                    const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
+                    for (let i = 0; i < fixedLength; i++) {
+                        inferFromTypes(i < sourceLength ? source.typeArguments![i] : sourceRestType!, target.typeArguments![i]);
+                    }
+                    if (targetRestType) {
+                        const types = fixedLength < sourceLength ? source.typeArguments!.slice(fixedLength, sourceLength) : [];
+                        if (sourceRestType) {
+                            types.push(sourceRestType);
+                        }
+                        if (types.length) {
+                            inferFromTypes(getUnionType(types), targetRestType);
+                        }
                     }
                 }
                 else {
