@@ -3351,6 +3351,9 @@ declare namespace ts {
         hasRestElement: boolean;
         associatedNames?: __String[];
     }
+    interface TupleTypeReference extends TypeReference {
+        target: TupleType;
+    }
     interface UnionOrIntersectionType extends Type {
         types: Type[];
         propertyCache: SymbolTable;
