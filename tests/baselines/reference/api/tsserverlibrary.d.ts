@@ -10780,7 +10780,12 @@ declare namespace ts {
      */
     function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined;
     function isMemberSymbolInBaseType(memberSymbol: Symbol, checker: TypeChecker): boolean;
-    class NodeSet {
+    interface ReadonlyNodeSet {
+        has(node: Node): boolean;
+        forEach(cb: (node: Node) => void): void;
+        some(pred: (node: Node) => boolean): boolean;
+    }
+    class NodeSet implements ReadonlyNodeSet {
         private map;
         add(node: Node): void;
         has(node: Node): boolean;
@@ -11071,6 +11076,7 @@ declare namespace ts.FindAllReferences.Core {
     /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
     function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile): boolean;
     function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined;
+    function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (sourceFile: SourceFile, call: CallExpression) => void): void;
     /**
      * Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
      * of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
