@@ -661,8 +661,8 @@ namespace ts {
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition = false): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, includeEndPosition, includeJsDocComment);
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment = true): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, /*includeEndPosition*/ false, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */

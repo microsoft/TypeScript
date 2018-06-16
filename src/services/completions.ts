@@ -849,7 +849,7 @@ namespace ts.Completions {
                     return { kind: CompletionDataKind.JsDocTagName };
                 }
                 if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
-                    currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ true);
+                    currentToken = getTokenAtPosition(sourceFile, position);
                     if (!currentToken ||
                         (!isDeclarationName(currentToken) &&
                             (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||

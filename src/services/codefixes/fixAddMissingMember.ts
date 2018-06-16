@@ -52,7 +52,7 @@ namespace ts.codefix {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
-        const token = getTokenAtPosition(tokenSourceFile, tokenPos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(tokenSourceFile, tokenPos);
         if (!isIdentifier(token)) {
             return undefined;
         }

@@ -242,7 +242,7 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const tokenAtPos = getTokenAtPosition(sourceFile, position);
         const tokenStart = tokenAtPos.getStart(sourceFile);
         if (!tokenAtPos || tokenStart < position) {
             return undefined;

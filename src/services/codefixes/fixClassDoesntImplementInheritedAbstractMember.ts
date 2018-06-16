@@ -28,7 +28,7 @@ namespace ts.codefix {
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
         // Token is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         return cast(token.parent, isClassLike);
     }
 

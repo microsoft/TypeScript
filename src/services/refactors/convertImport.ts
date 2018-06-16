@@ -22,7 +22,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function getImportToConvert(context: RefactorContext): NamedImportBindings | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
-        const token = getTokenAtPosition(file, span.start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(file, span.start);
         const importDecl = getParentNodeInSpan(token, file, span);
         if (!importDecl || !isImportDeclaration(importDecl)) return undefined;
         const { importClause } = importDecl;
