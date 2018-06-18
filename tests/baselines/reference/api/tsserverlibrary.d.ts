@@ -10713,11 +10713,13 @@ declare namespace ts {
     function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number): boolean;
     function isInTemplateString(sourceFile: SourceFile, position: number): boolean;
     function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined;
+    function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean;
+    function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): ReadonlyArray<Signature>;
     interface PossibleTypeArgumentInfo {
         readonly called: Identifier;
         readonly nTypeArguments: number;
     }
-    function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined;
+    function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined;
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *
