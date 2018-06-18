@@ -4,25 +4,47 @@ interface C {
 
   [C.a](): void;
 >[C.a] : Symbol(C[C.a], Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 0, 13))
->C.a : Symbol(C.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 4, 9))
+>C.a : Symbol(C.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 5, 12))
 >C : Symbol(C, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 0, 0), Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 3, 1))
->a : Symbol(C.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 4, 9))
+>a : Symbol(C.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 5, 12))
 
   [C.b]: void;
 >[C.b] : Symbol(C[C.b], Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 1, 16))
->C.b : Symbol(C.b, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 5, 31))
+>C.b : Symbol(C.b, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 6, 31))
 >C : Symbol(C, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 0, 0), Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 3, 1))
->b : Symbol(C.b, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 5, 31))
+>b : Symbol(C.b, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 6, 31))
 }
 class C {
 >C : Symbol(C, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 0, 0), Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 3, 1))
 
+  [C.c] = 1;
+>[C.c] : Symbol(C[C.c], Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 4, 9))
+>C.c : Symbol(C.c, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 7, 31))
+>C : Symbol(C, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 0, 0), Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 3, 1))
+>c : Symbol(C.c, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 7, 31))
+
   static readonly a = Symbol();
->a : Symbol(C.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 4, 9))
->Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>a : Symbol(C.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 5, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
   static readonly b = Symbol();
->b : Symbol(C.b, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 5, 31))
->Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>b : Symbol(C.b, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 6, 31))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+  static readonly c = Symbol();
+>c : Symbol(C.c, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 7, 31))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
+class D {
+>D : Symbol(D, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 9, 1))
+
+  [D.a] = 0;
+>[D.a] : Symbol(D[D.a], Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 11, 9))
+>D.a : Symbol(D.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 12, 12))
+>D : Symbol(D, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 9, 1))
+>a : Symbol(D.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 12, 12))
+
+  static a = "a";
+>a : Symbol(D.a, Decl(unnecessaryReferenceChecksWithPropertySignature.ts, 12, 12))
+}

@@ -1,0 +1,27 @@
+tests/cases/compiler/unnecessaryReferenceChecksWithPropertySignature.ts(6,4): error TS2449: Class 'C' used before its declaration.
+tests/cases/compiler/unnecessaryReferenceChecksWithPropertySignature.ts(13,3): error TS1166: A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/unnecessaryReferenceChecksWithPropertySignature.ts(13,4): error TS2449: Class 'D' used before its declaration.
+
+
+==== tests/cases/compiler/unnecessaryReferenceChecksWithPropertySignature.ts (3 errors) ====
+    interface C {
+      [C.a](): void;
+      [C.b]: void;
+    }
+    class C {
+      [C.c] = 1;
+       ~
+!!! error TS2449: Class 'C' used before its declaration.
+      static readonly a = Symbol();
+      static readonly b = Symbol();
+      static readonly c = Symbol();
+    }
+    
+    class D {
+      [D.a] = 0;
+      ~~~~~
+!!! error TS1166: A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.
+       ~
+!!! error TS2449: Class 'D' used before its declaration.
+      static a = "a";
+    }

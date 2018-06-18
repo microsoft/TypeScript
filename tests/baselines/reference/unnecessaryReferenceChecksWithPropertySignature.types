@@ -17,6 +17,13 @@ interface C {
 class C {
 >C : C
 
+  [C.c] = 1;
+>[C.c] : number
+>C.c : unique symbol
+>C : typeof C
+>c : unique symbol
+>1 : 1
+
   static readonly a = Symbol();
 >a : unique symbol
 >Symbol() : unique symbol
@@ -26,5 +33,24 @@ class C {
 >b : unique symbol
 >Symbol() : unique symbol
 >Symbol : SymbolConstructor
+
+  static readonly c = Symbol();
+>c : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
 }
 
+class D {
+>D : D
+
+  [D.a] = 0;
+>[D.a] : number
+>D.a : string
+>D : typeof D
+>a : string
+>0 : 0
+
+  static a = "a";
+>a : string
+>"a" : "a"
+}
