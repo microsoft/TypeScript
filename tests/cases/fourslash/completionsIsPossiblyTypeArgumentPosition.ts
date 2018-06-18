@@ -4,13 +4,22 @@
 ////type T = number;
 ////function f(x: number) {}
 ////function g<T>(x: T) {}
+////class C<T> {}
 
-////x + /*0*/
-////x < /*1*/
-////f < /*2*/
-////g < /*3*/
+////x + {| "valueOnly": true |}
+////x < {| "valueOnly": true |}
+////f < {| "valueOnly": true |}
+////g < {| "valueOnly": false |}
+////const something: C<{| "valueOnly": false |};
+////const something2: C<C<{| "valueOnly": false |};
+////new C<{| "valueOnly": false |};
+////new C<C<{| "valueOnly": false |};
 
-verify.completions(
-    { marker: ["0", "1", "2"], includes: "x", excludes: "T" },
-    { marker: "3", includes: ["x", "T"] },
-);
+for (const marker of test.markers()) {
+    if (marker.data.valueOnly) {
+        verify.completions({ marker, includes: "x", excludes: "T" });
+    }
+    else {
+        verify.completions({ marker, includes: ["x", "T"] });
+    }
+}

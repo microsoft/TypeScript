@@ -926,7 +926,9 @@ namespace ts {
 
     export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
         const info = getPossibleTypeArgumentsInfo(token, sourceFile);
-        return info !== undefined && getPossibleGenericSignatures(info.called, info.nTypeArguments, checker).length !== 0;
+        return info !== undefined && (isPartOfTypeNode(info.called) ||
+            getPossibleGenericSignatures(info.called, info.nTypeArguments, checker).length !== 0 ||
+            isPossiblyTypeArgumentPosition(info.called, sourceFile, checker));
     }
 
     export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): ReadonlyArray<Signature> {

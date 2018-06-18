@@ -200,7 +200,7 @@ declare namespace FourSlashInterface {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completions(...options: {
-            readonly marker?: ArrayOrSingle<string>,
+            readonly marker?: ArrayOrSingle<string | Marker>,
             readonly isNewIdentifierLocation?: boolean;
             readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
             readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
