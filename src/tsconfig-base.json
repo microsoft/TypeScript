@@ -16,6 +16,8 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
 
+        "skipLibCheck": true,
+
         "alwaysStrict": true,
         "preserveConstEnums": true,
         "newLine": "lf",
