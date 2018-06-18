@@ -13801,6 +13801,9 @@ declare namespace ts.server {
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
+        tryGetDefaultProjectForFile(fileName: NormalizedPath): Project | undefined;
+        ensureDefaultProjectForFile(fileName: NormalizedPath): Project;
+        private doEnsureDefaultProjectForFile;
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
         private ensureProjectStructuresUptoDate;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;

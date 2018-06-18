@@ -693,16 +693,22 @@ namespace ts.server {
         }
 
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined {
-            let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            if (ensureProject && (!scriptInfo || scriptInfo.isOrphan())) {
-                this.ensureProjectStructuresUptoDate();
-                scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-                if (!scriptInfo) {
-                    return Errors.ThrowNoProject();
-                }
-                return scriptInfo.getDefaultProject();
-            }
+            return ensureProject ? this.ensureDefaultProjectForFile(fileName) : this.tryGetDefaultProjectForFile(fileName);
+        }
+
+        tryGetDefaultProjectForFile(fileName: NormalizedPath): Project | undefined {
+            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
             return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
+        }
+
+        ensureDefaultProjectForFile(fileName: NormalizedPath): Project {
+            return this.tryGetDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
+        }
+
+        private doEnsureDefaultProjectForFile(fileName: NormalizedPath): Project {
+            this.ensureProjectStructuresUptoDate();
+            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+            return scriptInfo ? scriptInfo.getDefaultProject() : Errors.ThrowNoProject();
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
