@@ -14,8 +14,6 @@
         ]
     },
     "references": [
-        { "path": "../core", "prepend": true },
-        { "path": "../parser", "prepend": true },
         { "path": "../compiler", "prepend": true },
         { "path": "../services", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
