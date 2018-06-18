@@ -4,26 +4,19 @@ const { join } = require("path");
 
 /**
  * Find the size of a directory recursively.
- * Symbolic links are counted once (same inode).
+ * Symbolic links can cause a loop.
  * @param {string} root
- * @param {Set} seen
  * @returns {number} bytes
  */
-function getDirSize(root, seen = new Set()) {
+function getDirSize(root) {
     const stats = lstatSync(root);
-
-    if (seen.has(stats.ino)) {
-        return 0;
-    }
-
-    seen.add(stats.ino);
 
     if (!stats.isDirectory()) {
         return stats.size;
     }
 
     return readdirSync(root)
-        .map(file => getDirSize(join(root, file), seen))
+        .map(file => getDirSize(join(root, file)))
         .reduce((acc, num) => acc + num, 0);
 }
 

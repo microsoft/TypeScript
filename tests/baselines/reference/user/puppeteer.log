@@ -18,6 +18,7 @@ lib/ElementHandle.js(24,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ElementHandle.js(83,29): error TS2503: Cannot find namespace 'Protocol'.
 lib/EmulationManager.js(36,16): error TS2503: Cannot find namespace 'Protocol'.
 lib/ExecutionContext.js(22,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/ExecutionContext.js(87,15): error TS2304: Cannot find name 'Frame'.
 lib/ExecutionContext.js(132,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(28,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(54,15): error TS2503: Cannot find namespace 'Protocol'.

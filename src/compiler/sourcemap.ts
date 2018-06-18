@@ -64,10 +64,10 @@ namespace ts {
 
     // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
     const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
-        emittedLine: 1,
-        emittedColumn: 1,
-        sourceLine: 1,
-        sourceColumn: 1,
+        emittedLine: 0,
+        emittedColumn: 0,
+        sourceLine: 0,
+        sourceColumn: 0,
         sourceIndex: 0
     };
 
@@ -258,6 +258,11 @@ namespace ts {
                 return;
             }
 
+            Debug.assert(lastRecordedSourceMapSpan.emittedColumn >= 0, "lastEncodedSourceMapSpan.emittedColumn was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceIndex >= 0, "lastEncodedSourceMapSpan.sourceIndex was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceLine >= 0, "lastEncodedSourceMapSpan.sourceLine was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceColumn >= 0, "lastEncodedSourceMapSpan.sourceColumn was negative");
+
             let prevEncodedEmittedColumn = lastEncodedSourceMapSpan!.emittedColumn;
             // Line/Comma delimiters
             if (lastEncodedSourceMapSpan!.emittedLine === lastRecordedSourceMapSpan.emittedLine) {
@@ -271,7 +276,7 @@ namespace ts {
                 for (let encodedLine = lastEncodedSourceMapSpan!.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
                     sourceMapData.sourceMapMappings += ";";
                 }
-                prevEncodedEmittedColumn = 1;
+                prevEncodedEmittedColumn = 0;
             }
 
             // 1. Relative Column 0 based
@@ -315,10 +320,6 @@ namespace ts {
             }
 
             const sourceLinePos = getLineAndCharacterOfPosition(currentSource, pos);
-
-            // Convert the location to be one-based.
-            sourceLinePos.line++;
-            sourceLinePos.character++;
 
             const emittedLine = writer.getLine();
             const emittedColumn = writer.getColumn();
@@ -389,20 +390,25 @@ namespace ts {
                     const firstLineColumnOffset = writer.getColumn();
                     // First, decode the old component sourcemap
                     const originalMap = parsed;
+
+                    const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+                    const resolvedPathCache = createMap<string>();
                     sourcemaps.calculateDecodedMappings(originalMap, (raw): void => {
                         // Apply offsets to each position and fixup source entries
                         const rawPath = originalMap.sources[raw.sourceIndex];
                         const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
                         const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
-                        const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
-                        const resolvedPath = getRelativePathToDirectoryOrUrl(
-                            sourcesDirectoryPath,
-                            combinedPath,
-                            host.getCurrentDirectory(),
-                            host.getCanonicalFileName,
-                            /*isAbsolutePathAnUrl*/ true
-                        );
-                        const absolutePath = toPath(resolvedPath, sourcesDirectoryPath, host.getCanonicalFileName);
+                        if (!resolvedPathCache.has(combinedPath)) {
+                            resolvedPathCache.set(combinedPath, getRelativePathToDirectoryOrUrl(
+                                sourcesDirectoryPath,
+                                combinedPath,
+                                host.getCurrentDirectory(),
+                                host.getCanonicalFileName,
+                                /*isAbsolutePathAnUrl*/ true
+                            ));
+                        }
+                        const resolvedPath = resolvedPathCache.get(combinedPath)!;
+                        const absolutePath = getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath);
                         // tslint:disable-next-line:no-null-keyword
                         setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
@@ -410,8 +416,8 @@ namespace ts {
                         encodeLastRecordedSourceMapSpan();
                         lastRecordedSourceMapSpan = {
                             ...raw,
-                            emittedLine: raw.emittedLine + offsetLine - 1,
-                            emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset - 1) : raw.emittedColumn,
+                            emittedLine: raw.emittedLine + offsetLine,
+                            emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset) : raw.emittedColumn,
                             sourceIndex: newIndex,
                         };
                     });

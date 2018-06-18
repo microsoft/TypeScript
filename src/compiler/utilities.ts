@@ -1,10 +1,5 @@
 /** Non-internal stuff goes here */
 namespace ts {
-    export const emptyArray: never[] = [] as never[];
-    export function closeFileWatcher(watcher: FileWatcher) {
-        watcher.close();
-    }
-
     export function isExternalModuleNameRelative(moduleName: string): boolean {
         // TypeScript 1.0 spec (April 2014): 11.2.1
         // An external module name is "relative" if the first term is "." or "..".
@@ -15,21 +10,11 @@ namespace ts {
     export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[] {
         return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
     }
-
-    export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
-        const nonCanonicalizedPath = isRootedDiskPath(fileName)
-            ? normalizePath(fileName)
-            : getNormalizedAbsolutePath(fileName, basePath);
-        return <Path>getCanonicalFileName(nonCanonicalizedPath);
-    }
-
-    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
-        return !!map && !!map.size;
-    }
 }
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
@@ -52,6 +37,10 @@ namespace ts {
     /** Create a new escaped identifier map. */
     export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
         return new MapCtr<T>() as UnderscoreEscapedMap<T>;
+    }
+
+    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
+        return !!map && !!map.size;
     }
 
     export function createSymbolTable(symbols?: ReadonlyArray<Symbol>): SymbolTable {
@@ -101,6 +90,13 @@ namespace ts {
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
+    }
+
+    export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
+        const nonCanonicalizedPath = isRootedDiskPath(fileName)
+            ? normalizePath(fileName)
+            : getNormalizedAbsolutePath(fileName, basePath);
+        return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
     export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
@@ -799,7 +795,7 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): DiagnosticWithLocation {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
         return {
@@ -808,7 +804,8 @@ namespace ts {
             length: span.length,
             code: messageChain.code,
             category: messageChain.category,
-            messageText: messageChain.next ? messageChain : messageChain.messageText
+            messageText: messageChain.next ? messageChain : messageChain.messageText,
+            relatedInformation
         };
     }
 
@@ -2097,7 +2094,12 @@ namespace ts {
             if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
                 isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
-                getJSDocCommentsAndTagsWorker(parent);
+                if (isBinaryExpression(parent)) {
+                    getJSDocCommentsAndTagsWorker(parent.parent);
+                }
+                else {
+                    getJSDocCommentsAndTagsWorker(parent);
+                }
             }
 
             // Pull parameter comments from declaring function as well
@@ -3086,8 +3088,8 @@ namespace ts {
             decreaseIndent: () => { indent--; },
             getIndent: () => indent,
             getTextPos: () => output.length,
-            getLine: () => lineCount + 1,
-            getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
+            getLine: () => lineCount,
+            getColumn: () => lineStart ? indent * getIndentSize() : output.length - linePos,
             getText: () => output,
             isAtStartOfLine: () => lineStart,
             clear: reset,
@@ -4093,6 +4095,10 @@ namespace ts {
     export function isWatchSet(options: CompilerOptions) {
         // Firefox has Object.prototype.watch
         return options.watch && options.hasOwnProperty("watch");
+    }
+
+    export function closeFileWatcher(watcher: FileWatcher) {
+        watcher.close();
     }
 
     export function getCheckFlags(symbol: Symbol): CheckFlags {
@@ -6664,7 +6670,11 @@ namespace ts {
     export function isStringLiteralLike(node: Node): node is StringLiteralLike {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
+}
 
+
+/* @internal */
+namespace ts {
     /** @internal */
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
@@ -6729,6 +6739,7 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
+    /* @internal */
     export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => Debug.assertDefined(args[+index + baseIndex]));
     }
@@ -6739,6 +6750,7 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
+    /* @internal */
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
         Debug.assertGreaterThanOrEqual(start, 0);
@@ -6778,6 +6790,7 @@ namespace ts {
         return text;
     }
 
+    /* @internal */
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
@@ -6798,6 +6811,7 @@ namespace ts {
         };
     }
 
+    /* @internal */
     export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
         return {
             file: undefined,
@@ -6810,6 +6824,7 @@ namespace ts {
         };
     }
 
+    /* @internal */
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
@@ -6841,6 +6856,7 @@ namespace ts {
         return diagnostic.file ? diagnostic.file.path : undefined;
     }
 
+    /* @internal */
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
             compareValues(d1.start, d2.start) ||
@@ -7139,6 +7155,7 @@ namespace ts {
         return rootLength > 0 && rootLength === path.length;
     }
 
+    /* @internal */
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
         return !isRootedDiskPath(absoluteOrRelativePath)
             ? absoluteOrRelativePath
@@ -7216,7 +7233,11 @@ namespace ts {
         return root + pathComponents.slice(1).join(directorySeparator);
     }
 
-    function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
+}
+
+/* @internal */
+namespace ts {
+    export function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
         const fromComponents = reducePathComponents(getPathComponents(from));
         const toComponents = reducePathComponents(getPathComponents(to));
 
@@ -8064,4 +8085,5 @@ namespace ts {
         }
 
         return findBestPatternMatch(patterns, _ => _, candidate);
-    }}
+    }
+}

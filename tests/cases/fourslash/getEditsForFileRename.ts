@@ -14,6 +14,10 @@
 /////// <reference path="../old.ts" />
 ////import old from "../old";
 
+// @Filename: /unrelated.ts
+// Don't update an unrelated import
+////import { x } from "././src/./foo/./a";
+
 // @Filename: /src/new.ts
 ////
 
