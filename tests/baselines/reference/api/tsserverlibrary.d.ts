@@ -3066,6 +3066,7 @@ declare namespace ts {
         ContainsStatic = 512,
         Late = 1024,
         ReverseMapped = 2048,
+        SyntheticExportEqual = 4096,
         Synthetic = 6
     }
     interface TransientSymbol extends Symbol, SymbolLinks {

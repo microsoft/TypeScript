@@ -893,7 +893,7 @@ namespace ts {
             mergedSymbols[source.mergeId] = target;
         }
 
-        function cloneSymbol(symbol: Symbol): Symbol {
+        function cloneSymbol(symbol: Symbol): TransientSymbol {
             const result = createSymbol(symbol.flags, symbol.escapedName);
             result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
             result.parent = symbol.parent;
@@ -2307,6 +2307,7 @@ namespace ts {
                 return exported;
             }
             const merged = cloneSymbol(exported);
+            merged.checkFlags = merged.checkFlags | CheckFlags.SyntheticExportEqual;
             if (merged.exports === undefined) {
                 merged.flags = merged.flags | SymbolFlags.ValueModule;
                 merged.exports = createSymbolTable();
@@ -4947,7 +4948,7 @@ namespace ts {
                     return errorType;
                 }
 
-                let type = getJSSpecialType(symbol, declaration);
+                let type = getJSSpecialType(symbol);
                 if (!type) {
                     if (isJSDocPropertyLikeTag(declaration)
                         || isPropertyAccessExpression(declaration)
@@ -4994,7 +4995,8 @@ namespace ts {
             return links.type;
         }
 
-        function getJSSpecialType(symbol: Symbol, decl: Declaration): Type | undefined {
+        function getJSSpecialType(symbol: Symbol): Type | undefined {
+            const decl = symbol.valueDeclaration;
             if (!isInJavaScriptFile(decl)) {
                 return undefined;
             }
@@ -5032,23 +5034,10 @@ namespace ts {
                     return initializerType;
                 }
                 const widened = getWidenedTypeForVariableLikeDeclaration(decl, /*includeOptionality*/ true);
-                if (init && getJavascriptInitializer(init, isPrototypeAccess(decl.name))) {
-                    if (symbol.flags & SymbolFlags.Transient && hasEntries(symbol.exports) && widened.flags & TypeFlags.StructuredType) {
-                        resolveStructuredTypeMembers(widened as StructuredType);
-                        const exports = createSymbolTable();
-                        forEachDeclarationInChain(decl, s => {
-                            if (s.exports) {
-                                s.exports.forEach((sourceSymbol, id) => {
-                                    if (!(widened as ResolvedType).members.has(id)) {
-                                        exports.set(id, exports.has(id) ? mergeSymbol(exports.get(id)!, sourceSymbol) : sourceSymbol);
-                                    }
-                                });
-                            }
-                        });
-                        if (hasEntries(exports)) {
-                            return getIntersectionType([widened, createAnonymousType(symbol, exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined)]);
-                        }
-                    }
+                if (init && getJavascriptInitializer(init, isPrototypeAccess(decl.name)) &&
+                    getCheckFlags(symbol) & CheckFlags.SyntheticExportEqual &&
+                    widened.flags & TypeFlags.StructuredType) {
+                    return getIntersectionType([widened, createObjectType(ObjectFlags.Anonymous, symbol)]);
                 }
                 return widened;
             }
@@ -6417,6 +6406,36 @@ namespace ts {
                 getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
         }
 
+        function resolveSyntheticJSModuleExportMembers(type: IntersectionType) {
+            if (type.types.length === 2) {
+                let widened: Type;
+                let t: Type;
+                if (type.types[0].symbol && getCheckFlags(type.types[0].symbol) & CheckFlags.SyntheticExportEqual) {
+                    t = type.types[0];
+                    widened = type.types[1];
+                }
+                else if (type.types[1].symbol && getCheckFlags(type.types[1].symbol) & CheckFlags.SyntheticExportEqual) {
+                    widened = type.types[0];
+                    t = type.types[1];
+                }
+                else {
+                    return;
+                }
+                resolveStructuredTypeMembers(widened as StructuredType);
+                const exports = createSymbolTable();
+                forEachDeclarationInChain(t.symbol.valueDeclaration, s => {
+                    if (s.exports) {
+                        s.exports.forEach((sourceSymbol, id) => {
+                            if (!(widened as ResolvedType).members.has(id)) {
+                                exports.set(id, exports.has(id) ? mergeSymbol(exports.get(id)!, sourceSymbol) : sourceSymbol);
+                            }
+                        });
+                    }
+                });
+                setStructuredTypeMembers(t as StructuredType, exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+            }
+        }
+
         function includeMixinType(type: Type, types: Type[], index: number): Type {
             const mixedTypes: Type[] = [];
             for (let i = 0; i < types.length; i++) {
@@ -6433,6 +6452,7 @@ namespace ts {
         function resolveIntersectionTypeMembers(type: IntersectionType) {
             // The members and properties collections are empty for intersection types. To get all properties of an
             // intersection type use getPropertiesOfType (only the language service uses this).
+            resolveSyntheticJSModuleExportMembers(type);
             let callSignatures: Signature[] = emptyArray;
             let constructSignatures: Signature[] = emptyArray;
             let stringIndexInfo: IndexInfo | undefined;

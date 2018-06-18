@@ -3513,6 +3513,7 @@ namespace ts {
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
         ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
+        SyntheticExportEqual = 1 << 12,     // Synthetic module.exports= symbol
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 

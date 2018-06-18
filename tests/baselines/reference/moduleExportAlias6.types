@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/use.js ===
 var w = require('./bug24754')
 >w : typeof webpack & { [x: string]: any; version: number; }
->require('./bug24754') : typeof webpack & { [x: string]: any; version: number; }
+>require('./bug24754') : typeof webpack & { WebpackOptionsDefaulter: number; version: number; }
 >require : any
 >'./bug24754' : "./bug24754"
 
@@ -27,7 +27,7 @@ var n = w.version * w.WebpackOptionsDefaulter * p.x
 === tests/cases/conformance/salsa/bug24754.js ===
 // #24754
 const webpack = class {
->webpack : typeof webpack & { [x: string]: any; version: number; }
+>webpack : typeof webpack & { WebpackOptionsDefaulter: number; version: number; }
 >class {    constructor() {        this.x = 1    }} : typeof webpack
 
     constructor() {
