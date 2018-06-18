@@ -692,17 +692,31 @@ namespace ts.server {
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
 
-        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined {
-            let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            if (ensureProject && (!scriptInfo || scriptInfo.isOrphan())) {
-                this.ensureProjectStructuresUptoDate();
-                scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-                if (!scriptInfo) {
-                    return Errors.ThrowNoProject();
+        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject = false): Project | undefined {
+            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+            return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : ensureProject ? this.doEnsureDefaultProjectForFile(fileName) : undefined;
+        }
+
+        ensureDefaultProjectForFile(fileName: NormalizedPath): Project {
+            return this.getDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
+        }
+
+        private doEnsureDefaultProjectForFile(fileName: NormalizedPath): Project {
+            this.ensureProjectStructuresUptoDate();
+            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+            return scriptInfo ? scriptInfo.getDefaultProject() : Errors.ThrowNoProject();
+        }
+
+        /* @internal */
+        tryGetSomeFileInDirectory(directoryPath: NormalizedPath): { readonly file: NormalizedPath, readonly project: Project } | undefined {
+            const scriptInfo = forEachEntry(this.filenameToScriptInfo, scriptInfo => {
+                if (startsWithDirectory(scriptInfo.path, directoryPath)) {
+                    return scriptInfo;
                 }
-                return scriptInfo.getDefaultProject();
-            }
-            return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
+            });
+            if (!scriptInfo) return undefined;
+            const file = toNormalizedPath(scriptInfo.path);
+            return { file, project: this.ensureDefaultProjectForFile(file) };
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {

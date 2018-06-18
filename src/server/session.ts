@@ -1142,15 +1142,27 @@ namespace ts.server {
             return this.getPosition(args, scriptInfo);
         }
 
-        private getFileAndProject(args: protocol.FileRequestArgs): { file: NormalizedPath, project: Project } {
+        private getFileAndProject(args: protocol.FileRequestArgs): FileAndProject {
             return this.getFileAndProjectWorker(args.file, args.projectFileName);
+        }
+
+        private getFileAndProjectForFileRename(args: protocol.GetEditsForFileRenameRequestArgs): FileAndProject {
+            const oldFilePath = toNormalizedPath(args.oldFilePath);
+            const oldProject = this.projectService.getDefaultProjectForFile(oldFilePath);
+            if (oldProject) return { file: oldFilePath, project: oldProject };
+
+            const newFilePath = toNormalizedPath(args.newFilePath);
+            const newProject = this.projectService.getDefaultProjectForFile(newFilePath);
+            if (newProject) return { file: newFilePath, project: newProject };
+
+            return Debug.assertDefined(this.projectService.tryGetSomeFileInDirectory(oldFilePath) || this.projectService.tryGetSomeFileInDirectory(newFilePath));
         }
 
         private getFileAndLanguageServiceForSyntacticOperation(args: protocol.FileRequestArgs) {
             // Since this is syntactic operation, there should always be project for the file
             // we wouldnt have to ensure project but rather throw if we dont get project
             const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ false);
+            const project = this.getProject(args.projectFileName) || this.projectService.getDefaultProjectForFile(file);
             if (!project) {
                 return Errors.ThrowNoProject();
             }
@@ -1162,7 +1174,7 @@ namespace ts.server {
 
         private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string | undefined): { file: NormalizedPath, project: Project } {
             const file = toNormalizedPath(uncheckedFileName);
-            const project = this.getProject(projectFileName) || this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ true)!; // TODO: GH#18217
+            const project = this.getProject(projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
             return { file, project };
         }
 
@@ -1454,7 +1466,7 @@ namespace ts.server {
         private createCheckList(fileNames: string[], defaultProject?: Project): PendingErrorCheck[] {
             return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
-                const project = defaultProject || this.projectService.getDefaultProjectForFile(fileName, /*ensureProject*/ false);
+                const project = defaultProject || this.projectService.getDefaultProjectForFile(fileName);
                 return project && { fileName, project };
             });
         }
@@ -1731,7 +1743,7 @@ namespace ts.server {
         }
 
         private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
-            const { file, project } = this.getFileAndProject(args);
+            const { file, project } = this.getFileAndProjectForFileRename(args);
             const changes = project.getLanguageService().getEditsForFileRename(toNormalizedPath(args.oldFilePath), toNormalizedPath(args.newFilePath), this.getFormatOptions(file), this.getPreferences(file));
             return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
         }
@@ -1852,7 +1864,7 @@ namespace ts.server {
             const lowPriorityFiles: NormalizedPath[] = [];
             const veryLowPriorityFiles: NormalizedPath[] = [];
             const normalizedFileName = toNormalizedPath(fileName);
-            const project = this.projectService.getDefaultProjectForFile(normalizedFileName, /*ensureProject*/ true)!;
+            const project = this.projectService.ensureDefaultProjectForFile(normalizedFileName);
             for (const fileNameInProject of fileNamesInProject) {
                 if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName)) {
                     highPriorityFiles.push(fileNameInProject);
@@ -2293,6 +2305,11 @@ namespace ts.server {
         private getPreferences(file: NormalizedPath): UserPreferences {
             return this.projectService.getPreferences(file);
         }
+    }
+
+    interface FileAndProject {
+        readonly file: NormalizedPath;
+        readonly project: Project;
     }
 
     function mapTextChangesToCodeEdits(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {

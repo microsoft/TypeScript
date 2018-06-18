@@ -7494,7 +7494,11 @@ namespace ts {
         }
     }
 
-        // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
+    export function startsWithDirectory(path: string, dirPath: string): boolean {
+        return tryRemoveDirectoryPrefix(path, dirPath) !== undefined;
+    }
+
+    // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;

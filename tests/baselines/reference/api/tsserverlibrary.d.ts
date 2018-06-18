@@ -7252,6 +7252,7 @@ declare namespace ts {
     function containsPath(parent: string, child: string, ignoreCase?: boolean): boolean;
     function containsPath(parent: string, child: string, currentDirectory: string, ignoreCase?: boolean): boolean;
     function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined;
+    function startsWithDirectory(path: string, dirPath: string): boolean;
     function hasExtension(fileName: string): boolean;
     const commonPackageFolders: ReadonlyArray<string>;
     function getRegularExpressionForWildcard(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined;
@@ -12437,7 +12438,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetEditsForFileRename;
         arguments: GetEditsForFileRenameRequestArgs;
     }
-    interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+    interface GetEditsForFileRenameRequestArgs {
         readonly oldFilePath: string;
         readonly newFilePath: string;
     }
@@ -13800,7 +13801,13 @@ declare namespace ts.server {
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
-        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
+        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject?: boolean): Project | undefined;
+        ensureDefaultProjectForFile(fileName: NormalizedPath): Project;
+        private doEnsureDefaultProjectForFile;
+        tryGetSomeFileInDirectory(directoryPath: NormalizedPath): {
+            readonly file: NormalizedPath;
+            readonly project: Project;
+        } | undefined;
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
         private ensureProjectStructuresUptoDate;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
@@ -13988,6 +13995,7 @@ declare namespace ts.server {
         private getPosition;
         private getPositionInFile;
         private getFileAndProject;
+        private getFileAndProjectForFileRename;
         private getFileAndLanguageServiceForSyntacticOperation;
         private getFileAndProjectWorker;
         private getOutliningSpans;
