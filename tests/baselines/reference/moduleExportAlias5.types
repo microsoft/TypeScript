@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/use.js ===
 var w = require('./bug24754')
->w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>w : { (): number; WebpackOptionsDefaulter: number; } & { WebpackOptionsDefaulter: number; version: number; }
 >require('./bug24754') : { (): number; WebpackOptionsDefaulter: number; } & { WebpackOptionsDefaulter: number; version: number; }
 >require : any
 >'./bug24754' : "./bug24754"
@@ -10,13 +10,13 @@ var n = w.version * w.WebpackOptionsDefaulter * w()
 >w.version * w.WebpackOptionsDefaulter * w() : number
 >w.version * w.WebpackOptionsDefaulter : number
 >w.version : number
->w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>w : { (): number; WebpackOptionsDefaulter: number; } & { WebpackOptionsDefaulter: number; version: number; }
 >version : number
 >w.WebpackOptionsDefaulter : number
->w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>w : { (): number; WebpackOptionsDefaulter: number; } & { WebpackOptionsDefaulter: number; version: number; }
 >WebpackOptionsDefaulter : number
 >w() : number
->w : { (): number; WebpackOptionsDefaulter: number; } & { [x: string]: any; version: number; }
+>w : { (): number; WebpackOptionsDefaulter: number; } & { WebpackOptionsDefaulter: number; version: number; }
 
 === tests/cases/conformance/salsa/bug24754.js ===
 // #24754

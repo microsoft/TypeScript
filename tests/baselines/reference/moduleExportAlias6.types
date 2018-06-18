@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/use.js ===
 var w = require('./bug24754')
->w : typeof webpack & { [x: string]: any; version: number; }
+>w : typeof webpack & { WebpackOptionsDefaulter: number; version: number; }
 >require('./bug24754') : typeof webpack & { WebpackOptionsDefaulter: number; version: number; }
 >require : any
 >'./bug24754' : "./bug24754"
@@ -8,17 +8,17 @@ var w = require('./bug24754')
 var p = new w();
 >p : webpack
 >new w() : webpack
->w : typeof webpack & { [x: string]: any; version: number; }
+>w : typeof webpack & { WebpackOptionsDefaulter: number; version: number; }
 
 var n = w.version * w.WebpackOptionsDefaulter * p.x
 >n : number
 >w.version * w.WebpackOptionsDefaulter * p.x : number
 >w.version * w.WebpackOptionsDefaulter : number
 >w.version : number
->w : typeof webpack & { [x: string]: any; version: number; }
+>w : typeof webpack & { WebpackOptionsDefaulter: number; version: number; }
 >version : number
 >w.WebpackOptionsDefaulter : number
->w : typeof webpack & { [x: string]: any; version: number; }
+>w : typeof webpack & { WebpackOptionsDefaulter: number; version: number; }
 >WebpackOptionsDefaulter : number
 >p.x : number
 >p : webpack
