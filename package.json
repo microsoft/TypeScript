@@ -102,5 +102,11 @@
         "fs": false,
         "os": false,
         "path": false
+    },
+    "dependencies": {
+        "@types/node-fetch": "^2.1.1",
+        "es6-promise": "^4.2.4",
+        "isomorphic-fetch": "^2.2.1",
+        "node-fetch": "^2.1.2"
     }
 }

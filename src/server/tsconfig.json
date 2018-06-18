@@ -88,6 +88,7 @@
         "../services/codefixes/addMissingInvocationForDecorator.ts",
         "../services/codefixes/annotateWithTypeFromJSDoc.ts",
         "../services/codefixes/convertFunctionToEs6Class.ts",
+        "../services/codefixes/convertPromisesToAwaitAndAsync.ts",
         "../services/codefixes/convertToEs6Module.ts",
         "../services/codefixes/correctQualifiedNameToIndexedAccessType.ts",
         "../services/codefixes/fixClassIncorrectlyImplementsInterface.ts",

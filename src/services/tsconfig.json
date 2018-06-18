@@ -85,6 +85,7 @@
         "codefixes/addMissingInvocationForDecorator.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
         "codefixes/convertFunctionToEs6Class.ts",
+        "codefixes/convertPromisesToAwaitAndAsync.ts",
         "codefixes/convertToEs6Module.ts",
         "codefixes/correctQualifiedNameToIndexedAccessType.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",

@@ -87,7 +87,7 @@ namespace ts.codefix {
         if (!argName) {
             argName = "val"; // fix this to maybe not always create a variable declaration if not necessary
         }
-        return argUsed ? [createVariableStatement(/*modifiers*/ undefined, [createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node))])] :
+        return argUsed ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node))], NodeFlags.Let)))] :
             [createStatement(createAwait(node))];
     }
 
@@ -130,6 +130,7 @@ namespace ts.codefix {
                 }
         }
     }
+
 
     function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
         if (node.expression.kind !== SyntaxKind.PropertyAccessExpression) {
