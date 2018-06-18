@@ -15,8 +15,8 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
-`async function f(): Promise<void> {
-    var result = await fetch('http://yahoo.com');
-    console.log(result);
+`async function f() {
+   let result = await fetch('http://yahoo.com);
+   console.log(result);
 }`,
 });

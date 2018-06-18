@@ -20,7 +20,7 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `async function f():Promise<void> {
-    var result = await fetch('http://yahoo.com');
+    await fetch('http://yahoo.com');
     return await res(result);
 }
 

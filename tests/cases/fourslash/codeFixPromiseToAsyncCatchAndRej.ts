@@ -18,8 +18,9 @@ verify.codeFix({
     newFileContent:
 `async function f():Promise<void> {
     try {
+        let result;
         try {
-            var result = await fetch('http://yahoo.com');
+            result = await fetch('http://yahoo.com');
         }
         catch (rejection) {
             console.log("rejected:", rejection);
