@@ -716,7 +716,7 @@ namespace ts.server {
             });
             if (!scriptInfo) return undefined;
             const file = toNormalizedPath(scriptInfo.path);
-            return { file, project: this.ensureDefaultProjectForFile(file) };
+            return { file, project: scriptInfo.getDefaultProject() };
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {

@@ -1147,15 +1147,15 @@ namespace ts.server {
         }
 
         private getFileAndProjectForFileRename(args: protocol.GetEditsForFileRenameRequestArgs): FileAndProject {
-            const oldFilePath = toNormalizedPath(args.oldFilePath);
-            const oldProject = this.projectService.getDefaultProjectForFile(oldFilePath);
-            if (oldProject) return { file: oldFilePath, project: oldProject };
-
             const newFilePath = toNormalizedPath(args.newFilePath);
             const newProject = this.projectService.getDefaultProjectForFile(newFilePath);
             if (newProject) return { file: newFilePath, project: newProject };
 
-            return Debug.assertDefined(this.projectService.tryGetSomeFileInDirectory(oldFilePath) || this.projectService.tryGetSomeFileInDirectory(newFilePath));
+            const oldFilePath = toNormalizedPath(args.oldFilePath);
+            const oldProject = this.projectService.getDefaultProjectForFile(oldFilePath);
+            if (oldProject) return { file: oldFilePath, project: oldProject };
+
+            return Debug.assertDefined(this.projectService.tryGetSomeFileInDirectory(newFilePath) || this.projectService.tryGetSomeFileInDirectory(oldFilePath));
         }
 
         private getFileAndLanguageServiceForSyntacticOperation(args: protocol.FileRequestArgs) {
