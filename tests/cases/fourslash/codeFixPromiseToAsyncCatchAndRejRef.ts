@@ -29,19 +29,14 @@ verify.codeFix({
     newFileContent:
 `async function f(): Promise<void> {
     try {
+        let result;
         try {
-            var result = await fetch('http://yahoo.com');
+            result = await fetch('http://yahoo.com');
         }
         catch (rejection) {
             return await rej(rejection);
         }
         return await res(result);
-    }
-    catch (err) {
-        return await catch_err(err);
-            return rej(rejection);
-        }
-        return res(result);
     }
     catch (err) {
         return catch_err(err);

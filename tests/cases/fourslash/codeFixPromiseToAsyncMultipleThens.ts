@@ -12,7 +12,7 @@
 ////
 ////function res2(result2){
 ////    console.log(result2);
-///}
+////}
 
 verify.getSuggestionDiagnostics([{
     message: "This may be converted to use async and await.",

@@ -24,8 +24,9 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `async function f():Promise<void> {
+    let result;
     try {
-        var result = await fetch('http://yahoo.com');
+        result = await fetch('http://yahoo.com');
     }
     catch (err) {
         return await rej(err);

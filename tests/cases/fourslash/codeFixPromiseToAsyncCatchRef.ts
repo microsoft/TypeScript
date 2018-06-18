@@ -23,17 +23,12 @@ verify.codeFix({
     newFileContent:
 `async function f():Promise<void> {
     try {
-        var result = await fetch('http://yahoo.com');
+        let result = await fetch('http://yahoo.com');
         return await res(result);
     }
     catch (err) {
         return await catch_err(err);
     }
-        return res(result);
-   } 
-   catch(err) {
-       return catch_err(err);
-   }   
 }
 
 function res(result){
