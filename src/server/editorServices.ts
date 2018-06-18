@@ -692,19 +692,17 @@ namespace ts.server {
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
 
-        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject = false): Project | undefined {
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : ensureProject ? this.doEnsureDefaultProjectForFile(fileName) : undefined;
-        }
-
-        ensureDefaultProjectForFile(fileName: NormalizedPath): Project {
-            return this.getDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
-        }
-
-        private doEnsureDefaultProjectForFile(fileName: NormalizedPath): Project {
-            this.ensureProjectStructuresUptoDate();
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            return scriptInfo ? scriptInfo.getDefaultProject() : Errors.ThrowNoProject();
+        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined {
+            let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+            if (ensureProject && (!scriptInfo || scriptInfo.isOrphan())) {
+                this.ensureProjectStructuresUptoDate();
+                scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+                if (!scriptInfo) {
+                    return Errors.ThrowNoProject();
+                }
+                return scriptInfo.getDefaultProject();
+            }
+            return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
         }
 
         /* @internal */
