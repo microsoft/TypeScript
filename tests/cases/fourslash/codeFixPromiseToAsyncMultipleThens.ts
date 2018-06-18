@@ -10,8 +10,8 @@
 ////    return result.ok;
 ////}
 ////
-////function res2(result){
-////    console.log(result);
+///function res2(result2){
+////    console.log(result2);
 ///}
 
 verify.getSuggestionDiagnostics([{

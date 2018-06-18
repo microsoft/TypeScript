@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+<<<<<<< HEAD
 // @target: es6
 
 ////function [|f|](): Promise<void> {
