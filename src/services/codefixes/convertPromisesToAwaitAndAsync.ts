@@ -32,12 +32,16 @@ namespace ts.codefix {
         }
     }
 
+    function returnsAPromise(node: CallExpression, checker: TypeChecker): boolean {
+        return checker.isPromiseLikeType(checker.getTypeAtLocation(node)) && (<CallExpression>node).expression.kind !== SyntaxKind.PropertyAccessExpression;
+    }
+
     function parseCallback(node: Expression, checker: TypeChecker, argName?: string, argUsed?: boolean): Statement[] {
         if (!node) {
             return;
         }
 
-        if (node.kind === SyntaxKind.CallExpression && checker.isPromiseLikeType(checker.getTypeAtLocation(node)) && (<CallExpression>node).expression.kind !== SyntaxKind.PropertyAccessExpression) {
+        if (node.kind === SyntaxKind.CallExpression && returnsAPromise(node as CallExpression, checker)) {
             return parsePromiseCall(node as CallExpression, argName, argUsed);
         }
         else if (node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "then", checker)) {
@@ -56,7 +60,7 @@ namespace ts.codefix {
         const argName = getArgName(func, "arg", checker);
         const tryBlock = createBlock(parseCallback(node.expression, checker, argName, argName !== "arg"));
         // instead of using e -> get the paramater of the catch function and use that
-        const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName)));
+        const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName, node, checker)));
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
 
@@ -70,12 +74,12 @@ namespace ts.codefix {
             const argNameRej = getArgName(rej, "e", checker);
 
             const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes, argNameRes !== "val"));
-            const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej)));
+            const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej, node, checker, /* isRej */ true)));
 
-            return [createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes));
+            return [createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes, node, checker));
         }
         else {
-            return parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes));
+            return parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes, node, checker));
         }
     }
 
@@ -84,13 +88,38 @@ namespace ts.codefix {
             argName = "val"; // fix this to maybe not always create a variable declaration if not necessary
         }
         return argUsed ? [createVariableStatement(/*modifiers*/ undefined, [createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node))])] :
-                         [createStatement(createAwait(node))];
+            [createStatement(createAwait(node))];
     }
 
-    function getCallbackBody(func: Node, argName: string): NodeArray<Statement> {
+
+    function getLastDotThen(node: Expression, checker: TypeChecker): CallExpression {
+        if (!node || !node.parent) {
+            return undefined;
+        }
+
+        let parent = node.parent;
+        if (parent.kind === SyntaxKind.CallExpression && isCallback(parent as CallExpression, "then", checker)) {
+            return parent as CallExpression;
+        }
+        else {
+            return getLastDotThen(node.parent as Expression, checker);
+        }
+
+    }
+
+    function getCallbackBody(func: Node, argName: string, parent: CallExpression, checker: TypeChecker, isRej: boolean = false): NodeArray<Statement> {
         switch (func.kind) {
             case SyntaxKind.Identifier:
-                return createNodeArray([(createReturn(createAwait(createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)]))))]);
+
+                let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)])
+                if (!getLastDotThen(parent, checker) || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
+                    return createNodeArray([(createReturn(createAwait(synthCall)))]);
+                }
+                
+                let lastDotThen = getLastDotThen(parent, checker);
+                let tempArgName = lastDotThen ? getArgName(lastDotThen.arguments[0], "temp", checker) : argName;
+                return createNodeArray([createVariableStatement(/*modifiers*/ undefined, [createVariableDeclaration(tempArgName, undefined, (createAwait(synthCall)))])]);
+
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
                 if ((<FunctionDeclaration>func).body.kind === SyntaxKind.Block) {
@@ -101,18 +130,20 @@ namespace ts.codefix {
                 }
         }
     }
+
     function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
         if (node.expression.kind !== SyntaxKind.PropertyAccessExpression) {
             return false;
         }
         return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
     }
+
     function getArgName(funcNode: Node, defaultVal: string, checker: TypeChecker): string {
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
             const name = (<Identifier>funcNode.parameters[0].name).text;
             if (name !== "_") {
                 return name;
-            } 
+            }
             else {
                 return defaultVal;
             }
