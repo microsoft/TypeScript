@@ -786,10 +786,10 @@ namespace ts.textChanges {
         }
     }
 
-    export function applyChanges(text: string, changes: TextChange[]): string {
+    export function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string {
         for (let i = changes.length - 1; i >= 0; i--) {
-            const change = changes[i];
-            text = `${text.substring(0, change.span.start)}${change.newText}${text.substring(textSpanEnd(change.span))}`;
+            const { span, newText } = changes[i];
+            text = `${text.substring(0, span.start)}${newText}${text.substring(textSpanEnd(span))}`;
         }
         return text;
     }

@@ -9233,9 +9233,9 @@ declare namespace ts {
 }
 declare namespace ts.moduleSpecifiers {
     interface ModuleSpecifierPreferences {
-        importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
-    function getModuleSpecifier(compilerOptions: CompilerOptions, fromSourceFile: SourceFile, fromSourceFileName: string, toFileName: string, host: ModuleSpecifierResolutionHost, preferences?: ModuleSpecifierPreferences): string;
+    function getModuleSpecifier(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: string, toFileName: string, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences?: ModuleSpecifierPreferences): string;
     function getModuleSpecifiers(moduleSymbol: Symbol, compilerOptions: CompilerOptions, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
 }
 declare namespace ts {
@@ -11084,6 +11084,9 @@ declare namespace ts.FindAllReferences.Core {
 }
 declare namespace ts {
     function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): ReadonlyArray<FileTextChanges>;
+    /** If 'path' refers to an old directory, returns path in the new directory. */
+    type PathUpdater = (path: string) => string | undefined;
+    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater;
 }
 declare namespace ts.GoToDefinition {
     function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] | undefined;
@@ -11508,7 +11511,7 @@ declare namespace ts.textChanges {
         createNewFile(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>): void;
     }
     type ValidateNonFormattedText = (node: Node, text: string) => void;
-    function applyChanges(text: string, changes: TextChange[]): string;
+    function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string;
     function isValidLocationToAddComment(sourceFile: SourceFile, position: number): boolean;
 }
 declare namespace ts {

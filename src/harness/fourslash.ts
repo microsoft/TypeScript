@@ -391,8 +391,11 @@ namespace FourSlash {
         }
 
         private getFileContent(fileName: string): string {
-            const script = this.languageServiceAdapterHost.getScriptInfo(fileName)!;
-            return script.content;
+            return ts.Debug.assertDefined(this.tryGetFileContent(fileName));
+        }
+        private tryGetFileContent(fileName: string): string | undefined {
+            const script = this.languageServiceAdapterHost.getScriptInfo(fileName);
+            return script && script.content;
         }
 
         // Entry points from fourslash.ts
@@ -1956,7 +1959,7 @@ Actual: ${stringify(fullActual)}`);
          * @returns The number of characters added to the file as a result of the edits.
          * May be negative.
          */
-        private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit: boolean): number {
+        private applyEdits(fileName: string, edits: ReadonlyArray<ts.TextChange>, isFormattingEdit: boolean): number {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
             // of the incremental offset from each edit to the next. We assume these edit ranges don't overlap
 
@@ -3134,30 +3137,34 @@ Actual: ${stringify(fullActual)}`);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.defaultPreferences)!;
-            this.testNewFileContents(editInfo.edits, options.newFileContents);
+            this.testNewFileContents(editInfo.edits, options.newFileContents, "move to new file");
         }
 
-        private testNewFileContents(edits: ReadonlyArray<ts.FileTextChanges>, newFileContents: { [fileName: string]: string }): void {
-            for (const edit of edits) {
-                const newContent = newFileContents[edit.fileName];
+        private testNewFileContents(edits: ReadonlyArray<ts.FileTextChanges>, newFileContents: { [fileName: string]: string }, description: string): void {
+            for (const { fileName, textChanges } of edits) {
+                const newContent = newFileContents[fileName];
                 if (newContent === undefined) {
-                    this.raiseError(`There was an edit in ${edit.fileName} but new content was not specified.`);
+                    this.raiseError(`${description} - There was an edit in ${fileName} but new content was not specified.`);
                 }
-                if (this.testData.files.some(f => f.fileName === edit.fileName)) {
-                    this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
-                    this.openFile(edit.fileName);
-                    this.verifyCurrentFileContent(newContent);
+
+                const fileContent = this.tryGetFileContent(fileName);
+                if (fileContent !== undefined) {
+                    const actualNewContent = ts.textChanges.applyChanges(fileContent, textChanges);
+                    assert.equal(actualNewContent, newContent, `new content for ${fileName}`);
                 }
                 else {
-                    assert(edit.textChanges.length === 1);
-                    const change = ts.first(edit.textChanges);
+                    // Creates a new file.
+                    assert(textChanges.length === 1);
+                    const change = ts.first(textChanges);
                     assert.deepEqual(change.span, ts.createTextSpan(0, 0));
-                    assert.equal(change.newText, newContent, `Content for ${edit.fileName}`);
+                    assert.equal(change.newText, newContent, `${description} - Content for ${fileName}`);
                 }
             }
 
             for (const fileName in newFileContents) {
-                assert(edits.some(e => e.fileName === fileName));
+                if (!edits.some(e => e.fileName === fileName)) {
+                    ts.Debug.fail(`${description} - Asserted new contents of ${fileName} but there were no edits`);
+                }
             }
         }
 
@@ -3292,7 +3299,7 @@ Actual: ${stringify(fullActual)}`);
             eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
         }
 
-        private findFile(indexOrName: string | number) {
+        private findFile(indexOrName: string | number): FourSlashFile {
             if (typeof indexOrName === "number") {
                 const index = indexOrName;
                 if (index >= this.testData.files.length) {
@@ -3303,30 +3310,37 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
             else if (ts.isString(indexOrName)) {
-                let name = ts.normalizePath(indexOrName);
-
-                // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
-                name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
-
-                const availableNames: string[] = [];
-                const result = ts.forEach(this.testData.files, file => {
-                    const fn = ts.normalizePath(file.fileName);
-                    if (fn) {
-                        if (fn === name) {
-                            return file;
-                        }
-                        availableNames.push(fn);
-                    }
-                });
-
-                if (!result) {
-                    throw new Error(`No test file named "${name}" exists. Available file names are: ${availableNames.join(", ")}`);
+                const { file, availableNames } = this.tryFindFileWorker(indexOrName);
+                if (!file) {
+                    throw new Error(`No test file named "${indexOrName}" exists. Available file names are: ${availableNames.join(", ")}`);
                 }
-                return result;
+                return file;
             }
             else {
                 return ts.Debug.assertNever(indexOrName);
             }
+        }
+
+        private tryFindFileWorker(name: string): { readonly file: FourSlashFile | undefined; readonly availableNames: ReadonlyArray<string>; } {
+            name = ts.normalizePath(name);
+            // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
+            name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
+
+            const availableNames: string[] = [];
+            const file = ts.forEach(this.testData.files, file => {
+                const fn = ts.normalizePath(file.fileName);
+                if (fn) {
+                    if (fn === name) {
+                        return file;
+                    }
+                    availableNames.push(fn);
+                }
+            });
+            return { file, availableNames };
+        }
+
+        private hasFile(name: string): boolean {
+            return this.tryFindFileWorker(name).file !== undefined;
         }
 
         private getLineColStringAtPosition(position: number) {
@@ -3366,14 +3380,33 @@ Actual: ${stringify(fullActual)}`);
             return !!a && !!b && a.start === b.start && a.length === b.length;
         }
 
-        public getEditsForFileRename(options: FourSlashInterface.GetEditsForFileRenameOptions): void {
-            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings, ts.defaultPreferences);
-            this.testNewFileContents(changes, options.newFileContents);
+        public getEditsForFileRename({ oldPath, newPath, newFileContents }: FourSlashInterface.GetEditsForFileRenameOptions): void {
+            const test = (fileContents: { readonly [fileName: string]: string }, description: string): void => {
+                const changes = this.languageService.getEditsForFileRename(oldPath, newPath, this.formatCodeSettings, ts.defaultPreferences);
+                this.testNewFileContents(changes, fileContents, description);
+            };
+
+            ts.Debug.assert(!this.hasFile(newPath), "initially, newPath should not exist");
+
+            test(newFileContents, "with file not yet moved");
+
+            this.languageServiceAdapterHost.renameFileOrDirectory(oldPath, newPath);
+            this.languageService.cleanupSemanticCache();
+            const pathUpdater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+            test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
         }
 
         private getApplicableRefactors(positionOrRange: number | ts.TextRange, preferences = ts.defaultPreferences): ReadonlyArray<ts.ApplicableRefactorInfo> {
             return this.languageService.getApplicableRefactors(this.activeFile.fileName, positionOrRange, preferences) || ts.emptyArray;
         }
+    }
+
+    function renameKeys<T>(obj: { readonly [key: string]: T }, renameKey: (key: string) => string): { readonly [key: string]: T } {
+        const res: { [key: string]: T } = {};
+        for (const key in obj) {
+            res[renameKey(key)] = obj[key];
+        }
+        return res;
     }
 
     export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
