@@ -29,7 +29,7 @@ const needsUpdate = require("./scripts/build/needsUpdate");
 const getDiffTool = require("./scripts/build/getDiffTool");
 const baselineAccept = require("./scripts/build/baselineAccept");
 const cmdLineOptions = require("./scripts/build/options");
-const { execAsync } = require("./scripts/build/exec");
+const exec = require("./scripts/build/exec");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
 Error.stackTraceLimit = 1000;
@@ -67,14 +67,14 @@ gulp.task(
     "configure-nightly",
     "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing",
     [configurePrereleaseJs],
-    () => execAsync(host, [configurePrereleaseJs, "dev", "package.json", "src/compiler/core.ts"]));
+    () => exec(host, [configurePrereleaseJs, "dev", "package.json", "src/compiler/core.ts"]));
 
 gulp.task(
     "publish-nightly",
     "Runs `npm publish --tag next` to create a new nightly build on npm",
     ["LKG"],
     () => runSequence("clean", "useDebugMode", "runtests-parallel",
-        () => execAsync("npm", ["publish", "--tag", "next"])));
+        () => exec("npm", ["publish", "--tag", "next"])));
 
 const importDefinitelyTypedTestsProject = "scripts/importDefinitelyTypedTests/tsconfig.json";
 const importDefinitelyTypedTestsJs = "scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js";
@@ -85,7 +85,7 @@ gulp.task(
     "importDefinitelyTypedTests",
     "Runs scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.ts to copy DT's tests to the TS-internal RWC tests",
     [importDefinitelyTypedTestsJs],
-    () => execAsync(host, [importDefinitelyTypedTestsJs, "./", "../DefinitelyTyped"]));
+    () => exec(host, [importDefinitelyTypedTestsJs, "./", "../DefinitelyTyped"]));
 
 gulp.task(
     "lib",
@@ -98,7 +98,7 @@ const diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
 const diagnosticMessagesGeneratedJson = "src/compiler/diagnosticMessages.generated.json";
 gulp.task(diagnosticInformationMapTs, /*help*/ false, [processDiagnosticMessagesJs], () => {
     if (needsUpdate(diagnosticMessagesJson, [diagnosticMessagesGeneratedJson, diagnosticInformationMapTs])) {
-        return execAsync(host, [processDiagnosticMessagesJs, diagnosticMessagesJson]);
+        return exec(host, [processDiagnosticMessagesJs, diagnosticMessagesJson]);
     }
 });
 gulp.task("clean:" + diagnosticInformationMapTs, /*help*/ false, () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]));
@@ -134,7 +134,7 @@ const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt
 
 gulp.task(generatedLCGFile, /*help*/ false, [generateLocalizedDiagnosticMessagesJs, diagnosticInformationMapTs], (done) => {
     if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-        return execAsync(host, [generateLocalizedDiagnosticMessagesJs, "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
+        return exec(host, [generateLocalizedDiagnosticMessagesJs, "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
     }
 });
 
@@ -242,7 +242,7 @@ gulp.task(
 // Generate Markdown spec
 const specMd = "doc/spec.md";
 gulp.task(specMd, /*help*/ false, [word2mdJs], () =>
-    execAsync("cscript", ["//nologo", word2mdJs, path.resolve(specMd), path.resolve("doc/TypeScript Language Specification.docx")]));
+    exec("cscript", ["//nologo", word2mdJs, path.resolve(specMd), path.resolve("doc/TypeScript Language Specification.docx")]));
 
 gulp.task(
     "generate-spec", 
@@ -273,7 +273,7 @@ gulp.task(
                 throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
             }
             const sizeBefore = getDirSize("lib");
-            return execAsync(host, [produceLKGJs]).then(() => {
+            return exec(host, [produceLKGJs]).then(() => {
                 const sizeAfter = getDirSize("lib");
                 if (sizeAfter > (sizeBefore * 1.10)) {
                     throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
@@ -409,25 +409,25 @@ gulp.task(
         if (tests) {
             args.push(JSON.stringify(tests));
         }
-        return execAsync("node", args);
+        return exec("node", args);
     }));
 
 gulp.task(
     "generate-code-coverage",
     "Generates code coverage data via istanbul",
     ["tests"],
-    () => execAsync("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", "" + cmdLineOptions.testTimeout, runJs]));
+    () => exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", "" + cmdLineOptions.testTimeout, runJs]));
 
 
 gulp.task(
     "diff",
     "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable",
-    () => execAsync(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));
+    () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));
 
 gulp.task(
     "diff-rwc",
     "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable",
-    () => execAsync(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true }));
+    () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true }));
 
 gulp.task(
     "baseline-accept",
@@ -470,7 +470,7 @@ const loggedIOTs = "src/harness/loggedIO.ts";
 const loggedIOJs = "built/local/loggedIO.js";
 gulp.task(loggedIOJs, /*help*/ false, [], (done) => {
     return mkdirp("built/local/temp")
-        .then(() => execAsync(host, ["lib/tsc.js", "--types", "--target es5", "--lib es5", "--outdir", "built/local/temp", loggedIOTs]))
+        .then(() => exec(host, ["lib/tsc.js", "--types", "--target es5", "--lib es5", "--outdir", "built/local/temp", loggedIOTs]))
         .then(() => { fs.renameSync(path.join("built/local/temp", "/harness/loggedIO.js"), loggedIOJs); })
         .then(() => del("built/local/temp"));
 });
@@ -484,7 +484,7 @@ gulp.task(
     "tsc-instrumented",
     "Builds an instrumented tsc.js - run with --test=[testname]",
     ["local", loggedIOJs, instrumenterJs, typescriptServicesJs],
-    () => execAsync(host, [instrumenterJs, "record", cmdLineOptions.tests || "iocapture", "built/local"]));
+    () => exec(host, [instrumenterJs, "record", cmdLineOptions.tests || "iocapture", "built/local"]));
 
 gulp.task(
     "update-sublime",

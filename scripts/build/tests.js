@@ -5,7 +5,7 @@ const os = require("os");
 const path = require("path");
 const mkdirP = require("./mkdirp");
 const cmdLineOptions = require("./options");
-const { execAsync } = require("./exec");
+const exec = require("./exec");
 const runSequence = require("run-sequence");
 const finished = require("./finished");
 const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
@@ -103,7 +103,7 @@ function runConsoleTests(runJs, defaultReporter, runInParallel) {
                 args.push(runJs);
             }
             setNodeEnvToDevelopment();
-            return execAsync(host, [runJs]);
+            return exec(host, [runJs]);
         })
         .then(({ exitCode }) => {
             if (exitCode !== 0) return finish(undefined, exitCode);
