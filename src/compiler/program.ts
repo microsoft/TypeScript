@@ -2817,11 +2817,11 @@ namespace ts {
     /**
      * Returns the target config filename of a project reference
      */
-    export function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
+    export function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName {
         if (!host.fileExists(ref.path)) {
-            return combinePaths(ref.path, "tsconfig.json");
+            return combinePaths(ref.path, "tsconfig.json") as ResolvedConfigFileName;
         }
-        return ref.path;
+        return ref.path as ResolvedConfigFileName;
     }
 
     /* @internal */
