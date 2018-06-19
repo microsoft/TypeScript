@@ -50,7 +50,7 @@ namespace ts {
         }
         else {
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
-            const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+            const sourceMapFilePath = isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
             // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
             const isJs = isSourceFileJavaScript(sourceFile);
             const declarationFilePath = ((forceDtsPaths || options.declaration) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
@@ -1026,7 +1026,7 @@ namespace ts {
 
         // SyntaxKind.UnparsedSource
         function emitUnparsedSource(unparsed: UnparsedSource) {
-            write(unparsed.text);
+            writer.rawWrite(unparsed.text);
         }
 
         //

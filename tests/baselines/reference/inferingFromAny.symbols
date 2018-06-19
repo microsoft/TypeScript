@@ -144,7 +144,7 @@ declare function f16<T>(x: Partial<T>): T;
 >f16 : Symbol(f16, Decl(a.ts, 17, 36))
 >T : Symbol(T, Decl(a.ts, 18, 21))
 >x : Symbol(x, Decl(a.ts, 18, 24))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(a.ts, 18, 21))
 >T : Symbol(T, Decl(a.ts, 18, 21))
 

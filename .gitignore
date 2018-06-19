@@ -23,6 +23,8 @@ tests/services/browser/typescriptServices.js
 src/harness/*.js
 src/compiler/diagnosticInformationMap.generated.ts
 src/compiler/diagnosticMessages.generated.json
+src/parser/diagnosticInformationMap.generated.ts
+src/parser/diagnosticMessages.generated.json
 rwc-report.html
 *.swp
 build.json
@@ -44,6 +46,7 @@ scripts/configurePrerelease.js
 scripts/open-user-pr.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
+scripts/produceLKG.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 scripts/generateLocalizedDiagnosticMessages.js
 scripts/*.js.map

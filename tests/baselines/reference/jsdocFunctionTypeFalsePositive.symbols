@@ -1,0 +1,6 @@
+=== /a.js ===
+/** @param {<} x */
+function f(x) {}
+>f : Symbol(f, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 1, 11))
+

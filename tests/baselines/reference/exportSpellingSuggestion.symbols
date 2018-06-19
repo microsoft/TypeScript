@@ -5,7 +5,7 @@ export function assertNever(x: never, msg: string) {
 >msg : Symbol(msg, Decl(a.ts, 0, 37))
 
     throw new Error("Unexpected " + msg);
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >msg : Symbol(msg, Decl(a.ts, 0, 37))
 }
 

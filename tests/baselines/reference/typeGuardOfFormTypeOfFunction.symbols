@@ -150,9 +150,9 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 >item : Symbol(item, Decl(typeGuardOfFormTypeOfFunction.ts, 67, 13))
 
             item.call(obj);
->item.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>item.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(typeGuardOfFormTypeOfFunction.ts, 67, 13))
->call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 36))
     }
 }

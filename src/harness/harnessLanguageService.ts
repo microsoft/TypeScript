@@ -1,8 +1,3 @@
-/// <reference path="..\services\services.ts" />
-/// <reference path="..\services\shims.ts" />
-/// <reference path="..\server\client.ts" />
-/// <reference path="harness.ts" />
-
 namespace Harness.LanguageService {
     export class ScriptInfo {
         public version = 1;
@@ -509,6 +504,9 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
+        getJsxClosingTagAtPosition(): never {
+            throw new Error("Not supported on the shim.");
+        }
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
             return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
         }
@@ -573,7 +571,8 @@ namespace Harness.LanguageService {
                 importedFiles: [],
                 ambientExternalModules: [],
                 isLibFile: shimResult.isLibFile,
-                typeReferenceDirectives: []
+                typeReferenceDirectives: [],
+                libReferenceDirectives: []
             };
 
             ts.forEach(shimResult.referencedFiles, refFile => {

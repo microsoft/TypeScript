@@ -1161,7 +1161,7 @@ module TypeScript {
 >undefined : Symbol(undefined)
 
                     throw new Error("initWalkers function is not up to date with enum content!");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
                 }
             }
         }

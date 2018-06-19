@@ -10,7 +10,7 @@ var b: string;
 
 var c: Object;
 >c : Symbol(c, Decl(arithmeticOperatorWithNullValueAndInvalidOperands.ts, 5, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 // operator *
 var r1a1 = null * a;

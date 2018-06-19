@@ -27,7 +27,7 @@ declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
 >T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 9, 22))
 >propNames : Symbol(propNames, Decl(keyofIsLiteralContexualType.ts, 9, 51))
 >K : Symbol(K, Decl(keyofIsLiteralContexualType.ts, 9, 24))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 9, 22))
 >K : Symbol(K, Decl(keyofIsLiteralContexualType.ts, 9, 24))
 

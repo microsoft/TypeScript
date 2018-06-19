@@ -2614,3 +2614,68 @@ declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
 >I7 : I7
 >K : K
 
+// Repro from #21770
+
+type Dict<T extends string> = { [key in T]: number };
+>Dict : Dict<T>
+>T : T
+>key : key
+>T : T
+
+type DictDict<V extends string, T extends string> = { [key in V]: Dict<T> };
+>DictDict : DictDict<V, T>
+>V : V
+>T : T
+>key : key
+>V : V
+>Dict : Dict<T>
+>T : T
+
+function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+>ff1 : <V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T) => number
+>V : V
+>T : T
+>dd : DictDict<V, T>
+>DictDict : DictDict<V, T>
+>V : V
+>T : T
+>k1 : V
+>V : V
+>k2 : T
+>T : T
+
+    return dd[k1][k2];
+>dd[k1][k2] : DictDict<V, T>[V][T]
+>dd[k1] : DictDict<V, T>[V]
+>dd : DictDict<V, T>
+>k1 : V
+>k2 : T
+}
+
+function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+>ff2 : <V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T) => number
+>V : V
+>T : T
+>dd : DictDict<V, T>
+>DictDict : DictDict<V, T>
+>V : V
+>T : T
+>k1 : V
+>V : V
+>k2 : T
+>T : T
+
+    const d: Dict<T> = dd[k1];
+>d : Dict<T>
+>Dict : Dict<T>
+>T : T
+>dd[k1] : DictDict<V, T>[V]
+>dd : DictDict<V, T>
+>k1 : V
+
+    return d[k2];
+>d[k2] : Dict<T>[T]
+>d : Dict<T>
+>k2 : T
+}
+

@@ -56,9 +56,9 @@ var c2: Collection<number>;
 var rf1 = (x: number) => { return x.toFixed() };
 >rf1 : Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
->x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 var r1a = _.map(c2, (x) => { return x.toFixed() });
 >r1a : Symbol(r1a, Decl(callbacksDontShareTypes.ts, 14, 3))
@@ -67,9 +67,9 @@ var r1a = _.map(c2, (x) => { return x.toFixed() });
 >map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
 >c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
->x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors 
 >r1b : Symbol(r1b, Decl(callbacksDontShareTypes.ts, 15, 3))
@@ -86,9 +86,9 @@ var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
 >map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
 >c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))
->x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 var r5b = _.map<number, string>(c2, rf1);
 >r5b : Symbol(r5b, Decl(callbacksDontShareTypes.ts, 17, 3))
