@@ -114,7 +114,7 @@ namespace ts.codefix {
 
                 let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)])
                 if (!getLastDotThen(parent, checker) || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
-                    return createNodeArray([(createReturn(createAwait(synthCall)))]);
+                    return createNodeArray([createReturn(synthCall)]);
                 }
                 
                 let lastDotThen = getLastDotThen(parent, checker);
