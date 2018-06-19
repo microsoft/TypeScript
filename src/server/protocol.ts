@@ -15,6 +15,7 @@ namespace ts.server.protocol {
         Change = "change",
         Close = "close",
         Completions = "completions",
+        CompletionInfo = "completionInfo",
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
@@ -1945,6 +1946,17 @@ namespace ts.server.protocol {
 
     export interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
+    }
+
+    export interface CompletionInfoResponse extends Response {
+        body?: CompletionInfo;
+    }
+
+    export interface CompletionInfo {
+        readonly isGlobalCompletion: boolean;
+        readonly isMemberCompletion: boolean;
+        readonly isNewIdentifierLocation: boolean;
+        readonly entries: ReadonlyArray<CompletionEntry>;
     }
 
     export interface CompletionDetailsResponse extends Response {
