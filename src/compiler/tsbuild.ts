@@ -245,7 +245,7 @@ namespace ts {
         }
     }
 
-    export function createDependencyMapper() {
+    function createDependencyMapper() {
         const childToParents = createFileMap<ResolvedConfigFileName[]>();
         const parentToChildren = createFileMap<ResolvedConfigFileName[]>();
         const allKeys = createFileMap<true>();
@@ -422,7 +422,7 @@ namespace ts {
         }
     ];
 
-    export function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System) {
+    export function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number | undefined {
         let verbose = false;
         let dry = false;
         let force = false;
@@ -455,7 +455,8 @@ namespace ts {
                 case "--?":
                 case "-?":
                 case "--help":
-                    return printHelp(buildOpts, "--build ");
+                    printHelp(buildOpts, "--build ");
+                    return ExitStatus.Success;
             }
             // Not a flag, parse as filename
             addProject(arg);
@@ -463,16 +464,20 @@ namespace ts {
 
         // Nonsensical combinations
         if (clean && force) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (clean && verbose) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (clean && watch) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (watch && dry) {
-            return buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry");
+            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry");
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
 
         if (projects.length === 0) {
@@ -482,15 +487,15 @@ namespace ts {
 
         const builder = createSolutionBuilder(compilerHost, buildHost, projects, { dry, force, verbose }, system);
         if (clean) {
-            builder.cleanAllProjects();
-        }
-        else {
-            builder.buildAllProjects();
+            return builder.cleanAllProjects();
         }
 
         if (watch) {
-            return builder.startWatching();
+            builder.startWatching();
+            return undefined;
         }
+
+        return builder.buildAllProjects();
 
         function addProject(projectSpecification: string) {
             const fileName = resolvePath(compilerHost.getCurrentDirectory(), projectSpecification);
@@ -503,7 +508,6 @@ namespace ts {
                 return buildHost.error(Diagnostics.File_0_does_not_exist, fileName);
             }
             projects.push(refPath);
-
         }
     }
 
@@ -637,7 +641,6 @@ namespace ts {
 
             // Mark all downstream projects of this one needing to be built "later"
             function queueBuildForDownstreamReferences(root: ResolvedConfigFileName) {
-                debugger;
                 const deps = graph.dependencyMap.getReferencesTo(root);
                 for (const ref of deps) {
                     // Can skip circular references
@@ -773,8 +776,11 @@ namespace ts {
             }
 
             let pseudoUpToDate = false;
+            let usesPrepend = false;
+            let upstreamChangedProject: string | undefined;
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
+                    usesPrepend = usesPrepend || !!(ref.prepend);
                     const resolvedRef = resolveProjectReferencePath(compilerHost, ref) as ResolvedConfigFileName;
                     const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
 
@@ -804,6 +810,7 @@ namespace ts {
                     // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
                     if (refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                         pseudoUpToDate = true;
+                        upstreamChangedProject = ref.path;
                         continue;
                     }
 
@@ -829,6 +836,14 @@ namespace ts {
                     type: UpToDateStatusType.OutOfDateWithSelf,
                     outOfDateOutputFileName: oldestOutputFileName,
                     newerInputFileName: newestInputFileName
+                };
+            }
+
+            if (usesPrepend && pseudoUpToDate) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithUpstream,
+                    outOfDateOutputFileName: oldestOutputFileName,
+                    newerProjectName: upstreamChangedProject!
                 };
             }
 
@@ -1048,16 +1063,19 @@ namespace ts {
         function cleanAllProjects() {
             const resolvedNames: ReadonlyArray<ResolvedConfigFileName> | undefined = getAllProjectsInScope();
             if (resolvedNames === undefined) {
-                return buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
 
             const filesToDelete = getFilesToClean(resolvedNames);
             if (filesToDelete === undefined) {
-                return buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
 
             if (context.options.dry) {
-                return buildHost.message(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
+                buildHost.message(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
+                return ExitStatus.Success;
             }
 
             // Do this check later to allow --clean --dry to function even if the host can't delete files
@@ -1068,6 +1086,8 @@ namespace ts {
             for (const output of filesToDelete) {
                 compilerHost.deleteFile(output);
             }
+
+            return ExitStatus.Success;
         }
 
         function resolveProjectName(name: string): ResolvedConfigFileName | undefined {
@@ -1095,16 +1115,18 @@ namespace ts {
             return resolvedNames;
         }
 
-        function buildAllProjects() {
+        function buildAllProjects(): ExitStatus {
             const graph = getGlobalDependencyGraph();
-            if (graph === undefined) return;
+            if (graph === undefined) return ExitStatus.DiagnosticsPresent_OutputsSkipped;
 
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
 
+            let anyFailed = false;
             for (const next of queue) {
                 const proj = configFileCache.parseConfigFile(next);
                 if (proj === undefined) {
+                    anyFailed = true;
                     break;
                 }
                 const status = getUpToDateStatus(proj);
@@ -1136,8 +1158,10 @@ namespace ts {
                     continue;
                 }
 
-                buildSingleProject(next);
+                const buildResult = buildSingleProject(next);
+                anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
+            return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
         /**

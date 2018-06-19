@@ -1,18 +1,8 @@
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-
+declare namespace ts {
+    const versionMajorMinor = "3.0";
+    /** The version of the TypeScript compiler release */
+    const version: string;
+}
 declare namespace ts {
     /**
      * Type of objects whose values are all of the same type.
@@ -21,6 +11,9 @@ declare namespace ts {
      */
     interface MapLike<T> {
         [index: string]: T;
+    }
+    interface SortedArray<T> extends Array<T> {
+        " __sortedArrayBrand": any;
     }
     /** ES6 Map interface, only read methods included. */
     interface ReadonlyMap<T> {
@@ -52,6 +45,8 @@ declare namespace ts {
     interface Push<T> {
         push(...values: T[]): void;
     }
+}
+declare namespace ts {
     type Path = string & {
         __pathBrand: any;
     };
@@ -357,17 +352,18 @@ declare namespace ts {
         JSDocCallbackTag = 292,
         JSDocParameterTag = 293,
         JSDocReturnTag = 294,
-        JSDocTypeTag = 295,
-        JSDocTemplateTag = 296,
-        JSDocTypedefTag = 297,
-        JSDocPropertyTag = 298,
-        SyntaxList = 299,
-        NotEmittedStatement = 300,
-        PartiallyEmittedExpression = 301,
-        CommaListExpression = 302,
-        MergeDeclarationMarker = 303,
-        EndOfDeclarationMarker = 304,
-        Count = 305,
+        JSDocThisTag = 295,
+        JSDocTypeTag = 296,
+        JSDocTemplateTag = 297,
+        JSDocTypedefTag = 298,
+        JSDocPropertyTag = 299,
+        SyntaxList = 300,
+        NotEmittedStatement = 301,
+        PartiallyEmittedExpression = 302,
+        CommaListExpression = 303,
+        MergeDeclarationMarker = 304,
+        EndOfDeclarationMarker = 305,
+        Count = 306,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -394,9 +390,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 146,
         FirstJSDocNode = 278,
-        LastJSDocNode = 298,
+        LastJSDocNode = 299,
         FirstJSDocTagNode = 289,
-        LastJSDocTagNode = 298
+        LastJSDocTagNode = 299
     }
     enum NodeFlags {
         None = 0,
@@ -1525,6 +1521,10 @@ declare namespace ts {
     interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
     }
+    interface JSDocThisTag extends JSDocTag {
+        kind: SyntaxKind.JSDocThisTag;
+        typeExpression?: JSDocTypeExpression;
+    }
     interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
         typeParameters: NodeArray<TypeParameterDeclaration>;
@@ -1674,13 +1674,16 @@ declare namespace ts {
     interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
         javascriptText: string;
+        javascriptMapPath?: string;
         javascriptMapText?: string;
         declarationText: string;
+        declarationMapPath?: string;
         declarationMapText?: string;
     }
     interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
         text: string;
+        sourceMapPath?: string;
         sourceMapText?: string;
     }
     interface JsonSourceFile extends SourceFile {
@@ -1787,7 +1790,7 @@ declare namespace ts {
         sourceMapFile: string;
         sourceMapSourceRoot: string;
         sourceMapSources: string[];
-        sourceMapSourcesContent?: string[];
+        sourceMapSourcesContent?: (string | null)[];
         inputSourceFileNames: string[];
         sourceMapNames?: string[];
         sourceMapMappings: string;
@@ -2071,7 +2074,7 @@ declare namespace ts {
         AliasExcludes = 2097152,
         ModuleMember = 2623475,
         ExportHasLocal = 944,
-        HasExports = 1952,
+        HasExports = 1955,
         HasMembers = 6240,
         BlockScoped = 418,
         PropertyOrAccessor = 98308,
@@ -2360,16 +2363,19 @@ declare namespace ts {
         code: number;
         next?: DiagnosticMessageChain;
     }
-    interface Diagnostic {
-        file: SourceFile | undefined;
-        start: number | undefined;
-        length: number | undefined;
-        messageText: string | DiagnosticMessageChain;
+    interface Diagnostic extends DiagnosticRelatedInformation {
         category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         code: number;
         source?: string;
+        relatedInformation?: DiagnosticRelatedInformation[];
+    }
+    interface DiagnosticRelatedInformation {
+        file: SourceFile | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string | DiagnosticMessageChain;
     }
     interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
@@ -2906,9 +2912,6 @@ declare namespace ts {
         span: TextSpan;
         newLength: number;
     }
-    interface SortedArray<T> extends Array<T> {
-        " __sortedArrayBrand": any;
-    }
     interface SyntaxList extends Node {
         _children: Node[];
     }
@@ -2977,15 +2980,6 @@ declare namespace ts {
         Parameters = 1296,
         IndexSignatureParameters = 4432
     }
-}
-declare namespace ts {
-    const versionMajorMinor = "3.0";
-    /** The version of the TypeScript compiler release */
-    const version: string;
-}
-declare namespace ts {
-    function isExternalModuleNameRelative(moduleName: string): boolean;
-    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[];
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -3098,6 +3092,11 @@ declare namespace ts {
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
+}
+/** Non-internal stuff goes here */
+declare namespace ts {
+    function isExternalModuleNameRelative(moduleName: string): boolean;
+    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[];
 }
 declare namespace ts {
     function getDefaultLibFileName(options: CompilerOptions): string;
@@ -3215,6 +3214,8 @@ declare namespace ts {
     function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
     /** Gets the JSDoc class tag for the node if present */
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
+    /** Gets the JSDoc this tag for the node if present */
+    function getJSDocThisTag(node: Node): JSDocThisTag | undefined;
     /** Gets the JSDoc return tag for the node if present */
     function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined;
     /** Gets the JSDoc template tag for the node if present */
@@ -3400,6 +3401,7 @@ declare namespace ts {
     function isJSDoc(node: Node): node is JSDoc;
     function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
     function isJSDocClassTag(node: Node): node is JSDocClassTag;
+    function isJSDocThisTag(node: Node): node is JSDocThisTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
     function isJSDocTypeTag(node: Node): node is JSDocTypeTag;
@@ -3483,6 +3485,79 @@ declare namespace ts {
     function parseJsonText(fileName: string, sourceText: string): JsonSourceFile;
     function isExternalModule(file: SourceFile): boolean;
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
+}
+declare namespace ts {
+    function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine;
+    type DiagnosticReporter = (diagnostic: Diagnostic) => void;
+    /**
+     * Reports config file diagnostics
+     */
+    interface ConfigFileDiagnosticsReporter {
+        /**
+         * Reports unrecoverable error when parsing config file
+         */
+        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
+    }
+    /**
+     * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
+     */
+    interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
+        getCurrentDirectory(): string;
+    }
+    /**
+     * Reads the config file, reports errors if any and exits if the config file cannot be found
+     */
+    function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined;
+    /**
+     * Read tsconfig.json file
+     * @param fileName The path to the config file
+     */
+    function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): {
+        config?: any;
+        error?: Diagnostic;
+    };
+    /**
+     * Parse the text of the tsconfig.json file
+     * @param fileName The path to the config file
+     * @param jsonText The text of the config file
+     */
+    function parseConfigFileTextToJson(fileName: string, jsonText: string): {
+        config?: any;
+        error?: Diagnostic;
+    };
+    /**
+     * Read tsconfig.json file
+     * @param fileName The path to the config file
+     */
+    function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile;
+    /**
+     * Convert the json syntax tree into the json value
+     */
+    function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any;
+    /**
+     * Parse the contents of a config file (tsconfig.json).
+     * @param json The contents of the config file to parse
+     * @param host Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath A root directory to resolve relative path entries in the config
+     *    file to. e.g. outDir
+     */
+    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
+    /**
+     * Parse the contents of a config file (tsconfig.json).
+     * @param jsonNode The contents of the config file to parse
+     * @param host Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath A root directory to resolve relative path entries in the config
+     *    file to. e.g. outDir
+     */
+    function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
+    function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
+        options: CompilerOptions;
+        errors: Diagnostic[];
+    };
+    function convertTypeAcquisitionFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
+        options: TypeAcquisition;
+        errors: Diagnostic[];
+    };
 }
 declare namespace ts {
     function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
@@ -3840,8 +3915,10 @@ declare namespace ts {
     function createCommaList(elements: ReadonlyArray<Expression>): CommaListExpression;
     function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>): CommaListExpression;
     function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource | InputFiles>): Bundle;
-    function createUnparsedSourceFile(text: string, map?: string): UnparsedSource;
-    function createInputFiles(javascript: string, declaration: string, javascriptMapText?: string, declarationMapText?: string): InputFiles;
+    function createUnparsedSourceFile(text: string): UnparsedSource;
+    function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    function createInputFiles(javascript: string, declaration: string): InputFiles;
+    function createInputFiles(javascript: string, declaration: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
     function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>): CallExpression;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>, param: ParameterDeclaration, paramValue: Expression): CallExpression;
@@ -4311,76 +4388,179 @@ declare namespace ts {
     function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
 }
 declare namespace ts {
-    function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine;
-    type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     /**
-     * Reports config file diagnostics
+     * Branded string for keeping track of when we've turned an ambiguous path
+     * specified like "./blah" to an absolute path to an actual
+     * tsconfig file, e.g. "/root/blah/tsconfig.json"
      */
-    interface ConfigFileDiagnosticsReporter {
+    type ResolvedConfigFileName = string & {
+        _isResolvedConfigFileName: never;
+    };
+    interface BuildHost {
+        verbose(diag: DiagnosticMessage, ...args: string[]): void;
+        error(diag: DiagnosticMessage, ...args: string[]): void;
+        errorDiagnostic(diag: Diagnostic): void;
+        message(diag: DiagnosticMessage, ...args: string[]): void;
+    }
+    /**
+     * A BuildContext tracks what's going on during the course of a build.
+     *
+     * Callers may invoke any number of build requests within the same context;
+     * until the context is reset, each project will only be built at most once.
+     *
+     * Example: In a standard setup where project B depends on project A, and both are out of date,
+     * a failed build of A will result in A remaining out of date. When we try to build
+     * B, we should immediately bail instead of recomputing A's up-to-date status again.
+     *
+     * This also matters for performing fast (i.e. fake) downstream builds of projects
+     * when their upstream .d.ts files haven't changed content (but have newer timestamps)
+     */
+    interface BuildContext {
+        options: BuildOptions;
         /**
-         * Reports unrecoverable error when parsing config file
+         * Map from output file name to its pre-build timestamp
          */
-        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
+        unchangedOutputs: FileMap<Date>;
+        /**
+         * Map from config file name to up-to-date status
+         */
+        projectStatus: FileMap<UpToDateStatus>;
+        invalidatedProjects: FileMap<true>;
+        queuedProjects: FileMap<true>;
+        missingRoots: Map<true>;
     }
-    /**
-     * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
-     */
-    interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
-        getCurrentDirectory(): string;
+    type Mapper = ReturnType<typeof createDependencyMapper>;
+    interface DependencyGraph {
+        buildQueue: ResolvedConfigFileName[];
+        dependencyMap: Mapper;
     }
-    /**
-     * Reads the config file, reports errors if any and exits if the config file cannot be found
-     */
-    function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined;
-    /**
-     * Read tsconfig.json file
-     * @param fileName The path to the config file
-     */
-    function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): {
-        config?: any;
-        error?: Diagnostic;
+    interface BuildOptions {
+        dry: boolean;
+        force: boolean;
+        verbose: boolean;
+    }
+    enum UpToDateStatusType {
+        Unbuildable = 0,
+        UpToDate = 1,
+        /**
+         * The project appears out of date because its upstream inputs are newer than its outputs,
+         * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
+         * This means we can Pseudo-build (just touch timestamps), as if we had actually built this project.
+         */
+        UpToDateWithUpstreamTypes = 2,
+        OutputMissing = 3,
+        OutOfDateWithSelf = 4,
+        OutOfDateWithUpstream = 5,
+        UpstreamOutOfDate = 6,
+        UpstreamBlocked = 7,
+        /**
+         * Projects with no outputs (i.e. "solution" files)
+         */
+        ContainerOnly = 8
+    }
+    type UpToDateStatus = Status.Unbuildable | Status.UpToDate | Status.OutputMissing | Status.OutOfDateWithSelf | Status.OutOfDateWithUpstream | Status.UpstreamOutOfDate | Status.UpstreamBlocked | Status.ContainerOnly;
+    namespace Status {
+        /**
+         * The project can't be built at all in its current state. For example,
+         * its config file cannot be parsed, or it has a syntax error or missing file
+         */
+        interface Unbuildable {
+            type: UpToDateStatusType.Unbuildable;
+            reason: string;
+        }
+        /**
+         * This project doesn't have any outputs, so "is it up to date" is a meaningless question.
+         */
+        interface ContainerOnly {
+            type: UpToDateStatusType.ContainerOnly;
+        }
+        /**
+         * The project is up to date with respect to its inputs.
+         * We track what the newest input file is.
+         */
+        interface UpToDate {
+            type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
+            newestInputFileTime: Date;
+            newestInputFileName: string;
+            newestDeclarationFileContentChangedTime: Date;
+            newestOutputFileTime: Date;
+            newestOutputFileName: string;
+            oldestOutputFileName: string;
+        }
+        /**
+         * One or more of the outputs of the project does not exist.
+         */
+        interface OutputMissing {
+            type: UpToDateStatusType.OutputMissing;
+            /**
+             * The name of the first output file that didn't exist
+             */
+            missingOutputFileName: string;
+        }
+        /**
+         * One or more of the project's outputs is older than its newest input.
+         */
+        interface OutOfDateWithSelf {
+            type: UpToDateStatusType.OutOfDateWithSelf;
+            outOfDateOutputFileName: string;
+            newerInputFileName: string;
+        }
+        /**
+         * This project depends on an out-of-date project, so shouldn't be built yet
+         */
+        interface UpstreamOutOfDate {
+            type: UpToDateStatusType.UpstreamOutOfDate;
+            upstreamProjectName: string;
+        }
+        /**
+         * This project depends an upstream project with build errors
+         */
+        interface UpstreamBlocked {
+            type: UpToDateStatusType.UpstreamBlocked;
+            upstreamProjectName: string;
+        }
+        /**
+         * One or more of the project's outputs is older than the newest output of
+         * an upstream project.
+         */
+        interface OutOfDateWithUpstream {
+            type: UpToDateStatusType.OutOfDateWithUpstream;
+            outOfDateOutputFileName: string;
+            newerProjectName: string;
+        }
+    }
+    interface FileMap<T> {
+        setValue(fileName: string, value: T): void;
+        getValue(fileName: string): T | never;
+        getValueOrUndefined(fileName: string): T | undefined;
+        hasKey(fileName: string): boolean;
+        removeKey(fileName: string): void;
+        getKeys(): string[];
+    }
+    function createDependencyMapper(): {
+        addReference: (childConfigFileName: ResolvedConfigFileName, parentConfigFileName: ResolvedConfigFileName) => void;
+        getReferencesTo: (parentConfigFileName: ResolvedConfigFileName) => ResolvedConfigFileName[];
+        getReferencesOf: (childConfigFileName: ResolvedConfigFileName) => ResolvedConfigFileName[];
+        getKeys: () => ReadonlyArray<ResolvedConfigFileName>;
     };
+    function createBuildContext(options: BuildOptions): BuildContext;
+    function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number | undefined;
     /**
-     * Parse the text of the tsconfig.json file
-     * @param fileName The path to the config file
-     * @param jsonText The text of the config file
+     * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
+     * can dynamically add/remove other projects based on changes on the rootNames' references
      */
-    function parseConfigFileTextToJson(fileName: string, jsonText: string): {
-        config?: any;
-        error?: Diagnostic;
-    };
-    /**
-     * Read tsconfig.json file
-     * @param fileName The path to the config file
-     */
-    function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile;
-    /**
-     * Convert the json syntax tree into the json value
-     */
-    function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any;
-    /**
-     * Parse the contents of a config file (tsconfig.json).
-     * @param json The contents of the config file to parse
-     * @param host Instance of ParseConfigHost used to enumerate files in folder.
-     * @param basePath A root directory to resolve relative path entries in the config
-     *    file to. e.g. outDir
-     */
-    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
-    /**
-     * Parse the contents of a config file (tsconfig.json).
-     * @param jsonNode The contents of the config file to parse
-     * @param host Instance of ParseConfigHost used to enumerate files in folder.
-     * @param basePath A root directory to resolve relative path entries in the config
-     *    file to. e.g. outDir
-     */
-    function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
-    function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
-        options: CompilerOptions;
-        errors: Diagnostic[];
-    };
-    function convertTypeAcquisitionFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
-        options: TypeAcquisition;
-        errors: Diagnostic[];
+    function createSolutionBuilder(compilerHost: CompilerHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System): {
+        buildAllProjects: () => ExitStatus;
+        getUpToDateStatus: (project: ParsedCommandLine | undefined) => UpToDateStatus;
+        getUpToDateStatusOfFile: (configFileName: ResolvedConfigFileName) => UpToDateStatus;
+        cleanAllProjects: () => ExitStatus.Success | ExitStatus.DiagnosticsPresent_OutputsSkipped;
+        resetBuildContext: (opts?: BuildOptions) => void;
+        getBuildGraph: (configFileNames: ReadonlyArray<string>) => DependencyGraph | undefined;
+        invalidateProject: (configFileName: string) => void;
+        buildInvalidatedProjects: () => void;
+        buildDependentInvalidatedProjects: () => void;
+        resolveProjectName: (name: string) => ResolvedConfigFileName | undefined;
+        startWatching: () => void;
     };
 }
 declare namespace ts {
@@ -5346,5 +5526,5 @@ declare namespace ts {
      */
     function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
 }
-
-export = ts;
+//# sourceMappingURL=typescriptServices.d.ts.map
+export = ts

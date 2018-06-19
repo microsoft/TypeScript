@@ -252,7 +252,9 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    function getCategoryFormat(category: DiagnosticCategory): string {
+    const halfIndent = "  ";
+    const indent = "    ";
+    function getCategoryFormat(category: DiagnosticCategory): ForegroundColorEscapeSequences {
         switch (category) {
             case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
             case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
@@ -273,68 +275,79 @@ namespace ts {
         return s;
     }
 
+    function formatCodeSpan(file: SourceFile, start: number, length: number, indent: string, squiggleColor: ForegroundColorEscapeSequences, host: FormatDiagnosticsHost) {
+        const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
+        const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
+        const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
+
+        const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
+        let gutterWidth = (lastLine + 1 + "").length;
+        if (hasMoreThanFiveLines) {
+            gutterWidth = Math.max(ellipsis.length, gutterWidth);
+        }
+
+        let context = "";
+        for (let i = firstLine; i <= lastLine; i++) {
+            context += host.getNewLine();
+            // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
+            // so we'll skip ahead to the second-to-last line.
+            if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
+                context += indent + formatColorAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
+                i = lastLine - 1;
+            }
+
+            const lineStart = getPositionOfLineAndCharacter(file, i, 0);
+            const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
+            let lineContent = file.text.slice(lineStart, lineEnd);
+            lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
+            lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
+
+            // Output the gutter and the actual contents of the line.
+            context += indent + formatColorAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+            context += lineContent + host.getNewLine();
+
+            // Output the gutter and the error span for the line using tildes.
+            context += indent + formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+            context += squiggleColor;
+            if (i === firstLine) {
+                // If we're on the last line, then limit it to the last character of the last line.
+                // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
+                const lastCharForLine = i === lastLine ? lastLineChar : undefined;
+
+                context += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
+                context += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
+            }
+            else if (i === lastLine) {
+                context += lineContent.slice(0, lastLineChar).replace(/./g, "~");
+            }
+            else {
+                // Squiggle the entire line.
+                context += lineContent.replace(/./g, "~");
+            }
+            context += resetEscapeSequence;
+        }
+        return context;
+    }
+
+    function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost) {
+        const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
+        const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
+
+        let output = "";
+        output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
+        output += ":";
+        output += formatColorAndReset(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
+        output += ":";
+        output += formatColorAndReset(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
+        return output;
+    }
+
     export function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
         let output = "";
         for (const diagnostic of diagnostics) {
-            let context = "";
             if (diagnostic.file) {
-                const { start, length, file } = diagnostic;
-                const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start!); // TODO: GH#18217
-                const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start! + length!);
-                const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
-                const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
-
-                const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
-                let gutterWidth = (lastLine + 1 + "").length;
-                if (hasMoreThanFiveLines) {
-                    gutterWidth = Math.max(ellipsis.length, gutterWidth);
-                }
-
-                for (let i = firstLine; i <= lastLine; i++) {
-                    context += host.getNewLine();
-                    // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
-                    // so we'll skip ahead to the second-to-last line.
-                    if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                        context += formatColorAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
-                        i = lastLine - 1;
-                    }
-
-                    const lineStart = getPositionOfLineAndCharacter(file, i, 0);
-                    const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
-                    let lineContent = file.text.slice(lineStart, lineEnd);
-                    lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
-                    lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
-
-                    // Output the gutter and the actual contents of the line.
-                    context += formatColorAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    context += lineContent + host.getNewLine();
-
-                    // Output the gutter and the error span for the line using tildes.
-                    context += formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    context += ForegroundColorEscapeSequences.Red;
-                    if (i === firstLine) {
-                        // If we're on the last line, then limit it to the last character of the last line.
-                        // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
-                        const lastCharForLine = i === lastLine ? lastLineChar : undefined;
-
-                        context += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
-                        context += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
-                    }
-                    else if (i === lastLine) {
-                        context += lineContent.slice(0, lastLineChar).replace(/./g, "~");
-                    }
-                    else {
-                        // Squiggle the entire line.
-                        context += lineContent.replace(/./g, "~");
-                    }
-                    context += resetEscapeSequence;
-                }
-
-                output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
-                output += ":";
-                output += formatColorAndReset(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
-                output += ":";
-                output += formatColorAndReset(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
+                const { file, start } = diagnostic;
+                output += formatLocation(file, start!, host); // TODO: GH#18217
                 output += " - ";
             }
 
@@ -344,12 +357,24 @@ namespace ts {
 
             if (diagnostic.file) {
                 output += host.getNewLine();
-                output += context;
+                output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
+                if (diagnostic.relatedInformation) {
+                    output += host.getNewLine();
+                    for (const { file, start, length, messageText } of diagnostic.relatedInformation) {
+                        if (file) {
+                            output += host.getNewLine();
+                            output += halfIndent + formatLocation(file, start!, host); // TODO: GH#18217
+                            output += formatCodeSpan(file, start!, length!, indent, ForegroundColorEscapeSequences.Cyan, host); // TODO: GH#18217
+                        }
+                        output += host.getNewLine();
+                        output += indent + flattenDiagnosticMessageText(messageText, host.getNewLine());
+                    }
+                }
             }
 
             output += host.getNewLine();
         }
-        return output + host.getNewLine();
+        return output;
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
@@ -616,7 +641,7 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        const resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
+        let resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
         const projectReferenceRedirects: Map<string> = createMap();
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
@@ -1190,6 +1215,7 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+            resolvedProjectReferences = oldProgram.getProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsSet = oldProgram.redirectTargetsSet;
@@ -1239,10 +1265,12 @@ namespace ts {
 
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
-                    const jsMap = host.readFile(resolvedRefOpts.options.outFile + ".map"); // TODO: try to read sourceMappingUrl comment from the js file
+                    const jsMapPath = resolvedRefOpts.options.outFile + ".map"; // TODO: try to read sourceMappingUrl comment from the file
+                    const jsMap = host.readFile(jsMapPath);
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const dtsMap = host.readFile(dtsFilename + ".map");
-                    const node = createInputFiles(js, dts, jsMap, dtsMap);
+                    const dtsMapPath = dtsFilename + ".map";
+                    const dtsMap = host.readFile(dtsMapPath);
+                    const node = createInputFiles(js, dts, jsMap && jsMapPath, jsMap, dtsMap && dtsMapPath, dtsMap);
                     nodes.push(node);
                 }
             }

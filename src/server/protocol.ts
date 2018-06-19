@@ -466,6 +466,7 @@ namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        relatedInformation?: DiagnosticRelatedInformation[];
     }
 
     /**
@@ -616,7 +617,7 @@ namespace ts.server.protocol {
     }
 
     export interface OrganizeImportsResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
 
     export interface GetEditsForFileRenameRequest extends Request {
@@ -632,7 +633,7 @@ namespace ts.server.protocol {
     }
 
     export interface GetEditsForFileRenameResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
 
     /**
@@ -2216,6 +2217,11 @@ namespace ts.server.protocol {
         reportsUnnecessary?: {};
 
         /**
+         * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
+         */
+        relatedInformation?: DiagnosticRelatedInformation[];
+
+        /**
          * The error code of the diagnostic message.
          */
         code?: number;
@@ -2231,6 +2237,23 @@ namespace ts.server.protocol {
          * Name of the file the diagnostic is in
          */
         fileName: string;
+    }
+
+    /**
+     * Represents additional spans returned with a diagnostic which are relevant to it
+     * Like DiagnosticWithLinePosition, this is provided in two forms:
+     *   - start and length of the span
+     *   - startLocation and endLocation a pair of Location objects storing the start/end line offset of the span
+     */
+    export interface DiagnosticRelatedInformation {
+        /**
+         * Text of related or additional information.
+         */
+        message: string;
+        /**
+         * Associated location
+         */
+        span?: FileSpan;
     }
 
     export interface DiagnosticEventBody {

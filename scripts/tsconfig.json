@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "removeComments": false,
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": false,
+        "lib": [
+            "es6",
+            "scripthost"
+        ],
+        "types": ["node"]
+    },
+    "files": [
+        "produceLKG.ts",
+        "buildProtocol.ts",
+        "processDiagnosticMessages.ts",
+        "generateLocalizedDiagnosticMessages.ts",
+        "configurePrerelease.ts"
+    ]
+}
