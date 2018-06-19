@@ -21,7 +21,7 @@ const [r0, r1, r2, r3, r4, r5] = test.ranges();
 verify.referenceGroups(r0, [
     { definition: "(local class) C", ranges: [r0] },
     // TODO: This definition is really ugly
-    { definition: "(alias) (local class) export=\nimport export=", ranges: [r3] },
+    { definition: "(alias) (local class) C\nexport = export=", ranges: [r3] },
 ]);
 verify.referenceGroups([r1, r5], [
     { definition: "class D\n(property) D: typeof D", ranges: [r1, r5, r5] }, // TODO: should only reference r5 once
@@ -33,5 +33,5 @@ verify.referenceGroups(r2, [
 verify.referenceGroups([r3, r4], [
     { definition: 'module "/a"', ranges: [r4] },
     { definition: "(local class) C", ranges: [r0] },
-    { definition: "(alias) (local class) export=\nimport export=", ranges: [r3] },
+    { definition: "(alias) (local class) C\nexport = export=", ranges: [r3] },
 ]);
