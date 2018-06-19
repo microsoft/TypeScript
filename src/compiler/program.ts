@@ -2332,7 +2332,7 @@ namespace ts {
 
         function parseProjectReferenceConfigFile(ref: ProjectReference): { commandLine: ParsedCommandLine, sourceFile: SourceFile } | undefined {
             // The actual filename (i.e. add "/tsconfig.json" if necessary)
-            const refPath = resolveProjectReferencePath(host, ref)!; // TODO: GH#18217
+            const refPath = resolveProjectReferencePath(host, ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
             const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile;

@@ -1111,7 +1111,7 @@ namespace ts {
                     newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                 }
                 else {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime!(output));
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime(output));
                 }
             }
         }
