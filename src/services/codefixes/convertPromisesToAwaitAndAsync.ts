@@ -73,10 +73,11 @@ namespace ts.codefix {
         if (rej) {
             const argNameRej = getArgName(rej, "e", checker);
 
+            const varDecl: Statement = createVariableStatement(/* modifiers */ undefined, createVariableDeclarationList([createVariableDeclaration(argNameRes)], NodeFlags.Let));
             const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes, argNameRes !== "val"));
             const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej, node, checker, /* isRej */ true)));
 
-            return [createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes, node, checker));
+            return [varDecl, createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes, node, checker));
         }
         else {
             return parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes, node, checker));
