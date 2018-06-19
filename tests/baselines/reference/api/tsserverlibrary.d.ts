@@ -11625,7 +11625,7 @@ declare namespace ts.codefix {
      * @returns Empty string iff there are no member insertions.
      */
     function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, preferences: UserPreferences, out: (node: ClassElement) => void): void;
-    function createMethodFromCallExpression({ typeArguments, arguments: args, parent: parent }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean, preferences: UserPreferences): MethodDeclaration;
+    function createMethodFromCallExpression(context: CodeFixContextBase, { typeArguments, arguments: args, parent: parent }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean, preferences: UserPreferences): MethodDeclaration;
 }
 declare namespace ts.codefix {
 }
