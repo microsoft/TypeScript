@@ -777,6 +777,7 @@ namespace ts {
 
             let pseudoUpToDate = false;
             let usesPrepend = false;
+            let upstreamChangedProject: string | undefined;
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
                     usesPrepend = usesPrepend || !!(ref.prepend);
@@ -809,6 +810,7 @@ namespace ts {
                     // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
                     if (refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                         pseudoUpToDate = true;
+                        upstreamChangedProject = ref.path;
                         continue;
                     }
 
@@ -837,8 +839,12 @@ namespace ts {
                 };
             }
 
-            if (usesPrepend) {
-                pseudoUpToDate = false;
+            if (usesPrepend && pseudoUpToDate) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithUpstream,
+                    outOfDateOutputFileName: oldestOutputFileName,
+                    newerProjectName: upstreamChangedProject!
+                };
             }
 
             // Up to date
