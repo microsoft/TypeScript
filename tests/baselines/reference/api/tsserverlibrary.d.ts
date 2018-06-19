@@ -13801,9 +13801,7 @@ declare namespace ts.server {
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
-        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject?: boolean): Project | undefined;
-        ensureDefaultProjectForFile(fileName: NormalizedPath): Project;
-        private doEnsureDefaultProjectForFile;
+        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
         tryGetSomeFileInDirectory(directoryPath: NormalizedPath): {
             readonly file: NormalizedPath;
             readonly project: Project;
