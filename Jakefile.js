@@ -204,7 +204,7 @@ task(TaskNames.lint, [TaskNames.buildRules], () => {
         if (fold.isTravis()) console.log(fold.end("lint"));
         complete();
     }));
-});
+}, { async: true });
 
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {

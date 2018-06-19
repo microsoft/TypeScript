@@ -9,6 +9,11 @@
     "declaration": true,
     "outFile": "./bin/first-output.js"
   },
+  "files": [
+    "first_PART1.ts",
+    "first_part2.ts",
+    "first_part3.ts"
+  ],
   "references": [
   ]
 }
