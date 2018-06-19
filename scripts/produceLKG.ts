@@ -77,7 +77,7 @@ async function writeGitAttributes() {
 
 async function copyWithCopyright(fileName: string) {
     const content = await fs.readFile(path.join(source, fileName), "utf-8");
-    await fs.writeFile(path.join(dest, fileName), copyright + "\r\n" + content);
+    await fs.writeFile(path.join(dest, fileName), copyright + "\n" + content);
 }
 
 async function copyFromBuiltLocal(fileName: string) {

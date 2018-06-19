@@ -46,9 +46,9 @@ node_modules/acorn/dist/acorn.es.js(3016,14): error TS2339: Property 'context' d
 node_modules/acorn/dist/acorn.es.js(3018,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(3023,12): error TS2339: Property 'options' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(3024,14): error TS2339: Property 'value' does not exist on type 'TokenType'.
-node_modules/acorn/dist/acorn.es.js(3024,37): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/dist/acorn.es.js(3024,38): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(3025,14): error TS2339: Property 'value' does not exist on type 'TokenType'.
-node_modules/acorn/dist/acorn.es.js(3025,39): error TS2339: Property 'inGeneratorContext' does not exist on type 'TokenType'.
+node_modules/acorn/dist/acorn.es.js(3025,40): error TS2339: Property 'inGeneratorContext' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(3028,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(5290,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/acorn/dist/acorn.es.js(5291,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
@@ -95,9 +95,9 @@ node_modules/acorn/dist/acorn.js(3022,14): error TS2339: Property 'context' does
 node_modules/acorn/dist/acorn.js(3024,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(3029,12): error TS2339: Property 'options' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(3030,14): error TS2339: Property 'value' does not exist on type 'TokenType'.
-node_modules/acorn/dist/acorn.js(3030,37): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/dist/acorn.js(3030,38): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(3031,14): error TS2339: Property 'value' does not exist on type 'TokenType'.
-node_modules/acorn/dist/acorn.js(3031,39): error TS2339: Property 'inGeneratorContext' does not exist on type 'TokenType'.
+node_modules/acorn/dist/acorn.js(3031,40): error TS2339: Property 'inGeneratorContext' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(3034,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(5296,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/acorn/dist/acorn.js(5297,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.

@@ -9,9 +9,12 @@ emittedFile:all.js
 sourceFile:tests/cases/compiler/ref/a.ts
 -------------------------------------------------------------------
 >>>var __extends = (this && this.__extends) || (function () {
->>>    var extendStatics = Object.setPrototypeOf ||
->>>        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
->>>        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+>>>    var extendStatics = function (d, b) {
+>>>        extendStatics = Object.setPrototypeOf ||
+>>>            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+>>>            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+>>>        return extendStatics(d, b);
+>>>    }
 >>>    return function (d, b) {
 >>>        extendStatics(d, b);
 >>>        function __() { this.constructor = d; }
@@ -25,13 +28,13 @@ sourceFile:tests/cases/compiler/ref/a.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(14, 5) Source(1, 1) + SourceIndex(0)
+1 >Emitted(17, 5) Source(1, 1) + SourceIndex(0)
 ---
 >>>        function A() {
 1->^^^^^^^^
 2 >        ^^->
 1->
-1->Emitted(15, 9) Source(1, 1) + SourceIndex(0)
+1->Emitted(18, 9) Source(1, 1) + SourceIndex(0)
 ---
 >>>        }
 1->^^^^^^^^
@@ -39,16 +42,16 @@ sourceFile:tests/cases/compiler/ref/a.ts
 3 >         ^^^^^^^^^->
 1->export class A { 
 2 >        }
-1->Emitted(16, 9) Source(1, 18) + SourceIndex(0)
-2 >Emitted(16, 10) Source(1, 19) + SourceIndex(0)
+1->Emitted(19, 9) Source(1, 18) + SourceIndex(0)
+2 >Emitted(19, 10) Source(1, 19) + SourceIndex(0)
 ---
 >>>        return A;
 1->^^^^^^^^
 2 >        ^^^^^^^^
 1->
 2 >        }
-1->Emitted(17, 9) Source(1, 18) + SourceIndex(0)
-2 >Emitted(17, 17) Source(1, 19) + SourceIndex(0)
+1->Emitted(20, 9) Source(1, 18) + SourceIndex(0)
+2 >Emitted(20, 17) Source(1, 19) + SourceIndex(0)
 ---
 >>>    }());
 1 >^^^^
@@ -60,18 +63,18 @@ sourceFile:tests/cases/compiler/ref/a.ts
 2 >    }
 3 >     
 4 >     export class A { }
-1 >Emitted(18, 5) Source(1, 18) + SourceIndex(0)
-2 >Emitted(18, 6) Source(1, 19) + SourceIndex(0)
-3 >Emitted(18, 6) Source(1, 1) + SourceIndex(0)
-4 >Emitted(18, 10) Source(1, 19) + SourceIndex(0)
+1 >Emitted(21, 5) Source(1, 18) + SourceIndex(0)
+2 >Emitted(21, 6) Source(1, 19) + SourceIndex(0)
+3 >Emitted(21, 6) Source(1, 1) + SourceIndex(0)
+4 >Emitted(21, 10) Source(1, 19) + SourceIndex(0)
 ---
 >>>    exports.A = A;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^
 1->
 2 >    A
-1->Emitted(19, 5) Source(1, 14) + SourceIndex(0)
-2 >Emitted(19, 19) Source(1, 15) + SourceIndex(0)
+1->Emitted(22, 5) Source(1, 14) + SourceIndex(0)
+2 >Emitted(22, 19) Source(1, 15) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:all.js
@@ -86,21 +89,21 @@ sourceFile:tests/cases/compiler/b.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >import {A} from "./ref/a";
   >
-1 >Emitted(24, 5) Source(2, 1) + SourceIndex(1)
+1 >Emitted(27, 5) Source(2, 1) + SourceIndex(1)
 ---
 >>>        __extends(B, _super);
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^
 1->export class B extends 
 2 >        A
-1->Emitted(25, 9) Source(2, 24) + SourceIndex(1)
-2 >Emitted(25, 30) Source(2, 25) + SourceIndex(1)
+1->Emitted(28, 9) Source(2, 24) + SourceIndex(1)
+2 >Emitted(28, 30) Source(2, 25) + SourceIndex(1)
 ---
 >>>        function B() {
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(26, 9) Source(2, 1) + SourceIndex(1)
+1 >Emitted(29, 9) Source(2, 1) + SourceIndex(1)
 ---
 >>>            return _super !== null && _super.apply(this, arguments) || this;
 >>>        }
@@ -109,16 +112,16 @@ sourceFile:tests/cases/compiler/b.ts
 3 >         ^^^^^^^^^->
 1->export class B extends A { 
 2 >        }
-1->Emitted(28, 9) Source(2, 28) + SourceIndex(1)
-2 >Emitted(28, 10) Source(2, 29) + SourceIndex(1)
+1->Emitted(31, 9) Source(2, 28) + SourceIndex(1)
+2 >Emitted(31, 10) Source(2, 29) + SourceIndex(1)
 ---
 >>>        return B;
 1->^^^^^^^^
 2 >        ^^^^^^^^
 1->
 2 >        }
-1->Emitted(29, 9) Source(2, 28) + SourceIndex(1)
-2 >Emitted(29, 17) Source(2, 29) + SourceIndex(1)
+1->Emitted(32, 9) Source(2, 28) + SourceIndex(1)
+2 >Emitted(32, 17) Source(2, 29) + SourceIndex(1)
 ---
 >>>    }(a_1.A));
 1 >^^^^
@@ -134,20 +137,20 @@ sourceFile:tests/cases/compiler/b.ts
 4 >     export class B extends 
 5 >      A
 6 >            { }
-1 >Emitted(30, 5) Source(2, 28) + SourceIndex(1)
-2 >Emitted(30, 6) Source(2, 29) + SourceIndex(1)
-3 >Emitted(30, 6) Source(2, 1) + SourceIndex(1)
-4 >Emitted(30, 7) Source(2, 24) + SourceIndex(1)
-5 >Emitted(30, 12) Source(2, 25) + SourceIndex(1)
-6 >Emitted(30, 15) Source(2, 29) + SourceIndex(1)
+1 >Emitted(33, 5) Source(2, 28) + SourceIndex(1)
+2 >Emitted(33, 6) Source(2, 29) + SourceIndex(1)
+3 >Emitted(33, 6) Source(2, 1) + SourceIndex(1)
+4 >Emitted(33, 7) Source(2, 24) + SourceIndex(1)
+5 >Emitted(33, 12) Source(2, 25) + SourceIndex(1)
+6 >Emitted(33, 15) Source(2, 29) + SourceIndex(1)
 ---
 >>>    exports.B = B;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^
 1->
 2 >    B
-1->Emitted(31, 5) Source(2, 14) + SourceIndex(1)
-2 >Emitted(31, 19) Source(2, 15) + SourceIndex(1)
+1->Emitted(34, 5) Source(2, 14) + SourceIndex(1)
+2 >Emitted(34, 19) Source(2, 15) + SourceIndex(1)
 ---
 >>>});
 >>>//# sourceMappingURL=all.js.map

@@ -259,6 +259,23 @@ namespace ts {
                 });
             });
         });
+
+        describe("tsbuild - downstream prepend projects always get rebuilt", () => {
+            const fs = outFileFs.shadow();
+            const host = new fakes.CompilerHost(fs);
+            const builder = createSolutionBuilder(host, buildHost, ["/src/third"], { dry: false, force: false, verbose: false });
+            clearDiagnostics();
+            builder.buildAllProjects();
+            assertDiagnosticMessages(/*none*/);
+            assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "First build timestamp is correct");
+            tick();
+            replaceText(fs, "src/first/first_PART1.ts", "Hello", "Hola");
+            tick();
+            builder.resetBuildContext();
+            builder.buildAllProjects();
+            assertDiagnosticMessages(/*none*/);
+            assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
+        });
     }
 
     describe("tsbuild - graph-ordering", () => {
