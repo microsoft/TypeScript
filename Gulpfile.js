@@ -315,7 +315,7 @@ gulp.task("clean:" + webTestServerJs, /*help*/ false, [project.clean(webTestServ
 
 const bundlePath = path.resolve("built/local/bundle.js");
 
-// TODO(rbuckton)
+// TODO(rbuckton): Clean up browserify logic
 gulp.task(
     "browserify",
     "Runs browserify on run.js to produce a file suitable for running tests in the browser",
@@ -520,11 +520,12 @@ gulp.task(
     "Runs 'local'",
     ["local"]);
 
-gulp.task(
-    "watch",
-    "Watches the src/ directory for changes and executes runtests-parallel.",
-    [],
-    () => gulp.watch("src/**/*.*", ["runtests-parallel"]));
+// TODO(rbuckton): Investigate restoring gulp.watch() functionality.
+// gulp.task(
+//     "watch",
+//     "Watches the src/ directory for changes and executes runtests-parallel.",
+//     [],
+//     () => gulp.watch("src/**/*.*", ["runtests-parallel"]));
 
 gulp.task("clean-built", /*help*/ false, ["clean:" + diagnosticInformationMapTs], () => del(["built"]));
 gulp.task(
