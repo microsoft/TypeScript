@@ -1146,18 +1146,6 @@ namespace ts.server {
             return this.getFileAndProjectWorker(args.file, args.projectFileName);
         }
 
-        private getFileAndProjectForFileRename(args: protocol.GetEditsForFileRenameRequestArgs): FileAndProject {
-            const newFilePath = toNormalizedPath(args.newFilePath);
-            const newProject = this.projectService.getDefaultProjectForFile(newFilePath, /*ensureProject*/ false);
-            if (newProject) return { file: newFilePath, project: newProject };
-
-            const oldFilePath = toNormalizedPath(args.oldFilePath);
-            const oldProject = this.projectService.getDefaultProjectForFile(oldFilePath, /*ensureProject*/ false);
-            if (oldProject) return { file: oldFilePath, project: oldProject };
-
-            return Debug.assertDefined(this.projectService.tryGetSomeFileInDirectory(newFilePath) || this.projectService.tryGetSomeFileInDirectory(oldFilePath));
-        }
-
         private getFileAndLanguageServiceForSyntacticOperation(args: protocol.FileRequestArgs) {
             // Since this is syntactic operation, there should always be project for the file
             // we wouldnt have to ensure project but rather throw if we dont get project
@@ -1743,9 +1731,22 @@ namespace ts.server {
         }
 
         private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
-            const { file, project } = this.getFileAndProjectForFileRename(args);
-            const changes = project.getLanguageService().getEditsForFileRename(toNormalizedPath(args.oldFilePath), toNormalizedPath(args.newFilePath), this.getFormatOptions(file), this.getPreferences(file));
-            return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
+            const oldPath = toNormalizedPath(args.oldFilePath);
+            const newPath = toNormalizedPath(args.newFilePath);
+            const formatOptions = this.getHostFormatOptions();
+            const preferences = this.getHostPreferences();
+
+            const changes: (protocol.FileCodeEdits | FileTextChanges)[] = [];
+            this.projectService.forEachProject(project => {
+                for (const fileTextChanges of project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences)) {
+                    // Subsequent projects may make conflicting edits to the same file -- just go with the first.
+                    if (!changes.some(f => f.fileName === fileTextChanges.fileName)) {
+                        changes.push(simplifiedResult ? this.mapTextChangeToCodeEdit(project, fileTextChanges) : fileTextChanges);
+                    }
+                }
+            });
+
+            return changes as ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges>;
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> | undefined {
@@ -1815,10 +1816,12 @@ namespace ts.server {
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
-            return textChanges.map(change => {
-                const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
-                return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
-            });
+            return textChanges.map(change => this.mapTextChangeToCodeEdit(project, change));
+        }
+
+        private mapTextChangeToCodeEdit(project: Project, change: FileTextChanges): protocol.FileCodeEdits {
+            const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
+            return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
@@ -2304,6 +2307,14 @@ namespace ts.server {
 
         private getPreferences(file: NormalizedPath): UserPreferences {
             return this.projectService.getPreferences(file);
+        }
+
+        private getHostFormatOptions(): FormatCodeSettings {
+            return this.projectService.getHostFormatCodeOptions();
+        }
+
+        private getHostPreferences(): UserPreferences {
+            return this.projectService.getHostPreferences();
         }
     }
 

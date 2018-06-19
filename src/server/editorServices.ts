@@ -692,6 +692,13 @@ namespace ts.server {
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
 
+        /* @internal */
+        forEachProject(cb: (project: Project) => void) {
+            for (const p of this.inferredProjects) cb(p);
+            this.configuredProjects.forEach(cb);
+            this.externalProjects.forEach(cb);
+        }
+
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined {
             let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
             if (ensureProject && (!scriptInfo || scriptInfo.isOrphan())) {
@@ -703,18 +710,6 @@ namespace ts.server {
                 return scriptInfo.getDefaultProject();
             }
             return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
-        }
-
-        /* @internal */
-        tryGetSomeFileInDirectory(directoryPath: NormalizedPath): { readonly file: NormalizedPath, readonly project: Project } | undefined {
-            const scriptInfo = forEachEntry(this.filenameToScriptInfo, scriptInfo => {
-                if (startsWithDirectory(scriptInfo.path, directoryPath)) {
-                    return scriptInfo;
-                }
-            });
-            if (!scriptInfo) return undefined;
-            const file = toNormalizedPath(scriptInfo.path);
-            return { file, project: scriptInfo.getDefaultProject() };
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
@@ -752,6 +747,14 @@ namespace ts.server {
         getPreferences(file: NormalizedPath): UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
             return info && info.getPreferences() || this.hostConfiguration.preferences;
+        }
+
+        getHostFormatCodeOptions(): FormatCodeSettings {
+            return this.hostConfiguration.formatCodeOptions;
+        }
+
+        getHostPreferences(): UserPreferences {
+            return this.hostConfiguration.preferences;
         }
 
         private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
