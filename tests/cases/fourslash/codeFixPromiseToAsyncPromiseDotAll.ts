@@ -17,7 +17,7 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
-`async function f():Promise<boolean> {
+`async function f():Promise<void> {
    let vals = await Promise.all([fetch('http://yahoo.com'), fetch('https://microsoft.com'), fetch('https://youtube.com')]);
    return vals.forEach(console.log);
 }`,

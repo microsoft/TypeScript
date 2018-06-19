@@ -26,7 +26,7 @@ verify.codeFix({
 `async function f():Promise<boolean> {
     let result = await fetch('http://yahoo.com');
     let result2 = await res(result);
-    return await res2(result2);
+    return res2(result2);
 }
 
 function res(result){

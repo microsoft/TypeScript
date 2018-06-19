@@ -20,14 +20,14 @@ verify.codeFix({
         let res;
         try {
             res = await fetch("http://yahoo.com");
-            return await console.log(res);
+            return console.log(res);
         }
         catch (err) {
-            return await console.log("err");
+            return console.log("err");
         }
     }
     catch (err2) {
-        return await console.log("err2");
+        return console.log("err2");
     }
 }}`,
 });

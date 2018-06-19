@@ -19,6 +19,6 @@ verify.codeFix({
 
 `async function f():Promise<void> {
     let val = await Promise.race([fetch('http://yahoo.com'), fetch('https://microsoft.com'), fetch('https://youtube.com')]);
-    return await console.log(val);
+    return console.log(val);
 }`,
 });
