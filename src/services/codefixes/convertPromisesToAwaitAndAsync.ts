@@ -118,7 +118,7 @@ namespace ts.codefix {
                 
                 let lastDotThen = getLastDotThen(parent, checker);
                 let tempArgName = lastDotThen ? getArgName(lastDotThen.arguments[0], "temp", checker) : argName;
-                return createNodeArray([createVariableStatement(/*modifiers*/ undefined, [createVariableDeclaration(tempArgName, undefined, (createAwait(synthCall)))])]);
+                return createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(tempArgName, undefined, (createAwait(synthCall)))], NodeFlags.Let)))]);
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
