@@ -27,11 +27,11 @@ verify.codeFix({
     let result;
     try {
         result = await fetch('http://yahoo.com');
+        return res(result);
     }
     catch (err) {
-        return await rej(err);
+        return rej(err);
     }
-    return await res(result);
 }
 
 function res(result){

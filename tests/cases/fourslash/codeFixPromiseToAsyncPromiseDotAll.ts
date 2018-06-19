@@ -3,7 +3,9 @@
 // @target: es6
 
 ////function [|f|]():Promise<void> {
-////    return fetch('http://yahoo.com').then(result => console.log(result)).catch(err => console.log(err));
+////    return Promise.all([fetch('http://yahoo.com'), fetch('https://microsoft.com'), fetch('https://youtube.com')]).then(function(vals){
+////        vals.forEach(console.log); 
+////    })
 ////}
 
 verify.getSuggestionDiagnostics([{
@@ -16,12 +18,7 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `async function f():Promise<void> {
-    try {
-        let result = await fetch('http://yahoo.com');
-        return console.log(result);
-    }
-    catch (err) {
-        return console.log(err);
-    }
+   let vals = await Promise.all([fetch('http://yahoo.com'), fetch('https://microsoft.com'), fetch('https://youtube.com')]);
+   return vals.forEach(console.log);
 }`,
 });

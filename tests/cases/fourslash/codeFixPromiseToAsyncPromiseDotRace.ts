@@ -3,8 +3,9 @@
 // @target: es6
 
 ////function [|f|]():Promise<void> {
-////    return fetch('http://yahoo.com').then(result => console.log(result)).catch(err => console.log(err));
+////    return Promise.race([fetch('http://yahoo.com'), fetch('https://microsoft.com'), fetch('https://youtube.com')]).then(val => console.log(val));
 ////}
+
 
 verify.getSuggestionDiagnostics([{
     message: "This may be converted to use async and await.",
@@ -15,13 +16,9 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
+
 `async function f():Promise<void> {
-    try {
-        let result = await fetch('http://yahoo.com');
-        return console.log(result);
-    }
-    catch (err) {
-        return console.log(err);
-    }
+    let val = await Promise.race([fetch('http://yahoo.com'), fetch('https://microsoft.com'), fetch('https://youtube.com')]);
+    return console.log(val);
 }`,
 });

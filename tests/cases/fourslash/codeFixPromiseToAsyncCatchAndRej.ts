@@ -21,14 +21,14 @@ verify.codeFix({
         let result;
         try {
             result = await fetch('http://yahoo.com');
+            return console.log(result);
         }
         catch (rejection) {
-            console.log("rejected:", rejection);
+            return console.log("rejected:", rejection);
         }
-        console.log(result);
     }
     catch (err) {
-        console.log(err);
+        return console.log(err);
     }
 }`,
 });

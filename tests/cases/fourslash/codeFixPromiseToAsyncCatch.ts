@@ -19,10 +19,10 @@ verify.codeFix({
 `async function f():Promise<void> {
     try {
         let result = await fetch('http://yahoo.com');
-        console.log(result);
+        return console.log(result);
     }
     catch (err) {
-        console.log(err);
+        return console.log(err);
     }
 }`,
 });
