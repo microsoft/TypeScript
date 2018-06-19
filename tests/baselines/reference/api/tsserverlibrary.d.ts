@@ -13801,15 +13801,14 @@ declare namespace ts.server {
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
+        forEachProject(cb: (project: Project) => void): void;
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
-        tryGetSomeFileInDirectory(directoryPath: NormalizedPath): {
-            readonly file: NormalizedPath;
-            readonly project: Project;
-        } | undefined;
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
         private ensureProjectStructuresUptoDate;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
         getPreferences(file: NormalizedPath): UserPreferences;
+        getHostFormatCodeOptions(): FormatCodeSettings;
+        getHostPreferences(): UserPreferences;
         private onSourceFileChanged;
         private handleDeletedFile;
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject): FileWatcher;
@@ -13993,7 +13992,6 @@ declare namespace ts.server {
         private getPosition;
         private getPositionInFile;
         private getFileAndProject;
-        private getFileAndProjectForFileRename;
         private getFileAndLanguageServiceForSyntacticOperation;
         private getFileAndProjectWorker;
         private getOutliningSpans;
@@ -14041,6 +14039,7 @@ declare namespace ts.server {
         private mapCodeAction;
         private mapCodeFixAction;
         private mapTextChangesToCodeEdits;
+        private mapTextChangeToCodeEdit;
         private convertTextChangeToCodeEdit;
         private getBraceMatching;
         private getDiagnosticsForProject;
@@ -14057,6 +14056,8 @@ declare namespace ts.server {
         onMessage(message: string): void;
         private getFormatOptions;
         private getPreferences;
+        private getHostFormatOptions;
+        private getHostPreferences;
     }
     interface HandlerResponse {
         response?: {};
