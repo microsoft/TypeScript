@@ -25,13 +25,16 @@ verify.codeFix({
     newFileContent:
 `async function f():Promise<void> {
     let result;
-    try {
-        result = await fetch('http://yahoo.com');
+    label: {
+        try {
+            result = await fetch('http://yahoo.com');
+        }
+        catch (err) {
+            return await rej(err);
+            break label;
+        }
+        return await res(result);
     }
-    catch (err) {
-        return await rej(err);
-    }
-    return await res(result);
 }
 
 function res(result){

@@ -30,11 +30,14 @@ verify.codeFix({
 `async function f(): Promise<void> {
     try {
         let result;
-        try {
-            result = await fetch('http://yahoo.com');
-        }
-        catch (rejection) {
-            return await rej(rejection);
+        label: {
+            try {
+                result = await fetch('http://yahoo.com');
+            }
+            catch (rejection) {
+                return await rej(rejection);
+                break label;
+            }
         }
         return await res(result);
     }

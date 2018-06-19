@@ -17,12 +17,15 @@ verify.codeFix({
     newFileContent:
 `async function f():Promise<void> {
     let result;
-    try {
-        result = await fetch('http://yahoo.com');
+    label: {
+        try {
+            result = await fetch('http://yahoo.com');
+        }
+        catch (rejection) {
+            console.log("rejected:", rejection);
+            break label;
+        }
+        console.log(result);
     }
-    catch (rejection) {
-        console.log("rejected:", rejection);
-    }
-    console.log(result);
 }`,
 });
