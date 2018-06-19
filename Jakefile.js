@@ -3,6 +3,7 @@
 /// <reference types="jake" />
 
 const fs = require("fs");
+const fs2 = require("fs-extra");
 const os = require("os");
 const path = require("path");
 const fold = require("travis-fold");
@@ -358,9 +359,9 @@ file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
         fs.writeFileSync(Paths.servicesDefinitionFile, servicesContentWithoutConstEnums);
         
         // Also build typescript.js, typescript.js.map, and typescript.d.ts
-        fs.copyFileSync(Paths.servicesFile, Paths.typescriptFile);
+        jake.cpR(Paths.servicesFile, Paths.typescriptFile);
         if (fs.existsSync(Paths.servicesFile + ".map")) {
-            fs.copyFileSync(Paths.servicesFile + ".map", Paths.typescriptFile + ".map");
+            jake.cpR(Paths.servicesFile + ".map", Paths.typescriptFile + ".map");
         }
 
         fs.writeFileSync(Paths.typescriptDefinitionFile, servicesContentWithoutConstEnums + "\r\nexport = ts", { encoding: "utf-8" });
