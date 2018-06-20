@@ -17,10 +17,10 @@
 ////foo7(1, <string>(/*7*/   // signature help shows y as T
 
 verify.signatureHelp(
-    { marker: "1", text: "foo1<T>(x: number, callback: (y1: T) => number): void" },
+    { marker: "1", text: "foo1(x: number, callback: (y1: {}) => number): void" },
     // TODO: GH#23631
     // { marker: "2", text: "foo2(x: number, callback: (y2: {}) => number): void" },
-    { marker: "3", text: "foo3<T>(x: number, callback: (y3: T) => number): void" },
+    { marker: "3", text: "foo3(x: number, callback: (y3: {}) => number): void" },
     // TODO: GH#23631
     // { marker: "4", text: "foo4(x: number, callback: (y4: string) => number): void" },
     { marker: "5", text: "foo5(x: number, callback: (y5: string) => number): void" },
@@ -31,4 +31,4 @@ goTo.marker('6');
 // verify.signatureHelp({ text: "foo6(x: number, callback: (y6: {}) => number): void" });
 edit.insert('string>(null,null);'); // need to make this line parse so we can get reasonable LS answers to later tests
 
-verify.signatureHelp({ marker: "7", text: "foo7<T>(x: number, callback: (y7: T) => number): void" });
+verify.signatureHelp({ marker: "7", text: "foo7(x: number, callback: (y7: {}) => number): void" });

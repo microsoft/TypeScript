@@ -7399,6 +7399,10 @@ declare namespace ts {
      * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
      */
     function matchPatternOrExact(patternStrings: ReadonlyArray<string>, candidate: string): string | Pattern | undefined;
+    function minAndMax<T>(arr: ReadonlyArray<T>, getValue: (value: T) => number): {
+        readonly min: number;
+        readonly max: number;
+    };
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;

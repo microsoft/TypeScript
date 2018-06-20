@@ -8098,4 +8098,20 @@ namespace ts {
 
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
+
+    export function minAndMax<T>(arr: ReadonlyArray<T>, getValue: (value: T) => number): { readonly min: number, readonly max: number } {
+        Debug.assert(arr.length !== 0);
+        let min = getValue(arr[0]);
+        let max = min;
+        for (let i = 1; i < arr.length; i++) {
+            const value = getValue(arr[i]);
+            if (value < min) {
+                min = value;
+            }
+            else if (value > max) {
+                max = value;
+            }
+        }
+        return { min, max };
+    }
 }
