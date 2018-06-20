@@ -1246,7 +1246,7 @@ namespace ts {
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined!;
+            hostCache = undefined;
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
