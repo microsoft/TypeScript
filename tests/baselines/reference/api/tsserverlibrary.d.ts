@@ -6293,7 +6293,8 @@ declare namespace ts {
     function isIdentifierName(node: Identifier): boolean;
     function isAliasSymbolDeclaration(node: Node): boolean;
     function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean;
-    function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments | undefined;
+    function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments | undefined;
+    function getClassExtendsHeritageElement(node: ClassLikeDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments | undefined;
     function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration): NodeArray<ExpressionWithTypeArguments> | undefined;
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode>;
