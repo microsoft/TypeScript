@@ -16,13 +16,12 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `async function f():Promise<void> {
-    let result;
     try {
-        result = await fetch('http://yahoo.com');
-        return console.log(result);
+        let result = await fetch('http://yahoo.com');
+        console.log(result);
     }
     catch (rejection) {
-        return console.log("rejected:", rejection);
+        console.log("rejected:", rejection);
     }
 }`,
 });
