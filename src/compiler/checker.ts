@@ -5392,16 +5392,7 @@ namespace ts {
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments | undefined {
-            const decl = <ClassLikeDeclaration>type.symbol.valueDeclaration;
-            if (isInJavaScriptFile(decl)) {
-                // Prefer an @augments tag because it may have type parameters.
-                const tag = getJSDocAugmentsTag(decl);
-                if (tag) {
-                    return tag.class;
-                }
-            }
-
-            return getClassExtendsHeritageClauseElement(decl);
+            return getClassExtendsHeritageClauseElement(type.symbol.valueDeclaration as ClassLikeDeclaration);
         }
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): Signature[] {

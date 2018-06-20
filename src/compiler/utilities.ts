@@ -2414,6 +2414,13 @@ namespace ts {
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
+        if (isInJavaScriptFile(node)) {
+            // Prefer an @augments tag because it may have type parameters.
+            const tag = getJSDocAugmentsTag(node);
+            if (tag) {
+                return tag.class;
+            }
+        }
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
