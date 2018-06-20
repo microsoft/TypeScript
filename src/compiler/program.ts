@@ -1241,6 +1241,7 @@ namespace ts {
                 readFile: f => host.readFile(f),
                 fileExists: f => host.fileExists(f),
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
+                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             };
         }
 
