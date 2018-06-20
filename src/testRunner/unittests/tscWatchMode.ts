@@ -1218,6 +1218,58 @@ namespace ts.tscWatch {
                 checkWatchedFiles(host, files.map(f => f.path));
             }
         });
+
+        it("updates errors correctly when declaration emit is disabled in compiler options", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `import test from './b';
+test(4, 5);`
+            };
+            const bFileContent = `function test(x: number, y: number) {
+    return x + y / 5;
+}
+export default test;`;
+            const bFile: File = {
+                path: `${currentDirectory}/b.ts`,
+                content: bFileContent
+            };
+            const tsconfigFile: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "commonjs",
+                        noEmit: true,
+                        strict: true,
+                    }
+                })
+            };
+            const files = [aFile, bFile, libFile, tsconfigFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            changeParameterType("x", "string", [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.indexOf("4"), 1, Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1, "4", "string")
+            ]);
+            changeParameterType("y", "string", [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.indexOf("5"), 1, Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1, "5", "string"),
+                getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("y /"), 1, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type)
+            ]);
+
+            function changeParameterType(parameterName: string, toType: string, expectedErrors: ReadonlyArray<Diagnostic>) {
+                const newContent = bFileContent.replace(new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
+
+                verifyErrorsWithBFileContents(newContent, expectedErrors);
+                verifyErrorsWithBFileContents(bFileContent, emptyArray);
+            }
+
+            function verifyErrorsWithBFileContents(content: string, expectedErrors: ReadonlyArray<Diagnostic>) {
+                host.writeFile(bFile.path, content);
+                host.runQueuedTimeoutCallbacks();
+                checkOutputErrorsIncremental(host, expectedErrors);
+            }
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {
