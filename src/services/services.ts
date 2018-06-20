@@ -869,7 +869,7 @@ namespace ts {
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
+        constructor(private host: LanguageServiceHost, private getCanonicalFileName: GetCanonicalFileName) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = createMap<CachedHostFileInformation>();
@@ -890,6 +890,28 @@ namespace ts {
 
         public getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
             return this.host.getProjectReferences && this.host.getProjectReferences();
+        }
+
+        /**
+         * Returns a copy of the HostCache where there are no cached script snapshots,
+         * just their paths/existence.
+         */
+        public thinCopy() {
+            const cache = new HostCache(this.host, this.getCanonicalFileName);
+            const entries = this.fileNameToEntry.keys();
+            for (let { done, value: key } = entries.next(); !done; { done, value: key } = entries.next()) {
+                const existing = this.fileNameToEntry.get(key);
+                if (!existing) continue;
+                this.fileNameToEntry.set(key, typeof existing !== "string" ? {
+                    hostFileName: existing.hostFileName,
+                    version: existing.version,
+                    get scriptSnapshot(): IScriptSnapshot {
+                        return Debug.fail("Thin cache does not support actually retrieving snapshots! This callstack is being executed outside of a context within which file contents are available!");
+                    },
+                    scriptKind: existing.scriptKind
+                } : existing);
+            }
+            return cache;
         }
 
         private createEntry(fileName: string, path: Path) {
@@ -1171,7 +1193,7 @@ namespace ts {
             }
 
             // Get a fresh cache of the host information
-            let hostCache = new HostCache(host, getCanonicalFileName);
+            let hostCache: HostCache = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
 
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
@@ -1246,7 +1268,7 @@ namespace ts {
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined!;
+            hostCache = hostCache.thinCopy(); // The thin copy does not cache any snapshots, just their paths, so is relatively safe to hold onto longer-term
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
@@ -1278,7 +1300,6 @@ namespace ts {
             }
 
             function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                Debug.assert(hostCache !== undefined);
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.

@@ -1239,7 +1239,14 @@ namespace ts {
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
                 readFile: f => host.readFile(f),
-                fileExists: f => host.fileExists(f),
+                fileExists: f => {
+                    // Use local caches
+                    const path = toPath(f);
+                    if (getSourceFileByPath(path)) return true;
+                    if (contains(missingFilePaths, path)) return false;
+                    // Before falling back to the host
+                    return host.fileExists(f);
+                },
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
             };
         }
