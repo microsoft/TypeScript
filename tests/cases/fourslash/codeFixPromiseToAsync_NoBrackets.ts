@@ -18,6 +18,6 @@ verify.codeFix({
     newFileContent:
 `async function f():Promise<void> {
     let result = await fetch('http://yahoo.com');
-    console.log(result);
+    return console.log(result);
 }`,
 });
