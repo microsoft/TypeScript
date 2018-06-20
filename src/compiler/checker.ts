@@ -5392,16 +5392,7 @@ namespace ts {
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments | undefined {
-            const decl = <ClassLikeDeclaration>type.symbol.valueDeclaration;
-            if (isInJavaScriptFile(decl)) {
-                // Prefer an @augments tag because it may have type parameters.
-                const tag = getJSDocAugmentsTag(decl);
-                if (tag) {
-                    return tag.class;
-                }
-            }
-
-            return getClassExtendsHeritageClauseElement(decl);
+            return getEffectiveBaseTypeNode(type.symbol.valueDeclaration as ClassLikeDeclaration);
         }
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): Signature[] {
@@ -5428,7 +5419,7 @@ namespace ts {
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
             if (!type.resolvedBaseConstructorType) {
                 const decl = <ClassLikeDeclaration>type.symbol.valueDeclaration;
-                const extended = getClassExtendsHeritageClauseElement(decl);
+                const extended = getEffectiveBaseTypeNode(decl);
                 const baseTypeNode = getBaseTypeNodeOfClass(type);
                 if (!baseTypeNode) {
                     return type.resolvedBaseConstructorType = undefinedType;
@@ -14764,7 +14755,7 @@ namespace ts {
 
         function checkThisBeforeSuper(node: Node, container: Node, diagnosticMessage: DiagnosticMessage) {
             const containingClassDecl = <ClassDeclaration>container.parent;
-            const baseTypeNode = getClassExtendsHeritageClauseElement(containingClassDecl);
+            const baseTypeNode = getEffectiveBaseTypeNode(containingClassDecl);
 
             // If a containing class does not have extends clause or the class extends null
             // skip checking whether super statement is called before "this" accessing.
@@ -15040,7 +15031,7 @@ namespace ts {
 
             // at this point the only legal case for parent is ClassLikeDeclaration
             const classLikeDeclaration = <ClassLikeDeclaration>container.parent;
-            if (!getClassExtendsHeritageClauseElement(classLikeDeclaration)) {
+            if (!getEffectiveBaseTypeNode(classLikeDeclaration)) {
                 error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
                 return errorType;
             }
@@ -18678,7 +18669,7 @@ namespace ts {
                 if (superType !== errorType) {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
                     // with the type arguments specified in the extends clause.
-                    const baseTypeNode = getClassExtendsHeritageClauseElement(getContainingClass(node)!);
+                    const baseTypeNode = getEffectiveBaseTypeNode(getContainingClass(node)!);
                     if (baseTypeNode) {
                         const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments, baseTypeNode);
                         return resolveCall(node, baseConstructors, candidatesOutArray);
@@ -21474,7 +21465,7 @@ namespace ts {
             // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
             const containingClassDecl = <ClassDeclaration>node.parent;
-            if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
+            if (getEffectiveBaseTypeNode(containingClassDecl)) {
                 captureLexicalThis(node.parent, containingClassDecl);
                 const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
                 const superCall = getSuperCallInConstructor(node);
@@ -22651,7 +22642,7 @@ namespace ts {
             }
 
             const name = getIdentifierFromEntityNameExpression(node.class.expression);
-            const extend = getClassExtendsHeritageClauseElement(classLike);
+            const extend = getClassExtendsHeritageElement(classLike);
             if (extend) {
                 const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {
@@ -24426,7 +24417,7 @@ namespace ts {
                 checkClassForStaticPropertyNameConflicts(node);
             }
 
-            const baseTypeNode = getClassExtendsHeritageClauseElement(node);
+            const baseTypeNode = getEffectiveBaseTypeNode(node);
             if (baseTypeNode) {
                 if (languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
@@ -24439,6 +24430,10 @@ namespace ts {
                     const staticBaseType = getApparentType(baseConstructorType);
                     checkBaseTypeAccessibility(staticBaseType, baseTypeNode);
                     checkSourceElement(baseTypeNode.expression);
+                    const extendsNode = getClassExtendsHeritageElement(node);
+                    if (extendsNode && extendsNode !== baseTypeNode) {
+                        checkExpression(extendsNode.expression);
+                    }
                     if (some(baseTypeNode.typeArguments)) {
                         forEach(baseTypeNode.typeArguments, checkSourceElement);
                         for (const constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode)) {
