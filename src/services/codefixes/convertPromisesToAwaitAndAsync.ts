@@ -59,8 +59,8 @@ namespace ts.codefix {
         const func = node.arguments[0];
         const argName = getArgName(func, "arg", checker);
         const tryBlock = createBlock(parseCallback(node.expression, checker, argName, argName !== "arg"));
-        // instead of using e -> get the paramater of the catch function and use that
         const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName, node, checker)));
+
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
 
@@ -73,11 +73,10 @@ namespace ts.codefix {
         if (rej) {
             const argNameRej = getArgName(rej, "e", checker);
 
-            const varDecl: Statement = createVariableStatement(/* modifiers */ undefined, createVariableDeclarationList([createVariableDeclaration(argNameRes)], NodeFlags.Let));
-            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes, argNameRes !== "val"));
+            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes, node, checker)));
             const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej, node, checker, /* isRej */ true)));
 
-            return [varDecl, createTry(tryBlock, catchClause, /*finalllyBlock*/ undefined) as Statement].concat(getCallbackBody(res, argNameRes, node, checker));
+            return  [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
         else {
             return parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes, node, checker));
@@ -88,8 +87,9 @@ namespace ts.codefix {
         if (!argName) {
             argName = "val"; // fix this to maybe not always create a variable declaration if not necessary
         }
-        return argUsed ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node))], NodeFlags.Let)))] :
-            [createStatement(createAwait(node))];
+
+        let varDecl = createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node));
+        return argUsed ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(node))];
     }
 
 
@@ -127,7 +127,7 @@ namespace ts.codefix {
                     return (<FunctionDeclaration>func).body.statements;
                 }
                 else {
-                    return createNodeArray([createStatement((<ArrowFunction>func).body as Expression)]);
+                    return createNodeArray([createReturn((<ArrowFunction>func).body as Expression)]);
                 }
         }
     }
