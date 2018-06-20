@@ -3,7 +3,7 @@
 // @target: es6
 
 ////function [|f|](): Promise<void> {
-////    return fetch('http://yahoo.com').then( () => { console.log(done); });
+////    return fetch('http://yahoo.com').then( () => console.log(done) );
 ////}
 
 verify.getSuggestionDiagnostics([{
