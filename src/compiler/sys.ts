@@ -9,8 +9,8 @@ namespace ts {
      */
     /* @internal */
     export function setStackTraceLimit() {
-        if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
-            (Error as any).stackTraceLimit = 100;
+        if ((Error as any).stackTraceLimit < Infinity) { // Also tests that we won't set the property if it doesn't exist.
+            (Error as any).stackTraceLimit = Infinity;
         }
     }
 
