@@ -4298,8 +4298,8 @@ namespace ts {
         return !!forEachAncestorDirectory(directory, d => callback(d) ? true : undefined);
     }
 
-    export function isUMDExportSymbol(symbol: Symbol | undefined) {
-        return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
+    export function isUMDExportSymbol(symbol: Symbol | undefined): boolean {
+        return !!symbol && !!symbol.declarations && !!symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
     }
 
     export function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string {
@@ -8094,4 +8094,6 @@ namespace ts {
 
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
+
+    export type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
 }

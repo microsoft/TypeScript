@@ -2649,7 +2649,7 @@ Actual: ${stringify(fullActual)}`);
             }
             const range = ts.firstOrUndefined(ranges);
 
-            const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixId === undefined); // TODO: GH#20315 filter out those that use the import fix ID;
+            const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixId === ts.codefix.importFixId);
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {

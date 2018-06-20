@@ -132,7 +132,7 @@ declare namespace ts {
      */
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
     function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined;
-    function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U>;
+    function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => ReadonlyArray<U> | Iterator<U> | undefined): Iterator<U>;
     /**
      * Maps an array. If the mapped value is an array, it is spread into the result.
      * Avoids allocation if all elements map to themselves.
@@ -348,6 +348,7 @@ declare namespace ts {
      */
     function isString(text: any): text is string;
     function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
+    function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
     function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut;
     /** Does nothing. */
     function noop(_?: {} | null | undefined): void;
@@ -5913,6 +5914,7 @@ declare namespace ts {
         Add_or_remove_braces_in_an_arrow_function: DiagnosticMessage;
         Add_braces_to_arrow_function: DiagnosticMessage;
         Remove_braces_from_arrow_function: DiagnosticMessage;
+        Fix_all_missing_imports: DiagnosticMessage;
     };
 }
 declare namespace ts {
@@ -6599,7 +6601,7 @@ declare namespace ts {
     function getObjectFlags(type: Type): ObjectFlags;
     function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker): boolean;
     function forSomeAncestorDirectory(directory: string, callback: (directory: string) => boolean): boolean;
-    function isUMDExportSymbol(symbol: Symbol | undefined): boolean | undefined;
+    function isUMDExportSymbol(symbol: Symbol | undefined): boolean;
     function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string;
     function getLastChild(node: Node): Node | undefined;
     /** Add a value to a set, and return true if it wasn't already present. */
@@ -7367,6 +7369,9 @@ declare namespace ts {
      * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
      */
     function matchPatternOrExact(patternStrings: ReadonlyArray<string>, candidate: string): string | Pattern | undefined;
+    type Mutable<T extends object> = {
+        -readonly [K in keyof T]: T[K];
+    };
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
@@ -10893,7 +10898,7 @@ declare namespace ts.Completions {
         name: string;
         source?: string;
     }
-    function getCompletionEntryDetails(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier, host: LanguageServiceHost, formatContext: formatting.FormatContext, getCanonicalFileName: GetCanonicalFileName, preferences: UserPreferences, cancellationToken: CancellationToken): CompletionEntryDetails | undefined;
+    function getCompletionEntryDetails(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences, cancellationToken: CancellationToken): CompletionEntryDetails | undefined;
     function getCompletionEntrySymbol(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier): Symbol | undefined;
 }
 declare namespace ts.DocumentHighlights {
@@ -11481,7 +11486,7 @@ declare namespace ts.textChanges {
         replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options?: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd): this;
         private nextCommaToken;
         replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment): this;
-        private insertNodeAt;
+        insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options?: InsertNodeOptions): void;
         private insertNodesAt;
         insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void;
         insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween?: boolean): void;
@@ -11530,9 +11535,9 @@ declare namespace ts.textChanges {
 }
 declare namespace ts {
     interface CodeFixRegistration {
-        errorCodes: number[];
+        errorCodes: ReadonlyArray<number>;
         getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
-        fixIds?: string[];
+        fixIds?: ReadonlyArray<string>;
         getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
     }
     interface CodeFixContextBase extends textChanges.TextChangesContext {
@@ -11556,8 +11561,10 @@ declare namespace ts {
         function getSupportedErrorCodes(): string[];
         function getFixes(context: CodeFixContext): CodeFixAction[];
         function getAllFixes(context: CodeFixAllContext): CombinedCodeActions;
+        function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions;
         function createFileTextChanges(fileName: string, textChanges: TextChange[]): FileTextChanges;
         function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void): CombinedCodeActions;
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: ReadonlyArray<number>, cb: (diag: DiagnosticWithLocation) => void): void;
     }
 }
 declare namespace ts {
@@ -11598,7 +11605,8 @@ declare namespace ts.codefix {
 declare namespace ts.codefix {
 }
 declare namespace ts.codefix {
-    function getImportCompletionAction(exportedSymbol: Symbol, moduleSymbol: Symbol, sourceFile: SourceFile, symbolName: string, host: LanguageServiceHost, program: Program, checker: TypeChecker, compilerOptions: CompilerOptions, allSourceFiles: ReadonlyArray<SourceFile>, formatContext: formatting.FormatContext, getCanonicalFileName: GetCanonicalFileName, symbolToken: Node | undefined, preferences: UserPreferences): {
+    const importFixId = "fixMissingImport";
+    function getImportCompletionAction(exportedSymbol: Symbol, moduleSymbol: Symbol, sourceFile: SourceFile, symbolName: string, host: LanguageServiceHost, program: Program, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, formatContext: formatting.FormatContext, symbolToken: Node | undefined, preferences: UserPreferences): {
         readonly moduleSpecifier: string;
         readonly codeAction: CodeAction;
     };

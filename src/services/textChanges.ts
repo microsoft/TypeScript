@@ -316,7 +316,7 @@ namespace ts.textChanges {
             return this.replaceNode(sourceFile, oldNode, newNode, { suffix });
         }
 
-        private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
+        public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
             this.replaceRange(sourceFile, createTextRange(pos), newNode, options);
         }
 
@@ -497,6 +497,7 @@ namespace ts.textChanges {
 
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.Identifier:
                     return { prefix: ", " };
 
                 case SyntaxKind.PropertyAssignment:

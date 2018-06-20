@@ -4418,5 +4418,9 @@
     "Remove braces from arrow function": {
         "category": "Message",
         "code": 95060
+    },
+    "Fix all missing imports": {
+        "category": "Message",
+        "code": 95061
     }
 }

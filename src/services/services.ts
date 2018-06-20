@@ -1424,7 +1424,6 @@ namespace ts {
                 { name, source },
                 host,
                 (formattingOptions && formatting.getFormatContext(formattingOptions))!, // TODO: GH#18217
-                getCanonicalFileName,
                 preferences,
                 cancellationToken,
             );
