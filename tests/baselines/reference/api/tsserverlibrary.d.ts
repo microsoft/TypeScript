@@ -12175,6 +12175,7 @@ declare namespace ts.server.protocol {
         Change = "change",
         Close = "close",
         Completions = "completions",
+        CompletionInfo = "completionInfo",
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
         CompletionDetailsFull = "completionEntryDetails-full",
@@ -12875,6 +12876,15 @@ declare namespace ts.server.protocol {
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
+    }
+    interface CompletionInfoResponse extends Response {
+        body?: CompletionInfo;
+    }
+    interface CompletionInfo {
+        readonly isGlobalCompletion: boolean;
+        readonly isMemberCompletion: boolean;
+        readonly isNewIdentifierLocation: boolean;
+        readonly entries: ReadonlyArray<CompletionEntry>;
     }
     interface CompletionDetailsResponse extends Response {
         body?: CompletionEntryDetails[];
