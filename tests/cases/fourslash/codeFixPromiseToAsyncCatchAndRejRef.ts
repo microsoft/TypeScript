@@ -30,7 +30,7 @@ verify.codeFix({
 `async function f(): Promise<void> {
     try {
         try {
-            result = await fetch('http://yahoo.com');
+            let result = await fetch('http://yahoo.com');
             return res(result);
         }
         catch (rejection) {
