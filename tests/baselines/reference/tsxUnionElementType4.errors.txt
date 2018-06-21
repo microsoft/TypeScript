@@ -1,5 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(32,17): error TS2326: Types of property 'x' are incompatible.
-  Type 'true' is not assignable to type 'ReactText'.
+tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'true' is not assignable to type 'ReactText'.
 tests/cases/conformance/jsx/file.tsx(33,10): error TS2559: Type '{ x: number; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
 tests/cases/conformance/jsx/file.tsx(34,10): error TS2559: Type '{ prop: true; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
 
@@ -38,8 +37,7 @@ tests/cases/conformance/jsx/file.tsx(34,10): error TS2559: Type '{ prop: true; }
     // Error
     let a = <RCComp x />;
                     ~
-!!! error TS2326: Types of property 'x' are incompatible.
-!!! error TS2326:   Type 'true' is not assignable to type 'ReactText'.
+!!! error TS2322: Type 'true' is not assignable to type 'ReactText'.
     let b = <PartRCComp x={10} />
              ~~~~~~~~~~
 !!! error TS2559: Type '{ x: number; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.

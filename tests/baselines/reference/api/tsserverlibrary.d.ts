@@ -5737,6 +5737,7 @@ declare namespace ts {
         Option_build_must_be_the_first_command_line_argument: DiagnosticMessage;
         Options_0_and_1_cannot_be_combined: DiagnosticMessage;
         Skipping_clean_because_not_all_projects_could_be_located: DiagnosticMessage;
+        Which_is_from_property_0_of_type_1_declared_here: DiagnosticMessage;
         Variable_0_implicitly_has_an_1_type: DiagnosticMessage;
         Parameter_0_implicitly_has_an_1_type: DiagnosticMessage;
         Member_0_implicitly_has_an_1_type: DiagnosticMessage;

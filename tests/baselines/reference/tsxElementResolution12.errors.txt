@@ -2,8 +2,7 @@ tests/cases/conformance/jsx/file.tsx(23,1): error TS2607: JSX element class does
 tests/cases/conformance/jsx/file.tsx(23,7): error TS2339: Property 'x' does not exist on type '{}'.
 tests/cases/conformance/jsx/file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 tests/cases/conformance/jsx/file.tsx(26,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
-tests/cases/conformance/jsx/file.tsx(33,7): error TS2326: Types of property 'x' are incompatible.
-  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type '"10"' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
@@ -48,7 +47,6 @@ tests/cases/conformance/jsx/file.tsx(33,7): error TS2326: Types of property 'x' 
     var Obj4: Obj4type;
     <Obj4 x={10} />; // OK
     <Obj4 x={'10'} />; // Error
-          ~~~~~~~~
-!!! error TS2326: Types of property 'x' are incompatible.
-!!! error TS2326:   Type 'string' is not assignable to type 'number'.
+          ~
+!!! error TS2322: Type '"10"' is not assignable to type 'number'.
     

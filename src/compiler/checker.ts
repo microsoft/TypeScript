@@ -10137,7 +10137,13 @@ namespace ts {
                     else {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
                         const resultObj: { error?: Diagnostic } = {};
-                        checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
+                        // Use the expression type, if available
+                        const specificSource = next ? checkExpressionCached(next) : sourcePropType;
+                        const result = checkTypeAssignableTo(specificSource, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
+                        if (result && specificSource !== sourcePropType) {
+                            // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
+                            checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj)
+                        }
                         if (resultObj.error && target.symbol && length(target.symbol.declarations)) {
                             const reportedDiag = resultObj.error;
                             const relatededInfo = (reportedDiag.relatedInformation = reportedDiag.relatedInformation || []);
@@ -15630,7 +15636,7 @@ namespace ts {
                     const discriminatingType = checkExpression(prop.initializer);
                     for (const type of (contextualType as UnionType).types) {
                         const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
-                        if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
+                        if (targetType && isTypeAssignableTo(discriminatingType, targetType)) {
                             if (match) {
                                 if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
                                 match = undefined;
@@ -19907,10 +19913,10 @@ namespace ts {
                     if (returnOrPromisedType) {
                         if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) { // Async function
                             const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-                            checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
+                            checkTypeAssignableToAndOptionallyElaborate(awaitedType, returnOrPromisedType, node.body, node.body);
                         }
                         else { // Normal function
-                            checkTypeAssignableTo(exprType, returnOrPromisedType, node.body);
+                            checkTypeAssignableToAndOptionallyElaborate(exprType, returnOrPromisedType, node.body, node.body);
                         }
                     }
                 }
@@ -20329,7 +20335,7 @@ namespace ts {
                 Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access :
                 Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access;
             if (checkReferenceExpression(target, error)) {
-                checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);
+                checkTypeAssignableToAndOptionallyElaborate(sourceType, targetType, target, target);
             }
             return sourceType;
         }
@@ -20628,7 +20634,7 @@ namespace ts {
                     if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)
                         && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
+                        checkTypeAssignableToAndOptionallyElaborate(valueType, leftType, left, right);
                     }
                 }
             }
@@ -20717,7 +20723,7 @@ namespace ts {
             const returnType = getEffectiveReturnTypeNode(func);
             if (returnType) {
                 const signatureElementType = getIteratedTypeOfGenerator(getTypeFromTypeNode(returnType), isAsync) || anyType;
-                checkTypeAssignableTo(yieldedType, signatureElementType, node.expression || node, /*headMessage*/ undefined);
+                checkTypeAssignableToAndOptionallyElaborate(yieldedType, signatureElementType, node.expression || node, node.expression);
             }
 
             // Both yield and yield* expressions have type 'any'
@@ -23416,7 +23422,7 @@ namespace ts {
                         checkNonNullType(initializerType, node);
                     }
                     else {
-                        checkTypeAssignableTo(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                        checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
                     }
                     checkParameterInitializer(node);
                 }
@@ -23623,7 +23629,7 @@ namespace ts {
                     // because we accessed properties from anyType, or it may have led to an error inside
                     // getElementTypeOfIterable.
                     if (iteratedType) {
-                        checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
+                        checkTypeAssignableToAndOptionallyElaborate(iteratedType, leftType, varExpr, node.expression);
                     }
                 }
             }
@@ -24067,7 +24073,7 @@ namespace ts {
                     }
                 }
                 else if (func.kind === SyntaxKind.Constructor) {
-                    if (node.expression && !checkTypeAssignableTo(exprType, returnType, node)) {
+                    if (node.expression && !checkTypeAssignableToAndOptionallyElaborate(exprType, returnType, node, node.expression)) {
                         error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                     }
                 }
@@ -24083,7 +24089,7 @@ namespace ts {
                         }
                     }
                     else {
-                        checkTypeAssignableTo(exprType, returnType, node);
+                        checkTypeAssignableToAndOptionallyElaborate(exprType, returnType, node, node.expression);
                     }
                 }
             }

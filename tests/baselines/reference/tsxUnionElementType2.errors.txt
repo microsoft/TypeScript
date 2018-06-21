@@ -1,5 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(12,10): error TS2326: Types of property 'x' are incompatible.
-  Type 'string' is not assignable to type 'number | boolean'.
+tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type '"hi"' is not assignable to type 'number | boolean'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -15,6 +14,5 @@ tests/cases/conformance/jsx/file.tsx(12,10): error TS2326: Types of property 'x'
     
     var SFCComp = SFC1 || SFC2;
     <SFCComp x={"hi"}/>
-             ~~~~~~~~
-!!! error TS2326: Types of property 'x' are incompatible.
-!!! error TS2326:   Type 'string' is not assignable to type 'number | boolean'.
+             ~
+!!! error TS2322: Type '"hi"' is not assignable to type 'number | boolean'.

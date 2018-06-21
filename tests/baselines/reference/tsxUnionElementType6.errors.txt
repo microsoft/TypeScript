@@ -1,6 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(18,10): error TS2559: Type '{ x: true; }' has no properties in common with type 'IntrinsicAttributes'.
-tests/cases/conformance/jsx/file.tsx(19,27): error TS2326: Types of property 'x' are incompatible.
-  Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(19,27): error TS2322: Type '"hi"' is not assignable to type 'boolean'.
 tests/cases/conformance/jsx/file.tsx(20,10): error TS2322: Type '{}' is not assignable to type '{ x: boolean; }'.
   Property 'x' is missing in type '{}'.
 tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type '{ data-prop: true; }' is not assignable to type '{ x: boolean; }'.
@@ -29,9 +28,8 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type '{ data-prop: tr
              ~~~~~~~~~~~~
 !!! error TS2559: Type '{ x: true; }' has no properties in common with type 'IntrinsicAttributes'.
     let b = <SFC2AndEmptyComp x="hi" />;
-                              ~~~~~~
-!!! error TS2326: Types of property 'x' are incompatible.
-!!! error TS2326:   Type 'string' is not assignable to type 'boolean'.
+                              ~
+!!! error TS2322: Type '"hi"' is not assignable to type 'boolean'.
     let c = <SFC2AndEmptyComp />;
              ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type '{ x: boolean; }'.
