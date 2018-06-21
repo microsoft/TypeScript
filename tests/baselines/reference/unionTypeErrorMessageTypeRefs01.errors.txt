@@ -1,0 +1,99 @@
+tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(25,1): error TS2322: Type 'A<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
+  Type 'A<Foo>' is not assignable to type 'C<Kwah>'.
+    Property 'cProp' is missing in type 'A<Foo>'.
+tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(26,1): error TS2322: Type 'B<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
+  Type 'B<Foo>' is not assignable to type 'C<Kwah>'.
+    Property 'cProp' is missing in type 'B<Foo>'.
+tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(27,1): error TS2322: Type 'C<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
+  Type 'C<Foo>' is not assignable to type 'C<Kwah>'.
+    Type 'Foo' is not assignable to type 'Kwah'.
+      Property 'kwah' is missing in type 'Foo'.
+tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(48,1): error TS2322: Type 'X<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
+  Type 'X<Foo>' is not assignable to type 'Z<Kwah>'.
+    Property 'zProp' is missing in type 'X<Foo>'.
+tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(49,1): error TS2322: Type 'Y<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
+  Type 'Y<Foo>' is not assignable to type 'Z<Kwah>'.
+    Property 'zProp' is missing in type 'Y<Foo>'.
+tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(50,1): error TS2322: Type 'Z<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
+  Type 'Z<Foo>' is not assignable to type 'Z<Kwah>'.
+    Types of property 'zProp' are incompatible.
+      Type 'Foo' is not assignable to type 'Kwah'.
+
+
+==== tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts (6 errors) ====
+    interface Foo { foo: any }
+    interface Bar { bar: any }
+    interface Baz { baz: any }
+    interface Kwah { kwah: any }
+    
+    ////////
+    
+    interface A<T> {
+        aProp: T;
+    }
+    
+    interface B<T> {
+        bProp: T;
+    }
+    
+    interface C<T> {
+        cProp: T;
+    }
+    
+    declare const a: A<Foo>;
+    declare const b: B<Foo>;
+    declare const c: C<Foo>;
+    declare let thingOfInterfaces: A<Bar> | B<Baz> | C<Kwah>;
+    
+    thingOfInterfaces = a;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'A<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
+!!! error TS2322:   Type 'A<Foo>' is not assignable to type 'C<Kwah>'.
+!!! error TS2322:     Property 'cProp' is missing in type 'A<Foo>'.
+    thingOfInterfaces = b;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'B<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
+!!! error TS2322:   Type 'B<Foo>' is not assignable to type 'C<Kwah>'.
+!!! error TS2322:     Property 'cProp' is missing in type 'B<Foo>'.
+    thingOfInterfaces = c;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'C<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
+!!! error TS2322:   Type 'C<Foo>' is not assignable to type 'C<Kwah>'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'Kwah'.
+!!! error TS2322:       Property 'kwah' is missing in type 'Foo'.
+    
+    ////////
+    
+    type X<T> = {
+        xProp: T;
+    }
+    
+    type Y<T> = {
+        yProp: T;
+    }
+    
+    type Z<T> = {
+        zProp: T;
+    }
+    
+    declare const x: X<Foo>;
+    declare const y: Y<Foo>;
+    declare const z: Z<Foo>;
+    declare let thingOfTypeAliases: X<Bar> | Y<Baz> | Z<Kwah>;
+    
+    thingOfTypeAliases = x;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'X<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
+!!! error TS2322:   Type 'X<Foo>' is not assignable to type 'Z<Kwah>'.
+!!! error TS2322:     Property 'zProp' is missing in type 'X<Foo>'.
+    thingOfTypeAliases = y;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Y<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
+!!! error TS2322:   Type 'Y<Foo>' is not assignable to type 'Z<Kwah>'.
+!!! error TS2322:     Property 'zProp' is missing in type 'Y<Foo>'.
+    thingOfTypeAliases = z;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Z<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
+!!! error TS2322:   Type 'Z<Foo>' is not assignable to type 'Z<Kwah>'.
+!!! error TS2322:     Types of property 'zProp' are incompatible.
+!!! error TS2322:       Type 'Foo' is not assignable to type 'Kwah'.
