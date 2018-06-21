@@ -7538,9 +7538,9 @@ namespace ts {
                     signature.resolvedTypePredicate = getUnionTypePredicate(signature.unionSignatures) || noTypePredicate;
                 }
                 else {
-                    const declaration = signature.declaration;
-                    signature.resolvedTypePredicate = declaration && declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
-                        createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
+                    const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+                    signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
+                        createTypePredicateFromTypePredicateNode(type) :
                         noTypePredicate;
                 }
                 Debug.assert(!!signature.resolvedTypePredicate);
