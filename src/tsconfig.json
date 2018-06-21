@@ -4,7 +4,6 @@
     "references": [
         { "path": "./tsc" },
         { "path": "./tsserver" },
-        { "path": "./tsserverLibrary" },
         { "path": "./typingsInstaller" },
         { "path": "./watchGuard" },
         { "path": "./cancellationToken" },

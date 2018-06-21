@@ -190,6 +190,7 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
+        refactorsAvailable(names: ReadonlyArray<string>): void;
         refactor(options: {
             name: string;
             actionName: string;
@@ -255,7 +256,7 @@ declare namespace FourSlashInterface {
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<FourSlashInterface.ReferenceGroup>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
@@ -510,6 +511,10 @@ declare namespace FourSlashInterface {
     type ReferencesDefinition = string | {
         text: string;
         range: Range;
+    }
+    interface ReferenceGroup {
+        readonly definition: ReferencesDefinition;
+        readonly ranges: ReadonlyArray<Range>;
     }
     interface Diagnostic {
         message: string;

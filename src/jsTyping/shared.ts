@@ -1,3 +1,4 @@
+/* @internal */
 namespace ts.server {
     // tslint:disable variable-name
     export const ActionSet: ActionSet = "action::set";

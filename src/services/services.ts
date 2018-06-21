@@ -391,10 +391,10 @@ namespace ts {
         getApparentProperties(): Symbol[] {
             return this.checker.getAugmentedPropertiesOfType(this);
         }
-        getCallSignatures(): Signature[] {
+        getCallSignatures(): ReadonlyArray<Signature> {
             return this.checker.getSignaturesOfType(this, SignatureKind.Call);
         }
-        getConstructSignatures(): Signature[] {
+        getConstructSignatures(): ReadonlyArray<Signature> {
             return this.checker.getSignaturesOfType(this, SignatureKind.Construct);
         }
         getStringIndexType(): Type | undefined {
