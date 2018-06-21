@@ -10862,15 +10862,13 @@ namespace ts {
 
             function findMatchingTypeReferenceOrTypeAliasReference(source: Type, unionTarget: UnionOrIntersectionType) {
                 if (source.flags & TypeFlags.Object && (source as ObjectType).objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous) && unionTarget.flags & TypeFlags.Union) {
-                    return find(unionTarget.types, t => {
-                        if (t.flags & TypeFlags.Object) {
-                            if ((source as ObjectType).objectFlags & (t as ObjectType).objectFlags & ObjectFlags.Reference) {
-                                return (source as TypeReference).target === (t as TypeReference).target;
+                    return find(unionTarget.types, target => {
+                        if (target.flags & TypeFlags.Object) {
+                            if ((source as ObjectType).objectFlags & (target as ObjectType).objectFlags & ObjectFlags.Reference) {
+                                return (source as TypeReference).target === (target as TypeReference).target;
                             }
-                            if ((source as ObjectType).objectFlags & (t as ObjectType).objectFlags & ObjectFlags.Anonymous) {
-                                // TODO (drosen): Not sure why the following isn't sufficient.
-                                // return !!(source as AnonymousType).aliasSymbol && (source as AnonymousType).aliasSymbol === (target as AnonymousType).aliasSymbol;
-                                return false;
+                            if ((source as ObjectType).objectFlags & (target as ObjectType).objectFlags & ObjectFlags.Anonymous) {
+                                return !!(source as AnonymousType).aliasSymbol && (source as AnonymousType).aliasSymbol === (target as AnonymousType).aliasSymbol;
                             }
                         }
                         return false;
