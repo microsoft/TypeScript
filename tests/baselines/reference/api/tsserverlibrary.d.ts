@@ -2544,7 +2544,7 @@ declare namespace ts {
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
-        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
+        getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
@@ -3246,7 +3246,7 @@ declare namespace ts {
         symbol: Symbol;
         pattern?: DestructuringPattern;
         aliasSymbol?: Symbol;
-        aliasTypeArguments?: Type[];
+        aliasTypeArguments?: ReadonlyArray<Type>;
         wildcardInstantiation?: Type;
     }
     interface IntrinsicType extends Type {
@@ -3317,7 +3317,7 @@ declare namespace ts {
      */
     interface TypeReference extends ObjectType {
         target: GenericType;
-        typeArguments?: Type[];
+        typeArguments?: ReadonlyArray<Type>;
     }
     enum Variance {
         Invariant = 0,
@@ -3367,8 +3367,8 @@ declare namespace ts {
     interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;
         properties: Symbol[];
-        callSignatures: Signature[];
-        constructSignatures: Signature[];
+        callSignatures: ReadonlyArray<Signature>;
+        constructSignatures: ReadonlyArray<Signature>;
         stringIndexInfo?: IndexInfo;
         numberIndexInfo?: IndexInfo;
     }
@@ -3447,8 +3447,8 @@ declare namespace ts {
     }
     interface Signature {
         declaration?: SignatureDeclaration | JSDocSignature;
-        typeParameters?: TypeParameter[];
-        parameters: Symbol[];
+        typeParameters?: ReadonlyArray<TypeParameter>;
+        parameters: ReadonlyArray<Symbol>;
         thisParameter?: Symbol;
         resolvedReturnType?: Type;
         resolvedTypePredicate?: TypePredicate;
@@ -3514,7 +3514,7 @@ declare namespace ts {
     }
     type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
     interface InferenceContext extends TypeMapper {
-        typeParameters: TypeParameter[];
+        typeParameters: ReadonlyArray<TypeParameter>;
         signature?: Signature;
         inferences: InferenceInfo[];
         flags: InferenceFlags;
@@ -9800,8 +9800,8 @@ declare namespace ts {
         getProperties(): Symbol[];
         getProperty(propertyName: string): Symbol | undefined;
         getApparentProperties(): Symbol[];
-        getCallSignatures(): Signature[];
-        getConstructSignatures(): Signature[];
+        getCallSignatures(): ReadonlyArray<Signature>;
+        getConstructSignatures(): ReadonlyArray<Signature>;
         getStringIndexType(): Type | undefined;
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
