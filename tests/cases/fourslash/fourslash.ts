@@ -190,6 +190,7 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
+        refactorsAvailable(names: ReadonlyArray<string>): void;
         refactor(options: {
             name: string;
             actionName: string;

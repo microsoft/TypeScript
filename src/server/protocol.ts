@@ -14,7 +14,9 @@ namespace ts.server.protocol {
         GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
+        /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
         Completions = "completions",
+        CompletionInfo = "completionInfo",
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
@@ -1942,8 +1944,20 @@ namespace ts.server.protocol {
         source?: SymbolDisplayPart[];
     }
 
+    /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
     export interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
+    }
+
+    export interface CompletionInfoResponse extends Response {
+        body?: CompletionInfo;
+    }
+
+    export interface CompletionInfo {
+        readonly isGlobalCompletion: boolean;
+        readonly isMemberCompletion: boolean;
+        readonly isNewIdentifierLocation: boolean;
+        readonly entries: ReadonlyArray<CompletionEntry>;
     }
 
     export interface CompletionDetailsResponse extends Response {
