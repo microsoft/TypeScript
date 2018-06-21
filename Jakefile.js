@@ -38,6 +38,7 @@ const TaskNames = {
     buildFoldEnd: "build-fold-end",
     generateDiagnostics: "generate-diagnostics",
     coreBuild: "core-build",
+    tsc: "tsc",
     lkg: "LKG",
     release: "release",
     lssl: "lssl",
@@ -59,6 +60,7 @@ Paths.builtLocalCompiler = "built/local/tsc.js";
 Paths.builtLocalTSServer = "built/local/tsserver.js";
 Paths.builtLocalRun = "built/local/run.js";
 Paths.typesMapOutput = "built/local/typesMap.json";
+Paths.typescriptFile = "built/local/typescript.js";
 Paths.servicesFile = "built/local/typescriptServices.js";
 Paths.servicesDefinitionFile = "built/local/typescriptServices.d.ts";
 Paths.typescriptDefinitionFile = "built/local/typescript.d.ts";
@@ -276,6 +278,12 @@ task(TaskNames.clean, function () {
 desc("Generates the LCG file for localization");
 task("localize", [Paths.generatedLCGFile]);
 
+task(TaskNames.tsc, [Paths.diagnosticInformationMap, TaskNames.lib], function () {
+    tsbuild(ConfigFileFor.tsc, true, () => {
+        complete();
+    });
+}, { async: true });
+
 task(TaskNames.coreBuild, [Paths.diagnosticInformationMap, TaskNames.lib], function () {
     tsbuild(ConfigFileFor.all, true, () => {
         complete();
@@ -348,8 +356,13 @@ file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
         const servicesContent = readFileSync(Paths.servicesDefinitionFile);
         const servicesContentWithoutConstEnums = removeConstModifierFromEnumDeclarations(servicesContent);
         fs.writeFileSync(Paths.servicesDefinitionFile, servicesContentWithoutConstEnums);
+        
+        // Also build typescript.js, typescript.js.map, and typescript.d.ts
+        jake.cpR(Paths.servicesFile, Paths.typescriptFile);
+        if (fs.existsSync(Paths.servicesFile + ".map")) {
+            jake.cpR(Paths.servicesFile + ".map", Paths.typescriptFile + ".map");
+        }
 
-        // Also build typescript.d.ts
         fs.writeFileSync(Paths.typescriptDefinitionFile, servicesContentWithoutConstEnums + "\r\nexport = ts", { encoding: "utf-8" });
         // And typescript_standalone.d.ts
         fs.writeFileSync(Paths.typescriptStandaloneDefinitionFile, servicesContentWithoutConstEnums.replace(/declare (namespace|module) ts(\..+)? \{/g, 'declare module "typescript" {'), { encoding: "utf-8"});
