@@ -6106,7 +6106,7 @@ declare namespace ts {
     function isLateVisibilityPaintedStatement(node: Node): node is LateVisibilityPaintedStatement;
     function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport;
     function getEnclosingBlockScopeContainer(node: Node): Node;
-    function declarationNameToString(name: DeclarationName | QualifiedName): string;
+    function declarationNameToString(name: DeclarationName | QualifiedName | undefined): string;
     function getNameFromIndexInfo(info: IndexInfo): string | undefined;
     function getTextOfPropertyName(name: PropertyName): __String;
     function entityNameToString(name: EntityNameOrEntityNameExpression): string;
@@ -6684,7 +6684,7 @@ declare namespace ts {
     function isNamedDeclaration(node: Node): node is NamedDeclaration & {
         name: DeclarationName;
     };
-    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName;
+    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -7701,8 +7701,8 @@ declare namespace ts {
     /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
     function createFileLevelUniqueName(text: string): Identifier;
     /** Create a unique name generated for a node. */
-    function getGeneratedNameForNode(node: Node): Identifier;
-    function getGeneratedNameForNode(node: Node, flags: GeneratedIdentifierFlags): Identifier;
+    function getGeneratedNameForNode(node: Node | undefined): Identifier;
+    function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier;
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
     function createSuper(): SuperExpression;
     function createThis(): ThisExpression & Token<SyntaxKind.ThisKeyword>;

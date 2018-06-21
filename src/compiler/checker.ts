@@ -22814,11 +22814,7 @@ namespace ts {
             addDiagnostic(UnusedKind.Local, createDiagnosticForNode(node, message, name));
         }
 
-        function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {
-            return parameterName && isIdentifierThatStartsWithUnderScore(parameterName);
-        }
-
-        function isIdentifierThatStartsWithUnderScore(node: Node) {
+        function isIdentifierThatStartsWithUnderscore(node: Node) {
             return isIdentifier(node) && idText(node).charCodeAt(0) === CharacterCodes._;
         }
 
@@ -22866,7 +22862,7 @@ namespace ts {
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
             if (!(node.flags & NodeFlags.Ambient) && last(getSymbolOfNode(node).declarations) === node) {
                 for (const typeParameter of typeParameters) {
-                    if (!(getMergedSymbol(typeParameter.symbol).isReferenced! & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
+                    if (!(getMergedSymbol(typeParameter.symbol).isReferenced! & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderscore(typeParameter.name)) {
                         addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol)));
                     }
                 }
@@ -22904,7 +22900,7 @@ namespace ts {
 
                 for (const declaration of local.declarations) {
                     if (isAmbientModule(declaration) ||
-                        (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderScore(declaration.name!)) {
+                        (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderscore(declaration.name!)) {
                         continue;
                     }
 
@@ -22923,9 +22919,9 @@ namespace ts {
                     }
                     else {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
-                        if (parameter) {
-                            const name = getNameOfDeclaration(local.valueDeclaration);
-                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !parameterNameStartsWithUnderscore(name)) {
+                        const name = getNameOfDeclaration(local.valueDeclaration)
+                        if (parameter && name) {
+                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
                                 addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
                             }
                         }
@@ -24220,18 +24216,19 @@ namespace ts {
                 }
 
                 const propDeclaration = prop.valueDeclaration;
+                const name = getNameOfDeclaration(propDeclaration);
 
                 // index is numeric and property name is not valid numeric literal
-                if (indexKind === IndexKind.Number && !(propDeclaration ? isNumericName(getNameOfDeclaration(propDeclaration)) : isNumericLiteralName(prop.escapedName))) {
+                if (indexKind === IndexKind.Number && !(name ? isNumericName(name) : isNumericLiteralName(prop.escapedName))) {
                     return;
                 }
 
                 // perform property check if property or indexer is declared in 'type'
                 // this allows us to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node | undefined;
-                if (propDeclaration &&
+                if (propDeclaration && name &&
                     (propDeclaration.kind === SyntaxKind.BinaryExpression ||
-                     getNameOfDeclaration(propDeclaration).kind === SyntaxKind.ComputedPropertyName ||
+                     name.kind === SyntaxKind.ComputedPropertyName ||
                      prop.parent === containingType.symbol)) {
                     errorNode = propDeclaration;
                 }

@@ -512,7 +512,10 @@ namespace ts.formatting {
                 // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                    return getNameOfDeclaration(<Declaration>node).kind;
+                    const name =getNameOfDeclaration(<Declaration>node);
+                    if (name) {
+                        return name.kind;
+                    }
             }
         }
 

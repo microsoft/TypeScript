@@ -3188,7 +3188,7 @@ declare namespace ts {
      */
     function unescapeIdentifier(id: string): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined;
-    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName;
+    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -3623,7 +3623,7 @@ declare namespace ts {
     /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
     function createFileLevelUniqueName(text: string): Identifier;
     /** Create a unique name generated for a node. */
-    function getGeneratedNameForNode(node: Node): Identifier;
+    function getGeneratedNameForNode(node: Node | undefined): Identifier;
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
     function createSuper(): SuperExpression;
     function createThis(): ThisExpression & Token<SyntaxKind.ThisKeyword>;
