@@ -695,6 +695,7 @@ namespace ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.TypeParameter:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocSignature:

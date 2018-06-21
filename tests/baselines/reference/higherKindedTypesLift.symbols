@@ -1,0 +1,525 @@
+=== tests/cases/compiler/higherKindedTypesLift.ts ===
+declare function stringLength(strarg: string): number;
+>stringLength : Symbol(stringLength, Decl(higherKindedTypesLift.ts, 0, 0))
+>strarg : Symbol(strarg, Decl(higherKindedTypesLift.ts, 0, 30))
+
+export interface Functor<AF, Container<_TF>> {
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift.ts, 0, 54))
+>AF : Symbol(AF, Decl(higherKindedTypesLift.ts, 2, 25))
+>Container : Symbol(Container, Decl(higherKindedTypesLift.ts, 2, 28))
+>_TF : Symbol(_TF, Decl(higherKindedTypesLift.ts, 2, 39))
+
+    map<BF>(f: (a: AF) => BF): Container<BF>;
+>map : Symbol(Functor.map, Decl(higherKindedTypesLift.ts, 2, 46))
+>BF : Symbol(BF, Decl(higherKindedTypesLift.ts, 3, 8))
+>f : Symbol(f, Decl(higherKindedTypesLift.ts, 3, 12))
+>a : Symbol(a, Decl(higherKindedTypesLift.ts, 3, 16))
+>AF : Symbol(AF, Decl(higherKindedTypesLift.ts, 2, 25))
+>BF : Symbol(BF, Decl(higherKindedTypesLift.ts, 3, 8))
+>Container : Symbol(Container, Decl(higherKindedTypesLift.ts, 2, 28))
+>BF : Symbol(BF, Decl(higherKindedTypesLift.ts, 3, 8))
+}
+
+export interface DiffFunctor<DA, DContainer<_TD>> {
+>DiffFunctor : Symbol(DiffFunctor, Decl(higherKindedTypesLift.ts, 4, 1))
+>DA : Symbol(DA, Decl(higherKindedTypesLift.ts, 6, 29))
+>DContainer : Symbol(DContainer, Decl(higherKindedTypesLift.ts, 6, 32))
+>_TD : Symbol(_TD, Decl(higherKindedTypesLift.ts, 6, 44))
+
+    diffMap<DB>(df: (da: DA) => DB): DContainer<DB>;
+>diffMap : Symbol(DiffFunctor.diffMap, Decl(higherKindedTypesLift.ts, 6, 51))
+>DB : Symbol(DB, Decl(higherKindedTypesLift.ts, 7, 12))
+>df : Symbol(df, Decl(higherKindedTypesLift.ts, 7, 16))
+>da : Symbol(da, Decl(higherKindedTypesLift.ts, 7, 21))
+>DA : Symbol(DA, Decl(higherKindedTypesLift.ts, 6, 29))
+>DB : Symbol(DB, Decl(higherKindedTypesLift.ts, 7, 12))
+>DContainer : Symbol(DContainer, Decl(higherKindedTypesLift.ts, 6, 32))
+>DB : Symbol(DB, Decl(higherKindedTypesLift.ts, 7, 12))
+}
+
+class FunctorX<AX> implements Functor<AX, FunctorX> {
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>AX : Symbol(AX, Decl(higherKindedTypesLift.ts, 10, 15))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift.ts, 0, 54))
+>AX : Symbol(AX, Decl(higherKindedTypesLift.ts, 10, 15))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+
+    constructor(private elements: AX[]) {}
+>elements : Symbol(FunctorX.elements, Decl(higherKindedTypesLift.ts, 11, 16))
+>AX : Symbol(AX, Decl(higherKindedTypesLift.ts, 10, 15))
+
+    map<BX>(f: (a: AX) => BX): FunctorX<BX> {
+>map : Symbol(FunctorX.map, Decl(higherKindedTypesLift.ts, 11, 42))
+>BX : Symbol(BX, Decl(higherKindedTypesLift.ts, 12, 8))
+>f : Symbol(f, Decl(higherKindedTypesLift.ts, 12, 12))
+>a : Symbol(a, Decl(higherKindedTypesLift.ts, 12, 16))
+>AX : Symbol(AX, Decl(higherKindedTypesLift.ts, 10, 15))
+>BX : Symbol(BX, Decl(higherKindedTypesLift.ts, 12, 8))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>BX : Symbol(BX, Decl(higherKindedTypesLift.ts, 12, 8))
+
+        const mappedElements = this.elements.map(f);
+>mappedElements : Symbol(mappedElements, Decl(higherKindedTypesLift.ts, 13, 13))
+>this.elements.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>this.elements : Symbol(FunctorX.elements, Decl(higherKindedTypesLift.ts, 11, 16))
+>this : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>elements : Symbol(FunctorX.elements, Decl(higherKindedTypesLift.ts, 11, 16))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>f : Symbol(f, Decl(higherKindedTypesLift.ts, 12, 12))
+
+        return new FunctorX(mappedElements);
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>mappedElements : Symbol(mappedElements, Decl(higherKindedTypesLift.ts, 13, 13))
+    }
+
+    firstVal(): AX | undefined {
+>firstVal : Symbol(FunctorX.firstVal, Decl(higherKindedTypesLift.ts, 15, 5))
+>AX : Symbol(AX, Decl(higherKindedTypesLift.ts, 10, 15))
+
+        return this.elements.length ? this.elements[0] : undefined;
+>this.elements.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.elements : Symbol(FunctorX.elements, Decl(higherKindedTypesLift.ts, 11, 16))
+>this : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>elements : Symbol(FunctorX.elements, Decl(higherKindedTypesLift.ts, 11, 16))
+>length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.elements : Symbol(FunctorX.elements, Decl(higherKindedTypesLift.ts, 11, 16))
+>this : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>elements : Symbol(FunctorX.elements, Decl(higherKindedTypesLift.ts, 11, 16))
+>undefined : Symbol(undefined)
+
+    };
+}
+
+const functorXString = new FunctorX(["myFunctorX"]);
+>functorXString : Symbol(functorXString, Decl(higherKindedTypesLift.ts, 22, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+
+declare class DiffFunctorY<AY> implements DiffFunctor<AY, DiffFunctorY> {
+>DiffFunctorY : Symbol(DiffFunctorY, Decl(higherKindedTypesLift.ts, 22, 52))
+>AY : Symbol(AY, Decl(higherKindedTypesLift.ts, 24, 27))
+>DiffFunctor : Symbol(DiffFunctor, Decl(higherKindedTypesLift.ts, 4, 1))
+>AY : Symbol(AY, Decl(higherKindedTypesLift.ts, 24, 27))
+>DiffFunctorY : Symbol(DiffFunctorY, Decl(higherKindedTypesLift.ts, 22, 52))
+
+    diffMap<BY>(f: (a: AY) => BY): DiffFunctorY<BY>
+>diffMap : Symbol(DiffFunctorY.diffMap, Decl(higherKindedTypesLift.ts, 24, 73))
+>BY : Symbol(BY, Decl(higherKindedTypesLift.ts, 26, 12))
+>f : Symbol(f, Decl(higherKindedTypesLift.ts, 26, 16))
+>a : Symbol(a, Decl(higherKindedTypesLift.ts, 26, 20))
+>AY : Symbol(AY, Decl(higherKindedTypesLift.ts, 24, 27))
+>BY : Symbol(BY, Decl(higherKindedTypesLift.ts, 26, 12))
+>DiffFunctorY : Symbol(DiffFunctorY, Decl(higherKindedTypesLift.ts, 22, 52))
+>BY : Symbol(BY, Decl(higherKindedTypesLift.ts, 26, 12))
+
+    firstValY(): AY | undefined
+>firstValY : Symbol(DiffFunctorY.firstValY, Decl(higherKindedTypesLift.ts, 26, 51))
+>AY : Symbol(AY, Decl(higherKindedTypesLift.ts, 24, 27))
+}
+
+declare const diffFunctorYString: DiffFunctorY<string>;
+>diffFunctorYString : Symbol(diffFunctorYString, Decl(higherKindedTypesLift.ts, 31, 13))
+>DiffFunctorY : Symbol(DiffFunctorY, Decl(higherKindedTypesLift.ts, 22, 52))
+
+declare class InvalidFunctor<IA> {
+>InvalidFunctor : Symbol(InvalidFunctor, Decl(higherKindedTypesLift.ts, 31, 55))
+>IA : Symbol(IA, Decl(higherKindedTypesLift.ts, 33, 29))
+
+    // does not actually implement Functor because it doesn't return InvalidFunctor<IB>
+    map<IB>(fi: (ia: IA) => IB): IB
+>map : Symbol(InvalidFunctor.map, Decl(higherKindedTypesLift.ts, 33, 34))
+>IB : Symbol(IB, Decl(higherKindedTypesLift.ts, 35, 8))
+>fi : Symbol(fi, Decl(higherKindedTypesLift.ts, 35, 12))
+>ia : Symbol(ia, Decl(higherKindedTypesLift.ts, 35, 17))
+>IA : Symbol(IA, Decl(higherKindedTypesLift.ts, 33, 29))
+>IB : Symbol(IB, Decl(higherKindedTypesLift.ts, 35, 8))
+>IB : Symbol(IB, Decl(higherKindedTypesLift.ts, 35, 8))
+}
+declare const invalidFunctor: InvalidFunctor<string>;
+>invalidFunctor : Symbol(invalidFunctor, Decl(higherKindedTypesLift.ts, 37, 13))
+>InvalidFunctor : Symbol(InvalidFunctor, Decl(higherKindedTypesLift.ts, 31, 55))
+
+declare class InvalidFunctor2<IA2> {
+>InvalidFunctor2 : Symbol(InvalidFunctor2, Decl(higherKindedTypesLift.ts, 37, 53))
+>IA2 : Symbol(IA2, Decl(higherKindedTypesLift.ts, 39, 30))
+
+    // does not actually implement Functor because it doesn't return InvalidFunctor2<IB>
+    map<IB2>(fi2: (ia2: IA2) => IB2): FunctorX<IB2>
+>map : Symbol(InvalidFunctor2.map, Decl(higherKindedTypesLift.ts, 39, 36))
+>IB2 : Symbol(IB2, Decl(higherKindedTypesLift.ts, 41, 8))
+>fi2 : Symbol(fi2, Decl(higherKindedTypesLift.ts, 41, 13))
+>ia2 : Symbol(ia2, Decl(higherKindedTypesLift.ts, 41, 19))
+>IA2 : Symbol(IA2, Decl(higherKindedTypesLift.ts, 39, 30))
+>IB2 : Symbol(IB2, Decl(higherKindedTypesLift.ts, 41, 8))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>IB2 : Symbol(IB2, Decl(higherKindedTypesLift.ts, 41, 8))
+
+    someUniqueMethod(): IA2
+>someUniqueMethod : Symbol(InvalidFunctor2.someUniqueMethod, Decl(higherKindedTypesLift.ts, 41, 51))
+>IA2 : Symbol(IA2, Decl(higherKindedTypesLift.ts, 39, 30))
+}
+declare const invalidFunctor2: InvalidFunctor2<string>;
+>invalidFunctor2 : Symbol(invalidFunctor2, Decl(higherKindedTypesLift.ts, 45, 13))
+>InvalidFunctor2 : Symbol(InvalidFunctor2, Decl(higherKindedTypesLift.ts, 37, 53))
+
+interface StaticFunctor<CS<_TS>> {
+>StaticFunctor : Symbol(StaticFunctor, Decl(higherKindedTypesLift.ts, 45, 55))
+>CS : Symbol(CS, Decl(higherKindedTypesLift.ts, 47, 24))
+>_TS : Symbol(_TS, Decl(higherKindedTypesLift.ts, 47, 27))
+
+    <AS, BS>(csas: CS<AS>, fmapstatic: (as: AS) => BS): CS<BS>;
+>AS : Symbol(AS, Decl(higherKindedTypesLift.ts, 48, 5))
+>BS : Symbol(BS, Decl(higherKindedTypesLift.ts, 48, 8))
+>csas : Symbol(csas, Decl(higherKindedTypesLift.ts, 48, 13))
+>CS : Symbol(CS, Decl(higherKindedTypesLift.ts, 47, 24))
+>AS : Symbol(AS, Decl(higherKindedTypesLift.ts, 48, 5))
+>fmapstatic : Symbol(fmapstatic, Decl(higherKindedTypesLift.ts, 48, 26))
+>as : Symbol(as, Decl(higherKindedTypesLift.ts, 48, 40))
+>AS : Symbol(AS, Decl(higherKindedTypesLift.ts, 48, 5))
+>BS : Symbol(BS, Decl(higherKindedTypesLift.ts, 48, 8))
+>CS : Symbol(CS, Decl(higherKindedTypesLift.ts, 47, 24))
+>BS : Symbol(BS, Decl(higherKindedTypesLift.ts, 48, 8))
+}
+
+interface LiftedResult<LRC<_LT>> {
+>LiftedResult : Symbol(LiftedResult, Decl(higherKindedTypesLift.ts, 49, 1))
+>LRC : Symbol(LRC, Decl(higherKindedTypesLift.ts, 51, 23))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift.ts, 51, 27))
+
+    <LRA, LRB>(lrmap: (lra: LRA) => LRB): <NC<_NT> extends LRC<_NT>>(lrclra: NC<LRA>) => NC<LRB>
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 52, 5))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 52, 9))
+>lrmap : Symbol(lrmap, Decl(higherKindedTypesLift.ts, 52, 15))
+>lra : Symbol(lra, Decl(higherKindedTypesLift.ts, 52, 23))
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 52, 5))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 52, 9))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 52, 43))
+>_NT : Symbol(_NT, Decl(higherKindedTypesLift.ts, 52, 46))
+>LRC : Symbol(LRC, Decl(higherKindedTypesLift.ts, 51, 23))
+>_NT : Symbol(_NT, Decl(higherKindedTypesLift.ts, 52, 46))
+>lrclra : Symbol(lrclra, Decl(higherKindedTypesLift.ts, 52, 69))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 52, 43))
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 52, 5))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 52, 43))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 52, 9))
+}
+
+interface LiftedResult3A<LRC<_LT>> {
+>LiftedResult3A : Symbol(LiftedResult3A, Decl(higherKindedTypesLift.ts, 53, 1))
+>LRC : Symbol(LRC, Decl(higherKindedTypesLift.ts, 55, 25))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift.ts, 55, 29))
+
+    <LRA, LRB>(lrmap: (lra: LRA) => LRB): LiftedResult3B<LRC, LRA, LRB>
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 56, 5))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 56, 9))
+>lrmap : Symbol(lrmap, Decl(higherKindedTypesLift.ts, 56, 15))
+>lra : Symbol(lra, Decl(higherKindedTypesLift.ts, 56, 23))
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 56, 5))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 56, 9))
+>LiftedResult3B : Symbol(LiftedResult3B, Decl(higherKindedTypesLift.ts, 57, 1))
+>LRC : Symbol(LRC, Decl(higherKindedTypesLift.ts, 55, 25))
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 56, 5))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 56, 9))
+}
+interface LiftedResult3B<LRC<_LT>, LRA, LRB> {
+>LiftedResult3B : Symbol(LiftedResult3B, Decl(higherKindedTypesLift.ts, 57, 1))
+>LRC : Symbol(LRC, Decl(higherKindedTypesLift.ts, 58, 25))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift.ts, 58, 29))
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 58, 34))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 58, 39))
+
+    <NC<_NT> extends LRC<_NT>>(lrclra: NC<LRA>): NC<LRB>
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 59, 5))
+>_NT : Symbol(_NT, Decl(higherKindedTypesLift.ts, 59, 8))
+>LRC : Symbol(LRC, Decl(higherKindedTypesLift.ts, 58, 25))
+>_NT : Symbol(_NT, Decl(higherKindedTypesLift.ts, 59, 8))
+>lrclra : Symbol(lrclra, Decl(higherKindedTypesLift.ts, 59, 31))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 59, 5))
+>LRA : Symbol(LRA, Decl(higherKindedTypesLift.ts, 58, 34))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 59, 5))
+>LRB : Symbol(LRB, Decl(higherKindedTypesLift.ts, 58, 39))
+}
+
+function lift1<C<_TL>>(fToLift: StaticFunctor<C>): LiftedResult<C> {
+>lift1 : Symbol(lift1, Decl(higherKindedTypesLift.ts, 60, 1))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 62, 15))
+>_TL : Symbol(_TL, Decl(higherKindedTypesLift.ts, 62, 17))
+>fToLift : Symbol(fToLift, Decl(higherKindedTypesLift.ts, 62, 23))
+>StaticFunctor : Symbol(StaticFunctor, Decl(higherKindedTypesLift.ts, 45, 55))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 62, 15))
+>LiftedResult : Symbol(LiftedResult, Decl(higherKindedTypesLift.ts, 49, 1))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 62, 15))
+
+    return lmap => lca => fToLift(lca, lmap);
+>lmap : Symbol(lmap, Decl(higherKindedTypesLift.ts, 63, 10))
+>lca : Symbol(lca, Decl(higherKindedTypesLift.ts, 63, 18))
+>fToLift : Symbol(fToLift, Decl(higherKindedTypesLift.ts, 62, 23))
+>lca : Symbol(lca, Decl(higherKindedTypesLift.ts, 63, 18))
+>lmap : Symbol(lmap, Decl(higherKindedTypesLift.ts, 63, 10))
+}
+
+// lift2 does not use intermediate interfaces
+function lift2<C<_TL>>(
+>lift2 : Symbol(lift2, Decl(higherKindedTypesLift.ts, 64, 1))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 67, 15))
+>_TL : Symbol(_TL, Decl(higherKindedTypesLift.ts, 67, 17))
+
+    fToLift: <AS, BS>(csas: C<AS>, fmapstatic: (as: AS) => BS) => C<BS>
+>fToLift : Symbol(fToLift, Decl(higherKindedTypesLift.ts, 67, 23))
+>AS : Symbol(AS, Decl(higherKindedTypesLift.ts, 68, 14))
+>BS : Symbol(BS, Decl(higherKindedTypesLift.ts, 68, 17))
+>csas : Symbol(csas, Decl(higherKindedTypesLift.ts, 68, 22))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 67, 15))
+>AS : Symbol(AS, Decl(higherKindedTypesLift.ts, 68, 14))
+>fmapstatic : Symbol(fmapstatic, Decl(higherKindedTypesLift.ts, 68, 34))
+>as : Symbol(as, Decl(higherKindedTypesLift.ts, 68, 48))
+>AS : Symbol(AS, Decl(higherKindedTypesLift.ts, 68, 14))
+>BS : Symbol(BS, Decl(higherKindedTypesLift.ts, 68, 17))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 67, 15))
+>BS : Symbol(BS, Decl(higherKindedTypesLift.ts, 68, 17))
+
+): 
+    <LA, LB>(lrmap: (lra: LA) => LB) => <NC<_NT> extends C<_NT>>(lrclra: NC<LA>) => NC<LB> {
+>LA : Symbol(LA, Decl(higherKindedTypesLift.ts, 70, 5))
+>LB : Symbol(LB, Decl(higherKindedTypesLift.ts, 70, 8))
+>lrmap : Symbol(lrmap, Decl(higherKindedTypesLift.ts, 70, 13))
+>lra : Symbol(lra, Decl(higherKindedTypesLift.ts, 70, 21))
+>LA : Symbol(LA, Decl(higherKindedTypesLift.ts, 70, 5))
+>LB : Symbol(LB, Decl(higherKindedTypesLift.ts, 70, 8))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 70, 41))
+>_NT : Symbol(_NT, Decl(higherKindedTypesLift.ts, 70, 44))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 67, 15))
+>_NT : Symbol(_NT, Decl(higherKindedTypesLift.ts, 70, 44))
+>lrclra : Symbol(lrclra, Decl(higherKindedTypesLift.ts, 70, 65))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 70, 41))
+>LA : Symbol(LA, Decl(higherKindedTypesLift.ts, 70, 5))
+>NC : Symbol(NC, Decl(higherKindedTypesLift.ts, 70, 41))
+>LB : Symbol(LB, Decl(higherKindedTypesLift.ts, 70, 8))
+
+    return lmap => lca => fToLift(lca, lmap);
+>lmap : Symbol(lmap, Decl(higherKindedTypesLift.ts, 71, 10))
+>lca : Symbol(lca, Decl(higherKindedTypesLift.ts, 71, 18))
+>fToLift : Symbol(fToLift, Decl(higherKindedTypesLift.ts, 67, 23))
+>lca : Symbol(lca, Decl(higherKindedTypesLift.ts, 71, 18))
+>lmap : Symbol(lmap, Decl(higherKindedTypesLift.ts, 71, 10))
+}
+
+// lift3 uses an extra intermediate interface
+function lift3<C<_TL>>(fToLift: StaticFunctor<C>): LiftedResult3A<C> {
+>lift3 : Symbol(lift3, Decl(higherKindedTypesLift.ts, 72, 1))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 75, 15))
+>_TL : Symbol(_TL, Decl(higherKindedTypesLift.ts, 75, 17))
+>fToLift : Symbol(fToLift, Decl(higherKindedTypesLift.ts, 75, 23))
+>StaticFunctor : Symbol(StaticFunctor, Decl(higherKindedTypesLift.ts, 45, 55))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 75, 15))
+>LiftedResult3A : Symbol(LiftedResult3A, Decl(higherKindedTypesLift.ts, 53, 1))
+>C : Symbol(C, Decl(higherKindedTypesLift.ts, 75, 15))
+
+    return lmap => lca => fToLift(lca, lmap);
+>lmap : Symbol(lmap, Decl(higherKindedTypesLift.ts, 76, 10))
+>lca : Symbol(lca, Decl(higherKindedTypesLift.ts, 76, 18))
+>fToLift : Symbol(fToLift, Decl(higherKindedTypesLift.ts, 75, 23))
+>lca : Symbol(lca, Decl(higherKindedTypesLift.ts, 76, 18))
+>lmap : Symbol(lmap, Decl(higherKindedTypesLift.ts, 76, 10))
+}
+
+function staticMap<C1<_T1> extends Functor<_T1, C1>, A1, B1>(fa1: C1<A1>, fmap1: (a1: A1) => B1): C1<B1> {
+>staticMap : Symbol(staticMap, Decl(higherKindedTypesLift.ts, 77, 1))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift.ts, 79, 19))
+>_T1 : Symbol(_T1, Decl(higherKindedTypesLift.ts, 79, 22))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift.ts, 0, 54))
+>_T1 : Symbol(_T1, Decl(higherKindedTypesLift.ts, 79, 22))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift.ts, 79, 19))
+>A1 : Symbol(A1, Decl(higherKindedTypesLift.ts, 79, 52))
+>B1 : Symbol(B1, Decl(higherKindedTypesLift.ts, 79, 56))
+>fa1 : Symbol(fa1, Decl(higherKindedTypesLift.ts, 79, 61))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift.ts, 79, 19))
+>A1 : Symbol(A1, Decl(higherKindedTypesLift.ts, 79, 52))
+>fmap1 : Symbol(fmap1, Decl(higherKindedTypesLift.ts, 79, 73))
+>a1 : Symbol(a1, Decl(higherKindedTypesLift.ts, 79, 82))
+>A1 : Symbol(A1, Decl(higherKindedTypesLift.ts, 79, 52))
+>B1 : Symbol(B1, Decl(higherKindedTypesLift.ts, 79, 56))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift.ts, 79, 19))
+>B1 : Symbol(B1, Decl(higherKindedTypesLift.ts, 79, 56))
+
+    return fa1.map(fmap1);
+>fa1.map : Symbol(Functor.map, Decl(higherKindedTypesLift.ts, 2, 46))
+>fa1 : Symbol(fa1, Decl(higherKindedTypesLift.ts, 79, 61))
+>map : Symbol(Functor.map, Decl(higherKindedTypesLift.ts, 2, 46))
+>fmap1 : Symbol(fmap1, Decl(higherKindedTypesLift.ts, 79, 73))
+}
+
+const liftedFunctor1 = lift1(staticMap);
+>liftedFunctor1 : Symbol(liftedFunctor1, Decl(higherKindedTypesLift.ts, 83, 5))
+>lift1 : Symbol(lift1, Decl(higherKindedTypesLift.ts, 60, 1))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypesLift.ts, 77, 1))
+
+const liftedFunctor2 = lift2(staticMap);
+>liftedFunctor2 : Symbol(liftedFunctor2, Decl(higherKindedTypesLift.ts, 84, 5))
+>lift2 : Symbol(lift2, Decl(higherKindedTypesLift.ts, 64, 1))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypesLift.ts, 77, 1))
+
+const liftedFunctor3 = lift3(staticMap);
+>liftedFunctor3 : Symbol(liftedFunctor3, Decl(higherKindedTypesLift.ts, 85, 5))
+>lift3 : Symbol(lift3, Decl(higherKindedTypesLift.ts, 72, 1))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypesLift.ts, 77, 1))
+
+const liftedStringLength1 = liftedFunctor1(stringLength);
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>liftedFunctor1 : Symbol(liftedFunctor1, Decl(higherKindedTypesLift.ts, 83, 5))
+>stringLength : Symbol(stringLength, Decl(higherKindedTypesLift.ts, 0, 0))
+
+const liftedStringLength2 = liftedFunctor2(stringLength);
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>liftedFunctor2 : Symbol(liftedFunctor2, Decl(higherKindedTypesLift.ts, 84, 5))
+>stringLength : Symbol(stringLength, Decl(higherKindedTypesLift.ts, 0, 0))
+
+const liftedStringLength3 = liftedFunctor3(stringLength);
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>liftedFunctor3 : Symbol(liftedFunctor3, Decl(higherKindedTypesLift.ts, 85, 5))
+>stringLength : Symbol(stringLength, Decl(higherKindedTypesLift.ts, 0, 0))
+
+
+const result1 = liftedStringLength1(functorXString);
+>result1 : Symbol(result1, Decl(higherKindedTypesLift.ts, 92, 5))
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>functorXString : Symbol(functorXString, Decl(higherKindedTypesLift.ts, 22, 5))
+
+const expectedType1: FunctorX<number> = result1;
+>expectedType1 : Symbol(expectedType1, Decl(higherKindedTypesLift.ts, 93, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>result1 : Symbol(result1, Decl(higherKindedTypesLift.ts, 92, 5))
+
+const result2 = liftedStringLength2(functorXString);
+>result2 : Symbol(result2, Decl(higherKindedTypesLift.ts, 94, 5))
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>functorXString : Symbol(functorXString, Decl(higherKindedTypesLift.ts, 22, 5))
+
+const expectedType2: FunctorX<number> = result2;
+>expectedType2 : Symbol(expectedType2, Decl(higherKindedTypesLift.ts, 95, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>result2 : Symbol(result2, Decl(higherKindedTypesLift.ts, 94, 5))
+
+const result3 = liftedStringLength3(functorXString);
+>result3 : Symbol(result3, Decl(higherKindedTypesLift.ts, 96, 5))
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>functorXString : Symbol(functorXString, Decl(higherKindedTypesLift.ts, 22, 5))
+
+const expectedType3: FunctorX<number> = result3;
+>expectedType3 : Symbol(expectedType3, Decl(higherKindedTypesLift.ts, 97, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesLift.ts, 8, 1))
+>result3 : Symbol(result3, Decl(higherKindedTypesLift.ts, 96, 5))
+
+const expectErrorA1 = liftedStringLength1(result1);
+>expectErrorA1 : Symbol(expectErrorA1, Decl(higherKindedTypesLift.ts, 99, 5))
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>result1 : Symbol(result1, Decl(higherKindedTypesLift.ts, 92, 5))
+
+const expectErrorA2 = liftedStringLength2(result2);
+>expectErrorA2 : Symbol(expectErrorA2, Decl(higherKindedTypesLift.ts, 100, 5))
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>result2 : Symbol(result2, Decl(higherKindedTypesLift.ts, 94, 5))
+
+const expectErrorA3 = liftedStringLength3(result3);
+>expectErrorA3 : Symbol(expectErrorA3, Decl(higherKindedTypesLift.ts, 101, 5))
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>result3 : Symbol(result3, Decl(higherKindedTypesLift.ts, 96, 5))
+
+
+const stringArray = ["not explicitly declared to implement functor"];
+>stringArray : Symbol(stringArray, Decl(higherKindedTypesLift.ts, 104, 5))
+
+const arrayResult1 = liftedStringLength1(stringArray);
+>arrayResult1 : Symbol(arrayResult1, Decl(higherKindedTypesLift.ts, 105, 5))
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>stringArray : Symbol(stringArray, Decl(higherKindedTypesLift.ts, 104, 5))
+
+const arrayExpectedType1: Array<number> = arrayResult1;
+>arrayExpectedType1 : Symbol(arrayExpectedType1, Decl(higherKindedTypesLift.ts, 106, 5))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>arrayResult1 : Symbol(arrayResult1, Decl(higherKindedTypesLift.ts, 105, 5))
+
+const arrayResult2 = liftedStringLength2(stringArray);
+>arrayResult2 : Symbol(arrayResult2, Decl(higherKindedTypesLift.ts, 107, 5))
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>stringArray : Symbol(stringArray, Decl(higherKindedTypesLift.ts, 104, 5))
+
+const arrayExpectedType2: Array<number> = arrayResult2;
+>arrayExpectedType2 : Symbol(arrayExpectedType2, Decl(higherKindedTypesLift.ts, 108, 5))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>arrayResult2 : Symbol(arrayResult2, Decl(higherKindedTypesLift.ts, 107, 5))
+
+const arrayResult3 = liftedStringLength3(stringArray);
+>arrayResult3 : Symbol(arrayResult3, Decl(higherKindedTypesLift.ts, 109, 5))
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>stringArray : Symbol(stringArray, Decl(higherKindedTypesLift.ts, 104, 5))
+
+const arrayExpectedType3: Array<number> = arrayResult3;
+>arrayExpectedType3 : Symbol(arrayExpectedType3, Decl(higherKindedTypesLift.ts, 110, 5))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>arrayResult3 : Symbol(arrayResult3, Decl(higherKindedTypesLift.ts, 109, 5))
+
+const arrayExpectErrorA1 = liftedStringLength1(arrayResult1);
+>arrayExpectErrorA1 : Symbol(arrayExpectErrorA1, Decl(higherKindedTypesLift.ts, 112, 5))
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>arrayResult1 : Symbol(arrayResult1, Decl(higherKindedTypesLift.ts, 105, 5))
+
+const arrayExpectErrorA2 = liftedStringLength2(arrayResult2);
+>arrayExpectErrorA2 : Symbol(arrayExpectErrorA2, Decl(higherKindedTypesLift.ts, 113, 5))
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>arrayResult2 : Symbol(arrayResult2, Decl(higherKindedTypesLift.ts, 107, 5))
+
+const arrayExpectErrorA3 = liftedStringLength3(arrayResult3);
+>arrayExpectErrorA3 : Symbol(arrayExpectErrorA3, Decl(higherKindedTypesLift.ts, 114, 5))
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>arrayResult3 : Symbol(arrayResult3, Decl(higherKindedTypesLift.ts, 109, 5))
+
+
+
+// should have error because DiffFunctorY has diffMap function, not "map" as needed because liftedFunctor was created from staticMap which declared Functor
+const expectErrorB1 = liftedStringLength1(diffFunctorYString);
+>expectErrorB1 : Symbol(expectErrorB1, Decl(higherKindedTypesLift.ts, 119, 5))
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>diffFunctorYString : Symbol(diffFunctorYString, Decl(higherKindedTypesLift.ts, 31, 13))
+
+const expectErrorB2 = liftedStringLength2(diffFunctorYString);
+>expectErrorB2 : Symbol(expectErrorB2, Decl(higherKindedTypesLift.ts, 120, 5))
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>diffFunctorYString : Symbol(diffFunctorYString, Decl(higherKindedTypesLift.ts, 31, 13))
+
+const expectErrorB3 = liftedStringLength3(diffFunctorYString);
+>expectErrorB3 : Symbol(expectErrorB3, Decl(higherKindedTypesLift.ts, 121, 5))
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>diffFunctorYString : Symbol(diffFunctorYString, Decl(higherKindedTypesLift.ts, 31, 13))
+
+
+const expectErrorC1 = liftedStringLength1(invalidFunctor);
+>expectErrorC1 : Symbol(expectErrorC1, Decl(higherKindedTypesLift.ts, 124, 5))
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>invalidFunctor : Symbol(invalidFunctor, Decl(higherKindedTypesLift.ts, 37, 13))
+
+const expectErrorC2 = liftedStringLength2(invalidFunctor);
+>expectErrorC2 : Symbol(expectErrorC2, Decl(higherKindedTypesLift.ts, 125, 5))
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>invalidFunctor : Symbol(invalidFunctor, Decl(higherKindedTypesLift.ts, 37, 13))
+
+const expectErrorC3 = liftedStringLength3(invalidFunctor);
+>expectErrorC3 : Symbol(expectErrorC3, Decl(higherKindedTypesLift.ts, 126, 5))
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>invalidFunctor : Symbol(invalidFunctor, Decl(higherKindedTypesLift.ts, 37, 13))
+
+
+const expectErrorD1 = liftedStringLength1(invalidFunctor2);
+>expectErrorD1 : Symbol(expectErrorD1, Decl(higherKindedTypesLift.ts, 129, 5))
+>liftedStringLength1 : Symbol(liftedStringLength1, Decl(higherKindedTypesLift.ts, 87, 5))
+>invalidFunctor2 : Symbol(invalidFunctor2, Decl(higherKindedTypesLift.ts, 45, 13))
+
+const expectErrorD2 = liftedStringLength2(invalidFunctor2);
+>expectErrorD2 : Symbol(expectErrorD2, Decl(higherKindedTypesLift.ts, 130, 5))
+>liftedStringLength2 : Symbol(liftedStringLength2, Decl(higherKindedTypesLift.ts, 88, 5))
+>invalidFunctor2 : Symbol(invalidFunctor2, Decl(higherKindedTypesLift.ts, 45, 13))
+
+const expectErrorD3 = liftedStringLength3(invalidFunctor2);
+>expectErrorD3 : Symbol(expectErrorD3, Decl(higherKindedTypesLift.ts, 131, 5))
+>liftedStringLength3 : Symbol(liftedStringLength3, Decl(higherKindedTypesLift.ts, 89, 5))
+>invalidFunctor2 : Symbol(invalidFunctor2, Decl(higherKindedTypesLift.ts, 45, 13))
+

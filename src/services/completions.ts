@@ -1802,6 +1802,7 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
                         containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
                         containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type Map, K, |
+                        containingNodeKind === SyntaxKind.TypeParameter ||                          // <T<_T, |
                         // class A<T, |
                         // var C = class D<T, |
                         (isClassLike(parent) &&
@@ -1829,6 +1830,7 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
                         containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
                         containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
+                        containingNodeKind === SyntaxKind.TypeParameter ||                          // <T< |
                         isFunctionLikeKind(containingNodeKind);
 
                 case SyntaxKind.StaticKeyword:

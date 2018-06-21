@@ -78,6 +78,7 @@ namespace ts {
                     visitNode(cbNode, (<QualifiedName>node).right);
             case SyntaxKind.TypeParameter:
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
+                    visitNodes(cbNode, cbNodes, (<TypeParameterDeclaration>node).typeParameters) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
@@ -1610,7 +1611,8 @@ namespace ts {
                     return isVariableDeclaratorListTerminator();
                 case ParsingContext.TypeParameters:
                     // Tokens other than '>' are here for better error recovery
-                    return token() === SyntaxKind.GreaterThanToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword;
+                    return token() === SyntaxKind.GreaterThanToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.OpenBraceToken ||
+                        token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword || token() === SyntaxKind.SemicolonToken;
                 case ParsingContext.ArgumentExpressions:
                     // Tokens other than ')' are here for better error recovery
                     return token() === SyntaxKind.CloseParenToken || token() === SyntaxKind.SemicolonToken;
@@ -2386,6 +2388,7 @@ namespace ts {
         function parseTypeParameter(): TypeParameterDeclaration {
             const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             node.name = parseIdentifier();
+            node.typeParameters = parseTypeParameters();
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 // It's not uncommon for people to write improper constraints to a generic.  If the
                 // user writes a constraint that is an expression and not an actual type, then parse

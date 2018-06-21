@@ -1,0 +1,572 @@
+=== tests/cases/compiler/higherKindedTypesLift.ts ===
+declare function stringLength(strarg: string): number;
+>stringLength : (strarg: string) => number
+>strarg : string
+
+export interface Functor<AF, Container<_TF>> {
+>Functor : Functor<AF, Container<_TF>>
+>AF : AF
+>Container : Container<_TF>
+>_TF : _TF
+
+    map<BF>(f: (a: AF) => BF): Container<BF>;
+>map : <BF>(f: (a: AF) => BF) => Container<BF>
+>BF : BF
+>f : (a: AF) => BF
+>a : AF
+>AF : AF
+>BF : BF
+>Container : Container<_TF>
+>BF : BF
+}
+
+export interface DiffFunctor<DA, DContainer<_TD>> {
+>DiffFunctor : DiffFunctor<DA, DContainer<_TD>>
+>DA : DA
+>DContainer : DContainer<_TD>
+>_TD : _TD
+
+    diffMap<DB>(df: (da: DA) => DB): DContainer<DB>;
+>diffMap : <DB>(df: (da: DA) => DB) => DContainer<DB>
+>DB : DB
+>df : (da: DA) => DB
+>da : DA
+>DA : DA
+>DB : DB
+>DContainer : DContainer<_TD>
+>DB : DB
+}
+
+class FunctorX<AX> implements Functor<AX, FunctorX> {
+>FunctorX : FunctorX<AX>
+>AX : AX
+>Functor : Functor<AF, Container<_TF>>
+>AX : AX
+>FunctorX : FunctorX<AX>
+
+    constructor(private elements: AX[]) {}
+>elements : AX[]
+>AX : AX
+
+    map<BX>(f: (a: AX) => BX): FunctorX<BX> {
+>map : <BX>(f: (a: AX) => BX) => FunctorX<BX>
+>BX : BX
+>f : (a: AX) => BX
+>a : AX
+>AX : AX
+>BX : BX
+>FunctorX : FunctorX<AX>
+>BX : BX
+
+        const mappedElements = this.elements.map(f);
+>mappedElements : BX[]
+>this.elements.map(f) : BX[]
+>this.elements.map : <U>(callbackfn: (value: AX, index: number, array: AX[]) => U, thisArg?: any) => U[]
+>this.elements : AX[]
+>this : this
+>elements : AX[]
+>map : <U>(callbackfn: (value: AX, index: number, array: AX[]) => U, thisArg?: any) => U[]
+>f : (a: AX) => BX
+
+        return new FunctorX(mappedElements);
+>new FunctorX(mappedElements) : FunctorX<BX>
+>FunctorX : typeof FunctorX
+>mappedElements : BX[]
+    }
+
+    firstVal(): AX | undefined {
+>firstVal : () => AX | undefined
+>AX : AX
+
+        return this.elements.length ? this.elements[0] : undefined;
+>this.elements.length ? this.elements[0] : undefined : AX | undefined
+>this.elements.length : number
+>this.elements : AX[]
+>this : this
+>elements : AX[]
+>length : number
+>this.elements[0] : AX
+>this.elements : AX[]
+>this : this
+>elements : AX[]
+>0 : 0
+>undefined : undefined
+
+    };
+}
+
+const functorXString = new FunctorX(["myFunctorX"]);
+>functorXString : FunctorX<string>
+>new FunctorX(["myFunctorX"]) : FunctorX<string>
+>FunctorX : typeof FunctorX
+>["myFunctorX"] : string[]
+>"myFunctorX" : "myFunctorX"
+
+declare class DiffFunctorY<AY> implements DiffFunctor<AY, DiffFunctorY> {
+>DiffFunctorY : DiffFunctorY<AY>
+>AY : AY
+>DiffFunctor : DiffFunctor<DA, DContainer<_TD>>
+>AY : AY
+>DiffFunctorY : DiffFunctorY<AY>
+
+    diffMap<BY>(f: (a: AY) => BY): DiffFunctorY<BY>
+>diffMap : <BY>(f: (a: AY) => BY) => DiffFunctorY<BY>
+>BY : BY
+>f : (a: AY) => BY
+>a : AY
+>AY : AY
+>BY : BY
+>DiffFunctorY : DiffFunctorY<AY>
+>BY : BY
+
+    firstValY(): AY | undefined
+>firstValY : () => AY | undefined
+>AY : AY
+}
+
+declare const diffFunctorYString: DiffFunctorY<string>;
+>diffFunctorYString : DiffFunctorY<string>
+>DiffFunctorY : DiffFunctorY<AY>
+
+declare class InvalidFunctor<IA> {
+>InvalidFunctor : InvalidFunctor<IA>
+>IA : IA
+
+    // does not actually implement Functor because it doesn't return InvalidFunctor<IB>
+    map<IB>(fi: (ia: IA) => IB): IB
+>map : <IB>(fi: (ia: IA) => IB) => IB
+>IB : IB
+>fi : (ia: IA) => IB
+>ia : IA
+>IA : IA
+>IB : IB
+>IB : IB
+}
+declare const invalidFunctor: InvalidFunctor<string>;
+>invalidFunctor : InvalidFunctor<string>
+>InvalidFunctor : InvalidFunctor<IA>
+
+declare class InvalidFunctor2<IA2> {
+>InvalidFunctor2 : InvalidFunctor2<IA2>
+>IA2 : IA2
+
+    // does not actually implement Functor because it doesn't return InvalidFunctor2<IB>
+    map<IB2>(fi2: (ia2: IA2) => IB2): FunctorX<IB2>
+>map : <IB2>(fi2: (ia2: IA2) => IB2) => FunctorX<IB2>
+>IB2 : IB2
+>fi2 : (ia2: IA2) => IB2
+>ia2 : IA2
+>IA2 : IA2
+>IB2 : IB2
+>FunctorX : FunctorX<AX>
+>IB2 : IB2
+
+    someUniqueMethod(): IA2
+>someUniqueMethod : () => IA2
+>IA2 : IA2
+}
+declare const invalidFunctor2: InvalidFunctor2<string>;
+>invalidFunctor2 : InvalidFunctor2<string>
+>InvalidFunctor2 : InvalidFunctor2<IA2>
+
+interface StaticFunctor<CS<_TS>> {
+>StaticFunctor : StaticFunctor<CS<_TS>>
+>CS : CS<_TS>
+>_TS : _TS
+
+    <AS, BS>(csas: CS<AS>, fmapstatic: (as: AS) => BS): CS<BS>;
+>AS : AS
+>BS : BS
+>csas : CS<AS>
+>CS : CS<_TS>
+>AS : AS
+>fmapstatic : (as: AS) => BS
+>as : AS
+>AS : AS
+>BS : BS
+>CS : CS<_TS>
+>BS : BS
+}
+
+interface LiftedResult<LRC<_LT>> {
+>LiftedResult : LiftedResult<LRC<_LT>>
+>LRC : LRC<_LT>
+>_LT : _LT
+
+    <LRA, LRB>(lrmap: (lra: LRA) => LRB): <NC<_NT> extends LRC<_NT>>(lrclra: NC<LRA>) => NC<LRB>
+>LRA : LRA
+>LRB : LRB
+>lrmap : (lra: LRA) => LRB
+>lra : LRA
+>LRA : LRA
+>LRB : LRB
+>NC : NC<_NT>
+>_NT : _NT
+>LRC : LRC<_LT>
+>_NT : _NT
+>lrclra : NC<LRA>
+>NC : NC<_NT>
+>LRA : LRA
+>NC : NC<_NT>
+>LRB : LRB
+}
+
+interface LiftedResult3A<LRC<_LT>> {
+>LiftedResult3A : LiftedResult3A<LRC<_LT>>
+>LRC : LRC<_LT>
+>_LT : _LT
+
+    <LRA, LRB>(lrmap: (lra: LRA) => LRB): LiftedResult3B<LRC, LRA, LRB>
+>LRA : LRA
+>LRB : LRB
+>lrmap : (lra: LRA) => LRB
+>lra : LRA
+>LRA : LRA
+>LRB : LRB
+>LiftedResult3B : LiftedResult3B<LRC<_LT>, LRA, LRB>
+>LRC : LRC<_LT>
+>LRA : LRA
+>LRB : LRB
+}
+interface LiftedResult3B<LRC<_LT>, LRA, LRB> {
+>LiftedResult3B : LiftedResult3B<LRC<_LT>, LRA, LRB>
+>LRC : LRC<_LT>
+>_LT : _LT
+>LRA : LRA
+>LRB : LRB
+
+    <NC<_NT> extends LRC<_NT>>(lrclra: NC<LRA>): NC<LRB>
+>NC : NC<_NT>
+>_NT : _NT
+>LRC : LRC<_LT>
+>_NT : _NT
+>lrclra : NC<LRA>
+>NC : NC<_NT>
+>LRA : LRA
+>NC : NC<_NT>
+>LRB : LRB
+}
+
+function lift1<C<_TL>>(fToLift: StaticFunctor<C>): LiftedResult<C> {
+>lift1 : <C>(fToLift: StaticFunctor<C<_TS>>) => LiftedResult<C<_LT>>
+>C : C<_TL>
+>_TL : _TL
+>fToLift : StaticFunctor<C<_TS>>
+>StaticFunctor : StaticFunctor<CS<_TS>>
+>C : C<_TL>
+>LiftedResult : LiftedResult<LRC<_LT>>
+>C : C<_TL>
+
+    return lmap => lca => fToLift(lca, lmap);
+>lmap => lca => fToLift(lca, lmap) : <LRA, LRB>(lmap: (lra: LRA) => LRB) => <NC extends C<_NT>>(lca: LiftedResult<C<_LT>>.NC<LRA>) => C<LRB>
+>lmap : (lra: LRA) => LRB
+>lca => fToLift(lca, lmap) : <NC extends C<_NT>>(lca: LiftedResult<C<_LT>>.NC<LRA>) => C<LRB>
+>lca : LiftedResult<C<_LT>>.NC<LRA>
+>fToLift(lca, lmap) : C<LRB>
+>fToLift : StaticFunctor<C<_TS>>
+>lca : LiftedResult<C<_LT>>.NC<LRA>
+>lmap : (lra: LRA) => LRB
+}
+
+// lift2 does not use intermediate interfaces
+function lift2<C<_TL>>(
+>lift2 : <C>(fToLift: <AS, BS>(csas: C<AS>, fmapstatic: (as: AS) => BS) => C<BS>) => <LA, LB>(lrmap: (lra: LA) => LB) => <NC extends C<_NT>>(lrclra: NC<LA>) => NC<LB>
+>C : C<_TL>
+>_TL : _TL
+
+    fToLift: <AS, BS>(csas: C<AS>, fmapstatic: (as: AS) => BS) => C<BS>
+>fToLift : <AS, BS>(csas: C<AS>, fmapstatic: (as: AS) => BS) => C<BS>
+>AS : AS
+>BS : BS
+>csas : C<AS>
+>C : C<_TL>
+>AS : AS
+>fmapstatic : (as: AS) => BS
+>as : AS
+>AS : AS
+>BS : BS
+>C : C<_TL>
+>BS : BS
+
+): 
+    <LA, LB>(lrmap: (lra: LA) => LB) => <NC<_NT> extends C<_NT>>(lrclra: NC<LA>) => NC<LB> {
+>LA : LA
+>LB : LB
+>lrmap : (lra: LA) => LB
+>lra : LA
+>LA : LA
+>LB : LB
+>NC : NC<_NT>
+>_NT : _NT
+>C : C<_TL>
+>_NT : _NT
+>lrclra : NC<LA>
+>NC : NC<_NT>
+>LA : LA
+>NC : NC<_NT>
+>LB : LB
+
+    return lmap => lca => fToLift(lca, lmap);
+>lmap => lca => fToLift(lca, lmap) : <LA, LB>(lmap: (lra: LA) => LB) => <NC extends C<_NT>>(lca: NC<LA>) => C<LB>
+>lmap : (lra: LA) => LB
+>lca => fToLift(lca, lmap) : <NC extends C<_NT>>(lca: NC<LA>) => C<LB>
+>lca : NC<LA>
+>fToLift(lca, lmap) : C<LB>
+>fToLift : <AS, BS>(csas: C<AS>, fmapstatic: (as: AS) => BS) => C<BS>
+>lca : NC<LA>
+>lmap : (lra: LA) => LB
+}
+
+// lift3 uses an extra intermediate interface
+function lift3<C<_TL>>(fToLift: StaticFunctor<C>): LiftedResult3A<C> {
+>lift3 : <C>(fToLift: StaticFunctor<C<_TS>>) => LiftedResult3A<C<_LT>>
+>C : C<_TL>
+>_TL : _TL
+>fToLift : StaticFunctor<C<_TS>>
+>StaticFunctor : StaticFunctor<CS<_TS>>
+>C : C<_TL>
+>LiftedResult3A : LiftedResult3A<LRC<_LT>>
+>C : C<_TL>
+
+    return lmap => lca => fToLift(lca, lmap);
+>lmap => lca => fToLift(lca, lmap) : <LRA, LRB>(lmap: (lra: LRA) => LRB) => <NC extends C<_NT>>(lca: LiftedResult3B<C<_LT>>.NC<LRA>) => C<LRB>
+>lmap : (lra: LRA) => LRB
+>lca => fToLift(lca, lmap) : <NC extends C<_NT>>(lca: LiftedResult3B<C<_LT>>.NC<LRA>) => C<LRB>
+>lca : LiftedResult3B<C<_LT>>.NC<LRA>
+>fToLift(lca, lmap) : C<LRB>
+>fToLift : StaticFunctor<C<_TS>>
+>lca : LiftedResult3B<C<_LT>>.NC<LRA>
+>lmap : (lra: LRA) => LRB
+}
+
+function staticMap<C1<_T1> extends Functor<_T1, C1>, A1, B1>(fa1: C1<A1>, fmap1: (a1: A1) => B1): C1<B1> {
+>staticMap : <C1 extends Functor<_T1, C1<_TF>>, A1, B1>(fa1: C1<A1>, fmap1: (a1: A1) => B1) => C1<B1>
+>C1 : C1<_T1>
+>_T1 : _T1
+>Functor : Functor<AF, Container<_TF>>
+>_T1 : _T1
+>C1 : C1<_T1>
+>A1 : A1
+>B1 : B1
+>fa1 : C1<A1>
+>C1 : C1<_T1>
+>A1 : A1
+>fmap1 : (a1: A1) => B1
+>a1 : A1
+>A1 : A1
+>B1 : B1
+>C1 : C1<_T1>
+>B1 : B1
+
+    return fa1.map(fmap1);
+>fa1.map(fmap1) : C1<B1>
+>fa1.map : <BF>(f: (a: A1) => BF) => C1<BF>
+>fa1 : C1<A1>
+>map : <BF>(f: (a: A1) => BF) => C1<BF>
+>fmap1 : (a1: A1) => B1
+}
+
+const liftedFunctor1 = lift1(staticMap);
+>liftedFunctor1 : LiftedResult<C1<_LT>>
+>lift1(staticMap) : LiftedResult<C1<_LT>>
+>lift1 : <C>(fToLift: StaticFunctor<C<_TS>>) => LiftedResult<C<_LT>>
+>staticMap : <C1 extends Functor<_T1, C1<_TF>>, A1, B1>(fa1: C1<A1>, fmap1: (a1: A1) => B1) => C1<B1>
+
+const liftedFunctor2 = lift2(staticMap);
+>liftedFunctor2 : <LA, LB>(lrmap: (lra: LA) => LB) => <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<LA>) => lift2<C1<_TL>>.NC<LB>
+>lift2(staticMap) : <LA, LB>(lrmap: (lra: LA) => LB) => <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<LA>) => lift2<C1<_TL>>.NC<LB>
+>lift2 : <C>(fToLift: <AS, BS>(csas: C<AS>, fmapstatic: (as: AS) => BS) => C<BS>) => <LA, LB>(lrmap: (lra: LA) => LB) => <NC extends C<_NT>>(lrclra: NC<LA>) => NC<LB>
+>staticMap : <C1 extends Functor<_T1, C1<_TF>>, A1, B1>(fa1: C1<A1>, fmap1: (a1: A1) => B1) => C1<B1>
+
+const liftedFunctor3 = lift3(staticMap);
+>liftedFunctor3 : LiftedResult3A<C1<_LT>>
+>lift3(staticMap) : LiftedResult3A<C1<_LT>>
+>lift3 : <C>(fToLift: StaticFunctor<C<_TS>>) => LiftedResult3A<C<_LT>>
+>staticMap : <C1 extends Functor<_T1, C1<_TF>>, A1, B1>(fa1: C1<A1>, fmap1: (a1: A1) => B1) => C1<B1>
+
+const liftedStringLength1 = liftedFunctor1(stringLength);
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>liftedFunctor1(stringLength) : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>liftedFunctor1 : LiftedResult<C1<_LT>>
+>stringLength : (strarg: string) => number
+
+const liftedStringLength2 = liftedFunctor2(stringLength);
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>liftedFunctor2(stringLength) : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>liftedFunctor2 : <LA, LB>(lrmap: (lra: LA) => LB) => <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<LA>) => lift2<C1<_TL>>.NC<LB>
+>stringLength : (strarg: string) => number
+
+const liftedStringLength3 = liftedFunctor3(stringLength);
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>liftedFunctor3(stringLength) : LiftedResult3B<C1<_LT>, string, number>
+>liftedFunctor3 : LiftedResult3A<C1<_LT>>
+>stringLength : (strarg: string) => number
+
+
+const result1 = liftedStringLength1(functorXString);
+>result1 : FunctorX<number>
+>liftedStringLength1(functorXString) : FunctorX<number>
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>functorXString : FunctorX<string>
+
+const expectedType1: FunctorX<number> = result1;
+>expectedType1 : FunctorX<number>
+>FunctorX : FunctorX<AX>
+>result1 : FunctorX<number>
+
+const result2 = liftedStringLength2(functorXString);
+>result2 : FunctorX<number>
+>liftedStringLength2(functorXString) : FunctorX<number>
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>functorXString : FunctorX<string>
+
+const expectedType2: FunctorX<number> = result2;
+>expectedType2 : FunctorX<number>
+>FunctorX : FunctorX<AX>
+>result2 : FunctorX<number>
+
+const result3 = liftedStringLength3(functorXString);
+>result3 : FunctorX<number>
+>liftedStringLength3(functorXString) : FunctorX<number>
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>functorXString : FunctorX<string>
+
+const expectedType3: FunctorX<number> = result3;
+>expectedType3 : FunctorX<number>
+>FunctorX : FunctorX<AX>
+>result3 : FunctorX<number>
+
+const expectErrorA1 = liftedStringLength1(result1);
+>expectErrorA1 : any
+>liftedStringLength1(result1) : any
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>result1 : FunctorX<number>
+
+const expectErrorA2 = liftedStringLength2(result2);
+>expectErrorA2 : any
+>liftedStringLength2(result2) : any
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>result2 : FunctorX<number>
+
+const expectErrorA3 = liftedStringLength3(result3);
+>expectErrorA3 : any
+>liftedStringLength3(result3) : any
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>result3 : FunctorX<number>
+
+
+const stringArray = ["not explicitly declared to implement functor"];
+>stringArray : string[]
+>["not explicitly declared to implement functor"] : string[]
+>"not explicitly declared to implement functor" : "not explicitly declared to implement functor"
+
+const arrayResult1 = liftedStringLength1(stringArray);
+>arrayResult1 : number[]
+>liftedStringLength1(stringArray) : number[]
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>stringArray : string[]
+
+const arrayExpectedType1: Array<number> = arrayResult1;
+>arrayExpectedType1 : number[]
+>Array : T[]
+>arrayResult1 : number[]
+
+const arrayResult2 = liftedStringLength2(stringArray);
+>arrayResult2 : number[]
+>liftedStringLength2(stringArray) : number[]
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>stringArray : string[]
+
+const arrayExpectedType2: Array<number> = arrayResult2;
+>arrayExpectedType2 : number[]
+>Array : T[]
+>arrayResult2 : number[]
+
+const arrayResult3 = liftedStringLength3(stringArray);
+>arrayResult3 : number[]
+>liftedStringLength3(stringArray) : number[]
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>stringArray : string[]
+
+const arrayExpectedType3: Array<number> = arrayResult3;
+>arrayExpectedType3 : number[]
+>Array : T[]
+>arrayResult3 : number[]
+
+const arrayExpectErrorA1 = liftedStringLength1(arrayResult1);
+>arrayExpectErrorA1 : any
+>liftedStringLength1(arrayResult1) : any
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>arrayResult1 : number[]
+
+const arrayExpectErrorA2 = liftedStringLength2(arrayResult2);
+>arrayExpectErrorA2 : any
+>liftedStringLength2(arrayResult2) : any
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>arrayResult2 : number[]
+
+const arrayExpectErrorA3 = liftedStringLength3(arrayResult3);
+>arrayExpectErrorA3 : any
+>liftedStringLength3(arrayResult3) : any
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>arrayResult3 : number[]
+
+
+
+// should have error because DiffFunctorY has diffMap function, not "map" as needed because liftedFunctor was created from staticMap which declared Functor
+const expectErrorB1 = liftedStringLength1(diffFunctorYString);
+>expectErrorB1 : any
+>liftedStringLength1(diffFunctorYString) : any
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>diffFunctorYString : DiffFunctorY<string>
+
+const expectErrorB2 = liftedStringLength2(diffFunctorYString);
+>expectErrorB2 : any
+>liftedStringLength2(diffFunctorYString) : any
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>diffFunctorYString : DiffFunctorY<string>
+
+const expectErrorB3 = liftedStringLength3(diffFunctorYString);
+>expectErrorB3 : any
+>liftedStringLength3(diffFunctorYString) : any
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>diffFunctorYString : DiffFunctorY<string>
+
+
+const expectErrorC1 = liftedStringLength1(invalidFunctor);
+>expectErrorC1 : any
+>liftedStringLength1(invalidFunctor) : any
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>invalidFunctor : InvalidFunctor<string>
+
+const expectErrorC2 = liftedStringLength2(invalidFunctor);
+>expectErrorC2 : any
+>liftedStringLength2(invalidFunctor) : any
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>invalidFunctor : InvalidFunctor<string>
+
+const expectErrorC3 = liftedStringLength3(invalidFunctor);
+>expectErrorC3 : any
+>liftedStringLength3(invalidFunctor) : any
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>invalidFunctor : InvalidFunctor<string>
+
+
+const expectErrorD1 = liftedStringLength1(invalidFunctor2);
+>expectErrorD1 : any
+>liftedStringLength1(invalidFunctor2) : any
+>liftedStringLength1 : <NC extends C1<_NT>>(lrclra: LiftedResult<C1<_LT>>.NC<string>) => LiftedResult<C1<_LT>>.NC<number>
+>invalidFunctor2 : InvalidFunctor2<string>
+
+const expectErrorD2 = liftedStringLength2(invalidFunctor2);
+>expectErrorD2 : any
+>liftedStringLength2(invalidFunctor2) : any
+>liftedStringLength2 : <NC extends C1<_NT>>(lrclra: lift2<C1<_TL>>.NC<string>) => lift2<C1<_TL>>.NC<number>
+>invalidFunctor2 : InvalidFunctor2<string>
+
+const expectErrorD3 = liftedStringLength3(invalidFunctor2);
+>expectErrorD3 : any
+>liftedStringLength3(invalidFunctor2) : any
+>liftedStringLength3 : LiftedResult3B<C1<_LT>, string, number>
+>invalidFunctor2 : InvalidFunctor2<string>
+

@@ -1,0 +1,189 @@
+=== tests/cases/compiler/getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts ===
+export declare function f1<T>(cb: <S extends number>(x: S) => T): T;
+>f1 : <T>(cb: <S extends number>(x: S) => T) => T
+>T : T
+>cb : <S extends number>(x: S) => T
+>S : S
+>x : S
+>S : S
+>T : T
+>T : T
+
+export declare function f2<T>(cb: <S extends string>(x: S) => T): T;
+>f2 : <T>(cb: <S extends string>(x: S) => T) => T
+>T : T
+>cb : <S extends string>(x: S) => T
+>S : S
+>x : S
+>S : S
+>T : T
+>T : T
+
+export declare function f3<T>(cb: <S extends symbol>(x: S) => T): T;
+>f3 : <T>(cb: <S extends symbol>(x: S) => T) => T
+>T : T
+>cb : <S extends symbol>(x: S) => T
+>S : S
+>x : S
+>S : S
+>T : T
+>T : T
+
+export declare function f4<T>(cb: <S extends number | string | symbol>(x: S) => T): T;
+>f4 : <T>(cb: <S extends string | number | symbol>(x: S) => T) => T
+>T : T
+>cb : <S extends string | number | symbol>(x: S) => T
+>S : S
+>x : S
+>S : S
+>T : T
+>T : T
+
+export declare function f5<T, O>(cb: <S extends keyof O>(x: S) => T, obj: O): keyof O;
+>f5 : <T, O>(cb: <S extends keyof O>(x: S) => T, obj: O) => keyof O
+>T : T
+>O : O
+>cb : <S extends keyof O>(x: S) => T
+>S : S
+>O : O
+>x : S
+>S : S
+>T : T
+>obj : O
+>O : O
+>O : O
+
+export declare function f6<T, O>(cb: <S extends string & keyof O>(x: S) => T, obj: O): T;
+>f6 : <T, O>(cb: <S extends string & keyof O>(x: S) => T, obj: O) => T
+>T : T
+>O : O
+>cb : <S extends string & keyof O>(x: S) => T
+>S : S
+>O : O
+>x : S
+>S : S
+>T : T
+>obj : O
+>O : O
+>T : T
+
+export declare function f7<T, O>(cb: <S extends Extract<keyof O, string>>(x: S) => T, obj: O): T;
+>f7 : <T, O>(cb: <S extends Extract<keyof O, string>>(x: S) => T, obj: O) => T
+>T : T
+>O : O
+>cb : <S extends Extract<keyof O, string>>(x: S) => T
+>S : S
+>Extract : Extract<T, U>
+>O : O
+>x : S
+>S : S
+>T : T
+>obj : O
+>O : O
+>T : T
+
+const x1 = f1(x => x); 
+>x1 : number
+>f1(x => x) : number
+>f1 : <T>(cb: <S extends number>(x: S) => T) => T
+>x => x : <S extends number>(x: S) => S
+>x : S
+>x : S
+
+const expectedx1: number = x1;
+>expectedx1 : number
+>x1 : number
+
+let x2 = f2(x => x);
+>x2 : string
+>f2(x => x) : string
+>f2 : <T>(cb: <S extends string>(x: S) => T) => T
+>x => x : <S extends string>(x: S) => S
+>x : S
+>x : S
+
+const expectedx2: string = x2;
+>expectedx2 : string
+>x2 : string
+
+let x3 = f3(x => x);
+>x3 : symbol
+>f3(x => x) : symbol
+>f3 : <T>(cb: <S extends symbol>(x: S) => T) => T
+>x => x : <S extends symbol>(x: S) => S
+>x : S
+>x : S
+
+const expectedx3: symbol = x3;
+>expectedx3 : symbol
+>x3 : symbol
+
+let x4 = f4(x => x);
+>x4 : string | number | symbol
+>f4(x => x) : string | number | symbol
+>f4 : <T>(cb: <S extends string | number | symbol>(x: S) => T) => T
+>x => x : <S extends string | number | symbol>(x: S) => S
+>x : S
+>x : S
+
+const expectedx4: number | string | symbol = x4;
+>expectedx4 : string | number | symbol
+>x4 : string | number | symbol
+
+declare const symProp: unique symbol
+>symProp : unique symbol
+
+declare const obj: {
+>obj : { [index: number]: number; prop: string; [symProp]: symbol; }
+
+    prop: string,
+>prop : string
+
+    [symProp]: symbol,
+>[symProp] : symbol
+>symProp : unique symbol
+
+    [index: number]: number
+>index : number
+}
+
+
+let x5 = f5((x) => x, obj);
+>x5 : number | unique symbol | "prop"
+>f5((x) => x, obj) : number | unique symbol | "prop"
+>f5 : <T, O>(cb: <S extends keyof O>(x: S) => T, obj: O) => keyof O
+>(x) => x : <S extends number | unique symbol | "prop">(x: S) => S
+>x : S
+>x : S
+>obj : { [index: number]: number; prop: string; [symProp]: symbol; }
+
+const expectedx5: number | string | symbol = x5;
+>expectedx5 : string | number | symbol
+>x5 : number | unique symbol | "prop"
+
+let x6 = f6(x => x, obj);
+>x6 : "prop"
+>f6(x => x, obj) : "prop"
+>f6 : <T, O>(cb: <S extends string & keyof O>(x: S) => T, obj: O) => T
+>x => x : <S extends "prop">(x: S) => S
+>x : S
+>x : S
+>obj : { [index: number]: number; prop: string; [symProp]: symbol; }
+
+const expectedx6: string = x6;
+>expectedx6 : string
+>x6 : "prop"
+
+let x7 = f7(x => x, obj);
+>x7 : "prop"
+>f7(x => x, obj) : "prop"
+>f7 : <T, O>(cb: <S extends Extract<keyof O, string>>(x: S) => T, obj: O) => T
+>x => x : <S extends "prop">(x: S) => S
+>x : S
+>x : S
+>obj : { [index: number]: number; prop: string; [symProp]: symbol; }
+
+const expectedx7: string = x7;
+>expectedx7 : string
+>x7 : "prop"
+

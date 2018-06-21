@@ -1,0 +1,40 @@
+=== tests/cases/compiler/higherKindedTypesExpectedErrors.ts ===
+interface Functor<FX<_TX>, AX> {
+>Functor : Functor<FX<_TX>, AX>
+>FX : FX<_TX>
+>_TX : _TX
+>AX : AX
+
+    map<BX>(fmapx: (fmapxax: AX) => BX): FX<BX>;
+>map : <BX>(fmapx: (fmapxax: AX) => BX) => FX<BX>
+>BX : BX
+>fmapx : (fmapxax: AX) => BX
+>fmapxax : AX
+>AX : AX
+>BX : BX
+>FX : FX<_TX>
+>BX : BX
+}
+
+// Expect error since array doesn't have xVal property
+interface FunctorX<A> extends Functor<FunctorX, A> {
+>FunctorX : FunctorX<A>
+>A : A
+>Functor : Functor<FX<_TX>, AX>
+>FunctorX : FunctorX<A>
+>A : A
+
+    map<B>(f: (a: A) => B): Array<B>;
+>map : <B>(f: (a: A) => B) => B[]
+>B : B
+>f : (a: A) => B
+>a : A
+>A : A
+>B : B
+>Array : T[]
+>B : B
+
+    xVal: string;
+>xVal : string
+}
+

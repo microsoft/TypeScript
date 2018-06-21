@@ -754,6 +754,7 @@ namespace ts {
         kind: SyntaxKind.TypeParameter;
         parent: DeclarationWithTypeParameters | InferTypeNode;
         name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
         constraint?: TypeNode;
         default?: TypeNode;
 
@@ -2013,7 +2014,7 @@ namespace ts {
 
     export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
 
-    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | TypeParameterDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
 
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
@@ -3738,6 +3739,8 @@ namespace ts {
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
         /* @internal */
         wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
+        /* @internal */
+        wrapperType?: WrapperType;       // wrapper type for this type
     }
 
     /* @internal */
@@ -3786,6 +3789,10 @@ namespace ts {
         ReverseMapped    = 1 << 11, // Object contains a property from a reverse-mapped type
         JsxAttributes    = 1 << 12, // Jsx attributes type
         MarkerType       = 1 << 13, // Marker type used for variance probing
+        GenericTypeParameter = 1 << 14, // uninstantiated generic type parameter (meaning a type parameter that has its own type parameters)
+        /* @internal */
+        Wrapper          = 1 << 15, // wrapper for mapped GenericTypeParameters, which is needed to avoid instantiation order problems in some cases in getInferredType()
+
         ClassOrInterface = Class | Interface
     }
 
@@ -3828,8 +3835,9 @@ namespace ts {
      * explicit "this" argument.
      */
     export interface TypeReference extends ObjectType {
-        target: GenericType;    // Type reference target
-        typeArguments?: Type[];  // Type reference type arguments (undefined if none)
+        target: GenericType;               // Type reference target
+        typeArguments?: Type[];            // Type reference type arguments (undefined if none)
+        typeParameterReference?: boolean;  // true if target is a GenericTypeParameter but NOT true if this is the GenericTypeParameter (ie if this === target)
     }
 
     /* @internal */
@@ -3841,7 +3849,7 @@ namespace ts {
         Independent   = 4,  // Unwitnessed type parameter
     }
 
-    // Generic class and interface types
+    // Generic class, interface and type parameter types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
         instantiations: Map<TypeReference>;  // Generic instantiation cache
@@ -3958,13 +3966,28 @@ namespace ts {
         /* @internal */
         default?: Type;
         /* @internal */
-        target?: TypeParameter;  // Instantiation target
+        original?: TypeParameter; // The type parameter this type parameter was cloned from
         /* @internal */
-        mapper?: TypeMapper;     // Instantiation mapper
+        mapper?: TypeMapper; // mapper for cloned type parameters
         /* @internal */
         isThisType?: boolean;
         /* @internal */
-        resolvedDefaultType?: Type;
+        isGeneric?: boolean;
+    }
+
+    // Generic type parameters (TypeFlags.TypeParameter, TypeFlags.Object, ObjectFlags.GenericTypeParameter)
+    export interface GenericTypeParameter extends GenericType, TypeParameter, InterfaceTypeWithDeclaredMembers {
+        localTypeParameters: TypeParameter[]; // GenericTypeParameters always have localTypeParameters since that's what distinguishes them from non-generic type parameters.
+        /* @internal */
+        original?: GenericTypeParameter; // The type parameter this type parameter was cloned from
+        /* @internal */
+        isGeneric: true;
+    }
+
+    /* @internal */
+    // ObjectFlags.Wrapper
+    export interface WrapperType extends ObjectType {
+        wrappedType: Type;
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)

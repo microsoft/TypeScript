@@ -1,0 +1,175 @@
+=== tests/cases/compiler/getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts ===
+export declare function f1<T>(cb: <S extends number>(x: S) => T): T;
+>f1 : Symbol(f1, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 0))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 27))
+>cb : Symbol(cb, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 30))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 35))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 53))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 35))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 27))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 27))
+
+export declare function f2<T>(cb: <S extends string>(x: S) => T): T;
+>f2 : Symbol(f2, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 68))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 27))
+>cb : Symbol(cb, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 30))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 35))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 53))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 35))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 27))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 27))
+
+export declare function f3<T>(cb: <S extends symbol>(x: S) => T): T;
+>f3 : Symbol(f3, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 68))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 27))
+>cb : Symbol(cb, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 30))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 35))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 53))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 35))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 27))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 27))
+
+export declare function f4<T>(cb: <S extends number | string | symbol>(x: S) => T): T;
+>f4 : Symbol(f4, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 68))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 27))
+>cb : Symbol(cb, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 30))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 35))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 71))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 35))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 27))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 27))
+
+export declare function f5<T, O>(cb: <S extends keyof O>(x: S) => T, obj: O): keyof O;
+>f5 : Symbol(f5, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 86))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 27))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 29))
+>cb : Symbol(cb, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 33))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 38))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 29))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 57))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 38))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 27))
+>obj : Symbol(obj, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 68))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 29))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 29))
+
+export declare function f6<T, O>(cb: <S extends string & keyof O>(x: S) => T, obj: O): T;
+>f6 : Symbol(f6, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 86))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 27))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 29))
+>cb : Symbol(cb, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 33))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 38))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 29))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 66))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 38))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 27))
+>obj : Symbol(obj, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 77))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 29))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 27))
+
+export declare function f7<T, O>(cb: <S extends Extract<keyof O, string>>(x: S) => T, obj: O): T;
+>f7 : Symbol(f7, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 89))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 27))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 29))
+>cb : Symbol(cb, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 33))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 38))
+>Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 29))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 74))
+>S : Symbol(S, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 38))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 27))
+>obj : Symbol(obj, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 85))
+>O : Symbol(O, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 29))
+>T : Symbol(T, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 6, 27))
+
+const x1 = f1(x => x); 
+>x1 : Symbol(x1, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 8, 5))
+>f1 : Symbol(f1, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 0))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 8, 14))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 8, 14))
+
+const expectedx1: number = x1;
+>expectedx1 : Symbol(expectedx1, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 9, 5))
+>x1 : Symbol(x1, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 8, 5))
+
+let x2 = f2(x => x);
+>x2 : Symbol(x2, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 11, 3))
+>f2 : Symbol(f2, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 0, 68))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 11, 12))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 11, 12))
+
+const expectedx2: string = x2;
+>expectedx2 : Symbol(expectedx2, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 12, 5))
+>x2 : Symbol(x2, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 11, 3))
+
+let x3 = f3(x => x);
+>x3 : Symbol(x3, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 14, 3))
+>f3 : Symbol(f3, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 1, 68))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 14, 12))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 14, 12))
+
+const expectedx3: symbol = x3;
+>expectedx3 : Symbol(expectedx3, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 15, 5))
+>x3 : Symbol(x3, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 14, 3))
+
+let x4 = f4(x => x);
+>x4 : Symbol(x4, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 17, 3))
+>f4 : Symbol(f4, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 2, 68))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 17, 12))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 17, 12))
+
+const expectedx4: number | string | symbol = x4;
+>expectedx4 : Symbol(expectedx4, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 18, 5))
+>x4 : Symbol(x4, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 17, 3))
+
+declare const symProp: unique symbol
+>symProp : Symbol(symProp, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 20, 13))
+
+declare const obj: {
+>obj : Symbol(obj, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 21, 13))
+
+    prop: string,
+>prop : Symbol(prop, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 21, 20))
+
+    [symProp]: symbol,
+>[symProp] : Symbol([symProp], Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 22, 17))
+>symProp : Symbol(symProp, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 20, 13))
+
+    [index: number]: number
+>index : Symbol(index, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 24, 5))
+}
+
+
+let x5 = f5((x) => x, obj);
+>x5 : Symbol(x5, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 28, 3))
+>f5 : Symbol(f5, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 3, 86))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 28, 13))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 28, 13))
+>obj : Symbol(obj, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 21, 13))
+
+const expectedx5: number | string | symbol = x5;
+>expectedx5 : Symbol(expectedx5, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 29, 5))
+>x5 : Symbol(x5, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 28, 3))
+
+let x6 = f6(x => x, obj);
+>x6 : Symbol(x6, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 31, 3))
+>f6 : Symbol(f6, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 4, 86))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 31, 12))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 31, 12))
+>obj : Symbol(obj, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 21, 13))
+
+const expectedx6: string = x6;
+>expectedx6 : Symbol(expectedx6, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 32, 5))
+>x6 : Symbol(x6, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 31, 3))
+
+let x7 = f7(x => x, obj);
+>x7 : Symbol(x7, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 34, 3))
+>f7 : Symbol(f7, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 5, 89))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 34, 12))
+>x : Symbol(x, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 34, 12))
+>obj : Symbol(obj, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 21, 13))
+
+const expectedx7: string = x7;
+>expectedx7 : Symbol(expectedx7, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 35, 5))
+>x7 : Symbol(x7, Decl(getBaseSignatureShouldNotGetWrapperTypeOfPrimitives.ts, 34, 3))
+
