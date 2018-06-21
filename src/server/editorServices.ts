@@ -696,11 +696,13 @@ namespace ts.server {
             return ensureProject ? this.ensureDefaultProjectForFile(fileName) : this.tryGetDefaultProjectForFile(fileName);
         }
 
+        /* @internal */
         tryGetDefaultProjectForFile(fileName: NormalizedPath): Project | undefined {
             const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
             return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
         }
 
+        /* @internal */
         ensureDefaultProjectForFile(fileName: NormalizedPath): Project {
             return this.tryGetDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
         }
