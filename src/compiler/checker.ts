@@ -3052,66 +3052,27 @@ namespace ts {
 
         function createNodeBuilder() {
             return {
-                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = typeToTypeNodeHelper(type, context);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result;
-                },
-                indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result!; // TODO: GH#18217
-                },
-                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = signatureToSignatureDeclarationHelper(signature, kind, context);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result;
-                },
-                symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result;
-                },
-                symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = symbolToExpression(symbol, context, meaning);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result;
-                },
-                symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = typeParametersToTypeParameterDeclarations(symbol, context);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result;
-                },
-                symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = symbolToParameterDeclaration(symbol, context);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result;
-                },
-                typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
-                    const resultingNode = typeParameterToDeclaration(parameter, context);
-                    const result = context.encounteredError ? undefined : resultingNode;
-                    return result;
-                },
+                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
+                indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context))!, // TODO: GH#18217
+                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
+                symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
+                symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => symbolToExpression(symbol, context, meaning)),
+                symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => typeParametersToTypeParameterDeclarations(symbol, context)),
+                symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => symbolToParameterDeclaration(symbol, context)),
+                typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => typeParameterToDeclaration(parameter, context)),
             };
 
-            function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined): NodeBuilderContext {
-                return {
+            function withContext<T>(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined, cb: (context: NodeBuilderContext) => T): T | undefined {
+                Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
+                const context: NodeBuilderContext = {
                     enclosingDeclaration,
                     flags: flags || NodeBuilderFlags.None,
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
@@ -3119,6 +3080,8 @@ namespace ts {
                     visitedSymbols: undefined,
                     inferTypeParameters: undefined
                 };
+                const resultingNode = cb(context);
+                return context.encounteredError ? undefined : resultingNode;
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
