@@ -1,9 +1,11 @@
 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(25,1): error TS2322: Type 'A<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
-  Type 'A<Foo>' is not assignable to type 'C<Kwah>'.
-    Property 'cProp' is missing in type 'A<Foo>'.
+  Type 'A<Foo>' is not assignable to type 'A<Bar>'.
+    Type 'Foo' is not assignable to type 'Bar'.
+      Property 'bar' is missing in type 'Foo'.
 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(26,1): error TS2322: Type 'B<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
-  Type 'B<Foo>' is not assignable to type 'C<Kwah>'.
-    Property 'cProp' is missing in type 'B<Foo>'.
+  Type 'B<Foo>' is not assignable to type 'B<Baz>'.
+    Type 'Foo' is not assignable to type 'Baz'.
+      Property 'baz' is missing in type 'Foo'.
 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(27,1): error TS2322: Type 'C<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
   Type 'C<Foo>' is not assignable to type 'C<Kwah>'.
     Type 'Foo' is not assignable to type 'Kwah'.
@@ -48,13 +50,15 @@ tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(50,1): error TS2322: Typ
     thingOfInterfaces = a;
     ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'A<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
-!!! error TS2322:   Type 'A<Foo>' is not assignable to type 'C<Kwah>'.
-!!! error TS2322:     Property 'cProp' is missing in type 'A<Foo>'.
+!!! error TS2322:   Type 'A<Foo>' is not assignable to type 'A<Bar>'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'Bar'.
+!!! error TS2322:       Property 'bar' is missing in type 'Foo'.
     thingOfInterfaces = b;
     ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'B<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
-!!! error TS2322:   Type 'B<Foo>' is not assignable to type 'C<Kwah>'.
-!!! error TS2322:     Property 'cProp' is missing in type 'B<Foo>'.
+!!! error TS2322:   Type 'B<Foo>' is not assignable to type 'B<Baz>'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'Baz'.
+!!! error TS2322:       Property 'baz' is missing in type 'Foo'.
     thingOfInterfaces = c;
     ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'C<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
