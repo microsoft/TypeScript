@@ -10166,10 +10166,12 @@ namespace ts {
             return elaborateElementwise(generateJsxAttributes(node), source, target);
         }
 
-        function *generateArrayElements(node: ArrayLiteralExpression): ElaborationIterator {
+        function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
             const len = length(node.elements);
             if (!len) return;
             for (let i = 0; i < len; i++) {
+                // Skip elements which do not exist in the target - a length error on the tuple overall is likely better than an error on a mismatched index signature
+                if (isTupleLikeType(target) && !getPropertyOfType(target, ("" + i) as __String)) continue;
                 const elem = node.elements[i];
                 if (isOmittedExpression(elem)) continue;
                 const nameType = getLiteralType(i);
@@ -10179,7 +10181,7 @@ namespace ts {
 
         function elaborateArrayLiteral(node: ArrayLiteralExpression, source: Type, target: Type) {
             if (isTupleLikeType(source)) {
-                return elaborateElementwise(generateArrayElements(node), source, target);
+                return elaborateElementwise(generateLimitedTupleElements(node, target), source, target);
             }
             return false;
         }
