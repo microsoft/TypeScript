@@ -439,6 +439,10 @@ namespace ts {
         return startEndOverlapsWithStartEnd(r1.pos, r1.end, start, end);
     }
 
+    export function nodeOverlapsWithStartEnd(node: Node, sourceFile: SourceFile, start: number, end: number) {
+        return startEndOverlapsWithStartEnd(node.getStart(sourceFile), node.end, start, end);
+    }
+
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
         const start = Math.max(start1, start2);
         const end = Math.min(end1, end2);
@@ -944,7 +948,7 @@ namespace ts {
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
                     if (!token || !isIdentifier(token)) return undefined;
                     if (!remainingLessThanTokens) {
-                        return { called: token, nTypeArguments };
+                        return isDeclarationName(token) ? undefined : { called: token, nTypeArguments };
                     }
                     remainingLessThanTokens--;
                     break;

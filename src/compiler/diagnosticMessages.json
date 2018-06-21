@@ -3636,7 +3636,7 @@
         "category": "Message",
         "code": 6353
     },
-    
+
     "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6354
@@ -3840,6 +3840,10 @@
     "Mapped object type implicitly has an 'any' template type.": {
         "category": "Error",
         "code": 7039
+    },
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+        "category": "Error",
+        "code": 7040
     },
     "You cannot rename this element.": {
         "category": "Error",

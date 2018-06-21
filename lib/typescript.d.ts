@@ -368,17 +368,18 @@ declare namespace ts {
         JSDocCallbackTag = 292,
         JSDocParameterTag = 293,
         JSDocReturnTag = 294,
-        JSDocTypeTag = 295,
-        JSDocTemplateTag = 296,
-        JSDocTypedefTag = 297,
-        JSDocPropertyTag = 298,
-        SyntaxList = 299,
-        NotEmittedStatement = 300,
-        PartiallyEmittedExpression = 301,
-        CommaListExpression = 302,
-        MergeDeclarationMarker = 303,
-        EndOfDeclarationMarker = 304,
-        Count = 305,
+        JSDocThisTag = 295,
+        JSDocTypeTag = 296,
+        JSDocTemplateTag = 297,
+        JSDocTypedefTag = 298,
+        JSDocPropertyTag = 299,
+        SyntaxList = 300,
+        NotEmittedStatement = 301,
+        PartiallyEmittedExpression = 302,
+        CommaListExpression = 303,
+        MergeDeclarationMarker = 304,
+        EndOfDeclarationMarker = 305,
+        Count = 306,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -405,9 +406,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 146,
         FirstJSDocNode = 278,
-        LastJSDocNode = 298,
+        LastJSDocNode = 299,
         FirstJSDocTagNode = 289,
-        LastJSDocTagNode = 298
+        LastJSDocTagNode = 299
     }
     enum NodeFlags {
         None = 0,
@@ -1536,6 +1537,10 @@ declare namespace ts {
     interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
     }
+    interface JSDocThisTag extends JSDocTag {
+        kind: SyntaxKind.JSDocThisTag;
+        typeExpression?: JSDocTypeExpression;
+    }
     interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
         typeParameters: NodeArray<TypeParameterDeclaration>;
@@ -1685,13 +1690,16 @@ declare namespace ts {
     interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
         javascriptText: string;
+        javascriptMapPath?: string;
         javascriptMapText?: string;
         declarationText: string;
+        declarationMapPath?: string;
         declarationMapText?: string;
     }
     interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
         text: string;
+        sourceMapPath?: string;
         sourceMapText?: string;
     }
     interface JsonSourceFile extends SourceFile {
@@ -1724,6 +1732,14 @@ declare namespace ts {
         fileExists(path: string): boolean;
         readFile(path: string): string | undefined;
     }
+    /**
+     * Branded string for keeping track of when we've turned an ambiguous path
+     * specified like "./blah" to an absolute path to an actual
+     * tsconfig file, e.g. "/root/blah/tsconfig.json"
+     */
+    type ResolvedConfigFileName = string & {
+        _isResolvedConfigFileName: never;
+    };
     type WriteFileCallback = (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles?: ReadonlyArray<SourceFile>) => void;
     class OperationCanceledException {
     }
@@ -1798,7 +1814,7 @@ declare namespace ts {
         sourceMapFile: string;
         sourceMapSourceRoot: string;
         sourceMapSources: string[];
-        sourceMapSourcesContent?: string[];
+        sourceMapSourcesContent?: (string | null)[];
         inputSourceFileNames: string[];
         sourceMapNames?: string[];
         sourceMapMappings: string;
@@ -2371,16 +2387,19 @@ declare namespace ts {
         code: number;
         next?: DiagnosticMessageChain;
     }
-    interface Diagnostic {
-        file: SourceFile | undefined;
-        start: number | undefined;
-        length: number | undefined;
-        messageText: string | DiagnosticMessageChain;
+    interface Diagnostic extends DiagnosticRelatedInformation {
         category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         code: number;
         source?: string;
+        relatedInformation?: DiagnosticRelatedInformation[];
+    }
+    interface DiagnosticRelatedInformation {
+        file: SourceFile | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string | DiagnosticMessageChain;
     }
     interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
@@ -2576,6 +2595,14 @@ declare namespace ts {
         host?: CompilerHost;
         oldProgram?: Program;
         configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+    }
+    interface UpToDateHost {
+        fileExists(fileName: string): boolean;
+        getModifiedTime(fileName: string): Date;
+        getUnchangedTime?(fileName: string): Date | undefined;
+        getLastStatus?(fileName: string): UpToDateStatus | undefined;
+        setLastStatus?(fileName: string, status: UpToDateStatus): void;
+        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
     }
     interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
@@ -3219,6 +3246,8 @@ declare namespace ts {
     function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
     /** Gets the JSDoc class tag for the node if present */
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
+    /** Gets the JSDoc this tag for the node if present */
+    function getJSDocThisTag(node: Node): JSDocThisTag | undefined;
     /** Gets the JSDoc return tag for the node if present */
     function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined;
     /** Gets the JSDoc template tag for the node if present */
@@ -3404,6 +3433,7 @@ declare namespace ts {
     function isJSDoc(node: Node): node is JSDoc;
     function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
     function isJSDocClassTag(node: Node): node is JSDocClassTag;
+    function isJSDocThisTag(node: Node): node is JSDocThisTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
     function isJSDocTypeTag(node: Node): node is JSDocTypeTag;
@@ -3917,8 +3947,10 @@ declare namespace ts {
     function createCommaList(elements: ReadonlyArray<Expression>): CommaListExpression;
     function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>): CommaListExpression;
     function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource | InputFiles>): Bundle;
-    function createUnparsedSourceFile(text: string, map?: string): UnparsedSource;
-    function createInputFiles(javascript: string, declaration: string, javascriptMapText?: string, declarationMapText?: string): InputFiles;
+    function createUnparsedSourceFile(text: string): UnparsedSource;
+    function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    function createInputFiles(javascript: string, declaration: string): InputFiles;
+    function createInputFiles(javascript: string, declaration: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
     function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>): CallExpression;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>, param: ParameterDeclaration, paramValue: Expression): CallExpression;
@@ -4142,7 +4174,7 @@ declare namespace ts {
     /**
      * Returns the target config filename of a project reference
      */
-    function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined;
+    function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName;
 }
 declare namespace ts {
     interface EmitOutput {
@@ -4388,14 +4420,6 @@ declare namespace ts {
     function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
 }
 declare namespace ts {
-    /**
-     * Branded string for keeping track of when we've turned an ambiguous path
-     * specified like "./blah" to an absolute path to an actual
-     * tsconfig file, e.g. "/root/blah/tsconfig.json"
-     */
-    type ResolvedConfigFileName = string & {
-        _isResolvedConfigFileName: never;
-    };
     interface BuildHost {
         verbose(diag: DiagnosticMessage, ...args: string[]): void;
         error(diag: DiagnosticMessage, ...args: string[]): void;
@@ -4550,7 +4574,7 @@ declare namespace ts {
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
     function createSolutionBuilder(compilerHost: CompilerHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System): {
-        buildAllProjects: () => number;
+        buildAllProjects: () => ExitStatus;
         getUpToDateStatus: (project: ParsedCommandLine | undefined) => UpToDateStatus;
         getUpToDateStatusOfFile: (configFileName: ResolvedConfigFileName) => UpToDateStatus;
         cleanAllProjects: () => ExitStatus.Success | ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -4562,6 +4586,12 @@ declare namespace ts {
         resolveProjectName: (name: string) => ResolvedConfigFileName | undefined;
         startWatching: () => void;
     };
+    /**
+     * Gets the UpToDateStatus for a project
+     */
+    function getUpToDateStatus(host: UpToDateHost, project: ParsedCommandLine | undefined): UpToDateStatus;
+    function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string>;
+    function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T): T | undefined;
 }
 declare namespace ts {
     interface Node {
@@ -5526,5 +5556,5 @@ declare namespace ts {
      */
     function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
 }
-//# sourceMappingURL=typescriptservices.d.ts.map
+//# sourceMappingURL=typescriptServices.d.ts.map
 export = ts
