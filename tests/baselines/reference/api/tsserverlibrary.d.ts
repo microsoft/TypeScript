@@ -3048,6 +3048,7 @@ declare namespace ts {
         enumKind?: EnumKind;
         originatingImport?: ImportDeclaration | ImportCall;
         lateSymbol?: Symbol;
+        specifierCache?: Map<string>;
     }
     enum EnumKind {
         Numeric = 0,
