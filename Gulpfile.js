@@ -24,12 +24,13 @@ const getDirSize = require("./scripts/build/getDirSize");
 const project = require("./scripts/build/project");
 const replace = require("./scripts/build/replace");
 const convertConstEnums = require("./scripts/build/convertConstEnum");
-const makeLibraryTargets = require("./scripts/build/lib");
 const needsUpdate = require("./scripts/build/needsUpdate");
 const getDiffTool = require("./scripts/build/getDiffTool");
 const baselineAccept = require("./scripts/build/baselineAccept");
 const cmdLineOptions = require("./scripts/build/options");
 const exec = require("./scripts/build/exec");
+const _debugMode = require("./scripts/build/debugMode");
+const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
 Error.stackTraceLimit = 1000;
@@ -37,11 +38,10 @@ Error.stackTraceLimit = 1000;
 // Constants
 const host = cmdLineOptions.host;
 const copyright = "CopyrightNotice.txt";
-const libraryTargets = makeLibraryTargets([copyright]);
 
-// Compile using the LKG compiler
 project.addTypeScript("lkg", "./lib/typescript.js");
-project.addTypeScript("default", "lkg");
+project.addTypeScript("built", "./built/local/typescriptServices.js");
+project.addTypeScript("default", "lkg"); // Compile using the LKG compiler by default
 
 const scriptsProject = "scripts/tsconfig.json";
 const configurePrereleaseJs = "scripts/configurePrerelease.js";
@@ -50,7 +50,7 @@ const generateLocalizedDiagnosticMessagesJs = "scripts/generateLocalizedDiagnost
 const buildProtocolJs = "scripts/buildProtocol.js";
 const produceLKGJs = "scripts/produceLKG.js";
 const word2mdJs = "scripts/word2md.js";
-gulp.task("scripts", /*help*/ false, [project(scriptsProject)], undefined, {
+gulp.task("scripts", /*help*/ false, () => project.compile(scriptsProject), {
     aliases: [
         configurePrereleaseJs, 
         processDiagnosticMessagesJs,
@@ -60,7 +60,7 @@ gulp.task("scripts", /*help*/ false, [project(scriptsProject)], undefined, {
         word2mdJs
     ]
 });
-gulp.task("clean-scripts", /*help*/ false, [project.clean(scriptsProject)]);
+gulp.task("clean-scripts", /*help*/ false, () => project.clean(scriptsProject));
 
 // Nightly management tasks
 gulp.task(
@@ -78,8 +78,8 @@ gulp.task(
 
 const importDefinitelyTypedTestsProject = "scripts/importDefinitelyTypedTests/tsconfig.json";
 const importDefinitelyTypedTestsJs = "scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js";
-gulp.task(importDefinitelyTypedTestsJs, /*help*/ false, [project(importDefinitelyTypedTestsProject)]);
-gulp.task("clean:" + importDefinitelyTypedTestsJs, /*help*/ false, [project.clean(importDefinitelyTypedTestsProject)]);
+gulp.task(importDefinitelyTypedTestsJs, /*help*/ false, () => project.compile(importDefinitelyTypedTestsProject));
+gulp.task("clean:" + importDefinitelyTypedTestsJs, /*help*/ false, () => project.clean(importDefinitelyTypedTestsProject));
 
 gulp.task(
     "importDefinitelyTypedTests",
@@ -90,7 +90,7 @@ gulp.task(
 gulp.task(
     "lib",
     "Builds the library targets",
-    libraryTargets);
+    () => generateLibs([copyright]));
 
 // The generated diagnostics map; built for the compiler and for the "generate-diagnostics" task
 const diagnosticInformationMapTs = "src/compiler/diagnosticInformationMap.generated.ts";
@@ -145,20 +145,18 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
     // NOTE: flatten services so that we can properly strip @internal
     project.flatten("src/services/tsconfig.json", typescriptServicesProject, {
         compilerOptions: {
+            "removeComments": true,
             "stripInternal": true,
             "outFile": "typescriptServices.js"
         }
     });
-})
+});
 
 const typescriptServicesJs = "built/local/typescriptServices.js";
 const typescriptServicesDts = "built/local/typescriptServices.d.ts";
-const typescriptServicesProjectTask = project.defer(typescriptServicesProject, {
-    dts: files => files.pipe(convertConstEnums()),
-    release: { compilerOptions: { removeComments: true } }
-});
-
-gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], typescriptServicesProjectTask, { aliases: [typescriptServicesDts] });
+gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], () => 
+    project.compile(typescriptServicesProject, { dts: convertConstEnums() }), 
+    { aliases: [typescriptServicesDts] });
 
 const typescriptJs = "built/local/typescript.js";
 gulp.task(typescriptJs, /*help*/ false, [typescriptServicesJs], () =>
@@ -186,28 +184,25 @@ gulp.task(typescriptStandaloneDts, /*help*/ false, [typescriptServicesDts], () =
 // build all 'typescriptServices'-related outputs
 gulp.task("typescriptServices", /*help*/ false, [typescriptServicesJs, typescriptServicesDts, typescriptJs, typescriptDts, typescriptStandaloneDts]);
 
-// Add the "built" compiler with a dependency on the built version of the compiler.
-project.addTypeScript("built", "./built/local/typescriptServices.js", [typescriptServicesJs]);
-
 const tscProject = "src/tsc/tsconfig.json";
 const tscJs = "built/local/tsc.js";
-gulp.task(tscJs, /*help*/ false, [project(tscProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })]);
+gulp.task(tscJs, /*help*/ false, [typescriptServicesJs], () => project.compile(tscProject, { typescript: "built" }));
 
 const cancellationTokenProject = "src/cancellationToken/tsconfig.json";
 const cancellationTokenJs = "built/local/cancellationToken.js";
-gulp.task(cancellationTokenJs, /*help*/ false, [project(cancellationTokenProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })]);
+gulp.task(cancellationTokenJs, /*help*/ false, [typescriptServicesJs], () => project.compile(cancellationTokenProject, { typescript: "built" }));
 
 const typingsInstallerProject = "src/typingsInstaller/tsconfig.json";
 const typingsInstallerJs = "built/local/typingsInstaller.js";
-gulp.task(typingsInstallerJs, /*help*/ false, [project(typingsInstallerProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })]);
+gulp.task(typingsInstallerJs, /*help*/ false, [typescriptServicesJs], () => project.compile(typingsInstallerProject, { typescript: "built" }));
 
 const tsserverProject = "src/tsserver/tsconfig.json";
 const tsserverJs = "built/local/tsserver.js";
-gulp.task(tsserverJs, /*help*/ false, [project(tsserverProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })]);
+gulp.task(tsserverJs, /*help*/ false, [typescriptServicesJs], () => project.compile(tsserverProject, { typescript: "built" }));
 
 const watchGuardProject = "src/watchGuard/tsconfig.json";
 const watchGuardJs = "built/local/watchGuard.js";
-gulp.task(watchGuardJs, /*help*/ false, [project(watchGuardProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })]);
+gulp.task(watchGuardJs, /*help*/ false, [typescriptServicesJs], () => project.compile(watchGuardProject, { typescript: "built" }));
 
 const typesMapJson = "built/local/typesMap.json";
 gulp.task(typesMapJson, /*help*/ false, [], () =>
@@ -249,42 +244,43 @@ gulp.task(
     "Generates a Markdown version of the Language Specification", 
     [specMd]);
 
+gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJs, typingsInstallerJs, watchGuardJs], () => {
+    const expectedFiles = [
+        tscJs, 
+        typescriptServicesJs, 
+        tsserverJs, 
+        typescriptJs, 
+        typescriptDts, 
+        typescriptServicesDts, 
+        tsserverlibraryDts, 
+        tsserverlibraryDts, 
+        typingsInstallerJs, 
+        cancellationTokenJs
+    ].concat(libraryTargets);
+    const missingFiles = expectedFiles
+        .concat(localizationTargets)
+        .filter(f => !fs.existsSync(f));
+    if (missingFiles.length > 0) {
+        throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
+    }
+    const sizeBefore = getDirSize("lib");
+    return exec(host, [produceLKGJs]).then(() => {
+        const sizeAfter = getDirSize("lib");
+        if (sizeAfter > (sizeBefore * 1.10)) {
+            throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
+        }
+    });
+});
+
 gulp.task(
     "LKG", 
     "Makes a new LKG out of the built js files", 
-    () => runSequence("clean-built", "dontUseDebugMode", ["scripts", "local", cancellationTokenJs, typingsInstallerJs, watchGuardJs], 
-        () => {
-            const expectedFiles = [
-                tscJs, 
-                typescriptServicesJs, 
-                tsserverJs, 
-                typescriptJs, 
-                typescriptDts, 
-                typescriptServicesDts, 
-                tsserverlibraryDts, 
-                tsserverlibraryDts, 
-                typingsInstallerJs, 
-                cancellationTokenJs
-            ].concat(libraryTargets);
-            const missingFiles = expectedFiles
-                .concat(localizationTargets)
-                .filter(f => !fs.existsSync(f));
-            if (missingFiles.length > 0) {
-                throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
-            }
-            const sizeBefore = getDirSize("lib");
-            return exec(host, [produceLKGJs]).then(() => {
-                const sizeAfter = getDirSize("lib");
-                if (sizeAfter > (sizeBefore * 1.10)) {
-                    throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
-                }
-            });
-        }));
+    () => runSequence("clean-built", "dontUseDebugMode", "produce-LKG"));
 
 // Task to build the tests infrastructure using the built compiler
 const testRunnerProject = "src/testRunner/tsconfig.json";
 const runJs = "built/local/run.js";
-gulp.task(runJs, /*help*/ false, [project(testRunnerProject, { typescript: "built", deps: [tsserverlibraryDts] })]);
+gulp.task(runJs, /*help*/ false, [typescriptServicesJs, tsserverlibraryDts], () => project.compile(testRunnerProject, { typescript: "built" }));
 
 gulp.task(
     "tests",
@@ -310,8 +306,8 @@ gulp.task(
 
 const webTestServerProject = "tests/webTestServer.tsconfig.json";
 const webTestServerJs = "tests/webTestServer.js";
-gulp.task(webTestServerJs, /*help*/ false, [project(webTestServerProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })])
-gulp.task("clean:" + webTestServerJs, /*help*/ false, [project.clean(webTestServerProject, { typescript: "built" })])
+gulp.task(webTestServerJs, /*help*/ false, [typescriptServicesJs], () => project.compile(webTestServerProject, { typescript: "built" }));
+gulp.task("clean:" + webTestServerJs, /*help*/ false, () => project.clean(webTestServerProject));
 
 const bundlePath = path.resolve("built/local/bundle.js");
 
@@ -447,8 +443,8 @@ gulp.task(
 // Webhost
 const webtscProject = "tests/webhost/webtsc.tsconfig.json";
 const webtscJs = "tests/webhost/webtsc.js";
-gulp.task(webtscJs, /*help*/ false, [project(webtscProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })]);
-gulp.task("clean:" + webtscJs, /*help*/ false, [project.clean(webtscProject, { typescript: "built" })]);
+gulp.task(webtscJs, /*help*/ false, [typescriptServicesJs], () => project.compile(webtscProject, { typescript: "built" }));
+gulp.task("clean:" + webtscJs, /*help*/ false, () => project.clean(webtscProject));
 
 gulp.task("webhost", "Builds the tsc web host", [webtscJs], () =>
     gulp.src("built/local/lib.d.ts")
@@ -457,8 +453,8 @@ gulp.task("webhost", "Builds the tsc web host", [webtscJs], () =>
 // Perf compiler
 const perftscProject = "tests/perftsc.tsconfig.json";
 const perftscJs = "built/local/perftsc.js";
-gulp.task(perftscJs, /*help*/ false, [project(perftscProject, { typescript: "built", release: { compilerOptions: { removeComments: true } } })]);
-gulp.task("clean:" + perftscJs, /*help*/ false, [project.clean(perftscProject, { typescript: "built" })]);
+gulp.task(perftscJs, /*help*/ false, [typescriptServicesJs], () => project.compile(perftscProject, { typescript: "built" }));
+gulp.task("clean:" + perftscJs, /*help*/ false, () => project.clean(perftscProject));
 
 gulp.task(
     "perftsc",
@@ -477,8 +473,8 @@ gulp.task(loggedIOJs, /*help*/ false, [], (done) => {
 
 const instrumenterProject = "src/instrumenter/tsconfig.json";
 const instrumenterJs = "built/local/instrumenter.js";
-gulp.task(instrumenterJs, /*help*/ false, [project(instrumenterProject)]);
-gulp.task("clean:" + instrumenterJs, /*help*/ false, [project.clean(instrumenterProject)]);
+gulp.task(instrumenterJs, /*help*/ false, () => project.compile(instrumenterProject));
+gulp.task("clean:" + instrumenterJs, /*help*/ false, () => project.clean(instrumenterProject));
 
 gulp.task(
     "tsc-instrumented",
@@ -497,9 +493,9 @@ gulp.task(
 gulp.task(
     "build-rules",
     "Compiles tslint rules to js",
-    [project("scripts/tslint/tsconfig.json")]);
+    () => project.compile("scripts/tslint/tsconfig.json"));
 
-gulp.task("clean-rules", /*help*/ false, [project.clean("scripts/tslint/tsconfig.json")]);
+gulp.task("clean-rules", /*help*/ false, () => project.clean("scripts/tslint/tsconfig.json"));
 
 gulp.task(
     "lint",

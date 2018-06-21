@@ -3,7 +3,7 @@ const path = require("path");
 const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
 const ts = require("../../lib/typescript");
 const { Duplex } = require("stream");
-const { addColor, color } = require("./colors");
+const chalk = require("./chalk");
 const Vinyl = require("vinyl");
 
 /**
@@ -86,7 +86,7 @@ function normalizeSlashes(file) {
  * @private
  */
 function fileName(file) {
-    return addColor(normalizeSlashes(path.relative(process.cwd(), path.resolve(file))), color.cyan);
+    return chalk.cyan(normalizeSlashes(path.relative(process.cwd(), path.resolve(file))));
 }
 
 /**

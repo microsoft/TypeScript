@@ -11,19 +11,36 @@ const formatDiagnosticsHost = exports.formatDiagnosticsHost = {
 
 /**
  * @param {Diagnostic[]} diagnostics
- * @param {boolean} [pretty]
+ * @param {{ cwd?: string, pretty?: boolean }} [options]
  */
-function formatDiagnostics(diagnostics, pretty) {
-    return pretty ? ts.formatDiagnosticsWithColorAndContext(diagnostics, formatDiagnosticsHost) :
-        ts.formatDiagnostics(diagnostics, formatDiagnosticsHost);
+function formatDiagnostics(diagnostics, options) {
+    return options && options.pretty 
+        ? ts.formatDiagnosticsWithColorAndContext(diagnostics, getFormatDiagnosticsHost(options && options.cwd)) 
+        : ts.formatDiagnostics(diagnostics, getFormatDiagnosticsHost(options && options.cwd));
 }
 exports.formatDiagnostics = formatDiagnostics;
 
-/** @param {Diagnostic[]} diagnostics */
-function reportDiagnostics(diagnostics) {
-    log(formatDiagnostics(diagnostics, process.stdout.isTTY));
+/** 
+ * @param {Diagnostic[]} diagnostics 
+ * @param {{ cwd?: string }} [options]
+ */
+function reportDiagnostics(diagnostics, options) {
+    log(formatDiagnostics(diagnostics, { cwd: options && options.cwd, pretty: process.stdout.isTTY }));
 }
 exports.reportDiagnostics = reportDiagnostics;
+
+/**
+ * @param {string | undefined} cwd 
+ * @returns {FormatDiagnosticsHost}
+ */
+function getFormatDiagnosticsHost(cwd) {
+    if (!cwd || cwd === process.cwd()) return formatDiagnosticsHost;
+    return {
+        getCanonicalFileName: formatDiagnosticsHost.getCanonicalFileName,
+        getCurrentDirectory: () => cwd,
+        getNewLine: formatDiagnosticsHost.getNewLine
+    };
+}
 
 /**
  * @typedef {import("../../lib/typescript").FormatDiagnosticsHost} FormatDiagnosticsHost

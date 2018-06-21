@@ -2,7 +2,7 @@
 const cp = require("child_process");
 const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
 const isWin = /^win/.test(process.platform);
-const { addColor, color } = require("./colors");
+const chalk = require("./chalk");
 
 module.exports = exec;
 
@@ -15,7 +15,7 @@ module.exports = exec;
  */
 function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
-        log(addColor(`${cmd} ${args.join(" ")}`, color.gray));
+        log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
         // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
         const subshellFlag = isWin ? "/c" : "-c";
         const command = isWin ? [possiblyQuote(cmd), ...args] : [`${cmd} ${args.join(" ")}`];

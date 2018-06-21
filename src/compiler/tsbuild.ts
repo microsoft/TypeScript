@@ -1017,12 +1017,6 @@ namespace ts {
      */
     export function getUpToDateStatus(host: UpToDateHost, project: ParsedCommandLine | undefined): UpToDateStatus {
         if (project === undefined) {
-            return {
-                type: UpToDateStatusType.Unbuildable, reason: "File deleted mid-build"
-            };
-        }
-
-        if (project === undefined) {
             return { type: UpToDateStatusType.Unbuildable, reason: "File deleted mid-build" };
         }
 
