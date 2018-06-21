@@ -2552,7 +2552,7 @@ declare namespace ts {
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
-        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
+        getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
@@ -2923,7 +2923,7 @@ declare namespace ts {
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         isLateBound(node: Declaration): node is LateBoundDeclaration;
-        collectLinkedAliases(node: Identifier): Node[] | undefined;
+        collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
         isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
@@ -3254,7 +3254,7 @@ declare namespace ts {
         symbol: Symbol;
         pattern?: DestructuringPattern;
         aliasSymbol?: Symbol;
-        aliasTypeArguments?: Type[];
+        aliasTypeArguments?: ReadonlyArray<Type>;
         wildcardInstantiation?: Type;
     }
     interface IntrinsicType extends Type {
@@ -3325,7 +3325,7 @@ declare namespace ts {
      */
     interface TypeReference extends ObjectType {
         target: GenericType;
-        typeArguments?: Type[];
+        typeArguments?: ReadonlyArray<Type>;
     }
     enum Variance {
         Invariant = 0,
@@ -3375,8 +3375,8 @@ declare namespace ts {
     interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;
         properties: Symbol[];
-        callSignatures: Signature[];
-        constructSignatures: Signature[];
+        callSignatures: ReadonlyArray<Signature>;
+        constructSignatures: ReadonlyArray<Signature>;
         stringIndexInfo?: IndexInfo;
         numberIndexInfo?: IndexInfo;
     }
@@ -3455,8 +3455,8 @@ declare namespace ts {
     }
     interface Signature {
         declaration?: SignatureDeclaration | JSDocSignature;
-        typeParameters?: TypeParameter[];
-        parameters: Symbol[];
+        typeParameters?: ReadonlyArray<TypeParameter>;
+        parameters: ReadonlyArray<Symbol>;
         thisParameter?: Symbol;
         resolvedReturnType?: Type;
         resolvedTypePredicate?: TypePredicate;
@@ -3522,7 +3522,7 @@ declare namespace ts {
     }
     type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
     interface InferenceContext extends TypeMapper {
-        typeParameters: TypeParameter[];
+        typeParameters: ReadonlyArray<TypeParameter>;
         signature?: Signature;
         inferences: InferenceInfo[];
         flags: InferenceFlags;
@@ -5768,6 +5768,7 @@ declare namespace ts {
         Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports: DiagnosticMessage;
         Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead: DiagnosticMessage;
         Mapped_object_type_implicitly_has_an_any_template_type: DiagnosticMessage;
+        If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_0: DiagnosticMessage;
         You_cannot_rename_this_element: DiagnosticMessage;
         You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library: DiagnosticMessage;
         import_can_only_be_used_in_a_ts_file: DiagnosticMessage;
@@ -6122,7 +6123,7 @@ declare namespace ts {
     function isLateVisibilityPaintedStatement(node: Node): node is LateVisibilityPaintedStatement;
     function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport;
     function getEnclosingBlockScopeContainer(node: Node): Node;
-    function declarationNameToString(name: DeclarationName | QualifiedName): string;
+    function declarationNameToString(name: DeclarationName | QualifiedName | undefined): string;
     function getNameFromIndexInfo(info: IndexInfo): string | undefined;
     function getTextOfPropertyName(name: PropertyName): __String;
     function entityNameToString(name: EntityNameOrEntityNameExpression): string;
@@ -6309,7 +6310,8 @@ declare namespace ts {
     function isIdentifierName(node: Identifier): boolean;
     function isAliasSymbolDeclaration(node: Node): boolean;
     function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean;
-    function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments | undefined;
+    function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments | undefined;
+    function getClassExtendsHeritageElement(node: ClassLikeDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments | undefined;
     function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration): NodeArray<ExpressionWithTypeArguments> | undefined;
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode>;
@@ -6700,7 +6702,7 @@ declare namespace ts {
     function isNamedDeclaration(node: Node): node is NamedDeclaration & {
         name: DeclarationName;
     };
-    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName;
+    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -7717,8 +7719,8 @@ declare namespace ts {
     /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
     function createFileLevelUniqueName(text: string): Identifier;
     /** Create a unique name generated for a node. */
-    function getGeneratedNameForNode(node: Node): Identifier;
-    function getGeneratedNameForNode(node: Node, flags: GeneratedIdentifierFlags): Identifier;
+    function getGeneratedNameForNode(node: Node | undefined): Identifier;
+    function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier;
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
     function createSuper(): SuperExpression;
     function createThis(): ThisExpression & Token<SyntaxKind.ThisKeyword>;
@@ -9813,8 +9815,8 @@ declare namespace ts {
         getProperties(): Symbol[];
         getProperty(propertyName: string): Symbol | undefined;
         getApparentProperties(): Symbol[];
-        getCallSignatures(): Signature[];
-        getConstructSignatures(): Signature[];
+        getCallSignatures(): ReadonlyArray<Signature>;
+        getConstructSignatures(): ReadonlyArray<Signature>;
         getStringIndexType(): Type | undefined;
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
@@ -10684,6 +10686,7 @@ declare namespace ts {
     function startEndContainsRange(start: number, end: number, range: TextRange): boolean;
     function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean;
     function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number): boolean;
+    function nodeOverlapsWithStartEnd(node: Node, sourceFile: SourceFile, start: number, end: number): boolean;
     function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number): boolean;
     /**
      * Assumes `candidate.start <= position` holds.
@@ -11639,7 +11642,7 @@ declare namespace ts.codefix {
      * @returns Empty string iff there are no member insertions.
      */
     function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, preferences: UserPreferences, out: (node: ClassElement) => void): void;
-    function createMethodFromCallExpression({ typeArguments, arguments: args, parent: parent }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean, preferences: UserPreferences): MethodDeclaration;
+    function createMethodFromCallExpression(context: CodeFixContextBase, { typeArguments, arguments: args, parent: parent }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean, preferences: UserPreferences): MethodDeclaration;
 }
 declare namespace ts.codefix {
 }
@@ -12188,6 +12191,7 @@ declare namespace ts.server.protocol {
         Change = "change",
         Close = "close",
         Completions = "completions",
+        CompletionInfo = "completionInfo",
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
         CompletionDetailsFull = "completionEntryDetails-full",
@@ -12888,6 +12892,15 @@ declare namespace ts.server.protocol {
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
+    }
+    interface CompletionInfoResponse extends Response {
+        body?: CompletionInfo;
+    }
+    interface CompletionInfo {
+        readonly isGlobalCompletion: boolean;
+        readonly isMemberCompletion: boolean;
+        readonly isNewIdentifierLocation: boolean;
+        readonly entries: ReadonlyArray<CompletionEntry>;
     }
     interface CompletionDetailsResponse extends Response {
         body?: CompletionEntryDetails[];
