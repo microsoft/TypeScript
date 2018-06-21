@@ -10823,11 +10823,31 @@ namespace ts {
                     }
                 }
                 if (reportErrors) {
-                    const discriminantType = findMatchingDiscriminantType(source, target);
-                    isRelatedTo(source, discriminantType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
+                    const bestMatchingType =
+                        findMatchingDiscriminantType(source, target) ||
+                        findMatchingTypeReferenceOrTypeAliasReference(source, target);
+
+                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
                 return Ternary.False;
             }
+
+            function findMatchingTypeReferenceOrTypeAliasReference(source: Type, unionTarget: UnionOrIntersectionType) {
+                if (source.flags & TypeFlags.Object && (source as ObjectType).objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous) && unionTarget.flags & TypeFlags.Union) {
+                    return find(unionTarget.types, target => {
+                        if (target.flags & TypeFlags.Object) {
+                            if ((source as ObjectType).objectFlags & (target as ObjectType).objectFlags & ObjectFlags.Reference) {
+                                return (source as TypeReference).target === (target as TypeReference).target;
+                            }
+                            if ((source as ObjectType).objectFlags & (target as ObjectType).objectFlags & ObjectFlags.Anonymous) {
+                                return !!(source as AnonymousType).aliasSymbol && (source as AnonymousType).aliasSymbol === (target as AnonymousType).aliasSymbol;
+                            }
+                        }
+                        return false;
+                    });
+                }
+            }
+
 
             // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
             function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
