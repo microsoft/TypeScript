@@ -16,15 +16,22 @@ and limitations under the License.
 
 declare namespace ts {
     const versionMajorMinor = "3.0";
+    /** The version of the TypeScript compiler release */
     const version: string;
 }
 declare namespace ts {
+    /**
+     * Type of objects whose values are all of the same type.
+     * The `in` and `for-in` operators can *not* be safely used,
+     * since `Object.prototype` may be modified by outside code.
+     */
     interface MapLike<T> {
         [index: string]: T;
     }
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
+    /** ES6 Map interface, only read methods included. */
     interface ReadonlyMap<T> {
         get(key: string): T | undefined;
         has(key: string): boolean;
@@ -34,11 +41,13 @@ declare namespace ts {
         values(): Iterator<T>;
         entries(): Iterator<[string, T]>;
     }
+    /** ES6 Map interface. */
     interface Map<T> extends ReadonlyMap<T> {
         set(key: string, value: T): this;
         delete(key: string): boolean;
         clear(): void;
     }
+    /** ES6 Iterator type. */
     interface Iterator<T> {
         next(): {
             value: T;
@@ -48,6 +57,7 @@ declare namespace ts {
             done: true;
         };
     }
+    /** Array that is only intended to be pushed to, never read. */
     interface Push<T> {
         push(...values: T[]): void;
     }
@@ -452,7 +462,9 @@ declare namespace ts {
     }
     enum JsxFlags {
         None = 0,
+        /** An element from a named property of the JSX.IntrinsicElements interface */
         IntrinsicNamedElement = 1,
+        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
         IntrinsicIndexedElement = 2,
         IntrinsicElement = 3
     }
@@ -492,6 +504,10 @@ declare namespace ts {
     type ModifiersArray = NodeArray<Modifier>;
     interface Identifier extends PrimaryExpression, Declaration {
         kind: SyntaxKind.Identifier;
+        /**
+         * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
+         * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
+         */
         escapedText: __String;
         originalKeywordKind?: SyntaxKind;
         isInJSDocNamespace?: boolean;
@@ -635,6 +651,14 @@ declare namespace ts {
     }
     type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
     type ArrayBindingElement = BindingElement | OmittedExpression;
+    /**
+     * Several node kinds share function-like features such as a signature,
+     * a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
+     * Examples:
+     * - FunctionDeclaration
+     * - MethodDeclaration
+     * - AccessorDeclaration
+     */
     interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
         _functionLikeDeclarationBrand: any;
         asteriskToken?: AsteriskToken;
@@ -642,6 +666,7 @@ declare namespace ts {
         body?: Block | Expression;
     }
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
+    /** @deprecated Use SignatureDeclaration */
     type FunctionLike = SignatureDeclaration;
     interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
@@ -664,6 +689,7 @@ declare namespace ts {
         parent: ClassLikeDeclaration;
         body?: FunctionBody;
     }
+    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
         parent: ClassLikeDeclaration;
@@ -803,6 +829,7 @@ declare namespace ts {
     interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
+    /** Deprecated, please use UpdateExpression */
     type IncrementExpression = UpdateExpression;
     interface UpdateExpression extends UnaryExpression {
         _updateExpressionBrand: any;
@@ -984,6 +1011,12 @@ declare namespace ts {
         parent: ArrayLiteralExpression | CallExpression | NewExpression;
         expression: Expression;
     }
+    /**
+     * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
+     * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
+     * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
+     * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     */
     interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         properties: NodeArray<T>;
     }
@@ -1000,6 +1033,7 @@ declare namespace ts {
     interface SuperPropertyAccessExpression extends PropertyAccessExpression {
         expression: SuperExpression;
     }
+    /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
     interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
         expression: EntityNameExpression;
@@ -1136,6 +1170,9 @@ declare namespace ts {
     interface NotEmittedStatement extends Statement {
         kind: SyntaxKind.NotEmittedStatement;
     }
+    /**
+     * A list of comma-separated expressions. This node is only created by transformations.
+     */
     interface CommaListExpression extends Expression {
         kind: SyntaxKind.CommaListExpression;
         elements: NodeArray<Expression>;
@@ -1272,6 +1309,7 @@ declare namespace ts {
     }
     interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.ClassDeclaration;
+        /** May be undefined in `export default class { ... }`. */
         name?: Identifier;
     }
     interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
@@ -1341,6 +1379,11 @@ declare namespace ts {
         statements: NodeArray<Statement>;
     }
     type ModuleReference = EntityName | ExternalModuleReference;
+    /**
+     * One of:
+     * - import x = require("mod");
+     * - import x = M.x;
+     */
     interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ImportEqualsDeclaration;
         parent: SourceFile | ModuleBlock;
@@ -1356,6 +1399,7 @@ declare namespace ts {
         kind: SyntaxKind.ImportDeclaration;
         parent: SourceFile | ModuleBlock;
         importClause?: ImportClause;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier: Expression;
     }
     type NamedImportBindings = NamespaceImport | NamedImports;
@@ -1377,7 +1421,9 @@ declare namespace ts {
     interface ExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
+        /** Will not be assigned in the case of `export * from "foo";` */
         exportClause?: NamedExports;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier?: Expression;
     }
     interface NamedImports extends Node {
@@ -1404,6 +1450,10 @@ declare namespace ts {
         name: Identifier;
     }
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    /**
+     * This is either an `export =` or an `export default` declaration.
+     * Unless `isExportEquals` is set, this node was parsed as an `export default`.
+     */
     interface ExportAssignment extends DeclarationStatement {
         kind: SyntaxKind.ExportAssignment;
         parent: SourceFile;
@@ -1474,6 +1524,10 @@ declare namespace ts {
     interface JSDocUnknownTag extends JSDocTag {
         kind: SyntaxKind.JSDocTag;
     }
+    /**
+     * Note that `@extends` is a synonym of `@augments`.
+     * Both tags are represented by this interface.
+     */
     interface JSDocAugmentsTag extends JSDocTag {
         kind: SyntaxKind.JSDocAugmentsTag;
         class: ExpressionWithTypeArguments & {
@@ -1523,6 +1577,7 @@ declare namespace ts {
         parent: JSDoc;
         name: EntityName;
         typeExpression?: JSDocTypeExpression;
+        /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
         isNameFirst: boolean;
         isBracketed: boolean;
     }
@@ -1535,6 +1590,7 @@ declare namespace ts {
     interface JSDocTypeLiteral extends JSDocType {
         kind: SyntaxKind.JSDocTypeLiteral;
         jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>;
+        /** If true, then this type literal represents an *array* of its type. */
         isArrayType?: boolean;
     }
     enum FlowFlags {
@@ -1615,6 +1671,14 @@ declare namespace ts {
         libReferenceDirectives: ReadonlyArray<FileReference>;
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
+        /**
+         * lib.d.ts should have a reference comment like
+         *
+         *  /// <reference no-default-lib="true"/>
+         *
+         * If any other file has this comment, it signals not to include lib.d.ts
+         * because this containing file is intended to act as a default library.
+         */
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
     }
@@ -1661,9 +1725,18 @@ declare namespace ts {
     interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
         readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
+        /**
+         * Gets a value indicating whether the specified path exists and is a file.
+         * @param path The path to test.
+         */
         fileExists(path: string): boolean;
         readFile(path: string): string | undefined;
     }
+    /**
+     * Branded string for keeping track of when we've turned an ambiguous path
+     * specified like "./blah" to an absolute path to an actual
+     * tsconfig file, e.g. "/root/blah/tsconfig.json"
+     */
     type ResolvedConfigFileName = string & {
         _isResolvedConfigFileName: never;
     };
@@ -1672,18 +1745,39 @@ declare namespace ts {
     }
     interface CancellationToken {
         isCancellationRequested(): boolean;
+        /** @throws OperationCanceledException if isCancellationRequested is true */
         throwIfCancellationRequested(): void;
     }
     interface Program extends ScriptReferenceHost {
+        /**
+         * Get a list of root file names that were passed to a 'createProgram'
+         */
         getRootFileNames(): ReadonlyArray<string>;
+        /**
+         * Get a list of files in the program
+         */
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        /**
+         * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
+         * the JavaScript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the JavaScript and declaration for that
+         * specific file will be generated.
+         *
+         * If writeFile is not specified then the writeFile callback from the compiler host will be
+         * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the JavaScript and declaration files.
+         */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
         getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
+        /** The first time this is called, it will return global diagnostics (no location). */
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        /**
+         * Gets a type checker that can be used to semantically analyze source files in the program.
+         */
         getTypeChecker(): TypeChecker;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
@@ -1693,16 +1787,25 @@ declare namespace ts {
         sourceFile: SourceFile;
     }
     interface CustomTransformers {
+        /** Custom transformers to evaluate before built-in .js transformations. */
         before?: TransformerFactory<SourceFile>[];
+        /** Custom transformers to evaluate after built-in .js transformations. */
         after?: TransformerFactory<SourceFile>[];
+        /** Custom transformers to evaluate after built-in .d.ts transformations. */
         afterDeclarations?: TransformerFactory<Bundle | SourceFile>[];
     }
     interface SourceMapSpan {
+        /** Line number in the .js file. */
         emittedLine: number;
+        /** Column number in the .js file. */
         emittedColumn: number;
+        /** Line number in the .ts file. */
         sourceLine: number;
+        /** Column number in the .ts file. */
         sourceColumn: number;
+        /** Optional name (index into names array) associated with this span. */
         nameIndex?: number;
+        /** .ts file (index into sources array) associated with this span */
         sourceIndex: number;
     }
     interface SourceMapData {
@@ -1717,6 +1820,7 @@ declare namespace ts {
         sourceMapMappings: string;
         sourceMapDecodedMappings: SourceMapSpan[];
     }
+    /** Return code used by getEmitOutput function to indicate status of the function */
     enum ExitStatus {
         Success = 0,
         DiagnosticsPresent_OutputsSkipped = 1,
@@ -1724,6 +1828,7 @@ declare namespace ts {
     }
     interface EmitResult {
         emitSkipped: boolean;
+        /** Contains declaration emit diagnostics */
         diagnostics: ReadonlyArray<Diagnostic>;
         emittedFiles?: string[];
     }
@@ -1741,21 +1846,41 @@ declare namespace ts {
         getReturnTypeOfSignature(signature: Signature): Type;
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
+        /** Note that the resulting nodes cannot be checked. */
         typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): (SignatureDeclaration & {
             typeArguments?: NodeArray<TypeNode>;
         }) | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         symbolToExpression(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Expression | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): NodeArray<TypeParameterDeclaration> | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): ParameterDeclaration | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeParameterDeclaration | undefined;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol | undefined;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
+        /**
+         * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
+         * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
+         */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        /**
+         * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
+         * Otherwise returns its input.
+         * For example, at `export type T = number;`:
+         *     - `getSymbolAtLocation` at the location `T` will return the exported symbol for `T`.
+         *     - But the result of `getSymbolsInScope` will contain the *local* symbol for `T`, not the exported symbol.
+         *     - Calling `getExportSymbolOfSymbol` on that local symbol will return the exported symbol.
+         */
         getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
         getTypeAtLocation(node: Node): Type | undefined;
@@ -1764,11 +1889,20 @@ declare namespace ts {
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
         typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        /**
+         * @deprecated Use the createX factory functions or XToY typechecker methods and `createPrinter` or the `xToString` methods instead
+         * This will be removed in a future version.
+         */
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /**
+         * returns unknownSignature in the case of an error.
+         * returns undefined if the node is not valid.
+         * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
+         */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
@@ -1777,6 +1911,7 @@ declare namespace ts {
         isUnknownSymbol(symbol: Symbol): boolean;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
+        /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
@@ -1790,6 +1925,11 @@ declare namespace ts {
         getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
+        /**
+         * Depending on the operation performed, it may be appropriate to throw away the checker
+         * if the cancellation token is triggered. Typically, if it is used for error checking
+         * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
+         */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
     enum NodeBuilderFlags {
@@ -1842,7 +1982,7 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        WriteOwnNameForAnyLike = 0,
+        /** @deprecated */ WriteOwnNameForAnyLike = 0,
         NodeBuilderFlagsMask = 9469291
     }
     enum SymbolFormatFlags {
@@ -1852,19 +1992,25 @@ declare namespace ts {
         AllowAnyNodeKind = 4,
         UseAliasDefinedOutsideCurrentScope = 8
     }
+    /**
+     * @deprecated
+     */
     interface SymbolDisplayBuilder {
-        buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
-        buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
-        buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
-        buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
+        /** @deprecated */ buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
+        /** @deprecated */ buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
+        /** @deprecated */ buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        /** @deprecated */ buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
+    /**
+     * @deprecated Migrate to other methods of generating symbol names, ex symbolToEntityName + a printer or symbolToString
+     */
     interface SymbolWriter extends SymbolTracker {
         writeKeyword(text: string): void;
         writeOperator(text: string): void;
@@ -1985,11 +2131,20 @@ declare namespace ts {
         ExportEquals = "export=",
         Default = "default"
     }
+    /**
+     * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
+     * The shape of this brand is rather unique compared to others we've used.
+     * Instead of just an intersection of a string and an object, it is that union-ed
+     * with an intersection of void and an object. This makes it wholly incompatible
+     * with a normal string (which is good, it cannot be misused on assignment or on usage),
+     * while still being comparable with a normal string via === (also good) and castable from a string.
+     */
     type __String = (string & {
         __escapedIdentifier: void;
     }) | (void & {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
+    /** ReadonlyMap where keys are `__String`s. */
     interface ReadonlyUnderscoreEscapedMap<T> {
         get(key: __String): T | undefined;
         has(key: __String): boolean;
@@ -1999,11 +2154,13 @@ declare namespace ts {
         values(): Iterator<T>;
         entries(): Iterator<[__String, T]>;
     }
+    /** Map where keys are `__String`s. */
     interface UnderscoreEscapedMap<T> extends ReadonlyUnderscoreEscapedMap<T> {
         set(key: __String, value: T): this;
         delete(key: __String): boolean;
         clear(): void;
     }
+    /** SymbolTable based on ES6 Map interface. */
     type SymbolTable = UnderscoreEscapedMap<Symbol>;
     enum TypeFlags {
         Any = 1,
@@ -2095,6 +2252,7 @@ declare namespace ts {
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
     }
+    /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
     interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[] | undefined;
         outerTypeParameters: TypeParameter[] | undefined;
@@ -2109,6 +2267,16 @@ declare namespace ts {
         declaredStringIndexInfo?: IndexInfo;
         declaredNumberIndexInfo?: IndexInfo;
     }
+    /**
+     * Type references (ObjectFlags.Reference). When a class or interface has type parameters or
+     * a "this" type, references to the class or interface are made using type references. The
+     * typeArguments property specifies the types to substitute for the type parameters of the
+     * class or interface and optionally includes an extra element that specifies the type to
+     * substitute for "this" in the resulting instantiation. When no extra argument is present,
+     * the type reference itself is substituted for "this". The typeArguments property is undefined
+     * if the class or interface has no type parameters and the reference isn't specifying an
+     * explicit "this" argument.
+     */
     interface TypeReference extends ObjectType {
         target: GenericType;
         typeArguments?: Type[];
@@ -2193,6 +2361,7 @@ declare namespace ts {
         AlwaysStrict = 64,
         PriorityImpliesCombination = 28
     }
+    /** @deprecated Use FileExtensionInfo instead. */
     type JsFileExtensionInfo = FileExtensionInfo;
     interface FileExtensionInfo {
         extension: string;
@@ -2206,6 +2375,12 @@ declare namespace ts {
         message: string;
         reportsUnnecessary?: {};
     }
+    /**
+     * A linked list of formatted diagnostic messages to be used as part of a multiline message.
+     * It is built from the bottom up, leaving the head to be the "main" diagnostic.
+     * While it seems that DiagnosticMessageChain is structurally similar to DiagnosticMessage,
+     * the difference is that messages are all preformatted in DMC.
+     */
     interface DiagnosticMessageChain {
         messageText: string;
         category: DiagnosticCategory;
@@ -2214,6 +2389,7 @@ declare namespace ts {
     }
     interface Diagnostic extends DiagnosticRelatedInformation {
         category: DiagnosticCategory;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         code: number;
         source?: string;
@@ -2244,9 +2420,13 @@ declare namespace ts {
         name: string;
     }
     interface ProjectReference {
+        /** A normalized path on disk */
         path: string;
+        /** The path as the user originally wrote it */
         originalPath?: string;
+        /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
         prepend?: boolean;
+        /** True if it is intended that this reference form a circularity */
         circular?: boolean;
     }
     type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
@@ -2323,6 +2503,7 @@ declare namespace ts {
         traceResolution?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
+        /** Paths used to compute primary types search locations */
         typeRoots?: string[];
         esModuleInterop?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
@@ -2354,6 +2535,7 @@ declare namespace ts {
         LineFeed = 1
     }
     interface LineAndCharacter {
+        /** 0-based. */
         line: number;
         character: number;
     }
@@ -2365,6 +2547,10 @@ declare namespace ts {
         TSX = 4,
         External = 5,
         JSON = 6,
+        /**
+         * Used on extensions that doesn't define the ScriptKind but the content defines it.
+         * Deferred extensions are going to be included in all project contexts.
+         */
         Deferred = 7
     }
     enum ScriptTarget {
@@ -2382,6 +2568,7 @@ declare namespace ts {
         Standard = 0,
         JSX = 1
     }
+    /** Either a parsed command line or a parsed tsconfig.json */
     interface ParsedCommandLine {
         options: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
@@ -2422,21 +2609,57 @@ declare namespace ts {
         readFile(fileName: string): string | undefined;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
+        /**
+         * Resolve a symbolic link.
+         * @see https://nodejs.org/api/fs.html#fs_fs_realpathsync_path_options
+         */
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
     }
+    /**
+     * Represents the result of module resolution.
+     * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
+     * The Program will then filter results based on these flags.
+     *
+     * Prefer to return a `ResolvedModuleFull` so that the file type does not have to be inferred.
+     */
     interface ResolvedModule {
+        /** Path of the file the module was resolved to. */
         resolvedFileName: string;
+        /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
     }
+    /**
+     * ResolvedModule with an explicitly provided `extension` property.
+     * Prefer this over `ResolvedModule`.
+     * If changing this, remember to change `moduleResolutionIsEqualTo`.
+     */
     interface ResolvedModuleFull extends ResolvedModule {
+        /**
+         * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
+         * This is optional for backwards-compatibility, but will be added if not provided.
+         */
         extension: Extension;
         packageId?: PackageId;
     }
+    /**
+     * Unique identifier with a package name and version.
+     * If changing this, remember to change `packageIdIsEqual`.
+     */
     interface PackageId {
+        /**
+         * Name of the package.
+         * Should not include `@types`.
+         * If accessing a non-index file, this should include its name e.g. "foo/bar".
+         */
         name: string;
+        /**
+         * Name of a submodule within this package.
+         * May be "".
+         */
         subModuleName: string;
+        /** Version of the package, e.g. "1.2.3" */
         version: string;
     }
     enum Extension {
@@ -2473,6 +2696,9 @@ declare namespace ts {
         getNewLine(): string;
         readDirectory?(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): (ResolvedModule | undefined)[];
+        /**
+         * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
+         */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
@@ -2534,42 +2760,163 @@ declare namespace ts {
         Unspecified = 4
     }
     interface TransformationContext {
+        /** Gets the compiler options supplied to the transformer. */
         getCompilerOptions(): CompilerOptions;
+        /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
         suspendLexicalEnvironment(): void;
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
         resumeLexicalEnvironment(): void;
+        /** Ends a lexical environment, returning any declarations. */
         endLexicalEnvironment(): Statement[] | undefined;
+        /** Hoists a function declaration to the containing scope. */
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
+        /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
+        /** Records a request for a non-scoped emit helper in the current context. */
         requestEmitHelper(helper: EmitHelper): void;
+        /** Gets and resets the requested non-scoped emit helpers. */
         readEmitHelpers(): EmitHelper[] | undefined;
+        /** Enables expression substitutions in the pretty printer for the provided SyntaxKind. */
         enableSubstitution(kind: SyntaxKind): void;
+        /** Determines whether expression substitutions are enabled for the provided node. */
         isSubstitutionEnabled(node: Node): boolean;
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         *
+         * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+         * before returning the `NodeTransformer` callback.
+         */
         onSubstituteNode: (hint: EmitHint, node: Node) => Node;
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided
+         * SyntaxKind.
+         */
         enableEmitNotification(kind: SyntaxKind): void;
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
         isEmitNotificationEnabled(node: Node): boolean;
+        /**
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
+         *
+         * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+         * before returning the `NodeTransformer` callback.
+         */
         onEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
     interface TransformationResult<T extends Node> {
+        /** Gets the transformed source files. */
         transformed: T[];
+        /** Gets diagnostics for the transformation. */
         diagnostics?: DiagnosticWithLocation[];
+        /**
+         * Gets a substitute for a node, if one is available; otherwise, returns the original node.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to substitute.
+         */
         substituteNode(hint: EmitHint, node: Node): Node;
+        /**
+         * Emits a node with possible notification.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback used to emit the node.
+         */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        /**
+         * Clean up EmitNode entries on any parse-tree nodes.
+         */
         dispose(): void;
     }
+    /**
+     * A function that is used to initialize and return a `Transformer` callback, which in turn
+     * will be used to transform one or more nodes.
+     */
     type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
+    /**
+     * A function that transforms a node.
+     */
     type Transformer<T extends Node> = (node: T) => T;
+    /**
+     * A function that accepts and possibly transforms a node.
+     */
     type Visitor = (node: Node) => VisitResult<Node>;
     type VisitResult<T extends Node> = T | T[] | undefined;
     interface Printer {
+        /**
+         * Print a node and its subtree as-is, without any emit transformations.
+         * @param hint A value indicating the purpose of a node. This is primarily used to
+         * distinguish between an `Identifier` used in an expression position, versus an
+         * `Identifier` used as an `IdentifierName` as part of a declaration. For most nodes you
+         * should just pass `Unspecified`.
+         * @param node The node to print. The node and its subtree are printed as-is, without any
+         * emit transformations.
+         * @param sourceFile A source file that provides context for the node. The source text of
+         * the file is used to emit the original source content for literals and identifiers, while
+         * the identifiers of the source file are used when generating unique names to avoid
+         * collisions.
+         */
         printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
+        /**
+         * Prints a list of nodes using the given format flags
+         */
         printList<T extends Node>(format: ListFormat, list: NodeArray<T>, sourceFile: SourceFile): string;
+        /**
+         * Prints a source file as-is, without any emit transformations.
+         */
         printFile(sourceFile: SourceFile): string;
+        /**
+         * Prints a bundle of source files as-is, without any emit transformations.
+         */
         printBundle(bundle: Bundle): string;
     }
     interface PrintHandlers {
+        /**
+         * A hook used by the Printer when generating unique names to avoid collisions with
+         * globally defined names that exist outside of the current source file.
+         */
         hasGlobalName?(name: string): boolean;
+        /**
+         * A hook used by the Printer to provide notifications prior to emitting a node. A
+         * compatible implementation **must** invoke `emitCallback` with the provided `hint` and
+         * `node` values.
+         * @param hint A hint indicating the intended purpose of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback that, when invoked, will emit the node.
+         * @example
+         * ```ts
+         * var printer = createPrinter(printerOptions, {
+         *   onEmitNode(hint, node, emitCallback) {
+         *     // set up or track state prior to emitting the node...
+         *     emitCallback(hint, node);
+         *     // restore state after emitting the node...
+         *   }
+         * });
+         * ```
+         */
         onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        /**
+         * A hook used by the Printer to perform just-in-time substitution of a node. This is
+         * primarily used by node transformations that need to substitute one node for another,
+         * such as replacing `myExportedVar` with `exports.myExportedVar`.
+         * @param hint A hint indicating the intended purpose of the node.
+         * @param node The node to emit.
+         * @example
+         * ```ts
+         * var printer = createPrinter(printerOptions, {
+         *   substituteNode(hint, node) {
+         *     // perform substitution if necessary...
+         *     return node;
+         *   }
+         * });
+         * ```
+         */
         substituteNode?(hint: EmitHint, node: Node): Node;
     }
     interface PrinterOptions {
@@ -2582,6 +2929,7 @@ declare namespace ts {
         directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
     }
+    /** @deprecated See comment on SymbolWriter */
     interface SymbolTracker {
         trackSymbol?(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError?(): void;
@@ -2684,6 +3032,10 @@ declare namespace ts {
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        /**
+         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
+         * use native OS file watching
+         */
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
@@ -2697,7 +3049,11 @@ declare namespace ts {
         getModifiedTime?(path: string): Date;
         setModifiedTime?(path: string, time: Date): void;
         deleteFile?(path: string): void;
+        /**
+         * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
+         */
         createHash?(data: string): string;
+        /** This must be cryptographically secure. Only implement this method using `crypto.createHash("sha256")`. */
         createSHA256Hash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
@@ -2751,6 +3107,7 @@ declare namespace ts {
     function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter;
     function isWhiteSpaceLike(ch: number): boolean;
+    /** Does not include line breaks. For that, see isWhiteSpaceLike. */
     function isWhiteSpaceSingleLine(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function couldStartTrivia(text: string, pos: number): boolean;
@@ -2762,11 +3119,13 @@ declare namespace ts {
     function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U | undefined;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
+    /** Optionally, get the shebang */
     function getShebang(text: string): string | undefined;
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
+/** Non-internal stuff goes here */
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
     function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[];
@@ -2790,6 +3149,14 @@ declare namespace ts {
     function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
     function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange;
     let unchangedTextChangeRange: TextChangeRange;
+    /**
+     * Called to merge all the changes that occurred across several versions of a script snapshot
+     * into a single change.  i.e. if a user keeps making successive edits to a script we will
+     * have a text change from V1 to V2, V2 to V3, ..., Vn.
+     *
+     * This function will then merge those changes into a single change range valid between V1 and
+     * Vn.
+     */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: ReadonlyArray<TextChangeRange>): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration | undefined;
     type ParameterPropertyDeclaration = ParameterDeclaration & {
@@ -2801,6 +3168,10 @@ declare namespace ts {
     function isEmptyBindingElement(node: BindingElement): boolean;
     function getCombinedModifierFlags(node: Node): ModifierFlags;
     function getCombinedNodeFlags(node: Node): NodeFlags;
+    /**
+     * Checks to see if the locale is in the appropriate format,
+     * and if it is, attempts to set the appropriate language.
+     */
     function validateLocaleAndSetLanguage(locale: string, sys: {
         getExecutingFilePath(): string;
         resolvePath(path: string): string;
@@ -2811,26 +3182,100 @@ declare namespace ts {
     function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     function getOriginalNode(node: Node | undefined): Node | undefined;
     function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node | undefined) => node is T): T | undefined;
+    /**
+     * Gets a value indicating whether a node originated in the parse tree.
+     *
+     * @param node The node to test.
+     */
     function isParseTreeNode(node: Node): boolean;
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
     function getParseTreeNode(node: Node): Node;
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
     function getParseTreeNode<T extends Node>(node: Node | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
+    /**
+     * Remove extra underscore from escaped identifier text content.
+     *
+     * @param identifier The escaped identifier text.
+     * @returns The unescaped identifier text.
+     */
     function unescapeLeadingUnderscores(identifier: __String): string;
     function idText(identifier: Identifier): string;
     function symbolName(symbol: Symbol): string;
+    /**
+     * Remove extra underscore from escaped identifier text content.
+     * @deprecated Use `id.text` for the unescaped text.
+     * @param identifier The escaped identifier text.
+     * @returns The unescaped identifier text.
+     */
     function unescapeIdentifier(id: string): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName;
+    /**
+     * Gets the JSDoc parameter tags for the node if present.
+     *
+     * @remarks Returns any JSDoc param tag that matches the provided
+     * parameter, whether a param tag on a containing function
+     * expression, or a param tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are returned first, so in the previous example, the param
+     * tag on the containing function expression would be first.
+     *
+     * Does not return tags for binding patterns, because JSDoc matches
+     * parameters by name and binding patterns do not have a name.
+     */
     function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag>;
+    /**
+     * Return true if the node has JSDoc parameter tags.
+     *
+     * @remarks Includes parameter tags that are not directly on the node,
+     * for example on a variable declaration whose initializer is a function expression.
+     */
     function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean;
+    /** Gets the JSDoc augments tag for the node if present */
     function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
+    /** Gets the JSDoc class tag for the node if present */
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
+    /** Gets the JSDoc this tag for the node if present */
     function getJSDocThisTag(node: Node): JSDocThisTag | undefined;
+    /** Gets the JSDoc return tag for the node if present */
     function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined;
+    /** Gets the JSDoc template tag for the node if present */
     function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
+    /** Gets the JSDoc type tag for the node if present and valid */
     function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
+    /**
+     * Gets the type node for the node if provided via JSDoc.
+     *
+     * @remarks The search includes any JSDoc param tag that relates
+     * to the provided parameter, for example a type tag on the
+     * parameter itself, or a param tag on a containing function
+     * expression, or a param tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are examined first, so in the previous example, the type
+     * tag directly on the node would be returned.
+     */
     function getJSDocType(node: Node): TypeNode | undefined;
+    /**
+     * Gets the return type node for the node if provided via JSDoc's return tag.
+     *
+     * @remarks `getJSDocReturnTag` just gets the whole JSDoc tag. This function
+     * gets the type from inside the braces.
+     */
     function getJSDocReturnType(node: Node): TypeNode | undefined;
+    /** Get all JSDoc tags related to a node, including those on parent nodes. */
     function getJSDocTags(node: Node): ReadonlyArray<JSDocTag>;
+    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
     function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag>;
 }
 declare namespace ts {
@@ -3001,6 +3446,11 @@ declare namespace ts {
     function isJSDocSignature(node: Node): node is JSDocSignature;
 }
 declare namespace ts {
+    /**
+     * True if node is of some token syntax kind.
+     * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+     */
     function isToken(n: Node): boolean;
     function isLiteralExpression(node: Node): node is LiteralExpression;
     type TemplateLiteralToken = NoSubstitutionTemplateLiteral | TemplateHead | TemplateMiddle | TemplateTail;
@@ -3018,6 +3468,11 @@ declare namespace ts {
     function isTypeElement(node: Node): node is TypeElement;
     function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement;
     function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike;
+    /**
+     * Node test that determines whether a node is a valid type node.
+     * This differs from the `isPartOfTypeNode` function which determines whether a node is *part*
+     * of a TypeNode.
+     */
     function isTypeNode(node: Node): node is TypeNode;
     function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
     function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
@@ -3029,6 +3484,7 @@ declare namespace ts {
     function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
+    /** True if node is of a kind that may contain comment text. */
     function isJSDocCommentContainingNode(node: Node): boolean;
     function isSetAccessor(node: Node): node is SetAccessorDeclaration;
     function isGetAccessor(node: Node): node is GetAccessorDeclaration;
@@ -3037,9 +3493,27 @@ declare namespace ts {
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
+    /**
+     * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
+     * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
+     * embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
+     * a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
+     *
+     * @param node a given node to visit its children
+     * @param cbNode a callback to be invoked for all child nodes
+     * @param cbNodes a callback to be invoked for embedded array
+     *
+     * @remarks `forEachChild` must visit the children of a node in the order
+     * that they appear in the source code. The language service depends on this property to locate nodes by position.
+     */
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
     function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName | undefined;
+    /**
+     * Parse json text into SyntaxTree and return node and parse errors if any
+     * @param fileName
+     * @param sourceText
+     */
     function parseJsonText(fileName: string, sourceText: string): JsonSourceFile;
     function isExternalModule(file: SourceFile): boolean;
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
@@ -3047,24 +3521,66 @@ declare namespace ts {
 declare namespace ts {
     function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine;
     type DiagnosticReporter = (diagnostic: Diagnostic) => void;
+    /**
+     * Reports config file diagnostics
+     */
     interface ConfigFileDiagnosticsReporter {
+        /**
+         * Reports unrecoverable error when parsing config file
+         */
         onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
     }
+    /**
+     * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
+     */
     interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
         getCurrentDirectory(): string;
     }
+    /**
+     * Reads the config file, reports errors if any and exits if the config file cannot be found
+     */
     function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined;
+    /**
+     * Read tsconfig.json file
+     * @param fileName The path to the config file
+     */
     function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): {
         config?: any;
         error?: Diagnostic;
     };
+    /**
+     * Parse the text of the tsconfig.json file
+     * @param fileName The path to the config file
+     * @param jsonText The text of the config file
+     */
     function parseConfigFileTextToJson(fileName: string, jsonText: string): {
         config?: any;
         error?: Diagnostic;
     };
+    /**
+     * Read tsconfig.json file
+     * @param fileName The path to the config file
+     */
     function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile;
+    /**
+     * Convert the json syntax tree into the json value
+     */
     function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any;
+    /**
+     * Parse the contents of a config file (tsconfig.json).
+     * @param json The contents of the config file to parse
+     * @param host Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath A root directory to resolve relative path entries in the config
+     *    file to. e.g. outDir
+     */
     function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
+    /**
+     * Parse the contents of a config file (tsconfig.json).
+     * @param jsonNode The contents of the config file to parse
+     * @param host Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath A root directory to resolve relative path entries in the config
+     *    file to. e.g. outDir
+     */
     function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
@@ -3077,11 +3593,32 @@ declare namespace ts {
 }
 declare namespace ts {
     function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
+    /**
+     * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
+     * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
+     * is assumed to be the same as root directory of the project.
+     */
     function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
+    /**
+     * Given a set of options, returns the set of type directive names
+     *   that should be included for this program automatically.
+     * This list could either come from the config file,
+     *   or from enumerating the types root + initial secondary types lookup location.
+     * More type directives might appear in the program later as a result of loading actual source files;
+     *   this list is only the set of defaults that are implicitly included.
+     */
     function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
+    /**
+     * Cached module resolutions per containing directory.
+     * This assumes that any module id will have the same resolution for sibling files located in the same folder.
+     */
     interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForDirectory(directoryName: string): Map<ResolvedModuleWithFailedLookupLocations>;
     }
+    /**
+     * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
+     * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
+     */
     interface NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForModuleName(nonRelativeModuleName: string): PerModuleNameCache;
     }
@@ -3097,6 +3634,7 @@ declare namespace ts {
 }
 declare namespace ts {
     function createNodeArray<T extends Node>(elements?: ReadonlyArray<T>, hasTrailingComma?: boolean): NodeArray<T>;
+    /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
     function createLiteral(value: number): NumericLiteral;
     function createLiteral(value: boolean): BooleanLiteral;
@@ -3106,11 +3644,17 @@ declare namespace ts {
     function createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
     function createIdentifier(text: string): Identifier;
     function updateIdentifier(node: Identifier): Identifier;
+    /** Create a unique temporary variable. */
     function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
+    /** Create a unique temporary variable for use in a loop. */
     function createLoopVariable(): Identifier;
+    /** Create a unique name based on the supplied text. */
     function createUniqueName(text: string): Identifier;
+    /** Create a unique name based on the supplied text. */
     function createOptimisticUniqueName(text: string): Identifier;
+    /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
     function createFileLevelUniqueName(text: string): Identifier;
+    /** Create a unique name generated for a node. */
     function getGeneratedNameForNode(node: Node): Identifier;
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
     function createSuper(): SuperExpression;
@@ -3379,8 +3923,25 @@ declare namespace ts {
     function createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember;
     function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember;
     function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"], hasNoDefaultLib?: boolean, libReferences?: SourceFile["libReferenceDirectives"]): SourceFile;
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     */
     function getMutableClone<T extends Node>(node: T): T;
+    /**
+     * Creates a synthetic statement to act as a placeholder for a not-emitted statement in
+     * order to preserve comments.
+     *
+     * @param original The original statement.
+     */
     function createNotEmittedStatement(original: Node): NotEmittedStatement;
+    /**
+     * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
+     * order to preserve comments or sourcemap positions.
+     *
+     * @param expression The inner expression to emit.
+     * @param original The original outer expression.
+     * @param location The location for the expression. Defaults to the positions from "original" if provided.
+     */
     function createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     function createCommaList(elements: ReadonlyArray<Expression>): CommaListExpression;
@@ -3410,15 +3971,43 @@ declare namespace ts {
     function createVoidZero(): VoidExpression;
     function createExportDefault(expression: Expression): ExportAssignment;
     function createExternalModuleExport(exportName: Identifier): ExportDeclaration;
+    /**
+     * Clears any EmitNode entries from parse-tree nodes.
+     * @param sourceFile A source file.
+     */
     function disposeEmitNodes(sourceFile: SourceFile): void;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
+    /**
+     * Sets flags that control emit behavior of a node.
+     */
     function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags): T;
+    /**
+     * Gets a custom text range to use when emitting source maps.
+     */
     function getSourceMapRange(node: Node): SourceMapRange;
+    /**
+     * Sets a custom text range to use when emitting source maps.
+     */
     function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined): T;
+    /**
+     * Create an external source map source file reference
+     */
     function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource;
+    /**
+     * Gets the TextRange to use for source maps for a token of a node.
+     */
     function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined;
+    /**
+     * Sets the TextRange to use for source maps for a token of a node.
+     */
     function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined): T;
+    /**
+     * Gets a custom text range to use when emitting comments.
+     */
     function getCommentRange(node: Node): TextRange;
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
     function setCommentRange<T extends Node>(node: T, range: TextRange): T;
     function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined;
     function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined): T;
@@ -3427,26 +4016,115 @@ declare namespace ts {
     function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined): T;
     function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean): T;
     function moveSyntheticComments<T extends Node>(node: T, original: Node): T;
+    /**
+     * Gets the constant value to emit for an expression.
+     */
     function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
+    /**
+     * Sets the constant value to emit for an expression.
+     */
     function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number): PropertyAccessExpression | ElementAccessExpression;
+    /**
+     * Adds an EmitHelper to a node.
+     */
     function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T;
+    /**
+     * Add EmitHelpers to a node.
+     */
     function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T;
+    /**
+     * Removes an EmitHelper from a node.
+     */
     function removeEmitHelper(node: Node, helper: EmitHelper): boolean;
+    /**
+     * Gets the EmitHelpers of a node.
+     */
     function getEmitHelpers(node: Node): EmitHelper[] | undefined;
+    /**
+     * Moves matching emit helpers from a source node to a target node.
+     */
     function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean): void;
     function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T;
 }
 declare namespace ts {
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     */
     function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T;
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     */
     function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
     function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
     function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+    /**
+     * Starts a new lexical environment and visits a statement list, ending the lexical environment
+     * and merging hoisted declarations upon completion.
+     */
     function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean): NodeArray<Statement>;
+    /**
+     * Starts a new lexical environment and visits a parameter list, suspending the lexical
+     * environment upon completion.
+     */
     function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes): NodeArray<ParameterDeclaration>;
+    /**
+     * Resumes a suspended lexical environment and visits a function body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
     function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext): FunctionBody;
+    /**
+     * Resumes a suspended lexical environment and visits a function body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
     function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext): FunctionBody | undefined;
+    /**
+     * Resumes a suspended lexical environment and visits a concise body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
     function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
+    /**
+     * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
+     *
+     * @param node The Node whose children will be visited.
+     * @param visitor The callback used to visit each child.
+     * @param context A lexical environment context for the visitor.
+     */
     function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+    /**
+     * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
+     *
+     * @param node The Node whose children will be visited.
+     * @param visitor The callback used to visit each child.
+     * @param context A lexical environment context for the visitor.
+     */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 }
 declare namespace ts {
@@ -3467,8 +4145,35 @@ declare namespace ts {
     function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic>;
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
+     * @param createProgramOptions - The options for creating a program.
+     * @returns A 'Program' object.
+     */
     function createProgram(createProgramOptions: CreateProgramOptions): Program;
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
+     * @param rootNames - A set of root files.
+     * @param options - The compiler options which should be used.
+     * @param host - The host interacts with the underlying file system.
+     * @param oldProgram - Reuses an old program structure.
+     * @param configFileParsingDiagnostics - error during config file parsing
+     * @returns A 'Program' object.
+     */
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
+    /**
+     * Returns the target config filename of a project reference
+     */
     function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName;
 }
 declare namespace ts {
@@ -3488,43 +4193,137 @@ declare namespace ts {
         affected: SourceFile | Program;
     } | undefined;
     interface BuilderProgramHost {
+        /**
+         * return true if file names are treated with case sensitivity
+         */
         useCaseSensitiveFileNames(): boolean;
+        /**
+         * If provided this would be used this hash instead of actual file shape text for detecting changes
+         */
         createHash?: (data: string) => string;
+        /**
+         * When emit or emitNextAffectedFile are called without writeFile,
+         * this callback if present would be used to write files
+         */
         writeFile?: WriteFileCallback;
     }
+    /**
+     * Builder to manage the program state changes
+     */
     interface BuilderProgram {
+        /**
+         * Returns current program
+         */
         getProgram(): Program;
+        /**
+         * Get compiler options of the program
+         */
         getCompilerOptions(): CompilerOptions;
+        /**
+         * Get the source file in the program with file name
+         */
         getSourceFile(fileName: string): SourceFile | undefined;
+        /**
+         * Get a list of files in the program
+         */
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        /**
+         * Get the diagnostics for compiler options
+         */
         getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the diagnostics that dont belong to any file
+         */
         getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the diagnostics from config file parsing
+         */
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the syntax diagnostics, for all source files if source file is not supplied
+         */
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get all the dependencies of the file
+         */
         getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
+        /**
+         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
+         * The semantic diagnostics are cached and managed here
+         * Note that it is assumed that when asked about semantic diagnostics through this API,
+         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
+         * In case of SemanticDiagnosticsBuilderProgram if the source file is not provided,
+         * it will iterate through all the affected files, to ensure that cache stays valid and yet provide a way to get all semantic diagnostics
+         */
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Emits the JavaScript and declaration files.
+         * When targetSource file is specified, emits the files corresponding to that source file,
+         * otherwise for the whole program.
+         * In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
+         * it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+         * it will only emit all the affected files instead of whole program
+         *
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
+         */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        /**
+         * Get the current directory of the program
+         */
         getCurrentDirectory(): string;
     }
+    /**
+     * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
+     */
     interface SemanticDiagnosticsBuilderProgram extends BuilderProgram {
+        /**
+         * Gets the semantic diagnostics from the program for the next affected file and caches it
+         * Returns undefined if the iteration is complete
+         */
         getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
     }
+    /**
+     * The builder that can handle the changes in program and iterate through changed file to emit the files
+     * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
+     */
     interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
+        /**
+         * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
+         */
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
+    /**
+     * Create the builder to manage semantic diagnostics and cache them
+     */
     function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): SemanticDiagnosticsBuilderProgram;
     function createSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): SemanticDiagnosticsBuilderProgram;
+    /**
+     * Create the builder that can handle the changes in program and iterate through changed files
+     * to emit the those files and manage semantic diagnostics cache as well
+     */
     function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): EmitAndSemanticDiagnosticsBuilderProgram;
     function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): EmitAndSemanticDiagnosticsBuilderProgram;
+    /**
+     * Creates a builder thats just abstraction over program and can be used with watch
+     */
     function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): BuilderProgram;
     function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): BuilderProgram;
 }
 declare namespace ts {
     type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
+    /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
     interface WatchCompilerHost<T extends BuilderProgram> {
+        /**
+         * Used to create the program when need for program creation or recreation detected
+         */
         createProgram: CreateProgram<T>;
+        /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
+        /** If provided, called with Diagnostic message that informs about change in watch status */
         onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
@@ -3532,41 +4331,92 @@ declare namespace ts {
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
         createHash?(data: string): string;
+        /**
+         * Use to check file presence for source files and
+         * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+         */
         fileExists(path: string): boolean;
+        /**
+         * Use to read file text for source files and
+         * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+         */
         readFile(path: string, encoding?: string): string | undefined;
+        /** If provided, used for module resolution as well as to handle directory structure */
         directoryExists?(path: string): boolean;
+        /** If provided, used in resolutions as well as handling directory structure */
         getDirectories?(path: string): string[];
+        /** If provided, used to cache and handle directory structure modifications */
         readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        /** Symbol links resolution */
         realpath?(path: string): string;
+        /** If provided would be used to write log about compilation */
         trace?(s: string): void;
+        /** If provided is used to get the environment variable */
         getEnvironmentVariable?(name: string): string | undefined;
+        /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        /** Used to watch changes in source files, missing files needed to update the program or config file */
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
     }
+    /**
+     * Host to create watch with root files and options
+     */
     interface WatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram> extends WatchCompilerHost<T> {
+        /** root files to use to generate program */
         rootFiles: string[];
+        /** Compiler options */
         options: CompilerOptions;
     }
+    /**
+     * Host to create watch with config file
+     */
     interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T>, ConfigFileDiagnosticsReporter {
+        /** Name of the config file to compile */
         configFileName: string;
+        /** Options to extend */
         optionsToExtend?: CompilerOptions;
+        /**
+         * Used to generate source file names from the config file and its include, exclude, files rules
+         * and also to cache the directory stucture
+         */
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
     }
     interface Watch<T> {
+        /** Synchronize with host and get updated program */
         getProgram(): T;
     }
+    /**
+     * Creates the watch what generates program using the config file
+     */
     interface WatchOfConfigFile<T> extends Watch<T> {
     }
+    /**
+     * Creates the watch that generates program using the root files and compiler options
+     */
     interface WatchOfFilesAndCompilerOptions<T> extends Watch<T> {
+        /** Updates the root files in the program, only if this is not config file compilation */
         updateRootFileNames(fileNames: string[]): void;
     }
+    /**
+     * Create the watch compiler host for either configFile or fileNames and its options
+     */
     function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions<T>;
     function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile<T>;
+    /**
+     * Creates the watch from the host for root files and compiler options
+     */
     function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T>): WatchOfFilesAndCompilerOptions<T>;
+    /**
+     * Creates the watch from the host for config file
+     */
     function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
 }
 declare namespace ts {
@@ -3576,9 +4426,28 @@ declare namespace ts {
         errorDiagnostic(diag: Diagnostic): void;
         message(diag: DiagnosticMessage, ...args: string[]): void;
     }
+    /**
+     * A BuildContext tracks what's going on during the course of a build.
+     *
+     * Callers may invoke any number of build requests within the same context;
+     * until the context is reset, each project will only be built at most once.
+     *
+     * Example: In a standard setup where project B depends on project A, and both are out of date,
+     * a failed build of A will result in A remaining out of date. When we try to build
+     * B, we should immediately bail instead of recomputing A's up-to-date status again.
+     *
+     * This also matters for performing fast (i.e. fake) downstream builds of projects
+     * when their upstream .d.ts files haven't changed content (but have newer timestamps)
+     */
     interface BuildContext {
         options: BuildOptions;
+        /**
+         * Map from output file name to its pre-build timestamp
+         */
         unchangedOutputs: FileMap<Date>;
+        /**
+         * Map from config file name to up-to-date status
+         */
         projectStatus: FileMap<UpToDateStatus>;
         invalidatedProjects: FileMap<true>;
         queuedProjects: FileMap<true>;
@@ -3597,23 +4466,42 @@ declare namespace ts {
     enum UpToDateStatusType {
         Unbuildable = 0,
         UpToDate = 1,
+        /**
+         * The project appears out of date because its upstream inputs are newer than its outputs,
+         * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
+         * This means we can Pseudo-build (just touch timestamps), as if we had actually built this project.
+         */
         UpToDateWithUpstreamTypes = 2,
         OutputMissing = 3,
         OutOfDateWithSelf = 4,
         OutOfDateWithUpstream = 5,
         UpstreamOutOfDate = 6,
         UpstreamBlocked = 7,
+        /**
+         * Projects with no outputs (i.e. "solution" files)
+         */
         ContainerOnly = 8
     }
     type UpToDateStatus = Status.Unbuildable | Status.UpToDate | Status.OutputMissing | Status.OutOfDateWithSelf | Status.OutOfDateWithUpstream | Status.UpstreamOutOfDate | Status.UpstreamBlocked | Status.ContainerOnly;
     namespace Status {
+        /**
+         * The project can't be built at all in its current state. For example,
+         * its config file cannot be parsed, or it has a syntax error or missing file
+         */
         interface Unbuildable {
             type: UpToDateStatusType.Unbuildable;
             reason: string;
         }
+        /**
+         * This project doesn't have any outputs, so "is it up to date" is a meaningless question.
+         */
         interface ContainerOnly {
             type: UpToDateStatusType.ContainerOnly;
         }
+        /**
+         * The project is up to date with respect to its inputs.
+         * We track what the newest input file is.
+         */
         interface UpToDate {
             type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
             newestInputFileTime: Date;
@@ -3623,23 +4511,42 @@ declare namespace ts {
             newestOutputFileName: string;
             oldestOutputFileName: string;
         }
+        /**
+         * One or more of the outputs of the project does not exist.
+         */
         interface OutputMissing {
             type: UpToDateStatusType.OutputMissing;
+            /**
+             * The name of the first output file that didn't exist
+             */
             missingOutputFileName: string;
         }
+        /**
+         * One or more of the project's outputs is older than its newest input.
+         */
         interface OutOfDateWithSelf {
             type: UpToDateStatusType.OutOfDateWithSelf;
             outOfDateOutputFileName: string;
             newerInputFileName: string;
         }
+        /**
+         * This project depends on an out-of-date project, so shouldn't be built yet
+         */
         interface UpstreamOutOfDate {
             type: UpToDateStatusType.UpstreamOutOfDate;
             upstreamProjectName: string;
         }
+        /**
+         * This project depends an upstream project with build errors
+         */
         interface UpstreamBlocked {
             type: UpToDateStatusType.UpstreamBlocked;
             upstreamProjectName: string;
         }
+        /**
+         * One or more of the project's outputs is older than the newest output of
+         * an upstream project.
+         */
         interface OutOfDateWithUpstream {
             type: UpToDateStatusType.OutOfDateWithUpstream;
             outOfDateOutputFileName: string;
@@ -3662,6 +4569,10 @@ declare namespace ts {
     };
     function createBuildContext(options: BuildOptions): BuildContext;
     function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number | undefined;
+    /**
+     * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
+     * can dynamically add/remove other projects based on changes on the rootNames' references
+     */
     function createSolutionBuilder(compilerHost: CompilerHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System): {
         buildAllProjects: () => ExitStatus;
         getUpToDateStatus: (project: ParsedCommandLine | undefined) => UpToDateStatus;
@@ -3675,6 +4586,9 @@ declare namespace ts {
         resolveProjectName: (name: string) => ResolvedConfigFileName | undefined;
         startWatching: () => void;
     };
+    /**
+     * Gets the UpToDateStatus for a project
+     */
     function getUpToDateStatus(host: UpToDateHost, project: ParsedCommandLine | undefined): UpToDateStatus;
     function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string>;
     function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T): T | undefined;
@@ -3754,10 +4668,25 @@ declare namespace ts {
     interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
+    /**
+     * Represents an immutable snapshot of a script at a specified time.Once acquired, the
+     * snapshot is observably immutable. i.e. the same calls with the same parameters will return
+     * the same values.
+     */
     interface IScriptSnapshot {
+        /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
+        /** Gets the length of this script snapshot. */
         getLength(): number;
+        /**
+         * Gets the TextChangeRange that describe how the text changed between this text and
+         * an older version.  This information is used by the incremental parser to determine
+         * what sections of the script need to be re-parsed.  'undefined' can be returned if the
+         * change range cannot be determined.  However, in that case, incremental parsing will
+         * not happen and the entire document will be re - parsed.
+         */
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
+        /** Releases all resources held by this script snapshot */
         dispose?(): void;
     }
     namespace ScriptSnapshot {
@@ -3804,6 +4733,9 @@ declare namespace ts {
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getDirectories?(directoryName: string): string[];
+        /**
+         * Gets a set of custom transformers to use during emit.
+         */
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
@@ -3819,10 +4751,17 @@ declare namespace ts {
     interface LanguageService {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
+        /** The first time this is called, it will return global diagnostics (no location). */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
+        /**
+         * @deprecated Use getEncodedSyntacticClassifications instead.
+         */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        /**
+         * @deprecated Use getEncodedSemanticClassifications instead.
+         */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
@@ -3842,6 +4781,7 @@ declare namespace ts {
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
+        /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -3855,6 +4795,10 @@ declare namespace ts {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
+        /**
+         * This will return a defined result if the position is after the `>` of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
+         * Editors should call this after `>` is typed.
+         */
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
@@ -3863,8 +4807,11 @@ declare namespace ts {
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
@@ -3884,8 +4831,11 @@ declare namespace ts {
     type OrganizeImportsScope = CombinedCodeFixScope;
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
+        /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
         triggerCharacter?: CompletionsTriggerCharacter;
+        /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
+        /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
     }
     interface ApplyCodeActionCommandResult {
@@ -3899,6 +4849,12 @@ declare namespace ts {
         textSpan: TextSpan;
         classificationType: ClassificationTypeNames;
     }
+    /**
+     * Navigation bar interface designed for visual studio's dual-column layout.
+     * This does not form a proper tree.
+     * The navbar is returned as a list of top-level items, each of which has a list of child items.
+     * Child items always have an empty array for their `childItems`.
+     */
     interface NavigationBarItem {
         text: string;
         kind: ScriptElementKind;
@@ -3909,12 +4865,23 @@ declare namespace ts {
         bolded: boolean;
         grayed: boolean;
     }
+    /**
+     * Node in a tree of nested declarations in a file.
+     * The top node is always a script or module node.
+     */
     interface NavigationTree {
+        /** Name of the declaration, or a short description, e.g. "<class>". */
         text: string;
         kind: ScriptElementKind;
+        /** ScriptElementKindModifier separated by commas, e.g. "public,abstract" */
         kindModifiers: string;
+        /**
+         * Spans of the nodes that generated this declaration.
+         * There will be more than one if this is the result of merging.
+         */
         spans: TextSpan[];
         nameSpan: TextSpan | undefined;
+        /** Present if non-empty */
         childItems?: NavigationTree[];
     }
     interface TodoCommentDescriptor {
@@ -3936,12 +4903,23 @@ declare namespace ts {
         isNewFile?: boolean;
     }
     interface CodeAction {
+        /** Description of the code action to display in the UI of the editor */
         description: string;
+        /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
+        /**
+         * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
+         * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
+         */
         commands?: CodeActionCommand[];
     }
     interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
         fixName: string;
+        /**
+         * If present, one may call 'getCombinedCodeFix' with this fixId.
+         * This may be omitted to indicate that the code fix can't be applied in a group.
+         */
         fixId?: {};
         fixAllDescription?: string;
     }
@@ -3952,16 +4930,49 @@ declare namespace ts {
     type CodeActionCommand = InstallPackageAction;
     interface InstallPackageAction {
     }
+    /**
+     * A set of one or more available refactoring actions, grouped under a parent refactoring.
+     */
     interface ApplicableRefactorInfo {
+        /**
+         * The programmatic name of the refactoring
+         */
         name: string;
+        /**
+         * A description of this refactoring category to show to the user.
+         * If the refactoring gets inlined (see below), this text will not be visible.
+         */
         description: string;
+        /**
+         * Inlineable refactorings can have their actions hoisted out to the top level
+         * of a context menu. Non-inlineanable refactorings should always be shown inside
+         * their parent grouping.
+         *
+         * If not specified, this value is assumed to be 'true'
+         */
         inlineable?: boolean;
         actions: RefactorActionInfo[];
     }
+    /**
+     * Represents a single refactoring action - for example, the "Extract Method..." refactor might
+     * offer several actions, each corresponding to a surround class or closure to extract into.
+     */
     interface RefactorActionInfo {
+        /**
+         * The programmatic name of the refactoring action
+         */
         name: string;
+        /**
+         * A description of this refactoring action to show to the user.
+         * If the parent refactoring is inlined away, this will be the only text shown,
+         * so this description should make sense by itself if the parent is inlineable=true
+         */
         description: string;
     }
+    /**
+     * A set of edits to make in response to a refactor action, plus an optional
+     * location where renaming should be invoked from
+     */
     interface RefactorEditInfo {
         edits: FileTextChanges[];
         renameFilename?: string;
@@ -3970,11 +4981,16 @@ declare namespace ts {
     }
     interface TextInsertion {
         newText: string;
+        /** The position in newText the caret should point to after the insertion. */
         caretOffset: number;
     }
     interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
+        /**
+         * If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+         * then the original filename and span will be specified here
+         */
         originalTextSpan?: TextSpan;
         originalFileName?: string;
     }
@@ -4146,6 +5162,13 @@ declare namespace ts {
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
     }
+    /**
+     * Represents a single signature to show in signature help.
+     * The id is used for subsequent calls into the language service to ask questions about the
+     * signature help item in the context of any documents that have been updated.  i.e. after
+     * an edit has happened, while signature help is still active, the host can ask important
+     * questions like 'what parameter is the user currently contained within?'.
+     */
     interface SignatureHelpItem {
         isVariadic: boolean;
         prefixDisplayParts: SymbolDisplayPart[];
@@ -4155,6 +5178,9 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
     }
+    /**
+     * Represents a set of signature help items, and the preferred item that should be selected.
+     */
     interface SignatureHelpItems {
         items: SignatureHelpItem[];
         applicableSpan: TextSpan;
@@ -4163,8 +5189,12 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
+        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
+        /**
+         * true when the current location also allows for a new identifier
+         */
         isNewIdentifierLocation: boolean;
         entries: CompletionEntry[];
     }
@@ -4174,6 +5204,11 @@ declare namespace ts {
         kindModifiers?: string;
         sortText: string;
         insertText?: string;
+        /**
+         * An optional span that indicates the text to be replaced by this completion item.
+         * If present, this span should be used instead of the default one.
+         * It will be set if the required span differs from the one generated by the default replacement behavior.
+         */
         replacementSpan?: TextSpan;
         hasAction?: true;
         source?: string;
@@ -4190,16 +5225,30 @@ declare namespace ts {
         source?: SymbolDisplayPart[];
     }
     interface OutliningSpan {
+        /** The span of the document to actually collapse. */
         textSpan: TextSpan;
+        /** The span of the document to display when the user hovers over the collapsed span. */
         hintSpan: TextSpan;
+        /** The text to display in the editor for the collapsed region. */
         bannerText: string;
+        /**
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
         autoCollapse: boolean;
+        /**
+         * Classification of the contents of the span
+         */
         kind: OutliningSpanKind;
     }
     enum OutliningSpanKind {
+        /** Single or multi-line comments */
         Comment = "comment",
+        /** Sections marked by '// #region' and '// #endregion' comments */
         Region = "region",
+        /** Declarations and expressions */
         Code = "code",
+        /** Contiguous blocks of import declarations */
         Imports = "imports"
     }
     enum OutputFileType {
@@ -4236,33 +5285,82 @@ declare namespace ts {
         classification: TokenClass;
     }
     interface Classifier {
+        /**
+         * Gives lexical classifications of tokens on a line without any syntactic context.
+         * For instance, a token consisting of the text 'string' can be either an identifier
+         * named 'string' or the keyword 'string', however, because this classifier is not aware,
+         * it relies on certain heuristics to give acceptable results. For classifications where
+         * speed trumps accuracy, this function is preferable; however, for true accuracy, the
+         * syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
+         * lexical, syntactic, and semantic classifiers may issue the best user experience.
+         *
+         * @param text                      The text of a line to classify.
+         * @param lexState                  The state of the lexical classifier at the end of the previous line.
+         * @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
+         *                                  If there is no syntactic classifier (syntacticClassifierAbsent=true),
+         *                                  certain heuristics may be used in its place; however, if there is a
+         *                                  syntactic classifier (syntacticClassifierAbsent=false), certain
+         *                                  classifications which may be incorrectly categorized will be given
+         *                                  back as Identifiers in order to allow the syntactic classifier to
+         *                                  subsume the classification.
+         * @deprecated Use getLexicalClassifications instead.
+         */
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
         getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
     enum ScriptElementKind {
         unknown = "",
         warning = "warning",
+        /** predefined type (void) or keyword (class) */
         keyword = "keyword",
+        /** top level script node */
         scriptElement = "script",
+        /** module foo {} */
         moduleElement = "module",
+        /** class X {} */
         classElement = "class",
+        /** var x = class X {} */
         localClassElement = "local class",
+        /** interface Y {} */
         interfaceElement = "interface",
+        /** type T = ... */
         typeElement = "type",
+        /** enum E */
         enumElement = "enum",
         enumMemberElement = "enum member",
+        /**
+         * Inside module and script only
+         * const v = ..
+         */
         variableElement = "var",
+        /** Inside function */
         localVariableElement = "local var",
+        /**
+         * Inside module and script only
+         * function f() { }
+         */
         functionElement = "function",
+        /** Inside function */
         localFunctionElement = "local function",
+        /** class X { [public|private]* foo() {} } */
         memberFunctionElement = "method",
+        /** class X { [public|private]* [get|set] foo:number; } */
         memberGetAccessorElement = "getter",
         memberSetAccessorElement = "setter",
+        /**
+         * class X { [public|private]* foo:number; }
+         * interface Y { foo:number; }
+         */
         memberVariableElement = "property",
+        /** class X { constructor() { } } */
         constructorImplementationElement = "constructor",
+        /** interface Y { ():number; } */
         callSignatureElement = "call",
+        /** interface Y { []:number; } */
         indexSignatureElement = "index",
+        /** interface Y { new():Y; } */
         constructSignatureElement = "construct",
+        /** function foo(*Y*: string) */
         parameterElement = "parameter",
         typeParameterElement = "type parameter",
         primitiveType = "primitive type",
@@ -4272,7 +5370,11 @@ declare namespace ts {
         letElement = "let",
         directory = "directory",
         externalModuleName = "external module name",
+        /**
+         * <JsxTagName attribute1 attribute2={0} />
+         */
         jsxAttribute = "JSX attribute",
+        /** String literal */
         string = "string"
     }
     enum ScriptElementKindModifier {
@@ -4342,12 +5444,62 @@ declare namespace ts {
     function createClassifier(): Classifier;
 }
 declare namespace ts {
+    /**
+     * The document registry represents a store of SourceFile objects that can be shared between
+     * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
+     * of files in the context.
+     * SourceFile objects account for most of the memory usage by the language service. Sharing
+     * the same DocumentRegistry instance between different instances of LanguageService allow
+     * for more efficient memory utilization since all projects will share at least the library
+     * file (lib.d.ts).
+     *
+     * A more advanced use of the document registry is to serialize sourceFile objects to disk
+     * and re-hydrate them when needed.
+     *
+     * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
+     * to all subsequent createLanguageService calls.
+     */
     interface DocumentRegistry {
+        /**
+         * Request a stored SourceFile with a given fileName and compilationSettings.
+         * The first call to acquire will call createLanguageServiceSourceFile to generate
+         * the SourceFile if was not found in the registry.
+         *
+         * @param fileName The name of the file requested
+         * @param compilationSettings Some compilation settings like target affects the
+         * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+         * multiple copies of the same file for different compilation settings.
+         * @param scriptSnapshot Text of the file. Only used if the file was not found
+         * in the registry and a new one was created.
+         * @param version Current version of the file. Only used if the file was not found
+         * in the registry and a new one was created.
+         */
         acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
+        /**
+         * Request an updated version of an already existing SourceFile with a given fileName
+         * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
+         * to get an updated SourceFile.
+         *
+         * @param fileName The name of the file requested
+         * @param compilationSettings Some compilation settings like target affects the
+         * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+         * multiple copies of the same file for different compilation settings.
+         * @param scriptSnapshot Text of the file.
+         * @param version Current version of the file.
+         */
         updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
+        /**
+         * Informs the DocumentRegistry that a file is not needed any longer.
+         *
+         * Note: It is not allowed to call release on a SourceFile that was not acquired from
+         * this registry originally.
+         *
+         * @param fileName The name of the file to be released
+         * @param compilationSettings The compilation settings used to acquire the file
+         */
         releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
         releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
         reportStats(): string;
@@ -4378,6 +5530,7 @@ declare namespace ts {
     function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string;
 }
 declare namespace ts {
+    /** The version of the language service API */
     const servicesVersion = "0.8";
     function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
     function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string;
@@ -4387,9 +5540,20 @@ declare namespace ts {
     let disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnly?: boolean): LanguageService;
+    /**
+     * Get the path of the default library files (lib.d.ts) as distributed with the typescript
+     * node package.
+     * The functionality is not supported if the ts module is consumed outside of a node module.
+     */
     function getDefaultLibFilePath(options: CompilerOptions): string;
 }
 declare namespace ts {
+    /**
+     * Transform one or more nodes using the supplied transformers.
+     * @param source A single `Node` or an array of `Node` objects.
+     * @param transformers An array of `TransformerFactory` callbacks used to process the transformation.
+     * @param compilerOptions Optional compiler options.
+     */
     function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
 }
 //# sourceMappingURL=typescriptServices.d.ts.map

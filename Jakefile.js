@@ -3,7 +3,6 @@
 /// <reference types="jake" />
 
 const fs = require("fs");
-const fs2 = require("fs-extra");
 const os = require("os");
 const path = require("path");
 const fold = require("travis-fold");
