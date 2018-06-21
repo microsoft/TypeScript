@@ -164,7 +164,7 @@ const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessag
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
     .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
     .concat(generatedLCGFile);
 

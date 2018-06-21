@@ -21,7 +21,7 @@ else if (process.env.PATH !== undefined) {
 
 const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
-const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
+const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"];
 
 const defaultTestTimeout = 40000;
 
@@ -172,7 +172,7 @@ task(TaskNames.lkg, [
         if (sizeAfter > (sizeBefore * 1.10)) {
             throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
         }
-    
+
         complete();
     });
 }, { async: true });
@@ -341,7 +341,7 @@ file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
         },
         files
     };
-    
+
     const configFilePath = `built/local/typescriptServices.tsconfig.json`;
     fs.writeFileSync(configFilePath, JSON.stringify(config, undefined, 2));
     tsbuild(configFilePath, false, () => {
@@ -683,8 +683,8 @@ function diagnosticsToString(diagnostics, pretty) {
 
 /**
  * Concatenate a list of sourceFiles to a destinationFile
- * @param {string} destinationFile 
- * @param {string[]} sourceFiles 
+ * @param {string} destinationFile
+ * @param {string[]} sourceFiles
  * @param {string} extraContent
  */
 function concatenateFiles(destinationFile, sourceFiles, extraContent) {
@@ -711,8 +711,8 @@ function appendToFile(path, content) {
 }
 
 /**
- * 
- * @param {string} path 
+ *
+ * @param {string} path
  * @returns string
  */
 function readFileSync(path) {
@@ -729,7 +729,7 @@ function getDiffTool() {
 
 /**
  * Replaces const enum declarations with non-const enums
- * @param {string} text 
+ * @param {string} text
  */
 function removeConstModifierFromEnumDeclarations(text) {
     return text.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
