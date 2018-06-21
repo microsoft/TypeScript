@@ -10833,13 +10833,15 @@ namespace ts {
             }
 
             function findMatchingTypeReferenceOrTypeAliasReference(source: Type, unionTarget: UnionOrIntersectionType) {
-                if (source.flags & TypeFlags.Object && (source as ObjectType).objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous) && unionTarget.flags & TypeFlags.Union) {
+                const sourceObjectFlags = getObjectFlags(source);
+                if (sourceObjectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous) && unionTarget.flags & TypeFlags.Union) {
                     return find(unionTarget.types, target => {
                         if (target.flags & TypeFlags.Object) {
-                            if ((source as ObjectType).objectFlags & (target as ObjectType).objectFlags & ObjectFlags.Reference) {
+                            const overlapObjFlags = sourceObjectFlags & getObjectFlags(target);
+                            if (overlapObjFlags & ObjectFlags.Reference) {
                                 return (source as TypeReference).target === (target as TypeReference).target;
                             }
-                            if ((source as ObjectType).objectFlags & (target as ObjectType).objectFlags & ObjectFlags.Anonymous) {
+                            if (overlapObjFlags & ObjectFlags.Anonymous) {
                                 return !!(source as AnonymousType).aliasSymbol && (source as AnonymousType).aliasSymbol === (target as AnonymousType).aliasSymbol;
                             }
                         }
