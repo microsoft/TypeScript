@@ -745,8 +745,8 @@ namespace ts {
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
-    export function declarationNameToString(name: DeclarationName | QualifiedName) {
-        return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
+    export function declarationNameToString(name: DeclarationName | QualifiedName | undefined) {
+        return !name || getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
     export function getNameFromIndexInfo(info: IndexInfo): string | undefined {
@@ -4858,7 +4858,7 @@ namespace ts {
 
     function getDeclarationIdentifier(node: Declaration | Expression): Identifier | undefined {
         const name = getNameOfDeclaration(node);
-        return isIdentifier(name) ? name : undefined;
+        return name && isIdentifier(name) ? name : undefined;
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
@@ -4870,16 +4870,15 @@ namespace ts {
         return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
     }
 
-    // TODO: GH#18217 This is often used as if it returns a defined result
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName {
+    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (!declaration) {
-            return undefined!;
+            return undefined;
         }
         switch (declaration.kind) {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
                 if (!(declaration as ClassExpression | FunctionExpression).name) {
-                    return getAssignedName(declaration)!;
+                    return getAssignedName(declaration);
                 }
                 break;
             case SyntaxKind.Identifier:
@@ -4901,19 +4900,19 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
                         return (expr.left as PropertyAccessExpression).name;
                     default:
-                        return undefined!;
+                        return undefined;
                 }
             }
             case SyntaxKind.JSDocCallbackTag:
-                return (declaration as JSDocCallbackTag).name!;
+                return (declaration as JSDocCallbackTag).name;
             case SyntaxKind.JSDocTypedefTag:
-                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag)!;
+                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
             case SyntaxKind.ExportAssignment: {
                 const { expression } = declaration as ExportAssignment;
-                return isIdentifier(expression) ? expression : undefined!;
+                return isIdentifier(expression) ? expression : undefined;
             }
         }
-        return (declaration as NamedDeclaration).name!;
+        return (declaration as NamedDeclaration).name;
     }
 
     function getAssignedName(node: Node): DeclarationName | undefined {
