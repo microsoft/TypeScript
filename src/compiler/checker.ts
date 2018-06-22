@@ -4062,15 +4062,25 @@ namespace ts {
                         // ambient module, just use declaration/symbol name (fallthrough)
                     }
                     else {
+                        if (file.moduleName) {
+                            return `"${file.moduleName}"`;
+                        }
                         const contextFile = getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration))!;
-                        return `"${file.moduleName || moduleSpecifiers.getModuleSpecifiers(
-                            symbol,
-                            compilerOptions,
-                            contextFile,
-                            context!.tracker.moduleResolverHost!,
-                            context!.tracker.moduleResolverHost!.getSourceFiles!(),
-                            { importModuleSpecifierPreference: "non-relative" }
-                        )[0]}"`;
+                        const links = getSymbolLinks(symbol);
+                        let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
+                        if (!specifier) {
+                            specifier = flatten(moduleSpecifiers.getModuleSpecifiers(
+                                symbol,
+                                compilerOptions,
+                                contextFile,
+                                context!.tracker.moduleResolverHost!,
+                                context!.tracker.moduleResolverHost!.getSourceFiles!(),
+                                { importModuleSpecifierPreference: "non-relative" }
+                            ))[0];
+                            links.specifierCache = links.specifierCache || createMap();
+                            links.specifierCache.set(contextFile.path, specifier);
+                        }
+                        return `"${specifier}"`;
                     }
                 }
                 const declaration = symbol.declarations[0];
