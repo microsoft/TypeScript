@@ -192,6 +192,11 @@ namespace ts {
             // Setup and perform the transformation to retrieve declarations from the input files
             const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
             const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
+            if (emitOnlyDtsFiles && !compilerOptions.declaration) {
+                // Checker wont collect the linked aliases since thats only done when declaration is enabled.
+                // Do that here when emitting only dts files
+                nonJsFiles.forEach(collectLinkedAliases);
+            }
             const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, concatenate([transformDeclarations], declarationTransformers), /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
                 for (const diagnostic of declarationTransform.diagnostics!) {
@@ -219,6 +224,20 @@ namespace ts {
                 printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
             }
             declarationTransform.dispose();
+        }
+
+        function collectLinkedAliases(node: Node) {
+            if (isExportAssignment(node)) {
+                if (node.expression.kind === SyntaxKind.Identifier) {
+                    resolver.collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
+                }
+                return;
+            }
+            else if (isExportSpecifier(node)) {
+                resolver.collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
+                return;
+            }
+            forEachChild(node, collectLinkedAliases);
         }
 
         function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapRecorder: SourceMapWriter) {

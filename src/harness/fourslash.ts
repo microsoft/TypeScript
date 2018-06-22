@@ -3045,6 +3045,10 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
+        public verifyRefactorsAvailable(names: ReadonlyArray<string>): void {
+            assert.deepEqual(unique(this.getApplicableRefactors(this.getSelection()), r => r.name), names);
+        }
+
         public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
             const actualRefactors = this.getApplicableRefactors(this.getSelection()).filter(r => r.name === name && r.actions.some(a => a.name === actionName));
             this.assertObjectsEqual(actualRefactors, refactors);
@@ -3815,7 +3819,7 @@ ${code}
     }
 
     /** Collects an array of unique outputs. */
-    function unique<T>(inputs: T[], getOutput: (t: T) => string): string[] {
+    function unique<T>(inputs: ReadonlyArray<T>, getOutput: (t: T) => string): string[] {
         const set = ts.createMap<true>();
         for (const input of inputs) {
             const out = getOutput(input);
@@ -4104,6 +4108,10 @@ namespace FourSlashInterface {
 
         public applicableRefactorAvailableForRange() {
             this.state.verifyApplicableRefactorAvailableForRange(this.negative);
+        }
+
+        public refactorsAvailable(names: ReadonlyArray<string>): void {
+            this.state.verifyRefactorsAvailable(names);
         }
 
         public refactor(options: VerifyRefactorOptions) {

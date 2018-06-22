@@ -1,15 +1,16 @@
 {
     "compilerOptions": {
-        "removeComments": false,
+        "module": "commonjs",
         "target": "es5",
-        "declaration": false,
         "lib": [
             "es6",
+            "dom",
             "scripthost"
         ],
-        "types": ["node"]
+        "outDir": "../../built/local",
+        "sourceMap": true
     },
     "files": [
-        "processDiagnosticMessages.ts"
+        "instrumenter.ts"
     ]
 }

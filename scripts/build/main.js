@@ -1,5 +1,4 @@
 // @ts-check
-const path = require("path");
 const fs = require("fs");
 const tsc = require("gulp-typescript");
 const Vinyl = require("vinyl");
@@ -24,7 +23,7 @@ process.on("message", ({ method, params }) => {
             if (options.typescript) {
                 settings.typescript = require(options.typescript);
             }
-            project = tsc.createProject(tsConfigFileName, settings);
+            project = tsConfigFileName === undefined ? tsc.createProject(settings) : tsc.createProject(tsConfigFileName, settings);
             inputStream = new Readable({
                 objectMode: true,
                 read() {}
@@ -34,7 +33,7 @@ process.on("message", ({ method, params }) => {
                 /**
                  * @param {*} file
                  */
-                write(file, encoding, callback) {
+                write(file, _, callback) {
                     process.send({
                         method: "write",
                         params: {
