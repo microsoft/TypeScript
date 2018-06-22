@@ -1,0 +1,99 @@
+=== tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts ===
+interface A {
+>A : A
+
+    a: number;
+>a : number
+}
+
+interface B {
+>B : B
+
+    b?: string;
+>b : string
+}
+
+// 'b' is incompatible.
+export let x1: A & B = {
+>x1 : A & B
+>A : A
+>B : B
+>{    a: 0,    b: 12,} : { a: number; b: number; }
+
+    a: 0,
+>a : number
+>0 : 0
+
+    b: 12,
+>b : number
+>12 : 12
+}
+
+// 'a' is incompatible, 'b' is present and compatible.
+export let x2: A & B = {
+>x2 : A & B
+>A : A
+>B : B
+>{    a: "hello",    b: "hello",} : { a: string; b: string; }
+
+    a: "hello",
+>a : string
+>"hello" : "hello"
+
+    b: "hello",
+>b : string
+>"hello" : "hello"
+}
+
+// 'a' is incompatible, 'b' is absent.
+export let x3: A & B = {
+>x3 : A & B
+>A : A
+>B : B
+>{    a: "hello",} : { a: string; }
+
+    a: "hello",
+>a : string
+>"hello" : "hello"
+}
+
+// Both 'a' and 'b' are incompatible
+export let x4: A & B = {
+>x4 : A & B
+>A : A
+>B : B
+>{    a: "hello",    b: 0,} : { a: string; b: number; }
+
+    a: "hello",
+>a : string
+>"hello" : "hello"
+
+    b: 0,
+>b : number
+>0 : 0
+}
+
+// 'b' is compatible, 'a' is missing
+export let x5: A & B = {
+>x5 : A & B
+>A : A
+>B : B
+>{    b: 0,} : { b: number; }
+
+    b: 0,
+>b : number
+>0 : 0
+}
+
+// 'b' is incompatible, 'a' is missing
+export let x6: A & B = {
+>x6 : A & B
+>A : A
+>B : B
+>{    b: "",} : { b: string; }
+
+    b: "",
+>b : string
+>"" : ""
+}
+

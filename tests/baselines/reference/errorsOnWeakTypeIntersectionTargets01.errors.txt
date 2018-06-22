@@ -1,0 +1,94 @@
+tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts(10,12): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'A & B'.
+  Type '{ a: number; b: number; }' is not assignable to type 'B'.
+    Types of property 'b' are incompatible.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts(16,12): error TS2322: Type '{ a: string; b: string; }' is not assignable to type 'A & B'.
+  Type '{ a: string; b: string; }' is not assignable to type 'A'.
+    Types of property 'a' are incompatible.
+      Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts(22,12): error TS2322: Type '{ a: string; }' is not assignable to type 'A & B'.
+  Type '{ a: string; }' is not assignable to type 'A'.
+    Types of property 'a' are incompatible.
+      Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts(27,12): error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'A & B'.
+  Type '{ a: string; b: number; }' is not assignable to type 'A'.
+    Types of property 'a' are incompatible.
+      Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts(33,12): error TS2322: Type '{ b: number; }' is not assignable to type 'A & B'.
+  Type '{ b: number; }' is not assignable to type 'A'.
+    Property 'a' is missing in type '{ b: number; }'.
+tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts(38,12): error TS2322: Type '{ b: string; }' is not assignable to type 'A & B'.
+  Type '{ b: string; }' is not assignable to type 'A'.
+    Property 'a' is missing in type '{ b: string; }'.
+
+
+==== tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts (6 errors) ====
+    interface A {
+        a: number;
+    }
+    
+    interface B {
+        b?: string;
+    }
+    
+    // 'b' is incompatible.
+    export let x1: A & B = {
+               ~~
+!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'A & B'.
+!!! error TS2322:   Type '{ a: number; b: number; }' is not assignable to type 'B'.
+!!! error TS2322:     Types of property 'b' are incompatible.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+        a: 0,
+        b: 12,
+    }
+    
+    // 'a' is incompatible, 'b' is present and compatible.
+    export let x2: A & B = {
+               ~~
+!!! error TS2322: Type '{ a: string; b: string; }' is not assignable to type 'A & B'.
+!!! error TS2322:   Type '{ a: string; b: string; }' is not assignable to type 'A'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+        a: "hello",
+        b: "hello",
+    }
+    
+    // 'a' is incompatible, 'b' is absent.
+    export let x3: A & B = {
+               ~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'A & B'.
+!!! error TS2322:   Type '{ a: string; }' is not assignable to type 'A'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+        a: "hello",
+    }
+    
+    // Both 'a' and 'b' are incompatible
+    export let x4: A & B = {
+               ~~
+!!! error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'A & B'.
+!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type 'A'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+        a: "hello",
+        b: 0,
+    }
+    
+    // 'b' is compatible, 'a' is missing
+    export let x5: A & B = {
+               ~~
+!!! error TS2322: Type '{ b: number; }' is not assignable to type 'A & B'.
+!!! error TS2322:   Type '{ b: number; }' is not assignable to type 'A'.
+!!! error TS2322:     Property 'a' is missing in type '{ b: number; }'.
+        b: 0,
+    }
+    
+    // 'b' is incompatible, 'a' is missing
+    export let x6: A & B = {
+               ~~
+!!! error TS2322: Type '{ b: string; }' is not assignable to type 'A & B'.
+!!! error TS2322:   Type '{ b: string; }' is not assignable to type 'A'.
+!!! error TS2322:     Property 'a' is missing in type '{ b: string; }'.
+        b: "",
+    }
+    

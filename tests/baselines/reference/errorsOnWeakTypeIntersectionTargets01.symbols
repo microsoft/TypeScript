@@ -1,0 +1,84 @@
+=== tests/cases/compiler/errorsOnWeakTypeIntersectionTargets01.ts ===
+interface A {
+>A : Symbol(A, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 0))
+
+    a: number;
+>a : Symbol(A.a, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 2, 1))
+
+    b?: string;
+>b : Symbol(B.b, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 4, 13))
+}
+
+// 'b' is incompatible.
+export let x1: A & B = {
+>x1 : Symbol(x1, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 9, 10))
+>A : Symbol(A, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 0))
+>B : Symbol(B, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 2, 1))
+
+    a: 0,
+>a : Symbol(a, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 9, 24))
+
+    b: 12,
+>b : Symbol(b, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 10, 9))
+}
+
+// 'a' is incompatible, 'b' is present and compatible.
+export let x2: A & B = {
+>x2 : Symbol(x2, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 15, 10))
+>A : Symbol(A, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 0))
+>B : Symbol(B, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 2, 1))
+
+    a: "hello",
+>a : Symbol(a, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 15, 24))
+
+    b: "hello",
+>b : Symbol(b, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 16, 15))
+}
+
+// 'a' is incompatible, 'b' is absent.
+export let x3: A & B = {
+>x3 : Symbol(x3, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 21, 10))
+>A : Symbol(A, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 0))
+>B : Symbol(B, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 2, 1))
+
+    a: "hello",
+>a : Symbol(a, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 21, 24))
+}
+
+// Both 'a' and 'b' are incompatible
+export let x4: A & B = {
+>x4 : Symbol(x4, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 26, 10))
+>A : Symbol(A, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 0))
+>B : Symbol(B, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 2, 1))
+
+    a: "hello",
+>a : Symbol(a, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 26, 24))
+
+    b: 0,
+>b : Symbol(b, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 27, 15))
+}
+
+// 'b' is compatible, 'a' is missing
+export let x5: A & B = {
+>x5 : Symbol(x5, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 32, 10))
+>A : Symbol(A, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 0))
+>B : Symbol(B, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 2, 1))
+
+    b: 0,
+>b : Symbol(b, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 32, 24))
+}
+
+// 'b' is incompatible, 'a' is missing
+export let x6: A & B = {
+>x6 : Symbol(x6, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 37, 10))
+>A : Symbol(A, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 0, 0))
+>B : Symbol(B, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 2, 1))
+
+    b: "",
+>b : Symbol(b, Decl(errorsOnWeakTypeIntersectionTargets01.ts, 37, 24))
+}
+
