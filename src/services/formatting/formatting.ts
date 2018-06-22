@@ -1148,8 +1148,10 @@ namespace ts.formatting {
         position: number,
         onlyMultiLine: boolean,
         precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
-        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*ignoreJsDocComment*/ true),
+        tokenAtPosition = getTokenAtPosition(sourceFile, position),
         predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
+        const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
+        if (jsdoc) tokenAtPosition = jsdoc.parent;
         const tokenStart = tokenAtPosition.getStart(sourceFile);
         if (tokenStart <= position && position < tokenAtPosition.getEnd()) {
             return undefined;

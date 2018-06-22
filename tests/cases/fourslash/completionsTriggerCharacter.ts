@@ -38,7 +38,7 @@ verify.completions(
     { marker: "quoteInComment", exact: undefined, triggerCharacter: '"' },
     { marker: "lessInComment", exact: undefined, triggerCharacter: "<" },
 
-    { marker: "openTag", includes: "div", triggerCharacter: "<" },
+    { marker: "openTag", exact: undefined, triggerCharacter: "<" }, // TODO: `includes: "div"`
     { marker: "lessThan", exact: undefined, triggerCharacter: "<" },
     { marker: "closeTag", exact: "div", triggerCharacter: "/" },
     { marker: "path", exact: "importMe", triggerCharacter: "/", isNewIdentifierLocation: true },

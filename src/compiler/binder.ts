@@ -697,10 +697,11 @@ namespace ts {
                     bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag);
                     break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
-                case SyntaxKind.SourceFile:
+                case SyntaxKind.SourceFile: {
                     bindEachFunctionsFirst((node as SourceFile).statements);
                     bind((node as SourceFile).endOfFileToken);
                     break;
+                }
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                     bindEachFunctionsFirst((node as Block).statements);
@@ -1975,7 +1976,10 @@ namespace ts {
             }
             else if (!skipTransformFlagAggregation && (node.transformFlags & TransformFlags.HasComputedFlags) === 0) {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
+                const saveParent = parent;
+                if (node.kind === SyntaxKind.EndOfFileToken) parent = node;
                 bindJSDoc(node);
+                parent = saveParent;
             }
             inStrictMode = saveInStrictMode;
         }

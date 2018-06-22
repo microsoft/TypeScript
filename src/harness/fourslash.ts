@@ -850,7 +850,7 @@ namespace FourSlash {
         private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions): void {
             const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter })!;
             if (!actualCompletions) {
-                if (options.exact === undefined) return;
+                if ("exact" in options && options.exact === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
