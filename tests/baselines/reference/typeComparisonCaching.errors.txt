@@ -1,9 +1,9 @@
 tests/cases/compiler/typeComparisonCaching.ts(26,1): error TS2322: Type 'B' is not assignable to type 'A'.
-  Types of property 'p' are incompatible.
-    Type 'D' is not assignable to type 'C'.
-      Types of property 'q' are incompatible.
-        Type 'B' is not assignable to type 'A'.
+  Types of property 's' are incompatible.
+    Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/typeComparisonCaching.ts(27,1): error TS2322: Type 'D' is not assignable to type 'C'.
+  Types of property 'q' are incompatible.
+    Type 'B' is not assignable to type 'A'.
 
 
 ==== tests/cases/compiler/typeComparisonCaching.ts (2 errors) ====
@@ -35,11 +35,11 @@ tests/cases/compiler/typeComparisonCaching.ts(27,1): error TS2322: Type 'D' is n
     a = b;
     ~
 !!! error TS2322: Type 'B' is not assignable to type 'A'.
-!!! error TS2322:   Types of property 'p' are incompatible.
-!!! error TS2322:     Type 'D' is not assignable to type 'C'.
-!!! error TS2322:       Types of property 'q' are incompatible.
-!!! error TS2322:         Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Types of property 's' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
     c = d; // Should not be allowed
     ~
 !!! error TS2322: Type 'D' is not assignable to type 'C'.
+!!! error TS2322:   Types of property 'q' are incompatible.
+!!! error TS2322:     Type 'B' is not assignable to type 'A'.
     
