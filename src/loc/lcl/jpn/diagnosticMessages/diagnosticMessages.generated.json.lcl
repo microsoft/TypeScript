@@ -487,7 +487,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非ドライ ビルドはプロジェクト '{0}' をビルドします]]></Val>
+            <Val><![CDATA[非 -dry ビルドを実行した場合、プロジェクト '{0}' がビルドされます]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -496,7 +496,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非ドライ ビルドは、次のファイルを削除します: {0}]]></Val>
+            <Val><![CDATA[非 -dry ビルドを実行した場合、次のファイルが削除されます: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
