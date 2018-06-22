@@ -797,7 +797,7 @@ namespace ts.Completions {
         const typeChecker = program.getTypeChecker();
 
         let start = timestamp();
-        let currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
+        let currentToken = getTokenAtPosition(sourceFile, position, /*ignoreJsDocComment*/ true); // TODO: GH#15853
         // We will check for jsdoc comments with insideComment and getJsDocTagAtPosition. (TODO: that seems rather inefficient to check the same thing so many times.)
 
         log("getCompletionData: Get current token: " + (timestamp() - start));

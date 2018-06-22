@@ -1145,7 +1145,7 @@ namespace ts.formatting {
         position: number,
         onlyMultiLine: boolean,
         precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
-        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*ignoreJsDocComment*/ true),
         predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
         const tokenStart = tokenAtPosition.getStart(sourceFile);
         if (tokenStart <= position && position < tokenAtPosition.getEnd()) {
