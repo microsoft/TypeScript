@@ -40,7 +40,8 @@ namespace ts.codefix {
             const deletion = Deleter.with(context, d =>
                 tryDeleteDeclaration(sourceFile, token, d, checker, sourceFiles, /*isFixAll*/ false));
             if (deletion.length) {
-                result.push(createCodeFixAction(fixName, deletion, [Diagnostics.Remove_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDelete, Diagnostics.Delete_all_unused_declarations));
+                const name = isComputedPropertyName(token.parent) ? token.parent : token;
+                result.push(createCodeFixAction(fixName, deletion, [Diagnostics.Remove_declaration_for_Colon_0, name.getText(sourceFile)], fixIdDelete, Diagnostics.Delete_all_unused_declarations));
             }
 
             const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
@@ -92,12 +93,9 @@ namespace ts.codefix {
 
     function tryDeleteFullDestructure(token: Node, deleter: Deleter, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): boolean {
         if (token.kind !== SyntaxKind.OpenBraceToken || !isObjectBindingPattern(token.parent)) return false;
-        const decl = cast(token.parent, isObjectBindingPattern).parent;
+        const decl = token.parent.parent;
         if (decl.kind === SyntaxKind.Parameter) {
-            if (mayDeleteParameter(decl, checker, isFixAll)) {
-                deleter.add(decl);
-                deleteUnusedArguments(deleter, decl, sourceFiles, checker);
-            }
+            tryDeleteParameter(deleter, decl, checker, sourceFiles, isFixAll);
         }
         else {
             deleter.add(decl);
@@ -153,25 +151,18 @@ namespace ts.codefix {
 
     function tryDeleteDeclarationWorker(token: Node, deleter: Deleter, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
         const { parent } = token;
-        switch (parent.kind) {
-            case SyntaxKind.Parameter:
-                if (!mayDeleteParameter(parent as ParameterDeclaration, checker, isFixAll)) break;
-                deleter.add(parent);
-                deleteUnusedArguments(deleter, parent as ParameterDeclaration, sourceFiles, checker);
-                break;
+        if (isParameter(parent)) {
+            tryDeleteParameter(deleter, parent, checker, sourceFiles, isFixAll);
+        }
+        else {
+            deleter.add(isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent);
+        }
+    }
 
-            case SyntaxKind.ImportSpecifier:
-                const namedImports = (parent as ImportSpecifier).parent;
-                deleter.add(namedImports.elements.length === 1 ? namedImports : parent);
-                break;
-
-            case SyntaxKind.ImportClause:
-                deleter.add(token);
-                break;
-
-            default:
-                deleter.add(isComputedPropertyName(parent) ? parent.parent : parent);
-                break;
+    function tryDeleteParameter(deleter: Deleter, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
+        if (mayDeleteParameter(p, checker, isFixAll)) {
+            deleter.add(p);
+            deleteUnusedArguments(deleter, p, sourceFiles, checker);
         }
     }
 
@@ -313,9 +304,9 @@ namespace ts.codefix {
             }
 
             case SyntaxKind.ImportSpecifier:
-                const namedImports = <NamedImports>node.parent;
+                const namedImports = (node as ImportSpecifier).parent;
                 if (namedImports.elements.length === 1) {
-                    deleteImportBinding(changes, sourceFile, node as ImportSpecifier);
+                    deleteImportBinding(changes, sourceFile, namedImports);
                 }
                 else {
                     changes.deleteNodeInList(sourceFile, node);
@@ -327,8 +318,7 @@ namespace ts.codefix {
                 break;
 
             default:
-                if (isImportClause(node.parent)) {
-                    Debug.assert(node.parent.name === node);
+                if (isImportClause(node.parent) && node.parent.name === node) {
                     deleteDefaultImport(changes, sourceFile, node.parent);
                 }
                 else if (isCallLikeExpression(node.parent)) {
@@ -360,20 +350,19 @@ namespace ts.codefix {
         }
     }
 
-    function deleteImportBinding(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ImportSpecifier | NamespaceImport): void {
-        const namedBindings = cast(node, isNamedImportBindings);
-        if (namedBindings.parent.name) {
+    function deleteImportBinding(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: NamedImportBindings): void {
+        if (node.parent.name) {
             // Delete named imports while preserving the default import
             // import d|, * as ns| from './file'
             // import d|, { a }| from './file'
-            const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, namedBindings.pos - 1, /*includeJsDocComment*/ true));
-            changes.deleteRange(sourceFile, { pos: previousToken.getStart(sourceFile), end: namedBindings.end });
+            const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, node.pos - 1, /*includeJsDocComment*/ true));
+            changes.deleteRange(sourceFile, { pos: previousToken.getStart(sourceFile), end: node.end });
         }
         else {
             // Delete the entire import declaration
             // |import * as ns from './file'|
             // |import { a } from './file'|
-            const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration)!;
+            const importDecl = getAncestor(node, SyntaxKind.ImportDeclaration)!;
             changes.deleteNode(sourceFile, importDecl);
         }
     }

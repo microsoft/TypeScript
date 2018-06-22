@@ -4,10 +4,10 @@
 // @noUnusedParameters: true
 
 ////import d from "foo";
-////import d2, { used } from "foo";
+////import d2, { used1 } from "foo";
 ////import { x } from "foo";
-////import { x2, used } from "foo";
-////used;
+////import { x2, used2 } from "foo";
+////used1; used2;
 ////
 ////function f(a, b) {
 ////    const x = 0;
@@ -42,9 +42,9 @@ verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
     fixAllDescription: "Delete all unused declarations",
     newFileContent:
-`import { used } from "foo";
-import { used } from "foo";
-used;
+`import { used1 } from "foo";
+import { used2 } from "foo";
+used1; used2;
 
 function f() {
 }
