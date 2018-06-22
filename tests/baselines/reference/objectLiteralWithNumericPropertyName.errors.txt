@@ -1,4 +1,4 @@
-tests/cases/compiler/objectLiteralWithNumericPropertyName.ts(5,5): error TS2322: Type '3' is not assignable to type 'string'.
+tests/cases/compiler/objectLiteralWithNumericPropertyName.ts(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/objectLiteralWithNumericPropertyName.ts (1 errors) ====
@@ -8,6 +8,6 @@ tests/cases/compiler/objectLiteralWithNumericPropertyName.ts(5,5): error TS2322:
     var x: A = {
         0: 3
         ~
-!!! error TS2322: Type '3' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     };
     

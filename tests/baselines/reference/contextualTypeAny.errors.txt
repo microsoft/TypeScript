@@ -1,4 +1,4 @@
-tests/cases/compiler/contextualTypeAny.ts(3,38): error TS2322: Type '""' is not assignable to type 'number'.
+tests/cases/compiler/contextualTypeAny.ts(3,38): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/contextualTypeAny.ts (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/compiler/contextualTypeAny.ts(3,38): error TS2322: Type '""' is not 
     
     var obj: { [s: string]: number } = { p: "", q: x };
                                          ~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     var arr: number[] = ["", x];

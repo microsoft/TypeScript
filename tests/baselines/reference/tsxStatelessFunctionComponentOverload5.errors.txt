@@ -8,7 +8,7 @@ tests/cases/conformance/jsx/file.tsx(51,13): error TS2322: Type '{ onClick: (k: 
   Property '"data-format"' is missing in type '{ onClick: (k: MouseEvent<any>) => void; to: string; }'.
 tests/cases/conformance/jsx/file.tsx(53,13): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
   Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
-tests/cases/conformance/jsx/file.tsx(54,51): error TS2322: Type '10' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(54,51): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(55,68): error TS2322: Type 'true' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type 'true' is not assignable to type 'string'.
 
@@ -84,7 +84,7 @@ tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type 'true' is not as
 !!! error TS2322:   Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
     const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
                                                       ~~~~~~~~
-!!! error TS2322: Type '10' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
                                                                        ~~~~~~~~~
 !!! error TS2322: Type 'true' is not assignable to type 'string'.

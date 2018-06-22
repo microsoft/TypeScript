@@ -1,6 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(13,11): error TS2322: Type '{}' is not assignable to type 'Prop'.
   Property 'a' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type '"hi"' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -27,4 +27,4 @@ tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type '"hi"' is not as
     // Error
     let x2 = <MyComp a="hi"/>
                      ~
-!!! error TS2322: Type '"hi"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

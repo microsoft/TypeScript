@@ -1,7 +1,7 @@
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(16,5): error TS2412: Property '3.0' of type 'number' is not assignable to numeric index type 'A'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(25,5): error TS2412: Property '3.0' of type 'number' is not assignable to numeric index type 'A'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(34,5): error TS2412: Property '3.0' of type 'number' is not assignable to numeric index type 'A'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(43,5): error TS2322: Type '1' is not assignable to type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(43,5): error TS2322: Type 'number' is not assignable to type 'A'.
 
 
 ==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts (4 errors) ====
@@ -55,6 +55,6 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         "2.5": new B(),
         3.0: 1,
         ~~~
-!!! error TS2322: Type '1' is not assignable to type 'A'.
+!!! error TS2322: Type 'number' is not assignable to type 'A'.
         "4.0": ''
     }

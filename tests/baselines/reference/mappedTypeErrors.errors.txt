@@ -37,9 +37,9 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(123,12): error TS2345: 
     Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(124,14): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, "a" | "b">'.
   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(128,16): error TS2322: Type '"no"' is not assignable to type 'number | undefined'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(129,25): error TS2322: Type '"no"' is not assignable to type 'number | undefined'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,39): error TS2322: Type '"no"' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(128,16): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(129,25): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,39): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,16): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
   Type 'T' is not assignable to type 'symbol'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: Type 'P' cannot be used to index type 'T'.
@@ -234,13 +234,13 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: 
     
     let x1: T2 = { a: 'no' };  // Error
                    ~
-!!! error TS2322: Type '"no"' is not assignable to type 'number | undefined'.
+!!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
     let x2: Partial<T2> = { a: 'no' }; // Error
                             ~
-!!! error TS2322: Type '"no"' is not assignable to type 'number | undefined'.
+!!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
     let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
                                           ~
-!!! error TS2322: Type '"no"' is not assignable to type 'number | undefined'.
+!!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
     
     // Repro from #13044
     

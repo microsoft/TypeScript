@@ -9,11 +9,11 @@ tests/cases/conformance/jsx/file.tsx(17,13): error TS2322: Type '{ yy: boolean; 
     Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/jsx/file.tsx(25,13): error TS2322: Type '{ extra-data: true; }' is not assignable to type '{ yy: string; direction?: number; }'.
   Property 'yy' is missing in type '{ extra-data: true; }'.
-tests/cases/conformance/jsx/file.tsx(26,40): error TS2322: Type '"left"' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(33,32): error TS2322: Type '"hello"' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(34,29): error TS2322: Type '"hello"' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(35,29): error TS2322: Type '"hello"' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type '"hello"' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(26,40): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(33,32): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(34,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(35,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (11 errors) ====
@@ -61,7 +61,7 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type '"hello"' is not
 !!! error TS2322:   Property 'yy' is missing in type '{ extra-data: true; }'.
     const d2 = <TestingOneThing yy="hello" direction="left" />
                                            ~~~~~~~~~
-!!! error TS2322: Type '"left"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
     declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
@@ -70,14 +70,14 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type '"hello"' is not
     // Error
     const e1 = <TestingOptional y1 y3="hello"/>
                                    ~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     const e2 = <TestingOptional y1="hello" y2={1000} y3 />
                                 ~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
                                 ~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
                                 ~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     

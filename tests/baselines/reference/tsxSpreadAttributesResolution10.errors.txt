@@ -1,5 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(19,23): error TS2322: Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(20,25): error TS2322: Type '"Hi"' is not assignable to type '2'.
+tests/cases/conformance/jsx/file.tsx(20,25): error TS2322: Type 'string' is not assignable to type '2'.
 tests/cases/conformance/jsx/file.tsx(21,25): error TS2322: Type '3' is not assignable to type '2'.
 tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type 'true' is not assignable to type '2'.
 
@@ -28,7 +28,7 @@ tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type 'true' is not as
 !!! error TS2322: Type '3' is not assignable to type '2'.
     let y1 = <Opt {...obj1} x="Hi"/>;
                             ~
-!!! error TS2322: Type '"Hi"' is not assignable to type '2'.
+!!! error TS2322: Type 'string' is not assignable to type '2'.
     let y2 = <Opt {...obj1} x={3}/>;
                             ~
 !!! error TS2322: Type '3' is not assignable to type '2'.

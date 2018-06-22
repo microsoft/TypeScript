@@ -10138,18 +10138,18 @@ namespace ts {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
                         const resultObj: { error?: Diagnostic } = {};
                         // Use the expression type, if available
-                        const specificSource = next ? checkExpressionCached(next) : sourcePropType;
+                        const specificSource = next ? checkExpressionForMutableLocation(next, CheckMode.Normal, sourcePropType) : sourcePropType;
                         const result = checkTypeAssignableTo(specificSource, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
                         if (result && specificSource !== sourcePropType) {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                            checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj)
+                            checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
                         }
                         if (resultObj.error && target.symbol && length(target.symbol.declarations)) {
                             const reportedDiag = resultObj.error;
                             const relatededInfo = (reportedDiag.relatedInformation = reportedDiag.relatedInformation || []);
                             const propertyName = typeToString(nameType);
                             const targetType = typeToString(target);
-                            for (const declaration of target.symbol.declarations!) {
+                            for (const declaration of target.symbol.declarations) {
                                 relatededInfo.push(createDiagnosticForNode(declaration, Diagnostics.Which_is_from_property_0_of_type_1_declared_here, propertyName, targetType));
                             }
                         }

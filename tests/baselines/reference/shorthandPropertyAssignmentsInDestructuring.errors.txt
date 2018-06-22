@@ -6,13 +6,13 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(70,5): error
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(75,8): error TS2322: Type '5' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(75,8): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(80,5): error TS2322: Type '5' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(80,20): error TS2322: Type '1' is not assignable to type 'string'.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(80,20): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,8): error TS2322: Type '5' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,8): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,19): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: string; }'.
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,26): error TS2322: Type '1' is not assignable to type 'string'.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,26): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,12): error TS2304: Cannot find name 's'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): error TS1312: '=' can only be used in an object literal property inside a destructuring assignment.
 
@@ -115,7 +115,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
     	   ~~
 !!! error TS2322: Type '5' is not assignable to type 'string'.
     	                  ~
-!!! error TS2322: Type '1' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     });
     
     (function() {
@@ -130,7 +130,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
 !!! error TS2322:   Types of property 'x' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
     	                        ~
-!!! error TS2322: Type '1' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     });
     
     (function() {
