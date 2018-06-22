@@ -1745,6 +1745,7 @@ namespace ts.server {
 
             const changes: (protocol.FileCodeEdits | FileTextChanges)[] = [];
             this.projectService.forEachProject(project => {
+                if (project.isOrphan() || !project.languageServiceEnabled) return;
                 for (const fileTextChanges of project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences)) {
                     // Subsequent projects may make conflicting edits to the same file -- just go with the first.
                     if (!changes.some(f => f.fileName === fileTextChanges.fileName)) {
