@@ -209,6 +209,7 @@ namespace ts.codefix {
     }
 }
 
+/* @internal */
 namespace ts.codefix {
     export class Deleter {
         static with(context: textChanges.TextChangesContext, cb: (d: Deleter) => void): FileTextChanges[] {

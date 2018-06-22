@@ -10681,6 +10681,7 @@ declare namespace ts {
     }
     function getLineStartPositionForPosition(position: number, sourceFile: SourceFileLike): number;
     function rangeContainsRange(r1: TextRange, r2: TextRange): boolean;
+    function rangeContainsRangeExclusive(r1: TextRange, r2: TextRange): boolean;
     function rangeContainsPosition(r: TextRange, pos: number): boolean;
     function rangeContainsPositionExclusive(r: TextRange, pos: number): boolean;
     function startEndContainsRange(start: number, end: number, range: TextRange): boolean;
@@ -11093,7 +11094,7 @@ declare namespace ts.FindAllReferences.Core {
     /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
     function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile): boolean;
     function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined;
-    function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (sourceFile: SourceFile, call: CallExpression) => void): void;
+    function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (call: CallExpression) => void): void;
     /**
      * Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
      * of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
@@ -11562,8 +11563,10 @@ declare namespace ts {
         function getSupportedErrorCodes(): string[];
         function getFixes(context: CodeFixContext): CodeFixAction[];
         function getAllFixes(context: CodeFixAllContext): CombinedCodeActions;
+        function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions;
         function createFileTextChanges(fileName: string, textChanges: TextChange[]): FileTextChanges;
         function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void): CombinedCodeActions;
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void;
     }
 }
 declare namespace ts {
@@ -11629,6 +11632,15 @@ declare namespace ts.codefix {
 declare namespace ts.codefix {
 }
 declare namespace ts.codefix {
+}
+declare namespace ts.codefix {
+    class Deleter {
+        static with(context: textChanges.TextChangesContext, cb: (d: Deleter) => void): FileTextChanges[];
+        static withChanges(changes: textChanges.ChangeTracker, cb: (d: Deleter) => void): void;
+        private nodes;
+        add(node: Node): void;
+        private finish;
+    }
 }
 declare namespace ts.codefix {
 }
