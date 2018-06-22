@@ -2087,10 +2087,9 @@ namespace ts {
         return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
-    export function tryRemovePrefix(str: string, prefix: string): string | undefined {
-        return startsWith(str, prefix) ? str.substring(prefix.length) : undefined;
+    export function tryRemovePrefix(str: string, prefix: string, getCanonicalFileName: GetCanonicalFileName = identity): string | undefined {
+        return startsWith(getCanonicalFileName(str), getCanonicalFileName(prefix)) ? str.substring(prefix.length) : undefined;
     }
-
 
     function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
         return candidate.length >= prefix.length + suffix.length &&

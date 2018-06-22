@@ -2,9 +2,11 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "ES5",
-        "noImplicitAny": true,
         "outDir": "./",
         "rootDir": ".",
+        "newLine": "lf",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
         "sourceMap": false
     },
     "files": [

@@ -390,19 +390,24 @@ namespace ts {
                     const firstLineColumnOffset = writer.getColumn();
                     // First, decode the old component sourcemap
                     const originalMap = parsed;
+
+                    const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+                    const resolvedPathCache = createMap<string>();
                     sourcemaps.calculateDecodedMappings(originalMap, (raw): void => {
                         // Apply offsets to each position and fixup source entries
                         const rawPath = originalMap.sources[raw.sourceIndex];
                         const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
                         const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
-                        const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
-                        const resolvedPath = getRelativePathToDirectoryOrUrl(
-                            sourcesDirectoryPath,
-                            combinedPath,
-                            host.getCurrentDirectory(),
-                            host.getCanonicalFileName,
-                            /*isAbsolutePathAnUrl*/ true
-                        );
+                        if (!resolvedPathCache.has(combinedPath)) {
+                            resolvedPathCache.set(combinedPath, getRelativePathToDirectoryOrUrl(
+                                sourcesDirectoryPath,
+                                combinedPath,
+                                host.getCurrentDirectory(),
+                                host.getCanonicalFileName,
+                                /*isAbsolutePathAnUrl*/ true
+                            ));
+                        }
+                        const resolvedPath = resolvedPathCache.get(combinedPath)!;
                         const absolutePath = getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath);
                         // tslint:disable-next-line:no-null-keyword
                         setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?

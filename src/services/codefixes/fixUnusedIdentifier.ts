@@ -18,7 +18,7 @@ namespace ts.codefix {
             const { errorCode, sourceFile, program } = context;
             const checker = program.getTypeChecker();
             const sourceFiles = program.getSourceFiles();
-            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
+            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ true);
 
             const importDecl = tryGetFullImport(token);
             if (importDecl) {
@@ -58,7 +58,7 @@ namespace ts.codefix {
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 Deleter.withChanges(changes, deleter => {
                     eachDiagnostic(context, errorCodes, diag => {
-                        const token = getTokenAtPosition(sourceFile, diag.start, /*includeJsDocComment*/ false);
+                        const token = getTokenAtPosition(sourceFile, diag.start, /*includeJsDocComment*/ true);
                         switch (context.fixId) {
                             case fixIdPrefix:
                                 if (isIdentifier(token) && canPrefix(token)) {
@@ -299,8 +299,8 @@ namespace ts.codefix {
                 const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node.parent);
                 if (typeParameters.length === 1) {
                     const { pos, end } = cast(typeParameters, isNodeArray);
-                    const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ false);
-                    const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ false);
+                    const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ true);
+                    const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ true);
                     Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
                     Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
 
@@ -348,7 +348,7 @@ namespace ts.codefix {
         else {
             // import |d,| * as ns from './file'
             const start = importClause.name!.getStart(sourceFile);
-            const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end, /*includeJsDocComment*/ false);
+            const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end, /*includeJsDocComment*/ true);
             if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                 // shift first non-whitespace position after comma to the start position of the node
                 const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
@@ -366,7 +366,7 @@ namespace ts.codefix {
             // Delete named imports while preserving the default import
             // import d|, * as ns| from './file'
             // import d|, { a }| from './file'
-            const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, namedBindings.pos - 1, /*includeJsDocComment*/ false));
+            const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, namedBindings.pos - 1, /*includeJsDocComment*/ true));
             changes.deleteRange(sourceFile, { pos: previousToken.getStart(sourceFile), end: namedBindings.end });
         }
         else {

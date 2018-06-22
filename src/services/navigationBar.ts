@@ -277,7 +277,7 @@ namespace ts.NavigationBar {
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
                     case SpecialPropertyAssignmentKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
-                        break;
+                        return;
                     case SpecialPropertyAssignmentKind.ThisProperty:
                     case SpecialPropertyAssignmentKind.Property:
                     case SpecialPropertyAssignmentKind.None:

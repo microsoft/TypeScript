@@ -1000,6 +1000,7 @@ namespace ts.FindAllReferences.Core {
 
     function getReferenceForShorthandProperty({ flags, valueDeclaration }: Symbol, search: Search, state: State): void {
         const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration)!;
+        const name = getNameOfDeclaration(valueDeclaration);
         /*
          * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
          * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
@@ -1007,8 +1008,8 @@ namespace ts.FindAllReferences.Core {
          * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
          * position of property accessing, the referenceEntry of such position will be handled in the first case.
          */
-        if (!(flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-            addReference(getNameOfDeclaration(valueDeclaration), shorthandValueSymbol, state);
+        if (!(flags & SymbolFlags.Transient) && name && search.includes(shorthandValueSymbol)) {
+            addReference(name, shorthandValueSymbol, state);
         }
     }
 

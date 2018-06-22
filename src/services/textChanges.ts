@@ -490,22 +490,25 @@ namespace ts.textChanges {
             };
         }
         private getInsertNodeAfterOptionsWorker(node: Node): InsertNodeOptions {
-            if (isClassDeclaration(node) || isModuleDeclaration(node)) {
-                return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                    return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
+
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.StringLiteral:
+                    return { prefix: ", " };
+
+                case SyntaxKind.PropertyAssignment:
+                    return { suffix: "," + this.newLineCharacter };
+
+                case SyntaxKind.Parameter:
+                    return {};
+
+                default:
+                    Debug.assert(isStatement(node) || isClassOrTypeElement(node)); // Else we haven't handled this kind of node yet -- add it
+                    return { suffix: this.newLineCharacter };
             }
-            else if (isStatement(node) || isClassOrTypeElement(node)) {
-                return { suffix: this.newLineCharacter };
-            }
-            else if (isVariableDeclaration(node) || isStringLiteral(node)) {
-                return { prefix: ", " };
-            }
-            else if (isPropertyAssignment(node)) {
-                return { suffix: "," + this.newLineCharacter };
-            }
-            else if (isParameter(node)) {
-                return {};
-            }
-            return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
 
         public insertName(sourceFile: SourceFile, node: FunctionExpression | ClassExpression | ArrowFunction, name: string): void {
