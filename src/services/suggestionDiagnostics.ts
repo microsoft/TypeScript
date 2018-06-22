@@ -24,7 +24,7 @@ namespace ts {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
                     }
-                    if (node.modifiers && isAsyncFunction(node)) {
+                    if (isAsyncFunction(node)) {
                         break;
                     }
 
@@ -33,13 +33,14 @@ namespace ts {
                         break;
                     }
 
-                    // collect all the return statements
-                    // check that a property access expression exists in there and that it is a handler
-                    const retStmts: ReturnStatement[] = [];
-                    getReturnStmts(node, retStmts);
-
-                    if (isPromiseType(returnType) && retStmts.length > 0) {
-                        diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
+                    if (checker.isPromiseLikeType(returnType)) {
+                        // collect all the return statements
+                        // check that a property access expression exists in there and that it is a handler
+                        const retStmts: ReturnStatement[] = [];
+                        getReturnStmts(node, retStmts);
+                        if(retStmts.length > 0){
+                            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
+                        }
                     }
                     break;
             }
@@ -121,10 +122,6 @@ namespace ts {
 
     function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
-    }
-
-    function isPromiseType(T: Type): boolean {
-        return T.flags === TypeFlags.Object && T.symbol.name === "Promise";
     }
 
     function getReturnStmts(node: Node, retStmts: ReturnStatement[]) {
