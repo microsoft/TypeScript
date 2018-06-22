@@ -1,5 +1,6 @@
 // @ts-check
 const path = require("path");
+const fs = require("fs");
 const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
 const ts = require("../../lib/typescript");
 const { Duplex } = require("stream");
@@ -10,20 +11,26 @@ const Vinyl = require("vinyl");
  * Creates a stream that passes through its inputs only if the project outputs are not up to date
  * with respect to the inputs. 
  * @param {ParsedCommandLine} parsedProject
- * @param {{verbose?: boolean}} [options]
+ * @param {UpToDateOptions} [options]
+ * 
+ * @typedef UpToDateOptions
+ * @property {boolean} [verbose]
  */
 function upToDate(parsedProject, options) {
     /** @type {File[]} */
     const inputs = [];
     /** @type {Map<string, File>} */
     const inputMap = new Map();
+    /** @type {Map<string, fs.Stats>} */
+    const statCache = new Map();
     /** @type {UpToDateHost} */
     const upToDateHost = {
         fileExists(fileName) {
-            return inputMap.has(path.resolve(fileName));
+            const stats = getStat(fileName);
+            return stats ? stats.isFile() : false;
         },
         getModifiedTime(fileName) {
-            return inputMap.get(path.resolve(fileName)).stat.mtime;
+            return getStat(fileName).mtime;
         }
     };
     const duplex = new Duplex({
@@ -34,7 +41,7 @@ function upToDate(parsedProject, options) {
         write(file, _, cb) {
             if (Vinyl.isVinyl(file)) {
                 inputs.push(file);
-                inputMap.set(file.path, file);
+                inputMap.set(path.resolve(file.path), file);
             }
             cb();
         },
@@ -45,12 +52,27 @@ function upToDate(parsedProject, options) {
                 for (const input of inputs) duplex.push(input);
             }
             duplex.push(null);
+            inputMap.clear();
+            statCache.clear();
             cb();
         },
         read() {
         }
     });
     return duplex;
+
+    function getStat(fileName) {
+        fileName = path.resolve(fileName);
+        const inputFile = inputMap.get(fileName);
+        if (inputFile && inputFile.stat) return inputFile.stat;
+        
+        let stats = statCache.get(fileName);
+        if (!stats && fs.existsSync(fileName)) {
+            stats = fs.statSync(fileName);
+            statCache.set(fileName, stats);
+        }
+        return stats;
+    }
 }
 module.exports = exports = upToDate;
 

@@ -14,7 +14,6 @@ const browserify = require("browserify");
 const through2 = require("through2");
 const fold = require("travis-fold");
 const rename = require("gulp-rename");
-const concat = require("gulp-concat");
 const convertMap = require("convert-source-map");
 const sorcery = require("sorcery");
 const Vinyl = require("vinyl");
@@ -155,7 +154,7 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
 const typescriptServicesJs = "built/local/typescriptServices.js";
 const typescriptServicesDts = "built/local/typescriptServices.d.ts";
 gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], () => 
-    project.compile(typescriptServicesProject, { dts: convertConstEnums() }), 
+    project.compile(typescriptServicesProject, { dts: files => files.pipe(convertConstEnums()) }),
     { aliases: [typescriptServicesDts] });
 
 const typescriptJs = "built/local/typescript.js";
@@ -182,7 +181,7 @@ gulp.task(typescriptStandaloneDts, /*help*/ false, [typescriptServicesDts], () =
         .pipe(gulp.dest("built/local")));
 
 // build all 'typescriptServices'-related outputs
-gulp.task("typescriptServices", /*help*/ false, [typescriptServicesJs, typescriptServicesDts, typescriptJs, typescriptDts, typescriptStandaloneDts]);
+gulp.task("services", /*help*/ false, [typescriptServicesJs, typescriptServicesDts, typescriptJs, typescriptDts, typescriptStandaloneDts]);
 
 const tscProject = "src/tsc/tsconfig.json";
 const tscJs = "built/local/tsc.js";
@@ -211,13 +210,28 @@ gulp.task(typesMapJson, /*help*/ false, [], () =>
         .pipe(insert.transform(contents => (JSON.parse(contents), contents)))
         .pipe(gulp.dest("built/local")));
 
+const tsserverlibraryProject = "built/local/tsserverlibrary.tsconfig.json";
+gulp.task(tsserverlibraryProject, /*help*/ false, () => {
+    // NOTE: flatten tsserverlibrary so that we can properly strip @internal
+    project.flatten("src/tsserver/tsconfig.json", tsserverlibraryProject, {
+        exclude: ["src/tsserver/server.ts"],
+        compilerOptions: {
+            "removeComments": true,
+            "stripInternal": true,
+            "outFile": "tsserverlibrary.js"
+        }
+    });
+});
+
+const tsserverlibraryJs = "built/local/tsserverlibrary.js";
 const tsserverlibraryDts = "built/local/tsserverlibrary.d.ts";
-gulp.task(tsserverlibraryDts, /*help*/ false, [tsserverJs], () =>
-    gulp.src(["built/local/compiler.d.ts", "built/local/jsTyping.d.ts", "built/local/services.d.ts", "built/local/server.d.ts"], { base: "built/local" })
-        .pipe(convertConstEnums())
-        .pipe(concat("tsserverlibrary.d.ts", { newLine: "\n" }))
-        .pipe(append("\nexport = ts;\nexport as namespace ts;"))
-        .pipe(gulp.dest("built/local")));
+gulp.task(tsserverlibraryJs, /*help*/ false, [typescriptServicesJs, tsserverlibraryProject], () =>
+    project.compile(tsserverlibraryProject, { 
+        dts: files => files
+            .pipe(convertConstEnums())
+            .pipe(append("\nexport = ts;\nexport as namespace ts;")),
+        typescript: "built"
+    }), { aliases: [tsserverlibraryDts] });
 
 gulp.task(
     "lssl",
@@ -227,7 +241,7 @@ gulp.task(
 gulp.task(
     "local",
     "Builds the full compiler and services",
-    [tscJs, "typescriptServices", tsserverJs, builtGeneratedDiagnosticMessagesJson, tsserverlibraryDts, "localize"]);
+    [tscJs, "services", tsserverJs, builtGeneratedDiagnosticMessagesJson, tsserverlibraryDts, "localize"]);
 
 gulp.task(
     "tsc",
