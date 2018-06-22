@@ -10707,7 +10707,7 @@ declare namespace ts {
      */
     function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node;
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment?: boolean): Node;
+    function getTokenAtPosition(sourceFile: SourceFile, position: number, ignoreJsDocComment?: boolean): Node;
     /**
      * The token on the left of the position is the token that strictly includes the position
      * or sits to the left of the cursor if it is on a boundary. For example
