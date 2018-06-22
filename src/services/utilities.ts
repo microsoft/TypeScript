@@ -419,6 +419,10 @@ namespace ts {
         return startEndContainsRange(r1.pos, r1.end, r2);
     }
 
+    export function rangeContainsRangeExclusive(r1: TextRange, r2: TextRange): boolean {
+        return rangeContainsPositionExclusive(r1, r2.pos) && rangeContainsPositionExclusive(r1, r2.end);
+    }
+
     export function rangeContainsPosition(r: TextRange, pos: number): boolean {
         return r.pos <= pos && pos <= r.end;
     }

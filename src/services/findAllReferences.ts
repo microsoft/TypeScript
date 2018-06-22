@@ -730,7 +730,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (sourceFile: SourceFile, call: CallExpression) => void): void {
+    export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (call: CallExpression) => void): void {
         if (!signature.name || !isIdentifier(signature.name)) return;
 
         const symbol = Debug.assertDefined(checker.getSymbolAtLocation(signature.name));
@@ -743,7 +743,7 @@ namespace ts.FindAllReferences.Core {
                 if (!isCallExpression(call) || call.expression !== called) continue;
                 const referenceSymbol = checker.getSymbolAtLocation(name);
                 if (referenceSymbol && checker.getRootSymbols(referenceSymbol).some(s => s === symbol)) {
-                    cb(sourceFile, call);
+                    cb(call);
                 }
             }
         }
