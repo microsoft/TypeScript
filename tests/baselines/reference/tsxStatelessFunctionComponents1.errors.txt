@@ -1,10 +1,12 @@
 tests/cases/conformance/jsx/file.tsx(19,10): error TS2322: Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
-  Property 'name' is missing in type '{ naaame: string; }'.
+  Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
+    Property 'name' is missing in type '{ naaame: string; }'.
 tests/cases/conformance/jsx/file.tsx(27,15): error TS2326: Types of property 'name' are incompatible.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(29,10): error TS2559: Type '{ naaaaaaame: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(34,10): error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
-  Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
+  Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
+    Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
 tests/cases/conformance/jsx/file.tsx(37,10): error TS2559: Type '{ prop1: true; }' has no properties in common with type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(38,11): error TS2559: Type '{ ref: (x: any) => any; }' has no properties in common with type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
@@ -33,7 +35,8 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     let b = <Greet naaame='world' />;
              ~~~~~
 !!! error TS2322: Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
-!!! error TS2322:   Property 'name' is missing in type '{ naaame: string; }'.
+!!! error TS2322:   Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
+!!! error TS2322:     Property 'name' is missing in type '{ naaame: string; }'.
     
     // OK
     let c = <Meet />;
@@ -56,7 +59,8 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     let h = <MeetAndGreet extra-prop-name="World" />;
              ~~~~~~~~~~~~
 !!! error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
-!!! error TS2322:   Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
+!!! error TS2322:   Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
+!!! error TS2322:     Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
     
     // Error
     let i = <EmptyPropSFC prop1 />
