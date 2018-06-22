@@ -4514,22 +4514,27 @@ namespace ts {
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
                 const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
+                const index = pattern.elements.indexOf(declaration);
                 if (declaration.dotDotDotToken) {
-                    // Rest element has an array type with the same element type as the parent type
-                    type = createArrayType(elementType);
+                    // If the parent is a tuple type, the rest element has an array type with a union of the
+                    // remaining tuple element types. Otherwise, the rest element has an array type with same
+                    // element type as the parent type.
+                    type = isTupleType(parentType) ?
+                        getArrayLiteralType((parentType.typeArguments || emptyArray).slice(index, getTypeReferenceArity(parentType))) :
+                        createArrayType(elementType);
                 }
                 else {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
-                    const propName = "" + pattern.elements.indexOf(declaration);
-                    type = isTupleLikeType(parentType)
-                        ? getTypeOfPropertyOfType(parentType, propName as __String)
-                        : elementType;
+                    const index = pattern.elements.indexOf(declaration);
+                    type = isTupleLikeType(parentType) ?
+                        getTupleElementType(parentType, index) || declaration.initializer && checkDeclarationInitializer(declaration) :
+                        elementType;
                     if (!type) {
                         if (isTupleType(parentType)) {
                             error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), getTypeReferenceArity(<TypeReference>parentType), pattern.elements.length);
                         }
                         else {
-                            error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                            error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), "" + index);
                         }
                         return errorType;
                     }
@@ -4800,7 +4805,7 @@ namespace ts {
         // pattern. Otherwise, it is the type any.
         function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean, reportErrors?: boolean): Type {
             if (element.initializer) {
-                return checkDeclarationInitializer(element);
+                return addOptionality(checkDeclarationInitializer(element));
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -4848,12 +4853,13 @@ namespace ts {
         function getTypeFromArrayBindingPattern(pattern: BindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const elements = pattern.elements;
             const lastElement = lastOrUndefined(elements);
-            if (!lastElement || (!isOmittedExpression(lastElement) && lastElement.dotDotDotToken)) {
+            const hasRestElement = !!(lastElement && lastElement.kind === SyntaxKind.BindingElement && lastElement.dotDotDotToken);
+            if (elements.length === 0 || elements.length === 1 && hasRestElement) {
                 return languageVersion >= ScriptTarget.ES2015 ? createIterableType(anyType) : anyArrayType;
             }
-            // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
             const elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
-            let result = <TypeReference>createTupleType(elementTypes);
+            const minLength = findLastIndex(elements, e => !isOmittedExpression(e) && !hasDefaultValue(e), elements.length - (hasRestElement ? 2 : 1)) + 1;
+            let result = <TypeReference>createTupleType(elementTypes, minLength, hasRestElement);
             if (includePatternInType) {
                 result = cloneTypeReference(result);
                 result.pattern = pattern;
@@ -12076,6 +12082,12 @@ namespace ts {
             return isTupleType(type) || !!getPropertyOfType(type, "0" as __String);
         }
 
+        function getTupleElementType(type: Type, index: number) {
+            return isTupleType(type) ?
+                index < getLengthOfTupleType(type) ? type.typeArguments![index] : getRestTypeOfTupleType(type) :
+                getTypeOfPropertyOfType(type, "" + index as __String);
+        }
+
         function isNeitherUnitTypeNorNever(type: Type): boolean {
             return !(type.flags & (TypeFlags.Unit | TypeFlags.Never));
         }
@@ -13471,7 +13483,7 @@ namespace ts {
         }
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
-            return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index as __String) ||
+            return isTupleLikeType(type) && getTupleElementType(type, index) ||
                 checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) ||
                 errorType;
         }
@@ -15993,11 +16005,12 @@ namespace ts {
 
         function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
             const elements = node.elements;
+            const elementCount = elements.length;
             let hasNonEndingSpreadElement = false;
             const elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
             const contextualType = getApparentTypeOfContextualType(node);
-            for (let index = 0; index < elements.length; index++) {
+            for (let index = 0; index < elementCount; index++) {
                 const e = elements[index];
                 if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElement) {
                     // Given the following situation:
@@ -16024,13 +16037,17 @@ namespace ts {
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
                     elementTypes.push(type);
                 }
-                hasNonEndingSpreadElement = hasNonEndingSpreadElement || (index < elements.length - 1 && e.kind === SyntaxKind.SpreadElement);
+                if (index < elementCount - 1 && e.kind === SyntaxKind.SpreadElement) {
+                    hasNonEndingSpreadElement = true;
+                }
             }
             if (!hasNonEndingSpreadElement) {
+                const hasRestElement = elementCount > 0 && elements[elementCount - 1].kind === SyntaxKind.SpreadElement;
+                const minLength = elementCount - (hasRestElement ? 1 : 0);
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
-                if (inDestructuringPattern && elementTypes.length) {
-                    const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes));
+                if (inDestructuringPattern && minLength > 0) {
+                    const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasRestElement));
                     type.pattern = node;
                     return type;
                 }
@@ -16038,27 +16055,30 @@ namespace ts {
                     const pattern = contextualType.pattern;
                     // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
                     // tuple type with the corresponding binding or assignment element types to make the lengths equal.
-                    if (pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
+                    if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
                         const patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
-                        for (let i = elementTypes.length; i < patternElements.length; i++) {
-                            const patternElement = patternElements[i];
-                            if (hasDefaultValue(patternElement)) {
+                        for (let i = elementCount; i < patternElements.length; i++) {
+                            const e = patternElements[i];
+                            if (hasDefaultValue(e)) {
                                 elementTypes.push((<TypeReference>contextualType).typeArguments![i]);
                             }
-                            else {
-                                if (patternElement.kind !== SyntaxKind.OmittedExpression) {
-                                    error(patternElement, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                            else if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken || e.kind === SyntaxKind.SpreadElement)) {
+                                if (e.kind !== SyntaxKind.OmittedExpression) {
+                                    error(e, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
                                 }
                                 elementTypes.push(strictNullChecks ? implicitNeverType : undefinedWideningType);
                             }
                         }
                     }
-                    const hasSpreadElement = elements.length > 0 && elements[elements.length - 1].kind === SyntaxKind.SpreadElement;
-                    return createTupleType(elementTypes, elementTypes.length - (hasSpreadElement ? 1 : 0), hasSpreadElement);
+                    return createTupleType(elementTypes, minLength, hasRestElement);
                 }
             }
+            return getArrayLiteralType(elementTypes, UnionReduction.Subtype);
+        }
+
+        function getArrayLiteralType(elementTypes: Type[], unionReduction = UnionReduction.Literal) {
             return createArrayType(elementTypes.length ?
-                getUnionType(elementTypes, UnionReduction.Subtype) :
+                getUnionType(elementTypes, unionReduction) :
                 strictNullChecks ? implicitNeverType : undefinedWideningType);
         }
 
@@ -20418,24 +20438,20 @@ namespace ts {
             if (element.kind !== SyntaxKind.OmittedExpression) {
                 if (element.kind !== SyntaxKind.SpreadElement) {
                     const propName = "" + elementIndex as __String;
-                    const type = isTypeAny(sourceType)
-                        ? sourceType
-                        : isTupleLikeType(sourceType)
-                            ? getTypeOfPropertyOfType(sourceType, propName)
-                            : elementType;
+                    const type = isTypeAny(sourceType) ? sourceType :
+                        isTupleLikeType(sourceType) ? getTupleElementType(sourceType, elementIndex) :
+                        elementType;
                     if (type) {
                         return checkDestructuringAssignment(element, type, checkMode);
                     }
+                    // We still need to check element expression here because we may need to set appropriate flag on the expression
+                    // such as NodeCheckFlags.LexicalThis on "this"expression.
+                    checkExpression(element);
+                    if (isTupleType(sourceType)) {
+                        error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), getTypeReferenceArity(<TypeReference>sourceType), elements.length);
+                    }
                     else {
-                        // We still need to check element expression here because we may need to set appropriate flag on the expression
-                        // such as NodeCheckFlags.LexicalThis on "this"expression.
-                        checkExpression(element);
-                        if (isTupleType(sourceType)) {
-                            error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), getTypeReferenceArity(<TypeReference>sourceType), elements.length);
-                        }
-                        else {
-                            error(element, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName as string);
-                        }
+                        error(element, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName as string);
                     }
                 }
                 else {
@@ -20449,7 +20465,10 @@ namespace ts {
                         }
                         else {
                             checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
-                            return checkDestructuringAssignment(restExpression, createArrayType(elementType), checkMode);
+                            const type = isTupleType(sourceType) ?
+                                getArrayLiteralType((sourceType.typeArguments || emptyArray).slice(elementIndex, getTypeReferenceArity(sourceType))) :
+                                createArrayType(elementType);
+                            return checkDestructuringAssignment(restExpression, type, checkMode);
                         }
                     }
                 }
