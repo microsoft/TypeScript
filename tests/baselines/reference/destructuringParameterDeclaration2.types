@@ -143,7 +143,7 @@ function c5([a, b, [[c]]]) { }
 >c : any
 
 function c6([a, b, [[c = 1]]]) { }
->c6 : ([a, b, [[c]]]: [any, any, [[number]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
 >a : any
 >b : any
 >c : number
@@ -193,7 +193,7 @@ c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
 
 c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
 >c6([1, 2, [["string"]]]) : void
->c6 : ([a, b, [[c]]]: [any, any, [[number]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
 >[1, 2, [["string"]]] : (number | string[][])[]
 >1 : 1
 >2 : 2
