@@ -497,6 +497,7 @@ declare namespace ts {
          */
         escapedText: __String;
         originalKeywordKind?: SyntaxKind;
+        isPrivateName: boolean;
         isInJSDocNamespace?: boolean;
     }
     interface TransientIdentifier extends Identifier {

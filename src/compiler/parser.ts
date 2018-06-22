@@ -1329,6 +1329,7 @@ namespace ts {
                 if (token() !== SyntaxKind.Identifier) {
                     node.originalKeywordKind = token();
                 }
+                node.isPrivateName = !!(scanner.getTokenFlags() & TokenFlags.PrivateName);
                 node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
                 nextToken();
                 return finishNode(node);

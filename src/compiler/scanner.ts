@@ -1723,6 +1723,24 @@ namespace ts {
                         error(Diagnostics.Invalid_character);
                         pos++;
                         return token = SyntaxKind.Unknown;
+                    case CharacterCodes.hash:
+                        pos++;
+                        if (
+                            languageVersion === ScriptTarget.ESNext
+                            && isIdentifierStart(ch = text.charCodeAt(pos), languageVersion)
+                        ) {
+                            tokenFlags |= TokenFlags.PrivateName;
+                            pos++;
+                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos), languageVersion)) pos++;
+                            tokenValue = text.substring(tokenPos, pos);
+                            if (ch === CharacterCodes.backslash) {
+                                tokenValue += scanIdentifierParts();
+                            }
+                            return token = SyntaxKind.Identifier;
+                        }
+                        error(Diagnostics.Invalid_character);
+                        // no `pos++` because already advanced at beginning of this `case` statement
+                        return token = SyntaxKind.Unknown;
                     default:
                         if (isIdentifierStart(ch, languageVersion)) {
                             pos++;

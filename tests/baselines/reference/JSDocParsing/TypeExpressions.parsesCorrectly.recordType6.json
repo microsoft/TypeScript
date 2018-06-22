@@ -14,6 +14,7 @@
                 "pos": 2,
                 "end": 5,
                 "flags": "JSDoc",
+                "isPrivateName": false,
                 "escapedText": "foo"
             }
         },
@@ -27,6 +28,7 @@
                 "pos": 6,
                 "end": 10,
                 "flags": "JSDoc",
+                "isPrivateName": false,
                 "escapedText": "bar"
             },
             "type": {

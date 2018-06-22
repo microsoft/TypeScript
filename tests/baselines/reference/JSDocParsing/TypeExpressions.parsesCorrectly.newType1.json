@@ -15,6 +15,7 @@
                 "end": 13,
                 "flags": "JSDoc",
                 "originalKeywordKind": "NewKeyword",
+                "isPrivateName": false,
                 "escapedText": "new"
             },
             "type": {
@@ -32,6 +33,7 @@
                         "pos": 14,
                         "end": 15,
                         "flags": "JSDoc",
+                        "isPrivateName": false,
                         "escapedText": "a"
                     },
                     "right": {
@@ -39,6 +41,7 @@
                         "pos": 16,
                         "end": 17,
                         "flags": "JSDoc",
+                        "isPrivateName": false,
                         "escapedText": "b"
                     }
                 }

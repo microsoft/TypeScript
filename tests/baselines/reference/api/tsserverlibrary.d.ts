@@ -1056,6 +1056,7 @@ declare namespace ts {
          */
         escapedText: __String;
         originalKeywordKind?: SyntaxKind;
+        isPrivateName: boolean;
         autoGenerateFlags?: GeneratedIdentifierFlags;
         autoGenerateId?: number;
         isInJSDocNamespace?: boolean;
@@ -1573,6 +1574,7 @@ declare namespace ts {
         BinarySpecifier = 128,
         OctalSpecifier = 256,
         ContainsSeparator = 512,
+        PrivateName = 1024,
         BinaryOrOctalSpecifier = 384,
         NumericLiteralFlags = 1008
     }
