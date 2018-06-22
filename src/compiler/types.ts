@@ -2668,6 +2668,13 @@ namespace ts {
         readFile(path: string): string | undefined;
     }
 
+    /**
+     * Branded string for keeping track of when we've turned an ambiguous path
+     * specified like "./blah" to an absolute path to an actual
+     * tsconfig file, e.g. "/root/blah/tsconfig.json"
+     */
+    export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
+
     export type WriteFileCallback = (
         fileName: string,
         data: string,
@@ -2854,7 +2861,7 @@ namespace ts {
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
-        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
+        getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
@@ -2969,7 +2976,7 @@ namespace ts {
          */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
-        getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
+        getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
@@ -3066,6 +3073,7 @@ namespace ts {
         Subtype
     }
 
+    // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
     export const enum NodeBuilderFlags {
         None                                    = 0,
         // Options
@@ -3330,7 +3338,7 @@ namespace ts {
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         isLateBound(node: Declaration): node is LateBoundDeclaration;
-        collectLinkedAliases(node: Identifier): Node[] | undefined;
+        collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
         isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
@@ -3734,7 +3742,7 @@ namespace ts {
         symbol: Symbol;                  // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
-        aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
         /* @internal */
         wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
     }
@@ -3828,7 +3836,7 @@ namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments?: Type[];  // Type reference type arguments (undefined if none)
+        typeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
     }
 
     /* @internal */
@@ -3905,8 +3913,8 @@ namespace ts {
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;             // Properties by name
         properties: Symbol[];             // Properties
-        callSignatures: Signature[];      // Call signatures of type
-        constructSignatures: Signature[]; // Construct signatures of type
+        callSignatures: ReadonlyArray<Signature>;      // Call signatures of type
+        constructSignatures: ReadonlyArray<Signature>; // Construct signatures of type
         stringIndexInfo?: IndexInfo;      // String indexing info
         numberIndexInfo?: IndexInfo;      // Numeric indexing info
     }
@@ -4031,8 +4039,8 @@ namespace ts {
 
     export interface Signature {
         declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
-        typeParameters?: TypeParameter[];   // Type parameters (undefined if non-generic)
-        parameters: Symbol[];               // Parameters
+        typeParameters?: ReadonlyArray<TypeParameter>;   // Type parameters (undefined if non-generic)
+        parameters: ReadonlyArray<Symbol>;               // Parameters
         /* @internal */
         thisParameter?: Symbol;             // symbol of this-type parameter
         /* @internal */
@@ -4131,11 +4139,11 @@ namespace ts {
 
     /* @internal */
     export interface InferenceContext extends TypeMapper {
-        typeParameters: TypeParameter[];    // Type parameters for which inferences are made
-        signature?: Signature;              // Generic signature for which inferences are made (if any)
-        inferences: InferenceInfo[];        // Inferences made for each type parameter
-        flags: InferenceFlags;              // Inference flags
-        compareTypes: TypeComparer;         // Type comparer function
+        typeParameters: ReadonlyArray<TypeParameter>; // Type parameters for which inferences are made
+        signature?: Signature;                        // Generic signature for which inferences are made (if any)
+        inferences: InferenceInfo[];                  // Inferences made for each type parameter
+        flags: InferenceFlags;                        // Inference flags
+        compareTypes: TypeComparer;                   // Type comparer function
     }
 
     /* @internal */
@@ -4649,6 +4657,15 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }
+
+    export interface UpToDateHost {
+        fileExists(fileName: string): boolean;
+        getModifiedTime(fileName: string): Date;
+        getUnchangedTime?(fileName: string): Date | undefined;
+        getLastStatus?(fileName: string): UpToDateStatus | undefined;
+        setLastStatus?(fileName: string, status: UpToDateStatus): void;
+        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
     }
 
     export interface ModuleResolutionHost {

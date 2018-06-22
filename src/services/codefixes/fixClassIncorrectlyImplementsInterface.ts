@@ -71,7 +71,7 @@ namespace ts.codefix {
     }
 
     function getHeritageClauseSymbolTable (classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
-        const heritageClauseNode = getClassExtendsHeritageClauseElement(classDeclaration);
+        const heritageClauseNode = getEffectiveBaseTypeNode(classDeclaration);
         if (!heritageClauseNode) return createSymbolTable();
         const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as InterfaceType;
         const heritageClauseTypeSymbols = checker.getPropertiesOfType(heritageClauseType);

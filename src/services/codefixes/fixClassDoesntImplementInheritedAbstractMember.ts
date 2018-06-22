@@ -33,7 +33,7 @@ namespace ts.codefix {
     }
 
     function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
-        const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration)!;
+        const extendsNode = getEffectiveBaseTypeNode(classDeclaration)!;
         const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode)!;
 
         // Note that this is ultimately derived from a map indexed by symbol names,
