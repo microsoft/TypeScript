@@ -125,10 +125,11 @@ namespace ts {
                         // TODO:GH#18217
                         ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
                         : getSourceFileToImport(importLiteral, sourceFile, program, host, oldToNew);
-                    // If neither the importing source file nor the imported file moved, do nothing.
-                    return toImport === undefined || !toImport.updated && !importingSourceFileMoved
-                        ? undefined
-                        : moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, preferences);
+
+                    // Need an update if the imported file moved, or the importing file moved and was using a relative path.
+                    return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
+                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, preferences)
+                        : undefined;
                 });
         }
     }
