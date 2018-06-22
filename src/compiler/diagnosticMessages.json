@@ -4419,7 +4419,7 @@
         "category": "Message",
         "code": 95060
     },
-    "Fix all missing imports": {
+    "Add all missing imports": {
         "category": "Message",
         "code": 95061
     }

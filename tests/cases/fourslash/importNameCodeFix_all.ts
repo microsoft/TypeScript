@@ -35,7 +35,7 @@
 goTo.file("/user.ts");
 verify.codeFixAll({
     fixId: "fixMissingImport",
-    fixAllDescription: "Fix all missing imports",
+    fixAllDescription: "Add all missing imports",
     newFileContent:
 // TODO: GH#25135 (should import 'e')
 `import bd, * as b from "./b";

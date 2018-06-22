@@ -414,7 +414,7 @@ namespace ts.codefix {
         const changes = textChanges.ChangeTracker.with(context, tracker => {
             diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, quotePreference);
         });
-        return createCodeFixAction("import", changes, diag, importFixId, Diagnostics.Fix_all_missing_imports);
+        return createCodeFixAction("import", changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
     }
     function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, quotePreference: QuotePreference): DiagnosticAndArguments {
         switch (fix.kind) {
