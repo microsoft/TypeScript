@@ -36,9 +36,8 @@ namespace ts {
                     if (checker.isPromiseLikeType(returnType)) {
                         // collect all the return statements
                         // check that a property access expression exists in there and that it is a handler
-                        const retStmts: ReturnStatement[] = [];
-                        getReturnStmts(node, retStmts);
-                        if(retStmts.length > 0){
+                        const retStmts = getReturnStatements(node);
+                        if (retStmts.length > 0) {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
                         }
                     }
@@ -124,7 +123,9 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    function getReturnStmts(node: Node, retStmts: ReturnStatement[]) {
+    function getReturnStatements(node: Node): ReturnStatement[] {
+
+        const retStmts: ReturnStatement[] = [];
         forEachChild(node, visit);
 
         function visit(node: Node) {
@@ -148,5 +149,6 @@ namespace ts {
 
             forEachChild(node, visit);
         }
+        return retStmts;
     }
 }
