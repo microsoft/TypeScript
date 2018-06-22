@@ -6226,7 +6226,7 @@ namespace ts {
                 /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes);
         }
 
-        function getExpandedParameters(sig: Signature): Symbol[] {
+        function getExpandedParameters(sig: Signature): ReadonlyArray<Symbol> {
             if (sig.hasRestParameter) {
                 const restIndex = sig.parameters.length - 1;
                 const restParameter = sig.parameters[restIndex];
