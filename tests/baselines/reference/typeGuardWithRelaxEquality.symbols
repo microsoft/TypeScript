@@ -1,0 +1,128 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardWithRelaxEquality.ts ===
+// Github issue #24991
+function test(level: number | string):number {
+>test : Symbol(test, Decl(typeGuardWithRelaxEquality.ts, 0, 0))
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+
+    if (level == +level) {
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+
+        const q2 = level; // number | string
+>q2 : Symbol(q2, Decl(typeGuardWithRelaxEquality.ts, 3, 13))
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+
+        return level;
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+    }
+    if (level === +level + 1) {
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+
+        const q2 = level;
+>q2 : Symbol(q2, Decl(typeGuardWithRelaxEquality.ts, 7, 13))
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+
+        return level;
+>level : Symbol(level, Decl(typeGuardWithRelaxEquality.ts, 1, 14))
+    }
+    return 0;
+}
+alert(test(5) + 1);
+>alert : Symbol(alert, Decl(lib.dom.d.ts, --, --))
+>test : Symbol(test, Decl(typeGuardWithRelaxEquality.ts, 0, 0))
+
+alert(test("5") + 1)
+>alert : Symbol(alert, Decl(lib.dom.d.ts, --, --))
+>test : Symbol(test, Decl(typeGuardWithRelaxEquality.ts, 0, 0))
+
+declare const a: string | number | boolean | object | symbol | null | undefined;
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+
+declare const s: symbol;
+>s : Symbol(s, Decl(typeGuardWithRelaxEquality.ts, 16, 13))
+
+declare const str: string;
+>str : Symbol(str, Decl(typeGuardWithRelaxEquality.ts, 17, 13))
+
+declare const num: number;
+>num : Symbol(num, Decl(typeGuardWithRelaxEquality.ts, 18, 13))
+
+declare const bool: boolean;
+>bool : Symbol(bool, Decl(typeGuardWithRelaxEquality.ts, 19, 13))
+
+if (a == 1) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 22, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == num) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+>num : Symbol(num, Decl(typeGuardWithRelaxEquality.ts, 18, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 25, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == '') {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 28, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == str) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+>str : Symbol(str, Decl(typeGuardWithRelaxEquality.ts, 17, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 31, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == false) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 34, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == bool) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+>bool : Symbol(bool, Decl(typeGuardWithRelaxEquality.ts, 19, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 37, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == {}) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 40, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == s) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+>s : Symbol(s, Decl(typeGuardWithRelaxEquality.ts, 16, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 43, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == null) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 46, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
+if (a == undefined) {
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+>undefined : Symbol(undefined)
+
+    const t = a
+>t : Symbol(t, Decl(typeGuardWithRelaxEquality.ts, 49, 9))
+>a : Symbol(a, Decl(typeGuardWithRelaxEquality.ts, 15, 13))
+}
