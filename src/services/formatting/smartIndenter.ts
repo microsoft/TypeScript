@@ -34,8 +34,8 @@ namespace ts.formatting {
 
             const precedingToken = findPrecedingToken(position, sourceFile);
 
-            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true, precedingToken || null); // tslint:disable-line:no-null-keyword
-            if (enclosingCommentRange) {
+            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null); // tslint:disable-line:no-null-keyword
+            if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
                 return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
             }
 
