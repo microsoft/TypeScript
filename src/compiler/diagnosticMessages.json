@@ -4418,5 +4418,13 @@
     "Remove braces from arrow function": {
         "category": "Message",
         "code": 95060
+    },
+    "Add missing enum member '{0}'": {
+        "category": "Message",
+        "code": 95061
+    },
+    "Add all missing enum members": {
+        "category": "Message",
+        "code": 95062
     }
 }

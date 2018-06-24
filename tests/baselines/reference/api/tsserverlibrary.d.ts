@@ -5914,6 +5914,8 @@ declare namespace ts {
         Add_or_remove_braces_in_an_arrow_function: DiagnosticMessage;
         Add_braces_to_arrow_function: DiagnosticMessage;
         Remove_braces_from_arrow_function: DiagnosticMessage;
+        Add_missing_enum_member_0: DiagnosticMessage;
+        Add_all_missing_enum_members: DiagnosticMessage;
     };
 }
 declare namespace ts {
