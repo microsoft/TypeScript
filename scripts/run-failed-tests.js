@@ -80,10 +80,9 @@ proc.on('exit', (code, signal) => {
     });
 });
 
-// terminate children.
 process.on('SIGINT', () => {
-    proc.kill('SIGINT'); // calls runner.abort()
-    proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+    proc.kill('SIGINT');
+    proc.kill('SIGTERM');
 });
 
 function escapeRegExp(pattern) {

@@ -298,8 +298,7 @@ gulp.task(runJs, /*help*/ false, [typescriptServicesJs, tsserverlibraryDts], () 
 
 gulp.task(
     "tests",
-        if (tests || runners || light || testTimeout || taskConfigsFolder) {
-            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout);
+    "Builds the test infrastructure using the built compiler",
     [runJs]);
 
 gulp.task(
