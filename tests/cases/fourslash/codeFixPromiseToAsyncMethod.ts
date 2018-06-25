@@ -20,7 +20,7 @@ verify.codeFix({
     newFileContent:
 `class Parser {
     async function f():Promise<void> {
-        let result = fetch('http://yahoo.com');
+        let result = await fetch('http://yahoo.com');
         return console.log(result);
     }
 }`,
