@@ -14213,6 +14213,7 @@ namespace ts {
                 if (!switchTypes.length) {
                     return type;
                 }
+                type = getBaseConstraintOfType(type) || type;
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
                 const discriminantType = getUnionType(clauseTypes);

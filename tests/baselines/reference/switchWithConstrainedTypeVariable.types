@@ -16,7 +16,7 @@ function function1<T extends 'a' | 'b'>(key: T) {
       key.toLowerCase();
 >key.toLowerCase() : string
 >key.toLowerCase : () => string
->key : T
+>key : "a"
 >toLowerCase : () => string
 
       break;
@@ -24,10 +24,56 @@ function function1<T extends 'a' | 'b'>(key: T) {
       key.toLowerCase();
 >key.toLowerCase() : string
 >key.toLowerCase : () => string
->key : T
+>key : "b"
 >toLowerCase : () => string
 
       break;
   }
 }
+
+// #20375
+
+declare var n: never;
+>n : never
+
+declare function never(never: never): never;
+>never : (never: never) => never
+>never : never
+
+function f<T extends 'a' | 'b' | 'c'>(t: T): void {
+>f : <T extends "a" | "b" | "c">(t: T) => void
+>T : T
+>t : T
+>T : T
+
+    switch (t) {
+>t : T
+
+        // in a/b/c branches, assignment should fail as t narrows to a/b/c
+        // in default branch, assignment should be fine
+        case 'a': n = t; break;
+>'a' : "a"
+>n = t : "a"
+>n : never
+>t : "a"
+
+        case 'b': n = t; break;
+>'b' : "b"
+>n = t : "b"
+>n : never
+>t : "b"
+
+        case 'c': n = t; break;
+>'c' : "c"
+>n = t : "c"
+>n : never
+>t : "c"
+
+        default: n = t; break;
+>n = t : never
+>n : never
+>t : never
+    }
+}
+
 

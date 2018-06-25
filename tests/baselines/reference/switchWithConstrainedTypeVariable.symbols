@@ -27,3 +27,42 @@ function function1<T extends 'a' | 'b'>(key: T) {
   }
 }
 
+// #20375
+
+declare var n: never;
+>n : Symbol(n, Decl(switchWithConstrainedTypeVariable.ts, 15, 11))
+
+declare function never(never: never): never;
+>never : Symbol(never, Decl(switchWithConstrainedTypeVariable.ts, 15, 21))
+>never : Symbol(never, Decl(switchWithConstrainedTypeVariable.ts, 16, 23))
+
+function f<T extends 'a' | 'b' | 'c'>(t: T): void {
+>f : Symbol(f, Decl(switchWithConstrainedTypeVariable.ts, 16, 44))
+>T : Symbol(T, Decl(switchWithConstrainedTypeVariable.ts, 17, 11))
+>t : Symbol(t, Decl(switchWithConstrainedTypeVariable.ts, 17, 38))
+>T : Symbol(T, Decl(switchWithConstrainedTypeVariable.ts, 17, 11))
+
+    switch (t) {
+>t : Symbol(t, Decl(switchWithConstrainedTypeVariable.ts, 17, 38))
+
+        // in a/b/c branches, assignment should fail as t narrows to a/b/c
+        // in default branch, assignment should be fine
+        case 'a': n = t; break;
+>n : Symbol(n, Decl(switchWithConstrainedTypeVariable.ts, 15, 11))
+>t : Symbol(t, Decl(switchWithConstrainedTypeVariable.ts, 17, 38))
+
+        case 'b': n = t; break;
+>n : Symbol(n, Decl(switchWithConstrainedTypeVariable.ts, 15, 11))
+>t : Symbol(t, Decl(switchWithConstrainedTypeVariable.ts, 17, 38))
+
+        case 'c': n = t; break;
+>n : Symbol(n, Decl(switchWithConstrainedTypeVariable.ts, 15, 11))
+>t : Symbol(t, Decl(switchWithConstrainedTypeVariable.ts, 17, 38))
+
+        default: n = t; break;
+>n : Symbol(n, Decl(switchWithConstrainedTypeVariable.ts, 15, 11))
+>t : Symbol(t, Decl(switchWithConstrainedTypeVariable.ts, 17, 38))
+    }
+}
+
+
