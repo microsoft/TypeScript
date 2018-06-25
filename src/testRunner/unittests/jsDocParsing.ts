@@ -312,7 +312,7 @@ namespace ts {
 `/**
  * {@link first link}
  * Inside {@link link text} thing
- * @see {@link second link text}
+ * @see {@link second link text} and {@link Foo|a foo} as well.
  */`);
             });
         });

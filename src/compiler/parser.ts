@@ -6368,25 +6368,11 @@ namespace ts {
                         indent = 0;
                     }
                     loop: while (true) {
-                        let hadBrace = false;
                         switch (token()) {
-                            case SyntaxKind.OpenBraceToken:
-                                // probably just use lookahead for now
-                                if ((state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) && // also in comment state too (that is, don't check state)
-                                    lookAhead(() => nextJSDocToken() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextJSDocToken()) && scanner.getTokenText() === "link")) {
-                                    nextJSDocToken();
-                                    hadBrace = true;
-                                }
-                                else {
-                                    state = JSDocState.SavingComments;
-                                    pushComment(scanner.getTokenText());
-                                    break;
-                                }
-                                // falls through
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
-                                    addTag(parseTag(indent, hadBrace));
+                                    addTag(parseTag(indent));
                                     // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
                                     // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
@@ -6494,7 +6480,7 @@ namespace ts {
                     }
                 }
 
-                function parseTag(indent: number, hadBrace: boolean) {
+                function parseTag(indent: number) {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const atToken = <AtToken>createNode(SyntaxKind.AtToken, scanner.getTokenPos());
                     atToken.end = scanner.getTextPos();
@@ -6535,9 +6521,6 @@ namespace ts {
                             break;
                         case "callback":
                             tag = parseCallbackTag(atToken, tagName, indent);
-                            break;
-                        case "link":
-                            tag = parseLinkTag(atToken, tagName, hadBrace);
                             break;
                         default:
                             tag = parseUnknownTag(atToken, tagName);
@@ -6590,6 +6573,16 @@ namespace ts {
                                     }
                                     indent += whitespace.length;
                                 }
+                                break;
+                            case SyntaxKind.OpenBraceToken:
+                                state = JSDocState.SavingComments;
+                                if (lookAhead(() => nextJSDocToken() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextJSDocToken()) && scanner.getTokenText() === "link")) {
+                                    pushComment(scanner.getTokenText());
+                                    nextJSDocToken();
+                                    pushComment(scanner.getTokenText());
+                                    nextJSDocToken();
+                                }
+                                pushComment(scanner.getTokenText());
                                 break;
                             case SyntaxKind.AsteriskToken:
                                 if (state === JSDocState.BeginningOfLine) {
@@ -6889,7 +6882,7 @@ namespace ts {
                     }
                     const returnTag = tryParse(() => {
                         if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
-                            const tag = parseTag(indent, /*hadBrace*/ false);
+                            const tag = parseTag(indent);
                             if (tag && tag.kind === SyntaxKind.JSDocReturnTag) {
                                 return tag as JSDocReturnTag;
                             }
@@ -6912,24 +6905,6 @@ namespace ts {
                             rightNode = rightNode.body;
                         }
                     }
-                }
-
-                function parseLinkTag(atToken: AtToken, tagName: Identifier, hadBrace: boolean): JSDocLinkTag {
-                    const linkTag = createNode(SyntaxKind.JSDocLinkTag, atToken.pos) as JSDocLinkTag;
-                    linkTag.atToken = atToken;
-                    linkTag.tagName = tagName;
-                    let s = scanner.getTokenText();
-                    let i = 0
-                    nextJSDocToken();
-                    while (i < 44 && (token() !== SyntaxKind.CloseBraceToken && (hadBrace || token() !== SyntaxKind.NewLineTrivia))) {
-                        s += scanner.getTokenText();
-                        nextJSDocToken();
-                        i++;
-                        Debug.assert(i < 1000, sourceFile.fileName);
-                    }
-                    linkTag.title = "COMPLETEL UNPSRED";
-                    linkTag.url = s;
-                    return finishNode(linkTag);
                 }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {

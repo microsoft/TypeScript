@@ -871,21 +871,20 @@ declare namespace ts {
         JSDocAugmentsTag = 290,
         JSDocClassTag = 291,
         JSDocCallbackTag = 292,
-        JSDocLinkTag = 293,
-        JSDocParameterTag = 294,
-        JSDocReturnTag = 295,
-        JSDocThisTag = 296,
-        JSDocTypeTag = 297,
-        JSDocTemplateTag = 298,
-        JSDocTypedefTag = 299,
-        JSDocPropertyTag = 300,
-        SyntaxList = 301,
-        NotEmittedStatement = 302,
-        PartiallyEmittedExpression = 303,
-        CommaListExpression = 304,
-        MergeDeclarationMarker = 305,
-        EndOfDeclarationMarker = 306,
-        Count = 307,
+        JSDocParameterTag = 293,
+        JSDocReturnTag = 294,
+        JSDocThisTag = 295,
+        JSDocTypeTag = 296,
+        JSDocTemplateTag = 297,
+        JSDocTypedefTag = 298,
+        JSDocPropertyTag = 299,
+        SyntaxList = 300,
+        NotEmittedStatement = 301,
+        PartiallyEmittedExpression = 302,
+        CommaListExpression = 303,
+        MergeDeclarationMarker = 304,
+        EndOfDeclarationMarker = 305,
+        Count = 306,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -912,9 +911,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 146,
         FirstJSDocNode = 278,
-        LastJSDocNode = 300,
+        LastJSDocNode = 299,
         FirstJSDocTagNode = 289,
-        LastJSDocTagNode = 300,
+        LastJSDocTagNode = 299,
         FirstContextualKeyword = 117,
         LastContextualKeyword = 145
     }
@@ -2179,11 +2178,6 @@ declare namespace ts {
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
         typeExpression: JSDocSignature;
-    }
-    interface JSDocLinkTag extends JSDocTag {
-        kind: SyntaxKind.JSDocLinkTag;
-        url?: string;
-        title: string;
     }
     interface JSDocSignature extends JSDocType, Declaration {
         kind: SyntaxKind.JSDocSignature;
