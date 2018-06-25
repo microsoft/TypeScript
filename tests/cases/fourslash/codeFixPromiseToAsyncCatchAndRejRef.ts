@@ -38,7 +38,7 @@ verify.codeFix({
         }
     }
     catch (err) {
-        return await catch_err(err);
+        return catch_err(err);
     }
 }
 
