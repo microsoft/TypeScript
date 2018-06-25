@@ -12,7 +12,8 @@ namespace ts.codefix {
     });
     function convertToAsyncAwait(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         // get the function declaration - returns a promise
-        const funcToConvert: FunctionLikeDeclaration = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeEndPosition*/ false)).valueDeclaration as FunctionLikeDeclaration;
+        const funcToConvert: FunctionLikeDeclaration = getSynthesizedDeepClone(getContainingFunction(getTokenAtPosition(sourceFile, position, /*includeEndPosition*/ false)) as FunctionLikeDeclaration);
+
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);
 
@@ -57,43 +58,47 @@ namespace ts.codefix {
     }
 
     function parseCatch(node: CallExpression, checker: TypeChecker): Statement[] {
-        const func = getSynthesizedDeepClone(node.arguments[0]);
+        const nodeClone = getSynthesizedDeepClone(node)
+        const func = getSynthesizedDeepClone(nodeClone.arguments[0]);
 
         let argName = getArgName(func, checker);
 
-        const tryBlock = createBlock(parseCallback(node.expression, checker, argName));
-        const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName, node, checker)));
+        const tryBlock = createBlock(parseCallback(nodeClone.expression, checker, argName));
+        const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName, nodeClone, checker)));
 
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
 
     function parseThen(node: CallExpression, checker: TypeChecker): Statement[] {
         const res = node.arguments[0];
-        const rej = node.arguments[1];
+        const rej = getSynthesizedDeepClone(node.arguments[1]);
         // TODO - what if this is a binding pattern and not an Identifier
         let argNameRes = getArgName(res, checker);
+        let nodeClone = getSynthesizedClone(node);
 
         if (rej) {
             const argNameRej = getArgName(rej, checker);
 
-            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes, node, checker)));
-            const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej, node, checker, /* isRej */ true)));
+            const tryBlock = createBlock(parseCallback(nodeClone.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes, nodeClone, checker)));
+            const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej, nodeClone, checker, /* isRej */ true)));
 
             return  [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
         else {
-            return parseCallback(node.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes, node, checker));
+            return parseCallback(nodeClone.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes, nodeClone, checker));
         }
     }
 
     function parsePromiseCall(node: CallExpression, argName?: string): Statement[] {
+        let nodeClone = getSynthesizedClone(node);
+
         let localArgName = argName;
         if (!localArgName) {
             localArgName = "val"; // fix this to maybe not always create a variable declaration if not necessary
         }
 
-        let varDecl = createVariableDeclaration(createIdentifier(localArgName), /*type*/ undefined, createAwait(node));
-        return argName ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(node))];
+        let varDecl = createVariableDeclaration(createIdentifier(localArgName), /*type*/ undefined, createAwait(nodeClone));
+        return argName ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(nodeClone))];
     }
 
     function getLastDotThen(node: Expression, checker: TypeChecker): CallExpression {
@@ -108,7 +113,6 @@ namespace ts.codefix {
         else {
             return getLastDotThen(node.parent as Expression, checker);
         }
-
     }
 
     function getCallbackBody(func: Node, argName: string, parent: CallExpression, checker: TypeChecker, isRej: boolean = false): NodeArray<Statement> {
@@ -125,6 +129,7 @@ namespace ts.codefix {
                 return createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(tempArgName, undefined, (createAwait(synthCall)))], NodeFlags.Let)))]);
 
             case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 if ((<FunctionDeclaration>func).body.kind === SyntaxKind.Block) {
                     return (<FunctionDeclaration>func).body.statements;
