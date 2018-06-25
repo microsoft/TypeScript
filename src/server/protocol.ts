@@ -14,7 +14,9 @@ namespace ts.server.protocol {
         GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
+        /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
         Completions = "completions",
+        CompletionInfo = "completionInfo",
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
@@ -625,9 +627,8 @@ namespace ts.server.protocol {
         arguments: GetEditsForFileRenameRequestArgs;
     }
 
-    // Note: The file from FileRequestArgs is just any file in the project.
-    // We will generate code changes for every file in that project, so the choice is arbitrary.
-    export interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+    /** Note: Paths may also be directories. */
+    export interface GetEditsForFileRenameRequestArgs {
         readonly oldFilePath: string;
         readonly newFilePath: string;
     }
@@ -1943,8 +1944,20 @@ namespace ts.server.protocol {
         source?: SymbolDisplayPart[];
     }
 
+    /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
     export interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
+    }
+
+    export interface CompletionInfoResponse extends Response {
+        body?: CompletionInfo;
+    }
+
+    export interface CompletionInfo {
+        readonly isGlobalCompletion: boolean;
+        readonly isMemberCompletion: boolean;
+        readonly isNewIdentifierLocation: boolean;
+        readonly entries: ReadonlyArray<CompletionEntry>;
     }
 
     export interface CompletionDetailsResponse extends Response {

@@ -421,6 +421,18 @@ namespace ts.projectSystem {
         return createTextSpan(start, substring.length);
     }
 
+    function protocolTextSpanFromSubstring(str: string, substring: string): protocol.TextSpan {
+        const start = str.indexOf(substring);
+        Debug.assert(start !== -1);
+        const lineStarts = computeLineStarts(str);
+        const toLocation = (pos: number) => lineAndCharacterToLocation(computeLineAndCharacterOfPosition(lineStarts, pos));
+        return { start: toLocation(start), end: toLocation(start + substring.length) };
+    }
+
+    function lineAndCharacterToLocation(lc: LineAndCharacter): protocol.Location {
+        return { line: lc.line + 1, offset: lc.character + 1 };
+    }
+
     /**
      * Test server cancellation token used to mock host token cancellation requests.
      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
@@ -464,14 +476,13 @@ namespace ts.projectSystem {
         }
     }
 
-    export function makeSessionRequest<T>(command: string, args: T) {
-        const newRequest: protocol.Request = {
+    export function makeSessionRequest<T>(command: string, args: T): protocol.Request {
+        return {
             seq: 0,
             type: "request",
             command,
             arguments: args
         };
-        return newRequest;
     }
 
     export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session) {
@@ -3097,7 +3108,7 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [file.path]);
             checkProjectActualFiles(project, [file.path, libFile.path]);
 
-            assert.strictEqual(projectService.getDefaultProjectForFile(server.toNormalizedPath(file.path), /*ensureProject*/ true), project);
+            assert.strictEqual(projectService.ensureDefaultProjectForFile(server.toNormalizedPath(file.path)), project);
             const indexOfX = file.content.indexOf("x");
             assert.deepEqual(project.getLanguageService(/*ensureSynchronized*/ true).getQuickInfoAtPosition(file.path, indexOfX), {
                 kind: ScriptElementKind.variableElement,
@@ -8681,6 +8692,49 @@ export const x = 10;`
                     newText: "./new",
                 }],
             }]);
+        });
+
+        it("works with multiple projects", () => {
+            const aUserTs: File = {
+                path: "/a/user.ts",
+                content: 'import { x } from "./old";',
+            };
+            const aOldTs: File = {
+                path: "/a/old.ts",
+                content: "export const x = 0;",
+            };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: "{}",
+            };
+            const bUserTs: File = {
+                path: "/b/user.ts",
+                content: 'import { x } from "../a/old";',
+            };
+            const bTsconfig: File = {
+                path: "/b/tsconfig.json",
+                content: "{}",
+            };
+
+            const host = createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aUserTs, bUserTs], session);
+
+            const renameRequest = makeSessionRequest<protocol.GetEditsForFileRenameRequestArgs>(CommandNames.GetEditsForFileRename, {
+                oldFilePath: "/a/old.ts",
+                newFilePath: "/a/new.ts",
+            });
+            const response = session.executeCommand(renameRequest).response as protocol.GetEditsForFileRenameResponse["body"];
+            assert.deepEqual(response, [
+                {
+                    fileName: aUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(aUserTs.content, "./old"), newText: "./new" }],
+                },
+                {
+                    fileName: bUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(bUserTs.content, "../a/old"), newText: "../a/new" }],
+                },
+            ]);
         });
     });
 

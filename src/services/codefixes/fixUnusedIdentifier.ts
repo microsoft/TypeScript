@@ -173,8 +173,8 @@ namespace ts.codefix {
                 const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>parent.parent);
                 if (typeParameters.length === 1) {
                     const { pos, end } = cast(typeParameters, isNodeArray);
-                    const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ false);
-                    const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ false);
+                    const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ true);
+                    const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ true);
                     Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
                     Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
 

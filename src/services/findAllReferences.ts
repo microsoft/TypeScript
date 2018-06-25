@@ -590,6 +590,30 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    export function eachExportReference(
+        sourceFiles: ReadonlyArray<SourceFile>,
+        checker: TypeChecker,
+        cancellationToken: CancellationToken | undefined,
+        exportSymbol: Symbol,
+        exportingModuleSymbol: Symbol,
+        exportName: string,
+        isDefaultExport: boolean,
+        cb: (ref: Identifier) => void,
+    ): void {
+        const importTracker = createImportTracker(sourceFiles, arrayToSet(sourceFiles, f => f.fileName), checker, cancellationToken);
+        const { importSearches, indirectUsers } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
+        for (const [importLocation] of importSearches) {
+            cb(importLocation);
+        }
+        for (const indirectUser of indirectUsers) {
+            for (const node of getPossibleSymbolReferenceNodes(indirectUser, isDefaultExport ? "default" : exportName)) {
+                if (isIdentifier(node) && checker.getSymbolAtLocation(node) === exportSymbol) {
+                    cb(node);
+                }
+            }
+        }
+    }
+
     function shouldAddSingleReference(singleRef: Identifier | StringLiteral, state: State): boolean {
         if (!hasMatchingMeaning(singleRef, state)) return false;
         if (!state.options.isForRename) return true;
@@ -981,6 +1005,7 @@ namespace ts.FindAllReferences.Core {
 
     function getReferenceForShorthandProperty({ flags, valueDeclaration }: Symbol, search: Search, state: State): void {
         const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration)!;
+        const name = getNameOfDeclaration(valueDeclaration);
         /*
          * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
          * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
@@ -988,8 +1013,8 @@ namespace ts.FindAllReferences.Core {
          * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
          * position of property accessing, the referenceEntry of such position will be handled in the first case.
          */
-        if (!(flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-            addReference(getNameOfDeclaration(valueDeclaration), shorthandValueSymbol, state);
+        if (!(flags & SymbolFlags.Transient) && name && search.includes(shorthandValueSymbol)) {
+            addReference(name, shorthandValueSymbol, state);
         }
     }
 
