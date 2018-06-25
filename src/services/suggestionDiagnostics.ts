@@ -174,6 +174,7 @@ namespace ts {
 
             forEachChild(node, visit);
         }
+
         return retStmts;
     }
 }
