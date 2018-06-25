@@ -241,6 +241,10 @@ namespace ts.textChanges {
             return this;
         }
 
+        public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
+            this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
+        }
+
         public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
@@ -397,6 +401,9 @@ namespace ts.textChanges {
             else if (isParameter(before)) {
                 return {};
             }
+            else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
+                return { suffix: ", " };
+            }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
@@ -465,6 +472,10 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
+        public insertNodeAtEndOfList(sourceFile: SourceFile, list: NodeArray<Node>, newNode: Node): void {
+            this.insertNodeAt(sourceFile, list.end, newNode, { prefix: ", " });
+        }
+
         public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
             this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
@@ -501,6 +512,9 @@ namespace ts.textChanges {
 
                 case SyntaxKind.PropertyAssignment:
                     return { suffix: "," + this.newLineCharacter };
+
+                case SyntaxKind.ExportKeyword:
+                    return { prefix: " " };
 
                 case SyntaxKind.Parameter:
                     return {};

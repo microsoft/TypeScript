@@ -24,7 +24,10 @@ function createProject(tsConfigFileName, settings, options) {
 
     const project = tsConfigFileName === undefined ? tsc.createProject(localSettings) : tsc.createProject(tsConfigFileName, localSettings);
     const wrappedProject = /** @type {tsc.Project} */(() => {
-        const proc = child_process.fork(require.resolve("./main.js"));
+        const proc = child_process.fork(require.resolve("./main.js"), [], { 
+            // Prevent errors when debugging gulpfile due to the same debug port being passed to forked children.
+            execArgv: [] 
+        });
         /** @type {Duplex & { js?: Readable, dts?: Readable }} */
         const compileStream = new Duplex({
             objectMode: true,

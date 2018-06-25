@@ -481,14 +481,13 @@ namespace ts.projectSystem {
         }
     }
 
-    export function makeSessionRequest<T>(command: string, args: T) {
-        const newRequest: protocol.Request = {
+    export function makeSessionRequest<T>(command: string, args: T): protocol.Request {
+        return {
             seq: 0,
             type: "request",
             command,
             arguments: args
         };
-        return newRequest;
     }
 
     export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
@@ -3120,7 +3119,7 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [file.path]);
             checkProjectActualFiles(project, [file.path, libFile.path]);
 
-            assert.strictEqual(projectService.getDefaultProjectForFile(server.toNormalizedPath(file.path), /*ensureProject*/ true), project);
+            assert.strictEqual(projectService.ensureDefaultProjectForFile(server.toNormalizedPath(file.path)), project);
             const indexOfX = file.content.indexOf("x");
             assert.deepEqual(project.getLanguageService(/*ensureSynchronized*/ true).getQuickInfoAtPosition(file.path, indexOfX), {
                 kind: ScriptElementKind.variableElement,
@@ -8705,6 +8704,49 @@ export const x = 10;`
                 }],
             }]);
         });
+
+        it("works with multiple projects", () => {
+            const aUserTs: File = {
+                path: "/a/user.ts",
+                content: 'import { x } from "./old";',
+            };
+            const aOldTs: File = {
+                path: "/a/old.ts",
+                content: "export const x = 0;",
+            };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: "{}",
+            };
+            const bUserTs: File = {
+                path: "/b/user.ts",
+                content: 'import { x } from "../a/old";',
+            };
+            const bTsconfig: File = {
+                path: "/b/tsconfig.json",
+                content: "{}",
+            };
+
+            const host = createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aUserTs, bUserTs], session);
+
+            const renameRequest = makeSessionRequest<protocol.GetEditsForFileRenameRequestArgs>(CommandNames.GetEditsForFileRename, {
+                oldFilePath: "/a/old.ts",
+                newFilePath: "/a/new.ts",
+            });
+            const response = session.executeCommand(renameRequest).response as protocol.GetEditsForFileRenameResponse["body"];
+            assert.deepEqual(response, [
+                {
+                    fileName: aUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(aUserTs.content, "./old"), newText: "./new" }],
+                },
+                {
+                    fileName: bUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(bUserTs.content, "../a/old"), newText: "../a/new" }],
+                },
+            ]);
+        });
     });
 
     describe("tsserverProjectSystem document registry in project service", () => {
@@ -8800,48 +8842,54 @@ export const x = 10;`
         });
     });
 
+    function makeSampleProjects() {
+        const aTs: File = {
+            path: "/a/a.ts",
+            content: "export function a() {}",
+        };
+        const aTsconfig: File = {
+            path: "/a/tsconfig.json",
+            content: `{
+                "compilerOptions": {
+                    "outDir": "bin",
+                    "declaration": true,
+                    "declarationMap": true,
+                    "composite": true,
+                }
+            }`,
+        };
+
+        const bTs: File = {
+            path: "/b/b.ts",
+            content: 'import { a } from "../a/a";\na();',
+        };
+        const bTsconfig: File = {
+            path: "/b/tsconfig.json",
+            content: `{
+                "compilerOptions": {
+                    "outDir": "bin",
+                },
+                "references": [
+                    { "path": "../a" }
+                ]
+            }`,
+        };
+
+        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+        const session = createSession(host);
+
+        writeDeclarationFiles(aTs, host, session, [
+            // Need to mangle the sourceMappingURL part or it breaks the build
+            { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,kCAAsB"}' },
+            { name: "/a/bin/a.d.ts", text: `export declare function a(): void;\n//# source${""}MappingURL=a.d.ts.map` },
+        ]);
+
+        return { session, aTs, bTs };
+    }
+
     describe("tsserverProjectSystem project references", () => {
         it("goToDefinition", () => {
-            const aTs: File = {
-                path: "/a/a.ts",
-                content: "export function a() {}",
-            };
-            const aTsconfig: File = {
-                path: "/a/tsconfig.json",
-                content: `{
-                    "compilerOptions": {
-                        "outDir": "bin",
-                        "declaration": true,
-                        "declarationMap": true,
-                        "composite": true,
-                    }
-                }`,
-            };
-
-            const bTs: File = {
-                path: "/b/b.ts",
-                content: 'import { a } from "../a/a";\na();',
-            };
-            const bTsconfig: File = {
-                path: "/b/tsconfig.json",
-                content: `{
-                    "compilerOptions": {
-                        "outDir": "bin",
-                    },
-                    "references": [
-                        { "path": "../a" }
-                    ]
-                }`,
-            };
-
-            const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
-            const session = createSession(host);
-
-            writeDeclarationFiles(aTs, host, session, [
-                // Need to mangle the sourceMappingURL part or it breaks the build
-                { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,kCAAsB"}' },
-                { name: "/a/bin/a.d.ts", text: `export declare function a(): void;\n//# source${""}MappingURL=a.d.ts.map` },
-            ]);
+            const { session, aTs, bTs } = makeSampleProjects();
 
             openFilesForSession([bTs], session);
 

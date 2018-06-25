@@ -16,9 +16,8 @@ namespace ts {
     function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            const canonicalPath = getCanonicalFileName(path);
-            if (canonicalPath === canonicalOldPath) return newFileOrDirPath;
-            const suffix = tryRemoveDirectoryPrefix(canonicalPath, canonicalOldPath);
+            if (getCanonicalFileName(path) === canonicalOldPath) return newFileOrDirPath;
+            const suffix = tryRemoveDirectoryPrefix(path, canonicalOldPath, getCanonicalFileName);
             return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
         };
     }
@@ -126,10 +125,11 @@ namespace ts {
                         // TODO:GH#18217
                         ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
                         : getSourceFileToImport(importLiteral, sourceFile, program, host, oldToNew);
-                    // If neither the importing source file nor the imported file moved, do nothing.
-                    return toImport === undefined || !toImport.updated && !importingSourceFileMoved
-                        ? undefined
-                        : moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, preferences);
+
+                    // Need an update if the imported file moved, or the importing file moved and was using a relative path.
+                    return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
+                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, preferences)
+                        : undefined;
                 });
         }
     }
