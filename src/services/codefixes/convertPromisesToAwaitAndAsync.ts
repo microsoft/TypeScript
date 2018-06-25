@@ -33,16 +33,17 @@ namespace ts.codefix {
     }
 
     function returnsAPromise(node: CallExpression, checker: TypeChecker): boolean {
-        return checker.isPromiseLikeType(checker.getTypeAtLocation(node)) && (<CallExpression>node).expression.kind !== SyntaxKind.PropertyAccessExpression;
+        return checker.isPromiseLikeType(checker.getTypeAtLocation(node)) && 
+            !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
     }
 
-    function parseCallback(node: Expression, checker: TypeChecker, argName?: string, argUsed?: boolean): Statement[] {
+    function parseCallback(node: Expression, checker: TypeChecker, argName?: string): Statement[] {
         if (!node) {
             return;
         }
 
         if (node.kind === SyntaxKind.CallExpression && returnsAPromise(node as CallExpression, checker)) {
-            return parsePromiseCall(node as CallExpression, argName, argUsed);
+            return parsePromiseCall(node as CallExpression, argName);
         }
         else if (node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "then", checker)) {
             return parseThen(node as CallExpression, checker);
@@ -51,14 +52,16 @@ namespace ts.codefix {
             return parseCatch(node as CallExpression, checker);
         }
         else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return parseCallback((<PropertyAccessExpression>node).expression, checker, argName, argUsed);
+            return parseCallback((<PropertyAccessExpression>node).expression, checker, argName);
         }
     }
 
     function parseCatch(node: CallExpression, checker: TypeChecker): Statement[] {
-        const func = node.arguments[0];
-        const argName = getArgName(func, "arg", checker);
-        const tryBlock = createBlock(parseCallback(node.expression, checker, argName, argName !== "arg"));
+        const func = getSynthesizedDeepClone(node.arguments[0]);
+
+        let argName = getArgName(func, checker);
+
+        const tryBlock = createBlock(parseCallback(node.expression, checker, argName));
         const catchClause = createCatchClause(argName, createBlock(getCallbackBody(func, argName, node, checker)));
 
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
@@ -68,30 +71,30 @@ namespace ts.codefix {
         const res = node.arguments[0];
         const rej = node.arguments[1];
         // TODO - what if this is a binding pattern and not an Identifier
-        const argNameRes = getArgName(res, "val", checker);
+        let argNameRes = getArgName(res, checker);
 
         if (rej) {
-            const argNameRej = getArgName(rej, "e", checker);
+            const argNameRej = getArgName(rej, checker);
 
-            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes, node, checker)));
+            const tryBlock = createBlock(parseCallback(node.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes, node, checker)));
             const catchClause = createCatchClause(argNameRej, createBlock(getCallbackBody(rej, argNameRej, node, checker, /* isRej */ true)));
 
             return  [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
         else {
-            return parseCallback(node.expression, checker, argNameRes, argNameRes !== "val").concat(getCallbackBody(res, argNameRes, node, checker));
+            return parseCallback(node.expression, checker, argNameRes).concat(getCallbackBody(res, argNameRes, node, checker));
         }
     }
 
-    function parsePromiseCall(node: CallExpression, argName?: string, argUsed?: boolean): Statement[] {
-        if (!argName) {
-            argName = "val"; // fix this to maybe not always create a variable declaration if not necessary
+    function parsePromiseCall(node: CallExpression, argName?: string): Statement[] {
+        let localArgName = argName;
+        if (!localArgName) {
+            localArgName = "val"; // fix this to maybe not always create a variable declaration if not necessary
         }
 
-        let varDecl = createVariableDeclaration(createIdentifier(argName), /*type*/ undefined, createAwait(node));
-        return argUsed ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(node))];
+        let varDecl = createVariableDeclaration(createIdentifier(localArgName), /*type*/ undefined, createAwait(node));
+        return argName ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(node))];
     }
-
 
     function getLastDotThen(node: Expression, checker: TypeChecker): CallExpression {
         if (!node || !node.parent) {
@@ -118,7 +121,7 @@ namespace ts.codefix {
                 }
                 
                 let lastDotThen = getLastDotThen(parent, checker);
-                let tempArgName = lastDotThen ? getArgName(lastDotThen.arguments[0], "temp", checker) : argName;
+                let tempArgName = lastDotThen ? getArgName(lastDotThen.arguments[0], checker, "temp") : argName;
                 return createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(tempArgName, undefined, (createAwait(synthCall)))], NodeFlags.Let)))]);
 
             case SyntaxKind.FunctionDeclaration:
@@ -140,7 +143,7 @@ namespace ts.codefix {
         return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
     }
 
-    function getArgName(funcNode: Node, defaultVal: string, checker: TypeChecker): string {
+    function getArgName(funcNode: Node, checker: TypeChecker, defaultVal?: string): string {
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
             const name = (<Identifier>funcNode.parameters[0].name).text;
             if (name !== "_") {
