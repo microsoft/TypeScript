@@ -864,13 +864,9 @@ namespace ts {
         }
 
         function addJSDocComment<T extends HasJSDoc>(node: T): T {
-            const comments = getJSDocCommentRanges(node, sourceFile.text);
-            if (comments) {
-                for (const comment of comments) {
-                    node.jsDoc = append<JSDoc>(node.jsDoc, JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
-                }
-            }
-
+            Debug.assert(!node.jsDoc); // Should only be called once per node
+            const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceFile.text), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+            if (jsDoc.length) node.jsDoc = jsDoc;
             return node;
         }
 
