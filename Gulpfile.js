@@ -530,12 +530,17 @@ gulp.task(
     "Runs 'local'",
     ["local"]);
 
-// TODO(rbuckton): Investigate restoring gulp.watch() functionality.
-// gulp.task(
-//     "watch",
-//     "Watches the src/ directory for changes and executes runtests-parallel.",
-//     [],
-//     () => gulp.watch("src/**/*.*", ["runtests-parallel"]));
+gulp.task(
+    "watch-tsc",
+    "Watches for changes to the build inputs for built/local/tsc.js",
+    [typescriptServicesJs],
+    () => project.watch(tscProject, { typescript: "built" }));
+
+gulp.task(
+    "watch",
+    "Watches for changes to the build inputs for built/local/run.js executes runtests-parallel.",
+    [typescriptServicesJs],
+    () => project.watch(testRunnerProject, { typescript: "built" }, ["runtests-parallel"]));
 
 gulp.task("clean-built", /*help*/ false, ["clean:" + diagnosticInformationMapTs], () => del(["built"]));
 gulp.task(
