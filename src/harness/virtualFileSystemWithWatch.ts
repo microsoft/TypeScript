@@ -615,6 +615,13 @@ interface Array<T> {}`
             }
         }
 
+        removeFile(filePath: string) {
+            const path = this.toFullPath(filePath);
+            const currentEntry = this.fs.get(path) as FsFile;
+            Debug.assert(isFsFile(currentEntry));
+            this.removeFileOrFolder(currentEntry, returnFalse);
+        }
+
         removeFolder(folderPath: string, recursive?: boolean) {
             const path = this.toFullPath(folderPath);
             const currentEntry = this.fs.get(path) as FsFolder;

@@ -334,6 +334,11 @@ namespace ts.server {
         return project.dirty && project.updateGraph();
     }
 
+    type ScriptInfoOrVersion = ScriptInfo | ScriptInfoVersion;
+    function isScriptInfoVersion(infoOrVersion: ScriptInfoOrVersion): infoOrVersion is ScriptInfoVersion {
+        return (infoOrVersion as ScriptInfoVersion).svc !== undefined;
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -345,7 +350,7 @@ namespace ts.server {
         /**
          * Container of all known scripts
          */
-        private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        private readonly filenameToScriptInfo = createMap<ScriptInfoOrVersion>();
         // Set of all '.js' files ever opened.
         private readonly allJsFilesForOpenFileTelemetry = createMap<true>();
 
@@ -884,7 +889,7 @@ namespace ts.server {
 
             project.close();
             if (Debug.shouldAssert(AssertionLevel.Normal)) {
-                this.filenameToScriptInfo.forEach(info => Debug.assert(!info.isAttached(project)));
+                this.filenameToScriptInfo.forEach(info => Debug.assert(isScriptInfoVersion(info) || !info.isAttached(project)));
             }
             // Remove the project from pending project updates
             this.pendingProjectUpdates.delete(project.getProjectName());
@@ -1021,7 +1026,7 @@ namespace ts.server {
         }
 
         private deleteScriptInfo(info: ScriptInfo) {
-            this.filenameToScriptInfo.delete(info.path);
+            this.filenameToScriptInfo.set(info.path, info.getVersion());
             const realpath = info.getRealpathIfDifferent();
             if (realpath) {
                 this.realpathToScriptInfos!.remove(realpath, info); // TODO: GH#18217
@@ -1850,8 +1855,8 @@ namespace ts.server {
         private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
             Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
             const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
-            let info = this.getScriptInfoForPath(path);
-            if (!info) {
+            let info = this.filenameToScriptInfo.get(path);
+            if (!info || isScriptInfoVersion(info)) {
                 const isDynamic = isDynamicFileName(fileName);
                 Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info`);
                 Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
@@ -1860,7 +1865,7 @@ namespace ts.server {
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
                 }
-                info = new ScriptInfo(this.host, fileName, scriptKind!, !!hasMixedContent, path); // TODO: GH#18217
+                info = new ScriptInfo(this.host, fileName, scriptKind!, !!hasMixedContent, path, info); // TODO: GH#18217
                 this.filenameToScriptInfo.set(info.path, info);
                 if (!openedByClient) {
                     this.watchClosedScriptInfo(info);
@@ -1894,7 +1899,8 @@ namespace ts.server {
         }
 
         getScriptInfoForPath(fileName: Path) {
-            return this.filenameToScriptInfo.get(fileName);
+            const info = this.filenameToScriptInfo.get(fileName);
+            return info && isScriptInfoVersion(info) ? undefined : info;
         }
 
         setHostConfiguration(args: protocol.ConfigureRequestArguments) {
@@ -2145,7 +2151,7 @@ namespace ts.server {
             // It was then postponed to cleanup these script infos so that they can be reused if
             // the file from that old project is reopened because of opening file from here.
             this.filenameToScriptInfo.forEach(info => {
-                if (!info.isScriptOpen() && info.isOrphan()) {
+                if (!isScriptInfoVersion(info) && !info.isScriptOpen() && info.isOrphan()) {
                     // if there are not projects that include this script info - delete it
                     this.stopWatchingScriptInfo(info);
                     this.deleteScriptInfo(info);
