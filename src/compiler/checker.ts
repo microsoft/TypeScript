@@ -15531,8 +15531,19 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
             return mapType(type, t => {
-                const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
-                return prop ? getTypeOfSymbol(prop) : undefined;
+                if (t.flags & TypeFlags.StructuredType) {
+                    const prop = getPropertyOfType(t, name);
+                    if (prop) {
+                        return getTypeOfSymbol(prop);
+                    }
+                    if (isTupleType(t)) {
+                        const restType = getRestTypeOfTupleType(t);
+                        if (restType && isNumericLiteralName(name) && +name >= 0) {
+                            return restType;
+                        }
+                    }
+                }
+                return undefined;
             }, /*noReductions*/ true);
         }
 
