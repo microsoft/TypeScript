@@ -27,6 +27,9 @@ type L4 = T4["length"];
 >L4 : 0 | 3 | 2 | 1
 >T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 
+type T5 = [number, string?, boolean];  // Error
+>T5 : [number, string | undefined, boolean]
+
 function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
 >f1 : (t1: [number, string, boolean], t2: [number, string, (boolean | undefined)?], t3: [number, (string | undefined)?, (boolean | undefined)?], t4: [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]) => void
 >t1 : [number, string, boolean]
@@ -119,77 +122,6 @@ function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
 >t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 }
 
-type T5 = [number, string?, boolean];
->T5 : [number, string | undefined, boolean]
-
-type L5 = T5["length"];
->L5 : 3
->T5 : [number, string | undefined, boolean]
-
-function f2(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) {
->f2 : (t1: [number, string, boolean], t2: [number, string, (boolean | undefined)?], t3: [number, (string | undefined)?, (boolean | undefined)?], t4: [(number | undefined)?, (string | undefined)?, (boolean | undefined)?], t5: [number, string | undefined, boolean]) => void
->t1 : [number, string, boolean]
->T1 : [number, string, boolean]
->t2 : [number, string, (boolean | undefined)?]
->T2 : [number, string, (boolean | undefined)?]
->t3 : [number, (string | undefined)?, (boolean | undefined)?]
->T3 : [number, (string | undefined)?, (boolean | undefined)?]
->t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
->T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
->t5 : [number, string | undefined, boolean]
->T5 : [number, string | undefined, boolean]
-
-    t1 = t5;  // Error
->t1 = t5 : [number, string | undefined, boolean]
->t1 : [number, string, boolean]
->t5 : [number, string | undefined, boolean]
-
-    t2 = t5;  // Error
->t2 = t5 : [number, string | undefined, boolean]
->t2 : [number, string, (boolean | undefined)?]
->t5 : [number, string | undefined, boolean]
-
-    t3 = t5;
->t3 = t5 : [number, string | undefined, boolean]
->t3 : [number, (string | undefined)?, (boolean | undefined)?]
->t5 : [number, string | undefined, boolean]
-
-    t4 = t5;
->t4 = t5 : [number, string | undefined, boolean]
->t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
->t5 : [number, string | undefined, boolean]
-
-    t5 = t5;
->t5 = t5 : [number, string | undefined, boolean]
->t5 : [number, string | undefined, boolean]
->t5 : [number, string | undefined, boolean]
-
-    t5 = t1;
->t5 = t1 : [number, string, boolean]
->t5 : [number, string | undefined, boolean]
->t1 : [number, string, boolean]
-
-    t5 = t2;  // Error
->t5 = t2 : [number, string, (boolean | undefined)?]
->t5 : [number, string | undefined, boolean]
->t2 : [number, string, (boolean | undefined)?]
-
-    t5 = t3;  // Error
->t5 = t3 : [number, (string | undefined)?, (boolean | undefined)?]
->t5 : [number, string | undefined, boolean]
->t3 : [number, (string | undefined)?, (boolean | undefined)?]
-
-    t5 = t4;  // Error
->t5 = t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
->t5 : [number, string | undefined, boolean]
->t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
-
-    t5 = t5;
->t5 = t5 : [number, string | undefined, boolean]
->t5 : [number, string | undefined, boolean]
->t5 : [number, string | undefined, boolean]
-}
-
 let t2: T2;
 >t2 : [number, string, (boolean | undefined)?]
 >T2 : [number, string, (boolean | undefined)?]
@@ -201,10 +133,6 @@ let t3: T3;
 let t4: T4;
 >t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 >T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
-
-let t5: T5;
->t5 : [number, string | undefined, boolean]
->T5 : [number, string | undefined, boolean]
 
 t2 = [42, "hello"];
 >t2 = [42, "hello"] : [number, string]
@@ -269,12 +197,4 @@ t4 = [];
 >t4 = [] : []
 >t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 >[] : []
-
-t5 = [42,,true];
->t5 = [42,,true] : [number, undefined, true]
->t5 : [number, string | undefined, boolean]
->[42,,true] : [number, undefined, true]
->42 : 42
-> : undefined
->true : true
 
