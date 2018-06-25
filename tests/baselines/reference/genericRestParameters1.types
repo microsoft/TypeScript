@@ -271,9 +271,9 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >...v : number
 >v : V
 
-    let x3 = f10(1, ...u);  // (string | number)[]
->x3 : (string | number)[]
->f10(1, ...u) : (string | number)[]
+    let x3 = f10(1, ...u);  // [number, ...string[]]
+>x3 : [number, ...string[]]
+>f10(1, ...u) : [number, ...string[]]
 >f10 : <T extends unknown[]>(...args: T) => T
 >1 : 1
 >...u : string
@@ -387,9 +387,9 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >...v : number
 >v : V
 
-    let x3 = f11(1, ...u);  // (string | 1)[]
->x3 : (string | 1)[]
->f11(1, ...u) : (string | 1)[]
+    let x3 = f11(1, ...u);  // [1, ...string[]]
+>x3 : [1, ...string[]]
+>f11(1, ...u) : [1, ...string[]]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
 >1 : 1
 >...u : string

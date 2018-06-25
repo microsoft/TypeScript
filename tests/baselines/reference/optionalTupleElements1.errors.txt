@@ -22,6 +22,7 @@ tests/cases/conformance/types/tuple/optionalTupleElements1.ts(23,5): error TS232
   Types of property '0' are incompatible.
     Type 'number | undefined' is not assignable to type 'number'.
       Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(30,29): error TS1257: A required element cannot follow an optional element.
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(34,5): error TS2322: Type '[number, string | undefined, boolean]' is not assignable to type '[number, string, boolean]'.
   Type 'string | undefined' is not assignable to type 'string'.
     Type 'undefined' is not assignable to type 'string'.
@@ -41,7 +42,7 @@ tests/cases/conformance/types/tuple/optionalTupleElements1.ts(42,5): error TS232
       Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/tuple/optionalTupleElements1.ts (11 errors) ====
+==== tests/cases/conformance/types/tuple/optionalTupleElements1.ts (12 errors) ====
     type T1 = [number, string, boolean];
     type T2 = [number, string, boolean?];
     type T3 = [number, string?, boolean?];
@@ -102,6 +103,8 @@ tests/cases/conformance/types/tuple/optionalTupleElements1.ts(42,5): error TS232
     }
     
     type T5 = [number, string?, boolean];
+                                ~~~~~~~
+!!! error TS1257: A required element cannot follow an optional element.
     type L5 = T5["length"];
     
     function f2(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) {

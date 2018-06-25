@@ -41,13 +41,13 @@ class FooIterator {
 }
 
 function fun(...[a, ...b]) { }
->fun : (__0_0: any, __0_1?: any) => void
+>fun : (__0_0: any, ...__0_1: any[]) => void
 >a : any
 >b : any[]
 
 fun(new FooIterator);
 >fun(new FooIterator) : void
->fun : (__0_0: any, __0_1?: any) => void
+>fun : (__0_0: any, ...__0_1: any[]) => void
 >new FooIterator : FooIterator
 >FooIterator : typeof FooIterator
 

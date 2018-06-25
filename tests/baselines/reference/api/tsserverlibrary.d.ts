@@ -1479,6 +1479,7 @@ declare namespace ts {
     }
     interface SyntheticExpression extends Expression {
         kind: SyntaxKind.SyntheticExpression;
+        isSpread: boolean;
         type: Type;
     }
     type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
@@ -5048,6 +5049,8 @@ declare namespace ts {
         _0_tag_cannot_be_used_independently_as_a_top_level_JSDoc_tag: DiagnosticMessage;
         A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal: DiagnosticMessage;
         A_definite_assignment_assertion_is_not_permitted_in_this_context: DiagnosticMessage;
+        A_rest_element_must_be_last_in_a_tuple_type: DiagnosticMessage;
+        A_required_element_cannot_follow_an_optional_element: DiagnosticMessage;
         with_statements_are_not_allowed_in_an_async_function_block: DiagnosticMessage;
         await_expression_is_only_allowed_within_an_async_function: DiagnosticMessage;
         can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment: DiagnosticMessage;
@@ -5344,6 +5347,9 @@ declare namespace ts {
         Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators: DiagnosticMessage;
         Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await: DiagnosticMessage;
         Object_is_of_type_unknown: DiagnosticMessage;
+        Rest_signatures_are_incompatible: DiagnosticMessage;
+        Property_0_is_incompatible_with_rest_element_type: DiagnosticMessage;
+        A_rest_element_type_must_be_an_array_type: DiagnosticMessage;
         JSX_element_attributes_type_0_may_not_be_a_union_type: DiagnosticMessage;
         The_return_type_of_a_JSX_element_constructor_must_return_an_object_type: DiagnosticMessage;
         JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist: DiagnosticMessage;

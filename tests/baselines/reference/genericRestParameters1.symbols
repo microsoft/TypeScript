@@ -180,7 +180,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >v : Symbol(v, Decl(genericRestParameters1.ts, 44, 66))
 
-    let x3 = f10(1, ...u);  // (string | number)[]
+    let x3 = f10(1, ...u);  // [number, ...string[]]
 >x3 : Symbol(x3, Decl(genericRestParameters1.ts, 47, 7))
 >f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
@@ -259,7 +259,7 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >v : Symbol(v, Decl(genericRestParameters1.ts, 63, 66))
 
-    let x3 = f11(1, ...u);  // (string | 1)[]
+    let x3 = f11(1, ...u);  // [1, ...string[]]
 >x3 : Symbol(x3, Decl(genericRestParameters1.ts, 66, 7))
 >f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
 >u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
