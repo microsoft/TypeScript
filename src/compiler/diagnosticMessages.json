@@ -3964,7 +3964,7 @@
         "category": "Suggestion",
         "code": 80005
     },
-    "This may be converted to use async and await.": {
+    "This may be converted to an async function.": {
         "category": "Suggestion",
         "code": 80006
     },
@@ -4285,11 +4285,11 @@
         "category": "Message",
         "code": 95054
     },
-    "Convert to use async and await":{
+    "Convert to async function":{
         "category": "Message",
          "code": 95055
     },
-    "Convert all to use async and await": {
+    "Convert all to async functions": {
         "category": "Message",
         "code": 95056
     }

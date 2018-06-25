@@ -1,11 +1,11 @@
 namespace ts.codefix {
     const fixId = "convertPromisesToAwaitAndAsync";
-    const errorCodes = [Diagnostics.This_may_be_converted_to_use_async_and_await.code];
+    const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];
     registerCodeFix({
         errorCodes,
         getCodeActions(context: CodeFixContext) {
             const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncAwait(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
-            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_use_async_and_await, fixId, Diagnostics.Convert_all_to_use_async_and_await)];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncAwait(changes, err.file!, err.start, context.program.getTypeChecker())),

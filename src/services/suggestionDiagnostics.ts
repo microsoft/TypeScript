@@ -33,12 +33,16 @@ namespace ts {
                         break;
                     }
 
+                    if(isFunctionLikeDeclaration(node) && !node.body){
+                        break; //break on ambient functions
+                    }
+
                     if (checker.isPromiseLikeType(returnType)) {
                         // collect all the return statements
                         // check that a property access expression exists in there and that it is a handler
-                        const retStmts = getReturnStatements(node);
+                        const retStmts = getReturnStatementsWithPromiseCallbacks(node);
                         if (retStmts.length > 0) {
-                            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_use_async_and_await));
+                            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
                         }
                     }
                     break;
