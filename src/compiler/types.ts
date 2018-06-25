@@ -1303,6 +1303,7 @@ namespace ts {
 
     export interface SyntheticExpression extends Expression {
         kind: SyntaxKind.SyntheticExpression;
+        isSpread: boolean;
         type: Type;
     }
 

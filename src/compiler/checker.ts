@@ -6232,13 +6232,15 @@ namespace ts {
                 const restParameter = sig.parameters[restIndex];
                 const restType = getTypeOfSymbol(restParameter);
                 if (isTupleType(restType)) {
-                    const elementTypes = (<TypeReference>restType).typeArguments || emptyArray;
-                    const minLength = (<TupleType>(<TypeReference>restType).target).minLength;
+                    const elementTypes = restType.typeArguments || emptyArray;
+                    const minLength = restType.target.minLength;
+                    const tupleRestIndex = restType.target.hasRestElement ? elementTypes.length - 1 : -1;
                     const restParams = map(elementTypes, (t, i) => {
                         const name = getParameterNameAtPosition(sig, restIndex + i);
-                        const checkFlags = i >= minLength ? CheckFlags.OptionalParameter : 0;
+                        const checkFlags = i === tupleRestIndex ? CheckFlags.RestParameter :
+                            i >= minLength ? CheckFlags.OptionalParameter : 0;
                         const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
-                        symbol.type = t;
+                        symbol.type = i === tupleRestIndex ? createArrayType(t) : t;
                         return symbol;
                     });
                     return concatenate(sig.parameters.slice(0, restIndex), restParams);
@@ -8372,7 +8374,7 @@ namespace ts {
                 const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
                 const elementTypes = map(node.elementTypes, n => {
                     const type = getTypeFromTypeNode(n);
-                    return n === restElement ? getIndexTypeOfType(type, IndexKind.Number) || errorType : type;
+                    return n === restElement && getIndexTypeOfType(type, IndexKind.Number) || type;
                 });
                 links.resolvedType = createTupleType(elementTypes, minLength, !!restElement);
             }
@@ -8886,6 +8888,12 @@ namespace ts {
                         }
                     }
                     return getTypeOfSymbol(prop);
+                }
+                if (isTupleType(objectType)) {
+                    const restType = getRestTypeOfTupleType(objectType);
+                    if (restType && isNumericLiteralName(propName) && +propName >= 0) {
+                        return restType;
+                    }
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
@@ -11343,6 +11351,33 @@ namespace ts {
                     }
                 }
                 let result = Ternary.True;
+                if (isTupleType(target)) {
+                    const targetRestType = getRestTypeOfTupleType(target);
+                    if (targetRestType) {
+                        if (!isTupleType(source)) {
+                            return Ternary.False;
+                        }
+                        const sourceRestType = getRestTypeOfTupleType(source);
+                        if (sourceRestType && !isRelatedTo(sourceRestType, targetRestType, reportErrors)) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Rest_signatures_are_incompatible);
+                            }
+                            return Ternary.False;
+                        }
+                        const targetCount = getTypeReferenceArity(target) - 1;
+                        const sourceCount = getTypeReferenceArity(source) - (sourceRestType ? 1 : 0);
+                        for (let i = targetCount; i < sourceCount; i++) {
+                            const related = isRelatedTo((<TypeReference>source).typeArguments![i], targetRestType, reportErrors);
+                            if (!related) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Property_0_is_incompatible_with_rest_element_type, "" + i);
+                                }
+                                return Ternary.False;
+                            }
+                            result &= related;
+                        }
+                    }
+                }
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
                     if (!(targetProp.flags & SymbolFlags.Prototype)) {
@@ -11414,35 +11449,6 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                        }
-                    }
-                }
-                if (isTupleType(target)) {
-                    const targetRestType = getRestTypeOfTupleType(target);
-                    if (targetRestType) {
-                        if (!isTupleType(source)) {
-                            return Ternary.False;
-                        }
-                        const sourceRestType = getRestTypeOfTupleType(source);
-                        if (sourceRestType && !isRelatedTo(sourceRestType, targetRestType, reportErrors)) {
-                            if (reportErrors) {
-                                // !!! Rest element types are incompatible
-                                reportError(Diagnostics.Index_signatures_are_incompatible);
-                            }
-                            return Ternary.False;
-                        }
-                        const targetCount = getTypeReferenceArity(target) - 1;
-                        const sourceCount = getTypeReferenceArity(source) - (sourceRestType ? 1 : 0);
-                        for (let i = targetCount; i < sourceCount; i++) {
-                            const related = isRelatedTo((<TypeReference>source).typeArguments![i], targetRestType, reportErrors);
-                            if (!related) {
-                                if (reportErrors) {
-                                    // !!! Property {0} is incompatible with rest element type
-                                    reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, "" + i);
-                                }
-                                return Ternary.False;
-                            }
-                            result &= related;
                         }
                     }
                 }
@@ -12506,7 +12512,7 @@ namespace ts {
                     }
                     const minArgumentCount = getMinArgumentCount(source);
                     const minLength = minArgumentCount < paramCount ? 0 : minArgumentCount - paramCount;
-                    const rest = sourceHasRest ? createArrayType(getUnionType(types)) : createTupleType(types, minLength, /*hasRestElement*/ false, names);
+                    const rest = createTupleType(types, minLength, sourceHasRest, names);
                     callback(rest, targetRestTypeVariable);
                 }
             }
@@ -17865,14 +17871,12 @@ namespace ts {
             }
         }
 
+        function isSpreadArgument(arg: Expression | undefined) {
+            return !!arg && (arg.kind === SyntaxKind.SpreadElement || arg.kind === SyntaxKind.SyntheticExpression && (<SyntheticExpression>arg).isSpread);
+        }
+
         function getSpreadArgumentIndex(args: ReadonlyArray<Expression>): number {
-            for (let i = 0; i < args.length; i++) {
-                const arg = args[i];
-                if (arg && arg.kind === SyntaxKind.SpreadElement) {
-                    return i;
-                }
-            }
-            return -1;
+            return findIndex(args, isSpreadArgument);
         }
 
         function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
@@ -18091,7 +18095,7 @@ namespace ts {
         function getSpreadArgumentType(node: CallLikeExpression, args: ReadonlyArray<Expression>, index: number, argCount: number, restType: TypeParameter, context: InferenceContext | undefined) {
             if (index === argCount - 1) {
                 const arg = getEffectiveArgument(node, args, index);
-                if (arg && arg.kind === SyntaxKind.SpreadElement) {
+                if (isSpreadArgument(arg)) {
                     // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                     // and the argument are ...x forms.
                     return checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context);
@@ -18100,16 +18104,20 @@ namespace ts {
             const contextualType = getIndexTypeOfType(restType, IndexKind.Number) || anyType;
             const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
             const types = [];
-            let hasSpreadExpression = false;
+            let spreadIndex = -1;
             for (let i = index; i < argCount; i++) {
                 let argType = getEffectiveArgumentType(node, i);
                 if (!argType) {
                     argType = checkExpressionWithContextualType(args[i], contextualType, context);
-                    hasSpreadExpression = hasSpreadExpression || args[i].kind === SyntaxKind.SpreadElement;
+                    if (spreadIndex < 0 && isSpreadArgument(args[i])) {
+                        spreadIndex = i - index;
+                    }
                 }
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
             }
-            return hasSpreadExpression ? createArrayType(getUnionType(types)) : createTupleType(types);
+            return spreadIndex < 0 ?
+                createTupleType(types) :
+                createTupleType(append(types.slice(0, spreadIndex), getUnionType(types.slice(spreadIndex))), spreadIndex, /*hasRestElement*/ true);
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
@@ -18205,7 +18213,7 @@ namespace ts {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
                 if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
-                    if (i === restIndex && (restType.flags & TypeFlags.TypeParameter || arg && arg.kind === SyntaxKind.SpreadElement && !isArrayType(restType))) {
+                    if (i === restIndex && (restType.flags & TypeFlags.TypeParameter || isSpreadArgument(arg) && !isArrayType(restType))) {
                         const spreadType = getSpreadArgumentType(node, args, i, argCount, restType, /*context*/ undefined);
                         return checkTypeRelatedTo(spreadType, restType, relation, arg, headMessage);
                     }
@@ -18275,17 +18283,20 @@ namespace ts {
             else {
                 const args = node.arguments || emptyArray;
                 const length = args.length;
-                if (length && args[length - 1].kind === SyntaxKind.SpreadElement && getSpreadArgumentIndex(args) === length - 1) {
+                if (length && isSpreadArgument(args[length - 1]) && getSpreadArgumentIndex(args) === length - 1) {
                     // We have a spread argument in the last position and no other spread arguments. If the type
                     // of the argument is a tuple type, spread the tuple elements into the argument list. We can
                     // call checkExpressionCached because spread expressions never have a contextual type.
                     const spreadArgument = <SpreadElement>args[length - 1];
                     const type = checkExpressionCached(spreadArgument.expression);
                     if (isTupleType(type)) {
-                        const syntheticArgs = map((<TypeReference>type).typeArguments || emptyArray, t => {
+                        const typeArguments = (<TypeReference>type).typeArguments || emptyArray;
+                        const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
+                        const syntheticArgs = map(typeArguments, (t, i) => {
                             const arg = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, spreadArgument.pos, spreadArgument.end);
                             arg.parent = spreadArgument;
                             arg.type = t;
+                            arg.isSpread = i === restIndex;
                             return arg;
                         });
                         return concatenate(args.slice(0, length - 1), syntheticArgs);
@@ -19601,9 +19612,12 @@ namespace ts {
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
                 if (isTupleType(restType)) {
-                    const elementCount = ((<TypeReference>restType).typeArguments || emptyArray).length;
-                    if (pos - paramCount < elementCount) {
-                        return (<TypeReference>restType).typeArguments![pos - paramCount];
+                    if (pos - paramCount < getLengthOfTupleType(restType)) {
+                        return restType.typeArguments![pos - paramCount];
+                    }
+                    const tupleRestType = getRestTypeOfTupleType(restType);
+                    if (tupleRestType) {
+                        return tupleRestType;
                     }
                 }
                 return getIndexTypeOfType(restType, IndexKind.Number) || anyType;
@@ -19612,7 +19626,14 @@ namespace ts {
         }
 
         function getTypeOfRestParameter(signature: Signature) {
-            return signature.hasRestParameter ? getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]) : undefined;
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                if (isTupleType(restType)) {
+                    return getRestTypeOfTupleType(restType);
+                }
+                return restType;
+            }
+            return undefined;
         }
 
         function getParameterCount(signature: Signature) {
@@ -19620,18 +19641,20 @@ namespace ts {
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[length - 1]);
                 if (isTupleType(restType)) {
-                    return length + ((<TypeReference>restType).typeArguments || emptyArray).length - 1;
+                    return length + (restType.typeArguments || emptyArray).length - 1;
                 }
             }
             return length;
         }
 
         function getMinArgumentCount(signature: Signature) {
-            const restType = getTypeOfRestParameter(signature);
-            if (restType && isTupleType(restType)) {
-                const minLength = (<TupleType>(<TypeReference>restType).target).minLength;
-                if (minLength > 0) {
-                    return signature.parameters.length - 1 + minLength;
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                if (isTupleType(restType)) {
+                    const minLength = restType.target.minLength;
+                    if (minLength > 0) {
+                        return signature.parameters.length - 1 + minLength;
+                    }
                 }
             }
             return signature.minArgumentCount;
@@ -19648,7 +19671,11 @@ namespace ts {
         }
 
         function hasEffectiveRestParameter(signature: Signature) {
-            return signature.hasRestParameter && !isTupleType(getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]));
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                return !isTupleType(restType) || restType.target.hasRestElement;
+            }
+            return false;
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
@@ -21928,6 +21955,27 @@ namespace ts {
         }
 
         function checkTupleType(node: TupleTypeNode) {
+            const elementTypes = node.elementTypes;
+            let seenOptionalElement = false;
+            for (let i = 0; i < elementTypes.length; i++) {
+                const e = elementTypes[i];
+                if (e.kind === SyntaxKind.RestType) {
+                    if (i !== elementTypes.length - 1) {
+                        grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
+                        break;
+                    }
+                    if (!isArrayType(getTypeFromTypeNode(e))) {
+                        error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
+                    }
+                }
+                else if (e.kind === SyntaxKind.OptionalType) {
+                    seenOptionalElement = true;
+                }
+                else if (seenOptionalElement) {
+                    grammarErrorOnNode(e, Diagnostics.A_required_element_cannot_follow_an_optional_element);
+                    break;
+                }
+            }
             checkGrammarForDisallowedTrailingComma(node.elementTypes);
             forEach(node.elementTypes, checkSourceElement);
         }
