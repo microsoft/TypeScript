@@ -1969,7 +1969,16 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
-            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentScope);
+            // node might be a reference to type variable, which can be scoped to a class declaration, in addition to the regular
+            // TypeScript scopes. Walk up the AST to find the next class and use that as the lookup scope.
+            let scope: Node = node;
+            while (scope.parent && scope !== currentScope) {
+                scope = scope.parent;
+                if (isClassDeclaration(scope)) {
+                    break;
+                }
+            }
+            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, scope);
             switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
                     const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
