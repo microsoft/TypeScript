@@ -402,6 +402,21 @@ function getOrCreateProjectGraph(projectSpec, paths) {
 }
 
 /**
+ * @param {ResolvedPathOptions} paths
+ */
+function createParseProject(paths) {
+    /**
+     * @param {string} configFilePath
+     */
+    function getProject(configFilePath) {
+        const projectSpec = resolveProjectSpec(configFilePath, paths, /*referrer*/ undefined);
+        const projectGraph = getOrCreateProjectGraph(projectSpec, defaultPaths);
+        return projectGraph && projectGraph.project;
+    }
+    return getProject;
+}
+
+/**
  * @param {ProjectGraph} projectGraph
  * @param {ResolvedProjectOptions} resolvedOptions
  * @returns {ProjectGraphConfiguration}
@@ -473,7 +488,7 @@ function ensureCompileTask(projectGraph, options) {
                 ? tsc.createProject(configFilePath, { typescript: require(options.typescript.typescript) })
                 : tsc_oop.createProject(configFilePath, {}, { typescript: options.typescript.typescript });
             const stream = project.src()
-                .pipe(gulpif(!options.force, upToDate(projectGraph.project, { verbose: options.verbose })))
+                .pipe(gulpif(!options.force, upToDate(projectGraph.project, { verbose: options.verbose, parseProject: createParseProject(options.paths) })))
                 .pipe(gulpif(sourceMap || inlineSourceMap, sourcemaps.init()))
                 .pipe(project());
             const js = (options.js ? options.js(stream.js) : stream.js)

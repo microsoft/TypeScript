@@ -15,6 +15,7 @@ const Vinyl = require("vinyl");
  * 
  * @typedef UpToDateOptions
  * @property {boolean} [verbose]
+ * @property {(configFilePath: string) => ParsedCommandLine | undefined} [parseProject]
  */
 function upToDate(parsedProject, options) {
     /** @type {File[]} */
@@ -31,7 +32,8 @@ function upToDate(parsedProject, options) {
         },
         getModifiedTime(fileName) {
             return getStat(fileName).mtime;
-        }
+        },
+        parseConfigFile: options && options.parseProject
     };
     const duplex = new Duplex({
         objectMode: true,
@@ -77,7 +79,6 @@ function upToDate(parsedProject, options) {
 module.exports = exports = upToDate;
 
 /**
- * 
  * @param {DiagnosticMessage} message 
  * @param {...string} args 
  */
