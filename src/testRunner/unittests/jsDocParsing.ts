@@ -308,6 +308,12 @@ namespace ts {
 * @param {object} o Doc doc
 * @param {string} o.f Doc for f
 */`);
+                parsesCorrectly("",
+`/**
+ * {@link first link}
+ * Inside {@link link text} thing
+ * @see {@link second link text}
+ */`);
             });
         });
         describe("getFirstToken", () => {
