@@ -6369,6 +6369,18 @@ namespace ts {
                     }
                     loop: while (true) {
                         switch (token()) {
+                            // case SyntaxKind.OpenBraceToken:
+                                // probably just use lookahead for now
+                                // if ((state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) &&
+                                    // lookAhead(() => nextJSDocToken() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextJSDocToken()) && scanner.getTokenText() === "link")) {
+                                    // nextToken();
+                                // }
+                                // else {
+                                    // state = JSDocState.SavingComments;
+                                    // pushComment(scanner.getTokenText());
+                                    // break;
+                                // }
+                                // falls through
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
@@ -6522,6 +6534,9 @@ namespace ts {
                         case "callback":
                             tag = parseCallbackTag(atToken, tagName, indent);
                             break;
+                        case "link":
+                            // tag = parseLinkTag(atToken, tagName);
+                            // break;
                         default:
                             tag = parseUnknownTag(atToken, tagName);
                             break;
@@ -6896,6 +6911,20 @@ namespace ts {
                         }
                     }
                 }
+
+                // function parseLinkTag(atToken: AtToken, tagName: Identifier): JSDocLinkTag {
+                //     const linkTag = createNode(SyntaxKind.JSDocLinkTag, atToken.pos) as JSDocLinkTag;
+                //     linkTag.atToken = atToken;
+                //     linkTag.tagName = tagName
+                //     // const start = scanner.getStartPos();
+                //     let s = "";
+                //     while (nextJSDocToken() !== SyntaxKind.CloseBraceToken) {
+                //         s += scanner.getTokenText();
+                //     }
+                //     // const end = scanner.getTextPos();
+                //     linkTag.title = s;
+                //     return finishNode(linkTag);
+                // }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
                     while (!ts.isIdentifier(a) || !ts.isIdentifier(b)) {

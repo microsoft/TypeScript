@@ -369,6 +369,7 @@ namespace ts {
         JSDocAugmentsTag,
         JSDocClassTag,
         JSDocCallbackTag,
+        // JSDocLinkTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocThisTag,
@@ -2359,6 +2360,12 @@ namespace ts {
         name?: Identifier;
         typeExpression: JSDocSignature;
     }
+
+    // export interface JSDocLinkTag extends JSDocTag {
+    //     kind: SyntaxKind.JSDocLinkTag;
+    //     url?: string;
+    //     title: string; // everything's in the title right now, because I don't want to parse a URL
+    // }
 
     export interface JSDocSignature extends JSDocType, Declaration {
         kind: SyntaxKind.JSDocSignature;
