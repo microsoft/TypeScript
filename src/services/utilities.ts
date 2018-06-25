@@ -1281,13 +1281,17 @@ namespace ts {
 
     export const enum QuotePreference { Single, Double }
 
+    export function quotePreferenceFromString(str: StringLiteral, sourceFile: SourceFile): QuotePreference {
+        return isStringDoubleQuoted(str, sourceFile) ? QuotePreference.Double : QuotePreference.Single;
+    }
+
     export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
         if (preferences.quotePreference) {
             return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
         }
         else {
-            const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
-            return !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile) ? QuotePreference.Single : QuotePreference.Double;
+            const firstModuleSpecifier = sourceFile.imports && find(sourceFile.imports, isStringLiteral);
+            return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
         }
     }
 
@@ -1382,6 +1386,10 @@ namespace ts {
     function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
         return textSpanContainsPosition(span, node.getStart(file)) &&
             node.getEnd() <= textSpanEnd(span);
+    }
+
+    export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined {
+        return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
     /* @internal */
