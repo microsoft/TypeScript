@@ -6567,6 +6567,16 @@ namespace ts {
                                     indent += whitespace.length;
                                 }
                                 break;
+                            case SyntaxKind.OpenBraceToken:
+                                state = JSDocState.SavingComments;
+                                if (lookAhead(() => nextJSDocToken() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextJSDocToken()) && scanner.getTokenText() === "link")) {
+                                    pushComment(scanner.getTokenText());
+                                    nextJSDocToken();
+                                    pushComment(scanner.getTokenText());
+                                    nextJSDocToken();
+                                }
+                                pushComment(scanner.getTokenText());
+                                break;
                             case SyntaxKind.AsteriskToken:
                                 if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
