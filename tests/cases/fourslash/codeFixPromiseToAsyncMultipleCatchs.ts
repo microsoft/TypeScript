@@ -2,8 +2,8 @@
 
 // @target: es6
 
-////function f(): Promise<void> {
-////    return fetch('http://yahoo.com').then(res => console.log(res)).catch(err => console.log("err")).catch(err2 => console.log("err2", err2));
+////function [|f|](): Promise<void> {
+////    return fetch('http://yahoo.com').then(res => console.log(res)).catch(err => console.log("err", err)).catch(err2 => console.log("err2", err2));
 ////}
 
 verify.getSuggestionDiagnostics([{
@@ -18,15 +18,15 @@ verify.codeFix({
 `async function f(): Promise<void> {
     try {
         try {
-            let res = await fetch("http://yahoo.com");
+            let res = await fetch('http://yahoo.com');
             return console.log(res);
         }
         catch (err) {
-            return console.log("err");
+            return console.log("err", err);
         }
     }
     catch (err2) {
-        return console.log("err2");
+        return console.log("err2", err2);
     }
-}}`,
+}`,
 });
