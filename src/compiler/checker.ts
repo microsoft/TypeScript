@@ -7982,10 +7982,11 @@ namespace ts {
             }
         }
 
-        function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
+        function getSubstitutionType(typeVariable: Type, substitute: Type, negaConstraints: Type[] | undefined) {
             const result = <SubstitutionType>createType(TypeFlags.Substitution);
             result.typeVariable = typeVariable;
             result.substitute = substitute;
+            result.negatedTypes = negaConstraints;
             return result;
         }
 
@@ -7993,25 +7994,31 @@ namespace ts {
             return node.kind === SyntaxKind.TupleType && (<TupleTypeNode>node).elementTypes.length === 1;
         }
 
-        function getImpliedConstraint(typeVariable: TypeVariable, checkNode: TypeNode, extendsNode: TypeNode): Type | undefined {
+        function getImpliedConstraint(typeVariable: Type, checkNode: TypeNode, extendsNode: TypeNode): Type | undefined {
             return isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) ? getImpliedConstraint(typeVariable, (<TupleTypeNode>checkNode).elementTypes[0], (<TupleTypeNode>extendsNode).elementTypes[0]) :
                 getActualTypeVariable(getTypeFromTypeNode(checkNode)) === typeVariable ? getTypeFromTypeNode(extendsNode) :
                 undefined;
         }
 
-        function getConstrainedTypeVariable(typeVariable: TypeVariable, node: Node) {
+        function getConstrainedTypeVariable(typeVariable: Type, node: Node) {
             let constraints: Type[] | undefined;
+            let negatedConstraints: Type[] | undefined;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
-                if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                if (parent.kind === SyntaxKind.ConditionalType && (node === (<ConditionalTypeNode>parent).trueType || node === (<ConditionalTypeNode>parent).falseType)) {
                     const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
-                        constraints = append(constraints, constraint);
+                        if (node === (<ConditionalTypeNode>parent).trueType) {
+                            constraints = append(constraints, constraint);
+                        }
+                        else {
+                            negatedConstraints = append(negatedConstraints, constraint);
+                        }
                     }
                 }
                 node = parent;
             }
-            return constraints ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable))) : typeVariable;
+            return (constraints || negatedConstraints) ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable)), negatedConstraints) : typeVariable;
         }
 
         function isJSDocTypeReference(node: Node): node is TypeReferenceNode {
@@ -8096,7 +8103,7 @@ namespace ts {
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceNode.
                 links.resolvedSymbol = symbol;
-                links.resolvedType = type;
+                links.resolvedType = getConstrainedTypeVariable(type, node);
             }
             return links.resolvedType;
         }
@@ -8112,7 +8119,7 @@ namespace ts {
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
                 // the widened type(section 3.9) of which becomes the result.
-                links.resolvedType = getWidenedType(checkExpression(node.exprName));
+                links.resolvedType = getConstrainedTypeVariable(getWidenedType(checkExpression(node.exprName)), node);
             }
             return links.resolvedType;
         }
@@ -8265,7 +8272,7 @@ namespace ts {
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
+                links.resolvedType = getConstrainedTypeVariable(createArrayType(getTypeFromTypeNode(node.elementType)), node);
             }
             return links.resolvedType;
         }
@@ -8320,7 +8327,7 @@ namespace ts {
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNode));
+                links.resolvedType = getConstrainedTypeVariable(createTupleType(map(node.elementTypes, getTypeFromTypeNode)), node);
             }
             return links.resolvedType;
         }
@@ -8570,8 +8577,8 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
-                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
+                links.resolvedType = getConstrainedTypeVariable(getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol)), node);
             }
             return links.resolvedType;
         }
@@ -8713,8 +8720,8 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                links.resolvedType = getIntersectionType(map(node.types, getTypeFromTypeNode),
-                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
+                links.resolvedType = getConstrainedTypeVariable(getIntersectionType(map(node.types, getTypeFromTypeNode),
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol)), node);
             }
             return links.resolvedType;
         }
@@ -8788,7 +8795,7 @@ namespace ts {
             if (!links.resolvedType) {
                 switch (node.operator) {
                     case SyntaxKind.KeyOfKeyword:
-                        links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
+                        links.resolvedType = getConstrainedTypeVariable(getIndexType(getTypeFromTypeNode(node.type)), node);
                         break;
                     case SyntaxKind.UniqueKeyword:
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
@@ -9022,7 +9029,7 @@ namespace ts {
                 links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
                     (<IndexedAccessType>resolved).objectType === objectType &&
                     (<IndexedAccessType>resolved).indexType === indexType ?
-                    getConstrainedTypeVariable(<IndexedAccessType>resolved, node) : resolved;
+                    getConstrainedTypeVariable(resolved, node) : resolved;
             }
             return links.resolvedType;
         }
@@ -9034,7 +9041,7 @@ namespace ts {
                 type.declaration = node;
                 type.aliasSymbol = getAliasSymbolForTypeNode(node);
                 type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(type.aliasSymbol);
-                links.resolvedType = type;
+                links.resolvedType = getConstrainedTypeVariable(type, node);
                 // Eagerly resolve the constraint type which forces an error if the constraint type circularly
                 // references itself through one or more type aliases.
                 getConstraintTypeFromMappedType(type);
@@ -9161,7 +9168,7 @@ namespace ts {
                     aliasSymbol,
                     aliasTypeArguments
                 };
-                links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
+                links.resolvedType = getConstrainedTypeVariable(getConditionalType(root, /*mapper*/ undefined), node);
                 if (outerTypeParameters) {
                     root.instantiations = createMap<Type>();
                     root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);
@@ -9245,10 +9252,10 @@ namespace ts {
             const resolvedSymbol = resolveSymbol(symbol);
             links.resolvedSymbol = resolvedSymbol;
             if (meaning === SymbolFlags.Value) {
-                return links.resolvedType = getTypeOfSymbol(symbol); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
+                return links.resolvedType = getConstrainedTypeVariable(getTypeOfSymbol(symbol), node); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
             }
             else {
-                return links.resolvedType = getTypeReferenceType(node, resolvedSymbol); // getTypeReferenceType doesn't handle aliases - it must get the resolved symbol
+                return links.resolvedType = getConstrainedTypeVariable(getTypeReferenceType(node, resolvedSymbol), node); // getTypeReferenceType doesn't handle aliases - it must get the resolved symbol
             }
         }
 
@@ -9267,7 +9274,7 @@ namespace ts {
                     if (isJSDocTypeLiteral(node) && node.isArrayType) {
                         type = createArrayType(type);
                     }
-                    links.resolvedType = type;
+                    links.resolvedType = getConstrainedTypeVariable(type, node);
                 }
             }
             return links.resolvedType;
@@ -9475,7 +9482,7 @@ namespace ts {
         function getTypeFromThisTypeNode(node: ThisExpression | ThisTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getThisType(node);
+                links.resolvedType = getConstrainedTypeVariable(getThisType(node), node);
             }
             return links.resolvedType;
         }
@@ -10431,6 +10438,52 @@ namespace ts {
             return getObjectFlags(source) & ObjectFlags.JsxAttributes && !(isUnhyphenatedJsxName(sourceProp.escapedName) || targetMemberType);
         }
 
+        function collectTypeParameters(type: Type) {
+            const params: TypeParameter[] = [];
+            instantiateType(type, t => {
+                if (t.flags & TypeFlags.TypeParameter) {
+                    params.push(t);
+                }
+                return t;
+            });
+            return params;
+        }
+
+        /**
+         * Runs a conditional type "backward" and returns weather the relationship check is true
+         * @param source The left-hand side of the relation
+         * @param target The conditional type on the right-hand side of the relation
+         * @param inferenceTarget The type that should be used as the inference target
+         * @param relation The relation to use for the comparison
+         */
+        function conditionalTypeReverseInferenceSucceeds(source: Type, target: ConditionalType, inferenceTarget: Type, relation: Map<RelationComparisonResult>) {
+            inferenceTarget = inferenceTarget.flags & TypeFlags.Substitution ? (inferenceTarget as SubstitutionType).typeVariable : inferenceTarget;
+            let checkType = target.checkType;
+            let mapper = identityMapper;
+            // target.root.outerTypeParameters indicates that this conditional type has some type variables which may be unbound
+            if (target.root.outerTypeParameters) {
+                // First, infer from source to the inference target
+                const params = collectTypeParameters(inferenceTarget);
+                // We `SkipConstraintCheck` in the below so that when we draw an inference from `"foo"` to `keyof T` for `T`, we don't replace the
+                //  result with `T`'s constraint.
+                const context = createInferenceContext(params, /*signature*/ undefined, InferenceFlags.SkipConstraintCheck);
+                inferTypes(context.inferences, source, inferenceTarget, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                const results = getInferredTypes(context);
+                // And instantiate the checkType with the results
+                checkType = instantiateType(target.checkType, mapper = createTypeMapper(params, results));
+            }
+            let extendsType = target.extendsType;
+            if (target.root.inferTypeParameters) {
+                // Then, infer from the instantiated checkType to the extendsType
+                const context = createInferenceContext(target.root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                // And instantiate it with the inferences
+                extendsType = instantiateType(extendsType, combineTypeMappers(mapper, context));
+            }
+            // Finally, check if the statement is true
+            return checkTypeRelatedTo(checkType, extendsType, relation, /*errorNode*/ undefined);
+        }
+
         /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
@@ -10567,7 +10620,15 @@ namespace ts {
                     source = relation === definitelyAssignableRelation ? (<SubstitutionType>source).typeVariable : (<SubstitutionType>source).substitute;
                 }
                 if (target.flags & TypeFlags.Substitution) {
-                    target = (<SubstitutionType>target).typeVariable;
+                    const negaTypes = (target as SubstitutionType).negatedTypes;
+                    if (negaTypes) {
+                        for (const type of negaTypes) {
+                            if (isRelatedTo(source, type)) {
+                                return Ternary.False;
+                            }
+                        }
+                    }
+                    target = (<SubstitutionType>target).substitute;
                 }
                 if (source.flags & TypeFlags.IndexedAccess) {
                     source = getSimplifiedType(source);
@@ -11184,6 +11245,49 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    // Simple check - if assignable to both the true and false types, it is assignable
+                    let trueType = getTrueTypeFromConditionalType(target as ConditionalType);
+                    let falseType = getFalseTypeFromConditionalType(target as ConditionalType);
+                    if (result = isRelatedTo(source, trueType) && isRelatedTo(source, falseType)) {
+                        errorInfo = saveErrorInfo;
+                        return result;
+                    }
+
+                    const root = (target as ConditionalType).root;
+                    const conditional = target as ConditionalType;
+                    if (root.trueType.flags & TypeFlags.Substitution) {
+                        const sub = root.trueType as SubstitutionType;
+                        trueType = getSubstitutionType(
+                            trueType,
+                            instantiateType(sub.substitute, conditional.combinedMapper || conditional.mapper),
+                            instantiateTypes(sub.negatedTypes, conditional.combinedMapper || conditional.mapper || identityMapper)
+                        );
+                    }
+                    if (root.falseType.flags & TypeFlags.Substitution) {
+                        const sub = root.falseType as SubstitutionType;
+                        falseType = getSubstitutionType(
+                            falseType,
+                            instantiateType(sub.substitute, conditional.combinedMapper || conditional.mapper),
+                            instantiateTypes(sub.negatedTypes, conditional.combinedMapper || conditional.mapper || identityMapper)
+                        );
+                    }
+                    if (root.isDistributive && source.flags & TypeFlags.Union) {
+                        // If the source is a union, and the root is distributive, break up the union and distribute it, too
+                        const types = (source as UnionType).types;
+                        let result = Ternary.True;
+                        for (const type of types) {
+                            result &= isAssociatedWithOneConditionalTypeBranch(type, target as ConditionalType, trueType, falseType);
+                            if (!result) {
+                                return result;
+                            }
+                        }
+                        return result;
+                    }
+                    else {
+                        return isAssociatedWithOneConditionalTypeBranch(source, target as ConditionalType, trueType, falseType);
+                    }
+                }
                 else {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
                         !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
@@ -11259,6 +11363,31 @@ namespace ts {
                             }
                             errorInfo = originalErrorInfo;
                         }
+                    }
+                }
+                return Ternary.False;
+            }
+
+            function isAssociatedWithOneConditionalTypeBranch(source: Type, target: ConditionalType, trueType: Type, falseType: Type) {
+                // This is a complex check for relating the source to either branch of a conditional.
+                // Assume we have a
+                //   * Target of type `{ x: T } extends { x: object } ? T : never`
+                //   * Source of type `{ x: number }`
+                // In order to check this, we need to discover if the `source` type could be a result given the target.
+                // To do so, first we assume that the `true` branch will succeed. We draw an inference from the `source` to the `trueType`.
+                // This inference produces instantiations for the type variables in the `checkType` (the left hand side of the `extends` clause).
+                // We instantiate the check type with these inferences, then check if the conditional is true, asking "does the check type actually extend the extends type?"
+                // If so, the `source` is assignable to the `target`. If not, the same process can be used for the `false` branch, but using definitely-not-assignable for
+                // checking the relationship between the instantiated `check` and `extends` types instead.
+                // If neither case is true, the type is not assignable.
+                if (isRelatedTo(source, trueType)) {
+                    if (conditionalTypeReverseInferenceSucceeds(source, target, trueType, assignableRelation)) {
+                        return Ternary.True;
+                    }
+                }
+                if (isRelatedTo(source, falseType)) {
+                    if (!conditionalTypeReverseInferenceSucceeds(source, target, falseType, definitelyAssignableRelation)) {
+                        return Ternary.True;
                     }
                 }
                 return Ternary.False;
@@ -12489,11 +12618,12 @@ namespace ts {
         function createEmptyObjectTypeFromStringLiteral(type: Type) {
             const members = createSymbolTable();
             forEachType(type, t => {
-                if (!(t.flags & TypeFlags.StringLiteral)) {
+                if (!isLiteralType(t)) {
                     return;
                 }
-                const name = escapeLeadingUnderscores((t as StringLiteralType).value);
+                const name = escapeLeadingUnderscores("" + (t as LiteralType).value);
                 const literalProp = createSymbol(SymbolFlags.Property, name);
+                literalProp.nameType = t;
                 literalProp.type = anyType;
                 if (t.symbol) {
                     literalProp.declarations = t.symbol.declarations;
@@ -13023,11 +13153,13 @@ namespace ts {
 
                 inference.inferredType = inferredType;
 
-                const constraint = getConstraintOfTypeParameter(inference.typeParameter);
-                if (constraint) {
-                    const instantiatedConstraint = instantiateType(constraint, context);
-                    if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                        inference.inferredType = inferredType = instantiatedConstraint;
+                if (!(context.flags & InferenceFlags.SkipConstraintCheck)) {
+                    const constraint = getConstraintOfTypeParameter(inference.typeParameter);
+                    if (constraint) {
+                        const instantiatedConstraint = instantiateType(constraint, context);
+                        if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                            inference.inferredType = inferredType = instantiatedConstraint;
+                        }
                     }
                 }
             }

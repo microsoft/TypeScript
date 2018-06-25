@@ -1,0 +1,27 @@
+=== tests/cases/compiler/keyofExtractConstrainsAsExpected.ts ===
+type StringKeyof<T> = Extract<keyof T, string>;
+>StringKeyof : Symbol(StringKeyof, Decl(keyofExtractConstrainsAsExpected.ts, 0, 0))
+>T : Symbol(T, Decl(keyofExtractConstrainsAsExpected.ts, 0, 17))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofExtractConstrainsAsExpected.ts, 0, 17))
+
+type Whatever<T, K extends StringKeyof<T>> = any;
+>Whatever : Symbol(Whatever, Decl(keyofExtractConstrainsAsExpected.ts, 0, 47))
+>T : Symbol(T, Decl(keyofExtractConstrainsAsExpected.ts, 2, 14))
+>K : Symbol(K, Decl(keyofExtractConstrainsAsExpected.ts, 2, 16))
+>StringKeyof : Symbol(StringKeyof, Decl(keyofExtractConstrainsAsExpected.ts, 0, 0))
+>T : Symbol(T, Decl(keyofExtractConstrainsAsExpected.ts, 2, 14))
+
+type WithoutFoo = Whatever<{ foo: string }, "foo">; // ok
+>WithoutFoo : Symbol(WithoutFoo, Decl(keyofExtractConstrainsAsExpected.ts, 2, 49))
+>Whatever : Symbol(Whatever, Decl(keyofExtractConstrainsAsExpected.ts, 0, 47))
+>foo : Symbol(foo, Decl(keyofExtractConstrainsAsExpected.ts, 4, 28))
+
+// no error on the following
+type WithoutFooGeneric<P extends { foo: string }> = Whatever<P, "foo">;
+>WithoutFooGeneric : Symbol(WithoutFooGeneric, Decl(keyofExtractConstrainsAsExpected.ts, 4, 51))
+>P : Symbol(P, Decl(keyofExtractConstrainsAsExpected.ts, 7, 23))
+>foo : Symbol(foo, Decl(keyofExtractConstrainsAsExpected.ts, 7, 34))
+>Whatever : Symbol(Whatever, Decl(keyofExtractConstrainsAsExpected.ts, 0, 47))
+>P : Symbol(P, Decl(keyofExtractConstrainsAsExpected.ts, 7, 23))
+

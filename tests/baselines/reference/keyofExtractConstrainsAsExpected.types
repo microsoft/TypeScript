@@ -1,0 +1,27 @@
+=== tests/cases/compiler/keyofExtractConstrainsAsExpected.ts ===
+type StringKeyof<T> = Extract<keyof T, string>;
+>StringKeyof : Extract<keyof T, string>
+>T : T
+>Extract : Extract<T, U>
+>T : T
+
+type Whatever<T, K extends StringKeyof<T>> = any;
+>Whatever : any
+>T : T
+>K : K
+>StringKeyof : Extract<keyof T, string>
+>T : T
+
+type WithoutFoo = Whatever<{ foo: string }, "foo">; // ok
+>WithoutFoo : any
+>Whatever : any
+>foo : string
+
+// no error on the following
+type WithoutFooGeneric<P extends { foo: string }> = Whatever<P, "foo">;
+>WithoutFooGeneric : any
+>P : P
+>foo : string
+>Whatever : any
+>P : P
+

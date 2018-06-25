@@ -4029,8 +4029,9 @@ namespace ts {
     // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution
     // types disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
-        typeVariable: TypeVariable;  // Target type variable
+        typeVariable: Type;          // Target type variable
         substitute: Type;            // Type to substitute for type parameter
+        negatedTypes?: Type[];       // Types proven that this type variables _doesn't_ extend
     }
 
     export const enum SignatureKind {
@@ -4117,6 +4118,7 @@ namespace ts {
         InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
         NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
+        SkipConstraintCheck = 1 << 3, // Skip checking weather the inference is assignable to the constraint (otherwise is replaced with constraint)
     }
 
     /**

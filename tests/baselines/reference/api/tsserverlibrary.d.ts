@@ -3446,8 +3446,9 @@ declare namespace ts {
         combinedMapper?: TypeMapper;
     }
     interface SubstitutionType extends InstantiableType {
-        typeVariable: TypeVariable;
+        typeVariable: Type;
         substitute: Type;
+        negatedTypes?: Type[];
     }
     enum SignatureKind {
         Call = 0,

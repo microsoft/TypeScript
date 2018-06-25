@@ -1,0 +1,30 @@
+tests/cases/compiler/conditionalTypeGenericAssignability.ts(3,5): error TS2322: Type '0' is not assignable to type 'Extract<keyof T, string>'.
+tests/cases/compiler/conditionalTypeGenericAssignability.ts(7,5): error TS2322: Type '"foo"' is not assignable to type 'Exclude<keyof T, string>'.
+tests/cases/compiler/conditionalTypeGenericAssignability.ts(16,5): error TS2322: Type '{ y: { x: T; }; }' is not assignable to type '{ x: T; } extends { x: string; } ? { y: { x: T; }; } : never'.
+
+
+==== tests/cases/compiler/conditionalTypeGenericAssignability.ts (3 errors) ====
+    function f1<T extends { foo: unknown; 0: unknown }>(_a: T, b: Extract<keyof T, string>) {
+        b = "foo"; // succeeds
+        b = 0; // errors
+        ~
+!!! error TS2322: Type '0' is not assignable to type 'Extract<keyof T, string>'.
+    }
+    
+    function f2<T extends { foo: unknown; 0: unknown }>(_a: T, b: Exclude<keyof T, string>) {
+        b = "foo"; // errors
+        ~
+!!! error TS2322: Type '"foo"' is not assignable to type 'Exclude<keyof T, string>'.
+        b = 0; // succeeds
+    }
+    
+    function f3<T extends number | string>(
+        i: T & string,
+        j: T,
+        b: { x: T } extends { x: string } ? { y: { x: T } } : never) {
+        b = { y: { x: i } }; // success
+        b = { y: { x: j } }; // failure
+        ~
+!!! error TS2322: Type '{ y: { x: T; }; }' is not assignable to type '{ x: T; } extends { x: string; } ? { y: { x: T; }; } : never'.
+    }
+    

@@ -1,0 +1,85 @@
+=== tests/cases/compiler/conditionalTypeGenericAssignability.ts ===
+function f1<T extends { foo: unknown; 0: unknown }>(_a: T, b: Extract<keyof T, string>) {
+>f1 : <T extends { foo: unknown; 0: unknown; }>(_a: T, b: Extract<keyof T, string>) => void
+>T : T
+>foo : unknown
+>0 : unknown
+>_a : T
+>T : T
+>b : Extract<keyof T, string>
+>Extract : Extract<T, U>
+>T : T
+
+    b = "foo"; // succeeds
+>b = "foo" : "foo"
+>b : Extract<keyof T, string>
+>"foo" : "foo"
+
+    b = 0; // errors
+>b = 0 : 0
+>b : Extract<keyof T, string>
+>0 : 0
+}
+
+function f2<T extends { foo: unknown; 0: unknown }>(_a: T, b: Exclude<keyof T, string>) {
+>f2 : <T extends { foo: unknown; 0: unknown; }>(_a: T, b: Exclude<keyof T, string>) => void
+>T : T
+>foo : unknown
+>0 : unknown
+>_a : T
+>T : T
+>b : Exclude<keyof T, string>
+>Exclude : Exclude<T, U>
+>T : T
+
+    b = "foo"; // errors
+>b = "foo" : "foo"
+>b : Exclude<keyof T, string>
+>"foo" : "foo"
+
+    b = 0; // succeeds
+>b = 0 : 0
+>b : Exclude<keyof T, string>
+>0 : 0
+}
+
+function f3<T extends number | string>(
+>f3 : <T extends string | number>(i: T & string, j: T, b: { x: T; } extends { x: string; } ? { y: { x: T; }; } : never) => void
+>T : T
+
+    i: T & string,
+>i : T & string
+>T : T
+
+    j: T,
+>j : T
+>T : T
+
+    b: { x: T } extends { x: string } ? { y: { x: T } } : never) {
+>b : { x: T; } extends { x: string; } ? { y: { x: T; }; } : never
+>x : T
+>T : T
+>x : string
+>y : { x: T; }
+>x : T
+>T : T
+
+    b = { y: { x: i } }; // success
+>b = { y: { x: i } } : { y: { x: T & string; }; }
+>b : { x: T; } extends { x: string; } ? { y: { x: T; }; } : never
+>{ y: { x: i } } : { y: { x: T & string; }; }
+>y : { x: T & string; }
+>{ x: i } : { x: T & string; }
+>x : T & string
+>i : T & string
+
+    b = { y: { x: j } }; // failure
+>b = { y: { x: j } } : { y: { x: T; }; }
+>b : { x: T; } extends { x: string; } ? { y: { x: T; }; } : never
+>{ y: { x: j } } : { y: { x: T; }; }
+>y : { x: T; }
+>{ x: j } : { x: T; }
+>x : T
+>j : T
+}
+

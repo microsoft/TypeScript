@@ -1,0 +1,71 @@
+=== tests/cases/compiler/conditionalTypeGenericAssignability.ts ===
+function f1<T extends { foo: unknown; 0: unknown }>(_a: T, b: Extract<keyof T, string>) {
+>f1 : Symbol(f1, Decl(conditionalTypeGenericAssignability.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 0, 12))
+>foo : Symbol(foo, Decl(conditionalTypeGenericAssignability.ts, 0, 23))
+>0 : Symbol(0, Decl(conditionalTypeGenericAssignability.ts, 0, 37))
+>_a : Symbol(_a, Decl(conditionalTypeGenericAssignability.ts, 0, 52))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 0, 12))
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 0, 58))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 0, 12))
+
+    b = "foo"; // succeeds
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 0, 58))
+
+    b = 0; // errors
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 0, 58))
+}
+
+function f2<T extends { foo: unknown; 0: unknown }>(_a: T, b: Exclude<keyof T, string>) {
+>f2 : Symbol(f2, Decl(conditionalTypeGenericAssignability.ts, 3, 1))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 5, 12))
+>foo : Symbol(foo, Decl(conditionalTypeGenericAssignability.ts, 5, 23))
+>0 : Symbol(0, Decl(conditionalTypeGenericAssignability.ts, 5, 37))
+>_a : Symbol(_a, Decl(conditionalTypeGenericAssignability.ts, 5, 52))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 5, 12))
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 5, 58))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 5, 12))
+
+    b = "foo"; // errors
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 5, 58))
+
+    b = 0; // succeeds
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 5, 58))
+}
+
+function f3<T extends number | string>(
+>f3 : Symbol(f3, Decl(conditionalTypeGenericAssignability.ts, 8, 1))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    i: T & string,
+>i : Symbol(i, Decl(conditionalTypeGenericAssignability.ts, 10, 39))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    j: T,
+>j : Symbol(j, Decl(conditionalTypeGenericAssignability.ts, 11, 18))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    b: { x: T } extends { x: string } ? { y: { x: T } } : never) {
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 12, 9))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 13, 8))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 13, 25))
+>y : Symbol(y, Decl(conditionalTypeGenericAssignability.ts, 13, 41))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 13, 46))
+>T : Symbol(T, Decl(conditionalTypeGenericAssignability.ts, 10, 12))
+
+    b = { y: { x: i } }; // success
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 12, 9))
+>y : Symbol(y, Decl(conditionalTypeGenericAssignability.ts, 14, 9))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 14, 14))
+>i : Symbol(i, Decl(conditionalTypeGenericAssignability.ts, 10, 39))
+
+    b = { y: { x: j } }; // failure
+>b : Symbol(b, Decl(conditionalTypeGenericAssignability.ts, 12, 9))
+>y : Symbol(y, Decl(conditionalTypeGenericAssignability.ts, 15, 9))
+>x : Symbol(x, Decl(conditionalTypeGenericAssignability.ts, 15, 14))
+>j : Symbol(j, Decl(conditionalTypeGenericAssignability.ts, 11, 18))
+}
+
