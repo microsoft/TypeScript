@@ -225,7 +225,6 @@ declare namespace ts {
      * Returns a new sorted array.
      */
     function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): T[];
-    function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined;
     function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T>;
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.

@@ -1029,23 +1029,6 @@ namespace ts {
         return array.slice().sort(comparer);
     }
 
-    export function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined {
-        const x = iter.next();
-        if (x.done) {
-            return undefined;
-        }
-        let best = x.value;
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) {
-                return best;
-            }
-            if (isBetter(value, best)) {
-                best = value;
-            }
-        }
-    }
-
     export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
         let i = 0;
         return { next: () => {
