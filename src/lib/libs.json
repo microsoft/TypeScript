@@ -35,6 +35,7 @@
         "esnext.asynciterable",
         "esnext.array",
         "esnext.symbol",
+        "esnext.intl",
         // Default libraries
         "es5.full",
         "es2015.full",

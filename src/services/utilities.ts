@@ -439,6 +439,10 @@ namespace ts {
         return startEndOverlapsWithStartEnd(r1.pos, r1.end, start, end);
     }
 
+    export function nodeOverlapsWithStartEnd(node: Node, sourceFile: SourceFile, start: number, end: number) {
+        return startEndOverlapsWithStartEnd(node.getStart(sourceFile), node.end, start, end);
+    }
+
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
         const start = Math.max(start1, start2);
         const end = Math.min(end1, end2);
@@ -944,7 +948,7 @@ namespace ts {
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
                     if (!token || !isIdentifier(token)) return undefined;
                     if (!remainingLessThanTokens) {
-                        return { called: token, nTypeArguments };
+                        return isDeclarationName(token) ? undefined : { called: token, nTypeArguments };
                     }
                     remainingLessThanTokens--;
                     break;
@@ -1277,13 +1281,17 @@ namespace ts {
 
     export const enum QuotePreference { Single, Double }
 
+    export function quotePreferenceFromString(str: StringLiteral, sourceFile: SourceFile): QuotePreference {
+        return isStringDoubleQuoted(str, sourceFile) ? QuotePreference.Double : QuotePreference.Single;
+    }
+
     export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
         if (preferences.quotePreference) {
             return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
         }
         else {
-            const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
-            return !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile) ? QuotePreference.Single : QuotePreference.Double;
+            const firstModuleSpecifier = sourceFile.imports && find(sourceFile.imports, isStringLiteral);
+            return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
         }
     }
 
@@ -1378,6 +1386,10 @@ namespace ts {
     function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
         return textSpanContainsPosition(span, node.getStart(file)) &&
             node.getEnd() <= textSpanEnd(span);
+    }
+
+    export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined {
+        return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
     /* @internal */

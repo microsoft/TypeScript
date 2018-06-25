@@ -52,11 +52,13 @@ async function buildProtocol() {
 }
 
 async function copyScriptOutputs() {
-    await copyWithCopyright("tsserver.js");
-    await copyWithCopyright("tsc.js");
-    await copyWithCopyright("watchGuard.js");
     await copyWithCopyright("cancellationToken.js");
+    await copyWithCopyright("tsc.js");
+    await copyWithCopyright("tsserver.js");
+    await copyWithCopyright("typescript.js");
+    await copyWithCopyright("typescriptServices.js");
     await copyWithCopyright("typingsInstaller.js");
+    await copyWithCopyright("watchGuard.js");
 }
 
 async function buildTsc() {
@@ -64,9 +66,9 @@ async function buildTsc() {
 }
 
 async function copyDeclarationOutputs() {
+    await copyWithCopyright("tsserverlibrary.d.ts");
     await copyWithCopyright("typescript.d.ts");
     await copyWithCopyright("typescriptServices.d.ts");
-    await copyWithCopyright("tsserverlibrary.d.ts");
 }
 
 async function writeGitAttributes() {
@@ -75,7 +77,7 @@ async function writeGitAttributes() {
 
 async function copyWithCopyright(fileName: string) {
     const content = await fs.readFile(path.join(source, fileName), "utf-8");
-    await fs.writeFile(path.join(dest, fileName), copyright + "\r\n" + content);
+    await fs.writeFile(path.join(dest, fileName), copyright + "\n" + content);
 }
 
 async function copyFromBuiltLocal(fileName: string) {

@@ -10,9 +10,18 @@ const ts = require("./lib/typescript");
 const del = require("del");
 const getDirSize = require("./scripts/build/getDirSize");
 
+// add node_modules to path so we don't need global modules, prefer the modules by adding them first
+var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
+if (process.env.path !== undefined) {
+    process.env.path = nodeModulesPathPrefix + process.env.path;
+}
+else if (process.env.PATH !== undefined) {
+    process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
+}
+
 const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
-const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
+const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"];
 
 const defaultTestTimeout = 40000;
 
@@ -29,6 +38,7 @@ const TaskNames = {
     buildFoldEnd: "build-fold-end",
     generateDiagnostics: "generate-diagnostics",
     coreBuild: "core-build",
+    tsc: "tsc",
     lkg: "LKG",
     release: "release",
     lssl: "lssl",
@@ -50,6 +60,7 @@ Paths.builtLocalCompiler = "built/local/tsc.js";
 Paths.builtLocalTSServer = "built/local/tsserver.js";
 Paths.builtLocalRun = "built/local/run.js";
 Paths.typesMapOutput = "built/local/typesMap.json";
+Paths.typescriptFile = "built/local/typescript.js";
 Paths.servicesFile = "built/local/typescriptServices.js";
 Paths.servicesDefinitionFile = "built/local/typescriptServices.d.ts";
 Paths.typescriptDefinitionFile = "built/local/typescript.d.ts";
@@ -58,10 +69,10 @@ Paths.tsserverLibraryDefinitionFile = "built/local/tsserverlibrary.d.ts";
 Paths.baselines = {};
 Paths.baselines.local = "tests/baselines/local";
 Paths.baselines.localTest262 = "tests/baselines/test262/local";
-Paths.baselines.localRwc = "tests/baselines/rwc/local";
+Paths.baselines.localRwc = "internal/baselines/rwc/local";
 Paths.baselines.reference = "tests/baselines/reference";
 Paths.baselines.referenceTest262 = "tests/baselines/test262/reference";
-Paths.baselines.referenceRwc = "tests/baselines/rwc/reference";
+Paths.baselines.referenceRwc = "internal/baselines/rwc/reference";
 Paths.copyright = "CopyrightNotice.txt";
 Paths.thirdParty = "ThirdPartyNoticeText.txt";
 Paths.processDiagnosticMessagesJs = "scripts/processDiagnosticMessages.js";
@@ -163,7 +174,7 @@ task(TaskNames.lkg, [
         if (sizeAfter > (sizeBefore * 1.10)) {
             throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
         }
-    
+
         complete();
     });
 }, { async: true });
@@ -195,17 +206,17 @@ task(TaskNames.lint, [TaskNames.buildRules], () => {
         if (fold.isTravis()) console.log(fold.end("lint"));
         complete();
     }));
-});
+}, { async: true });
 
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
-    var cmd = `"${getDiffTool()} ${Paths.baselines.reference} ${Paths.baselines.local}`;
+    var cmd = `"${getDiffTool()}" ${Paths.baselines.reference} ${Paths.baselines.local}`;
     exec(cmd);
 }, { async: true });
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
-    var cmd = `"${getDiffTool()} ${Paths.baselines.referenceRwc} ${Paths.baselines.localRwc}`;
+    var cmd = `"${getDiffTool()}" ${Paths.baselines.referenceRwc} ${Paths.baselines.localRwc}`;
     exec(cmd);
 }, { async: true });
 
@@ -266,6 +277,12 @@ task(TaskNames.clean, function () {
 
 desc("Generates the LCG file for localization");
 task("localize", [Paths.generatedLCGFile]);
+
+task(TaskNames.tsc, [Paths.diagnosticInformationMap, TaskNames.lib], function () {
+    tsbuild(ConfigFileFor.tsc, true, () => {
+        complete();
+    });
+}, { async: true });
 
 task(TaskNames.coreBuild, [Paths.diagnosticInformationMap, TaskNames.lib], function () {
     tsbuild(ConfigFileFor.all, true, () => {
@@ -332,15 +349,20 @@ file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
         },
         files
     };
-    
+
     const configFilePath = `built/local/typescriptServices.tsconfig.json`;
     fs.writeFileSync(configFilePath, JSON.stringify(config, undefined, 2));
     tsbuild(configFilePath, false, () => {
         const servicesContent = readFileSync(Paths.servicesDefinitionFile);
         const servicesContentWithoutConstEnums = removeConstModifierFromEnumDeclarations(servicesContent);
         fs.writeFileSync(Paths.servicesDefinitionFile, servicesContentWithoutConstEnums);
+        
+        // Also build typescript.js, typescript.js.map, and typescript.d.ts
+        jake.cpR(Paths.servicesFile, Paths.typescriptFile);
+        if (fs.existsSync(Paths.servicesFile + ".map")) {
+            jake.cpR(Paths.servicesFile + ".map", Paths.typescriptFile + ".map");
+        }
 
-        // Also build typescript.d.ts
         fs.writeFileSync(Paths.typescriptDefinitionFile, servicesContentWithoutConstEnums + "\r\nexport = ts", { encoding: "utf-8" });
         // And typescript_standalone.d.ts
         fs.writeFileSync(Paths.typescriptStandaloneDefinitionFile, servicesContentWithoutConstEnums.replace(/declare (namespace|module) ts(\..+)? \{/g, 'declare module "typescript" {'), { encoding: "utf-8"});
@@ -685,8 +707,8 @@ function diagnosticsToString(diagnostics, pretty) {
 
 /**
  * Concatenate a list of sourceFiles to a destinationFile
- * @param {string} destinationFile 
- * @param {string[]} sourceFiles 
+ * @param {string} destinationFile
+ * @param {string[]} sourceFiles
  * @param {string} extraContent
  */
 function concatenateFiles(destinationFile, sourceFiles, extraContent) {
@@ -713,8 +735,8 @@ function appendToFile(path, content) {
 }
 
 /**
- * 
- * @param {string} path 
+ *
+ * @param {string} path
  * @returns string
  */
 function readFileSync(path) {
@@ -731,7 +753,7 @@ function getDiffTool() {
 
 /**
  * Replaces const enum declarations with non-const enums
- * @param {string} text 
+ * @param {string} text
  */
 function removeConstModifierFromEnumDeclarations(text) {
     return text.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
