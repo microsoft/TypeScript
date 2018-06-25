@@ -421,6 +421,7 @@ namespace ts {
         let force = false;
         let clean = false;
         let watch = false;
+        let listFiles = false;
 
         const projects: string[] = [];
         for (const arg of args) {
@@ -443,6 +444,9 @@ namespace ts {
                 case "--watch":
                 case "-w":
                     watch = true;
+                    continue;                    
+                case "--listfiles":
+                    listFiles = true;
                     continue;
 
                 case "--?":
@@ -479,6 +483,12 @@ namespace ts {
         }
 
         const builder = createSolutionBuilder(compilerHost, buildHost, projects, { dry, force, verbose }, system);
+
+        if (listFiles) {
+            builder.listFiles();
+            return ExitStatus.Success;
+        }
+
         if (clean) {
             return builder.cleanAllProjects();
         }
@@ -534,6 +544,7 @@ namespace ts {
             cleanAllProjects,
             resetBuildContext,
             getBuildGraph,
+            listFiles,
 
             invalidateProject,
             buildInvalidatedProjects,
@@ -594,6 +605,27 @@ namespace ts {
 
         function getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus {
             return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
+        }
+
+        function listFiles() {
+            const graph = getGlobalDependencyGraph();
+            if (!graph) return;
+
+            for (const proj of graph.buildQueue) {
+                listProjectFiles(proj);
+            }
+        }
+
+        function listProjectFiles(proj: ResolvedConfigFileName) {
+            const configFile = configFileCache.parseConfigFile(proj);
+            if (!configFile) {
+                // Failed to read the config file
+                return;
+            }
+            for (const file of configFile.fileNames) {
+                sys.write(normalizeSlashes(resolvePath(file)));
+                sys.write("\r\n");
+            }
         }
 
         function getBuildGraph(configFileNames: ReadonlyArray<string>) {
