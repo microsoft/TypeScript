@@ -1,0 +1,71 @@
+=== tests/cases/conformance/jsdoc/bug25127.js ===
+class Entry {
+>Entry : Entry
+
+    constructor() {
+        this.c = 1
+>this.c = 1 : 1
+>this.c : number
+>this : this
+>c : number
+>1 : 1
+    }
+    /**
+     * @param {any} x
+     * @return {this is Entry}
+     */
+    isInit(x) {
+>isInit : (x: any) => this is Entry
+>x : any
+
+        return true
+>true : true
+    }
+}
+class Group {
+>Group : Group
+
+    constructor() {
+        this.d = 'no'
+>this.d = 'no' : "no"
+>this.d : string
+>this : this
+>d : string
+>'no' : "no"
+    }
+    /**
+     * @param {any} x
+     * @return {false}
+     */
+    isInit(x) {
+>isInit : (x: any) => false
+>x : any
+
+        return false
+>false : false
+    }
+}
+/** @param {Entry | Group} chunk */
+function f(chunk) {
+>f : (chunk: Entry | Group) => string | number
+>chunk : Entry | Group
+
+    let x = chunk.isInit(chunk) ? chunk.c : chunk.d
+>x : string | number
+>chunk.isInit(chunk) ? chunk.c : chunk.d : string | number
+>chunk.isInit(chunk) : boolean
+>chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
+>chunk : Entry | Group
+>isInit : ((x: any) => this is Entry) | ((x: any) => false)
+>chunk : Entry | Group
+>chunk.c : number
+>chunk : Entry
+>c : number
+>chunk.d : string
+>chunk : Group
+>d : string
+
+    return x
+>x : string | number
+}
+

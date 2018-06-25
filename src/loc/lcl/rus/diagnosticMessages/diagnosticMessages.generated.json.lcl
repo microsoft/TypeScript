@@ -486,7 +486,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[При выполнении сборки в рабочем режиме будет собран проект "{0}"]]></Val>
+            <Val><![CDATA[При сборке без флага -dry будет собран проект "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -495,7 +495,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[При выполнении сборки в рабочем режиме будут удалены следующие файлы: {0}]]></Val>
+            <Val><![CDATA[При сборке без флага -dry будут удалены следующие файлы: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

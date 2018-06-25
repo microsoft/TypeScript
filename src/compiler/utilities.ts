@@ -745,8 +745,8 @@ namespace ts {
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
-    export function declarationNameToString(name: DeclarationName | QualifiedName) {
-        return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
+    export function declarationNameToString(name: DeclarationName | QualifiedName | undefined) {
+        return !name || getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
     export function getNameFromIndexInfo(info: IndexInfo): string | undefined {
@@ -2067,53 +2067,51 @@ namespace ts {
 
     export function getJSDocCommentsAndTags(hostNode: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
-        getJSDocCommentsAndTagsWorker(hostNode);
-        return result || emptyArray;
+        // Pull parameter comments from declaring function as well
+        if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
+            result = addRange(result, (hostNode.initializer as HasJSDoc).jsDoc!);
+        }
 
-        function getJSDocCommentsAndTagsWorker(node: Node): void {
-            const parent = node.parent;
-            if (!parent) return;
-            if (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent)) {
-                getJSDocCommentsAndTagsWorker(parent);
-            }
-            // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
-            // /**
-            //   * @param {number} name
-            //   * @returns {number}
-            //   */
-            // var x = function(name) { return name.length; }
-            if (parent.parent && (getSingleVariableOfVariableStatement(parent.parent) === node)) {
-                getJSDocCommentsAndTagsWorker(parent.parent);
-            }
-            if (parent.parent && parent.parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent.parent) ||
-                    getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
-                    getSourceOfDefaultedAssignment(parent.parent.parent))) {
-                getJSDocCommentsAndTagsWorker(parent.parent.parent);
-            }
-            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
-                isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
-                node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
-                if (isBinaryExpression(parent)) {
-                    getJSDocCommentsAndTagsWorker(parent.parent);
-                }
-                else {
-                    getJSDocCommentsAndTagsWorker(parent);
-                }
+        let node: Node | undefined = hostNode;
+        while (node && node.parent) {
+            if (hasJSDocNodes(node)) {
+                result = addRange(result, node.jsDoc!);
             }
 
-            // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
+                break;
             }
+            node = getNextJSDocCommentLocation(node);
+        }
+        return result || emptyArray;
+    }
 
-            if (isVariableLike(node) && hasInitializer(node) && node.initializer !== hostNode && hasJSDocNodes(node.initializer!)) {
-                result = addRange(result, (node.initializer as HasJSDoc).jsDoc);
-            }
-
-            if (hasJSDocNodes(node)) {
-                result = addRange(result, node.jsDoc);
-            }
+    function getNextJSDocCommentLocation(node: Node) {
+        const parent = node.parent;
+        if (parent.kind === SyntaxKind.PropertyAssignment ||
+            parent.kind === SyntaxKind.PropertyDeclaration ||
+            parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
+            getNestedModuleDeclaration(parent) ||
+            isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken) {
+            return parent;
+        }
+        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
+        // /**
+        //   * @param {number} name
+        //   * @returns {number}
+        //   */
+        // var x = function(name) { return name.length; }
+        else if (parent.parent &&
+            (getSingleVariableOfVariableStatement(parent.parent) === node ||
+            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
+            return parent.parent;
+        }
+        else if (parent.parent && parent.parent.parent &&
+            (getSingleVariableOfVariableStatement(parent.parent.parent) ||
+            getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
+            getSourceOfDefaultedAssignment(parent.parent.parent))) {
+            return parent.parent.parent;
         }
     }
 
@@ -2415,7 +2413,18 @@ namespace ts {
         return isEntityNameExpression(e) || isClassExpression(e);
     }
 
-    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
+    export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
+        if (isInJavaScriptFile(node)) {
+            // Prefer an @augments tag because it may have type parameters.
+            const tag = getJSDocAugmentsTag(node);
+            if (tag) {
+                return tag.class;
+            }
+        }
+        return getClassExtendsHeritageElement(node);
+    }
+
+    export function getClassExtendsHeritageElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -2428,7 +2437,7 @@ namespace ts {
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode> {
         return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray
-            : isClassLike(node) ? concatenate(singleElementArray(getClassExtendsHeritageClauseElement(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
+            : isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
                 : emptyArray;
     }
 
@@ -4849,7 +4858,7 @@ namespace ts {
 
     function getDeclarationIdentifier(node: Declaration | Expression): Identifier | undefined {
         const name = getNameOfDeclaration(node);
-        return isIdentifier(name) ? name : undefined;
+        return name && isIdentifier(name) ? name : undefined;
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
@@ -4861,16 +4870,15 @@ namespace ts {
         return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
     }
 
-    // TODO: GH#18217 This is often used as if it returns a defined result
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName {
+    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (!declaration) {
-            return undefined!;
+            return undefined;
         }
         switch (declaration.kind) {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
                 if (!(declaration as ClassExpression | FunctionExpression).name) {
-                    return getAssignedName(declaration)!;
+                    return getAssignedName(declaration);
                 }
                 break;
             case SyntaxKind.Identifier:
@@ -4892,19 +4900,19 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
                         return (expr.left as PropertyAccessExpression).name;
                     default:
-                        return undefined!;
+                        return undefined;
                 }
             }
             case SyntaxKind.JSDocCallbackTag:
-                return (declaration as JSDocCallbackTag).name!;
+                return (declaration as JSDocCallbackTag).name;
             case SyntaxKind.JSDocTypedefTag:
-                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag)!;
+                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
             case SyntaxKind.ExportAssignment: {
                 const { expression } = declaration as ExportAssignment;
-                return isIdentifier(expression) ? expression : undefined!;
+                return isIdentifier(expression) ? expression : undefined;
             }
         }
-        return (declaration as NamedDeclaration).name!;
+        return (declaration as NamedDeclaration).name;
     }
 
     function getAssignedName(node: Node): DeclarationName | undefined {
@@ -7482,19 +7490,20 @@ namespace ts {
         return true;
     }
 
-    export function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined {
-        const a = tryRemovePrefix(path, dirPath);
-        if (a === undefined) return undefined;
-        switch (a.charCodeAt(0)) {
-            case CharacterCodes.slash:
-            case CharacterCodes.backslash:
-                return a.slice(1);
-            default:
-                return undefined;
-        }
+    function isDirectorySeparator(charCode: number): boolean {
+        return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
     }
 
-        // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
+    function stripLeadingDirectorySeparator(s: string): string | undefined {
+        return isDirectorySeparator(s.charCodeAt(0)) ? s.slice(1) : undefined;
+    }
+
+    export function tryRemoveDirectoryPrefix(path: string, dirPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
+        const withoutPrefix = tryRemovePrefix(path, dirPath, getCanonicalFileName);
+        return withoutPrefix === undefined ? undefined : stripLeadingDirectorySeparator(withoutPrefix);
+    }
+
+    // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;

@@ -3836,6 +3836,10 @@
         "category": "Error",
         "code": 7039
     },
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+        "category": "Error",
+        "code": 7040
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

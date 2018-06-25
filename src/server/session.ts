@@ -1150,7 +1150,7 @@ namespace ts.server {
             // Since this is syntactic operation, there should always be project for the file
             // we wouldnt have to ensure project but rather throw if we dont get project
             const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ false);
+            const project = this.getProject(args.projectFileName) || this.projectService.tryGetDefaultProjectForFile(file);
             if (!project) {
                 return Errors.ThrowNoProject();
             }
@@ -1162,7 +1162,7 @@ namespace ts.server {
 
         private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string | undefined): { file: NormalizedPath, project: Project } {
             const file = toNormalizedPath(uncheckedFileName);
-            const project = this.getProject(projectFileName) || this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ true)!; // TODO: GH#18217
+            const project = this.getProject(projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
             return { file, project };
         }
 
@@ -1343,8 +1343,7 @@ namespace ts.server {
             });
         }
 
-        private getCompletions(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CompletionEntry> | CompletionInfo | undefined {
-            const prefix = args.prefix || "";
+        private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.Completions | protocol.CommandTypes.CompletionsFull): ReadonlyArray<protocol.CompletionEntry> | protocol.CompletionInfo | CompletionInfo | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1355,19 +1354,27 @@ namespace ts.server {
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions
             });
-            if (simplifiedResult) {
-                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
-                    if (completions!.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                        const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
-                        const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
-                        // Use `hasAction || undefined` to avoid serializing `false`.
-                        return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
-                    }
-                }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
-            }
-            else {
-                return completions;
-            }
+            if (completions === undefined) return undefined;
+
+            if (kind === protocol.CommandTypes.CompletionsFull) return completions;
+
+            const prefix = args.prefix || "";
+            const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
+                if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
+                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
+                    const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
+                    // Use `hasAction || undefined` to avoid serializing `false`.
+                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
+                }
+            }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
+
+            if (kind === protocol.CommandTypes.Completions) return entries;
+
+            const res: protocol.CompletionInfo = {
+                ...completions,
+                entries,
+            };
+            return res;
         }
 
         private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CompletionEntryDetails> | ReadonlyArray<CompletionEntryDetails> {
@@ -1454,7 +1461,7 @@ namespace ts.server {
         private createCheckList(fileNames: string[], defaultProject?: Project): PendingErrorCheck[] {
             return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
-                const project = defaultProject || this.projectService.getDefaultProjectForFile(fileName, /*ensureProject*/ false);
+                const project = defaultProject || this.projectService.tryGetDefaultProjectForFile(fileName);
                 return project && { fileName, project };
             });
         }
@@ -1852,7 +1859,7 @@ namespace ts.server {
             const lowPriorityFiles: NormalizedPath[] = [];
             const veryLowPriorityFiles: NormalizedPath[] = [];
             const normalizedFileName = toNormalizedPath(fileName);
-            const project = this.projectService.getDefaultProjectForFile(normalizedFileName, /*ensureProject*/ true)!;
+            const project = this.projectService.ensureDefaultProjectForFile(normalizedFileName);
             for (const fileNameInProject of fileNamesInProject) {
                 if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName)) {
                     highPriorityFiles.push(fileNameInProject);
@@ -2035,11 +2042,14 @@ namespace ts.server {
             [CommandNames.FormatRangeFull]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRangeFull(request.arguments));
             },
+            [CommandNames.CompletionInfo]: (request: protocol.CompletionsRequest) => {
+                return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionInfo));
+            },
             [CommandNames.Completions]: (request: protocol.CompletionsRequest) => {
-                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ true));
+                return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.Completions));
             },
             [CommandNames.CompletionsFull]: (request: protocol.CompletionsRequest) => {
-                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false));
+                return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionsFull));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ true));
