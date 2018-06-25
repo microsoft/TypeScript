@@ -692,17 +692,32 @@ namespace ts.server {
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
 
+        /* @internal */
+        forEachProject(cb: (project: Project) => void) {
+            for (const p of this.inferredProjects) cb(p);
+            this.configuredProjects.forEach(cb);
+            this.externalProjects.forEach(cb);
+        }
+
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined {
-            let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            if (ensureProject && (!scriptInfo || scriptInfo.isOrphan())) {
-                this.ensureProjectStructuresUptoDate();
-                scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-                if (!scriptInfo) {
-                    return Errors.ThrowNoProject();
-                }
-                return scriptInfo.getDefaultProject();
-            }
+            return ensureProject ? this.ensureDefaultProjectForFile(fileName) : this.tryGetDefaultProjectForFile(fileName);
+        }
+
+        /* @internal */
+        tryGetDefaultProjectForFile(fileName: NormalizedPath): Project | undefined {
+            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
             return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
+        }
+
+        /* @internal */
+        ensureDefaultProjectForFile(fileName: NormalizedPath): Project {
+            return this.tryGetDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
+        }
+
+        private doEnsureDefaultProjectForFile(fileName: NormalizedPath): Project {
+            this.ensureProjectStructuresUptoDate();
+            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+            return scriptInfo ? scriptInfo.getDefaultProject() : Errors.ThrowNoProject();
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
@@ -740,6 +755,14 @@ namespace ts.server {
         getPreferences(file: NormalizedPath): UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
             return info && info.getPreferences() || this.hostConfiguration.preferences;
+        }
+
+        getHostFormatCodeOptions(): FormatCodeSettings {
+            return this.hostConfiguration.formatCodeOptions;
+        }
+
+        getHostPreferences(): UserPreferences {
+            return this.hostConfiguration.preferences;
         }
 
         private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {

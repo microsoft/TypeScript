@@ -13,36 +13,41 @@ const del = require("del");
 const needsUpdate = require("./needsUpdate");
 const mkdirp = require("./mkdirp");
 const { reportDiagnostics } = require("./diagnostics");
-const { PassThrough } = require("stream");
 
 class CompilationGulp extends gulp.Gulp {
     /**
-     * @param {import("gulp-help").GulpHelp | import("gulp").Gulp} gulp
+     * @param {boolean} [verbose] 
      */
-    constructor(gulp) {
+    fork(verbose) {
+        const child = new ForkedGulp(this.tasks);
+        if (verbose) {
+            this.on("task_start", e => gulp.emit("task_start", e));
+            this.on("task_stop", e => gulp.emit("task_stop", e));
+            this.on("task_err", e => gulp.emit("task_err", e));
+            this.on("task_not_found", e => gulp.emit("task_not_found", e));
+            this.on("task_recursion", e => gulp.emit("task_recursion", e));
+        }
+        return child;
+    }
+}
+
+class ForkedGulp extends gulp.Gulp {
+    /**
+     * @param {gulp.Gulp["tasks"]} tasks
+     */
+    constructor(tasks) {
         super();
-        // forward notifications to the outer gulp.
-        this.on("task_start", e => gulp.emit("task_start", e));
-        this.on("task_stop", e => gulp.emit("task_stop", e));
-        this.on("task_err", e => gulp.emit("task_err", e));
-        this.on("task_not_found", e => gulp.emit("task_not_found", e));
-        this.on("task_recursion", e => gulp.emit("task_recursion", e));
-        this.on("err", e => gulp.emit("err", e));
+        this.tasks = tasks;
     }
 
-    dispose() {
-        this.removeAllListeners();
-        this.reset();
-    }
-    
-    // Do not reset tasks when `gulp.start()` is called
+    // Do not reset tasks
     _resetAllTasks() {}
     _resetSpecificTasks() {}
     _resetTask() {}
 }
 
 // internal `Gulp` instance for compilation artifacts.
-const compilationGulp = new CompilationGulp(gulp);
+const compilationGulp = new CompilationGulp();
 
 /** @type {Map<ResolvedProjectSpec, ProjectGraph>} */
 const projectGraphCache = new Map();
@@ -60,7 +65,9 @@ function createCompiler(projectSpec, options) {
     const resolvedOptions = resolveProjectOptions(options);
     const resolvedProjectSpec = resolveProjectSpec(projectSpec, resolvedOptions.paths, /*referrer*/ undefined);
     const taskName = compileTaskName(ensureCompileTask(getOrCreateProjectGraph(resolvedProjectSpec, resolvedOptions.paths), resolvedOptions), resolvedOptions.typescript);
-    return () => new Promise((resolve, reject) => compilationGulp.start(taskName, err => err ? reject(err) : resolve(err)));
+    return () => new Promise((resolve, reject) => compilationGulp
+        .fork(resolvedOptions.verbose)
+        .start(taskName, err => err ? reject(err) : resolve()));
 }
 exports.createCompiler = createCompiler;
 
@@ -74,13 +81,13 @@ exports.createCompiler = createCompiler;
  * @property {string} [cwd] The path to use for the current working directory. Defaults to `process.cwd()`.
  * @property {string} [base] The path to use as the base for relative paths. Defaults to `cwd`.
  * @property {string} [typescript] A module specifier or path (relative to gulpfile.js) to the version of TypeScript to use.
- * @property {Hook} [js] Pipeline hook for .js file outputs. For multiple steps, use `stream-combiner`.
- * @property {Hook} [dts] Pipeline hook for .d.ts file outputs. For multiple steps, use `stream-combiner`.
+ * @property {Hook} [js] Pipeline hook for .js file outputs.
+ * @property {Hook} [dts] Pipeline hook for .d.ts file outputs.
  * @property {boolean} [verbose] Indicates whether verbose logging is enabled.
  * @property {boolean} [force] Force recompilation (no up-to-date check).
  * @property {boolean} [inProcess] Indicates whether to run gulp-typescript in-process or out-of-process (default).
  * 
- * @typedef {NodeJS.ReadWriteStream | (() => NodeJS.ReadWriteStream)} Hook
+ * @typedef {(stream: NodeJS.ReadableStream) => NodeJS.ReadWriteStream} Hook
  */
 function compile(projectSpec, options) {
     const compiler = createCompiler(projectSpec, options);
@@ -97,7 +104,9 @@ function createCleaner(projectSpec, options) {
     const paths = resolvePathOptions(options);
     const resolvedProjectSpec = resolveProjectSpec(projectSpec, paths, /*referrer*/ undefined);
     const taskName = cleanTaskName(ensureCleanTask(getOrCreateProjectGraph(resolvedProjectSpec, paths)));
-    return () => new Promise((resolve, reject) => compilationGulp.start(taskName, err => err ? reject(err) : resolve(err)));
+    return () => new Promise((resolve, reject) => compilationGulp
+        .fork()
+        .start(taskName, err => err ? reject(err) : resolve()));
 }
 exports.createCleaner = createCleaner;
 
@@ -134,6 +143,7 @@ exports.addTypeScript = addTypeScript;
  * @property {string} [cwd] The path to use for the current working directory. Defaults to `process.cwd()`.
  * @property {CompilerOptions} [compilerOptions] Compiler option overrides.
  * @property {boolean} [force] Forces creation of the output project.
+ * @property {string[]} [exclude] Files to exclude (relative to `cwd`)
  */
 function flatten(projectSpec, flattenedProjectSpec, options = {}) {
     const paths = resolvePathOptions(options);
@@ -142,15 +152,16 @@ function flatten(projectSpec, flattenedProjectSpec, options = {}) {
     const resolvedOutputDirectory = path.dirname(resolvedOutputSpec);
     const resolvedProjectSpec = resolveProjectSpec(projectSpec, paths, /*referrer*/ undefined);
     const projectGraph = getOrCreateProjectGraph(resolvedProjectSpec, paths);
+    const skipProjects = /**@type {Set<ProjectGraph>}*/(new Set());
+    const skipFiles = new Set(options && options.exclude && options.exclude.map(file => path.resolve(paths.cwd, file)));
     recur(projectGraph);
 
-    const config = {
-        extends: normalizeSlashes(path.relative(resolvedOutputDirectory, resolvedProjectSpec)),
-        compilerOptions: options.compilerOptions || {},
-        files
-    };
-
     if (options.force || needsUpdate(files, resolvedOutputSpec)) {
+        const config = {
+            extends: normalizeSlashes(path.relative(resolvedOutputDirectory, resolvedProjectSpec)),
+            compilerOptions: options.compilerOptions || {},
+            files: files.map(file => normalizeSlashes(path.relative(resolvedOutputDirectory, file)))
+        };
         mkdirp.sync(resolvedOutputDirectory);
         fs.writeFileSync(resolvedOutputSpec, JSON.stringify(config, undefined, 2), "utf8");
     }
@@ -159,11 +170,16 @@ function flatten(projectSpec, flattenedProjectSpec, options = {}) {
      * @param {ProjectGraph} projectGraph 
      */
     function recur(projectGraph) {
+        if (skipProjects.has(projectGraph)) return;
+        skipProjects.add(projectGraph);
         for (const ref of projectGraph.references) {
             recur(ref.target);
         }
-        for (const file of projectGraph.project.fileNames) {
-            files.push(normalizeSlashes(path.relative(resolvedOutputDirectory, path.resolve(projectGraph.projectDirectory, file))));
+        for (let file of projectGraph.project.fileNames) {
+            file = path.resolve(projectGraph.projectDirectory, file);
+            if (skipFiles.has(file)) continue;
+            skipFiles.add(file);
+            files.push(file);
         }
     }
 }
@@ -255,14 +271,6 @@ function resolveProjectOptions(options = {}) {
         force: options.force || false,
         inProcess: options.inProcess || false
     };
-}
-
-/**
- * @param {Hook} hook 
- * @returns {NodeJS.ReadWriteStream}
- */
-function evaluateHook(hook) {
-    return (typeof hook === "function" ? hook() : hook) || new PassThrough({ objectMode: true });
 }
 
 /**
@@ -448,31 +456,29 @@ function resolveDestPath(projectGraph, paths) {
 
 /**
  * @param {ProjectGraph} projectGraph
- * @param {ResolvedProjectOptions} resolvedOptions
+ * @param {ResolvedProjectOptions} options
  */
-function ensureCompileTask(projectGraph, resolvedOptions) {
-    const projectGraphConfig = getOrCreateProjectGraphConfiguration(projectGraph, resolvedOptions);
-    projectGraphConfig.resolvedOptions = resolvedOptions = mergeProjectOptions(resolvedOptions, resolvedOptions);
+function ensureCompileTask(projectGraph, options) {
+    const projectGraphConfig = getOrCreateProjectGraphConfiguration(projectGraph, options);
+    projectGraphConfig.resolvedOptions = options = mergeProjectOptions(options, options);
     if (!projectGraphConfig.compileTaskCreated) {
-        const deps = makeProjectReferenceCompileTasks(projectGraph, resolvedOptions.typescript, resolvedOptions.paths);
-        compilationGulp.task(compileTaskName(projectGraph, resolvedOptions.typescript), deps, () => {
-            const destPath = resolveDestPath(projectGraph, resolvedOptions.paths);
+        const deps = makeProjectReferenceCompileTasks(projectGraph, options.typescript, options.paths);
+        compilationGulp.task(compileTaskName(projectGraph, options.typescript), deps, () => {
+            const destPath = resolveDestPath(projectGraph, options.paths);
             const { sourceMap, inlineSourceMap, inlineSources = false, sourceRoot, declarationMap } = projectGraph.project.options;
             const configFilePath = projectGraph.project.options.configFilePath;
             const sourceMapPath = inlineSourceMap ? undefined : ".";
             const sourceMapOptions = { includeContent: inlineSources, sourceRoot, destPath };
-            const project = resolvedOptions.inProcess
-                ? tsc.createProject(configFilePath, { typescript: require(resolvedOptions.typescript.typescript) })
-                : tsc_oop.createProject(configFilePath, {}, { typescript: resolvedOptions.typescript.typescript });
+            const project = options.inProcess
+                ? tsc.createProject(configFilePath, { typescript: require(options.typescript.typescript) })
+                : tsc_oop.createProject(configFilePath, {}, { typescript: options.typescript.typescript });
             const stream = project.src()
-                .pipe(gulpif(!resolvedOptions.force, upToDate(projectGraph.project, { verbose: resolvedOptions.verbose })))
+                .pipe(gulpif(!options.force, upToDate(projectGraph.project, { verbose: options.verbose })))
                 .pipe(gulpif(sourceMap || inlineSourceMap, sourcemaps.init()))
                 .pipe(project());
-            const js = stream.js
-                .pipe(evaluateHook(resolvedOptions.js))
+            const js = (options.js ? options.js(stream.js) : stream.js)
                 .pipe(gulpif(sourceMap || inlineSourceMap, sourcemaps.write(sourceMapPath, sourceMapOptions)));
-            const dts = stream.dts
-                .pipe(evaluateHook(resolvedOptions.dts))
+            const dts = (options.dts ? options.dts(stream.dts) : stream.dts)
                 .pipe(gulpif(declarationMap, sourcemaps.write(sourceMapPath, sourceMapOptions)));
             return merge2([js, dts])
                 .pipe(gulp.dest(destPath));

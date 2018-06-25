@@ -451,6 +451,12 @@ namespace FourSlash {
             this.selectionEnd = end.position;
         }
 
+        public selectAllInFile(fileName: string) {
+            this.openFile(fileName);
+            this.goToPosition(0);
+            this.selectionEnd = this.activeFile.content.length;
+        }
+
         public selectRange(range: Range): void {
             this.goToRangeStart(range);
             this.selectionEnd = range.end;
@@ -850,7 +856,7 @@ namespace FourSlash {
         private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions): void {
             const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter })!;
             if (!actualCompletions) {
-                if (options.exact === undefined) return;
+                if ("exact" in options && options.exact === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -1382,17 +1388,8 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }) {
-            let findInStrings: boolean, findInComments: boolean, ranges: Range[];
-            if (ts.isArray(options)) {
-                findInStrings = findInComments = false;
-                ranges = options;
-            }
-            else {
-                findInStrings = !!options.findInStrings;
-                findInComments = !!options.findInComments;
-                ranges = options.ranges;
-            }
+        public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: ReadonlyArray<Range> | { findInStrings?: boolean, findInComments?: boolean, ranges: ReadonlyArray<Range> }) {
+            const { findInStrings = false, findInComments = false, ranges = this.getRanges() } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options } : options;
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
@@ -1403,30 +1400,12 @@ Actual: ${stringify(fullActual)}`);
                     break;
                 }
 
-                let references = this.languageService.findRenameLocations(
+                const references = this.languageService.findRenameLocations(
                     this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
 
-                ranges = ranges || this.getRanges();
-
-                if (!references) {
-                    if (ranges.length !== 0) {
-                        this.raiseError(`Expected ${ranges.length} rename locations; got none.`);
-                    }
-                    return;
-                }
-
-                if (ranges.length !== references.length) {
-                    this.raiseError("Rename location count does not match result.\n\nExpected: " + stringify(ranges) + "\n\nActual:" + stringify(references));
-                }
-
-                ranges = ranges.sort((r1, r2) => r1.pos - r2.pos);
-                references = references.sort((r1, r2) => r1.textSpan.start - r2.textSpan.start);
-
-                ts.zipWith(references, ranges, (reference, range) => {
-                    if (reference.textSpan.start !== range.pos || ts.textSpanEnd(reference.textSpan) !== range.end) {
-                        this.raiseError("Rename location results do not match.\n\nExpected: " + stringify(ranges) + "\n\nActual:" + stringify(references));
-                    }
-                });
+                const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
+                    locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
+                assert.deepEqual(sort(references), sort(ranges.map((r): ts.RenameLocation => ({ fileName: r.fileName, textSpan: ts.createTextSpanFromRange(r) }))));
             }
         }
 
@@ -3090,9 +3069,22 @@ Actual: ${stringify(fullActual)}`);
                 this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
             }
 
-            const { renamePosition, newContent } = parseNewContent();
+            let renameFilename: string | undefined;
+            let renamePosition: number | undefined;
 
-            this.verifyCurrentFileContent(newContent);
+            const newFileContents = typeof newContentWithRenameMarker === "string" ? { [this.activeFile.fileName]: newContentWithRenameMarker } : newContentWithRenameMarker;
+            for (const fileName in newFileContents) {
+                const { renamePosition: rp, newContent } = TestState.parseNewContent(newFileContents[fileName]);
+                if (renamePosition === undefined) {
+                    renameFilename = fileName;
+                    renamePosition = rp;
+                }
+                else {
+                    ts.Debug.assert(rp === undefined);
+                }
+                this.verifyFileContent(fileName, newContent);
+
+            }
 
             if (renamePosition === undefined) {
                 if (editInfo.renameLocation !== undefined) {
@@ -3100,22 +3092,21 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
             else {
-                // TODO: test editInfo.renameFilename value
-                assert.isDefined(editInfo.renameFilename);
+                this.assertObjectsEqual(editInfo.renameFilename, renameFilename);
                 if (renamePosition !== editInfo.renameLocation) {
                     this.raiseError(`Expected rename position of ${renamePosition}, but got ${editInfo.renameLocation}`);
                 }
             }
+        }
 
-            function parseNewContent(): { renamePosition: number | undefined, newContent: string } {
-                const renamePosition = newContentWithRenameMarker.indexOf("/*RENAME*/");
-                if (renamePosition === -1) {
-                    return { renamePosition: undefined, newContent: newContentWithRenameMarker };
-                }
-                else {
-                    const newContent = newContentWithRenameMarker.slice(0, renamePosition) + newContentWithRenameMarker.slice(renamePosition + "/*RENAME*/".length);
-                    return { renamePosition, newContent };
-                }
+        private static parseNewContent(newContentWithRenameMarker: string): { readonly renamePosition: number | undefined, readonly newContent: string } {
+            const renamePosition = newContentWithRenameMarker.indexOf("/*RENAME*/");
+            if (renamePosition === -1) {
+                return { renamePosition: undefined, newContent: newContentWithRenameMarker };
+            }
+            else {
+                const newContent = newContentWithRenameMarker.slice(0, renamePosition) + newContentWithRenameMarker.slice(renamePosition + "/*RENAME*/".length);
+                return { renamePosition, newContent };
             }
         }
 
@@ -3966,6 +3957,10 @@ namespace FourSlashInterface {
             this.state.select(startMarker, endMarker);
         }
 
+        public selectAllInFile(fileName: string) {
+            this.state.selectAllInFile(fileName);
+        }
+
         public selectRange(range: FourSlash.Range): void {
             this.state.selectRange(range);
         }
@@ -4736,7 +4731,7 @@ namespace FourSlashInterface {
         refactorName: string;
         actionName: string;
         actionDescription: string;
-        newContent: string;
+        newContent: NewFileContent;
     }
 
     export type ExpectedCompletionEntry = string | {
@@ -4798,9 +4793,11 @@ namespace FourSlashInterface {
         filesToSearch?: ReadonlyArray<string>;
     }
 
+    export type NewFileContent = string | { readonly [filename: string]: string };
+
     export interface NewContentOptions {
         // Exactly one of these should be defined.
-        newFileContent?: string | { readonly [filename: string]: string };
+        newFileContent?: NewFileContent;
         newRangeContent?: string;
     }
 
