@@ -67,8 +67,8 @@ namespace ts.codefix {
     }
 
     function parseThen(node: CallExpression, checker: TypeChecker): Statement[] {
-        const res = node.arguments[0];
-        const rej = node.arguments[1];
+        const [res, rej] = node.arguments;
+
         // TODO - what if this is a binding pattern and not an Identifier
         const argNameRes = getArgName(res, checker);
 

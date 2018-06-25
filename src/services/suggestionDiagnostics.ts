@@ -17,6 +17,8 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.ArrowFunction:
 
                     if (isJsFile) {
                         const symbol = node.symbol;
@@ -24,6 +26,7 @@ namespace ts {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
                     }
+
                     if (isAsyncFunction(node)) {
                         break;
                     }
@@ -127,23 +130,41 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    function getReturnStatements(node: Node): ReturnStatement[] {
+    function getReturnStatementsWithPromiseCallbacks(node: Node): ReturnStatement[] {
 
         const retStmts: ReturnStatement[] = [];
         forEachChild(node, visit);
+
+        /*
+        function visit(node: Node) {
+            if (isFunctionLike(node)) {
+                return;
+            }
+
+            if (isReturnStatement(node)) {
+                if (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
+                    (node.expression.name.text === "then" || node.expression.name.text === "catch")) {
+                    retStmts.push(node as ReturnStatement);
+                }
+                else if (!isFunctionLike(node)) {
+                    forEachChild(node, visit);
+                }
+            }
+        }
+        */
 
         function visit(node: Node) {
             if (isFunctionLike(node)) {
                 return;
             }
 
-            if (node.kind === SyntaxKind.ReturnStatement) {
+            if (isReturnStatement(node)) {
                 forEachChild(node, hasCallback);
             }
 
             function hasCallback(child: Node) {
-                if (child.kind === SyntaxKind.CallExpression && (<CallExpression>child).expression.kind === SyntaxKind.PropertyAccessExpression &&
-                    ((<PropertyAccessExpression>(<CallExpression>child).expression).name.text === "then" || (<PropertyAccessExpression>(<CallExpression>child).expression).name.text === "catch")) {
+                if (isCallExpression(child) && isPropertyAccessExpression(child.expression)  &&
+                    (child.expression.name.text === "then" || child.expression.name.text === "catch")) {
                     retStmts.push(node as ReturnStatement);
                 }
                 else if (!isFunctionLike(child)) {
