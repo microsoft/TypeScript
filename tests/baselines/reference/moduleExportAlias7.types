@@ -1,0 +1,55 @@
+=== tests/cases/conformance/salsa/use.js ===
+var w = require('./bug24754')
+>w : { [x: string]: any; n: number; } & { WebpackOptionsDefaulter: number; version: number; }
+>require('./bug24754') : { [x: string]: any; n: number; } & { WebpackOptionsDefaulter: number; version: number; }
+>require : any
+>'./bug24754' : "./bug24754"
+
+var n = w.version * w.WebpackOptionsDefaulter * w.n
+>n : number
+>w.version * w.WebpackOptionsDefaulter * w.n : number
+>w.version * w.WebpackOptionsDefaulter : number
+>w.version : number
+>w : { [x: string]: any; n: number; } & { WebpackOptionsDefaulter: number; version: number; }
+>version : number
+>w.WebpackOptionsDefaulter : number
+>w : { [x: string]: any; n: number; } & { WebpackOptionsDefaulter: number; version: number; }
+>WebpackOptionsDefaulter : number
+>w.n : number
+>w : { [x: string]: any; n: number; } & { WebpackOptionsDefaulter: number; version: number; }
+>n : number
+
+=== tests/cases/conformance/salsa/bug24754.js ===
+// #24754
+const webpack = (function () { return { n: 12 } })()
+>webpack : { [x: string]: any; n: number; } & { WebpackOptionsDefaulter: number; version: number; }
+>(function () { return { n: 12 } })() : { [x: string]: any; n: number; }
+>(function () { return { n: 12 } }) : () => { [x: string]: any; n: number; }
+>function () { return { n: 12 } } : () => { [x: string]: any; n: number; }
+>{ n: 12 } : { [x: string]: any; n: number; }
+>n : number
+>12 : 12
+
+exports = module.exports = webpack;
+>exports = module.exports = webpack : { [x: string]: any; n: number; }
+>exports : typeof import("tests/cases/conformance/salsa/bug24754")
+>module.exports = webpack : { [x: string]: any; n: number; }
+>module.exports : any
+>module : any
+>exports : any
+>webpack : { [x: string]: any; n: number; }
+
+exports.version = 1001;
+>exports.version = 1001 : 1001
+>exports.version : number
+>exports : typeof import("tests/cases/conformance/salsa/bug24754")
+>version : number
+>1001 : 1001
+
+webpack.WebpackOptionsDefaulter = 1111;
+>webpack.WebpackOptionsDefaulter = 1111 : 1111
+>webpack.WebpackOptionsDefaulter : any
+>webpack : { [x: string]: any; n: number; }
+>WebpackOptionsDefaulter : any
+>1111 : 1111
+
