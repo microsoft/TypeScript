@@ -20,8 +20,8 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `async function f():Promise<boolean> {
-   let result = await fetch('http://yahoo.com);
-   return res(result);
+    let result = await fetch('http://yahoo.com');
+    return await res(result);
 }
 
 function res(result){
