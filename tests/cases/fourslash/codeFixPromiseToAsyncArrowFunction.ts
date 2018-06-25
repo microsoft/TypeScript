@@ -2,7 +2,7 @@
 
 // @target: es6
 
-////() => {
+////[|():Promise<void> => {/**/|]
 ////    return fetch('http://yahoo.com').then(result => console.log(result));
 ////}
 
@@ -16,7 +16,7 @@ verify.codeFix({
     description: "Convert to use async and await",
     index: 0,
     newFileContent:
-`() => {
+`async ():Promise<void> => {
     let result = await fetch('http://yahoo.com');
     return console.log(result);
 }`,
