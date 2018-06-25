@@ -29,7 +29,8 @@ edit.applyRefactor({
 `import { f } from "./a";
 import { f } from "./a";
 import { f as g } from "./a";
-import f, * as a from "./a"; // TODO: GH#24875
+import, * as a from "./a"; // TODO: GH#24875
+import { f } from "./a";
 
 export { f as default } from "./a";
 export { f } from "./a";
