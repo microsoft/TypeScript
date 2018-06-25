@@ -99,7 +99,7 @@ namespace ts.GoToDefinition {
      */
     function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclaration) {
         return s === calledDeclaration.symbol || s === calledDeclaration.symbol.parent ||
-            isVariableDeclaration(calledDeclaration.parent) && s === calledDeclaration.parent.symbol;
+            !isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol;
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
