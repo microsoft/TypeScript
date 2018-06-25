@@ -7,7 +7,7 @@
 ////import f from "./a";
 ////import { default as f } from "./a";
 ////import { default as g } from "./a";
-////import f, * as a from "./a"; // TODO: GH#24875
+////import f, * as a from "./a";
 ////
 ////export { default } from "./a";
 ////export { default as f } from "./a";
@@ -29,7 +29,7 @@ edit.applyRefactor({
 `import { f } from "./a";
 import { f } from "./a";
 import { f as g } from "./a";
-import, * as a from "./a"; // TODO: GH#24875
+import * as a from "./a";
 import { f } from "./a";
 
 export { f as default } from "./a";
