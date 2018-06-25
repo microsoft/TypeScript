@@ -48,7 +48,7 @@ const x18 = f10(...ns, true);  // (string | number | boolean)[]
 function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
     let x1 = f10(...u);  // U
     let x2 = f10(...v);  // V
-    let x3 = f10(1, ...u);  // (string | number)[]
+    let x3 = f10(1, ...u);  // [number, ...string[]]
     let x4 = f10(...u, ...v);  // (string | number)[]
 }
 
@@ -67,7 +67,7 @@ const z18 = f11(...ns, true);  // (string | number | true)[]
 function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
     let x1 = f11(...u);  // U
     let x2 = f11(...v);  // V
-    let x3 = f11(1, ...u);  // (string | 1)[]
+    let x3 = f11(1, ...u);  // [1, ...string[]]
     let x4 = f11(...u, ...v);  // (string | number)[]
 }
 
