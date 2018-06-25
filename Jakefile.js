@@ -59,6 +59,7 @@ Paths.builtLocal = "built/local";
 Paths.builtLocalCompiler = "built/local/tsc.js";
 Paths.builtLocalTSServer = "built/local/tsserver.js";
 Paths.builtLocalRun = "built/local/run.js";
+Paths.releaseCompiler = "built/local/tsc.release.js";
 Paths.typesMapOutput = "built/local/typesMap.json";
 Paths.typescriptFile = "built/local/typescript.js";
 Paths.servicesFile = "built/local/typescriptServices.js";
@@ -95,6 +96,7 @@ Paths.versionFile = "src/compiler/core.ts";
 
 const ConfigFileFor = {
     tsc: "src/tsc",
+    tscRelease: "src/tsc/tsconfig.release.json",
     tsserver: "src/tsserver",
     runjs: "src/testRunner",
     lint: "scripts/tslint",
@@ -157,6 +159,12 @@ task(TaskNames.scripts, [TaskNames.coreBuild], function() {
     });
 }, { async: true });
 
+task(Paths.releaseCompiler, function () {
+    tsbuild([ConfigFileFor.tscRelease], true, () => {
+        complete();
+    });
+}, { async: true });
+
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task(TaskNames.lkg, [
@@ -165,6 +173,7 @@ task(TaskNames.lkg, [
     TaskNames.local,
     Paths.servicesDefinitionFile,
     Paths.tsserverLibraryDefinitionFile,
+    Paths.releaseCompiler,
     ...libraryTargets
 ], () => {
     const sizeBefore = getDirSize(Paths.lkg);
