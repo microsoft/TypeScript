@@ -1,0 +1,11 @@
+tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts(2,4): error TS2304: Cannot find name 'Decorate'.
+
+
+==== tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts (1 errors) ====
+    export class C<TypeVariable> {
+      @Decorate
+       ~~~~~~~~
+!!! error TS2304: Cannot find name 'Decorate'.
+      member: TypeVariable;
+    }
+    
