@@ -380,6 +380,8 @@ namespace ts {
 
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
+                case SyntaxKind.OptionalType:
+                case SyntaxKind.RestType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.TypePredicate:
                 case SyntaxKind.TypeParameter:
@@ -586,7 +588,7 @@ namespace ts {
         function getClassFacts(node: ClassDeclaration, staticProperties: ReadonlyArray<PropertyDeclaration>) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
-            const extendsClauseElement = getClassExtendsHeritageClauseElement(node);
+            const extendsClauseElement = getEffectiveBaseTypeNode(node);
             if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
             if (shouldEmitDecorateCallForClass(node)) facts |= ClassFacts.HasConstructorDecorators;
             if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;

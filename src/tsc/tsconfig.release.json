@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../lib/tsc.js",
+        "outFile": "../../built/local/tsc.release.js",
         "stripInternal": true,
         "preserveConstEnums": false,
         "declaration": false,

@@ -5,11 +5,9 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4
   Type '[[boolean]]' is not assignable to type '[[string]]'.
     Type '[boolean]' is not assignable to type '[string]'.
       Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(14,16): error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c3' and no string index signature.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(14,24): error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c5' and no string index signature.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts (4 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts (2 errors) ====
     // The type T associated with a destructuring variable declaration is determined as follows:
     //      If the declaration includes a type annotation, T is that type.
     var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // Error
@@ -33,10 +31,6 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(1
     //      If the binding element is a rest element, T is an array type with
     //          an element type E, where E is the type of the numeric index signature of S.
     var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
-                   ~~
-!!! error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c3' and no string index signature.
-                           ~~
-!!! error TS2459: Type 'number | { c3: number; c5: number; }' has no property 'c5' and no string index signature.
     
     // When a destructuring variable declaration, binding property, or binding element specifies
     // an initializer expression, the type of the initializer expression is required to be assignable

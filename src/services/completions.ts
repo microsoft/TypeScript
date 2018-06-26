@@ -961,8 +961,7 @@ namespace ts.Completions {
                         break;
 
                     case SyntaxKind.BinaryExpression:
-                        if (!((parent as BinaryExpression).left.flags & NodeFlags.ThisNodeHasError)) {
-                            // It has a left-hand side, so we're not in an opening JSX tag.
+                        if (!binaryExpressionMayBeOpenTag(parent as BinaryExpression)) {
                             break;
                         }
                     // falls through
@@ -1970,7 +1969,7 @@ namespace ts.Completions {
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
                     const name = getNameOfDeclaration(m);
-                    existingName = isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
+                    existingName = name && isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
                 }
 
                 existingMemberNames.set(existingName!, true); // TODO: GH#18217
@@ -2260,7 +2259,7 @@ namespace ts.Completions {
                 return isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
             case "<":
                 // Opening JSX tag
-                return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+                return contextToken.kind === SyntaxKind.LessThanToken && (!isBinaryExpression(contextToken.parent) || binaryExpressionMayBeOpenTag(contextToken.parent));
             case "/":
                 return isStringLiteralLike(contextToken)
                     ? !!tryGetImportFromModuleSpecifier(contextToken)
@@ -2268,6 +2267,10 @@ namespace ts.Completions {
             default:
                 return Debug.assertNever(triggerCharacter);
         }
+    }
+
+    function binaryExpressionMayBeOpenTag({ left }: BinaryExpression): boolean {
+        return nodeIsMissing(left);
     }
 
     function isStringLiteralOrTemplate(node: Node): node is StringLiteralLike | TemplateExpression | TaggedTemplateExpression {

@@ -194,10 +194,10 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier;
-    /* @internal */ export function getGeneratedNameForNode(node: Node, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
-    export function getGeneratedNameForNode(node: Node, flags?: GeneratedIdentifierFlags): Identifier {
-        const name = createIdentifier(isIdentifier(node) ? idText(node) : "");
+    export function getGeneratedNameForNode(node: Node | undefined): Identifier;
+    /* @internal */ export function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
+    export function getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier {
+        const name = createIdentifier(node && isIdentifier(node) ? idText(node) : "");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node | flags!;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
@@ -745,9 +745,33 @@ namespace ts {
         return node;
     }
 
-    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
+    export function updateTupleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
         return node.elementTypes !== elementTypes
             ? updateNode(createTupleTypeNode(elementTypes), node)
+            : node;
+    }
+
+    export function createOptionalTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.OptionalType) as OptionalTypeNode;
+        node.type = parenthesizeArrayTypeMember(type);
+        return node;
+    }
+
+    export function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
+        return node.type !== type
+            ? updateNode(createOptionalTypeNode(type), node)
+            : node;
+    }
+
+    export function createRestTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.RestType) as RestTypeNode;
+        node.type = type;
+        return node;
+    }
+
+    export function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
+        return node.type !== type
+            ? updateNode(createRestTypeNode(type), node)
             : node;
     }
 

@@ -627,9 +627,8 @@ namespace ts.server.protocol {
         arguments: GetEditsForFileRenameRequestArgs;
     }
 
-    // Note: The file from FileRequestArgs is just any file in the project.
-    // We will generate code changes for every file in that project, so the choice is arbitrary.
-    export interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+    /** Note: Paths may also be directories. */
+    export interface GetEditsForFileRenameRequestArgs {
         readonly oldFilePath: string;
         readonly newFilePath: string;
     }

@@ -225,6 +225,8 @@ namespace ts {
         TypeLiteral,
         ArrayType,
         TupleType,
+        OptionalType,
+        RestType,
         UnionType,
         IntersectionType,
         ConditionalType,
@@ -269,6 +271,7 @@ namespace ts {
         AsExpression,
         NonNullExpression,
         MetaProperty,
+        SyntheticExpression,
 
         // Misc
         TemplateSpan,
@@ -1101,6 +1104,16 @@ namespace ts {
         elementTypes: NodeArray<TypeNode>;
     }
 
+    export interface OptionalTypeNode extends TypeNode {
+        kind: SyntaxKind.OptionalType;
+        type: TypeNode;
+    }
+
+    export interface RestTypeNode extends TypeNode {
+        kind: SyntaxKind.RestType;
+        type: TypeNode;
+    }
+
     export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
 
     export interface UnionTypeNode extends TypeNode {
@@ -1286,6 +1299,12 @@ namespace ts {
         kind: SyntaxKind.YieldExpression;
         asteriskToken?: AsteriskToken;
         expression?: Expression;
+    }
+
+    export interface SyntheticExpression extends Expression {
+        kind: SyntaxKind.SyntheticExpression;
+        isSpread: boolean;
+        type: Type;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -2668,6 +2687,13 @@ namespace ts {
         readFile(path: string): string | undefined;
     }
 
+    /**
+     * Branded string for keeping track of when we've turned an ambiguous path
+     * specified like "./blah" to an absolute path to an actual
+     * tsconfig file, e.g. "/root/blah/tsconfig.json"
+     */
+    export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
+
     export type WriteFileCallback = (
         fileName: string,
         data: string,
@@ -2854,7 +2880,7 @@ namespace ts {
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
-        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
+        getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
@@ -2969,7 +2995,7 @@ namespace ts {
          */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
-        getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
+        getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
@@ -3331,7 +3357,7 @@ namespace ts {
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         isLateBound(node: Declaration): node is LateBoundDeclaration;
-        collectLinkedAliases(node: Identifier): Node[] | undefined;
+        collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
         isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
@@ -3492,6 +3518,7 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
+        specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
     }
 
     /* @internal */
@@ -3513,14 +3540,15 @@ namespace ts {
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
+        ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 12,        // Optional parameter
+        RestParameter     = 1 << 13,        // Rest parameter
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
-        isRestParameter?: boolean;
     }
 
     /* @internal */
@@ -3735,7 +3763,7 @@ namespace ts {
         symbol: Symbol;                  // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
-        aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
         /* @internal */
         wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
     }
@@ -3829,7 +3857,7 @@ namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments?: Type[];  // Type reference type arguments (undefined if none)
+        typeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
     }
 
     /* @internal */
@@ -3847,6 +3875,16 @@ namespace ts {
         instantiations: Map<TypeReference>;  // Generic instantiation cache
         /* @internal */
         variances?: Variance[];  // Variance of each type parameter
+    }
+
+    export interface TupleType extends GenericType {
+        minLength: number;
+        hasRestElement: boolean;
+        associatedNames?: __String[];
+    }
+
+    export interface TupleTypeReference extends TypeReference {
+        target: TupleType;
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -3906,8 +3944,8 @@ namespace ts {
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;             // Properties by name
         properties: Symbol[];             // Properties
-        callSignatures: Signature[];      // Call signatures of type
-        constructSignatures: Signature[]; // Construct signatures of type
+        callSignatures: ReadonlyArray<Signature>;      // Call signatures of type
+        constructSignatures: ReadonlyArray<Signature>; // Construct signatures of type
         stringIndexInfo?: IndexInfo;      // String indexing info
         numberIndexInfo?: IndexInfo;      // Numeric indexing info
     }
@@ -4032,8 +4070,8 @@ namespace ts {
 
     export interface Signature {
         declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
-        typeParameters?: TypeParameter[];   // Type parameters (undefined if non-generic)
-        parameters: Symbol[];               // Parameters
+        typeParameters?: ReadonlyArray<TypeParameter>;   // Type parameters (undefined if non-generic)
+        parameters: ReadonlyArray<Symbol>;               // Parameters
         /* @internal */
         thisParameter?: Symbol;             // symbol of this-type parameter
         /* @internal */
@@ -4132,11 +4170,11 @@ namespace ts {
 
     /* @internal */
     export interface InferenceContext extends TypeMapper {
-        typeParameters: TypeParameter[];    // Type parameters for which inferences are made
-        signature?: Signature;              // Generic signature for which inferences are made (if any)
-        inferences: InferenceInfo[];        // Inferences made for each type parameter
-        flags: InferenceFlags;              // Inference flags
-        compareTypes: TypeComparer;         // Type comparer function
+        typeParameters: ReadonlyArray<TypeParameter>; // Type parameters for which inferences are made
+        signature?: Signature;                        // Generic signature for which inferences are made (if any)
+        inferences: InferenceInfo[];                  // Inferences made for each type parameter
+        flags: InferenceFlags;                        // Inference flags
+        compareTypes: TypeComparer;                   // Type comparer function
     }
 
     /* @internal */
@@ -4650,6 +4688,15 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }
+
+    export interface UpToDateHost {
+        fileExists(fileName: string): boolean;
+        getModifiedTime(fileName: string): Date;
+        getUnchangedTime?(fileName: string): Date | undefined;
+        getLastStatus?(fileName: string): UpToDateStatus | undefined;
+        setLastStatus?(fileName: string, status: UpToDateStatus): void;
+        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
     }
 
     export interface ModuleResolutionHost {

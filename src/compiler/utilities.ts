@@ -745,8 +745,8 @@ namespace ts {
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
-    export function declarationNameToString(name: DeclarationName | QualifiedName) {
-        return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
+    export function declarationNameToString(name: DeclarationName | QualifiedName | undefined) {
+        return !name || getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
     export function getNameFromIndexInfo(info: IndexInfo): string | undefined {
@@ -1887,6 +1887,14 @@ namespace ts {
             return SpecialPropertyAssignmentKind.None;
         }
         const lhs = expr.left;
+        if (isEntityNameExpression(lhs.expression) && lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+                // F.prototype = { ... }
+                return SpecialPropertyAssignmentKind.Prototype;
+        }
+        return getSpecialPropertyAccessKind(lhs);
+    }
+
+    export function getSpecialPropertyAccessKind(lhs: PropertyAccessExpression): SpecialPropertyAssignmentKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
         }
@@ -1895,11 +1903,7 @@ namespace ts {
             return SpecialPropertyAssignmentKind.ModuleExports;
         }
         else if (isEntityNameExpression(lhs.expression)) {
-            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
-                // F.prototype = { ... }
-                return SpecialPropertyAssignmentKind.Prototype;
-            }
-            else if (isPrototypeAccess(lhs.expression)) {
+            if (isPrototypeAccess(lhs.expression)) {
                 // F.G....prototype.x = expr
                 return SpecialPropertyAssignmentKind.PrototypeProperty;
             }
@@ -2413,7 +2417,18 @@ namespace ts {
         return isEntityNameExpression(e) || isClassExpression(e);
     }
 
-    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
+    export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
+        if (isInJavaScriptFile(node)) {
+            // Prefer an @augments tag because it may have type parameters.
+            const tag = getJSDocAugmentsTag(node);
+            if (tag) {
+                return tag.class;
+            }
+        }
+        return getClassExtendsHeritageElement(node);
+    }
+
+    export function getClassExtendsHeritageElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -2426,7 +2441,7 @@ namespace ts {
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode> {
         return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray
-            : isClassLike(node) ? concatenate(singleElementArray(getClassExtendsHeritageClauseElement(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
+            : isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
                 : emptyArray;
     }
 
@@ -4847,7 +4862,7 @@ namespace ts {
 
     function getDeclarationIdentifier(node: Declaration | Expression): Identifier | undefined {
         const name = getNameOfDeclaration(node);
-        return isIdentifier(name) ? name : undefined;
+        return name && isIdentifier(name) ? name : undefined;
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
@@ -4859,16 +4874,15 @@ namespace ts {
         return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
     }
 
-    // TODO: GH#18217 This is often used as if it returns a defined result
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName {
+    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (!declaration) {
-            return undefined!;
+            return undefined;
         }
         switch (declaration.kind) {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
                 if (!(declaration as ClassExpression | FunctionExpression).name) {
-                    return getAssignedName(declaration)!;
+                    return getAssignedName(declaration);
                 }
                 break;
             case SyntaxKind.Identifier:
@@ -4890,19 +4904,19 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
                         return (expr.left as PropertyAccessExpression).name;
                     default:
-                        return undefined!;
+                        return undefined;
                 }
             }
             case SyntaxKind.JSDocCallbackTag:
-                return (declaration as JSDocCallbackTag).name!;
+                return (declaration as JSDocCallbackTag).name;
             case SyntaxKind.JSDocTypedefTag:
-                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag)!;
+                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
             case SyntaxKind.ExportAssignment: {
                 const { expression } = declaration as ExportAssignment;
-                return isIdentifier(expression) ? expression : undefined!;
+                return isIdentifier(expression) ? expression : undefined;
             }
         }
-        return (declaration as NamedDeclaration).name!;
+        return (declaration as NamedDeclaration).name;
     }
 
     function getAssignedName(node: Node): DeclarationName | undefined {
@@ -5834,7 +5848,7 @@ namespace ts {
     // Keywords
 
     /* @internal */
-    export function isModifierKind(token: SyntaxKind): boolean {
+    export function isModifierKind(token: SyntaxKind): token is Modifier["kind"] {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.AsyncKeyword:
@@ -7480,19 +7494,20 @@ namespace ts {
         return true;
     }
 
-    export function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined {
-        const a = tryRemovePrefix(path, dirPath);
-        if (a === undefined) return undefined;
-        switch (a.charCodeAt(0)) {
-            case CharacterCodes.slash:
-            case CharacterCodes.backslash:
-                return a.slice(1);
-            default:
-                return undefined;
-        }
+    function isDirectorySeparator(charCode: number): boolean {
+        return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
     }
 
-        // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
+    function stripLeadingDirectorySeparator(s: string): string | undefined {
+        return isDirectorySeparator(s.charCodeAt(0)) ? s.slice(1) : undefined;
+    }
+
+    export function tryRemoveDirectoryPrefix(path: string, dirPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
+        const withoutPrefix = tryRemovePrefix(path, dirPath, getCanonicalFileName);
+        return withoutPrefix === undefined ? undefined : stripLeadingDirectorySeparator(withoutPrefix);
+    }
+
+    // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;

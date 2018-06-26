@@ -367,10 +367,6 @@
         "category": "Error",
         "code": 1121
     },
-    "A tuple type element list cannot be empty.": {
-        "category": "Error",
-        "code": 1122
-    },
     "Variable declaration list cannot be empty.": {
         "category": "Error",
         "code": 1123
@@ -846,6 +842,14 @@
     "A definite assignment assertion '!' is not permitted in this context.": {
         "category": "Error",
         "code": 1255
+    },
+    "A rest element must be last in a tuple type.": {
+        "category": "Error",
+        "code": 1256
+    },
+    "A required element cannot follow an optional element.": {
+        "category": "Error",
+        "code": 1257
     },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -2031,6 +2035,18 @@
     "Object is of type 'unknown'.": {
         "category": "Error",
         "code": 2571
+    },
+    "Rest signatures are incompatible.": {
+        "category": "Error",
+        "code": 2572
+    },
+    "Property '{0}' is incompatible with rest element type.": {
+        "category": "Error",
+        "code": 2573
+    },
+    "A rest element type must be an array type.": {
+        "category": "Error",
+        "code": 2574
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -3636,7 +3652,7 @@
         "category": "Message",
         "code": 6353
     },
-    
+
     "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6354
@@ -3835,6 +3851,10 @@
     "Mapped object type implicitly has an 'any' template type.": {
         "category": "Error",
         "code": 7039
+    },
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+        "category": "Error",
+        "code": 7040
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -4414,5 +4434,13 @@
     "Remove braces from arrow function": {
         "category": "Message",
         "code": 95060
+    },
+    "Convert default export to named export": {
+        "category": "Message",
+        "code": 95061
+    },
+    "Convert named export to default export": {
+        "category": "Message",
+        "code": 95062
     }
 }

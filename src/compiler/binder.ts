@@ -3606,6 +3606,8 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
             case SyntaxKind.ArrayType:
             case SyntaxKind.TupleType:
+            case SyntaxKind.OptionalType:
+            case SyntaxKind.RestType:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
             case SyntaxKind.ConditionalType:
