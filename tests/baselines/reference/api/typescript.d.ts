@@ -1780,6 +1780,7 @@ declare namespace ts {
          */
         getTypeChecker(): TypeChecker;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        isSourceFileDefaultLibrary(file: SourceFile): boolean;
         getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
     }
     interface ResolvedProjectReference {
