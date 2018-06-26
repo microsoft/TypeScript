@@ -13784,6 +13784,7 @@ declare namespace ts.server {
         readonly typingsCache: TypingsCache;
         readonly documentRegistry: DocumentRegistry;
         private readonly filenameToScriptInfo;
+        private readonly filenameToScriptInfoVersion;
         private readonly allJsFilesForOpenFileTelemetry;
         readonly realpathToScriptInfos: MultiMap<ScriptInfo> | undefined;
         private readonly externalProjectToConfiguredProjectMap;
