@@ -2774,7 +2774,7 @@ namespace ts {
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
-        /* @internal */ isSourceFileDefaultLibrary(file: SourceFile): boolean;
+        isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
