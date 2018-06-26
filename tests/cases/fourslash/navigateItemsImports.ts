@@ -11,8 +11,8 @@
 ////import { [|{| "name": "c", "kind": "alias" |}c|],
 ////            [|{| "name": "dee", "kind": "alias" |}d as dee|] }  from "a";
 ////
-////import [|{| "name": "d1", "kind": "alias" |}d1, {
-////            [|{| "name": "e", "kind": "alias" |}e|] }|]  from "a";
+////import [|{| "name": "d1", "kind": "alias" |}d1|], {
+////            [|{| "name": "e", "kind": "alias" |}e|] }  from "a";
 ////
 ////[|{| "name": "f", "kind": "alias" |}import f = require("a");|]
 

@@ -1,17 +1,17 @@
 /* @internal */
 namespace ts.NavigateTo {
     interface RawNavigateToItem {
-        name: string;
-        fileName: string;
-        matchKind: PatternMatchKind;
-        isCaseSensitive: boolean;
-        declaration: Declaration;
+        readonly name: string;
+        readonly fileName: string;
+        readonly matchKind: PatternMatchKind;
+        readonly isCaseSensitive: boolean;
+        readonly declaration: Declaration;
     }
 
     export function getNavigateToItems(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         if (!patternMatcher) return emptyArray;
-        let rawItems: RawNavigateToItem[] = [];
+        const rawItems: RawNavigateToItem[] = [];
 
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
         for (const sourceFile of sourceFiles) {
@@ -27,10 +27,7 @@ namespace ts.NavigateTo {
         }
 
         rawItems.sort(compareNavigateToItems);
-        if (maxResultCount !== undefined) {
-            rawItems = rawItems.slice(0, maxResultCount);
-        }
-        return rawItems.map(createNavigateToItem);
+        return (maxResultCount === undefined ? rawItems : rawItems.slice(0, maxResultCount)).map(createNavigateToItem);
     }
 
     function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: ReadonlyArray<Declaration>, checker: TypeChecker, fileName: string, rawItems: Push<RawNavigateToItem>): void {
@@ -45,13 +42,13 @@ namespace ts.NavigateTo {
             if (!shouldKeepItem(declaration, checker)) continue;
 
             if (patternMatcher.patternContainsDots) {
-                const fullMatch = patternMatcher.getFullMatch(getContainers(declaration)!, name); // TODO: GH#18217
+                // If the pattern has dots in it, then also see if the declaration container matches as well.
+                const fullMatch = patternMatcher.getFullMatch(getContainers(declaration), name);
                 if (fullMatch) {
                     rawItems.push({ name, fileName, matchKind: fullMatch.kind, isCaseSensitive: fullMatch.isCaseSensitive, declaration });
                 }
             }
             else {
-                // If the pattern has dots in it, then also see if the declaration container matches as well.
                 rawItems.push({ name, fileName, matchKind: match.kind, isCaseSensitive: match.isCaseSensitive, declaration });
             }
         }
@@ -62,7 +59,7 @@ namespace ts.NavigateTo {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
-                const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!;
+                const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!; // TODO: GH#18217
                 const imported = checker.getAliasedSymbol(importer);
                 return importer.escapedName !== imported.escapedName;
             default:
@@ -107,14 +104,14 @@ namespace ts.NavigateTo {
         return false;
     }
 
-    function getContainers(declaration: Declaration): string[] | undefined {
+    function getContainers(declaration: Declaration): ReadonlyArray<string> {
         const containers: string[] = [];
 
         // First, if we started with a computed property name, then add all but the last
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
         if (name && name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
-            return undefined;
+            return emptyArray;
         }
 
         // Now, walk up our containers, adding all their names to the container array.
@@ -122,7 +119,7 @@ namespace ts.NavigateTo {
 
         while (container) {
             if (!tryAddSingleDeclarationName(container, containers)) {
-                return undefined;
+                return emptyArray;
             }
 
             container = getContainerNode(container);
@@ -151,7 +148,7 @@ namespace ts.NavigateTo {
             textSpan: createTextSpanFromNode(declaration),
             // TODO(jfreeman): What should be the containerName when the container has a computed name?
             containerName: containerName ? (<Identifier>containerName).text : "",
-            containerKind: containerName ? getNodeKind(container!) : ScriptElementKind.unknown // TODO: GH#18217 Just use `container ? ...`
+            containerKind: containerName ? getNodeKind(container!) : ScriptElementKind.unknown, // TODO: GH#18217 Just use `container ? ...`
         };
     }
 }
