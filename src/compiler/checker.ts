@@ -19911,7 +19911,7 @@ namespace ts {
 
         function getYieldedTypeOfYieldExpression(node: YieldExpression, isAsync: boolean, checkMode?: CheckMode): Type | undefined {
             const errorNode = node.expression || node;
-            const expressionType = node.expression ? checkExpressionCached(node.expression, checkMode) : undefinedWideningType;
+            const expressionType = node.expression ? checkExpression(node.expression, checkMode) : undefinedWideningType;
             // A `yield*` expression effectively yields everything that its operand yields
             const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(expressionType, errorNode, /*allowStringInput*/ false, isAsync) : expressionType;
             return !isAsync ? yieldedType : getAwaitedType(yieldedType, errorNode, node.asteriskToken
