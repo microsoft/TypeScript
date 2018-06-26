@@ -137,6 +137,7 @@ function watch(projectSpec, options, tasks, callback) {
     if (typeof options === "function") callback = options, tasks = /**@type {string[] | undefined}*/(undefined), options = /**@type {CompileOptions | undefined}*/(undefined);
     if (Array.isArray(options)) tasks = options, options = /**@type {CompileOptions | undefined}*/(undefined);
     const resolvedOptions = resolveCompileOptions(options);
+    resolvedOptions.watch = true;
     const resolvedProjectSpec = resolveProjectSpec(projectSpec, resolvedOptions.paths, /*referrer*/ undefined);
     const projectGraph = getOrCreateProjectGraph(resolvedProjectSpec, resolvedOptions.paths);
     projectGraph.isRoot = true;
@@ -284,6 +285,7 @@ function resolvePathOptions(options) {
  * @property {boolean} [verbose] Indicates whether verbose logging is enabled.
  * @property {boolean} [force] Force recompilation (no up-to-date check).
  * @property {boolean} [inProcess] Indicates whether to run gulp-typescript in-process or out-of-process (default).
+ * @property {boolean} [watch] Indicates the project was created in watch mode
  */
 function resolveCompileOptions(options = {}) {
     const paths = resolvePathOptions(options);
@@ -305,7 +307,7 @@ function resolveCompileOptions(options = {}) {
  * @returns {ResolvedCompileOptions}
  */
 function mergeCompileOptions(left, right) {
-    if (left.typescript !== right.typescript) throw new Error("Cannot merge project options targeting different TypeScript packages");
+    if (left.typescript.typescript !== right.typescript.typescript) throw new Error("Cannot merge project options targeting different TypeScript packages");
     if (tryReuseCompileOptions(left, right)) return left;
     return {
         paths: left.paths,
@@ -314,7 +316,8 @@ function mergeCompileOptions(left, right) {
         dts: right.dts || left.dts,
         verbose: right.verbose || left.verbose,
         force: right.force || left.force,
-        inProcess: right.inProcess || left.inProcess
+        inProcess: right.inProcess || left.inProcess,
+        watch: right.watch || left.watch
     };
 }
 
@@ -599,30 +602,40 @@ function resolveDestPath(projectGraph, paths) {
  */
 function ensureCompileTask(projectGraph, options) {
     const projectGraphConfig = getOrCreateProjectGraphConfiguration(projectGraph, options);
-    projectGraphConfig.resolvedOptions = options = mergeCompileOptions(options, options);
-    if (!projectGraphConfig.compileTaskCreated) {
-        const deps = makeProjectReferenceCompileTasks(projectGraph, options.typescript, options.paths);
-        compilationGulp.task(compileTaskName(projectGraph, options.typescript), deps, () => {
-            const destPath = resolveDestPath(projectGraph, options.paths);
+    projectGraphConfig.resolvedOptions = mergeCompileOptions(projectGraphConfig.resolvedOptions, options);
+    const hasCompileTask = projectGraphConfig.compileTaskCreated;
+    projectGraphConfig.compileTaskCreated = true;
+    const deps = makeProjectReferenceCompileTasks(projectGraph, projectGraphConfig.resolvedOptions.typescript, projectGraphConfig.resolvedOptions.paths, projectGraphConfig.resolvedOptions.watch);
+    if (!hasCompileTask) {
+        compilationGulp.task(compileTaskName(projectGraph, projectGraphConfig.resolvedOptions.typescript), deps, () => {
+            const destPath = resolveDestPath(projectGraph, projectGraphConfig.resolvedOptions.paths);
             const { sourceMap, inlineSourceMap, inlineSources = false, sourceRoot, declarationMap } = projectGraph.project.options;
             const configFilePath = projectGraph.project.options.configFilePath;
             const sourceMapPath = inlineSourceMap ? undefined : ".";
             const sourceMapOptions = { includeContent: inlineSources, sourceRoot, destPath };
-            const project = options.inProcess
-                ? tsc.createProject(configFilePath, { typescript: require(options.typescript.typescript) })
-                : tsc_oop.createProject(configFilePath, {}, { typescript: options.typescript.typescript });
+            const project = projectGraphConfig.resolvedOptions.inProcess
+                ? tsc.createProject(configFilePath, { typescript: require(projectGraphConfig.resolvedOptions.typescript.typescript) })
+                : tsc_oop.createProject(configFilePath, {}, { typescript: projectGraphConfig.resolvedOptions.typescript.typescript });
             const stream = project.src()
-                .pipe(gulpif(!options.force, upToDate(projectGraph.project, { verbose: options.verbose, parseProject: createParseProject(options.paths) })))
+                .pipe(gulpif(!projectGraphConfig.resolvedOptions.force, upToDate(projectGraph.project, { verbose: projectGraphConfig.resolvedOptions.verbose, parseProject: createParseProject(projectGraphConfig.resolvedOptions.paths) })))
                 .pipe(gulpif(sourceMap || inlineSourceMap, sourcemaps.init()))
                 .pipe(project());
-            const js = (options.js ? options.js(stream.js) : stream.js)
+            if (projectGraphConfig.resolvedOptions.watch) {
+                stream.on("error", error => {
+                    if (error.message === "TypeScript: Compilation failed") {
+                        stream.emit("end");
+                        stream.js.emit("end");
+                        stream.dts.emit("end");
+                    }
+                });
+            }
+            const js = (projectGraphConfig.resolvedOptions.js ? projectGraphConfig.resolvedOptions.js(stream.js) : stream.js)
                 .pipe(gulpif(sourceMap || inlineSourceMap, sourcemaps.write(sourceMapPath, sourceMapOptions)));
-            const dts = (options.dts ? options.dts(stream.dts) : stream.dts)
+            const dts = (projectGraphConfig.resolvedOptions.dts ? projectGraphConfig.resolvedOptions.dts(stream.dts) : stream.dts)
                 .pipe(gulpif(declarationMap, sourcemaps.write(sourceMapPath, sourceMapOptions)));
             return merge2([js, dts])
                 .pipe(gulp.dest(destPath));
         });
-        projectGraphConfig.compileTaskCreated = true;
     }
     return projectGraph;
 }
@@ -631,9 +644,10 @@ function ensureCompileTask(projectGraph, options) {
  * @param {ProjectGraph} projectGraph
  * @param {ResolvedTypeScript} typescript
  * @param {ResolvedPathOptions} paths
+ * @param {boolean} watch
  */
-function makeProjectReferenceCompileTasks(projectGraph, typescript, paths) {
-    return projectGraph.references.map(({target}) => compileTaskName(ensureCompileTask(target, { paths, typescript }), typescript));
+function makeProjectReferenceCompileTasks(projectGraph, typescript, paths, watch) {
+    return projectGraph.references.map(({target}) => compileTaskName(ensureCompileTask(target, { paths, typescript, watch }), typescript));
 }
 
 /**
@@ -715,7 +729,7 @@ function ensureWatcher(projectGraph, options, tasks, callback) {
 }
 
 /**
- * @param {ProjectGraphConfiguration} config 
+ * @param {ProjectGraphConfiguration} config
  * @param {import("orchestrator").Task} task
  */
 function possiblyTriggerRecompilation(config, task) {
@@ -732,7 +746,7 @@ function possiblyTriggerRecompilation(config, task) {
 
 /**
  * @param {import("orchestrator").Task} task
- * @param {ProjectGraphConfiguration} config 
+ * @param {ProjectGraphConfiguration} config
  */
 function triggerRecompilation(task, config) {
     compilationGulp._resetTask(task);
