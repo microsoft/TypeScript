@@ -10,13 +10,8 @@ const insert = require("gulp-insert");
 const { append } = require("gulp-insert");
 const sourcemaps = require("gulp-sourcemaps");
 const del = require("del");
-const browserify = require("browserify");
-const through2 = require("through2");
 const fold = require("travis-fold");
 const rename = require("gulp-rename");
-const convertMap = require("convert-source-map");
-const sorcery = require("sorcery");
-const Vinyl = require("vinyl");
 const mkdirp = require("./scripts/build/mkdirp");
 const gulp = require("./scripts/build/gulp");
 const getDirSize = require("./scripts/build/getDirSize");
@@ -28,7 +23,7 @@ const getDiffTool = require("./scripts/build/getDiffTool");
 const baselineAccept = require("./scripts/build/baselineAccept");
 const cmdLineOptions = require("./scripts/build/options");
 const exec = require("./scripts/build/exec");
-const _debugMode = require("./scripts/build/debugMode");
+const browserify = require("./scripts/build/browserify");
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
@@ -72,7 +67,7 @@ gulp.task(
     "publish-nightly",
     "Runs `npm publish --tag next` to create a new nightly build on npm",
     ["LKG"],
-    () => runSequence("clean", "useDebugMode", "runtests-parallel",
+    () => runSequence("clean", "runtests-parallel",
         () => exec("npm", ["publish", "--tag", "next"])));
 
 const importDefinitelyTypedTestsProject = "scripts/importDefinitelyTypedTests/tsconfig.json";
@@ -187,6 +182,10 @@ const tscProject = "src/tsc/tsconfig.json";
 const tscJs = "built/local/tsc.js";
 gulp.task(tscJs, /*help*/ false, [typescriptServicesJs], () => project.compile(tscProject, { typescript: "built" }));
 
+const tscReleaseProject = "src/tsc/tsconfig.release.json";
+const tscReleaseJs = "built/local/tsc.release.js";
+gulp.task(tscReleaseJs, /*help*/ false, () => project.compile(tscReleaseProject));
+
 const cancellationTokenProject = "src/cancellationToken/tsconfig.json";
 const cancellationTokenJs = "built/local/cancellationToken.js";
 gulp.task(cancellationTokenJs, /*help*/ false, [typescriptServicesJs], () => project.compile(cancellationTokenProject, { typescript: "built" }));
@@ -258,9 +257,9 @@ gulp.task(
     "Generates a Markdown version of the Language Specification", 
     [specMd]);
 
-gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJs, typingsInstallerJs, watchGuardJs], () => {
+gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJs, typingsInstallerJs, watchGuardJs, tscReleaseJs], () => {
     const expectedFiles = [
-        tscJs, 
+        tscReleaseJs, 
         typescriptServicesJs, 
         tsserverJs, 
         typescriptJs, 
@@ -289,7 +288,7 @@ gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJ
 gulp.task(
     "LKG", 
     "Makes a new LKG out of the built js files", 
-    () => runSequence("clean-built", "dontUseDebugMode", "produce-LKG"));
+    () => runSequence("clean-built", "produce-LKG"));
 
 // Task to build the tests infrastructure using the built compiler
 const testRunnerProject = "src/testRunner/tsconfig.json";
@@ -300,11 +299,6 @@ gulp.task(
     "tests",
     "Builds the test infrastructure using the built compiler",
     [runJs]);
-
-gulp.task(
-    "tests-debug",
-    "Builds the test sources and automation in debug mode",
-    () => runSequence("useDebugMode", "tests"));
 
 gulp.task(
     "runtests-parallel",
@@ -325,77 +319,17 @@ gulp.task("clean:" + webTestServerJs, /*help*/ false, () => project.clean(webTes
 
 const bundlePath = path.resolve("built/local/bundle.js");
 
-// TODO(rbuckton): Clean up browserify logic
 gulp.task(
     "browserify",
     "Runs browserify on run.js to produce a file suitable for running tests in the browser",
     [runJs],
-    (done) => {
-        /** @type {*} */
-        let originalMap;
-        /** @type {string} */
-        let prebundledContent;
-        browserify(gulp.src([runJs])
-            .pipe(newer(bundlePath))
-            .pipe(sourcemaps.init({ loadMaps: true }))
-            .pipe(through2.obj((file, enc, next) => {
-                if (originalMap) {
-                    throw new Error("Should only recieve one file!");
-                }
-                log(`Saving sourcemaps for ${file.path}`);
-                originalMap = file.sourceMap;
-                prebundledContent = file.contents.toString();
-                // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
-                originalMap.sources = originalMap.sources.map(s => path.resolve(path.join("src/harness", s)));
-                // browserify names input files this when they are streamed in, so this is what it puts in the sourcemap
-                originalMap.file = "built/local/_stream_0.js";
-
-                next(/*err*/ undefined, file.contents);
-            }))
-            .on("error", err => {
-                return done(err);
-            }), { debug: true, basedir: __dirname }) // Attach error handler to inner stream
-            .bundle((err, contents) => {
-                if (err) {
-                    if (err.message.match(/Cannot find module '.*_stream_0.js'/)) {
-                        return done(); // Browserify errors when we pass in no files when `newer` filters the input, we should count that as a success, though
-                    }
-                    return done(err);
-                }
-                const stringContent = contents.toString();
-                const file = new Vinyl({ contents, path: bundlePath });
-                log(`Fixing sourcemaps for ${file.path}`);
-                // assumes contents is a Buffer, since that's what browserify yields
-                const maps = convertMap.fromSource(stringContent).toObject();
-                delete maps.sourceRoot;
-                maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
-                // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
-                file.contents = new Buffer(convertMap.removeComments(stringContent));
-                const chain = sorcery.loadSync(bundlePath, {
-                    content: {
-                        "built/local/_stream_0.js": prebundledContent,
-                        [bundlePath]: stringContent
-                    },
-                    sourcemaps: {
-                        "built/local/_stream_0.js": originalMap,
-                        [bundlePath]: maps,
-                        "node_modules/source-map-support/source-map-support.js": undefined,
-                    }
-                });
-                const finalMap = chain.apply();
-                file.sourceMap = finalMap;
-
-                const stream = through2.obj((file, enc, callback) => {
-                    return callback(/*err*/ undefined, file);
-                });
-                stream.pipe(sourcemaps.write(".", { includeContent: false }))
-                    .pipe(gulp.dest("."))
-                    .on("end", done)
-                    .on("error", done);
-                stream.write(file);
-                stream.end();
-            });
-    });
+    () => gulp.src([runJs], { base: "built/local" })
+        .pipe(newer(bundlePath))
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(browserify())
+        .pipe(rename("bundle.js"))
+        .pipe(sourcemaps.write(".", /**@type {*}*/({ includeContent: false, destPath: "built/local" })))
+        .pipe(gulp.dest("built/local")));
 
 gulp.task(
     "runtests-browser",
@@ -530,12 +464,17 @@ gulp.task(
     "Runs 'local'",
     ["local"]);
 
-// TODO(rbuckton): Investigate restoring gulp.watch() functionality.
-// gulp.task(
-//     "watch",
-//     "Watches the src/ directory for changes and executes runtests-parallel.",
-//     [],
-//     () => gulp.watch("src/**/*.*", ["runtests-parallel"]));
+gulp.task(
+    "watch-tsc",
+    "Watches for changes to the build inputs for built/local/tsc.js",
+    [typescriptServicesJs],
+    () => project.watch(tscProject, { typescript: "built" }));
+
+gulp.task(
+    "watch",
+    "Watches for changes to the build inputs for built/local/run.js executes runtests-parallel.",
+    [typescriptServicesJs],
+    () => project.watch(testRunnerProject, { typescript: "built" }, ["runtests-parallel"]));
 
 gulp.task("clean-built", /*help*/ false, ["clean:" + diagnosticInformationMapTs], () => del(["built"]));
 gulp.task(

@@ -15,6 +15,7 @@ const Vinyl = require("vinyl");
  * 
  * @typedef UpToDateOptions
  * @property {boolean} [verbose]
+ * @property {(configFilePath: string) => ParsedCommandLine | undefined} [parseProject]
  */
 function upToDate(parsedProject, options) {
     /** @type {File[]} */
@@ -31,7 +32,8 @@ function upToDate(parsedProject, options) {
         },
         getModifiedTime(fileName) {
             return getStat(fileName).mtime;
-        }
+        },
+        parseConfigFile: options && options.parseProject
     };
     const duplex = new Duplex({
         objectMode: true,
@@ -39,10 +41,9 @@ function upToDate(parsedProject, options) {
          * @param {string|Buffer|File} file 
          */
         write(file, _, cb) {
-            if (Vinyl.isVinyl(file)) {
-                inputs.push(file);
-                inputMap.set(path.resolve(file.path), file);
-            }
+            if (typeof file === "string" || Buffer.isBuffer(file)) return cb(new Error("Only Vinyl files are supported."));
+            inputs.push(file);
+            inputMap.set(path.resolve(file.path), file);
             cb();
         },
         final(cb) {
@@ -77,7 +78,6 @@ function upToDate(parsedProject, options) {
 module.exports = exports = upToDate;
 
 /**
- * 
  * @param {DiagnosticMessage} message 
  * @param {...string} args 
  */

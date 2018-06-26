@@ -225,7 +225,6 @@ declare namespace ts {
      * Returns a new sorted array.
      */
     function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): T[];
-    function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined;
     function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T>;
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
@@ -5916,6 +5915,8 @@ declare namespace ts {
         Remove_braces_from_arrow_function: DiagnosticMessage;
         Add_missing_enum_member_0: DiagnosticMessage;
         Add_all_missing_enum_members: DiagnosticMessage;
+        Convert_default_export_to_named_export: DiagnosticMessage;
+        Convert_named_export_to_default_export: DiagnosticMessage;
     };
 }
 declare namespace ts {
@@ -6263,6 +6264,7 @@ declare namespace ts {
     function isExportsIdentifier(node: Node): boolean;
     function isModuleExportsPropertyAccessExpression(node: Node): boolean;
     function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind;
+    function getSpecialPropertyAccessKind(lhs: PropertyAccessExpression): SpecialPropertyAssignmentKind;
     function getInitializerOfBinaryExpression(expr: BinaryExpression): Expression;
     function isPrototypePropertyAssignment(node: Node): boolean;
     function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean;
@@ -6950,7 +6952,7 @@ declare namespace ts {
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier;
-    function isModifierKind(token: SyntaxKind): boolean;
+    function isModifierKind(token: SyntaxKind): token is Modifier["kind"];
     function isParameterPropertyModifier(kind: SyntaxKind): boolean;
     function isClassMemberModifier(idToken: SyntaxKind): boolean;
     function isModifier(node: Node): node is Modifier;
@@ -10784,6 +10786,7 @@ declare namespace ts {
         Single = 0,
         Double = 1
     }
+    function quotePreferenceFromString(str: StringLiteral, sourceFile: SourceFile): QuotePreference;
     function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference;
     function symbolNameNoDefault(symbol: Symbol): string | undefined;
     function symbolEscapedNameNoDefault(symbol: Symbol): __String | undefined;
@@ -10808,6 +10811,7 @@ declare namespace ts {
         some(pred: (node: Node) => boolean): boolean;
     }
     function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined;
+    function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined;
     function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void;
 }
 declare namespace ts {
@@ -10985,7 +10989,7 @@ declare namespace ts.FindAllReferences {
     }
     type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
     /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
-    function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken): ImportTracker;
+    function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker;
     /** Info about an exported symbol to perform recursive search on. */
     interface ExportInfo {
         exportingModuleSymbol: Symbol;
@@ -11088,6 +11092,7 @@ declare namespace ts.FindAllReferences {
 declare namespace ts.FindAllReferences.Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
     function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options?: Options, sourceFilesSet?: ReadonlyMap<true>): SymbolAndEntries[] | undefined;
+    function eachExportReference(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken | undefined, exportSymbol: Symbol, exportingModuleSymbol: Symbol, exportName: string, isDefaultExport: boolean, cb: (ref: Identifier) => void): void;
     /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
     function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile): boolean;
     function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined;
@@ -11473,6 +11478,7 @@ declare namespace ts.textChanges {
         deleteRange(sourceFile: SourceFile, range: TextRange): this;
         /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
         deleteNode(sourceFile: SourceFile, node: Node, options?: ConfigurableStartEnd): this;
+        deleteModifier(sourceFile: SourceFile, modifier: Modifier): void;
         deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options?: ConfigurableStartEnd): this;
         deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options?: ConfigurableStartEnd): void;
         deleteNodeInList(sourceFile: SourceFile, node: Node): this;
@@ -11504,6 +11510,7 @@ declare namespace ts.textChanges {
         private getInsertNodeAtClassStartPrefixSuffix;
         insertNodeAfterComma(sourceFile: SourceFile, after: Node, newNode: Node): void;
         insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): void;
+        insertNodeAtEndOfList(sourceFile: SourceFile, list: NodeArray<Node>, newNode: Node): void;
         insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void;
         private insertNodeAfterWorker;
         private getInsertNodeAfterOptions;
@@ -11661,7 +11668,9 @@ declare namespace ts.codefix {
 }
 declare namespace ts.codefix {
 }
-declare namespace ts.refactor.generateGetAccessorAndSetAccessor {
+declare namespace ts.refactor {
+}
+declare namespace ts.refactor {
 }
 declare namespace ts.refactor.extractSymbol {
     /**
@@ -12458,7 +12467,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetEditsForFileRename;
         arguments: GetEditsForFileRenameRequestArgs;
     }
-    interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+    interface GetEditsForFileRenameRequestArgs {
         readonly oldFilePath: string;
         readonly newFilePath: string;
     }
@@ -13830,6 +13839,7 @@ declare namespace ts.server {
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
+        forEachProject(cb: (project: Project) => void): void;
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
         tryGetDefaultProjectForFile(fileName: NormalizedPath): Project | undefined;
         ensureDefaultProjectForFile(fileName: NormalizedPath): Project;
@@ -13838,6 +13848,8 @@ declare namespace ts.server {
         private ensureProjectStructuresUptoDate;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
         getPreferences(file: NormalizedPath): UserPreferences;
+        getHostFormatCodeOptions(): FormatCodeSettings;
+        getHostPreferences(): UserPreferences;
         private onSourceFileChanged;
         private handleDeletedFile;
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject): FileWatcher;
@@ -14068,6 +14080,7 @@ declare namespace ts.server {
         private mapCodeAction;
         private mapCodeFixAction;
         private mapTextChangesToCodeEdits;
+        private mapTextChangeToCodeEdit;
         private convertTextChangeToCodeEdit;
         private getBraceMatching;
         private getDiagnosticsForProject;
@@ -14084,6 +14097,8 @@ declare namespace ts.server {
         onMessage(message: string): void;
         private getFormatOptions;
         private getPreferences;
+        private getHostFormatOptions;
+        private getHostPreferences;
     }
     interface HandlerResponse {
         response?: {};

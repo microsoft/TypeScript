@@ -4419,12 +4419,20 @@
         "category": "Message",
         "code": 95060
     },
-    "Add missing enum member '{0}'": {
+    "Convert default export to named export": {
         "category": "Message",
         "code": 95061
     },
-    "Add all missing enum members": {
+    "Convert named export to default export": {
         "category": "Message",
         "code": 95062
+    },
+    "Add missing enum member '{0}'": {
+        "category": "Message",
+        "code": 95063
+    },
+    "Add all missing enum members": {
+        "category": "Message",
+        "code": 95064
     }
 }

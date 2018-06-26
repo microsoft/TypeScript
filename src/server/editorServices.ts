@@ -692,6 +692,13 @@ namespace ts.server {
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
 
+        /* @internal */
+        forEachProject(cb: (project: Project) => void) {
+            for (const p of this.inferredProjects) cb(p);
+            this.configuredProjects.forEach(cb);
+            this.externalProjects.forEach(cb);
+        }
+
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined {
             return ensureProject ? this.ensureDefaultProjectForFile(fileName) : this.tryGetDefaultProjectForFile(fileName);
         }
@@ -748,6 +755,14 @@ namespace ts.server {
         getPreferences(file: NormalizedPath): UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
             return info && info.getPreferences() || this.hostConfiguration.preferences;
+        }
+
+        getHostFormatCodeOptions(): FormatCodeSettings {
+            return this.hostConfiguration.formatCodeOptions;
+        }
+
+        getHostPreferences(): UserPreferences {
+            return this.hostConfiguration.preferences;
         }
 
         private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
