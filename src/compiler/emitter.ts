@@ -659,6 +659,8 @@ namespace ts {
                         return emitArrayType(<ArrayTypeNode>node);
                     case SyntaxKind.TupleType:
                         return emitTupleType(<TupleTypeNode>node);
+                    case SyntaxKind.OptionalType:
+                        return emitOptionalType(<OptionalTypeNode>node);
                     case SyntaxKind.UnionType:
                         return emitUnionType(<UnionTypeNode>node);
                     case SyntaxKind.IntersectionType:
@@ -695,8 +697,9 @@ namespace ts {
                         return emitJSDocNonNullableType(node as JSDocNonNullableType);
                     case SyntaxKind.JSDocOptionalType:
                         return emitJSDocOptionalType(node as JSDocOptionalType);
+                    case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
-                        return emitJSDocVariadicType(node as JSDocVariadicType);
+                        return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
 
                     // Binding patterns
                     case SyntaxKind.ObjectBindingPattern:
@@ -1304,7 +1307,7 @@ namespace ts {
             writePunctuation("]");
         }
 
-        function emitJSDocVariadicType(node: JSDocVariadicType) {
+        function emitRestOrJSDocVariadicType(node: RestTypeNode | JSDocVariadicType) {
             write("...");
             emit(node.type);
         }
@@ -1313,6 +1316,11 @@ namespace ts {
             writePunctuation("[");
             emitList(node, node.elementTypes, ListFormat.TupleTypeElements);
             writePunctuation("]");
+        }
+
+        function emitOptionalType(node: OptionalTypeNode) {
+            emit(node.type);
+            write("?");
         }
 
         function emitUnionType(node: UnionTypeNode) {

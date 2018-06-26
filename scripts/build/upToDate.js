@@ -41,10 +41,9 @@ function upToDate(parsedProject, options) {
          * @param {string|Buffer|File} file 
          */
         write(file, _, cb) {
-            if (Vinyl.isVinyl(file)) {
-                inputs.push(file);
-                inputMap.set(path.resolve(file.path), file);
-            }
+            if (typeof file === "string" || Buffer.isBuffer(file)) return cb(new Error("Only Vinyl files are supported."));
+            inputs.push(file);
+            inputMap.set(path.resolve(file.path), file);
             cb();
         },
         final(cb) {
