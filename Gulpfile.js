@@ -46,7 +46,7 @@ const produceLKGJs = "scripts/produceLKG.js";
 const word2mdJs = "scripts/word2md.js";
 gulp.task("scripts", /*help*/ false, () => project.compile(scriptsProject), {
     aliases: [
-        configurePrereleaseJs, 
+        configurePrereleaseJs,
         processDiagnosticMessagesJs,
         generateLocalizedDiagnosticMessagesJs,
         produceLKGJs,
@@ -134,10 +134,11 @@ gulp.task(generatedLCGFile, /*help*/ false, [generateLocalizedDiagnosticMessages
 
 gulp.task("localize", /*help*/ false, [generatedLCGFile]);
 
+const servicesProject = "src/services/tsconfig.json";
 const typescriptServicesProject = "built/local/typescriptServices.tsconfig.json";
 gulp.task(typescriptServicesProject, /*help*/ false, () => {
     // NOTE: flatten services so that we can properly strip @internal
-    project.flatten("src/services/tsconfig.json", typescriptServicesProject, {
+    project.flatten(servicesProject, typescriptServicesProject, {
         compilerOptions: {
             "removeComments": true,
             "stripInternal": true,
@@ -148,7 +149,7 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
 
 const typescriptServicesJs = "built/local/typescriptServices.js";
 const typescriptServicesDts = "built/local/typescriptServices.d.ts";
-gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], () => 
+gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], () =>
     project.compile(typescriptServicesProject, { dts: files => files.pipe(convertConstEnums()) }),
     { aliases: [typescriptServicesDts] });
 
@@ -225,7 +226,7 @@ gulp.task(tsserverlibraryProject, /*help*/ false, () => {
 const tsserverlibraryJs = "built/local/tsserverlibrary.js";
 const tsserverlibraryDts = "built/local/tsserverlibrary.d.ts";
 gulp.task(tsserverlibraryJs, /*help*/ false, [typescriptServicesJs, tsserverlibraryProject], () =>
-    project.compile(tsserverlibraryProject, { 
+    project.compile(tsserverlibraryProject, {
         dts: files => files
             .pipe(convertConstEnums())
             .pipe(append("\nexport = ts;\nexport as namespace ts;")),
@@ -253,21 +254,21 @@ gulp.task(specMd, /*help*/ false, [word2mdJs], () =>
     exec("cscript", ["//nologo", word2mdJs, path.resolve(specMd), path.resolve("doc/TypeScript Language Specification.docx")]));
 
 gulp.task(
-    "generate-spec", 
-    "Generates a Markdown version of the Language Specification", 
+    "generate-spec",
+    "Generates a Markdown version of the Language Specification",
     [specMd]);
 
 gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJs, typingsInstallerJs, watchGuardJs, tscReleaseJs], () => {
     const expectedFiles = [
-        tscReleaseJs, 
-        typescriptServicesJs, 
-        tsserverJs, 
-        typescriptJs, 
-        typescriptDts, 
-        typescriptServicesDts, 
-        tsserverlibraryDts, 
-        tsserverlibraryDts, 
-        typingsInstallerJs, 
+        tscReleaseJs,
+        typescriptServicesJs,
+        tsserverJs,
+        typescriptJs,
+        typescriptDts,
+        typescriptServicesDts,
+        tsserverlibraryDts,
+        tsserverlibraryDts,
+        typingsInstallerJs,
         cancellationTokenJs
     ].concat(libraryTargets);
     const missingFiles = expectedFiles
@@ -286,8 +287,8 @@ gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJ
 });
 
 gulp.task(
-    "LKG", 
-    "Makes a new LKG out of the built js files", 
+    "LKG",
+    "Makes a new LKG out of the built js files",
     () => runSequence("clean-built", "produce-LKG"));
 
 // Task to build the tests infrastructure using the built compiler
@@ -465,10 +466,38 @@ gulp.task(
     ["local"]);
 
 gulp.task(
+    "watch-diagnostics",
+    /*help*/ false,
+    [processDiagnosticMessagesJs],
+    () => gulp.watch([diagnosticMessagesJson], [diagnosticInformationMapTs, builtGeneratedDiagnosticMessagesJson]));
+
+gulp.task(
+    "watch-lib",
+    /*help*/ false,
+    () => gulp.watch(["src/lib/**/*"], ["lib"]));
+
+gulp.task(
     "watch-tsc",
-    "Watches for changes to the build inputs for built/local/tsc.js",
-    [typescriptServicesJs],
+    /*help*/ false,
+    ["watch-diagnostics", "watch-lib", typescriptServicesJs],
     () => project.watch(tscProject, { typescript: "built" }));
+
+gulp.task(
+    "watch-services",
+    /*help*/ false,
+    ["watch-diagnostics", "watch-lib", typescriptServicesJs],
+    () => project.watch(servicesProject, { typescript: "built" }));
+
+gulp.task(
+    "watch-server",
+    /*help*/ false,
+    ["watch-diagnostics", "watch-lib", typescriptServicesJs],
+    () => project.watch(tsserverProject, { typescript: "built" }));
+
+gulp.task(
+    "watch-local",
+    /*help*/ false,
+    ["watch-lib", "watch-tsc", "watch-services", "watch-server"]);
 
 gulp.task(
     "watch",
