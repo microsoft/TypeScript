@@ -176,7 +176,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const memberElements = createClassElementsFromSymbol(initializer.symbol);
+            const memberElements = createClassElementsFromSymbol(node.symbol);
             if (initializer.body) {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
@@ -200,22 +200,6 @@ namespace ts.codefix {
             // Don't call copyComments here because we'll already leave them in place
             return cls;
         }
-    }
-
-    function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile) {
-        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
-            if (kind === SyntaxKind.MultiLineCommentTrivia) {
-                // Remove leading /*
-                pos += 2;
-                // Remove trailing */
-                end -= 2;
-            }
-            else {
-                // Remove leading //
-                pos += 2;
-            }
-            addSyntheticLeadingComment(targetNode, kind, sourceFile.text.slice(pos, end), htnl);
-        });
     }
 
     function getModifierKindFromSource(source: Node, kind: SyntaxKind): ReadonlyArray<Modifier> | undefined {

@@ -241,11 +241,21 @@ namespace ts.textChanges {
             return this;
         }
 
+        public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
+            this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
+        }
+
         public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
             this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
             return this;
+        }
+
+        public deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options: ConfigurableStartEnd = {}): void {
+            const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
+            const endPosition = afterEndNode === undefined ? sourceFile.text.length : getAdjustedStartPosition(sourceFile, afterEndNode, options, Position.FullStart);
+            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
         }
 
         public deleteNodeInList(sourceFile: SourceFile, node: Node) {
@@ -391,6 +401,9 @@ namespace ts.textChanges {
             else if (isParameter(before)) {
                 return {};
             }
+            else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
+                return { suffix: ", " };
+            }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
@@ -459,6 +472,10 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
+        public insertNodeAtEndOfList(sourceFile: SourceFile, list: NodeArray<Node>, newNode: Node): void {
+            this.insertNodeAt(sourceFile, list.end, newNode, { prefix: ", " });
+        }
+
         public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
             this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
@@ -484,22 +501,28 @@ namespace ts.textChanges {
             };
         }
         private getInsertNodeAfterOptionsWorker(node: Node): InsertNodeOptions {
-            if (isClassDeclaration(node) || isModuleDeclaration(node)) {
-                return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                    return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
+
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.StringLiteral:
+                    return { prefix: ", " };
+
+                case SyntaxKind.PropertyAssignment:
+                    return { suffix: "," + this.newLineCharacter };
+
+                case SyntaxKind.ExportKeyword:
+                    return { prefix: " " };
+
+                case SyntaxKind.Parameter:
+                    return {};
+
+                default:
+                    Debug.assert(isStatement(node) || isClassOrTypeElement(node)); // Else we haven't handled this kind of node yet -- add it
+                    return { suffix: this.newLineCharacter };
             }
-            else if (isStatement(node) || isClassOrTypeElement(node)) {
-                return { suffix: this.newLineCharacter };
-            }
-            else if (isVariableDeclaration(node)) {
-                return { prefix: ", " };
-            }
-            else if (isPropertyAssignment(node)) {
-                return { suffix: "," + this.newLineCharacter };
-            }
-            else if (isParameter(node)) {
-                return {};
-            }
-            return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
 
         public insertName(sourceFile: SourceFile, node: FunctionExpression | ClassExpression | ArrowFunction, name: string): void {
@@ -729,7 +752,7 @@ namespace ts.textChanges {
         export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
             // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
             const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
-            const sourceFile = createSourceFile(fileName, nonFormattedText, ScriptTarget.ESNext);
+            const sourceFile = createSourceFile(fileName, nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true);
             const changes = formatting.formatDocument(sourceFile, formatContext);
             const text = applyChanges(nonFormattedText, changes);
             return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };

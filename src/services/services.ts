@@ -391,10 +391,10 @@ namespace ts {
         getApparentProperties(): Symbol[] {
             return this.checker.getAugmentedPropertiesOfType(this);
         }
-        getCallSignatures(): Signature[] {
+        getCallSignatures(): ReadonlyArray<Signature> {
             return this.checker.getSignaturesOfType(this, SignatureKind.Call);
         }
-        getConstructSignatures(): Signature[] {
+        getConstructSignatures(): ReadonlyArray<Signature> {
             return this.checker.getSignaturesOfType(this, SignatureKind.Construct);
         }
         getStringIndexType(): Type | undefined {
@@ -426,7 +426,7 @@ namespace ts {
             return !!(this.flags & TypeFlags.UnionOrIntersection);
         }
         isLiteral(): this is LiteralType {
-            return !!(this.flags & TypeFlags.Literal);
+            return !!(this.flags & TypeFlags.StringOrNumberLiteral);
         }
         isStringLiteral(): this is StringLiteralType {
             return !!(this.flags & TypeFlags.StringLiteral);
@@ -540,6 +540,7 @@ namespace ts {
         public _declarationBrand: any;
         public fileName: string;
         public path: Path;
+        public resolvedPath: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: ReadonlyArray<number>;
@@ -551,6 +552,7 @@ namespace ts {
         public moduleName: string;
         public referencedFiles: FileReference[];
         public typeReferenceDirectives: FileReference[];
+        public libReferenceDirectives: FileReference[];
 
         public syntacticDiagnostics: DiagnosticWithLocation[];
         public parseDiagnostics: DiagnosticWithLocation[];
@@ -1109,35 +1111,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
-    export interface SourceFileLikeCache {
-        get(path: Path): SourceFileLike | undefined;
-    }
-
-    /* @internal */
-    export function createSourceFileLikeCache(host: { readFile?: (path: string) => string | undefined, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
-        const cached = createMap<SourceFileLike>();
-        return {
-            get(path: Path) {
-                if (cached.has(path)) {
-                    return cached.get(path);
-                }
-                if (!host.fileExists || !host.readFile || !host.fileExists(path)) return;
-                // And failing that, check the disk
-                const text = host.readFile(path)!; // TODO: GH#18217
-                const file: SourceFileLike = {
-                    text,
-                    lineMap: undefined,
-                    getLineAndCharacterOfPosition(pos) {
-                        return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
-                    }
-                };
-                cached.set(path, file);
-                return file;
-            }
-        };
-    }
-
     export function createLanguageService(
         host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
@@ -1198,13 +1171,13 @@ namespace ts {
             }
 
             // Get a fresh cache of the host information
-            let hostCache = new HostCache(host, getCanonicalFileName);
+            let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
 
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames)) {
                 return;
             }
 
@@ -1231,7 +1204,7 @@ namespace ts {
                 readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    const entry = hostCache.getEntryByPath(path);
+                    const entry = hostCache && hostCache.getEntryByPath(path);
                     if (entry) {
                         return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
                     }
@@ -1273,7 +1246,7 @@ namespace ts {
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined!;
+            hostCache = undefined;
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
@@ -1287,7 +1260,7 @@ namespace ts {
 
             function fileExists(fileName: string): boolean {
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                const entry = hostCache.getEntryByPath(path);
+                const entry = hostCache && hostCache.getEntryByPath(path);
                 return entry ?
                     !isString(entry) :
                     (!!host.fileExists && host.fileExists(fileName));
@@ -1305,11 +1278,11 @@ namespace ts {
             }
 
             function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                Debug.assert(hostCache !== undefined);
+                Debug.assert(hostCache !== undefined, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
-                const hostFileInformation = hostCache.getOrCreateEntryByPath(fileName, path);
+                const hostFileInformation = hostCache && hostCache.getOrCreateEntryByPath(fileName, path);
                 if (!hostFileInformation) {
                     return undefined;
                 }
@@ -1415,7 +1388,7 @@ namespace ts {
 
         function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
-            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program);
+            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -1466,7 +1439,7 @@ namespace ts {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
-            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+            const node = getTouchingPropertyName(sourceFile, position);
             if (node === sourceFile) {
                 // Avoid giving quickInfo for the sourceFile as a whole.
                 return undefined;
@@ -1724,7 +1697,8 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
-            return getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
+            const refs = getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
+            return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
@@ -1780,15 +1754,11 @@ namespace ts {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
-        function getSourceFile(fileName: string): SourceFile {
-            return getNonBoundSourceFile(fileName);
-        }
-
         function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
-            const node = getTouchingPropertyName(sourceFile, startPos, /*includeJsDocComment*/ false);
+            const node = getTouchingPropertyName(sourceFile, startPos);
 
             if (node === sourceFile) {
                 return undefined;
@@ -1985,8 +1955,8 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
-        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
-            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions));
+        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<FileTextChanges> {
+            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2049,6 +2019,17 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const token = findPrecedingToken(position, sourceFile);
+            if (!token) return undefined;
+            const element = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent) ? token.parent.parent
+                : isJsxText(token) ? token.parent : undefined;
+            if (element && !tagNamesAreEquivalent(element.openingElement.tagName, element.closingElement.tagName)) {
+                return { newText: `</${element.openingElement.tagName.getText(sourceFile)}>` };
+            }
         }
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {
@@ -2283,6 +2264,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getJsxClosingTagAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
             getCombinedCodeFix,
@@ -2291,7 +2273,6 @@ namespace ts {
             getEditsForFileRename,
             getEmitOutput,
             getNonBoundSourceFile,
-            getSourceFile,
             getProgram,
             getApplicableRefactors,
             getEditsForRefactor,

@@ -2,7 +2,7 @@
 declare function dec(): (target: Function, paramIndex: number) => void;
 >dec : Symbol(dec, Decl(decoratorOnClass8.ts, 0, 0))
 >target : Symbol(target, Decl(decoratorOnClass8.ts, 0, 25))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >paramIndex : Symbol(paramIndex, Decl(decoratorOnClass8.ts, 0, 42))
 
 @dec()

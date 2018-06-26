@@ -8,8 +8,21 @@
 ////[|/*useG*/g|]();
 ////[|/*useH*/h|]();
 
+////const i = /*i*/() => 0;
+////const /*j*/j = i;
+
+////[|/*useI*/i|]();
+////[|/*useJ*/j|]();
+
+////const o = { m: /*m*/() => 0 };
+////o.[|/*useM*/m|]();
+
 verify.goToDefinition({
     useF: "f",
-    useG: ["f", "g"],
-    useH: ["f", "h"],
+    useG: ["g", "f"],
+    useH: ["h", "f"],
+
+    useI: "i",
+    useJ: ["j", "i"],
+    useM: "m",
 });

@@ -14,11 +14,11 @@ function A () {
 A.prototype.y = A.prototype.z = function f(n) {
 >A.prototype : Symbol(A.y, Decl(a.js, 4, 1))
 >A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(A.y, Decl(a.js, 4, 1))
 >A.prototype : Symbol(A.z, Decl(a.js, 6, 15))
 >A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(A.z, Decl(a.js, 6, 15))
 >f : Symbol(f, Decl(a.js, 6, 31))
 >n : Symbol(n, Decl(a.js, 6, 43))

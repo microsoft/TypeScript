@@ -100,7 +100,7 @@ namespace ts {
         function transformBundle(node: Bundle) {
             return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
                 if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend.javascriptText);
+                    return createUnparsedSourceFile(prepend.javascriptText, prepend.javascriptMapPath, prepend.javascriptMapText);
                 }
                 return prepend;
             }));
@@ -380,6 +380,8 @@ namespace ts {
 
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
+                case SyntaxKind.OptionalType:
+                case SyntaxKind.RestType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.TypePredicate:
                 case SyntaxKind.TypeParameter:
@@ -552,7 +554,9 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile) {
             const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
-                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
+                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
+                !isJsonSourceFile(node);
+
             return updateSourceFileNode(
                 node,
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
@@ -584,7 +588,7 @@ namespace ts {
         function getClassFacts(node: ClassDeclaration, staticProperties: ReadonlyArray<PropertyDeclaration>) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
-            const extendsClauseElement = getClassExtendsHeritageClauseElement(node);
+            const extendsClauseElement = getEffectiveBaseTypeNode(node);
             if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
             if (shouldEmitDecorateCallForClass(node)) facts |= ClassFacts.HasConstructorDecorators;
             if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
@@ -1910,6 +1914,7 @@ namespace ts {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ImportType:
                     break;
 
                 default:

@@ -7,9 +7,9 @@ function len(s: string) {
 >s : Symbol(s, Decl(controlFlowIterationErrors.ts, 2, 13))
 
     return s.length;
->s.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(controlFlowIterationErrors.ts, 2, 13))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 function f1() {

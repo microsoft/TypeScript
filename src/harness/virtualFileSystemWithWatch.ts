@@ -1,5 +1,3 @@
-/// <reference path="harness.ts" />
-
 namespace ts.TestFSWithWatch {
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",
@@ -573,7 +571,9 @@ interface Array<T> {}`
         }
 
         private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean) {
-            insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
+            if (!this.fs.has(fileOrDirectory.path)) {
+                insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
+            }
             folder.modifiedTime = this.now();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 

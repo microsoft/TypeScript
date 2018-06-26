@@ -82,13 +82,13 @@ exports.B = B
 
 A.prototype = B.prototype = {
 >A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
->A.prototype : any
+>A.prototype : { [x: string]: any; m(n: number): number; }
 >A : typeof A
->prototype : any
+>prototype : { [x: string]: any; m(n: number): number; }
 >B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
->B.prototype : any
+>B.prototype : { [x: string]: any; }
 >B : typeof B
->prototype : any
+>prototype : { [x: string]: any; }
 >{    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
 
     /** @param {number} n */

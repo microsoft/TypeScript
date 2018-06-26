@@ -13,7 +13,7 @@ function MyClass() {
 MyClass.prototype.optionalParam = function(required, notRequired) {
 >MyClass.prototype : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
 >MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >optionalParam : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
 >required : Symbol(required, Decl(jsDocOptionality.js, 8, 43))
 >notRequired : Symbol(notRequired, Decl(jsDocOptionality.js, 8, 52))

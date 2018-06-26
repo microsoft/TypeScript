@@ -12,11 +12,11 @@ class EventBase {
 >args : Symbol(args, Decl(functionSubtypingOfVarArgs2.ts, 3, 19))
 
         this._listeners.push(listener);
->this._listeners.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>this._listeners.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this._listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
 >this : Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
 >_listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >listener : Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 3, 8))
     }
 }
