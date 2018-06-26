@@ -486,7 +486,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
             process.env.NODE_ENV = savedNodeEnv;
             Travis.measure(startTime);
             runLinterAndComplete();
-            finish();
         }, function (e, status) {
             process.env.NODE_ENV = savedNodeEnv;
             Travis.measure(startTime);
@@ -523,11 +522,11 @@ function runConsoleTests(defaultReporter, runInParallel) {
 
     function runLinterAndComplete() {
         if (!lintFlag || dirty) {
-            return;
+            return finish();
         }
         var lint = jake.Task['lint'];
-        lint.addListener('complete', function () {
-            complete();
+        lint.once('complete', function () {
+            finish();
         });
         lint.invoke();
     }
