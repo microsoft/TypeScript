@@ -166,9 +166,6 @@ namespace ts {
 
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.FunctionDeclaration:
-                    if (isClassDeclaration(node)) {
-                        currentScope = node;
-                    }
                     if (hasModifier(node, ModifierFlags.Ambient)) {
                         break;
                     }
@@ -182,6 +179,10 @@ namespace ts {
                         // however, class declaration parsing allows for undefined names, so syntactically invalid
                         // programs may also have an undefined name.
                         Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasModifier(node, ModifierFlags.Default));
+                    }
+                    if (isClassDeclaration(node)) {
+                        // XXX: should probably also cover interfaces and type aliases that can have type variables?
+                        currentScope = node;
                     }
 
                     break;
@@ -1972,16 +1973,7 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
-            // node might be a reference to type variable, which can be scoped to a class declaration, in addition to the regular
-            // TypeScript scopes. Walk up the AST to find the next class and use that as the lookup scope.
-            let scope: Node = currentScope;
-            // while (scope.parent && scope !== currentScope) {
-            //     scope = scope.parent;
-            //     if (isClassDeclaration(scope)) {
-            //         break;
-            //     }
-            // }
-            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, scope);
+            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentScope);
             switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
                     const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
