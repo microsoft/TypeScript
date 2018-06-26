@@ -95,13 +95,14 @@ namespace ts.codefix {
     }
 
     function parsePromiseCall(node: CallExpression, usedNames: string[], checker: TypeChecker, argName: string): Statement[] {
-        if (!argName){
-            argName = getArgName(node, checker, usedNames);
+        let localArgName = argName;
+        if (!localArgName){
+            localArgName = getArgName(node, checker, usedNames);
         } 
 
-        usedNames.push(argName)
+        usedNames.push(localArgName)
 
-        const varDecl = createVariableDeclaration(argName, /*type*/ undefined, createAwait(node));
+        const varDecl = createVariableDeclaration(localArgName, /*type*/ undefined, createAwait(node));
         return argName ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(node))];
     }
 
@@ -173,6 +174,10 @@ namespace ts.codefix {
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])){
             return (<Identifier>funcNode.arguments[0]).text;
+        }
+
+        if (name === undefined || name === "_"){
+            return undefined;
         }
 
         return name + "_" + getArgName.varNameItr;
