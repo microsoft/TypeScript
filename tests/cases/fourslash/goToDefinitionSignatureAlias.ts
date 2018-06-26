@@ -14,6 +14,9 @@
 ////[|/*useI*/i|]();
 ////[|/*useJ*/j|]();
 
+////const o = { m: /*m*/() => 0 };
+////o.[|/*useM*/m|]();
+
 verify.goToDefinition({
     useF: "f",
     useG: ["g", "f"],
@@ -21,4 +24,5 @@ verify.goToDefinition({
 
     useI: "i",
     useJ: ["j", "i"],
+    useM: "m",
 });

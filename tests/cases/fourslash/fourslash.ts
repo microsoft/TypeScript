@@ -139,6 +139,7 @@ declare namespace FourSlashInterface {
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
         selectRange(range: Range): void;
+        selectAllInFile(fileName: string): void;
     }
     class verifyNegatable {
         private negative;
@@ -178,7 +179,7 @@ declare namespace FourSlashInterface {
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
-            newFileContent?: string | { readonly [fileName: string]: string },
+            newFileContent?: NewFileContent,
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
@@ -336,7 +337,7 @@ declare namespace FourSlashInterface {
         getEditsForFileRename(options: {
             oldPath: string;
             newPath: string;
-            newFileContents: { [fileName: string]: string };
+            newFileContents: { readonly [fileName: string]: string };
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
@@ -357,7 +358,7 @@ declare namespace FourSlashInterface {
         enableFormatting(): void;
         disableFormatting(): void;
 
-        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: string }): void;
+        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: NewFileContent }): void;
     }
     class debug {
         printCurrentParameterHelp(): void;
@@ -573,6 +574,7 @@ declare namespace FourSlashInterface {
     }
 
     type ArrayOrSingle<T> = T | ReadonlyArray<T>;
+    type NewFileContent = string | { readonly [fileName: string]: string };
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;

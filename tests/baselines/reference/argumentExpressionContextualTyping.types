@@ -11,7 +11,7 @@ function foo({x: [a, b], y: {c, d, e}}) { }
 >e : any
 
 function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
->bar : ({ x: [a, b], y: { c, d, e } }: { x: [any, number]; y: { c: any; d: any; e?: { f: number; }; }; }) => void
+>bar : ({ x: [a, b], y: { c, d, e } }: { x: [any, number?]; y: { c: any; d: any; e?: { f: number; }; }; }) => void
 >x : any
 >a : any
 >b : number

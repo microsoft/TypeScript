@@ -35,32 +35,28 @@ function rm(dest, opts) {
          */
         write(file, _, cb) {
             if (failed) return;
-            if (Vinyl.isVinyl(file)) {
-                const basePath = typeof dest === "string" ? path.resolve(cwd, dest) :
-                    typeof dest === "function" ? path.resolve(cwd, dest(file)) :
-                    file.base;
-                const filePath = path.resolve(basePath, file.relative);
-                file.cwd = cwd;
-                file.base = basePath;
-                file.path = filePath;
-                const entry = { 
-                    file, 
-                    deleted: false, 
-                    cb,
-                    promise: del(file.path).then(() => {
-                        entry.deleted = true;
-                        processDeleted();
-                    }, err => {
-                        failed = true;
-                        pending.length = 0;
-                        cb(err);
-                    }) 
-                };
-                pending.push(entry);
-            }
-            else {
-                cb(new Error("Only Vinyl files are supported."));
-            }
+            if (typeof file === "string" || Buffer.isBuffer(file)) return cb(new Error("Only Vinyl files are supported."));
+            const basePath = typeof dest === "string" ? path.resolve(cwd, dest) :
+                typeof dest === "function" ? path.resolve(cwd, dest(file)) :
+                file.base;
+            const filePath = path.resolve(basePath, file.relative);
+            file.cwd = cwd;
+            file.base = basePath;
+            file.path = filePath;
+            const entry = { 
+                file, 
+                deleted: false, 
+                cb,
+                promise: del(file.path).then(() => {
+                    entry.deleted = true;
+                    processDeleted();
+                }, err => {
+                    failed = true;
+                    pending.length = 0;
+                    cb(err);
+                }) 
+            };
+            pending.push(entry);
         },
         final(cb) {
             processDeleted();

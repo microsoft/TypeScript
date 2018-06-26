@@ -13,10 +13,12 @@
 ////whatever
 
 // @Filename: /a.tsx
-////declare namespace JSX {
-////    interface Element {}
-////    interface IntrinsicElements {
-////        div: {};
+////declare global {
+////    namespace JSX {
+////        interface Element {}
+////        interface IntrinsicElements {
+////            div: {};
+////        }
 ////    }
 ////}
 ////const ctr = </*openTag*/;
@@ -38,7 +40,7 @@ verify.completions(
     { marker: "quoteInComment", exact: undefined, triggerCharacter: '"' },
     { marker: "lessInComment", exact: undefined, triggerCharacter: "<" },
 
-    { marker: "openTag", exact: undefined, triggerCharacter: "<" }, // TODO: `includes: "div"`
+    { marker: "openTag", includes: "div", triggerCharacter: "<" },
     { marker: "lessThan", exact: undefined, triggerCharacter: "<" },
     { marker: "closeTag", exact: "div", triggerCharacter: "/" },
     { marker: "path", exact: "importMe", triggerCharacter: "/", isNewIdentifierLocation: true },

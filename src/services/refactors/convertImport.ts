@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.generateGetAccessorAndSetAccessor {
+namespace ts.refactor {
     const refactorName = "Convert import";
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
