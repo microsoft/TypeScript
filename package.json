@@ -47,7 +47,7 @@
         "@types/minimatch": "latest",
         "@types/minimist": "latest",
         "@types/mkdirp": "latest",
-        "@types/mocha": "^5.2.2",
+        "@types/mocha": "latest",
         "@types/node": "8.5.5",
         "@types/q": "latest",
         "@types/run-sequence": "latest",
