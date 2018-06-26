@@ -1,15 +1,15 @@
 === tests/cases/compiler/declarationEmitDestructuring3.ts ===
 function bar([x, z, ...w]) { }
->bar : ([x, z, ...w]: any[]) => void
+>bar : ([x, z, ...w]: [any, any, ...any[]]) => void
 >x : any
 >z : any
 >w : any[]
 
 function foo([x, ...y] = [1, "string", true]) { }
->foo : ([x, ...y]?: (string | number | boolean)[]) => void
->x : string | number | boolean
->y : (string | number | boolean)[]
->[1, "string", true] : (string | number | boolean)[]
+>foo : ([x, ...y]?: [number, string, boolean]) => void
+>x : number
+>y : (string | boolean)[]
+>[1, "string", true] : [number, string, boolean]
 >1 : 1
 >"string" : "string"
 >true : true
