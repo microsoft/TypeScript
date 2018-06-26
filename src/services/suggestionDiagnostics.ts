@@ -130,7 +130,7 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    function getReturnStatementsWithPromiseCallbacks(node: Node): ReturnStatement[] {
+    export function getReturnStatementsWithPromiseCallbacks(node: Node): ReturnStatement[] {
 
         const retStmts: ReturnStatement[] = [];
         forEachChild(node, visit);
