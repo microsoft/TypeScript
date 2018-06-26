@@ -261,7 +261,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
         }
 
         public getFirstToken(): Node | undefined {

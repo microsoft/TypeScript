@@ -30,7 +30,7 @@ namespace ts.codefix {
                 return undefined; // TODO: GH#20113
             }
 
-            const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+            const token = getTokenAtPosition(sourceFile, start);
             let declaration!: Declaration | undefined;
             const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeenseen*/ returnTrue); });
             const name = getNameOfDeclaration(declaration!);
@@ -42,7 +42,7 @@ namespace ts.codefix {
             const { sourceFile, program, cancellationToken } = context;
             const markSeen = nodeSeenTracker();
             return codeFixAll(context, errorCodes, (changes, err) => {
-                doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start, /*includeJsDocComment*/ false), err.code, program, cancellationToken, markSeen);
+                doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start), err.code, program, cancellationToken, markSeen);
             });
         },
     });

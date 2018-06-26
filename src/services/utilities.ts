@@ -665,19 +665,14 @@ namespace ts {
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition = false): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, includeEndPosition, includeJsDocComment);
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, /*includeEndPosition*/ false, /*includeJsDocComment*/ true);
     }
 
     /** Get the token whose text contains the position */
     function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
-            if (isToken(current)) {
-                // exit early
-                return current;
-            }
-
             // find the child that contains 'position'
             for (const child of current.getChildren()) {
                 if (!includeJsDocComment && isJSDocNode(child)) {
@@ -718,7 +713,7 @@ namespace ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node | undefined {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        const tokenAtPosition = getTokenAtPosition(file, position, /*includeJsDocComment*/ false);
+        const tokenAtPosition = getTokenAtPosition(file, position);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -861,7 +856,7 @@ namespace ts {
      * returns true if the position is in between the open and close elements of an JSX expression.
      */
     export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, position);
 
         if (!token) {
             return false;
@@ -901,7 +896,7 @@ namespace ts {
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, position);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
@@ -1037,18 +1032,9 @@ namespace ts {
         return !!formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false, /*precedingToken*/ undefined, tokenAtPosition, predicate);
     }
 
-    export function hasDocComment(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-
-        // First, we have to see if this position actually landed in a comment.
-        const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
-
-        return forEach(commentRanges, jsDocPrefix);
-
-        function jsDocPrefix(c: CommentRange): boolean {
-            const text = sourceFile.text;
-            return text.length >= c.pos + 3 && text[c.pos] === "/" && text[c.pos + 1] === "*" && text[c.pos + 2] === "*";
-        }
+    export function hasDocComment(sourceFile: SourceFile, position: number): boolean {
+        const token = getTokenAtPosition(sourceFile, position);
+        return !!findAncestor(token, isJSDoc);
     }
 
     function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {

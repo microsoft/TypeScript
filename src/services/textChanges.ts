@@ -576,7 +576,7 @@ namespace ts.textChanges {
             if (index !== containingList.length - 1) {
                 // any element except the last one
                 // use next sibling as an anchor
-                const nextToken = getTokenAtPosition(sourceFile, after.end, /*includeJsDocComment*/ false);
+                const nextToken = getTokenAtPosition(sourceFile, after.end);
                 if (nextToken && isSeparator(after, nextToken)) {
                     // for list
                     // a, b, c
