@@ -155,15 +155,18 @@ namespace ts.codefix {
         return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
     }
 
+    
     function getArgName(funcNode: Node, checker: TypeChecker, usedNames: string[]): string {
+        let name;
+
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
-            const name = (<Identifier>funcNode.parameters[0].name).text;
+            name = (<Identifier>funcNode.parameters[0].name).text;
             if (name !== "_" && !isArgUsed(name, usedNames)) {
                 return name;
             }
         }
         else if (checker.getTypeAtLocation(funcNode).getCallSignatures().length > 0 && checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters.length > 0) {
-            const name = checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters[0].name;
+            name = checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters[0].name;
             if (!isArgUsed(name, usedNames)){
                 return name;
             }
@@ -172,8 +175,13 @@ namespace ts.codefix {
             return (<Identifier>funcNode.arguments[0]).text;
         }
 
-        return "NEWNAME";
+        return name + "_" + getArgName.varNameItr;
     }
+
+    namespace getArgName {
+        export let varNameItr = 1;
+    }
+
 
     function isArgUsed(name: string, usedNames: string[]): boolean {
         let nameUsed: string[] = usedNames.filter(element => element === name);
