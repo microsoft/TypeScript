@@ -6705,6 +6705,8 @@ declare namespace ts {
     function isNamedDeclaration(node: Node): node is NamedDeclaration & {
         name: DeclarationName;
     };
+    /** @internal */
+    function getNonAssignedNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
@@ -9848,7 +9850,7 @@ declare namespace ts {
         version: string;
         scriptSnapshot: IScriptSnapshot | undefined;
         nameTable: UnderscoreEscapedMap<number> | undefined;
-        getNamedDeclarations(): Map<Declaration[]>;
+        getNamedDeclarations(): Map<ReadonlyArray<Declaration>>;
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
         getLineStarts(): ReadonlyArray<number>;
