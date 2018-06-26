@@ -14330,7 +14330,7 @@ namespace ts {
                     const targetType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
                     if (targetType) {
                         if (isTypeSubtypeOf(targetType, type)) {
-                            return targetType;
+                            return isTypeAny(type) ? targetType : getIntersectionType([type, targetType]); // Intersection to handle `string` being a subtype of `keyof T`
                         }
                         if (type.flags & TypeFlags.Instantiable) {
                             const constraint = getBaseConstraintOfType(type) || anyType;
