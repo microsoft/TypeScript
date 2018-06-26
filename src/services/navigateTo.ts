@@ -145,7 +145,7 @@ namespace ts.NavigateTo {
             name: rawItem.name,
             kind: getNodeKind(declaration),
             kindModifiers: getNodeModifiers(declaration),
-            matchKind: PatternMatchKind[rawItem.matchKind],
+            matchKind: PatternMatchKind[rawItem.matchKind] as keyof typeof PatternMatchKind,
             isCaseSensitive: rawItem.isCaseSensitive,
             fileName: rawItem.fileName,
             textSpan: createTextSpanFromNode(declaration),

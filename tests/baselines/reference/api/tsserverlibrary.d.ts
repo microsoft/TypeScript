@@ -10227,7 +10227,7 @@ declare namespace ts {
         name: string;
         kind: ScriptElementKind;
         kindModifiers: string;
-        matchKind: string;
+        matchKind: "exact" | "prefix" | "substring" | "camelCase";
         isCaseSensitive: boolean;
         fileName: string;
         textSpan: TextSpan;
@@ -13076,8 +13076,8 @@ declare namespace ts.server.protocol {
     interface NavtoItem {
         name: string;
         kind: ScriptElementKind;
-        matchKind?: string;
-        isCaseSensitive?: boolean;
+        matchKind: string;
+        isCaseSensitive: boolean;
         kindModifiers?: string;
         file: string;
         start: Location;

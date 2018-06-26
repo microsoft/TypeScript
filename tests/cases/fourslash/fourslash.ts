@@ -289,8 +289,7 @@ declare namespace FourSlashInterface {
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
-        navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
-        navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
+        navigateTo(...options: VerifyNavigateToOptions[]);
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
@@ -566,6 +565,22 @@ declare namespace FourSlashInterface {
         argumentCount?: number;
         isVariadic?: boolean;
         tags?: ReadonlyArray<JSDocTagInfo>;
+    }
+
+    interface VerifyNavigateToOptions {
+        readonly pattern: string;
+        readonly fileName?: string;
+        readonly expected: ReadonlyArray<ExpectedNavigateToItem>;
+    }
+    interface ExpectedNavigateToItem {
+        readonly name: string;
+        readonly kind: string;
+        readonly kindModifiers?: string; // default: ""
+        readonly matchKind?: string; // default: "exact"
+        readonly isCaseSensitive?: boolean; // default: "true"
+        readonly range: Range;
+        readonly containerName?: string; // default: ""
+        readonly containerKind?: string; // default: ScriptElementKind.unknown
     }
 
     interface JSDocTagInfo {

@@ -2453,12 +2453,12 @@ namespace ts.server.protocol {
         /**
          * exact, substring, or prefix.
          */
-        matchKind?: string;
+        matchKind: string;
 
         /**
          * If this was a case sensitive or insensitive match.
          */
-        isCaseSensitive?: boolean;
+        isCaseSensitive: boolean;
 
         /**
          * Optional modifiers for the kind (such as 'public').
