@@ -2,6 +2,7 @@
 // @allowJs: true
 // @checkJs: true
 // @noImplicitAny: true
+// @lib: esnext
 // @Filename: bug25149.js
 function* f() {
     var o
