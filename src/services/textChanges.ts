@@ -214,6 +214,7 @@ namespace ts.textChanges {
         private readonly newFiles: { readonly oldFile: SourceFile, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
         private readonly deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         private readonly classesWithNodesInsertedAtStart = createMap<ClassDeclaration>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly deletedDeclarations: { readonly sourceFile: SourceFile, readonly node: Node }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
             return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
@@ -231,6 +232,10 @@ namespace ts.textChanges {
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
             return this;
+        }
+
+        deleteDeclaration(sourceFile: SourceFile, node: Node): void {
+            this.deletedDeclarations.push({ sourceFile, node });
         }
 
         /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
@@ -685,6 +690,14 @@ namespace ts.textChanges {
             });
         }
 
+        private finishDeleteDeclarations(): void {
+            for (const { sourceFile, node } of this.deletedDeclarations) {
+                if (!this.deletedDeclarations.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
+                    deleteDeclaration.deleteDeclaration(this, sourceFile, node);
+                }
+            }
+        }
+
         /**
          * Note: after calling this, the TextChanges object must be discarded!
          * @param validate only for tests
@@ -692,6 +705,7 @@ namespace ts.textChanges {
          *    so we can only call this once and can't get the non-formatted text separately.
          */
         public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
+            this.finishDeleteDeclarations();
             this.finishClassesWithNodesInsertedAtStart();
             this.finishTrailingCommaAfterDeletingNodesInList();
             const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
@@ -1006,5 +1020,171 @@ namespace ts.textChanges {
     function needSemicolonBetween(a: Node, b: Node): boolean {
         return (isPropertySignature(a) || isPropertyDeclaration(a)) && isClassOrTypeElement(b) && b.name!.kind === SyntaxKind.ComputedPropertyName
             || isStatementButNotDeclaration(a) && isStatementButNotDeclaration(b); // TODO: only if b would start with a `(` or `[`
+    }
+
+    namespace deleteDeclaration {
+        export function deleteDeclaration(changes: ChangeTracker, sourceFile: SourceFile, node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.Parameter: {
+                    const oldFunction = node.parent;
+                    if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
+                        // Lambdas with exactly one parameter are special because, after removal, there
+                        // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
+                        // case if the parameter is simply removed (e.g. in `x => 1`).
+                        const newFunction = updateArrowFunction(
+                            oldFunction,
+                            oldFunction.modifiers,
+                            oldFunction.typeParameters,
+                            /*parameters*/ undefined!, // TODO: GH#18217
+                            oldFunction.type,
+                            oldFunction.equalsGreaterThanToken,
+                            oldFunction.body);
+
+                        // Drop leading and trailing trivia of the new function because we're only going
+                        // to replace the span (vs the full span) of the old function - the old leading
+                        // and trailing trivia will remain.
+                        suppressLeadingAndTrailingTrivia(newFunction);
+
+                        changes.replaceNode(sourceFile, oldFunction, newFunction);
+                    }
+                    else {
+                        changes.deleteNodeInList(sourceFile, node);
+                    }
+                    break;
+                }
+
+                case SyntaxKind.ImportDeclaration:
+                    changes.deleteNode(sourceFile, node);
+                    break;
+
+                case SyntaxKind.BindingElement:
+                    const pattern = (node as BindingElement).parent;
+                    const preserveComma = pattern.kind === SyntaxKind.ArrayBindingPattern && node !== last(pattern.elements);
+                    if (preserveComma) {
+                        changes.deleteNode(sourceFile, node);
+                    }
+                    else {
+                        changes.deleteNodeInList(sourceFile, node);
+                    }
+                    break;
+
+                case SyntaxKind.VariableDeclaration:
+                    deleteVariableDeclaration(changes, sourceFile, node as VariableDeclaration);
+                    break;
+
+                case SyntaxKind.TypeParameter: {
+                    const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node.parent);
+                    if (typeParameters.length === 1) {
+                        const { pos, end } = cast(typeParameters, isNodeArray);
+                        const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ true);
+                        const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ true);
+                        Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
+                        Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
+
+                        changes.deleteNodeRange(sourceFile, previousToken, nextToken);
+                    }
+                    else {
+                        changes.deleteNodeInList(sourceFile, node);
+                    }
+                    break;
+                }
+
+                case SyntaxKind.ImportSpecifier:
+                    const namedImports = (node as ImportSpecifier).parent;
+                    if (namedImports.elements.length === 1) {
+                        deleteImportBinding(changes, sourceFile, namedImports);
+                    }
+                    else {
+                        changes.deleteNodeInList(sourceFile, node);
+                    }
+                    break;
+
+                case SyntaxKind.NamespaceImport:
+                    deleteImportBinding(changes, sourceFile, node as NamespaceImport);
+                    break;
+
+                default:
+                    if (isImportClause(node.parent) && node.parent.name === node) {
+                        deleteDefaultImport(changes, sourceFile, node.parent);
+                    }
+                    else if (isCallLikeExpression(node.parent)) {
+                        changes.deleteNodeInList(sourceFile, node);
+                    }
+                    else {
+                        changes.deleteNode(sourceFile, node);
+                    }
+            }
+        }
+
+        function deleteDefaultImport(changes: ChangeTracker, sourceFile: SourceFile, importClause: ImportClause): void {
+            if (!importClause.namedBindings) {
+                // Delete the whole import
+                changes.deleteNode(sourceFile, importClause.parent);
+            }
+            else {
+                // import |d,| * as ns from './file'
+                const start = importClause.name!.getStart(sourceFile);
+                const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end, /*includeJsDocComment*/ true);
+                if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
+                    // shift first non-whitespace position after comma to the start position of the node
+                    const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
+                    changes.deleteRange(sourceFile, { pos: start, end });
+                }
+                else {
+                    changes.deleteNode(sourceFile, importClause.name!);
+                }
+            }
+        }
+
+        function deleteImportBinding(changes: ChangeTracker, sourceFile: SourceFile, node: NamedImportBindings): void {
+            if (node.parent.name) {
+                // Delete named imports while preserving the default import
+                // import d|, * as ns| from './file'
+                // import d|, { a }| from './file'
+                const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, node.pos - 1, /*includeJsDocComment*/ true));
+                changes.deleteRange(sourceFile, { pos: previousToken.getStart(sourceFile), end: node.end });
+            }
+            else {
+                // Delete the entire import declaration
+                // |import * as ns from './file'|
+                // |import { a } from './file'|
+                const importDecl = getAncestor(node, SyntaxKind.ImportDeclaration)!;
+                changes.deleteNode(sourceFile, importDecl);
+            }
+        }
+
+        function deleteVariableDeclaration(changes: ChangeTracker, sourceFile: SourceFile, node: VariableDeclaration): void {
+            const { parent } = node;
+
+            if (parent.kind === SyntaxKind.CatchClause) {
+                // TODO: There's currently no unused diagnostic for this, could be a suggestion
+                changes.deleteNodeRange(sourceFile, findChildOfKind(parent, SyntaxKind.OpenParenToken, sourceFile)!, findChildOfKind(parent, SyntaxKind.CloseParenToken, sourceFile)!);
+                return;
+            }
+
+            if (parent.declarations.length !== 1) {
+                changes.deleteNodeInList(sourceFile, node);
+                return;
+            }
+
+            const gp = parent.parent;
+            switch (gp.kind) {
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.ForInStatement:
+                    changes.replaceNode(sourceFile, node, createObjectLiteral());
+                    break;
+
+                case SyntaxKind.ForStatement:
+                    changes.deleteNode(sourceFile, parent);
+                    break;
+
+                case SyntaxKind.VariableStatement:
+                    changes.deleteNode(sourceFile, gp);
+                    break;
+
+                default:
+                    Debug.assertNever(gp);
+            }
+        }
     }
 }

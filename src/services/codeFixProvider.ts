@@ -71,7 +71,7 @@ namespace ts {
             return fixIdToRegistration.get(cast(context.fixId, isString))!.getAllCodeActions!(context);
         }
 
-        export function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
+        function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
             return { changes, commands };
         }
 
@@ -89,7 +89,7 @@ namespace ts {
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        export function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void {
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void {
             for (const diag of program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken))) {
                 if (contains(errorCodes, diag.code)) {
                     cb(diag as DiagnosticWithLocation);
