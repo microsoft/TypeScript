@@ -2,10 +2,14 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(13,14): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(14,14): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(15,14): error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(16,14): error TS2365: Operator '==' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(17,14): error TS2365: Operator '!=' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2365: Operator '===' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2365: Operator '!==' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(16,14): error TS2367: The types of these values indicates that this condition will always be 'false'.
+  Operator '==' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(17,14): error TS2367: The types of these values indicates that this condition will always be 'true'.
+  Operator '!=' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2367: The types of these values indicates that this condition will always be 'false'.
+  Operator '===' cannot be applied to types 'T' and 'U'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2367: The types of these values indicates that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types 'T' and 'U'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(22,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(23,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(24,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'string'.
@@ -146,16 +150,20 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
         var r5 = t == u;
                  ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types 'T' and 'U'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367:   Operator '==' cannot be applied to types 'T' and 'U'.
         var r6 = t != u;
                  ~~~~~~
-!!! error TS2365: Operator '!=' cannot be applied to types 'T' and 'U'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'true'.
+!!! error TS2367:   Operator '!=' cannot be applied to types 'T' and 'U'.
         var r7 = t === u;
                  ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'T' and 'U'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types 'T' and 'U'.
         var r8 = t !== u;
                  ~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types 'T' and 'U'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types 'T' and 'U'.
     
         // operator <
         var r1a1 = t < a;

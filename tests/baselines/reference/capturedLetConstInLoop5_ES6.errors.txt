@@ -1,5 +1,7 @@
-tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(174,13): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(174,13): error TS2367: The types of these values indicates that this condition will always be 'false'.
+  Operator '==' cannot be applied to types '0' and '1'.
+tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: The types of these values indicates that this condition will always be 'false'.
+  Operator '==' cannot be applied to types '0' and '1'.
 
 
 ==== tests/cases/compiler/capturedLetConstInLoop5_ES6.ts (2 errors) ====
@@ -178,7 +180,8 @@ tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2365: Opera
             (() => x + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
                 return;
             }
         }
@@ -235,7 +238,8 @@ tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2365: Opera
             (() => x + y + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
                 return;
             }
         }

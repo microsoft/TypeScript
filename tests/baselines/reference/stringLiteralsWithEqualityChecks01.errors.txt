@@ -1,9 +1,15 @@
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(8,5): error TS2365: Operator '===' cannot be applied to types '"foo"' and '"bar"'.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(9,5): error TS2365: Operator '===' cannot be applied to types '"bar"' and '"foo"'.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(10,5): error TS2365: Operator '===' cannot be applied to types '"foo"' and '"bar"'.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(17,5): error TS2365: Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(18,5): error TS2365: Operator '!==' cannot be applied to types '"bar"' and '"foo"'.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(19,5): error TS2365: Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(8,5): error TS2367: The types of these values indicates that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '"foo"' and '"bar"'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(9,5): error TS2367: The types of these values indicates that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '"bar"' and '"foo"'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(10,5): error TS2367: The types of these values indicates that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '"foo"' and '"bar"'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(17,5): error TS2367: The types of these values indicates that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(18,5): error TS2367: The types of these values indicates that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types '"bar"' and '"foo"'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(19,5): error TS2367: The types of these values indicates that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
 
 
 ==== tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts (6 errors) ====
@@ -16,13 +22,16 @@ tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(19,5
     b = y === "foo";
     b = "foo" === "bar";
         ~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"foo"' and '"bar"'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '"foo"' and '"bar"'.
     b = "bar" === x;
         ~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"bar"' and '"foo"'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '"bar"' and '"foo"'.
     b = x === "bar";
         ~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"foo"' and '"bar"'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '"foo"' and '"bar"'.
     b = y === "bar";
     b = "bar" === y;
     
@@ -31,13 +40,16 @@ tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(19,5
     b = y !== "foo";
     b = "foo" !== "bar";
         ~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
     b = "bar" !== x;
         ~~~~~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types '"bar"' and '"foo"'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types '"bar"' and '"foo"'.
     b = x !== "bar";
         ~~~~~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
+!!! error TS2367: The types of these values indicates that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types '"foo"' and '"bar"'.
     b = y !== "bar";
     b = "bar" !== y;
     
