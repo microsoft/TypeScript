@@ -61,7 +61,8 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
-        let currentScope: SourceFile | Block | ModuleBlock | CaseBlock | ClassDeclaration;
+        let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
+        let currentNameScope: ClassDeclaration | undefined;
         let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
 
         /**
@@ -132,7 +133,8 @@ namespace ts {
          */
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
-            const savedCurrentScope = currentScope;
+            const savedCurrentScope = currentLexicalScope;
+            const savedCurrentNameScope = currentNameScope;
             const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
 
             // Handle state changes before visiting a node.
@@ -141,11 +143,12 @@ namespace ts {
             const visited = f(node);
 
             // Restore state
-            if (currentScope !== savedCurrentScope) {
+            if (currentLexicalScope !== savedCurrentScope) {
                 currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
             }
 
-            currentScope = savedCurrentScope;
+            currentLexicalScope = savedCurrentScope;
+            currentNameScope = savedCurrentNameScope;
             return visited;
         }
 
@@ -160,7 +163,8 @@ namespace ts {
                 case SyntaxKind.CaseBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.Block:
-                    currentScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
+                    currentLexicalScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
+                    currentNameScope = undefined;
                     currentScopeFirstDeclarationsOfName = undefined;
                     break;
 
@@ -182,7 +186,7 @@ namespace ts {
                     }
                     if (isClassDeclaration(node)) {
                         // XXX: should probably also cover interfaces and type aliases that can have type variables?
-                        currentScope = node;
+                        currentNameScope = node;
                     }
 
                     break;
@@ -1973,7 +1977,7 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
-            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentScope);
+            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentNameScope || currentLexicalScope);
             switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
                     const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
@@ -2037,7 +2041,7 @@ namespace ts {
                     const name = getMutableClone(node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
-                    name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
+                    name.parent = getParseTreeNode(currentLexicalScope); // ensure the parent is set to a parse tree node.
                     if (useFallback) {
                         return createLogicalAnd(
                             createStrictInequality(
@@ -2624,7 +2628,7 @@ namespace ts {
             // enum body.
             if (addVarForEnumOrModuleDeclaration(statements, node)) {
                 // We should still emit the comments if we are emitting a system module.
-                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
                     emitFlags |= EmitFlags.NoLeadingComments;
                 }
             }
@@ -2837,7 +2841,7 @@ namespace ts {
                     createVariableDeclaration(
                         getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                     )
-                ], currentScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
+                ], currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
             );
 
             setOriginalNode(statement, node);
@@ -2913,7 +2917,7 @@ namespace ts {
             // module body.
             if (addVarForEnumOrModuleDeclaration(statements, node)) {
                 // We should still emit the comments if we are emitting a system module.
-                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
                     emitFlags |= EmitFlags.NoLeadingComments;
                 }
             }
