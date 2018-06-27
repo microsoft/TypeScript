@@ -275,8 +275,8 @@ namespace ts.server {
     }
 
     type Projects = ReadonlyArray<Project> | {
-        projects: ReadonlyArray<Project>;
-        symLinkedProjects: MultiMap<Project>;
+        readonly projects: ReadonlyArray<Project>;
+        readonly symLinkedProjects: MultiMap<Project>;
     };
 
     function isProjectsArray(projects: Projects): projects is ReadonlyArray<Project> {
@@ -286,7 +286,14 @@ namespace ts.server {
     /**
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
-    function combineProjectOutput<T, U>(defaultValue: T, getValue: (path: Path) => T, projects: Projects, action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined, comparer?: (a: U, b: U) => number, areEqual?: (a: U, b: U) => boolean) {
+    function combineProjectOutput<T, U>(
+        defaultValue: T,
+        getValue: (path: Path) => T,
+        projects: Projects,
+        action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined,
+        comparer?: (a: U, b: U) => number,
+        areEqual?: (a: U, b: U) => boolean,
+    ): U[] {
         const outputs = flatMap(isProjectsArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isProjectsArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((projects, path) => {
@@ -298,6 +305,36 @@ namespace ts.server {
         return comparer
             ? sortAndDeduplicate(outputs, comparer, areEqual)
             : deduplicate(outputs, areEqual);
+    }
+
+    function combineProjectOutputWhileOpeningReferencedProjects<T>(
+        host: ServerHost,
+        projects: Projects,
+        projectService: ProjectService,
+        action: (project: Project) => ReadonlyArray<T>,
+        resultsEqual: (a: T, b: T) => boolean,
+    ): T[] {
+        const seenProjects = createMap<true>();
+        const projectsToDo: Project[] = (isProjectsArray(projects) ? projects : projects.projects).slice();
+
+        const outputs: T[] = [];
+
+        while (true) {
+            const project = projectsToDo.pop();
+            if (!project) break;
+            if (!addToSeen(seenProjects, project.projectName)) continue;
+
+            outputs.push(...action(project));
+
+            for (const ref of project.getProjectReferences() || emptyArray) {
+                const configFilePath = resolveProjectReferencePath(host, ref);
+                if (host.fileExists(configFilePath)) {
+                    projectsToDo.push(projectService.getOrCreateConfiguredProject(toNormalizedPath(configFilePath)).project);
+                }
+            }
+        }
+
+        return deduplicate(outputs, resultsEqual);
     }
 
     export interface SessionOptions {
@@ -1564,64 +1601,46 @@ namespace ts.server {
         }
 
         private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.NavtoItem> | ReadonlyArray<NavigateToItem> {
-            const projects = this.getProjects(args);
+            const full = this.getFullNavigateToItems(args);
+            return !simplifiedResult ? full : full.map((navItem) => {
+                const { file, project } = this.getFileAndProject({ file: navItem.fileName });
+                const scriptInfo = project.getScriptInfo(file)!;
+                const bakedItem: protocol.NavtoItem = {
+                    name: navItem.name,
+                    kind: navItem.kind,
+                    file: navItem.fileName,
+                    start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
+                };
+                if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
+                    bakedItem.kindModifiers = navItem.kindModifiers;
+                }
+                if (navItem.matchKind !== "none") {
+                    bakedItem.matchKind = navItem.matchKind;
+                }
+                if (navItem.containerName && (navItem.containerName.length > 0)) {
+                    bakedItem.containerName = navItem.containerName;
+                }
+                if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                    bakedItem.containerKind = navItem.containerKind;
+                }
+                return bakedItem;
+            });
+        }
 
-            const fileName = args.currentFileOnly ? args.file && normalizeSlashes(args.file) : undefined;
-            if (simplifiedResult) {
-                return combineProjectOutput(
-                    fileName,
-                    () => undefined,
-                    projects,
-                    (project, file) => {
-                        if (fileName && !file) {
-                            return undefined;
-                        }
-
-                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject());
-                        if (!navItems) {
-                            return emptyArray;
-                        }
-
-                        return navItems.map((navItem) => {
-                            const scriptInfo = project.getScriptInfo(navItem.fileName)!;
-                            const bakedItem: protocol.NavtoItem = {
-                                name: navItem.name,
-                                kind: navItem.kind,
-                                file: navItem.fileName,
-                                start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
-                                end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
-                            };
-                            if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
-                                bakedItem.kindModifiers = navItem.kindModifiers;
-                            }
-                            if (navItem.matchKind !== "none") {
-                                bakedItem.matchKind = navItem.matchKind;
-                            }
-                            if (navItem.containerName && (navItem.containerName.length > 0)) {
-                                bakedItem.containerName = navItem.containerName;
-                            }
-                            if (navItem.containerKind && (navItem.containerKind.length > 0)) {
-                                bakedItem.containerKind = navItem.containerKind;
-                            }
-                            return bakedItem;
-                        });
-                    },
-                    /*comparer*/ undefined,
-                    areNavToItemsForTheSameLocation
-                );
+        private getFullNavigateToItems(args: protocol.NavtoRequestArgs): ReadonlyArray<NavigateToItem> {
+            const { currentFileOnly, searchValue, maxResultCount } = args;
+            if (currentFileOnly) {
+                const { file, project } = this.getFileAndProject(args);
+                return project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file);
             }
             else {
-                return combineProjectOutput(
-                    fileName,
-                    () => undefined,
-                    projects,
-                    (project, file) => {
-                        if (fileName && !file) {
-                            return undefined;
-                        }
-                        return project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject());
-                    },
-                    /*comparer*/ undefined,
+                return combineProjectOutputWhileOpeningReferencedProjects<NavigateToItem>(
+                    this.host,
+                    this.getProjects(args),
+                    this.projectService,
+                    project =>
+                        project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
                     navigateToItemIsEqualTo);
             }
 
@@ -1642,15 +1661,6 @@ namespace ts.server {
                     a.name === b.name &&
                     a.textSpan.start === b.textSpan.start &&
                     a.textSpan.length === b.textSpan.length;
-            }
-
-            function areNavToItemsForTheSameLocation(a: protocol.NavtoItem, b: protocol.NavtoItem) {
-                if (a && b) {
-                    return a.file === b.file &&
-                        a.start === b.start &&
-                        a.end === b.end;
-                }
-                return false;
             }
         }
 

@@ -7435,6 +7435,8 @@ declare namespace ts {
         jsDocTypeExpression: JSDocTypeExpression;
         diagnostics: Diagnostic[];
     } | undefined;
+    /** @internal */
+    function isDeclarationFileName(fileName: string): boolean;
     interface PragmaContext {
         languageVersion: ScriptTarget;
         pragmas?: PragmaMap;
@@ -8974,10 +8976,14 @@ declare namespace ts {
      */
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
     function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigFileHost;
+    interface ResolveProjectReferencePathHost {
+        fileExists(fileName: string): boolean;
+    }
     /**
-     * Returns the target config filename of a project reference
+     * Returns the target config filename of a project reference.
+     * Note: The file might not exist.
      */
-    function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName;
+    function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
     /**
      * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
      * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
@@ -13548,7 +13554,7 @@ declare namespace ts.server {
         getCompilerOptions(): CompilerOptions;
         getNewLine(): string;
         getProjectVersion(): string;
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference>;
         getScriptFileNames(): string[];
         private getOrCreateScriptInfoAndAttachToProject;
         getScriptKind(fileName: string): ScriptKind;
@@ -13662,7 +13668,7 @@ declare namespace ts.server {
         updateGraph(): boolean;
         getCachedDirectoryStructureHost(): CachedDirectoryStructureHost;
         getConfigFilePath(): NormalizedPath;
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference>;
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined): void;
         enablePlugins(): void;
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
@@ -13954,6 +13960,10 @@ declare namespace ts.server {
         private ensureProjectForOpenFiles;
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
         private findExternalProjectContainingOpenScriptInfo;
+        getOrCreateConfiguredProject(configFileName: NormalizedPath): {
+            readonly project: ConfiguredProject;
+            readonly didCreate: boolean;
+        };
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         private telemetryOnOpenFile;
         closeClientFile(uncheckedFileName: string): void;
@@ -14107,6 +14117,7 @@ declare namespace ts.server {
         private toLocationTextSpan;
         private getNavigationTree;
         private getNavigateToItems;
+        private getFullNavigateToItems;
         private getSupportedCodeFixes;
         private isLocation;
         private extractPositionAndRange;

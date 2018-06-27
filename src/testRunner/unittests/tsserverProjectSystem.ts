@@ -8906,7 +8906,7 @@ export const x = 10;`
         });
 
         it("navigateTo", () => {
-            const { session, bTs } = makeSampleProjects();
+            const { session, aTs, bTs } = makeSampleProjects();
 
             openFilesForSession([bTs], session);
 
@@ -8914,23 +8914,20 @@ export const x = 10;`
             const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
 
             assert.deepEqual(navtoResponse, [
-                // TODO: First result should be from a.ts, not a.d.ts
-                {
-                    file: "/a/bin/a.d.ts",
-                    start: { line: 1, offset: 1 },
-                    end: { line: 1, offset: 37 },
-                    name: "fnA",
-                    matchKind: "prefix",
-                    kind: ScriptElementKind.functionElement,
-                    kindModifiers: "export,declare",
-                },
                 {
                     ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
                     name: "fnB",
                     matchKind: "prefix",
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
-                }
+                },
+                {
+                    ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
+                    name: "fnA",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                },
             ]);
         });
     });

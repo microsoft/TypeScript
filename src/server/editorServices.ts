@@ -2077,6 +2077,12 @@ namespace ts.server {
             });
         }
 
+        /** @internal */
+        getOrCreateConfiguredProject(configFileName: NormalizedPath): { readonly project: ConfiguredProject, readonly didCreate: boolean } {
+            const project = this.findConfiguredProjectByProjectName(configFileName);
+            return project ? { project, didCreate: false } : { project: this.createConfiguredProject(configFileName), didCreate: true };
+        }
+
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath | undefined;
             let configFileErrors: ReadonlyArray<Diagnostic> | undefined;
@@ -2087,9 +2093,9 @@ namespace ts.server {
             if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
-                    project = this.findConfiguredProjectByProjectName(configFileName);
-                    if (!project) {
-                        project = this.createConfiguredProject(configFileName);
+                    let didCreate: boolean;
+                    ({ project, didCreate } = this.getOrCreateConfiguredProject(configFileName));
+                    if (didCreate) {
                         // Send the event only if the project got created as part of this open request and info is part of the project
                         if (info.isOrphan()) {
                             // Since the file isnt part of configured project, do not send config file info

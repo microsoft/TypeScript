@@ -1583,11 +1583,10 @@ namespace ts {
         function makeGetTargetOfMappedPosition<TIn>(
             extract: (original: TIn) => sourcemaps.SourceMappableLocation,
             create: (result: sourcemaps.SourceMappableLocation, unmapped: TIn, original: TIn) => TIn
-        ) {
-            return getTargetOfMappedPosition;
-            function getTargetOfMappedPosition(input: TIn, original = input): TIn {
+        ): (input: TIn) => TIn {
+            return function getTargetOfMappedPosition(input, original = input): TIn {
                 const info = extract(input);
-                if (endsWith(info.fileName, Extension.Dts)) {
+                if (isDeclarationFileName(info.fileName)) {
                     let file: SourceFileLike | undefined = program.getSourceFile(info.fileName);
                     if (!file) {
                         const path = toPath(info.fileName, currentDirectory, getCanonicalFileName);
@@ -1602,7 +1601,11 @@ namespace ts {
                     return getTargetOfMappedPosition(create(newLoc, input, original), original);
                 }
                 return input;
-            }
+            };
+        }
+
+        function isMappedDeclarationFile(sourceFile: SourceFile): boolean {
+            return sourceFile.isDeclarationFile && getSourceMapper(sourceFile.fileName, sourceFile) !== sourcemaps.identitySourceMapper;
         }
 
         const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
@@ -1623,7 +1626,7 @@ namespace ts {
         );
 
         function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo> | undefined): DefinitionInfo[] | undefined {
-            return map(infos, d => getTargetOfMappedDeclarationInfo(d));
+            return map(infos, getTargetOfMappedDeclarationInfo);
         }
 
         /// Goto definition
@@ -1731,11 +1734,11 @@ namespace ts {
             return FindAllReferences.findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
-        /// NavigateTo
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
             synchronizeHostData();
-
-            const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
+            // Don't include `.d.ts` files that are declarations for other projects,
+            // since in session.ts we will be getting navigateTo items for those projects anyway.
+            const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles().filter(f => !isMappedDeclarationFile(f));
             return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
