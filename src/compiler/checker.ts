@@ -4532,10 +4532,10 @@ namespace ts {
 
         function parentDeclarationHasTypeAnnotation(binding: BindingElement) {
             let node: Node = binding;
-            while (node.parent && isBindingPattern(node.parent)) {
+            while (isBindingPattern(node.parent)) {
                 node = node.parent.parent;
             }
-            return couldHaveType(node) && !!node.type;
+            return !!getEffectiveTypeAnnotationNode(node);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
