@@ -3048,6 +3048,11 @@ namespace ts {
 
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /**
+         * True if `contextualType` should not be considered for completions because
+         * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
+         */
+        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression): boolean;
+        /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
          * Does not include properties of primitive types.

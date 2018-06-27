@@ -2165,23 +2165,13 @@ namespace ts.Completions {
 
     function getPropertiesForObjectExpression(contextualType: Type, obj: ObjectLiteralExpression, checker: TypeChecker): Symbol[] {
         return contextualType.isUnion()
-            ? checker.getAllPossiblePropertiesOfTypes(contextualType.types.filter(memberType => isAllowedUnionTypeForObjectExpression(memberType, obj, checker)))
+            ? checker.getAllPossiblePropertiesOfTypes(contextualType.types.filter(memberType =>
+                // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
+                !(memberType.flags & TypeFlags.Primitive ||
+                    checker.isArrayLikeType(memberType) ||
+                    typeHasCallOrConstructSignatures(memberType, checker) ||
+                    checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
             : contextualType.getApparentProperties();
-    }
-    function isAllowedUnionTypeForObjectExpression(contextualType: Type, obj: ObjectLiteralExpression, checker: TypeChecker): boolean {
-        // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
-        return !(contextualType.flags & TypeFlags.Primitive || checker.isArrayLikeType(contextualType) || typeHasCallOrConstructSignatures(contextualType, checker)) &&
-            // In `{ kind: "a", | }`, we only want completions from contextual types where `kind` is "a".
-            obj.properties.every(property => {
-                const name = property.name && getTextOfPropertyName(property.name);
-                const expected = name === undefined ? undefined : checker.getTypeOfPropertyOfType(contextualType, unescapeLeadingUnderscores(name));
-                if (expected && expected.isLiteral()) {
-                    const actual = checker.getTypeAtLocation(property);
-                    // Apparently two literal types for the same literal are still not equal.
-                    return !actual || actual.isLiteral() && actual.value === expected.value;
-                }
-                return true;
-            });
     }
 
     /**

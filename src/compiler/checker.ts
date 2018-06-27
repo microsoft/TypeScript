@@ -292,6 +292,7 @@ namespace ts {
             getNeverType: () => neverType,
             isSymbolAccessible,
             isArrayLikeType,
+            isTypeInvalidDueToUnionDiscriminant,
             getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
@@ -6745,6 +6746,19 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ?
                 getPropertiesOfUnionOrIntersectionType(<UnionType>type) :
                 getPropertiesOfObjectType(type);
+        }
+
+        function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression): boolean {
+            return obj.properties.some(property => {
+                const name = property.name && getTextOfPropertyName(property.name);
+                const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
+                if (expected && typeIsLiteralType(expected)) {
+                    const actual = getTypeOfNode(property);
+                    // Apparently two literal types for the same literal are still not equal.
+                    return !!actual && (!typeIsLiteralType(actual) || actual.value !== expected.value);
+                }
+                return false;
+            });
         }
 
         function getAllPossiblePropertiesOfTypes(types: ReadonlyArray<Type>): Symbol[] {
@@ -29011,5 +29025,9 @@ namespace ts {
         export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
         export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
         // tslint:enable variable-name
+    }
+
+    function typeIsLiteralType(type: Type): type is LiteralType {
+        return !!(type.flags & TypeFlags.Literal);
     }
 }
