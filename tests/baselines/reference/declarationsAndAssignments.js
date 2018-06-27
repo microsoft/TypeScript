@@ -60,7 +60,7 @@ function f7() {
 }
 
 function f8() {
-    var [a, b, c] = [];   // Ok, [] is an array
+    var [a, b, c] = [];   // Error, [] is an empty tuple
     var [d, e, f] = [1];  // Error, [1] is a tuple
 }
 
@@ -150,33 +150,37 @@ function f19() {
 }
 
 function f20() {
-    var a: number[];
     var x: number;
     var y: number;
     var z: number;
+    var a: number[];
+    var a3: any[];
     var [...a] = [1, 2, 3];
     var [x, ...a] = [1, 2, 3];
     var [x, y, ...a] = [1, 2, 3];
-    var [x, y, z, ...a] = [1, 2, 3];
+    var [x, y, z, ...a3] = [1, 2, 3];
     [...a] = [1, 2, 3];
     [x, ...a] = [1, 2, 3];
     [x, y, ...a] = [1, 2, 3];
-    [x, y, z, ...a] = [1, 2, 3];
+    [x, y, z, ...a3] = [1, 2, 3];
 }
 
 function f21() {
-    var a: (number | string | boolean)[];
-    var x: number | string | boolean;
-    var y: number | string | boolean;
-    var z: number | string | boolean;
-    var [...a] = [1, "hello", true];
-    var [x, ...a] = [1, "hello", true];
-    var [x, y, ...a] = [1, "hello", true];
-    var [x, y, z, ...a] = [1, "hello", true];
-    [...a] = [1, "hello", true];
-    [x, ...a] = [1, "hello", true];
-    [x, y, ...a] = [1, "hello", true];
-    [x, y, z, ...a] = [1, "hello", true];
+    var x: number;
+    var y: string;
+    var z: boolean;
+    var a0: (number | string | boolean)[];
+    var a1: (string | boolean)[];
+    var a2: boolean[];
+    var a3: any[];
+    var [...a0] = [1, "hello", true];
+    var [x, ...a1] = [1, "hello", true];
+    var [x, y, ...a2] = [1, "hello", true];
+    var [x, y, z, ...a3] = [1, "hello", true];
+    [...a0] = [1, "hello", true];
+    [x, ...a1] = [1, "hello", true];
+    [x, y, ...a2] = [1, "hello", true];
+    [x, y, z, ...a3] = [1, "hello", true];
 }
 
 
@@ -235,7 +239,7 @@ function f7() {
     var y;
 }
 function f8() {
-    var _a = [], a = _a[0], b = _a[1], c = _a[2]; // Ok, [] is an array
+    var _a = [], a = _a[0], b = _a[1], c = _a[2]; // Error, [] is an empty tuple
     var _b = [1], d = _b[0], e = _b[1], f = _b[2]; // Error, [1] is a tuple
 }
 function f9() {
@@ -318,31 +322,35 @@ function f19() {
 }
 function f20() {
     var _a, _b, _c;
-    var a;
     var x;
     var y;
     var z;
+    var a;
+    var a3;
     var a = [1, 2, 3].slice(0);
     var _d = [1, 2, 3], x = _d[0], a = _d.slice(1);
     var _e = [1, 2, 3], x = _e[0], y = _e[1], a = _e.slice(2);
-    var _f = [1, 2, 3], x = _f[0], y = _f[1], z = _f[2], a = _f.slice(3);
+    var _f = [1, 2, 3], x = _f[0], y = _f[1], z = _f[2], a3 = _f.slice(3);
     a = [1, 2, 3].slice(0);
     _a = [1, 2, 3], x = _a[0], a = _a.slice(1);
     _b = [1, 2, 3], x = _b[0], y = _b[1], a = _b.slice(2);
-    _c = [1, 2, 3], x = _c[0], y = _c[1], z = _c[2], a = _c.slice(3);
+    _c = [1, 2, 3], x = _c[0], y = _c[1], z = _c[2], a3 = _c.slice(3);
 }
 function f21() {
     var _a, _b, _c;
-    var a;
     var x;
     var y;
     var z;
-    var a = [1, "hello", true].slice(0);
-    var _d = [1, "hello", true], x = _d[0], a = _d.slice(1);
-    var _e = [1, "hello", true], x = _e[0], y = _e[1], a = _e.slice(2);
-    var _f = [1, "hello", true], x = _f[0], y = _f[1], z = _f[2], a = _f.slice(3);
-    a = [1, "hello", true].slice(0);
-    _a = [1, "hello", true], x = _a[0], a = _a.slice(1);
-    _b = [1, "hello", true], x = _b[0], y = _b[1], a = _b.slice(2);
-    _c = [1, "hello", true], x = _c[0], y = _c[1], z = _c[2], a = _c.slice(3);
+    var a0;
+    var a1;
+    var a2;
+    var a3;
+    var a0 = [1, "hello", true].slice(0);
+    var _d = [1, "hello", true], x = _d[0], a1 = _d.slice(1);
+    var _e = [1, "hello", true], x = _e[0], y = _e[1], a2 = _e.slice(2);
+    var _f = [1, "hello", true], x = _f[0], y = _f[1], z = _f[2], a3 = _f.slice(3);
+    a0 = [1, "hello", true].slice(0);
+    _a = [1, "hello", true], x = _a[0], a1 = _a.slice(1);
+    _b = [1, "hello", true], x = _b[0], y = _b[1], a2 = _b.slice(2);
+    _c = [1, "hello", true], x = _c[0], y = _c[1], z = _c[2], a3 = _c.slice(3);
 }

@@ -129,13 +129,8 @@ namespace ts.server {
         project: Project;
     }
 
-    function allEditsBeforePos(edits: TextChange[], pos: number) {
-        for (const edit of edits) {
-            if (textSpanEnd(edit.span) >= pos) {
-                return false;
-            }
-        }
-        return true;
+    function allEditsBeforePos(edits: ReadonlyArray<TextChange>, pos: number): boolean {
+        return edits.every(edit => textSpanEnd(edit.span) < pos);
     }
 
     // CommandNames used to be exposed before TS 2.4 as a namespace
@@ -1142,7 +1137,7 @@ namespace ts.server {
             return this.getPosition(args, scriptInfo);
         }
 
-        private getFileAndProject(args: protocol.FileRequestArgs): { file: NormalizedPath, project: Project } {
+        private getFileAndProject(args: protocol.FileRequestArgs): FileAndProject {
             return this.getFileAndProjectWorker(args.file, args.projectFileName);
         }
 
@@ -1150,7 +1145,7 @@ namespace ts.server {
             // Since this is syntactic operation, there should always be project for the file
             // we wouldnt have to ensure project but rather throw if we dont get project
             const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ false);
+            const project = this.getProject(args.projectFileName) || this.projectService.tryGetDefaultProjectForFile(file);
             if (!project) {
                 return Errors.ThrowNoProject();
             }
@@ -1162,7 +1157,7 @@ namespace ts.server {
 
         private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string | undefined): { file: NormalizedPath, project: Project } {
             const file = toNormalizedPath(uncheckedFileName);
-            const project = this.getProject(projectFileName) || this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ true)!; // TODO: GH#18217
+            const project = this.getProject(projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
             return { file, project };
         }
 
@@ -1461,7 +1456,7 @@ namespace ts.server {
         private createCheckList(fileNames: string[], defaultProject?: Project): PendingErrorCheck[] {
             return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
-                const project = defaultProject || this.projectService.getDefaultProjectForFile(fileName, /*ensureProject*/ false);
+                const project = defaultProject || this.projectService.tryGetDefaultProjectForFile(fileName);
                 return project && { fileName, project };
             });
         }
@@ -1738,9 +1733,23 @@ namespace ts.server {
         }
 
         private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
-            const { file, project } = this.getFileAndProject(args);
-            const changes = project.getLanguageService().getEditsForFileRename(toNormalizedPath(args.oldFilePath), toNormalizedPath(args.newFilePath), this.getFormatOptions(file), this.getPreferences(file));
-            return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
+            const oldPath = toNormalizedPath(args.oldFilePath);
+            const newPath = toNormalizedPath(args.newFilePath);
+            const formatOptions = this.getHostFormatOptions();
+            const preferences = this.getHostPreferences();
+
+            const changes: (protocol.FileCodeEdits | FileTextChanges)[] = [];
+            this.projectService.forEachProject(project => {
+                if (project.isOrphan() || !project.languageServiceEnabled) return;
+                for (const fileTextChanges of project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences)) {
+                    // Subsequent projects may make conflicting edits to the same file -- just go with the first.
+                    if (!changes.some(f => f.fileName === fileTextChanges.fileName)) {
+                        changes.push(simplifiedResult ? this.mapTextChangeToCodeEdit(project, fileTextChanges) : fileTextChanges);
+                    }
+                }
+            });
+
+            return changes as ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges>;
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> | undefined {
@@ -1810,10 +1819,12 @@ namespace ts.server {
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
-            return textChanges.map(change => {
-                const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
-                return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
-            });
+            return textChanges.map(change => this.mapTextChangeToCodeEdit(project, change));
+        }
+
+        private mapTextChangeToCodeEdit(project: Project, change: FileTextChanges): protocol.FileCodeEdits {
+            const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
+            return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
@@ -1859,7 +1870,7 @@ namespace ts.server {
             const lowPriorityFiles: NormalizedPath[] = [];
             const veryLowPriorityFiles: NormalizedPath[] = [];
             const normalizedFileName = toNormalizedPath(fileName);
-            const project = this.projectService.getDefaultProjectForFile(normalizedFileName, /*ensureProject*/ true)!;
+            const project = this.projectService.ensureDefaultProjectForFile(normalizedFileName);
             for (const fileNameInProject of fileNamesInProject) {
                 if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName)) {
                     highPriorityFiles.push(fileNameInProject);
@@ -2303,6 +2314,19 @@ namespace ts.server {
         private getPreferences(file: NormalizedPath): UserPreferences {
             return this.projectService.getPreferences(file);
         }
+
+        private getHostFormatOptions(): FormatCodeSettings {
+            return this.projectService.getHostFormatCodeOptions();
+        }
+
+        private getHostPreferences(): UserPreferences {
+            return this.projectService.getHostPreferences();
+        }
+    }
+
+    interface FileAndProject {
+        readonly file: NormalizedPath;
+        readonly project: Project;
     }
 
     function mapTextChangesToCodeEdits(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {

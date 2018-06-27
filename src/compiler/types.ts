@@ -225,6 +225,8 @@ namespace ts {
         TypeLiteral,
         ArrayType,
         TupleType,
+        OptionalType,
+        RestType,
         UnionType,
         IntersectionType,
         ConditionalType,
@@ -269,6 +271,7 @@ namespace ts {
         AsExpression,
         NonNullExpression,
         MetaProperty,
+        SyntheticExpression,
 
         // Misc
         TemplateSpan,
@@ -1101,6 +1104,16 @@ namespace ts {
         elementTypes: NodeArray<TypeNode>;
     }
 
+    export interface OptionalTypeNode extends TypeNode {
+        kind: SyntaxKind.OptionalType;
+        type: TypeNode;
+    }
+
+    export interface RestTypeNode extends TypeNode {
+        kind: SyntaxKind.RestType;
+        type: TypeNode;
+    }
+
     export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
 
     export interface UnionTypeNode extends TypeNode {
@@ -1286,6 +1299,12 @@ namespace ts {
         kind: SyntaxKind.YieldExpression;
         asteriskToken?: AsteriskToken;
         expression?: Expression;
+    }
+
+    export interface SyntheticExpression extends Expression {
+        kind: SyntaxKind.SyntheticExpression;
+        isSpread: boolean;
+        type: Type;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -2755,7 +2774,7 @@ namespace ts {
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
-        /* @internal */ isSourceFileDefaultLibrary(file: SourceFile): boolean;
+        isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
@@ -3499,6 +3518,7 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
+        specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
     }
 
     /* @internal */
@@ -3520,14 +3540,15 @@ namespace ts {
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
+        ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 12,        // Optional parameter
+        RestParameter     = 1 << 13,        // Rest parameter
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
-        isRestParameter?: boolean;
     }
 
     /* @internal */
@@ -3854,6 +3875,16 @@ namespace ts {
         instantiations: Map<TypeReference>;  // Generic instantiation cache
         /* @internal */
         variances?: Variance[];  // Variance of each type parameter
+    }
+
+    export interface TupleType extends GenericType {
+        minLength: number;
+        hasRestElement: boolean;
+        associatedNames?: __String[];
+    }
+
+    export interface TupleTypeReference extends TypeReference {
+        target: TupleType;
     }
 
     export interface UnionOrIntersectionType extends Type {

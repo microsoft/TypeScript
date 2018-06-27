@@ -246,6 +246,10 @@ namespace ts.textChanges {
             return this;
         }
 
+        public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
+            this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
+        }
+
         public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
@@ -402,6 +406,9 @@ namespace ts.textChanges {
             else if (isParameter(before)) {
                 return {};
             }
+            else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
+                return { suffix: ", " };
+            }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
@@ -470,6 +477,10 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
+        public insertNodeAtEndOfList(sourceFile: SourceFile, list: NodeArray<Node>, newNode: Node): void {
+            this.insertNodeAt(sourceFile, list.end, newNode, { prefix: ", " });
+        }
+
         public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
             this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
@@ -506,6 +517,9 @@ namespace ts.textChanges {
 
                 case SyntaxKind.PropertyAssignment:
                     return { suffix: "," + this.newLineCharacter };
+
+                case SyntaxKind.ExportKeyword:
+                    return { prefix: " " };
 
                 case SyntaxKind.Parameter:
                     return {};
@@ -567,7 +581,7 @@ namespace ts.textChanges {
             if (index !== containingList.length - 1) {
                 // any element except the last one
                 // use next sibling as an anchor
-                const nextToken = getTokenAtPosition(sourceFile, after.end, /*includeJsDocComment*/ false);
+                const nextToken = getTokenAtPosition(sourceFile, after.end);
                 if (nextToken && isSeparator(after, nextToken)) {
                     // for list
                     // a, b, c
@@ -803,10 +817,10 @@ namespace ts.textChanges {
         }
     }
 
-    export function applyChanges(text: string, changes: TextChange[]): string {
+    export function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string {
         for (let i = changes.length - 1; i >= 0; i--) {
-            const change = changes[i];
-            text = `${text.substring(0, change.span.start)}${change.newText}${text.substring(textSpanEnd(change.span))}`;
+            const { span, newText } = changes[i];
+            text = `${text.substring(0, span.start)}${newText}${text.substring(textSpanEnd(span))}`;
         }
         return text;
     }
@@ -1076,8 +1090,8 @@ namespace ts.textChanges {
                     const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node.parent);
                     if (typeParameters.length === 1) {
                         const { pos, end } = cast(typeParameters, isNodeArray);
-                        const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ true);
-                        const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ true);
+                        const previousToken = getTokenAtPosition(sourceFile, pos - 1);
+                        const nextToken = getTokenAtPosition(sourceFile, end);
                         Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
                         Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
 
@@ -1124,7 +1138,7 @@ namespace ts.textChanges {
             else {
                 // import |d,| * as ns from './file'
                 const start = importClause.name!.getStart(sourceFile);
-                const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end, /*includeJsDocComment*/ true);
+                const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end);
                 if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                     // shift first non-whitespace position after comma to the start position of the node
                     const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
@@ -1141,7 +1155,7 @@ namespace ts.textChanges {
                 // Delete named imports while preserving the default import
                 // import d|, * as ns| from './file'
                 // import d|, { a }| from './file'
-                const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, node.pos - 1, /*includeJsDocComment*/ true));
+                const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, node.pos - 1));
                 changes.deleteRange(sourceFile, { pos: previousToken.getStart(sourceFile), end: node.end });
             }
             else {

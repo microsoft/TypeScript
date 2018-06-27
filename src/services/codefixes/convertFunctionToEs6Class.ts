@@ -14,7 +14,7 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         const deletedNodes: { node: Node, inList: boolean }[] = [];
-        const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false))!;
+        const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
 
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
             // Bad input

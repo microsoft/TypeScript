@@ -2,13 +2,23 @@
 /* @internal */
 namespace ts.moduleSpecifiers {
     export interface ModuleSpecifierPreferences {
-        importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
 
-    // Note: fromSourceFile is just for usesJsExtensionOnImports
-    export function getModuleSpecifier(compilerOptions: CompilerOptions, fromSourceFile: SourceFile, fromSourceFileName: string, toFileName: string, host: ModuleSpecifierResolutionHost, preferences: ModuleSpecifierPreferences = {}) {
-        const info = getInfo(compilerOptions, fromSourceFile, fromSourceFileName, host);
-        return getGlobalModuleSpecifier(toFileName, info, host, compilerOptions) ||
+    // Note: importingSourceFile is just for usesJsExtensionOnImports
+    export function getModuleSpecifier(
+        compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
+        importingSourceFileName: string,
+        toFileName: string,
+        host: ModuleSpecifierResolutionHost,
+        files: ReadonlyArray<SourceFile>,
+        preferences: ModuleSpecifierPreferences = {},
+    ): string {
+        const info = getInfo(compilerOptions, importingSourceFile, importingSourceFileName, host);
+        const modulePaths = getAllModulePaths(files, toFileName, info.getCanonicalFileName, host);
+        return firstDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions)) ||
+            getGlobalModuleSpecifier(toFileName, info, host, compilerOptions) ||
             first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
     }
 
@@ -28,7 +38,7 @@ namespace ts.moduleSpecifiers {
         if (!files) {
             return Debug.fail("Files list must be present to resolve symlinks in specifier resolution");
         }
-        const modulePaths = getAllModulePaths(files, getSourceFileOfNode(moduleSymbol.valueDeclaration), info.getCanonicalFileName, host);
+        const modulePaths = getAllModulePaths(files, getSourceFileOfNode(moduleSymbol.valueDeclaration).fileName, info.getCanonicalFileName, host);
 
         const global = mapDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions));
         return global.length ? global.map(g => [g]) : modulePaths.map(moduleFileName =>
@@ -177,14 +187,14 @@ namespace ts.moduleSpecifiers {
     }
 
     /**
-     * Looks for a existing imports that use symlinks to this module.
+     * Looks for existing imports that use symlinks to this module.
      * Only if no symlink is available, the real path will be used.
      */
-    function getAllModulePaths(files: ReadonlyArray<SourceFile>, { fileName }: SourceFile, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost): ReadonlyArray<string> {
+    function getAllModulePaths(files: ReadonlyArray<SourceFile>, importedFileName: string, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost): ReadonlyArray<string> {
         const symlinks = mapDefined(files, sf =>
             sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
-                res && res.resolvedFileName === fileName ? res.originalPath : undefined));
-        return symlinks.length === 0 ? getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(fileName, host.getCurrentDirectory ? host.getCurrentDirectory() : ""), getCanonicalFileName, host) : symlinks;
+                res && res.resolvedFileName === importedFileName ? res.originalPath : undefined));
+        return symlinks.length === 0 ? getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(importedFileName, host.getCurrentDirectory ? host.getCurrentDirectory() : ""), getCanonicalFileName, host) : symlinks;
     }
 
     function getRelativePathNParents(relativePath: string): number {

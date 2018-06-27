@@ -590,6 +590,30 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    export function eachExportReference(
+        sourceFiles: ReadonlyArray<SourceFile>,
+        checker: TypeChecker,
+        cancellationToken: CancellationToken | undefined,
+        exportSymbol: Symbol,
+        exportingModuleSymbol: Symbol,
+        exportName: string,
+        isDefaultExport: boolean,
+        cb: (ref: Identifier) => void,
+    ): void {
+        const importTracker = createImportTracker(sourceFiles, arrayToSet(sourceFiles, f => f.fileName), checker, cancellationToken);
+        const { importSearches, indirectUsers } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
+        for (const [importLocation] of importSearches) {
+            cb(importLocation);
+        }
+        for (const indirectUser of indirectUsers) {
+            for (const node of getPossibleSymbolReferenceNodes(indirectUser, isDefaultExport ? "default" : exportName)) {
+                if (isIdentifier(node) && checker.getSymbolAtLocation(node) === exportSymbol) {
+                    cb(node);
+                }
+            }
+        }
+    }
+
     function shouldAddSingleReference(singleRef: Identifier | StringLiteral, state: State): boolean {
         if (!hasMatchingMeaning(singleRef, state)) return false;
         if (!state.options.isForRename) return true;

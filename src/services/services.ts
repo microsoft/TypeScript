@@ -261,7 +261,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
         }
 
         public getFirstToken(): Node | undefined {
@@ -1171,13 +1171,13 @@ namespace ts {
             }
 
             // Get a fresh cache of the host information
-            let hostCache = new HostCache(host, getCanonicalFileName);
+            let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
 
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames)) {
                 return;
             }
 
@@ -1204,7 +1204,7 @@ namespace ts {
                 readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    const entry = hostCache.getEntryByPath(path);
+                    const entry = hostCache && hostCache.getEntryByPath(path);
                     if (entry) {
                         return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
                     }
@@ -1246,7 +1246,7 @@ namespace ts {
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined!;
+            hostCache = undefined;
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
@@ -1260,7 +1260,7 @@ namespace ts {
 
             function fileExists(fileName: string): boolean {
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                const entry = hostCache.getEntryByPath(path);
+                const entry = hostCache && hostCache.getEntryByPath(path);
                 return entry ?
                     !isString(entry) :
                     (!!host.fileExists && host.fileExists(fileName));
@@ -1278,11 +1278,11 @@ namespace ts {
             }
 
             function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                Debug.assert(hostCache !== undefined);
+                Debug.assert(hostCache !== undefined, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
-                const hostFileInformation = hostCache.getOrCreateEntryByPath(fileName, path);
+                const hostFileInformation = hostCache && hostCache.getOrCreateEntryByPath(fileName, path);
                 if (!hostFileInformation) {
                     return undefined;
                 }
@@ -1697,7 +1697,8 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
-            return getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
+            const refs = getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
+            return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {

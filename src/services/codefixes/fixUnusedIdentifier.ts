@@ -18,7 +18,7 @@ namespace ts.codefix {
             const { errorCode, sourceFile, program } = context;
             const checker = program.getTypeChecker();
             const sourceFiles = program.getSourceFiles();
-            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ true);
+            const token = getTokenAtPosition(sourceFile, context.span.start);
 
             const importDecl = tryGetFullImport(token);
             if (importDecl) {
@@ -57,7 +57,7 @@ namespace ts.codefix {
             const checker = program.getTypeChecker();
             const sourceFiles = program.getSourceFiles();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const token = getTokenAtPosition(sourceFile, diag.start, /*includeJsDocComment*/ true);
+                const token = getTokenAtPosition(sourceFile, diag.start);
                 switch (context.fixId) {
                     case fixIdPrefix:
                         if (isIdentifier(token) && canPrefix(token)) {
