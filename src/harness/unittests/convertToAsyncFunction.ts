@@ -292,7 +292,19 @@ function res2(result){
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_NoRes", `
 function [#|f|]():Promise<void | Response> {
-    return fetch('https://typescriptlang.org').then(null, rejection => console.log("rejected:", rejection); );
+    return fetch('https://typescriptlang.org').then(null, rejection => console.log("rejected:", rejection));
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoRes2", `
+function [#|f|]():Promise<void | Response> {
+    return fetch('https://typescriptlang.org').then(undefined).catch(rej => console.log(rej));
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoRes3", `
+function [#|f|]():Promise<void | Response> {
+    return fetch('https://typescriptlang.org').catch(rej => console.log(rej));
 }
 `
         );
@@ -311,8 +323,59 @@ function [#|f|]():Promise<void>{
 `
         );
         _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionNoPromise", `
-        function [#|f|]():void{
-        }`);
+function [#|f|]():void{
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_Rej", `
+function [#|f|]():Promise<void> {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result); }, rejection => { console.log("rejected:", rejection); });
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_RejRef", `
+function [#|f|]():Promise<void> {
+    return fetch('https://typescriptlang.org').then(res, rej);
+}
+function res(result){
+    console.log(result);
+}
+function rej(err){
+    console.log(err);
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_RejNoBrackets", `
+function [#|f|]():Promise<void> {
+    return fetch('https://typescriptlang.org').then(result => console.log(result), rejection => console.log("rejected:", rejection));
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRef", `
+function [#|f|]():Promise<boolean> {
+    return fetch('https://typescriptlang.org').then(res);
+}
+function res(result){
+    return result.ok;
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRefNoReturnVal", `
+function [#|f|]():Promise<void> {
+    return fetch('https://typescriptlang.org').then(res);
+}
+function res(result){
+    console.log(result);
+}
+`
+    );
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoBrackets", `
+function [#|f|]():Promise<void> {
+    return fetch('https://typescriptlang.org').then(result => console.log(result));
+}
+`
+    );
+
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string, includeLib?: boolean) {

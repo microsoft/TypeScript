@@ -7,19 +7,19 @@ function res(result){
     return result.ok;
 }
 function res2(result){
-    console.log(result);
+    return result.bodyUsed;
 }
 
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f():Promise<boolean> {
-    let result = await fetch('https://typescriptlang.org');
-    let temp = await res(result);
-    return res2(temp);
+    let result_1 = await fetch('https://typescriptlang.org');
+    let result = await res(result_1);
+    return res2(result);
 }
 function res(result){
     return result.ok;
 }
 function res2(result){
-    console.log(result);
+    return result.bodyUsed;
 }
