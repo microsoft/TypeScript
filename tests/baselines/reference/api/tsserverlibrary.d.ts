@@ -10759,7 +10759,7 @@ declare namespace ts {
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
-    function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node | undefined;
+    function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined;
     function isInString(sourceFile: SourceFile, position: number, previousToken?: Node | undefined): boolean;
     /**
      * returns true if the position is in between the open and close elements of an JSX expression.

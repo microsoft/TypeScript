@@ -755,7 +755,7 @@ namespace ts {
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node | undefined {
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
         const result = find(startNode || sourceFile);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
@@ -774,7 +774,7 @@ namespace ts {
                 // we need to find the last token in a previous child.
                 // 2) `position` is within the same span: we recurse on `child`.
                 if (position < child.end) {
-                    const start = child.getStart(sourceFile, /*includeJsDoc*/ true);
+                    const start = child.getStart(sourceFile, /*includeJsDoc*/ !excludeJsdoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         !nodeHasTokens(child, sourceFile) ||
