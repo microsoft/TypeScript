@@ -302,7 +302,8 @@ namespace ts {
         const outputs: string[] = [];
         outputs.push(getOutputJavaScriptFileName(inputFileName, configFile));
         if (configFile.options.declaration) {
-            const dts = outputs.push(getOutputDeclarationFileName(inputFileName, configFile));
+            const dts = getOutputDeclarationFileName(inputFileName, configFile);
+            outputs.push(dts);
             if (configFile.options.declarationMap) {
                 outputs.push(dts + ".map");
             }
