@@ -119,7 +119,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function getConvertibleFieldAtPosition(context: RefactorContext): Info | undefined {
         const { file, startPosition, endPosition } = context;
 
-        const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
+        const node = getTokenAtPosition(file, startPosition);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;

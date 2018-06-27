@@ -30,7 +30,7 @@ namespace ts.refactor {
     function getInfo(context: RefactorContext): Info | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
-        const token = getTokenAtPosition(file, span.start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(file, span.start);
         const exportNode = getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
             return undefined;
@@ -148,7 +148,7 @@ namespace ts.refactor {
                 }
                 else if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                     // `import foo, * as a from "./a";` --> `import * as a from ".a/"; import { foo } from "./a";`
-                    changes.deleteNode(importingSourceFile, ref);
+                    changes.deleteRange(importingSourceFile, { pos: ref.getStart(importingSourceFile), end: namedBindings.getStart(importingSourceFile) });
                     const quotePreference = isStringLiteral(clause.parent.moduleSpecifier) ? quotePreferenceFromString(clause.parent.moduleSpecifier, importingSourceFile) : QuotePreference.Double;
                     const newImport = makeImport(/*default*/ undefined, [makeImportSpecifier(exportName, ref.text)], clause.parent.moduleSpecifier, quotePreference);
                     changes.insertNodeAfter(importingSourceFile, clause.parent, newImport);

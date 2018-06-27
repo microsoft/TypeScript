@@ -48,7 +48,7 @@ namespace ts.codefix {
     });
 
     function getPropertyDeclaration (sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         return isIdentifier(token) ? cast(token.parent, isPropertyDeclaration) : undefined;
     }
 

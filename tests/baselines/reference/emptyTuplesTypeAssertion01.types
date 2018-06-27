@@ -2,7 +2,7 @@
 let x = <[]>[];
 >x : []
 ><[]>[] : []
->[] : undefined[]
+>[] : []
 
 let y = x[0];
 >y : never

@@ -437,6 +437,12 @@ namespace ts.projectSystem {
         Debug.assert(start !== -1);
         return createTextSpan(start, substring.length);
     }
+    function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    }
+    function protocolFileSpanFromSubstring(file: File, substring: string): protocol.FileSpan {
+        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring) };
+    }
 
     /**
      * Test server cancellation token used to mock host token cancellation requests.
@@ -8845,7 +8851,7 @@ export const x = 10;`
     function makeSampleProjects() {
         const aTs: File = {
             path: "/a/a.ts",
-            content: "export function a() {}",
+            content: "export function fnA() {}",
         };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
@@ -8861,7 +8867,7 @@ export const x = 10;`
 
         const bTs: File = {
             path: "/b/b.ts",
-            content: 'import { a } from "../a/a";\na();',
+            content: 'import { fnA } from "../a/a";\nexport function fnB() { fnA(); }',
         };
         const bTsconfig: File = {
             path: "/b/tsconfig.json",
@@ -8879,9 +8885,9 @@ export const x = 10;`
         const session = createSession(host);
 
         writeDeclarationFiles(aTs, host, session, [
+            { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}' },
             // Need to mangle the sourceMappingURL part or it breaks the build
-            { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,kCAAsB"}' },
-            { name: "/a/bin/a.d.ts", text: `export declare function a(): void;\n//# source${""}MappingURL=a.d.ts.map` },
+            { name: "/a/bin/a.d.ts", text: `export declare function fnA(): void;\n//# source${""}MappingURL=a.d.ts.map` },
         ]);
 
         return { session, aTs, bTs };
@@ -8893,14 +8899,39 @@ export const x = 10;`
 
             openFilesForSession([bTs], session);
 
-            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, { file: bTs.path, ...protocolLocationFromSubstring(bTs.content, "a()") });
+            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(bTs, "fnA()"));
             const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
 
-            const _desiredResponse: protocol.FileSpan = { file: aTs.path, ...protocolTextSpanFromSubstring(aTs.content, "a") };
-            _desiredResponse; // tslint:disable-line no-unused-expression
-            // TODO: GH#24866 The definition is past the end of the file!
-            const expectedResponse: protocol.FileSpan = { file: aTs.path, start: { line: 1, offset: aTs.content.length + 1, }, end: { line: 1, offset: aTs.content.length + 2 } };
-            assert.deepEqual(definitionResponse, [expectedResponse]);
+            assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        });
+
+        it("navigateTo", () => {
+            const { session, bTs } = makeSampleProjects();
+
+            openFilesForSession([bTs], session);
+
+            const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: bTs.path, searchValue: "fn" });
+            const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
+
+            assert.deepEqual(navtoResponse, [
+                // TODO: First result should be from a.ts, not a.d.ts
+                {
+                    file: "/a/bin/a.d.ts",
+                    start: { line: 1, offset: 1 },
+                    end: { line: 1, offset: 37 },
+                    name: "fnA",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export,declare",
+                },
+                {
+                    ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
         });
     });
 

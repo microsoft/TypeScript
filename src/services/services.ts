@@ -261,7 +261,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
         }
 
         public getFirstToken(): Node | undefined {
@@ -1697,7 +1697,8 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
-            return getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
+            const refs = getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
+            return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {

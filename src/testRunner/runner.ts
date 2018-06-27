@@ -62,6 +62,7 @@ let workerCount: number;
 let runUnitTests: boolean | undefined;
 let stackTraceLimit: number | "full" | undefined;
 let noColors = false;
+let keepFailed = false;
 
 interface TestConfig {
     light?: boolean;
@@ -74,6 +75,7 @@ interface TestConfig {
     runUnitTests?: boolean;
     noColors?: boolean;
     timeout?: number;
+    keepFailed?: boolean;
 }
 
 interface TaskSet {
@@ -101,6 +103,9 @@ function handleTestConfig() {
         }
         if (testConfig.noColors !== undefined) {
             noColors = testConfig.noColors;
+        }
+        if (testConfig.keepFailed) {
+            keepFailed = true;
         }
 
         if (testConfig.stackTraceLimit === "full") {
