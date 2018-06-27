@@ -212,7 +212,6 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
-        private readonly deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         private readonly classesWithNodesInsertedAtStart = createMap<ClassDeclaration>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedDeclarations: { readonly sourceFile: SourceFile, readonly node: Node }[] = [];
 
@@ -234,16 +233,8 @@ namespace ts.textChanges {
             return this;
         }
 
-        deleteDeclaration(sourceFile: SourceFile, node: Node): void {
-            this.deletedDeclarations.push({ sourceFile, node });
-        }
-
-        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
-        public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}) {
-            const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
-            const endPosition = getAdjustedEndPosition(sourceFile, node, options);
-            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
-            return this;
+        delete(sourceFile: SourceFile, node: Node): void {
+            this.deletedDeclarations.push({ sourceFile, node, });
         }
 
         public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
@@ -261,32 +252,6 @@ namespace ts.textChanges {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
             const endPosition = afterEndNode === undefined ? sourceFile.text.length : getAdjustedStartPosition(sourceFile, afterEndNode, options, Position.FullStart);
             this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
-        }
-
-        public deleteNodeInList(sourceFile: SourceFile, node: Node) {
-            const containingList = formatting.SmartIndenter.getContainingList(node, sourceFile);
-            if (!containingList) {
-                Debug.fail("node is not a list element");
-                return this;
-            }
-            const index = indexOfNode(containingList, node);
-            if (index < 0) {
-                return this;
-            }
-            if (containingList.length === 1) {
-                this.deleteNode(sourceFile, node);
-                return this;
-            }
-
-            // Note: We will only delete a comma *after* a node. This will leave a trailing comma if we delete the last node.
-            // That's handled in the end by `finishTrailingCommaAfterDeletingNodesInList`.
-            Debug.assert(!this.deletedNodesInLists.has(node), "Deleting a node twice");
-            this.deletedNodesInLists.add(node);
-            this.deleteRange(sourceFile, {
-                pos: startPositionToDeleteNodeInList(sourceFile, node),
-                end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
-            });
-            return this;
         }
 
         public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
@@ -538,7 +503,7 @@ namespace ts.textChanges {
                 if (lparen) {
                     // `() => {}` --> `function f() {}`
                     this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [createToken(SyntaxKind.FunctionKeyword), createIdentifier(name)], { joiner: " " });
-                    this.deleteNode(sourceFile, arrow);
+                    deleteNode(this, sourceFile, arrow);
                 }
                 else {
                     // `x => {}` -> `function f(x) {}`
@@ -691,25 +656,24 @@ namespace ts.textChanges {
             });
         }
 
-        private finishTrailingCommaAfterDeletingNodesInList() {
-            this.deletedNodesInLists.forEach(node => {
+        private finishDeleteDeclarations(): void {
+            const deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+            for (const { sourceFile, node } of this.deletedDeclarations) {
+                if (!this.deletedDeclarations.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
+                    deleteDeclaration.deleteDeclaration(this, deletedNodesInLists, sourceFile, node);
+                }
+            }
+
+            deletedNodesInLists.forEach(node => {
                 const sourceFile = node.getSourceFile();
                 const list = formatting.SmartIndenter.getContainingList(node, sourceFile)!;
                 if (node !== last(list)) return;
 
-                const lastNonDeletedIndex = findLastIndex(list, n => !this.deletedNodesInLists.has(n), list.length - 2);
+                const lastNonDeletedIndex = findLastIndex(list, n => !deletedNodesInLists.has(n), list.length - 2);
                 if (lastNonDeletedIndex !== -1) {
                     this.deleteRange(sourceFile, { pos: list[lastNonDeletedIndex].end, end: startPositionToDeleteNodeInList(sourceFile, list[lastNonDeletedIndex + 1]) });
                 }
             });
-        }
-
-        private finishDeleteDeclarations(): void {
-            for (const { sourceFile, node } of this.deletedDeclarations) {
-                if (!this.deletedDeclarations.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
-                    deleteDeclaration.deleteDeclaration(this, sourceFile, node);
-                }
-            }
         }
 
         /**
@@ -721,7 +685,6 @@ namespace ts.textChanges {
         public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
             this.finishDeleteDeclarations();
             this.finishClassesWithNodesInsertedAtStart();
-            this.finishTrailingCommaAfterDeletingNodesInList();
             const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
             for (const { oldFile, fileName, statements } of this.newFiles) {
                 changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
@@ -1037,7 +1000,7 @@ namespace ts.textChanges {
     }
 
     namespace deleteDeclaration {
-        export function deleteDeclaration(changes: ChangeTracker, sourceFile: SourceFile, node: Node): void {
+        export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet, sourceFile: SourceFile, node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.Parameter: {
                     const oldFunction = node.parent;
@@ -1062,28 +1025,30 @@ namespace ts.textChanges {
                         changes.replaceNode(sourceFile, oldFunction, newFunction);
                     }
                     else {
-                        changes.deleteNodeInList(sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     break;
                 }
 
                 case SyntaxKind.ImportDeclaration:
-                    changes.deleteNode(sourceFile, node);
+                    deleteNode(changes, sourceFile, node,
+                        // For first import, leave header comment in place
+                        node === sourceFile.imports[0].parent ? { useNonAdjustedStartPosition: true, useNonAdjustedEndPosition: false } : undefined);
                     break;
 
                 case SyntaxKind.BindingElement:
                     const pattern = (node as BindingElement).parent;
                     const preserveComma = pattern.kind === SyntaxKind.ArrayBindingPattern && node !== last(pattern.elements);
                     if (preserveComma) {
-                        changes.deleteNode(sourceFile, node);
+                        deleteNode(changes, sourceFile, node);
                     }
                     else {
-                        changes.deleteNodeInList(sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     break;
 
                 case SyntaxKind.VariableDeclaration:
-                    deleteVariableDeclaration(changes, sourceFile, node as VariableDeclaration);
+                    deleteVariableDeclaration(changes, deletedNodesInLists, sourceFile, node as VariableDeclaration);
                     break;
 
                 case SyntaxKind.TypeParameter: {
@@ -1098,7 +1063,7 @@ namespace ts.textChanges {
                         changes.deleteNodeRange(sourceFile, previousToken, nextToken);
                     }
                     else {
-                        changes.deleteNodeInList(sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     break;
                 }
@@ -1109,7 +1074,7 @@ namespace ts.textChanges {
                         deleteImportBinding(changes, sourceFile, namedImports);
                     }
                     else {
-                        changes.deleteNodeInList(sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     break;
 
@@ -1122,10 +1087,10 @@ namespace ts.textChanges {
                         deleteDefaultImport(changes, sourceFile, node.parent);
                     }
                     else if (isCallLikeExpression(node.parent)) {
-                        changes.deleteNodeInList(sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     else {
-                        changes.deleteNode(sourceFile, node);
+                        deleteNode(changes, sourceFile, node, node.kind === SyntaxKind.SemicolonToken ? { useNonAdjustedEndPosition: true } : undefined);
                     }
             }
         }
@@ -1133,7 +1098,7 @@ namespace ts.textChanges {
         function deleteDefaultImport(changes: ChangeTracker, sourceFile: SourceFile, importClause: ImportClause): void {
             if (!importClause.namedBindings) {
                 // Delete the whole import
-                changes.deleteNode(sourceFile, importClause.parent);
+                deleteNode(changes, sourceFile, importClause.parent);
             }
             else {
                 // import |d,| * as ns from './file'
@@ -1145,7 +1110,7 @@ namespace ts.textChanges {
                     changes.deleteRange(sourceFile, { pos: start, end });
                 }
                 else {
-                    changes.deleteNode(sourceFile, importClause.name!);
+                    deleteNode(changes, sourceFile, importClause.name!);
                 }
             }
         }
@@ -1163,11 +1128,11 @@ namespace ts.textChanges {
                 // |import * as ns from './file'|
                 // |import { a } from './file'|
                 const importDecl = getAncestor(node, SyntaxKind.ImportDeclaration)!;
-                changes.deleteNode(sourceFile, importDecl);
+                deleteNode(changes, sourceFile, importDecl);
             }
         }
 
-        function deleteVariableDeclaration(changes: ChangeTracker, sourceFile: SourceFile, node: VariableDeclaration): void {
+        function deleteVariableDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet, sourceFile: SourceFile, node: VariableDeclaration): void {
             const { parent } = node;
 
             if (parent.kind === SyntaxKind.CatchClause) {
@@ -1177,7 +1142,7 @@ namespace ts.textChanges {
             }
 
             if (parent.declarations.length !== 1) {
-                changes.deleteNodeInList(sourceFile, node);
+                deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                 return;
             }
 
@@ -1189,16 +1154,43 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.ForStatement:
-                    changes.deleteNode(sourceFile, parent);
+                    deleteNode(changes, sourceFile, parent);
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    changes.deleteNode(sourceFile, gp);
+                    deleteNode(changes, sourceFile, gp);
                     break;
 
                 default:
                     Debug.assertNever(gp);
             }
         }
+    }
+
+    /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
+    // Exported for tests only! (TODO: improve tests to not need this)
+    export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}): void {
+        const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
+        const endPosition = getAdjustedEndPosition(sourceFile, node, options);
+        changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
+    }
+
+    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: NodeSet, sourceFile: SourceFile, node: Node): void {
+        const containingList = Debug.assertDefined(formatting.SmartIndenter.getContainingList(node, sourceFile));
+        const index = indexOfNode(containingList, node);
+        Debug.assert(index !== -1);
+        if (containingList.length === 1) {
+            deleteNode(changes, sourceFile, node);
+            return;
+        }
+
+        // Note: We will only delete a comma *after* a node. This will leave a trailing comma if we delete the last node.
+        // That's handled in the end by `finishTrailingCommaAfterDeletingNodesInList`.
+        Debug.assert(!deletedNodesInLists.has(node), "Deleting a node twice");
+        deletedNodesInLists.add(node);
+        changes.deleteRange(sourceFile, {
+            pos: startPositionToDeleteNodeInList(sourceFile, node),
+            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
+        });
     }
 }

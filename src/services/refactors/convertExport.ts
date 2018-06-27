@@ -78,7 +78,7 @@ namespace ts.refactor {
 
     function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: Info, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
-            changes.deleteNode(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword)));
+            changes.delete(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword)));
         }
         else {
             const exportKeyword = Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword));
@@ -155,7 +155,7 @@ namespace ts.refactor {
                 }
                 else {
                     // `import foo, { bar } from "./a"` --> `import { bar, foo } from "./a";`
-                    changes.deleteNode(importingSourceFile, ref);
+                    changes.delete(importingSourceFile, ref);
                     changes.insertNodeAtEndOfList(importingSourceFile, namedBindings.elements, spec);
                 }
                 break;
@@ -183,7 +183,7 @@ namespace ts.refactor {
                         changes.replaceNode(importingSourceFile, spec.parent, defaultImport);
                     }
                     else {
-                        changes.deleteNodeInList(importingSourceFile, spec);
+                        changes.delete(importingSourceFile, spec);
                         changes.insertNodeBefore(importingSourceFile, spec.parent, defaultImport);
                     }
                 }

@@ -22,7 +22,7 @@ namespace ts.codefix {
 
             const importDecl = tryGetFullImport(token);
             if (importDecl) {
-                const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, importDecl));
+                const changes = textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, importDecl));
                 return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
             const delDestructure = textChanges.ChangeTracker.with(context, t =>
@@ -67,7 +67,7 @@ namespace ts.codefix {
                     case fixIdDelete: {
                         const importDecl = tryGetFullImport(token);
                         if (importDecl) {
-                            changes.deleteDeclaration(sourceFile, importDecl);
+                            changes.delete(sourceFile, importDecl);
                         }
                         else if (!tryDeleteFullDestructure(token, changes, sourceFile, checker, sourceFiles, /*isFixAll*/ true) &&
                             !tryDeleteFullVariableStatement(sourceFile, token, changes)) {
@@ -94,7 +94,7 @@ namespace ts.codefix {
             tryDeleteParameter(changes, sourceFile, decl, checker, sourceFiles, isFixAll);
         }
         else {
-            changes.deleteDeclaration(sourceFile, decl);
+            changes.delete(sourceFile, decl);
         }
         return true;
     }
@@ -102,7 +102,7 @@ namespace ts.codefix {
     function tryDeleteFullVariableStatement(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker): boolean {
         const declarationList = tryCast(token.parent, isVariableDeclarationList);
         if (declarationList && declarationList.getChildren(sourceFile)[0] === token) {
-            changes.deleteDeclaration(sourceFile, declarationList.parent.kind === SyntaxKind.VariableStatement ? declarationList.parent : declarationList);
+            changes.delete(sourceFile, declarationList.parent.kind === SyntaxKind.VariableStatement ? declarationList.parent : declarationList);
             return true;
         }
         return false;
@@ -140,7 +140,7 @@ namespace ts.codefix {
         FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
             if (ref.parent.kind === SyntaxKind.PropertyAccessExpression) ref = ref.parent;
             if (ref.parent.kind === SyntaxKind.BinaryExpression && ref.parent.parent.kind === SyntaxKind.ExpressionStatement) {
-                changes.deleteDeclaration(sourceFile, ref.parent.parent);
+                changes.delete(sourceFile, ref.parent.parent);
             }
         });
     }
@@ -151,13 +151,13 @@ namespace ts.codefix {
             tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, isFixAll);
         }
         else {
-            changes.deleteDeclaration(sourceFile, isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent);
+            changes.delete(sourceFile, isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent);
         }
     }
 
     function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
         if (mayDeleteParameter(p, checker, isFixAll)) {
-            changes.deleteDeclaration(sourceFile, p);
+            changes.delete(sourceFile, p);
             deleteUnusedArguments(changes, sourceFile, p, sourceFiles, checker);
         }
     }
@@ -199,7 +199,7 @@ namespace ts.codefix {
         FindAllReferences.Core.eachSignatureCall(deletedParameter.parent, sourceFiles, checker, call => {
             const index = deletedParameter.parent.parameters.indexOf(deletedParameter);
             if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
-                changes.deleteDeclaration(sourceFile, call.arguments[index]);
+                changes.delete(sourceFile, call.arguments[index]);
             }
         });
     }
