@@ -10717,6 +10717,7 @@ declare namespace ts {
     }
     function getLineStartPositionForPosition(position: number, sourceFile: SourceFileLike): number;
     function rangeContainsRange(r1: TextRange, r2: TextRange): boolean;
+    function rangeContainsRangeExclusive(r1: TextRange, r2: TextRange): boolean;
     function rangeContainsPosition(r: TextRange, pos: number): boolean;
     function rangeContainsPositionExclusive(r: TextRange, pos: number): boolean;
     function startEndContainsRange(start: number, end: number, range: TextRange): boolean;
@@ -10834,7 +10835,12 @@ declare namespace ts {
      */
     function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined;
     function isMemberSymbolInBaseType(memberSymbol: Symbol, checker: TypeChecker): boolean;
-    class NodeSet {
+    interface ReadonlyNodeSet {
+        has(node: Node): boolean;
+        forEach(cb: (node: Node) => void): void;
+        some(pred: (node: Node) => boolean): boolean;
+    }
+    class NodeSet implements ReadonlyNodeSet {
         private map;
         add(node: Node): void;
         has(node: Node): boolean;
@@ -11127,6 +11133,7 @@ declare namespace ts.FindAllReferences.Core {
     /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
     function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile): boolean;
     function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined;
+    function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (call: CallExpression) => void): void;
     /**
      * Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
      * of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
@@ -11505,11 +11512,13 @@ declare namespace ts.textChanges {
         private readonly newFiles;
         private readonly deletedNodesInLists;
         private readonly classesWithNodesInsertedAtStart;
+        private readonly deletedDeclarations;
         static fromContext(context: TextChangesContext): ChangeTracker;
         static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[];
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(newLineCharacter: string, formatContext: formatting.FormatContext);
         deleteRange(sourceFile: SourceFile, range: TextRange): this;
+        deleteDeclaration(sourceFile: SourceFile, node: Node): void;
         /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
         deleteNode(sourceFile: SourceFile, node: Node, options?: ConfigurableStartEnd): this;
         deleteModifier(sourceFile: SourceFile, modifier: Modifier): void;
@@ -11559,6 +11568,7 @@ declare namespace ts.textChanges {
         insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList?: NodeArray<Node> | undefined): this;
         private finishClassesWithNodesInsertedAtStart;
         private finishTrailingCommaAfterDeletingNodesInList;
+        private finishDeleteDeclarations;
         /**
          * Note: after calling this, the TextChanges object must be discarded!
          * @param validate only for tests
