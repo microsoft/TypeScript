@@ -23665,15 +23665,25 @@ namespace ts {
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
                 // Don't validate for-in initializer as it is already an error
+                const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     const initializerType = checkExpressionCached(node.initializer);
                     if (strictNullChecks && node.name.elements.length === 0) {
                         checkNonNullType(initializerType, node);
                     }
                     else {
-                        checkTypeAssignableTo(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(initializerType, widenedType, node, /*headMessage*/ undefined);
                     }
                     checkParameterInitializer(node);
+                }
+                // check the binding pattern with empty elements
+                if (node.name.elements.length === 0) {
+                    if (isArrayBindingPattern(node.name)) {
+                        checkIteratedTypeOrElementType(widenedType,node, /* allowStringInput */ false, /* allowAsyncIterables */ false);
+                    }
+                    else if(strictNullChecks) {
+                        checkNonNullType(widenedType, node);
+                    }
                 }
                 return;
             }
