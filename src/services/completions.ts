@@ -871,7 +871,7 @@ namespace ts.Completions {
         }
 
         start = timestamp();
-        const previousToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, insideJsDocTagTypeExpression)!; // TODO: GH#18217
+        const previousToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
         log("getCompletionData: Get previous token 1: " + (timestamp() - start));
 
         // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
@@ -882,7 +882,7 @@ namespace ts.Completions {
         // Skip this partial identifier and adjust the contextToken to the token that precedes it.
         if (contextToken && position <= contextToken.end && (isIdentifier(contextToken) || isKeyword(contextToken.kind))) {
             const start = timestamp();
-            contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile, /*startNode*/ undefined, insideJsDocTagTypeExpression)!; // TODO: GH#18217
+            contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
             log("getCompletionData: Get previous token 2: " + (timestamp() - start));
         }
 
