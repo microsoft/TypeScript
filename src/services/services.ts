@@ -1885,7 +1885,7 @@ namespace ts {
 
         function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const token = getTouchingToken(sourceFile, position, /*includeJsDocComment*/ false);
+            const token = getTouchingToken(sourceFile, position);
             const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
             const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
             // We want to order the braces when we return the result.
