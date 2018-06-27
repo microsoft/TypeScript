@@ -81,10 +81,10 @@ class H {
 
 class I extends Object {
 >I : Symbol(I, Decl(classUpdateTests.ts, 43, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 	constructor() { super(); } // ERROR - no super call allowed
->super : Symbol(ObjectConstructor, Decl(lib.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
 }
 
 class J extends G {

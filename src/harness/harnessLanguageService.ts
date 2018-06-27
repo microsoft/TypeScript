@@ -1,8 +1,3 @@
-/// <reference path="..\services\services.ts" />
-/// <reference path="..\services\shims.ts" />
-/// <reference path="..\server\client.ts" />
-/// <reference path="harness.ts" />
-
 namespace Harness.LanguageService {
     export class ScriptInfo {
         public version = 1;
@@ -154,6 +149,21 @@ namespace Harness.LanguageService {
             this.vfs.mkdirpSync(vpath.dirname(fileName));
             this.vfs.writeFileSync(fileName, content);
             this.scriptInfos.set(vpath.resolve(this.vfs.cwd(), fileName), new ScriptInfo(fileName, content, isRootFile));
+        }
+
+        public renameFileOrDirectory(oldPath: string, newPath: string): void {
+            this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
+            this.vfs.renameSync(oldPath, newPath);
+
+            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+            this.scriptInfos.forEach((scriptInfo, key) => {
+                const newFileName = updater(key);
+                if (newFileName !== undefined) {
+                    this.scriptInfos.delete(key);
+                    this.scriptInfos.set(newFileName, scriptInfo);
+                    scriptInfo.fileName = newFileName;
+                }
+            });
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
@@ -576,7 +586,8 @@ namespace Harness.LanguageService {
                 importedFiles: [],
                 ambientExternalModules: [],
                 isLibFile: shimResult.isLibFile,
-                typeReferenceDirectives: []
+                typeReferenceDirectives: [],
+                libReferenceDirectives: []
             };
 
             ts.forEach(shimResult.referencedFiles, refFile => {

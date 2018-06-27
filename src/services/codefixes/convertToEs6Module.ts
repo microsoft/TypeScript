@@ -5,10 +5,10 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, preferences } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
-                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target!, preferences);
+                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target!, getQuotePreference(sourceFile, preferences));
                 if (moduleExportsChangedToDefault) {
                     for (const importingFile of program.getSourceFiles()) {
-                        fixImportOfModuleExports(importingFile, sourceFile, changes, preferences);
+                        fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreference(importingFile, preferences));
                     }
                 }
             });
@@ -17,7 +17,7 @@ namespace ts.codefix {
         },
     });
 
-    function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, preferences: UserPreferences) {
+    function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, quotePreference: QuotePreference) {
         for (const moduleSpecifier of importingFile.imports) {
             const imported = getResolvedModule(importingFile, moduleSpecifier.text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
@@ -27,7 +27,7 @@ namespace ts.codefix {
             const importNode = importFromModuleSpecifier(moduleSpecifier);
             switch (importNode.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    changes.replaceNode(importingFile, importNode, makeImport(importNode.name, /*namedImports*/ undefined, moduleSpecifier, preferences));
+                    changes.replaceNode(importingFile, importNode, makeImport(importNode.name, /*namedImports*/ undefined, moduleSpecifier, quotePreference));
                     break;
                 case SyntaxKind.CallExpression:
                     if (isRequireCall(importNode, /*checkArgumentIsStringLiteralLike*/ false)) {
@@ -39,13 +39,13 @@ namespace ts.codefix {
     }
 
     /** @returns Whether we converted a `module.exports =` to a default export. */
-    function convertFileToEs6Module(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, preferences: UserPreferences): ModuleExportsChanged {
+    function convertFileToEs6Module(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
         const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: createMap<true>() };
         const exports = collectExportRenames(sourceFile, checker, identifiers);
         convertExportsAccesses(sourceFile, exports, changes);
         let moduleExportsChangedToDefault = false;
         for (const statement of sourceFile.statements) {
-            const moduleExportsChanged = convertStatement(sourceFile, statement, checker, changes, identifiers, target, exports, preferences);
+            const moduleExportsChanged = convertStatement(sourceFile, statement, checker, changes, identifiers, target, exports, quotePreference);
             moduleExportsChangedToDefault = moduleExportsChangedToDefault || moduleExportsChanged;
         }
         return moduleExportsChangedToDefault;
@@ -98,10 +98,10 @@ namespace ts.codefix {
     /** Whether `module.exports =` was changed to `export default` */
     type ModuleExportsChanged = boolean;
 
-    function convertStatement(sourceFile: SourceFile, statement: Statement, checker: TypeChecker, changes: textChanges.ChangeTracker, identifiers: Identifiers, target: ScriptTarget, exports: ExportRenames, preferences: UserPreferences): ModuleExportsChanged {
+    function convertStatement(sourceFile: SourceFile, statement: Statement, checker: TypeChecker, changes: textChanges.ChangeTracker, identifiers: Identifiers, target: ScriptTarget, exports: ExportRenames, quotePreference: QuotePreference): ModuleExportsChanged {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
-                convertVariableStatement(sourceFile, statement as VariableStatement, changes, checker, identifiers, target, preferences);
+                convertVariableStatement(sourceFile, statement as VariableStatement, changes, checker, identifiers, target, quotePreference);
                 return false;
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
@@ -109,7 +109,7 @@ namespace ts.codefix {
                     case SyntaxKind.CallExpression: {
                         if (isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true)) {
                             // For side-effecting require() call, just make a side-effecting import.
-                            changes.replaceNode(sourceFile, statement, makeImport(/*name*/ undefined, /*namedImports*/ undefined, expression.arguments[0], preferences));
+                            changes.replaceNode(sourceFile, statement, makeImport(/*name*/ undefined, /*namedImports*/ undefined, expression.arguments[0], quotePreference));
                         }
                         return false;
                     }
@@ -125,7 +125,15 @@ namespace ts.codefix {
         }
     }
 
-    function convertVariableStatement(sourceFile: SourceFile, statement: VariableStatement, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, target: ScriptTarget, preferences: UserPreferences): void {
+    function convertVariableStatement(
+        sourceFile: SourceFile,
+        statement: VariableStatement,
+        changes: textChanges.ChangeTracker,
+        checker: TypeChecker,
+        identifiers: Identifiers,
+        target: ScriptTarget,
+        quotePreference: QuotePreference,
+    ): void {
         const { declarationList } = statement;
         let foundImport = false;
         const newNodes = flatMap(declarationList.declarations, decl => {
@@ -138,11 +146,11 @@ namespace ts.codefix {
                 }
                 else if (isRequireCall(initializer, /*checkArgumentIsStringLiteralLike*/ true)) {
                     foundImport = true;
-                    return convertSingleImport(sourceFile, name, initializer.arguments[0], changes, checker, identifiers, target, preferences);
+                    return convertSingleImport(sourceFile, name, initializer.arguments[0], changes, checker, identifiers, target, quotePreference);
                 }
                 else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*checkArgumentIsStringLiteralLike*/ true)) {
                     foundImport = true;
-                    return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0], identifiers, preferences);
+                    return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0], identifiers, quotePreference);
                 }
             }
             // Move it out to its own variable statement. (This will not be used if `!foundImport`)
@@ -155,20 +163,20 @@ namespace ts.codefix {
     }
 
     /** Converts `const name = require("moduleSpecifier").propertyName` */
-    function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, preferences: UserPreferences): ReadonlyArray<Node> {
+    function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, quotePreference: QuotePreference): ReadonlyArray<Node> {
         switch (name.kind) {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern: {
                 // `const [a, b] = require("c").d` --> `import { d } from "c"; const [a, b] = d;`
                 const tmp  = makeUniqueName(propertyName, identifiers);
                 return [
-                    makeSingleImport(tmp, propertyName, moduleSpecifier, preferences),
+                    makeSingleImport(tmp, propertyName, moduleSpecifier, quotePreference),
                     makeConst(/*modifiers*/ undefined, name, createIdentifier(tmp)),
                 ];
             }
             case SyntaxKind.Identifier:
                 // `const a = require("b").c` --> `import { c as a } from "./b";
-                return [makeSingleImport(name.text, propertyName, moduleSpecifier, preferences)];
+                return [makeSingleImport(name.text, propertyName, moduleSpecifier, quotePreference)];
             default:
                 return Debug.assertNever(name);
         }
@@ -340,7 +348,7 @@ namespace ts.codefix {
         checker: TypeChecker,
         identifiers: Identifiers,
         target: ScriptTarget,
-        preferences: UserPreferences,
+        quotePreference: QuotePreference,
     ): ReadonlyArray<Node> {
         switch (name.kind) {
             case SyntaxKind.ObjectBindingPattern: {
@@ -349,7 +357,7 @@ namespace ts.codefix {
                         ? undefined
                         : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text)); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
                 if (importSpecifiers) {
-                    return [makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier, preferences)];
+                    return [makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier, quotePreference)];
                 }
             }
             // falls through -- object destructuring has an interesting pattern and must be a variable declaration
@@ -360,12 +368,12 @@ namespace ts.codefix {
                 */
                 const tmp = makeUniqueName(moduleSpecifierToValidIdentifier(moduleSpecifier.text, target), identifiers);
                 return [
-                    makeImport(createIdentifier(tmp), /*namedImports*/ undefined, moduleSpecifier, preferences),
+                    makeImport(createIdentifier(tmp), /*namedImports*/ undefined, moduleSpecifier, quotePreference),
                     makeConst(/*modifiers*/ undefined, getSynthesizedDeepClone(name), createIdentifier(tmp)),
                 ];
             }
             case SyntaxKind.Identifier:
-                return convertSingleIdentifierImport(file, name, moduleSpecifier, changes, checker, identifiers, preferences);
+                return convertSingleIdentifierImport(file, name, moduleSpecifier, changes, checker, identifiers, quotePreference);
             default:
                 return Debug.assertNever(name);
         }
@@ -375,7 +383,7 @@ namespace ts.codefix {
      * Convert `import x = require("x").`
      * Also converts uses like `x.y()` to `y()` and uses a named import.
      */
-    function convertSingleIdentifierImport(file: SourceFile, name: Identifier, moduleSpecifier: StringLiteralLike, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, preferences: UserPreferences): ReadonlyArray<Node> {
+    function convertSingleIdentifierImport(file: SourceFile, name: Identifier, moduleSpecifier: StringLiteralLike, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): ReadonlyArray<Node> {
         const nameSymbol = checker.getSymbolAtLocation(name);
         // Maps from module property name to name actually used. (The same if there isn't shadowing.)
         const namedBindingsNames = createMap<string>();
@@ -410,7 +418,7 @@ namespace ts.codefix {
             // If it was unused, ensure that we at least import *something*.
             needDefaultImport = true;
         }
-        return [makeImport(needDefaultImport ? getSynthesizedDeepClone(name) : undefined, namedBindings, moduleSpecifier, preferences)];
+        return [makeImport(needDefaultImport ? getSynthesizedDeepClone(name) : undefined, namedBindings, moduleSpecifier, quotePreference)];
     }
 
     // Identifiers helpers
@@ -488,10 +496,10 @@ namespace ts.codefix {
             getSynthesizedDeepClones(cls.members));
     }
 
-    function makeSingleImport(localName: string, propertyName: string, moduleSpecifier: StringLiteralLike, preferences: UserPreferences): ImportDeclaration {
+    function makeSingleImport(localName: string, propertyName: string, moduleSpecifier: StringLiteralLike, quotePreference: QuotePreference): ImportDeclaration {
         return propertyName === "default"
-            ? makeImport(createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier, preferences)
-            : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier, preferences);
+            ? makeImport(createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier, quotePreference)
+            : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier, quotePreference);
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {

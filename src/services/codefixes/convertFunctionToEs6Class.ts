@@ -14,7 +14,7 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         const deletedNodes: { node: Node, inList: boolean }[] = [];
-        const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false))!;
+        const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
 
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
             // Bad input
@@ -200,22 +200,6 @@ namespace ts.codefix {
             // Don't call copyComments here because we'll already leave them in place
             return cls;
         }
-    }
-
-    function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile) {
-        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
-            if (kind === SyntaxKind.MultiLineCommentTrivia) {
-                // Remove leading /*
-                pos += 2;
-                // Remove trailing */
-                end -= 2;
-            }
-            else {
-                // Remove leading //
-                pos += 2;
-            }
-            addSyntheticLeadingComment(targetNode, kind, sourceFile.text.slice(pos, end), htnl);
-        });
     }
 
     function getModifierKindFromSource(source: Node, kind: SyntaxKind): ReadonlyArray<Modifier> | undefined {

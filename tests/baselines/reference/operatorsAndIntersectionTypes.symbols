@@ -51,9 +51,9 @@ const s1 = "{" + guid + "}";
 
 const s2 = guid.toLowerCase();
 >s2 : Symbol(s2, Decl(operatorsAndIntersectionTypes.ts, 20, 5))
->guid.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>guid.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >guid : Symbol(guid, Decl(operatorsAndIntersectionTypes.ts, 12, 3))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 const s3 = guid + guid;
 >s3 : Symbol(s3, Decl(operatorsAndIntersectionTypes.ts, 21, 5))
@@ -67,9 +67,9 @@ const s4 = guid + serialNo;
 
 const s5 = serialNo.toPrecision(0);
 >s5 : Symbol(s5, Decl(operatorsAndIntersectionTypes.ts, 23, 5))
->serialNo.toPrecision : Symbol(Number.toPrecision, Decl(lib.d.ts, --, --))
+>serialNo.toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
 >serialNo : Symbol(serialNo, Decl(operatorsAndIntersectionTypes.ts, 16, 3))
->toPrecision : Symbol(Number.toPrecision, Decl(lib.d.ts, --, --))
+>toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
 
 const n1 = serialNo * 3;
 >n1 : Symbol(n1, Decl(operatorsAndIntersectionTypes.ts, 24, 5))

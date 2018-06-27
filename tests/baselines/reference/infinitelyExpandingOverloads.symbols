@@ -57,10 +57,10 @@ class ViewModel<TValue> {
 
     public validationPlacements: Array<ValidationPlacement2<TValue>> = new Array<ValidationPlacement2<TValue>>();
 >validationPlacements : Symbol(ViewModel.validationPlacements, Decl(infinitelyExpandingOverloads.ts, 15, 25))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >ValidationPlacement2 : Symbol(ValidationPlacement2, Decl(infinitelyExpandingOverloads.ts, 5, 1))
 >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 15, 16))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >ValidationPlacement2 : Symbol(ValidationPlacement2, Decl(infinitelyExpandingOverloads.ts, 5, 1))
 >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 15, 16))
 }

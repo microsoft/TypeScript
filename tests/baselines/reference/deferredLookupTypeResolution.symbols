@@ -21,7 +21,7 @@ type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>
 >O : Symbol(O, Decl(deferredLookupTypeResolution.ts, 7, 18))
 >L : Symbol(L, Decl(deferredLookupTypeResolution.ts, 7, 20))
 >StringContains : Symbol(StringContains, Decl(deferredLookupTypeResolution.ts, 0, 0))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >O : Symbol(O, Decl(deferredLookupTypeResolution.ts, 7, 18))
 >L : Symbol(L, Decl(deferredLookupTypeResolution.ts, 7, 20))
 

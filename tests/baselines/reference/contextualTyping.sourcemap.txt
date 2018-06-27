@@ -2070,21 +2070,27 @@ sourceFile:contextualTyping.ts
 ---
 >>>function c9t5(f) { }
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^
+6 >               ^^^^
+7 >                   ^
 1 >
   >
-2 >function c9t5(
-3 >              f: (n: number) => IFoo
-4 >               ) {
-5 >                   }
+2 >function 
+3 >         c9t5
+4 >             (
+5 >              f: (n: number) => IFoo
+6 >               ) {
+7 >                   }
 1 >Emitted(86, 1) Source(146, 1) + SourceIndex(0)
-2 >Emitted(86, 15) Source(146, 15) + SourceIndex(0)
-3 >Emitted(86, 16) Source(146, 37) + SourceIndex(0)
-4 >Emitted(86, 20) Source(146, 40) + SourceIndex(0)
-5 >Emitted(86, 21) Source(146, 41) + SourceIndex(0)
+2 >Emitted(86, 10) Source(146, 10) + SourceIndex(0)
+3 >Emitted(86, 14) Source(146, 14) + SourceIndex(0)
+4 >Emitted(86, 15) Source(146, 15) + SourceIndex(0)
+5 >Emitted(86, 16) Source(146, 37) + SourceIndex(0)
+6 >Emitted(86, 20) Source(146, 40) + SourceIndex(0)
+7 >Emitted(86, 21) Source(146, 41) + SourceIndex(0)
 ---
 >>>;
 1 >
@@ -3019,18 +3025,20 @@ sourceFile:contextualTyping.ts
 ---
 >>>function EF1(a, b) { return a + b; }
 1->
-2 >^^^^^^^^^^^^^
-3 >             ^
-4 >              ^^
-5 >                ^
-6 >                 ^^^^
-7 >                     ^^^^^^^
-8 >                            ^
-9 >                             ^^^
-10>                                ^
-11>                                 ^
-12>                                  ^
-13>                                   ^
+2 >^^^^^^^^^
+3 >         ^^^
+4 >            ^
+5 >             ^
+6 >              ^^
+7 >                ^
+8 >                 ^^^^
+9 >                     ^^^^^^^
+10>                            ^
+11>                             ^^^
+12>                                ^
+13>                                 ^
+14>                                  ^
+15>                                   ^
 1->
   >
   >// CONTEXT: Contextual typing declarations
@@ -3039,31 +3047,35 @@ sourceFile:contextualTyping.ts
   >declare function EF1(a:number, b:number):number;
   >
   >
-2 >function EF1(
-3 >             a
-4 >              ,
-5 >                b
-6 >                 ) { 
-7 >                     return 
-8 >                            a
-9 >                             +
-10>                                b
-11>                                 ;
-12>                                   
-13>                                   }
+2 >function 
+3 >         EF1
+4 >            (
+5 >             a
+6 >              ,
+7 >                b
+8 >                 ) { 
+9 >                     return 
+10>                            a
+11>                             +
+12>                                b
+13>                                 ;
+14>                                   
+15>                                   }
 1->Emitted(124, 1) Source(191, 1) + SourceIndex(0)
-2 >Emitted(124, 14) Source(191, 14) + SourceIndex(0)
-3 >Emitted(124, 15) Source(191, 15) + SourceIndex(0)
-4 >Emitted(124, 17) Source(191, 16) + SourceIndex(0)
-5 >Emitted(124, 18) Source(191, 17) + SourceIndex(0)
-6 >Emitted(124, 22) Source(191, 21) + SourceIndex(0)
-7 >Emitted(124, 29) Source(191, 28) + SourceIndex(0)
-8 >Emitted(124, 30) Source(191, 29) + SourceIndex(0)
-9 >Emitted(124, 33) Source(191, 30) + SourceIndex(0)
-10>Emitted(124, 34) Source(191, 31) + SourceIndex(0)
-11>Emitted(124, 35) Source(191, 32) + SourceIndex(0)
-12>Emitted(124, 36) Source(191, 33) + SourceIndex(0)
-13>Emitted(124, 37) Source(191, 34) + SourceIndex(0)
+2 >Emitted(124, 10) Source(191, 10) + SourceIndex(0)
+3 >Emitted(124, 13) Source(191, 13) + SourceIndex(0)
+4 >Emitted(124, 14) Source(191, 14) + SourceIndex(0)
+5 >Emitted(124, 15) Source(191, 15) + SourceIndex(0)
+6 >Emitted(124, 17) Source(191, 16) + SourceIndex(0)
+7 >Emitted(124, 18) Source(191, 17) + SourceIndex(0)
+8 >Emitted(124, 22) Source(191, 21) + SourceIndex(0)
+9 >Emitted(124, 29) Source(191, 28) + SourceIndex(0)
+10>Emitted(124, 30) Source(191, 29) + SourceIndex(0)
+11>Emitted(124, 33) Source(191, 30) + SourceIndex(0)
+12>Emitted(124, 34) Source(191, 31) + SourceIndex(0)
+13>Emitted(124, 35) Source(191, 32) + SourceIndex(0)
+14>Emitted(124, 36) Source(191, 33) + SourceIndex(0)
+15>Emitted(124, 37) Source(191, 34) + SourceIndex(0)
 ---
 >>>var efv = EF1(1, 2);
 1 >

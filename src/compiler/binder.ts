@@ -236,7 +236,7 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
-                    (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     symbol.valueDeclaration = node;
                 }
@@ -697,10 +697,11 @@ namespace ts {
                     bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag);
                     break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
-                case SyntaxKind.SourceFile:
+                case SyntaxKind.SourceFile: {
                     bindEachFunctionsFirst((node as SourceFile).statements);
                     bind((node as SourceFile).endOfFileToken);
                     break;
+                }
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                     bindEachFunctionsFirst((node as Block).statements);
@@ -1975,7 +1976,10 @@ namespace ts {
             }
             else if (!skipTransformFlagAggregation && (node.transformFlags & TransformFlags.HasComputedFlags) === 0) {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
+                const saveParent = parent;
+                if (node.kind === SyntaxKind.EndOfFileToken) parent = node;
                 bindJSDoc(node);
+                parent = saveParent;
             }
             inStrictMode = saveInStrictMode;
         }
@@ -2305,18 +2309,22 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
+            if (file.externalModuleIndicator) {
+                return false;
+            }
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                if (!file.externalModuleIndicator) {
-                    bindSourceFileAsExternalModule();
-                }
+                bindSourceFileAsExternalModule();
             }
+            return true;
         }
 
         function bindExportsPropertyAssignment(node: BinaryExpression) {
             // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
             // expression is the declaration
-            setCommonJsModuleIndicator(node);
+            if (!setCommonJsModuleIndicator(node)) {
+                return;
+            }
             const lhs = node.left as PropertyAccessEntityNameExpression;
             const symbol = forEachIdentifierInEntityName(lhs.expression, /*parent*/ undefined, (id, symbol) => {
                 if (symbol) {
@@ -2337,15 +2345,15 @@ namespace ts {
             // is still pointing to 'module.exports'.
             // We do not want to consider this as 'export=' since a module can have only one of these.
             // Similarly we do not want to treat 'module.exports = exports' as an 'export='.
+            if (!setCommonJsModuleIndicator(node)) {
+                return;
+            }
             const assignedExpression = getRightMostAssignedExpression(node.right);
             if (isEmptyObjectLiteral(assignedExpression) || container === file && isExportsOrModuleExportsOrAlias(file, assignedExpression)) {
-                // Mark it as a module in case there are no other exports in the file
-                setCommonJsModuleIndicator(node);
                 return;
             }
 
             // 'module.exports = expr' assignment
-            setCommonJsModuleIndicator(node);
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
@@ -2514,11 +2522,12 @@ namespace ts {
                 return true;
             }
             const node = symbol.valueDeclaration;
-            const init = !node ? undefined :
+            let init = !node ? undefined :
                 isVariableDeclaration(node) ? node.initializer :
                 isBinaryExpression(node) ? node.right :
                 isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
                 undefined;
+            init = init && getRightMostAssignedExpression(init);
             if (init) {
                 const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
                 return !!getJavascriptInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, isPrototypeAssignment);
@@ -3601,6 +3610,8 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
             case SyntaxKind.ArrayType:
             case SyntaxKind.TupleType:
+            case SyntaxKind.OptionalType:
+            case SyntaxKind.RestType:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
             case SyntaxKind.ConditionalType:

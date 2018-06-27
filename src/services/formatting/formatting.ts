@@ -512,7 +512,10 @@ namespace ts.formatting {
                 // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                    return getNameOfDeclaration(<Declaration>node).kind;
+                    const name = getNameOfDeclaration(<Declaration>node);
+                    if (name) {
+                        return name.kind;
+                    }
             }
         }
 
@@ -1145,8 +1148,10 @@ namespace ts.formatting {
         position: number,
         onlyMultiLine: boolean,
         precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
-        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+        tokenAtPosition = getTokenAtPosition(sourceFile, position),
         predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
+        const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
+        if (jsdoc) tokenAtPosition = jsdoc.parent;
         const tokenStart = tokenAtPosition.getStart(sourceFile);
         if (tokenStart <= position && position < tokenAtPosition.getEnd()) {
             return undefined;

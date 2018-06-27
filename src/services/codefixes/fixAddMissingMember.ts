@@ -32,7 +32,7 @@ namespace ts.codefix {
 
                 // Always prefer to add a method declaration if possible.
                 if (call) {
-                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, preferences);
+                    addMethodDeclaration(context, changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, preferences);
                 }
                 else {
                     if (inJs) {
@@ -52,7 +52,7 @@ namespace ts.codefix {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
-        const token = getTokenAtPosition(tokenSourceFile, tokenPos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(tokenSourceFile, tokenPos);
         if (!isIdentifier(token)) {
             return undefined;
         }
@@ -184,11 +184,12 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): CodeFixAction | undefined {
-        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
+        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
         return createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, token.text], fixId, Diagnostics.Add_all_missing_members);
     }
 
     function addMethodDeclaration(
+        context: CodeFixContextBase,
         changeTracker: textChanges.ChangeTracker,
         classDeclarationSourceFile: SourceFile,
         classDeclaration: ClassLikeDeclaration,
@@ -198,7 +199,7 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, preferences);
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences);
         const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
 
         if (containingMethodDeclaration && containingMethodDeclaration.parent === classDeclaration) {

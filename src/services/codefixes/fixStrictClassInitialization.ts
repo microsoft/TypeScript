@@ -48,7 +48,7 @@ namespace ts.codefix {
     });
 
     function getPropertyDeclaration (sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         return isIdentifier(token) ? cast(token.parent, isPropertyDeclaration) : undefined;
     }
 
@@ -109,14 +109,8 @@ namespace ts.codefix {
     }
 
     function getDefaultValueFromType (checker: TypeChecker, type: Type): Expression | undefined {
-        if (type.flags & TypeFlags.String) {
-            return createLiteral("");
-        }
-        else if (type.flags & TypeFlags.Number) {
-            return createNumericLiteral("0");
-        }
-        else if (type.flags & TypeFlags.Boolean) {
-            return createFalse();
+        if (type.flags & TypeFlags.BooleanLiteral) {
+            return type === checker.getFalseType() ? createFalse() : createTrue();
         }
         else if (type.isLiteral()) {
             return createLiteral(type.value);
@@ -132,6 +126,9 @@ namespace ts.codefix {
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
             return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        }
+        else if (checker.isArrayLikeType(type)) {
+            return createArrayLiteral();
         }
         return undefined;
     }

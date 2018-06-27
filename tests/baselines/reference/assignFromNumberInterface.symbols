@@ -4,7 +4,7 @@ var x = 1;
 
 var a: Number;
 >a : Symbol(a, Decl(assignFromNumberInterface.ts, 1, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 x = a;
 >x : Symbol(x, Decl(assignFromNumberInterface.ts, 0, 3))
