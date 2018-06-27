@@ -4875,9 +4875,6 @@ namespace ts {
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
-        if (!declaration) {
-            return undefined;
-        }
         switch (declaration.kind) {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
@@ -4907,8 +4904,6 @@ namespace ts {
                         return undefined;
                 }
             }
-            case SyntaxKind.JSDocCallbackTag:
-                return (declaration as JSDocCallbackTag).name;
             case SyntaxKind.JSDocTypedefTag:
                 return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
             case SyntaxKind.ExportAssignment: {
