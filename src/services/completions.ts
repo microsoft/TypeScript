@@ -1117,15 +1117,19 @@ namespace ts.Completions {
         }
 
         function addPropertySymbol(symbol: Symbol) {
+            // For a computed property with an accessible name like `Symbol.iterator`,
+            // we'll add a completion for the *name* `Symbol` instead of for the property.
             // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
-            const symbolSymbol = firstDefined(symbol.declarations, decl => {
-                const name = getNameOfDeclaration(decl);
-                const leftName = name && name.kind === SyntaxKind.ComputedPropertyName ? getLeftMostName(name.expression) : undefined;
-                return leftName && typeChecker.getSymbolAtLocation(leftName);
-            });
-            if (symbolSymbol) {
-                symbols.push(symbolSymbol);
-                symbolToOriginInfoMap[getSymbolId(symbolSymbol)] = { type: "symbol-member" };
+            const computedPropertyName = firstDefined(symbol.declarations, decl => tryCast(getNameOfDeclaration(decl), isComputedPropertyName));
+            if (computedPropertyName) {
+                const leftMostName = getLeftMostName(computedPropertyName.expression); // The completion is for `Symbol`, not `iterator`.
+                const nameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
+                // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
+                const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken, typeChecker);
+                if (firstAccessibleSymbol && !symbolToOriginInfoMap[getSymbolId(firstAccessibleSymbol)]) {
+                    symbols.push(firstAccessibleSymbol);
+                    symbolToOriginInfoMap[getSymbolId(firstAccessibleSymbol)] = { type: "symbol-member" };
+                }
             }
             else {
                 symbols.push(symbol);
