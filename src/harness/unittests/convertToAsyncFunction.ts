@@ -119,22 +119,33 @@ namespace ts {
                 return;
             }
 
-            const sourceFile = program.getSourceFile(path);
-            const context: CodeFixContext = {
-                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
-                program,
-                sourceFile: sourceFile,
-                errorCode: 80006,
-                span: { start: 0, length: 12 },
-                host: notImplementedHost,
-                preferences: defaultPreferences,
-                formatContext: formatting.getFormatContext(formatOptions)
+            const f = {
+                path: path,
+                content: t.source
             };
 
+            const sourceFile = program.getSourceFile(path);
+            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+            const projectService = projectSystem.createProjectService(host);
+            projectService.openClientFile(f.path);
+            const languageService = projectService.inferredProjects[0].getLanguageService();
+            const context: CodeFixContext = {
+                errorCode: 80006,
+                span: { start: selectionRange.pos, length: selectionRange.end - selectionRange.pos },
+                sourceFile,
+                program,
+                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
+                preferences: defaultPreferences,
+                host: notImplementedHost,
+                formatContext: formatting.getFormatContext(formatOptions)
+            }
 
-            debugger;
+            const diagnostics = languageService.getSuggestionDiagnostics(f.path);
+            const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
+            assert.isNotNull(diagnostic);
+
             const actions = codefix.getFixes(context);
-            const action = find(actions, info => info.description === description.message);
+            const action = find(actions, action => action.description === description.message);
 
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
                 const data: string[] = [];
@@ -167,24 +178,45 @@ namespace ts {
         }
     }
 
+    function testConvertToAsyncFunctionFailed(caption: string, text: string, description: DiagnosticMessage) {
+        it(caption, () => {
+            const t = extractTest(text);
+            const selectionRange = t.ranges.get("selection");
+            if (!selectionRange) {
+                throw new Error(`Test ${caption} does not specify selection range`);
+            }
+            const f = {
+                path: "/a.ts",
+                content: t.source
+            };
+            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+            const projectService = projectSystem.createProjectService(host);
+            projectService.openClientFile(f.path);
+            const languageService = projectService.inferredProjects[0].getLanguageService();
+
+            const actions = languageService.getSuggestionDiagnostics(f.path);
+            assert.isUndefined(find(actions, action => action.messageText === description.message));
+        });
+    }
+
     describe("convertToAsyncFunctions", () => {
-        testConvertToAsyncFunctions("convertToAsyncFunction_basic", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_basic", `
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
 }`);
-        testConvertToAsyncFunctions("convertToAsyncFunction_ArrowFunction", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunction", `
 [#|():Promise<void> => {|]
     return fetch('https://typescriptlang.org').then(result => console.log(result));
 }`);
-        testConvertToAsyncFunctions("convertToAsyncFunction_Catch", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_Catch", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }).catch(err => { console.log(err); });
 }`);
-        testConvertToAsyncFunctions("convertToAsyncFunction_CatchAndRej", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_CatchAndRej", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }, rejection => { console.log("rejected:", rejection); }).catch(err => { console.log(err) });
 }`);
-        testConvertToAsyncFunctions("convertToAsyncFunction_CatchAndRejRef", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_CatchAndRejRef", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res, rej).catch(catch_err)
 }
@@ -197,7 +229,7 @@ function rej(rejection){
 function catch_err(err){
     console.log(err);
 }`);
-        testConvertToAsyncFunctions("convertToAsyncFunction_CatchRef", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_CatchRef", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res).catch(catch_err)
 }
@@ -208,34 +240,34 @@ function catch_err(err){
     console.log(err);
 }
 `);
-        testConvertToAsyncFunctions("convertToAsyncFunction_CatchNoBrackets", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_CatchNoBrackets", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => console.log(result)).catch(err => console.log(err));
 }`
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_IgnoreArgs1", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_IgnoreArgs1", `
 function [#|f|](): Promise<void> {
     return fetch('https://typescriptlang.org').then( _ => { console.log("done"); });
 }`
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_IgnoreArgs2", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_IgnoreArgs2", `
 function [#|f|](): Promise<void> {
     return fetch('https://typescriptlang.org').then( () => console.log("done") );
 }`
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_Method", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_Method", `
 class Parser {
     [#|f|]():Promise<void> {
         return fetch('https://typescriptlang.org').then(result => console.log(result));
     }
 }`
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_MultipleCatches", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_MultipleCatches", `
 function [#|f|](): Promise<void> {
     return fetch('https://typescriptlang.org').then(res => console.log(res)).catch(err => console.log("err", err)).catch(err2 => console.log("err2", err2));
 }`
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_MultipleThens", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_MultipleThens", `
 function [#|f|]():Promise<boolean> {
     return fetch('https://typescriptlang.org').then(res).then(res2);
 }
@@ -246,7 +278,7 @@ function res2(result2){
     console.log(result2);
 }`
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_MultipleThensSameVarName", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_MultipleThensSameVarName", `
 function [#|f|]():Promise<boolean> {
     return fetch('https://typescriptlang.org').then(res).then(res2);
 }
@@ -254,33 +286,40 @@ function res(result){
     return result.ok;
 }
 function res2(result){
-    console.log(result);
+    return result.bodyUsed;
 }
 `
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_NoRes", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoRes", `
 function [#|f|]():Promise<void | Response> {
     return fetch('https://typescriptlang.org').then(null, rejection => console.log("rejected:", rejection); );
 }
 `
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_NoSuggestion", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestion", `
 function [#|f|]():Promise<Response> {
     return fetch('https://typescriptlang.org');
 }
 `
         );
-        testConvertToAsyncFunctions("convertToAsyncFunction_PromiseDotAll", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseDotAll", `
 function [#|f|]():Promise<void>{
-    return Promise.all([fetch('http://yahoo.com'), fetch('https://microsoft.com'), fetch('https://youtube.com')]).then(function(vals){
+    return Promise.all([fetch('https://typescriptlang.org'), fetch('https://microsoft.com'), fetch('https://youtube.com')]).then(function(vals){
         vals.forEach(console.log); 
     });
 }
 `
         );
-});
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionNoPromise", `
+        function [#|f|]():void{
+        }`);
+    });
 
-    function testConvertToAsyncFunctions(caption: string, text: string, includeLib?: boolean) {
+    function _testConvertToAsyncFunction(caption: string, text: string, includeLib?: boolean) {
         testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.Convert_to_async_function, includeLib);
+    }
+
+    function _testConvertToAsyncFunctionFailed(caption: string, text: string) {
+        testConvertToAsyncFunctionFailed(caption, text, Diagnostics.Convert_to_async_function);
     }
 }
