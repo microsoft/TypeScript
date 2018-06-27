@@ -4525,9 +4525,17 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer ?
+            return declaration.initializer && !parentDeclarationHasTypeAnnotation(declaration) ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], UnionReduction.Subtype) :
                 type;
+        }
+
+        function parentDeclarationHasTypeAnnotation(binding: BindingElement) {
+            let node: Node = binding;
+            while (node.parent && isBindingPattern(node.parent)) {
+                node = node.parent.parent;
+            }
+            return couldHaveType(node) && !!node.type;
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
