@@ -1697,15 +1697,25 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
-            const refs = getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
-            return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const node = getTouchingPropertyName(sourceFile, position);
+            if (isIdentifier(node) && isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
+                const { openingElement, closingElement } = node.parent.parent;
+                return [openingElement, closingElement].map((node): RenameLocation => ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
+            }
+            else {
+                const refs = getReferences(node, position, { findInStrings, findInComments, isForRename: true });
+                return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
+            }
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
-            return getReferences(fileName, position)!;
+            synchronizeHostData();
+            return getReferences(getTouchingPropertyName(getValidSourceFile(fileName), position), position);
         }
 
-        function getReferences(fileName: string, position: number, options?: FindAllReferences.Options): ReferenceEntry[] | undefined {
+        function getReferences(node: Node, position: number, options?: FindAllReferences.Options): ReferenceEntry[] | undefined {
             synchronizeHostData();
 
             // Exclude default library when renaming as commonly user don't want to change that file.
@@ -1713,7 +1723,7 @@ namespace ts {
                 ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
                 : program.getSourceFiles();
 
-            return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
+            return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, node, position, options);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined {
