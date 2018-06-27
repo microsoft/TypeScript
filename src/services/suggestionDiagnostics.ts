@@ -36,8 +36,8 @@ namespace ts {
                         break;
                     }
 
-                    if(isFunctionLikeDeclaration(node) && !node.body){
-                        break; //break on ambient functions
+                    if (isFunctionLikeDeclaration(node) && !node.body) {
+                        break; // break on ambient functions
                     }
 
                     if (checker.isPromiseLikeType(returnType)) {
@@ -163,7 +163,7 @@ namespace ts {
             }
 
             function hasCallback(child: Node) {
-                if (isCallExpression(child) && isPropertyAccessExpression(child.expression)  &&
+                if (isCallExpression(child) && isPropertyAccessExpression(child.expression) &&
                     (child.expression.name.text === "then" || child.expression.name.text === "catch")) {
                     retStmts.push(node as ReturnStatement);
                 }

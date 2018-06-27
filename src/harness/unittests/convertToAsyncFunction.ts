@@ -120,7 +120,7 @@ namespace ts {
             }
 
             const f = {
-                path: path,
+                path,
                 content: t.source
             };
 
@@ -138,7 +138,7 @@ namespace ts {
                 preferences: defaultPreferences,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(formatOptions)
-            }
+            };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
@@ -152,7 +152,7 @@ namespace ts {
                 data.push(`// ==ORIGINAL==`);
                 data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
                 const changes = action.changes;
-                assert.lengthOf(changes, 1)
+                assert.lengthOf(changes, 1);
 
                 data.push(`// ==ASYNC FUNCTION::${action.description}==`);
                 const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);

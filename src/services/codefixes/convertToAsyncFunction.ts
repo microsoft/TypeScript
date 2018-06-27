@@ -17,12 +17,12 @@ namespace ts.codefix {
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);
 
-        //const stmts: NodeArray<Statement> = (<FunctionBody>funcToConvert.body).statements;
+        // const stmts: NodeArray<Statement> = (<FunctionBody>funcToConvert.body).statements;
         const retStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(funcToConvert);
         for (const stmt of retStmts) {
             forEachChild(stmt, function visit(node: Node) {
                 if (node.kind === SyntaxKind.CallExpression) {
-                    const usedNames: string[] = []
+                    const usedNames: string[] = [];
                     const newNode = parseCallback(node as CallExpression, checker, usedNames);
                     if (newNode) {
                         changes.replaceNodeWithNodes(sourceFile, stmt, newNode);
@@ -60,11 +60,11 @@ namespace ts.codefix {
 
     function parseCatch(node: CallExpression, checker: TypeChecker, usedNames: string[]): Statement[] {
         const func = getSynthesizedDeepClone(node.arguments[0]);
-        let argName = getArgName(func, checker, usedNames);
+        const argName = getArgName(func, checker, usedNames);
 
         const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames));
 
-        let [callbackBody, argNameNew] = getCallbackBody(func, argName, node, checker, usedNames);
+        const [callbackBody, argNameNew] = getCallbackBody(func, argName, node, checker, usedNames);
         const catchClause = createCatchClause(argNameNew, createBlock(callbackBody));
 
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
@@ -74,22 +74,22 @@ namespace ts.codefix {
         const [res, rej] = node.arguments;
 
         // TODO - what if this is a binding pattern and not an Identifier
-        let argNameRes = getArgName(res, checker, usedNames);
+        const argNameRes = getArgName(res, checker, usedNames);
 
         if (rej) {
-            const usedCatchNames: string[] = []
+            const usedCatchNames: string[] = [];
             const argNameRej = getArgName(rej, checker, usedCatchNames);
 
-            let [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames);
+            const [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames);
             const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames, argNameResNew).concat(callbackBody));
 
-            let [callbackBody2, argNameRejNew] = getCallbackBody(rej, argNameRej, node, checker, usedCatchNames, /* isRej */ true);
+            const [callbackBody2, argNameRejNew] = getCallbackBody(rej, argNameRej, node, checker, usedCatchNames, /* isRej */ true);
             const catchClause = createCatchClause(argNameRejNew, createBlock(callbackBody2));
 
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
         else if (res) {
-            let [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames);
+            const [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames);
             return parseCallback(node.expression, checker, usedNames, argNameResNew).concat(callbackBody);
         }
         else {
@@ -99,11 +99,11 @@ namespace ts.codefix {
 
     function parsePromiseCall(node: CallExpression, usedNames: string[], checker: TypeChecker, argName: string): Statement[] {
         let localArgName = argName;
-        if (!localArgName){
+        if (!localArgName) {
             localArgName = getArgName(node, checker, usedNames);
-        } 
+        }
 
-        usedNames.push(localArgName)
+        usedNames.push(localArgName);
 
         const varDecl = createVariableDeclaration(localArgName, /*type*/ undefined, createAwait(node));
         return argName ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(node))];
@@ -134,13 +134,12 @@ namespace ts.codefix {
                 if (!nextDotThen || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
                     return [createNodeArray([createReturn(synthCall)]), argName];
                 }
-    
+
                 const tempArgName = getArgName(nextDotThen.arguments[0], checker, usedNames);
                 usedNames.push(tempArgName);
 
                 argName = getArgName(func, checker, usedNames);
                 synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)]);
-                
                 return [createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(tempArgName, /*type*/ undefined, (createAwait(synthCall)))], NodeFlags.Let)))]), argName];
 
             case SyntaxKind.FunctionDeclaration:
@@ -150,7 +149,7 @@ namespace ts.codefix {
                     return [(<FunctionDeclaration>func).body.statements, argName];
                 }
                 else {
-                    return [createNodeArray([createReturn((<ArrowFunction>func).body as Expression)]), argName]
+                    return [createNodeArray([createReturn((<ArrowFunction>func).body as Expression)]), argName];
                 }
         }
         return [createNodeArray([]), ""];
@@ -163,7 +162,6 @@ namespace ts.codefix {
         return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
     }
 
-    
     function getArgName(funcNode: Node, checker: TypeChecker, usedNames: string[]): string {
         let name;
 
@@ -175,15 +173,15 @@ namespace ts.codefix {
         }
         else if (checker.getTypeAtLocation(funcNode).getCallSignatures().length > 0 && checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters.length > 0) {
             name = checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters[0].name;
-            if (!isArgUsed(name, usedNames)){
+            if (!isArgUsed(name, usedNames)) {
                 return name;
             }
         }
-        else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])){
+        else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
             return (<Identifier>funcNode.arguments[0]).text;
         }
 
-        if (name === undefined || name === "_"){
+        if (name === undefined || name === "_") {
             return undefined;
         }
 
@@ -196,7 +194,7 @@ namespace ts.codefix {
 
 
     function isArgUsed(name: string, usedNames: string[]): boolean {
-        let nameUsed: string[] = usedNames.filter(element => element === name);
+        const nameUsed: string[] = usedNames.filter(element => element === name);
         return nameUsed.length > 0;
     }
 }
