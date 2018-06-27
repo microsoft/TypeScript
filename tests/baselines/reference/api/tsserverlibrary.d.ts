@@ -13119,15 +13119,12 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
-    interface NavtoItem {
+    interface NavtoItem extends FileSpan {
         name: string;
         kind: ScriptElementKind;
         matchKind?: string;
         isCaseSensitive?: boolean;
         kindModifiers?: string;
-        file: string;
-        start: Location;
-        end: Location;
         containerName?: string;
         containerKind?: ScriptElementKind;
     }
