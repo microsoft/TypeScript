@@ -62,7 +62,7 @@ namespace ts.codefix {
         const func = getSynthesizedDeepClone(node.arguments[0]);
         let argName = getArgName(func, checker, usedNames);
 
-        const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames, argName));
+        const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames));
 
         let [callbackBody, argNameNew] = getCallbackBody(func, argName, node, checker, usedNames);
         const catchClause = createCatchClause(argNameNew, createBlock(callbackBody));
@@ -88,9 +88,12 @@ namespace ts.codefix {
 
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
-        else {
+        else if (res) {
             let [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames);
             return parseCallback(node.expression, checker, usedNames, argNameResNew).concat(callbackBody);
+        }
+        else {
+            return parseCallback(node.expression, checker, usedNames);
         }
     }
 
@@ -123,6 +126,9 @@ namespace ts.codefix {
     function getCallbackBody(func: Node, argName: string, parent: CallExpression, checker: TypeChecker, usedNames: string[], isRej = false): [NodeArray<Statement>, string] {
         switch (func.kind) {
             case SyntaxKind.Identifier:
+                if (!argName) {
+                    break;
+                }
                 let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)]);
                 const nextDotThen = getNextDotThen(parent, checker);
                 if (!nextDotThen || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
@@ -147,6 +153,7 @@ namespace ts.codefix {
                     return [createNodeArray([createReturn((<ArrowFunction>func).body as Expression)]), argName]
                 }
         }
+        return [createNodeArray([]), ""];
     }
 
     function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
