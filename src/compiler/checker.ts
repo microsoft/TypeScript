@@ -10633,13 +10633,14 @@ namespace ts {
 
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
                 // If so, reporting the `null` and `undefined` in the type is hardly useful.
-                // First, see if we're even relating an atomic type to a union.
+                // First, see if we're even relating an object type to a union.
                 // Then see if the target is stripped down to a single non-union type.
-                // We actually want to remove null and undefined naively here (rather than getNonNullableType),
-                // since we don't want to end up with a worse error like "`Foo` is not assignable to `NonNullable<T>`"
-                // when dealing with generics.
-                if (target.flags & TypeFlags.Union &&
-                    source.flags & ((TypeFlags.Primitive | TypeFlags.Object) & ~(TypeFlags.Nullable | TypeFlags.Void)) &&
+                // Note
+                //  * We actually want to remove null and undefined naively here (rather than using getNonNullableType),
+                //    since we don't want to end up with a worse error like "`Foo` is not assignable to `NonNullable<T>`"
+                //    when dealing with generics.
+                //  * We also don't deal with primitive source types, since we already halt elaboration below.
+                if (target.flags & TypeFlags.Union && source.flags & TypeFlags.Object &&
                     (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
                     const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
                     if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
