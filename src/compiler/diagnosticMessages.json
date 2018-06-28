@@ -1252,7 +1252,7 @@
         "category": "Error",
         "code": 2366
     },
-    "The types of these values indicate that this condition will always be '{0}'.": {
+    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
         "category": "Error",
         "code": 2367
     },
