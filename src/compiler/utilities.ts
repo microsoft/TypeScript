@@ -4613,26 +4613,30 @@ namespace ts {
         return node.parent;
     }
 
-    export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
+    function getCombinedFlags(node: Node, getFlags: (n: Node) => number): number {
         let n: Node = node;
         if (isBindingElement(n)) {
             n = walkUpBindingElementsAndPatterns(n);
         }
-        let flags = getModifierFlags(n);
+        let flags = getFlags(n);
         if (n.kind === SyntaxKind.VariableDeclaration) {
             n = n.parent;
         }
 
         if (n && n.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= getModifierFlags(n);
+            flags |= getFlags(n);
             n = n.parent;
         }
 
         if (n && n.kind === SyntaxKind.VariableStatement) {
-            flags |= getModifierFlags(n);
+            flags |= getFlags(n);
         }
 
         return flags;
+    }
+
+    export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
+        return getCombinedFlags(node, getModifierFlags);
     }
 
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
@@ -4643,26 +4647,7 @@ namespace ts {
     // list.  By calling this function, all those flags are combined so that the client can treat
     // the node as if it actually had those flags.
     export function getCombinedNodeFlags(node: Node): NodeFlags {
-        let n: Node = node;
-        if (isBindingElement(n)) {
-            n = walkUpBindingElementsAndPatterns(n);
-        }
-
-        let flags = n.flags;
-        if (n.kind === SyntaxKind.VariableDeclaration) {
-            n = n.parent;
-        }
-
-        if (n && n.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= n.flags;
-            n = n.parent;
-        }
-
-        if (n && n.kind === SyntaxKind.VariableStatement) {
-            flags |= n.flags;
-        }
-
-        return flags;
+        return getCombinedFlags(node, n => n.flags);
     }
 
     /**
