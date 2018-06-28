@@ -69,7 +69,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     }
 
     function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {
-        const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
+        const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
         if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) return undefined;
 

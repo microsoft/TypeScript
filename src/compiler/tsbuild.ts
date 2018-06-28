@@ -302,7 +302,8 @@ namespace ts {
         const outputs: string[] = [];
         outputs.push(getOutputJavaScriptFileName(inputFileName, configFile));
         if (configFile.options.declaration) {
-            const dts = outputs.push(getOutputDeclarationFileName(inputFileName, configFile));
+            const dts = getOutputDeclarationFileName(inputFileName, configFile);
+            outputs.push(dts);
             if (configFile.options.declarationMap) {
                 outputs.push(dts + ".map");
             }
@@ -493,10 +494,6 @@ namespace ts {
         function addProject(projectSpecification: string) {
             const fileName = resolvePath(compilerHost.getCurrentDirectory(), projectSpecification);
             const refPath = resolveProjectReferencePath(compilerHost, { path: fileName });
-            if (!refPath) {
-                return buildHost.error(Diagnostics.File_0_does_not_exist, projectSpecification);
-            }
-
             if (!compilerHost.fileExists(refPath)) {
                 return buildHost.error(Diagnostics.File_0_does_not_exist, fileName);
             }

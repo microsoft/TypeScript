@@ -22,15 +22,24 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(39,5): error TS232
 tests/cases/conformance/types/literal/numericLiteralTypes3.ts(40,5): error TS2322: Type '1' is not assignable to type 'B'.
 tests/cases/conformance/types/literal/numericLiteralTypes3.ts(43,5): error TS2322: Type '0' is not assignable to type 'C'.
 tests/cases/conformance/types/literal/numericLiteralTypes3.ts(50,5): error TS2322: Type '3' is not assignable to type 'D'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(54,5): error TS2365: Operator '===' cannot be applied to types '1' and '0'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(56,5): error TS2365: Operator '===' cannot be applied to types '1' and '2'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(57,5): error TS2365: Operator '===' cannot be applied to types '1' and '3'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(58,5): error TS2365: Operator '===' cannot be applied to types 'B' and '0'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(59,5): error TS2365: Operator '===' cannot be applied to types 'B' and '1'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(62,5): error TS2365: Operator '===' cannot be applied to types 'C' and '0'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(69,5): error TS2365: Operator '===' cannot be applied to types 'D' and '3'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(74,5): error TS2365: Operator '===' cannot be applied to types '1' and 'B'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(77,5): error TS2365: Operator '===' cannot be applied to types 'B' and '1'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(54,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '1' and '0'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(56,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '1' and '2'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(57,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '1' and '3'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(58,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types 'B' and '0'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(59,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types 'B' and '1'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(62,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types 'C' and '0'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(69,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types 'D' and '3'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(74,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '1' and 'B'.
+tests/cases/conformance/types/literal/numericLiteralTypes3.ts(77,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types 'B' and '1'.
 tests/cases/conformance/types/literal/numericLiteralTypes3.ts(94,14): error TS2678: Type '1' is not comparable to type '0 | 2 | 4'.
 tests/cases/conformance/types/literal/numericLiteralTypes3.ts(96,14): error TS2678: Type '3' is not comparable to type '0 | 2 | 4'.
 tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS2678: Type '5' is not comparable to type '0 | 2 | 4'.
@@ -132,25 +141,31 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
     function f6(a: A, b: B, c: C, d: D) {
         a === 0;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '1' and '0'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '1' and '0'.
         a === 1;
         a === 2;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '1' and '2'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '1' and '2'.
         a === 3;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '1' and '3'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '1' and '3'.
         b === 0;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'B' and '0'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types 'B' and '0'.
         b === 1;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'B' and '1'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types 'B' and '1'.
         b === 2;
         b === 3;
         c === 0;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'C' and '0'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types 'C' and '0'.
         c === 1;
         c === 2;
         c === 3;
@@ -159,19 +174,22 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
         d === 2;
         d === 3;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'D' and '3'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types 'D' and '3'.
     }
     
     function f7(a: A, b: B, c: C, d: D) {
         a === a;
         a === b;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '1' and 'B'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '1' and 'B'.
         a === c;
         a === d;
         b === a;
         ~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'B' and '1'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types 'B' and '1'.
         b === b;
         b === c;
         b === d;

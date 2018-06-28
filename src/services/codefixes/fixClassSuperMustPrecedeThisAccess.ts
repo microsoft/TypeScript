@@ -33,7 +33,7 @@ namespace ts.codefix {
     }
 
     function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration, readonly superCall: ExpressionStatement } | undefined {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         if (token.kind !== SyntaxKind.ThisKeyword) return undefined;
         const constructor = getContainingFunction(token) as ConstructorDeclaration;
         const superCall = findSuperCall(constructor.body!);

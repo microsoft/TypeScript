@@ -42,7 +42,7 @@ var outside = n => n + 1;
 
 /** @type {Final<{ fantasy }, { heroes }>} */
 var noreturn = (barts, tidus, noctis) => "cecil"
->noreturn : (barts: { fantasy: any; }, tidus: { heroes: any; }, noctis: { heroes: any; } & { fantasy: any; }) => "cecil" | "zidane"
+>noreturn : Final<{ fantasy: any; }, { heroes: any; }>
 >(barts, tidus, noctis) => "cecil" : (barts: { fantasy: any; }, tidus: { heroes: any; }, noctis: { heroes: any; } & { fantasy: any; }) => "cecil"
 >barts : { fantasy: any; }
 >tidus : { heroes: any; }

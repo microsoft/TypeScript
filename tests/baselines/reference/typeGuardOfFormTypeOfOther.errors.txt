@@ -1,15 +1,23 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(21,5): error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(27,5): error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(33,5): error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(21,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(27,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(33,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(40,5): error TS2322: Type 'string | C' is not assignable to type 'C'.
   Type 'string' is not assignable to type 'C'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(43,9): error TS2322: Type 'string | C' is not assignable to type 'string'.
   Type 'C' is not assignable to type 'string'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(46,5): error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(56,5): error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(62,5): error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(68,5): error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,5): error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(46,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(56,5): error TS2367: The types of these values indicate that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(62,5): error TS2367: The types of these values indicate that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(68,5): error TS2367: The types of these values indicate that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: The types of these values indicate that this condition will always be 'true'.
+  Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
 
 
 ==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts (10 errors) ====
@@ -35,7 +43,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     
     if (typeof strOrC === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         c = strOrC; // C
     }
     else {
@@ -43,7 +52,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof numOrC === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         c = numOrC; // C
     }
     else {
@@ -51,7 +61,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof boolOrC === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         c = boolOrC; // C
     }
     else {
@@ -72,7 +83,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     
     if (typeof strOrNumOrBool === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '===' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         let q1: {} = strOrNumOrBool; // {}
     }
     else {
@@ -84,7 +96,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     //  - when false, narrows the type of x by typeof x === s when true.
     if (typeof strOrC !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         var r2: string = strOrC; // string
     }
     else {
@@ -92,7 +105,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof numOrC !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         var r3: number = numOrC; // number
     }
     else {
@@ -100,7 +114,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof boolOrC !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         var r4: boolean = boolOrC; // boolean
     }
     else {
@@ -109,7 +124,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     
     if (typeof strOrNumOrBool !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'true'.
+!!! error TS2367:   Operator '!==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         let q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
     }
     else {

@@ -465,7 +465,7 @@ namespace ts {
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
 
-        let deferredNodes: Node[] | undefined;
+        let deferredNodes: Map<Node> | undefined;
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
         let flowLoopStart = 0;
@@ -4161,7 +4161,7 @@ namespace ts {
                         }
                         const parent = getDeclarationContainer(node);
                         // If the node is not exported or it is not ambient module element (except import declaration)
-                        if (!(getCombinedModifierFlags(node) & ModifierFlags.Export) &&
+                        if (!(getCombinedModifierFlags(node as Declaration) & ModifierFlags.Export) &&
                             !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && parent.flags & NodeFlags.Ambient)) {
                             return isGlobalSourceFile(parent);
                         }
@@ -4525,7 +4525,7 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer ?
+            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], UnionReduction.Subtype) :
                 type;
         }
@@ -8807,7 +8807,7 @@ namespace ts {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getLateBoundSymbol(prop).nameType;
                 if (!type && !isKnownSymbol(prop)) {
-                    const name = getNameOfDeclaration(prop.valueDeclaration);
+                    const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration);
                     type = name && isNumericLiteral(name) ? getLiteralType(+name.text) :
                         name && name.kind === SyntaxKind.ComputedPropertyName && isNumericLiteral(name.expression) ? getLiteralType(+name.expression.text) :
                         getLiteralType(symbolName(prop));
@@ -19931,7 +19931,7 @@ namespace ts {
 
         function getYieldedTypeOfYieldExpression(node: YieldExpression, isAsync: boolean, checkMode?: CheckMode): Type | undefined {
             const errorNode = node.expression || node;
-            const expressionType = node.expression ? checkExpressionCached(node.expression, checkMode) : undefinedWideningType;
+            const expressionType = node.expression ? checkExpression(node.expression, checkMode) : undefinedWideningType;
             // A `yield*` expression effectively yields everything that its operand yields
             const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(expressionType, errorNode, /*allowStringInput*/ false, isAsync) : expressionType;
             return !isAsync ? yieldedType : getAwaitedType(yieldedType, errorNode, node.asteriskToken
@@ -20904,7 +20904,31 @@ namespace ts {
             }
 
             function reportOperatorError() {
-                error(errorNode || operatorToken, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(operatorToken.kind), typeToString(leftType), typeToString(rightType));
+                let err = chainDiagnosticMessages(
+                    /*elaboration*/ undefined,
+                    Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
+                    tokenToString(operatorToken.kind),
+                    typeToString(leftType),
+                    typeToString(rightType)
+                );
+                err = giveBetterPrimaryError(err);
+
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(
+                    errorNode || operatorToken,
+                    err
+                ));
+            }
+
+            function giveBetterPrimaryError(elaboration: DiagnosticMessageChain) {
+                switch (operatorToken.kind) {
+                    case SyntaxKind.EqualsEqualsEqualsToken:
+                    case SyntaxKind.EqualsEqualsToken:
+                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "false");
+                    case SyntaxKind.ExclamationEqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsToken:
+                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "true");
+                    }
+                return elaboration;
             }
         }
 
@@ -22092,7 +22116,7 @@ namespace ts {
             return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
         }
 
-        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: ModifierFlags): ModifierFlags {
+        function getEffectiveDeclarationFlags(n: Declaration, flagsToCheck: ModifierFlags): ModifierFlags {
             let flags = getCombinedModifierFlags(n);
 
             // children of classes (even ambient classes) should not be marked as ambient or export
@@ -23264,7 +23288,7 @@ namespace ts {
                     }
                     else {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
-                        const name = getNameOfDeclaration(local.valueDeclaration);
+                        const name = local.valueDeclaration && getNameOfDeclaration(local.valueDeclaration);
                         if (parameter && name) {
                             if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
                                 addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
@@ -24561,7 +24585,7 @@ namespace ts {
                 }
 
                 const propDeclaration = prop.valueDeclaration;
-                const name = getNameOfDeclaration(propDeclaration);
+                const name = propDeclaration && getNameOfDeclaration(propDeclaration);
 
                 // index is numeric and property name is not valid numeric literal
                 if (indexKind === IndexKind.Number && !(name ? isNumericName(name) : isNumericLiteralName(prop.escapedName))) {
@@ -26090,12 +26114,13 @@ namespace ts {
         // Delaying the type check of the body ensures foo has been assigned a type.
         function checkNodeDeferred(node: Node) {
             if (deferredNodes) {
-                deferredNodes.push(node);
+                const id = "" + getNodeId(node);
+                deferredNodes.set(id, node);
             }
         }
 
         function checkDeferredNodes() {
-            for (const node of deferredNodes!) {
+            deferredNodes!.forEach(node => {
                 switch (node.kind) {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -26117,7 +26142,7 @@ namespace ts {
                         checkJsxElementDeferred(<JsxElement>node);
                         break;
                 }
-            }
+            });
         }
 
         function checkSourceFile(node: SourceFile) {
@@ -26159,7 +26184,7 @@ namespace ts {
                 clear(potentialThisCollisions);
                 clear(potentialNewTargetCollisions);
 
-                deferredNodes = [];
+                deferredNodes = createMap<Node>();
                 forEach(node.statements, checkSourceElement);
 
                 checkDeferredNodes();
