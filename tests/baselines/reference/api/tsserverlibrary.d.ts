@@ -3196,6 +3196,7 @@ declare namespace ts {
         hasSuperCall?: boolean;
         superCall?: SuperCall;
         switchTypes?: Type[];
+        jsxNamespace?: Symbol | false;
     }
     enum TypeFlags {
         Any = 1,
