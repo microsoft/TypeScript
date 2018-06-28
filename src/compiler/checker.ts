@@ -11817,6 +11817,12 @@ namespace ts {
                 !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, globalPromiseType);
         }
 
+        function isPromiseLikeType(type: Type): boolean {
+            const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ false); // this is only called from the language service, so don't report errors if the promise type doesn't exist
+            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalPromiseType ||
+                !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, globalPromiseType);
+        }
+
         function isArrayLikeType(type: Type): boolean {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>

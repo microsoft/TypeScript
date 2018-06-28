@@ -36,12 +36,17 @@ namespace ts.codefix {
     }
 
     function returnsAPromise(node: CallExpression, checker: TypeChecker): boolean {
-        return checker.isPromiseLikeType(checker.getTypeAtLocation(node)) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
+        const nodeType = checker.getTypeAtLocation(node);
+        if (!nodeType) {
+            return false;
+        }
+
+        return checker.isPromiseLikeType(nodeType) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
     }
 
     function parseCallback(node: Expression, checker: TypeChecker, usedNames: string[], argName?: string): Statement[] {
         if (!node) {
-            return;
+            return [];
         }
 
         if (node.kind === SyntaxKind.CallExpression && returnsAPromise(node as CallExpression, checker)) {
@@ -56,9 +61,12 @@ namespace ts.codefix {
         else if (node.kind === SyntaxKind.PropertyAccessExpression) {
             return parseCallback((<PropertyAccessExpression>node).expression, checker, usedNames, argName);
         }
+
+        return [];
     }
 
     function parseCatch(node: CallExpression, checker: TypeChecker, usedNames: string[]): Statement[] {
+        //const func = getSynthesizedDeepClone(node.arguments[0]);
         const func = getSynthesizedDeepClone(node.arguments[0]);
         const argName = getArgName(func, checker, usedNames);
 
@@ -97,7 +105,7 @@ namespace ts.codefix {
         }
     }
 
-    function parsePromiseCall(node: CallExpression, usedNames: string[], checker: TypeChecker, argName: string): Statement[] {
+    function parsePromiseCall(node: CallExpression, usedNames: string[], checker: TypeChecker, argName: string | undefined): Statement[] {
         let localArgName = argName;
         if (!localArgName) {
             localArgName = getArgName(node, checker, usedNames);
@@ -109,7 +117,7 @@ namespace ts.codefix {
         return argName ? [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))] : [createStatement(createAwait(node))];
     }
 
-    function getNextDotThen(node: Expression, checker: TypeChecker): CallExpression {
+    function getNextDotThen(node: Expression, checker: TypeChecker): CallExpression | undefined {
         if (!node || !node.parent) {
             return undefined;
         }
@@ -144,13 +152,12 @@ namespace ts.codefix {
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+                if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
+                    return [func.body.statements, argName];
+                }
+                break;
             case SyntaxKind.ArrowFunction:
-                if ((<FunctionDeclaration>func).body.kind === SyntaxKind.Block) {
-                    return [(<FunctionDeclaration>func).body.statements, argName];
-                }
-                else {
-                    return [createNodeArray([createReturn((<ArrowFunction>func).body as Expression)]), argName];
-                }
+                return [createNodeArray([createReturn((<ArrowFunction>func).body as Expression)]), argName];
         }
         return [createNodeArray([]), ""];
     }
@@ -159,11 +166,18 @@ namespace ts.codefix {
         if (node.expression.kind !== SyntaxKind.PropertyAccessExpression) {
             return false;
         }
-        return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(checker.getTypeAtLocation(node));
+
+        const nodeType = checker.getTypeAtLocation(node);
+        if (!nodeType) {
+            return false;
+        }
+
+        return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(nodeType);
     }
 
     function getArgName(funcNode: Node, checker: TypeChecker, usedNames: string[]): string {
         let name;
+        const funcNodeType = checker.getTypeAtLocation(funcNode);
 
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
             name = (<Identifier>funcNode.parameters[0].name).text;
@@ -171,8 +185,8 @@ namespace ts.codefix {
                 return name;
             }
         }
-        else if (checker.getTypeAtLocation(funcNode).getCallSignatures().length > 0 && checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters.length > 0) {
-            name = checker.getTypeAtLocation(funcNode).getCallSignatures()[0].parameters[0].name;
+        else if (funcNodeType && funcNodeType.getCallSignatures().length > 0 && funcNodeType.getCallSignatures()[0].parameters.length > 0) {
+            name = funcNodeType.getCallSignatures()[0].parameters[0].name;
             if (!isArgUsed(name, usedNames)) {
                 return name;
             }
@@ -182,7 +196,7 @@ namespace ts.codefix {
         }
 
         if (name === undefined || name === "_") {
-            return undefined;
+            return "";
         }
 
         return name + "_" + getArgName.varNameItr;
