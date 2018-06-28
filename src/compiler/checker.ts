@@ -12215,15 +12215,30 @@ namespace ts {
             return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
         }
 
+        function isUnconstrainedOrNulllUndefinedConstrainedTypeParameter(type: Type) {
+            if (!(type.flags & TypeFlags.Instantiable)) return false;
+            const constraint = getBaseConstraintOfType(type);
+            if (!constraint) return true;
+            return maybeTypeOfKind(constraint, TypeFlags.Undefined | TypeFlags.Null);
+        }
+
         function getGlobalNonNullableTypeInstantiation(type: Type) {
+            const filtered = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // If type alias unavailable, at least mimic non-higherorder behavior
             if (!deferredGlobalNonNullableTypeAlias) {
                 deferredGlobalNonNullableTypeAlias = getGlobalSymbol("NonNullable" as __String, SymbolFlags.TypeAlias, /*diagnostic*/ undefined) || unknownSymbol;
             }
             // Use NonNullable global type alias if available to improve quick info/declaration emit
             if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
-                return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
+                // The below check prevents us from making a NonNullable<T> where T can't ever be null or undefined
+                // This feels unnecessesary, as if `T extends Foo`, NonNullable<T> is trivially just `T` (as no
+                // value of T could ever be nullable); but our conditional type logic is lacking here and can't make
+                // that leap (it stays generic to allow for, eg T to be instantiated with `never`, which extends `Foo`
+                // _and_ undefined, thereby choosing a different branch than it would simplify to).
+                if (forEachType(filtered, isUnconstrainedOrNulllUndefinedConstrainedTypeParameter)) {
+                    return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [filtered]);
+                }
             }
-            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higherorder behavior
+            return filtered;
         }
 
         function getNonNullableType(type: Type): Type {
