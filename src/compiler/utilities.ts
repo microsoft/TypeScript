@@ -4614,24 +4614,20 @@ namespace ts {
     }
 
     function getCombinedFlags(node: Node, getFlags: (n: Node) => number): number {
-        let n: Node = node;
-        if (isBindingElement(n)) {
-            n = walkUpBindingElementsAndPatterns(n);
+        if (isBindingElement(node)) {
+            node = walkUpBindingElementsAndPatterns(node);
         }
-        let flags = getFlags(n);
-        if (n.kind === SyntaxKind.VariableDeclaration) {
-            n = n.parent;
+        let flags = getFlags(node);
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
         }
-
-        if (n && n.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= getFlags(n);
-            n = n.parent;
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= getFlags(node);
+            node = node.parent;
         }
-
-        if (n && n.kind === SyntaxKind.VariableStatement) {
-            flags |= getFlags(n);
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= getFlags(node);
         }
-
         return flags;
     }
 
