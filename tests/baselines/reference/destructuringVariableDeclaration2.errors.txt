@@ -5,9 +5,11 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4
   Type '[[boolean]]' is not assignable to type '[[string]]'.
     Type '[boolean]' is not assignable to type '[string]'.
       Type 'boolean' is not assignable to type 'string'.
+tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(19,10): error TS2322: Type 'string[]' is not assignable to type 'number[]'.
+  Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts (2 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts (3 errors) ====
     // The type T associated with a destructuring variable declaration is determined as follows:
     //      If the declaration includes a type annotation, T is that type.
     var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // Error
@@ -36,3 +38,6 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4
     // an initializer expression, the type of the initializer expression is required to be assignable
     // to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
     var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } };  // Error
+             ~~
+!!! error TS2322: Type 'string[]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
