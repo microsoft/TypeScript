@@ -1510,7 +1510,8 @@ namespace ts {
         }
 
         // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
-        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/gm;
+        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/;
+        const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
         const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -1519,10 +1520,14 @@ namespace ts {
             }
             const starts = getLineStarts(mappedFile);
             for (let index = starts.length - 1; index >= 0; index--) {
-                sourceMapCommentRegExp.lastIndex = starts[index];
-                const comment = sourceMapCommentRegExp.exec(mappedFile.text);
+                const lineText = mappedFile.text.substring(starts[index], starts[index + 1]);
+                const comment = sourceMapCommentRegExp.exec(lineText);
                 if (comment) {
                     return comment[1];
+                }
+                // If we see a nonwhitespace/map comment-like line, break, to avoid scanning up the entire file
+                else if (!lineText.match(whitespaceOrMapCommentRegExp)) {
+                    break;
                 }
             }
         }
