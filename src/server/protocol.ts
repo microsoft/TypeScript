@@ -2254,11 +2254,16 @@ namespace ts.server.protocol {
 
     /**
      * Represents additional spans returned with a diagnostic which are relevant to it
-     * Like DiagnosticWithLinePosition, this is provided in two forms:
-     *   - start and length of the span
-     *   - startLocation and endLocation a pair of Location objects storing the start/end line offset of the span
      */
     export interface DiagnosticRelatedInformation {
+        /**
+         * The category of the related information message, e.g. "error", "warning", or "suggestion".
+         */
+        category: string;
+        /**
+         * The code used ot identify the related information
+         */
+        code: number;
         /**
          * Text of related or additional information.
          */
