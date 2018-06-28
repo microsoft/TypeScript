@@ -4997,7 +4997,7 @@ namespace ts.projectSystem {
             assert.isTrue(error2Result.length === 0);
         });
 
-        it("should report semanitc errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
+        it("should report semantic errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
             const jsFile = {
                 path: "/a/jsFile.js",
                 content: `
@@ -5016,10 +5016,10 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0.code);
         });
 
-        it("should report semanitc errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
+        it("should report semantic errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
             const jsconfigFile = {
                 path: "/a/jsconfig.json",
                 content: "{}"
@@ -5043,10 +5043,10 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0.code);
         });
 
-        it("should report semanitc errors for configured js project with checkJs=true and skipLibCheck=true", () => {
+        it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
             const jsconfigFile = {
                 path: "/a/jsconfig.json",
                 content: JSON.stringify({
@@ -5072,7 +5072,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0.code);
         });
     });
 

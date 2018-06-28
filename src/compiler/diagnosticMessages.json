@@ -1252,6 +1252,10 @@
         "category": "Error",
         "code": 2366
     },
+    "The types of these values indicate that this condition will always be '{0}'.": {
+        "category": "Error",
+        "code": 2367
+    },
     "Type parameter name cannot be '{0}'.": {
         "category": "Error",
         "code": 2368
