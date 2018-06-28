@@ -7024,6 +7024,7 @@ namespace ts {
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
             let props: Symbol[] | undefined;
+            let indexTypes: Type[] | undefined;
             const isUnion = containingType.flags & TypeFlags.Union;
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
             // Flags we want to propagate to the result if they exist in all source symbols
@@ -7048,14 +7049,21 @@ namespace ts {
                         }
                     }
                     else if (isUnion) {
-                        checkFlags |= CheckFlags.Partial;
+                        const index = getIndexInfoOfType(type, IndexKind.String) || (isNumericLiteralName(name) && getIndexInfoOfType(type, IndexKind.Number));
+                        if (index) {
+                            checkFlags |= index.isReadonly ? CheckFlags.Readonly : 0;
+                            indexTypes = append(indexTypes, index.type);
+                        }
+                        else {
+                            checkFlags |= CheckFlags.Partial;
+                        }
                     }
                 }
             }
             if (!props) {
                 return undefined;
             }
-            if (props.length === 1 && !(checkFlags & CheckFlags.Partial)) {
+            if (props.length === 1 && !(checkFlags & CheckFlags.Partial) && !indexTypes) {
                 return props[0];
             }
             let declarations: Declaration[] | undefined;
@@ -7086,6 +7094,7 @@ namespace ts {
                 }
                 propTypes.push(type);
             }
+            addRange(propTypes, indexTypes);
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && commonValueDeclaration) {
