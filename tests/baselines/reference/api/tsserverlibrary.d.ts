@@ -6168,8 +6168,8 @@ declare namespace ts {
     function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan;
     function isExternalOrCommonJsModule(file: SourceFile): boolean;
     function isJsonSourceFile(file: SourceFile): file is JsonSourceFile;
-    function isConstEnumDeclaration(node: Node): boolean;
-    function isConst(node: Node): boolean;
+    function isEnumConst(node: EnumDeclaration): boolean;
+    function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean;
     function isLet(node: Node): boolean;
     function isSuperCall(n: Node): n is SuperCall;
     function isImportCall(n: Node): n is ImportCall;

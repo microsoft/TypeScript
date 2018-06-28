@@ -897,13 +897,12 @@ namespace ts {
         return file.scriptKind === ScriptKind.JSON;
     }
 
-    export function isConstEnumDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
+    export function isEnumConst(node: EnumDeclaration): boolean {
+        return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
     }
 
-    export function isConst(node: Node): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Const)
-            || !!(isDeclaration(node) && getCombinedModifierFlags(node) & ModifierFlags.Const);
+    export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
+        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
     }
 
     export function isLet(node: Node): boolean {
@@ -1184,7 +1183,7 @@ namespace ts {
     }
 
     export function isValidESSymbolDeclaration(node: Node): node is VariableDeclaration | PropertyDeclaration | SignatureDeclaration {
-        return isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+        return isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
             isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
                 isPropertySignature(node) && hasReadonlyModifier(node);
     }
