@@ -716,6 +716,10 @@ namespace ts.server {
             throw new Error("cleanupSemanticCache is not available through the server layer.");
         }
 
+        getSourceMapper(): never {
+            return notImplemented();
+        }
+
         dispose(): void {
             throw new Error("dispose is not available through the server layer.");
         }

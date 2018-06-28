@@ -2069,6 +2069,17 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
+        /** @internal */
+        openingProjectForFileIfNecessary(fileName: NormalizedPath, cb: (project: Project) => void): void {
+            const scriptInfo = this.filenameToScriptInfo.get(fileName);
+            const configFileName = scriptInfo ? this.getConfigFileNameForFile(scriptInfo) : this.openClientFileWithNormalizedPath(fileName).configFileName;
+            if (configFileName) {
+                cb(this.getOrCreateConfiguredProject(configFileName).project);
+            }
+            // Don't leave the file open if just opened it.
+            if (!scriptInfo) this.closeClientFile(fileName);
+        }
+
         private findExternalProjectContainingOpenScriptInfo(info: ScriptInfo): ExternalProject | undefined {
             return find(this.externalProjects, proj => {
                 // Ensure project structure is up-to-date to check if info is present in external project
@@ -2077,8 +2088,7 @@ namespace ts.server {
             });
         }
 
-        /** @internal */
-        getOrCreateConfiguredProject(configFileName: NormalizedPath): { readonly project: ConfiguredProject, readonly didCreate: boolean } {
+        private getOrCreateConfiguredProject(configFileName: NormalizedPath): { readonly project: ConfiguredProject, readonly didCreate: boolean } {
             const project = this.findConfiguredProjectByProjectName(configFileName);
             return project ? { project, didCreate: false } : { project: this.createConfiguredProject(configFileName), didCreate: true };
         }

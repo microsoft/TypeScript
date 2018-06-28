@@ -308,10 +308,10 @@ namespace ts.server {
     }
 
     function combineProjectOutputWhileOpeningReferencedProjects<T>(
-        host: ServerHost,
         projects: Projects,
         projectService: ProjectService,
         action: (project: Project) => ReadonlyArray<T>,
+        getLocation: (t: T) => sourcemaps.SourceMappableLocation,
         resultsEqual: (a: T, b: T) => boolean,
     ): T[] {
         const seenProjects = createMap<true>();
@@ -324,17 +324,22 @@ namespace ts.server {
             if (!project) break;
             if (!addToSeen(seenProjects, project.projectName)) continue;
 
-            outputs.push(...action(project));
+            const sourceMapper = project.getLanguageService().getSourceMapper();
 
-            for (const ref of project.getProjectReferences() || emptyArray) {
-                const configFilePath = resolveProjectReferencePath(host, ref);
-                if (host.fileExists(configFilePath)) {
-                    projectsToDo.push(projectService.getOrCreateConfiguredProject(toNormalizedPath(configFilePath)).project);
+            for (const output of action(project)) {
+                if (contains(outputs, output, resultsEqual)) continue;
+
+                const mapsTo = sourceMapper.tryGetMappedLocation(getLocation(output));
+                if (mapsTo) {
+                    projectService.openingProjectForFileIfNecessary(toNormalizedPath(mapsTo.fileName), project => { projectsToDo.push(project); });
+                }
+                else {
+                    outputs.push(output);
                 }
             }
         }
 
-        return deduplicate(outputs, resultsEqual);
+        return outputs;
     }
 
     export interface SessionOptions {
@@ -1636,11 +1641,11 @@ namespace ts.server {
             }
             else {
                 return combineProjectOutputWhileOpeningReferencedProjects<NavigateToItem>(
-                    this.host,
                     this.getProjects(args),
                     this.projectService,
                     project =>
                         project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
+                    item => ({ fileName: item.fileName, position: item.textSpan.start }),
                     navigateToItemIsEqualTo);
             }
 

@@ -8875,10 +8875,8 @@ export const x = 10;`
                 "compilerOptions": {
                     "outDir": "bin",
                 },
-                "references": [
-                    { "path": "../a" }
-                ]
             }`,
+            // Deliberately omitting "references" since shose should not be required to get services.
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
@@ -8915,15 +8913,15 @@ export const x = 10;`
 
             assert.deepEqual(navtoResponse, [
                 {
-                    ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
-                    name: "fnB",
+                    ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
+                    name: "fnA",
                     matchKind: "prefix",
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 },
                 {
-                    ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
-                    name: "fnA",
+                    ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
+                    name: "fnB",
                     matchKind: "prefix",
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",

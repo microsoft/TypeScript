@@ -1129,8 +1129,6 @@ namespace ts {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
-        let sourcemappedFileCache: SourceFileLikeCache;
-
         function log(message: string) {
             if (host.log) {
                 host.log(message);
@@ -1139,6 +1137,8 @@ namespace ts {
 
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+
+        const sourceMapper = getSourceMapper(getCanonicalFileName, currentDirectory, log, host, () => program);
 
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
@@ -1251,7 +1251,7 @@ namespace ts {
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
             // the course of whatever called `synchronizeHostData`
-            sourcemappedFileCache = createSourceFileLikeCache(host);
+            sourceMapper.clearCache();
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
@@ -1503,130 +1503,23 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
-        function toLineColumnOffset(fileName: string, position: number) {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const file = program.getSourceFile(path) || sourcemappedFileCache.get(path)!; // TODO: GH#18217
-            return file.getLineAndCharacterOfPosition(position);
-        }
-
-        // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
-        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/gm;
-        const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
-        function scanForSourcemapURL(fileName: string) {
-            const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
-            if (!mappedFile) {
-                return;
-            }
-            const starts = getLineStarts(mappedFile);
-            for (let index = starts.length - 1; index >= 0; index--) {
-                sourceMapCommentRegExp.lastIndex = starts[index];
-                const comment = sourceMapCommentRegExp.exec(mappedFile.text);
-                if (comment) {
-                    return comment[1];
-                }
-            }
-        }
-
-        function convertDocumentToSourceMapper(file: { sourceMapper?: sourcemaps.SourceMapper }, contents: string, mapFileName: string) {
-            let maps: sourcemaps.SourceMapData | undefined;
-            try {
-                maps = JSON.parse(contents);
-            }
-            catch {
-                // swallow error
-            }
-            if (!maps || !maps.sources || !maps.file || !maps.mappings) {
-                // obviously invalid map
-                return file.sourceMapper = sourcemaps.identitySourceMapper;
-            }
-            return file.sourceMapper = sourcemaps.decode({
-                readFile: s => host.readFile!(s), // TODO: GH#18217
-                fileExists: s => host.fileExists!(s), // TODO: GH#18217
-                getCanonicalFileName,
-                log,
-            }, mapFileName, maps, program, sourcemappedFileCache);
-        }
-
-        function getSourceMapper(fileName: string, file: { sourceMapper?: sourcemaps.SourceMapper }) {
-            if (!host.readFile || !host.fileExists) {
-                return file.sourceMapper = sourcemaps.identitySourceMapper;
-            }
-            if (file.sourceMapper) {
-                return file.sourceMapper;
-            }
-            let mapFileName = scanForSourcemapURL(fileName);
-            if (mapFileName) {
-                const match = base64UrlRegExp.exec(mapFileName);
-                if (match) {
-                    if (match[1]) {
-                        const base64Object = match[1];
-                        return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
-                    }
-                    // Not a data URL we can parse, skip it
-                    mapFileName = undefined;
-                }
-            }
-            const possibleMapLocations: string[] = [];
-            if (mapFileName) {
-                possibleMapLocations.push(mapFileName);
-            }
-            possibleMapLocations.push(fileName + ".map");
-            for (const location of possibleMapLocations) {
-                const mapPath = toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
-                if (host.fileExists(mapPath)) {
-                    return convertDocumentToSourceMapper(file, host.readFile(mapPath)!, mapPath); // TODO: GH#18217
-                }
-            }
-            return file.sourceMapper = sourcemaps.identitySourceMapper;
-        }
-
-        function makeGetTargetOfMappedPosition<TIn>(
-            extract: (original: TIn) => sourcemaps.SourceMappableLocation,
-            create: (result: sourcemaps.SourceMappableLocation, unmapped: TIn, original: TIn) => TIn
-        ): (input: TIn) => TIn {
-            return function getTargetOfMappedPosition(input, original = input): TIn {
-                const info = extract(input);
-                if (isDeclarationFileName(info.fileName)) {
-                    let file: SourceFileLike | undefined = program.getSourceFile(info.fileName);
-                    if (!file) {
-                        const path = toPath(info.fileName, currentDirectory, getCanonicalFileName);
-                        file = sourcemappedFileCache.get(path);
-                    }
-                    if (!file) {
-                        return input;
-                    }
-                    const mapper = getSourceMapper(info.fileName, file);
-                    const newLoc = mapper.getOriginalPosition(info);
-                    if (newLoc === info) return input;
-                    return getTargetOfMappedPosition(create(newLoc, input, original), original);
-                }
-                return input;
-            };
-        }
-
-        function isMappedDeclarationFile(sourceFile: SourceFile): boolean {
-            return sourceFile.isDeclarationFile && getSourceMapper(sourceFile.fileName, sourceFile) !== sourcemaps.identitySourceMapper;
-        }
-
-        const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
-            (info: DefinitionInfo) => ({ fileName: info.fileName, position: info.textSpan.start }),
-            (newLoc, info, original) => ({
-                containerKind: info.containerKind,
-                containerName: info.containerName,
-                fileName: newLoc.fileName,
-                kind: info.kind,
-                name: info.name,
-                textSpan: {
-                    start: newLoc.position,
-                    length: info.textSpan.length
-                },
-                originalFileName: original.fileName,
-                originalTextSpan: original.textSpan
-            })
-        );
-
         function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo> | undefined): DefinitionInfo[] | undefined {
-            return map(infos, getTargetOfMappedDeclarationInfo);
+            return map(infos, info => {
+                const newLoc = sourceMapper.tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
+                return !newLoc ? info : {
+                    containerKind: info.containerKind,
+                    containerName: info.containerName,
+                    fileName: newLoc.fileName,
+                    kind: info.kind,
+                    name: info.name,
+                    textSpan: {
+                        start: newLoc.position,
+                        length: info.textSpan.length
+                    },
+                    originalFileName: info.fileName,
+                    originalTextSpan: info.textSpan,
+                };
+            });
         }
 
         /// Goto definition
@@ -1656,23 +1549,21 @@ namespace ts {
 
         /// Goto implementation
 
-        const getTargetOfMappedImplementationLocation = makeGetTargetOfMappedPosition(
-            (info: ImplementationLocation) => ({ fileName: info.fileName, position: info.textSpan.start }),
-            (newLoc, info) => ({
-                fileName: newLoc.fileName,
-                kind: info.kind,
-                displayParts: info.displayParts,
-                textSpan: {
-                    start: newLoc.position,
-                    length: info.textSpan.length
-                },
-                originalFileName: info.fileName,
-                originalTextSpan: info.textSpan
-            })
-        );
-
         function getTargetOfMappedImplementationLocations(infos: ReadonlyArray<ImplementationLocation> | undefined): ImplementationLocation[] | undefined {
-            return map(infos, d => getTargetOfMappedImplementationLocation(d));
+            return map(infos, info => {
+                const newLoc = sourceMapper.tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
+                return !newLoc ? info : {
+                    fileName: newLoc.fileName,
+                    kind: info.kind,
+                    displayParts: info.displayParts,
+                    textSpan: {
+                        start: newLoc.position,
+                        length: info.textSpan.length
+                    },
+                    originalFileName: info.fileName,
+                    originalTextSpan: info.textSpan,
+                };
+            });
         }
 
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined {
@@ -1736,9 +1627,7 @@ namespace ts {
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
             synchronizeHostData();
-            // Don't include `.d.ts` files that are declarations for other projects,
-            // since in session.ts we will be getting navigateTo items for those projects anyway.
-            const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles().filter(f => !isMappedDeclarationFile(f));
+            const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
             return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
@@ -2289,7 +2178,8 @@ namespace ts {
             getProgram,
             getApplicableRefactors,
             getEditsForRefactor,
-            toLineColumnOffset
+            toLineColumnOffset: sourceMapper.toLineColumnOffset,
+            getSourceMapper: () => sourceMapper,
         };
     }
 
