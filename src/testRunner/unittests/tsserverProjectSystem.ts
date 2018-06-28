@@ -4999,7 +4999,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicates_that_this_condition_will_always_be_0.code);
+            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0.code);
         });
 
         it("should report semantic errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
@@ -5026,7 +5026,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicates_that_this_condition_will_always_be_0.code);
+            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0.code);
         });
 
         it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
@@ -5055,7 +5055,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicates_that_this_condition_will_always_be_0.code);
+            assert.equal(errorResult[0].code, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0.code);
         });
     });
 

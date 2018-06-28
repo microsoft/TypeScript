@@ -20903,10 +20903,10 @@ namespace ts {
                 switch (operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsToken:
-                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicates_that_this_condition_will_always_be_0, "false");
+                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "false");
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicates_that_this_condition_will_always_be_0, "true");
+                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "true");
                     }
                 return elaboration;
             }
