@@ -39,13 +39,13 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(124,14): error TS2345: 
   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(128,5): error TS2322: Type '{ a: string; }' is not assignable to type 'T2'.
   Types of property 'a' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(129,5): error TS2322: Type '{ a: string; }' is not assignable to type 'Partial<T2>'.
   Types of property 'a' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,5): error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
   Types of property 'a' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,16): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
   Type 'T' is not assignable to type 'symbol'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: Type 'P' cannot be used to index type 'T'.
@@ -242,17 +242,17 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: 
         ~~
 !!! error TS2322: Type '{ a: string; }' is not assignable to type 'T2'.
 !!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string' is not assignable to type 'number | undefined'.
     let x2: Partial<T2> = { a: 'no' }; // Error
         ~~
 !!! error TS2322: Type '{ a: string; }' is not assignable to type 'Partial<T2>'.
 !!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string' is not assignable to type 'number | undefined'.
     let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
         ~~
 !!! error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
 !!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string' is not assignable to type 'number | undefined'.
     
     // Repro from #13044
     

@@ -3,7 +3,7 @@ tests/cases/conformance/salsa/a.js(4,5): error TS7008: Member 'unknowable' impli
 tests/cases/conformance/salsa/a.js(5,5): error TS7008: Member 'empty' implicitly has an 'any[]' type.
 tests/cases/conformance/salsa/a.js(25,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 tests/cases/conformance/salsa/a.js(25,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
-tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not assignable to type 'number'.
+tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not assignable to type 'number | undefined'.
 
 
 ==== tests/cases/conformance/salsa/a.js (6 errors) ====
@@ -55,7 +55,7 @@ tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not as
         b = undefined
         b = 'error'
         ~
-!!! error TS2322: Type '"error"' is not assignable to type 'number'.
+!!! error TS2322: Type '"error"' is not assignable to type 'number | undefined'.
     
         // l should be any[]
         l.push(1)
