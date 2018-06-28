@@ -129,13 +129,8 @@ namespace ts.server {
         project: Project;
     }
 
-    function allEditsBeforePos(edits: TextChange[], pos: number) {
-        for (const edit of edits) {
-            if (textSpanEnd(edit.span) >= pos) {
-                return false;
-            }
-        }
-        return true;
+    function allEditsBeforePos(edits: ReadonlyArray<TextChange>, pos: number): boolean {
+        return edits.every(edit => textSpanEnd(edit.span) < pos);
     }
 
     // CommandNames used to be exposed before TS 2.4 as a namespace

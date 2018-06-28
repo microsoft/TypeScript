@@ -2439,7 +2439,7 @@ namespace ts.server.protocol {
     /**
      * An item found in a navto response.
      */
-    export interface NavtoItem {
+    export interface NavtoItem extends FileSpan {
         /**
          * The symbol's name.
          */
@@ -2464,21 +2464,6 @@ namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers?: string;
-
-        /**
-         * The file in which the symbol is found.
-         */
-        file: string;
-
-        /**
-         * The location within file at which the symbol is found.
-         */
-        start: Location;
-
-        /**
-         * One past the last character of the symbol.
-         */
-        end: Location;
 
         /**
          * Name of symbol's container symbol (if any); for example,

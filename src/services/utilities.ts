@@ -419,6 +419,10 @@ namespace ts {
         return startEndContainsRange(r1.pos, r1.end, r2);
     }
 
+    export function rangeContainsRangeExclusive(r1: TextRange, r2: TextRange): boolean {
+        return rangeContainsPositionExclusive(r1, r2.pos) && rangeContainsPositionExclusive(r1, r2.end);
+    }
+
     export function rangeContainsPosition(r: TextRange, pos: number): boolean {
         return r.pos <= pos && pos <= r.end;
     }
@@ -653,38 +657,29 @@ namespace ts {
      * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, /*includeJsDocComment*/ true, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
+        return getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
     }
 
     /**
      * Returns the token if position is in [start, end).
      * If position === end, returns the preceding token if includeItemAtEndPosition(previousToken) === true
      */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false, includeJsDocComment);
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition = false): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, includeEndPosition, includeJsDocComment);
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, /*includeEndPosition*/ false);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
-            if (isToken(current)) {
-                // exit early
-                return current;
-            }
-
             // find the child that contains 'position'
             for (const child of current.getChildren()) {
-                if (!includeJsDocComment && isJSDocNode(child)) {
-                    continue;
-                }
-
-                const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, includeJsDocComment);
+                const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, /*includeJsDoc*/ true);
                 if (start > position) {
                     // If this child begins after position, then all subsequent children will as well.
                     break;
@@ -718,7 +713,7 @@ namespace ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node | undefined {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        const tokenAtPosition = getTokenAtPosition(file, position, /*includeJsDocComment*/ false);
+        const tokenAtPosition = getTokenAtPosition(file, position);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -756,7 +751,7 @@ namespace ts {
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node | undefined {
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
         const result = find(startNode || sourceFile);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
@@ -775,7 +770,7 @@ namespace ts {
                 // we need to find the last token in a previous child.
                 // 2) `position` is within the same span: we recurse on `child`.
                 if (position < child.end) {
-                    const start = child.getStart(sourceFile, includeJsDoc);
+                    const start = child.getStart(sourceFile, /*includeJsDoc*/ !excludeJsdoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         !nodeHasTokens(child, sourceFile) ||
@@ -861,7 +856,7 @@ namespace ts {
      * returns true if the position is in between the open and close elements of an JSX expression.
      */
     export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, position);
 
         if (!token) {
             return false;
@@ -901,7 +896,7 @@ namespace ts {
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, position);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
@@ -1037,18 +1032,9 @@ namespace ts {
         return !!formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false, /*precedingToken*/ undefined, tokenAtPosition, predicate);
     }
 
-    export function hasDocComment(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-
-        // First, we have to see if this position actually landed in a comment.
-        const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
-
-        return forEach(commentRanges, jsDocPrefix);
-
-        function jsDocPrefix(c: CommentRange): boolean {
-            const text = sourceFile.text;
-            return text.length >= c.pos + 3 && text[c.pos] === "/" && text[c.pos + 1] === "*" && text[c.pos + 2] === "*";
-        }
+    export function hasDocComment(sourceFile: SourceFile, position: number): boolean {
+        const token = getTokenAtPosition(sourceFile, position);
+        return !!findAncestor(token, isJSDoc);
     }
 
     function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
@@ -1058,7 +1044,7 @@ namespace ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        const flags = getCombinedModifierFlags(node);
+        const flags = isDeclaration(node) ? getCombinedModifierFlags(node) : ModifierFlags.None;
         const result: string[] = [];
 
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
@@ -1354,7 +1340,13 @@ namespace ts {
         return getPropertySymbolsFromBaseTypes(memberSymbol.parent!, memberSymbol.name, checker, _ => true) || false;
     }
 
-    export class NodeSet {
+    export interface ReadonlyNodeSet {
+        has(node: Node): boolean;
+        forEach(cb: (node: Node) => void): void;
+        some(pred: (node: Node) => boolean): boolean;
+    }
+
+    export class NodeSet implements ReadonlyNodeSet {
         private map = createMap<Node>();
 
         add(node: Node): void {

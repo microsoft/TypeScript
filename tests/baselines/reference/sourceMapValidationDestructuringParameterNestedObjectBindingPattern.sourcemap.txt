@@ -88,17 +88,23 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 ---
 >>>function foo1(_a) {
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
-2 >function foo1(
-3 >              { skills: { primary: primaryA, secondary: secondaryA } }: Robot
+2 >function 
+3 >         foo1
+4 >             (
+5 >              { skills: { primary: primaryA, secondary: secondaryA } }: Robot
 1 >Emitted(2, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(2, 15) Source(13, 15) + SourceIndex(0)
-3 >Emitted(2, 17) Source(13, 78) + SourceIndex(0)
+2 >Emitted(2, 10) Source(13, 10) + SourceIndex(0)
+3 >Emitted(2, 14) Source(13, 14) + SourceIndex(0)
+4 >Emitted(2, 15) Source(13, 15) + SourceIndex(0)
+5 >Emitted(2, 17) Source(13, 78) + SourceIndex(0)
 ---
 >>>    var _b = _a.skills, primaryA = _b.primary, secondaryA = _b.secondary;
 1->^^^^^^^^
@@ -159,16 +165,22 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 ---
 >>>function foo2(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >function foo2(
-3 >              { name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot
+2 >function 
+3 >         foo2
+4 >             (
+5 >              { name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot
 1->Emitted(6, 1) Source(16, 1) + SourceIndex(0)
-2 >Emitted(6, 15) Source(16, 15) + SourceIndex(0)
-3 >Emitted(6, 17) Source(16, 91) + SourceIndex(0)
+2 >Emitted(6, 10) Source(16, 10) + SourceIndex(0)
+3 >Emitted(6, 14) Source(16, 14) + SourceIndex(0)
+4 >Emitted(6, 15) Source(16, 15) + SourceIndex(0)
+5 >Emitted(6, 17) Source(16, 91) + SourceIndex(0)
 ---
 >>>    var nameC = _a.name, _b = _a.skills, primaryB = _b.primary, secondaryB = _b.secondary;
 1->^^^^^^^^
@@ -235,16 +247,22 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 ---
 >>>function foo3(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^->
 1->
   >
-2 >function foo3(
-3 >              { skills }: Robot
+2 >function 
+3 >         foo3
+4 >             (
+5 >              { skills }: Robot
 1->Emitted(10, 1) Source(19, 1) + SourceIndex(0)
-2 >Emitted(10, 15) Source(19, 15) + SourceIndex(0)
-3 >Emitted(10, 17) Source(19, 32) + SourceIndex(0)
+2 >Emitted(10, 10) Source(19, 10) + SourceIndex(0)
+3 >Emitted(10, 14) Source(19, 14) + SourceIndex(0)
+4 >Emitted(10, 15) Source(19, 15) + SourceIndex(0)
+5 >Emitted(10, 17) Source(19, 32) + SourceIndex(0)
 ---
 >>>    var skills = _a.skills;
 1->^^^^^^^^

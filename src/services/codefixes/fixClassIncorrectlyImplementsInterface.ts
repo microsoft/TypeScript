@@ -29,7 +29,7 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false)));
+        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)));
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {

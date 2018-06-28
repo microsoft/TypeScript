@@ -84,13 +84,13 @@
         "q": "latest",
         "remove-internal": "^2.9.2",
         "run-sequence": "latest",
-        "sorcery": "latest",
         "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
         "tslint": "latest",
         "typescript": "next",
         "vinyl": "latest",
+        "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"
     },
     "scripts": {
