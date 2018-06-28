@@ -240,7 +240,7 @@ namespace ts.codefix {
          */
         const hasStringInitializer = some(enumDeclaration.members, member => {
             const type = checker.getTypeAtLocation(member);
-            return !!(type && type.flags & (TypeFlags.StringLike | TypeFlags.Enum));
+            return !!(type && type.flags & TypeFlags.StringLike);
         });
 
         const enumMember = createEnumMember(token, hasStringInitializer ? createStringLiteral(token.text) : undefined);
