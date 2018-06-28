@@ -20884,7 +20884,31 @@ namespace ts {
             }
 
             function reportOperatorError() {
-                error(errorNode || operatorToken, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(operatorToken.kind), typeToString(leftType), typeToString(rightType));
+                let err = chainDiagnosticMessages(
+                    /*elaboration*/ undefined,
+                    Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
+                    tokenToString(operatorToken.kind),
+                    typeToString(leftType),
+                    typeToString(rightType)
+                );
+                err = giveBetterPrimaryError(err);
+
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(
+                    errorNode || operatorToken,
+                    err
+                ));
+            }
+
+            function giveBetterPrimaryError(elaboration: DiagnosticMessageChain) {
+                switch (operatorToken.kind) {
+                    case SyntaxKind.EqualsEqualsEqualsToken:
+                    case SyntaxKind.EqualsEqualsToken:
+                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "false");
+                    case SyntaxKind.ExclamationEqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsToken:
+                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "true");
+                    }
+                return elaboration;
             }
         }
 

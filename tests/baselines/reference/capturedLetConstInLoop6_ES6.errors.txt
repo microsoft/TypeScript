@@ -1,7 +1,11 @@
-tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(147,9): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(150,9): error TS2365: Operator '==' cannot be applied to types '0' and '2'.
-tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(194,9): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(197,9): error TS2365: Operator '==' cannot be applied to types '0' and '2'.
+tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(147,9): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '==' cannot be applied to types '0' and '1'.
+tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(150,9): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '==' cannot be applied to types '0' and '2'.
+tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(194,9): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '==' cannot be applied to types '0' and '1'.
+tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(197,9): error TS2367: The types of these values indicate that this condition will always be 'false'.
+  Operator '==' cannot be applied to types '0' and '2'.
 
 
 ==== tests/cases/compiler/capturedLetConstInLoop6_ES6.ts (4 errors) ====
@@ -153,12 +157,14 @@ tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(197,9): error TS2365: Operat
         (() => x);
         if (x == 1) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
             break;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '2'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '==' cannot be applied to types '0' and '2'.
             continue;
         }
     }
@@ -204,12 +210,14 @@ tests/cases/compiler/capturedLetConstInLoop6_ES6.ts(197,9): error TS2365: Operat
         (() => x + y);
         if (x == 1) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
             break;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '2'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
+!!! error TS2367:   Operator '==' cannot be applied to types '0' and '2'.
             continue;
         }
     }
