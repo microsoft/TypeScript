@@ -1,6 +1,6 @@
-tests/cases/compiler/capturedLetConstInLoop5.ts(174,13): error TS2367: The types of these values indicates that this condition will always be 'false'.
+tests/cases/compiler/capturedLetConstInLoop5.ts(174,13): error TS2367: The types of these values indicate that this condition will always be 'false'.
   Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop5.ts(229,13): error TS2367: The types of these values indicates that this condition will always be 'false'.
+tests/cases/compiler/capturedLetConstInLoop5.ts(229,13): error TS2367: The types of these values indicate that this condition will always be 'false'.
   Operator '==' cannot be applied to types '0' and '1'.
 
 
@@ -180,7 +180,7 @@ tests/cases/compiler/capturedLetConstInLoop5.ts(229,13): error TS2367: The types
             (() => x + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
 !!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
                 return;
             }
@@ -238,7 +238,7 @@ tests/cases/compiler/capturedLetConstInLoop5.ts(229,13): error TS2367: The types
             (() => x + y + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
 !!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
                 return;
             }

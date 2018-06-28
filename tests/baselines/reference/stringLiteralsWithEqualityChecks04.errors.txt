@@ -1,6 +1,6 @@
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts(16,5): error TS2367: The types of these values indicates that this condition will always be 'false'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts(16,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
   Operator '==' cannot be applied to types '"foo"' and '"bar"'.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts(25,5): error TS2367: The types of these values indicates that this condition will always be 'true'.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts(25,5): error TS2367: The types of these values indicate that this condition will always be 'true'.
   Operator '!=' cannot be applied to types '"foo"' and '"bar"'.
 
 
@@ -22,7 +22,7 @@ tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts(25,5
     b = y == "foo";
     b = "foo" == "bar";
         ~~~~~~~~~~~~~~
-!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
 !!! error TS2367:   Operator '==' cannot be applied to types '"foo"' and '"bar"'.
     b = "bar" == x;
     b = x == "bar";
@@ -34,7 +34,7 @@ tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts(25,5
     b = y != "foo";
     b = "foo" != "bar";
         ~~~~~~~~~~~~~~
-!!! error TS2367: The types of these values indicates that this condition will always be 'true'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'true'.
 !!! error TS2367:   Operator '!=' cannot be applied to types '"foo"' and '"bar"'.
     b = "bar" != x;
     b = x != "bar";

@@ -1,4 +1,4 @@
-tests/cases/conformance/types/union/discriminatedUnionTypes1.ts(89,9): error TS2367: The types of these values indicates that this condition will always be 'false'.
+tests/cases/conformance/types/union/discriminatedUnionTypes1.ts(89,9): error TS2367: The types of these values indicate that this condition will always be 'false'.
   Operator '===' cannot be applied to types '"A" | "B" | "C" | "D"' and '"X"'.
 
 
@@ -93,7 +93,7 @@ tests/cases/conformance/types/union/discriminatedUnionTypes1.ts(89,9): error TS2
     function f3(m: Message) {
         if (m.kind === "X") {
             ~~~~~~~~~~~~~~
-!!! error TS2367: The types of these values indicates that this condition will always be 'false'.
+!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
 !!! error TS2367:   Operator '===' cannot be applied to types '"A" | "B" | "C" | "D"' and '"X"'.
             m;  // never
         }
