@@ -427,10 +427,10 @@ namespace ts.projectSystem {
             return { line: x.line + 1, offset: x.character + 1 };
         };
     }
-    function protocolTextSpanFromSubstring(str: string, substring: string): protocol.TextSpan {
+    function protocolTextSpanFromSubstring(str: string, substring: string, length = substring.length): protocol.TextSpan {
         const span = textSpanFromSubstring(str, substring);
         const toLocation = protocolToLocation(str);
-        return { start: toLocation(span.start), end: toLocation(span.start + span.length) };
+        return { start: toLocation(span.start), end: toLocation(span.start + length) };
     }
     function textSpanFromSubstring(str: string, substring: string): TextSpan {
         const start = str.indexOf(substring);
@@ -494,6 +494,10 @@ namespace ts.projectSystem {
             command,
             arguments: args
         };
+    }
+
+    export function executeSessionRequest<TRequest extends protocol.Request, TResponse extends protocol.Response>(session: server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
+        return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
     }
 
     export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
@@ -8851,7 +8855,7 @@ export const x = 10;`
     function makeSampleProjects() {
         const aTs: File = {
             path: "/a/a.ts",
-            content: "export function fnA() {}",
+            content: "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};",
         };
         const compilerOptions: CompilerOptions = {
             outDir: "bin",
@@ -8862,14 +8866,22 @@ export const x = 10;`
         const configContent = JSON.stringify({ compilerOptions });
         const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
 
+        const aDtsMapContent: SourceMapSection = {
+            version: 3,
+            file: "a.d.ts",
+            sourceRoot: "",
+            sources: ["../a.ts"],
+            names: [],
+            mappings: "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
+        };
         const aDtsMap: File = {
             path: "/a/bin/a.d.ts.map",
-            content: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}',
+            content: JSON.stringify(aDtsMapContent),
         };
         const aDts: File = {
             path: "/a/bin/a.d.ts",
             // Need to mangle the sourceMappingURL part or it breaks the build
-            content: `export declare function fnA(): void;\n//# source${""}MappingURL=a.d.ts.map`,
+            content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
         };
 
         const bTs: File = {
@@ -8878,9 +8890,17 @@ export const x = 10;`
         };
         const bTsconfig: File = { path: "/b/tsconfig.json", content: configContent };
 
+        const bDtsMapContent: SourceMapSection = {
+            version: 3,
+            file: "b.d.ts",
+            sourceRoot: "",
+            sources: ["../b.ts"],
+            names: [],
+            mappings: "AAAA,wBAAgB,GAAG,SAAK",
+        };
         const bDtsMap: File = {
             path: "/b/bin/b.d.ts.map",
-            content: '{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["../b.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}',
+            content: JSON.stringify(bDtsMapContent),
         };
         const bDts: File = {
             // Need to mangle the sourceMappingURL part or it breaks the build
@@ -8890,7 +8910,7 @@ export const x = 10;`
 
         const userTs: File = {
             path: "/user/user.ts",
-            content: 'import { fnA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); }',
+            content: 'import { fnA, instanceA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
         };
         const userTsconfig: File = {
             path: "/b/tsconfig.json",
@@ -8907,40 +8927,50 @@ export const x = 10;`
         // Testing what happens if we delete the original sources.
         host.removeFile(bTs.path);
 
+        openFilesForSession([userTs], session);
+
         return { session, aTs, bDts, userTs };
     }
 
     describe("tsserverProjectSystem project references", () => {
         it("goToDefinition", () => {
             const { session, aTs, userTs } = makeSampleProjects();
-            openFilesForSession([userTs], session);
+            const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        });
 
-            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
-            const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
+        it("getDefinitionAndBoundSpan", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, {
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA()", "fnA".length),
+                definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
+            });
+        });
 
-            assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        it("goToType", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.TypeDefinitionRequest, protocol.TypeDefinitionResponse>(session, protocol.CommandTypes.TypeDefinition, protocolFileLocationFromSubstring(userTs, "instanceA"));
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "IfaceA")]);
+        });
+
+        it("goToImplementation", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.ImplementationRequest, protocol.ImplementationResponse>(session, protocol.CommandTypes.Implementation, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
         });
 
         it("goToDefinition -- target does not exist", () => {
             const { session, bDts, userTs } = makeSampleProjects();
-            openFilesForSession([userTs], session);
-
-            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
-            const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
-
+            const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
             // bTs does not exist, so stick with bDts
-            assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(bDts, "fnB")]);
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(bDts, "fnB")]);
         });
 
         it("navigateTo", () => {
             const { session, aTs, bDts, userTs } = makeSampleProjects();
-
-            openFilesForSession([userTs], session);
-
-            const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
-            const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
-
-            assert.deepEqual(navtoResponse, [
+            const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
+            assert.deepEqual(response, [
                 {
                     ...protocolFileSpanFromSubstring(bDts, "export declare function fnB(): void;"),
                     name: "fnB",
@@ -8949,7 +8979,7 @@ export const x = 10;`
                     kindModifiers: "export,declare",
                 },
                 {
-                    ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { fnA(); fnB(); }"),
+                    ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { fnA(); fnB(); instanceA; }"),
                     name: "fnUser",
                     matchKind: "prefix",
                     kind: ScriptElementKind.functionElement,

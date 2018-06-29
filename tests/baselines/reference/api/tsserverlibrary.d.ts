@@ -8817,6 +8817,16 @@ declare namespace ts {
         extendedDiagnostics?: boolean;
     }
     function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter, compilerOptions?: SourceMapOptions): SourceMapWriter;
+    interface SourceMapSection {
+        version: 3;
+        file: string;
+        sourceRoot?: string;
+        sources: string[];
+        names?: string[];
+        mappings: string;
+        sourcesContent?: (string | null)[];
+        sections?: undefined;
+    }
 }
 declare namespace ts {
     interface CommentWriter {
@@ -12600,6 +12610,12 @@ declare namespace ts.server.protocol {
     }
     interface DefinitionRequest extends FileLocationRequest {
         command: CommandTypes.Definition;
+    }
+    interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
+        readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+    interface DefinitionAndBoundSpanResponse extends Response {
+        readonly body: DefinitionInfoAndBoundSpan;
     }
     interface TypeDefinitionRequest extends FileLocationRequest {
         command: CommandTypes.TypeDefinition;
