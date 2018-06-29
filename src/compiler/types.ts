@@ -3047,10 +3047,6 @@ namespace ts {
          */
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ isPromiseLikeType(type: Type): boolean;
-<<<<<<< HEAD
-=======
-
->>>>>>> 4c82130bb6... Fixed globalPromiseType bug
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(location?: Node): string;

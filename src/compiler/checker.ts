@@ -420,7 +420,6 @@ namespace ts {
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
         let globalArrayType: GenericType;
-        let globalPromiseType: GenericType;
         let globalReadonlyArrayType: GenericType;
         let globalStringType: ObjectType;
         let globalNumberType: ObjectType;
@@ -11810,11 +11809,6 @@ namespace ts {
 
         function isArrayType(type: Type): boolean {
             return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalArrayType;
-        }
-
-        function isPromiseLikeType(type: Type): boolean {
-            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalPromiseType /*|| (<TypeReference>type).target === globalReadonlyArrayType)*/ ||
-                !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, globalPromiseType);
         }
 
         function isPromiseLikeType(type: Type): boolean {
@@ -27041,7 +27035,6 @@ namespace ts {
             getSymbolLinks(unknownSymbol).type = unknownType;
 
             // Initialize special types
-            globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
             globalArrayType = getGlobalType("Array" as __String, /*arity*/ 1, /*reportErrors*/ true);
             globalObjectType = getGlobalType("Object" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalFunctionType = getGlobalType("Function" as __String, /*arity*/ 0, /*reportErrors*/ true);
