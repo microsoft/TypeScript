@@ -845,7 +845,7 @@ namespace ts.server {
                 configFileExistenceInfo.exists = false;
                 this.removeProject(project);
 
-                // Reload the configured projects for the open files in the map as they are affectected by this config file
+                // Reload the configured projects for the open files in the map as they are affected by this config file
                 // Since the configured project was deleted, we want to reload projects for all the open files including files
                 // that are not root of the inferred project
                 this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
