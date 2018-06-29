@@ -48,6 +48,7 @@
         "unittests/compileOnSave.ts",
         "unittests/configurationExtension.ts",
         "unittests/convertCompilerOptionsFromJson.ts",
+        "unittests/convertToAsyncFunction.ts",
         "unittests/convertToBase64.ts",
         "unittests/convertTypeAcquisitionFromJson.ts",
         "unittests/customTransforms.ts",

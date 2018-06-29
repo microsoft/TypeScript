@@ -3,6 +3,7 @@ namespace ts {
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
+        const checker = program.getDiagnosticsProducingTypeChecker();
 
         if (sourceFile.commonJsModuleIndicator &&
             (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
@@ -69,7 +70,7 @@ namespace ts {
             }
 
             if(isFunctionLikeDeclaration(node) || isArrowFunction(node) || isMethodDeclaration(node)){
-                addConvertToAsyncFunctionDiagnostics()
+                addConvertToAsyncFunctionDiagnostics(node, checker, diags)
             }
             node.forEachChild(check);
         }
@@ -112,18 +113,24 @@ namespace ts {
         }
     }
 
-    function addConvertToAsyncFunctionDiagnostics(node: Node, checker: TypeChecker, diags: DiagnosticsWithLocation[]): void{
-        if(isAsyncFunction(node)){
-            break;
+    function addConvertToAsyncFunctionDiagnostics(node: Node, checker: TypeChecker, diags: DiagnosticWithLocation[]): void{
+        if (isAsyncFunction(node)) {
+            return;
         }
 
-        const returnType = checker.getReturnTypeOfSignature(checker.getSignatureFromDeclaration(<FunctionDeclaration | FunctionExpression>node));
+        const signature = checker.getSignatureFromDeclaration(<FunctionLikeDeclaration>node)
+        if (!signature) {
+            return;
+        }
+
+
+        const returnType = checker.getReturnTypeOfSignature(signature);
         if (!returnType || !returnType.symbol) {
-            break;
+            return;
         }
 
         if (isFunctionLikeDeclaration(node) && !node.body) {
-            break; // break on ambient functions
+            return; // break on ambient functions
         }
 
         if (checker.isPromiseLikeType(returnType)) {

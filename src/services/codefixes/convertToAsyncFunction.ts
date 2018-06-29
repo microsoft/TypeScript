@@ -12,7 +12,7 @@ namespace ts.codefix {
     });
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         // get the function declaration - returns a promise
-        const funcToConvert: FunctionLikeDeclaration = getContainingFunction(getTokenAtPosition(sourceFile, position, /*includeEndPosition*/ false)) as FunctionLikeDeclaration;
+        const funcToConvert: FunctionLikeDeclaration = getContainingFunction(getTokenAtPosition(sourceFile, position)) as FunctionLikeDeclaration;
 
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);

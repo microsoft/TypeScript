@@ -1,6 +1,3 @@
-/// <reference path="..\harness.ts" />
-/// <reference path="tsserverProjectSystem.ts" />
-
 namespace ts {
     interface Range {
         pos: number;
@@ -34,7 +31,7 @@ namespace ts {
                     const name = s === e
                         ? source.charCodeAt(saved + 1) === CharacterCodes.hash ? "selection" : "extracted"
                         : source.substring(s, e);
-                    activeRanges.push({ name, pos: text.length, end: undefined });
+                    activeRanges.push({ name, pos: text.length, end: undefined! });
                     lastPos = pos;
                     continue;
                 }
@@ -45,7 +42,7 @@ namespace ts {
             else if (source.charCodeAt(pos) === CharacterCodes.bar && source.charCodeAt(pos + 1) === CharacterCodes.closeBracket) {
                 text += source.substring(lastPos, pos);
                 activeRanges[activeRanges.length - 1].end = text.length;
-                const range = activeRanges.pop();
+                const range = activeRanges.pop()!;
                 if (range.name in ranges) {
                     throw new Error(`Duplicate name of range ${range.name}`);
                 }
@@ -101,7 +98,7 @@ namespace ts {
 
     function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = getTest(text);
-        const selectionRange = t.ranges.get("selection");
+        const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
             throw new Error(`Test ${caption} does not specify selection range`);
         }
@@ -111,7 +108,7 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source }, includeLib);
+            const program = makeProgram({ path, content: t.source }, includeLib)!;
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -124,7 +121,7 @@ namespace ts {
                 content: t.source
             };
 
-            const sourceFile = program.getSourceFile(path);
+            const sourceFile = program.getSourceFile(path)!;
             const host = projectSystem.createServerHost([f, projectSystem.libFile]);
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
@@ -144,8 +141,9 @@ namespace ts {
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
             assert.isNotNull(diagnostic);
 
-            const actions = codefix.getFixes(context);
-            const action = find(actions, action => action.description === description.message);
+            const actions = codefix.getFixes(context)
+            const action = find(actions, action => action.description === description.message)!;
+            assert.isNotNull(action);
 
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
                 const data: string[] = [];
@@ -158,7 +156,7 @@ namespace ts {
                 const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
                 data.push(newText);
 
-                const diagProgram = makeProgram({ path, content: newText }, includeLib);
+                const diagProgram = makeProgram({ path, content: newText }, includeLib)!;
                 assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 return data.join(newLineCharacter);
             });
@@ -396,9 +394,9 @@ function [#|finallyTest|](): Promise<void> {
 `
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromise", `
-function innerPromise(): Promise<string> {
+function [#|innerPromise|](): Promise<string> {
     var blob = fetch("https://typescriptlang.org").then(resp => {
-        var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error: ${err}');
+        var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
         retrun blob2;
     }).then(blob => {
         return blob.toString();   
@@ -409,9 +407,9 @@ function innerPromise(): Promise<string> {
 `
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_InnerVarNameConflict", `
-function f(): Promise<string> {
+function [#|f|](): Promise<string> {
     var blob = fetch("https://typescriptlang.org").then(resp => {
-        var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error: ${err}');
+        var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
     }).then(blob => {
         return blob.toString();
     });
