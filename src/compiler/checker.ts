@@ -19474,7 +19474,7 @@ namespace ts {
             }
             const specifier = node.arguments[0];
             const specifierType = checkExpressionCached(specifier);
-            // Even though multiple arugments is grammatically incorrect, type-check extra arguments for completion
+            // Even though multiple arguments is grammatically incorrect, type-check extra arguments for completion
             for (let i = 1; i < node.arguments.length; ++i) {
                 checkExpressionCached(node.arguments[i]);
             }
