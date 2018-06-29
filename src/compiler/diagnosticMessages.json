@@ -3730,7 +3730,7 @@
         "code": 6371
     },
 
-    "Which is from property '{0}' of type '{1}', declared here.": {
+    "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
         "code": 6500
     },

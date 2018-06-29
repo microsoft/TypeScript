@@ -11,7 +11,7 @@
     [30;47m  [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     [30;47m10[0m             }
     [30;47m  [0m [96m~~~~~~~~~~~~~[0m
-    Which is from property '"thing"' of type '{ thing: A; }', declared here.
+    The expected type comes from property '"thing"' which is declared here on type '{ thing: A; }'
 [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m25[0m:[93m17[0m - [91merror[0m[90m TS2322: [0mType '{}' is not assignable to type 'A'.
   Property 'a' is missing in type '{}'.
 
@@ -25,7 +25,7 @@
     [30;47m  [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     [30;47m13[0m             }
     [30;47m  [0m [96m~~~~~~~~~~~~~[0m
-    Which is from property '"another"' of type '{ another: A; }', declared here.
+    The expected type comes from property '"another"' which is declared here on type '{ another: A; }'
 
 
 ==== tests/cases/compiler/deeplyNestedAssignabilityIssue.ts (2 errors) ====

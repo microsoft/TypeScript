@@ -10243,7 +10243,7 @@ namespace ts {
                             const propertyName = typeToString(nameType);
                             const targetType = typeToString(target);
                             for (const declaration of target.symbol.declarations) {
-                                relatededInfo.push(createDiagnosticForNode(declaration, Diagnostics.Which_is_from_property_0_of_type_1_declared_here, propertyName, targetType));
+                                relatededInfo.push(createDiagnosticForNode(declaration, Diagnostics.The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1, propertyName, targetType));
                             }
                         }
                         reportedError = true;
@@ -10285,7 +10285,7 @@ namespace ts {
             return false;
         }
 
-        function *generateObjectliteralElements(node: ObjectLiteralExpression): ElaborationIterator {
+        function *generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isSpreadAssignment(prop)) continue;
@@ -10310,7 +10310,7 @@ namespace ts {
         }
 
         function elaborateObjectLiteral(node: ObjectLiteralExpression, source: Type, target: Type) {
-            return elaborateElementwise(generateObjectliteralElements(node), source, target);
+            return elaborateElementwise(generateObjectLiteralElements(node), source, target);
         }
 
         /**
