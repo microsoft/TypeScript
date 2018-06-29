@@ -148,8 +148,16 @@ namespace ts.sourcemaps {
         }
     }
 
-    export function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
-        const state: DecoderState<T> = {
+    /*@internal*/
+    export interface MappingsDecoder extends Iterator<SourceMapSpan> {
+        readonly decodingIndex: number;
+        readonly error: string | undefined;
+        readonly lastSpan: SourceMapSpan;
+    }
+
+    /*@internal*/
+    export function decodeMappings(map: SourceMapData): MappingsDecoder {
+        const state: DecoderState = {
             encodedText: map.mappings,
             currentNameIndex: undefined,
             sourceMapNamesLength: map.names ? map.names.length : undefined,
@@ -158,20 +166,40 @@ namespace ts.sourcemaps {
             currentSourceColumn: 0,
             currentSourceLine: 0,
             currentSourceIndex: 0,
-            positions: [],
-            decodingIndex: 0,
-            processPosition,
+            decodingIndex: 0
         };
-        while (!hasCompletedDecoding(state)) {
-            decodeSinglePosition(state);
-            if (state.error) {
-                if (host && host.log) {
-                    host.log(`Encountered error while decoding sourcemap: ${state.error}`);
-                }
-                return [];
-            }
+        function captureSpan(): SourceMapSpan {
+            return {
+                emittedColumn: state.currentEmittedColumn,
+                emittedLine: state.currentEmittedLine,
+                sourceColumn: state.currentSourceColumn,
+                sourceIndex: state.currentSourceIndex,
+                sourceLine: state.currentSourceLine,
+                nameIndex: state.currentNameIndex
+            };
         }
-        return state.positions;
+        return {
+            get decodingIndex() { return state.decodingIndex; },
+            get error() { return state.error; },
+            get lastSpan() { return captureSpan(); },
+            next() {
+                if (hasCompletedDecoding(state) || state.error) return { done: true, value: undefined as never };
+                if (!decodeSinglePosition(state)) return { done: true, value: undefined as never };
+                return { done: false, value: captureSpan() };
+            }
+        };
+    }
+
+    export function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
+        const decoder = decodeMappings(map);
+        const positions = arrayFrom(decoder, processPosition);
+        if (decoder.error) {
+            if (host && host.log) {
+                host.log(`Encountered error while decoding sourcemap: ${decoder.error}`);
+            }
+            return [];
+        }
+        return positions;
     }
 
     interface ProcessedSourceMapPosition {
@@ -189,7 +217,7 @@ namespace ts.sourcemaps {
         nameIndex?: number;
     }
 
-    interface DecoderState<T> {
+    interface DecoderState {
         decodingIndex: number;
         currentEmittedLine: number;
         currentEmittedColumn: number;
@@ -200,15 +228,13 @@ namespace ts.sourcemaps {
         encodedText: string;
         sourceMapNamesLength?: number;
         error?: string;
-        positions: T[];
-        processPosition: (position: RawSourceMapPosition) => T;
     }
 
-    function hasCompletedDecoding(state: DecoderState<any>) {
+    function hasCompletedDecoding(state: DecoderState) {
         return state.decodingIndex === state.encodedText.length;
     }
 
-    function decodeSinglePosition<T>(state: DecoderState<T>): void {
+    function decodeSinglePosition(state: DecoderState): boolean {
         while (state.decodingIndex < state.encodedText.length) {
             const char = state.encodedText.charCodeAt(state.decodingIndex);
             if (char === CharacterCodes.semicolon) {
@@ -230,40 +256,40 @@ namespace ts.sourcemaps {
             state.currentEmittedColumn += base64VLQFormatDecode();
             // Incorrect emittedColumn dont support this map
             if (createErrorIfCondition(state.currentEmittedColumn < 0, "Invalid emittedColumn found")) {
-                return;
+                return false;
             }
             // Dont support reading mappings that dont have information about original source and its line numbers
             if (createErrorIfCondition(isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: No entries after emitted column")) {
-                return;
+                return false;
             }
 
             // 2. Relative sourceIndex
             state.currentSourceIndex += base64VLQFormatDecode();
             // Incorrect sourceIndex dont support this map
             if (createErrorIfCondition(state.currentSourceIndex < 0, "Invalid sourceIndex found")) {
-                return;
+                return false;
             }
             // Dont support reading mappings that dont have information about original source position
             if (createErrorIfCondition(isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: No entries after sourceIndex")) {
-                return;
+                return false;
             }
 
             // 3. Relative sourceLine 0 based
             state.currentSourceLine += base64VLQFormatDecode();
             // Incorrect sourceLine dont support this map
             if (createErrorIfCondition(state.currentSourceLine < 0, "Invalid sourceLine found")) {
-                return;
+                return false;
             }
             // Dont support reading mappings that dont have information about original source and its line numbers
             if (createErrorIfCondition(isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: No entries after emitted Line")) {
-                return;
+                return false;
             }
 
             // 4. Relative sourceColumn 0 based
             state.currentSourceColumn += base64VLQFormatDecode();
             // Incorrect sourceColumn dont support this map
             if (createErrorIfCondition(state.currentSourceColumn < 0, "Invalid sourceLine found")) {
-                return;
+                return false;
             }
             // 5. Check if there is name:
             if (!isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex)) {
@@ -279,27 +305,15 @@ namespace ts.sourcemaps {
             }
             // Dont support reading mappings that dont have information about original source and its line numbers
             if (createErrorIfCondition(!isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: There are more entries after " + (state.currentNameIndex === undefined ? "sourceColumn" : "nameIndex"))) {
-                return;
+                return false;
             }
 
             // Entry should be complete
-            capturePosition();
-            return;
+            return true;
         }
 
         createErrorIfCondition(/*condition*/ true, "No encoded entry found");
-        return;
-
-        function capturePosition() {
-            state.positions.push(state.processPosition({
-                emittedColumn: state.currentEmittedColumn,
-                emittedLine: state.currentEmittedLine,
-                sourceColumn: state.currentSourceColumn,
-                sourceIndex: state.currentSourceIndex,
-                sourceLine: state.currentSourceLine,
-                nameIndex: state.currentNameIndex
-            }));
-        }
+        return false;
 
         function createErrorIfCondition(condition: boolean, errormsg: string) {
             if (state.error) {

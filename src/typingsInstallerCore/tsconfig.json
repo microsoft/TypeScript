@@ -11,8 +11,7 @@
         ]
     },
     "references": [
-        { "path": "../core" },
-        { "path": "../parser" },
+        { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],
     "files": [

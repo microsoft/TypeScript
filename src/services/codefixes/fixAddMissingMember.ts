@@ -11,6 +11,12 @@ namespace ts.codefix {
         getCodeActions(context) {
             const info = getInfo(context.sourceFile, context.span.start, context.program.getTypeChecker());
             if (!info) return undefined;
+
+            if (info.kind === InfoKind.enum) {
+                const { token, enumDeclaration } = info;
+                const changes = textChanges.ChangeTracker.with(context, t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), token, enumDeclaration));
+                return singleElementArray(createCodeFixAction(fixName, changes, [Diagnostics.Add_missing_enum_member_0, token.text], fixId, Diagnostics.Add_all_missing_enum_members));
+            }
             const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
             const methodCodeAction = call && getActionForMethodDeclaration(context, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, context.preferences);
             const addMember = inJs ?
@@ -23,36 +29,46 @@ namespace ts.codefix {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { program, preferences } = context;
-                const info = getInfo(diag.file, diag.start, program.getTypeChecker());
-                if (!info) return;
-                const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
-                if (!addToSeen(seenNames, token.text)) {
+                const checker = program.getTypeChecker();
+                const info = getInfo(diag.file, diag.start, checker);
+                if (!info || !addToSeen(seenNames, info.token.text)) {
                     return;
                 }
 
-                // Always prefer to add a method declaration if possible.
-                if (call) {
-                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, preferences);
+                if (info.kind === InfoKind.enum) {
+                    const { token, enumDeclaration } = info;
+                    addEnumMemberDeclaration(changes, checker, token, enumDeclaration);
                 }
                 else {
-                    if (inJs) {
-                        addMissingMemberInJs(changes, classDeclarationSourceFile, classDeclaration, token.text, makeStatic);
+                    const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
+                    // Always prefer to add a method declaration if possible.
+                    if (call) {
+                        addMethodDeclaration(context, changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, preferences);
                     }
                     else {
-                        const typeNode = getTypeNode(program.getTypeChecker(), classDeclaration, token);
-                        addPropertyDeclaration(changes, classDeclarationSourceFile, classDeclaration, token.text, typeNode, makeStatic);
+                        if (inJs) {
+                            addMissingMemberInJs(changes, classDeclarationSourceFile, classDeclaration, token.text, makeStatic);
+                        }
+                        else {
+                            const typeNode = getTypeNode(program.getTypeChecker(), classDeclaration, token);
+                            addPropertyDeclaration(changes, classDeclarationSourceFile, classDeclaration, token.text, typeNode, makeStatic);
+                        }
                     }
                 }
             });
         },
     });
 
-    interface Info { token: Identifier; classDeclaration: ClassLikeDeclaration; makeStatic: boolean; classDeclarationSourceFile: SourceFile; inJs: boolean; call: CallExpression | undefined; }
+    enum InfoKind { enum, class }
+    interface EnumInfo { kind: InfoKind.enum; token: Identifier; enumDeclaration: EnumDeclaration; }
+    interface ClassInfo { kind: InfoKind.class; token: Identifier; classDeclaration: ClassLikeDeclaration; makeStatic: boolean; classDeclarationSourceFile: SourceFile; inJs: boolean; call: CallExpression | undefined; }
+    type Info = EnumInfo | ClassInfo;
+
     function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
-        const token = getTokenAtPosition(tokenSourceFile, tokenPos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(tokenSourceFile, tokenPos);
         if (!isIdentifier(token)) {
             return undefined;
         }
@@ -62,15 +78,21 @@ namespace ts.codefix {
 
         const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression)!);
         const { symbol } = leftExpressionType;
-        const classDeclaration = symbol && symbol.declarations && find(symbol.declarations, isClassLike);
-        if (!classDeclaration) return undefined;
+        if (!symbol || !symbol.declarations) return undefined;
 
-        const makeStatic = (leftExpressionType as TypeReference).target !== checker.getDeclaredTypeOfSymbol(symbol);
-        const classDeclarationSourceFile = classDeclaration.getSourceFile();
-        const inJs = isSourceFileJavaScript(classDeclarationSourceFile);
-        const call = tryCast(parent.parent, isCallExpression);
-
-        return { token, classDeclaration, makeStatic, classDeclarationSourceFile, inJs, call };
+        const classDeclaration = find(symbol.declarations, isClassLike);
+        if (classDeclaration) {
+            const makeStatic = (leftExpressionType as TypeReference).target !== checker.getDeclaredTypeOfSymbol(symbol);
+            const classDeclarationSourceFile = classDeclaration.getSourceFile();
+            const inJs = isSourceFileJavaScript(classDeclarationSourceFile);
+            const call = tryCast(parent.parent, isCallExpression);
+            return { kind: InfoKind.class, token, classDeclaration, makeStatic, classDeclarationSourceFile, inJs, call };
+        }
+        const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
+        if (enumDeclaration) {
+            return { kind: InfoKind.enum, token, enumDeclaration };
+        }
+        return undefined;
     }
 
     function getActionsForAddMissingMemberInJavaScriptFile(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
@@ -184,11 +206,12 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): CodeFixAction | undefined {
-        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
+        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
         return createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, token.text], fixId, Diagnostics.Add_all_missing_members);
     }
 
     function addMethodDeclaration(
+        context: CodeFixContextBase,
         changeTracker: textChanges.ChangeTracker,
         classDeclarationSourceFile: SourceFile,
         classDeclaration: ClassLikeDeclaration,
@@ -198,7 +221,7 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, preferences);
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences);
         const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
 
         if (containingMethodDeclaration && containingMethodDeclaration.parent === classDeclaration) {
@@ -207,5 +230,26 @@ namespace ts.codefix {
         else {
             changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
         }
+    }
+
+    function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: TypeChecker, token: Identifier, enumDeclaration: EnumDeclaration) {
+        /**
+         * create initializer only literal enum that has string initializer.
+         * value of initializer is a string literal that equal to name of enum member.
+         * numeric enum or empty enum will not create initializer.
+         */
+        const hasStringInitializer = some(enumDeclaration.members, member => {
+            const type = checker.getTypeAtLocation(member);
+            return !!(type && type.flags & TypeFlags.StringLike);
+        });
+
+        const enumMember = createEnumMember(token, hasStringInitializer ? createStringLiteral(token.text) : undefined);
+        changes.replaceNode(enumDeclaration.getSourceFile(), enumDeclaration, updateEnumDeclaration(
+            enumDeclaration,
+            enumDeclaration.decorators,
+            enumDeclaration.modifiers,
+            enumDeclaration.name,
+            concatenate(enumDeclaration.members, singleElementArray(enumMember))
+        ));
     }
 }

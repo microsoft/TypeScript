@@ -194,7 +194,7 @@ namespace ts.refactor.extractSymbol {
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
+        const start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start), sourceFile, span);
         // Do the same for the ending position
         const end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
 

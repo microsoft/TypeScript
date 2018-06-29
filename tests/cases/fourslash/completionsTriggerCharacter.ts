@@ -13,10 +13,12 @@
 ////whatever
 
 // @Filename: /a.tsx
-////declare namespace JSX {
-////    interface Element {}
-////    interface IntrinsicElements {
-////        div: {};
+////declare global {
+////    namespace JSX {
+////        interface Element {}
+////        interface IntrinsicElements {
+////            div: {};
+////        }
 ////    }
 ////}
 ////const ctr = </*openTag*/;

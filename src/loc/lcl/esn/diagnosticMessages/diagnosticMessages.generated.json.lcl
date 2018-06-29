@@ -496,7 +496,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una compilación no DRY compilaría el proyecto "{0}"]]></Val>
+            <Val><![CDATA[Una compilación no -dry compilaría el proyecto "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -505,7 +505,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una compilación no DRY eliminaría los siguientes archivos: {0}]]></Val>
+            <Val><![CDATA[Una compilación no -dry eliminaría los archivos siguientes: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

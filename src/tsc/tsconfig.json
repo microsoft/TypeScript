@@ -7,8 +7,6 @@
         "tsc.ts"
     ],
     "references": [
-        { "path": "../core", "prepend": true },
-        { "path": "../parser", "prepend": true },
         { "path": "../compiler", "prepend": true }
     ]
 }

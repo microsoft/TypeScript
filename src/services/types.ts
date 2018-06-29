@@ -44,8 +44,8 @@ namespace ts {
         getProperties(): Symbol[];
         getProperty(propertyName: string): Symbol | undefined;
         getApparentProperties(): Symbol[];
-        getCallSignatures(): Signature[];
-        getConstructSignatures(): Signature[];
+        getCallSignatures(): ReadonlyArray<Signature>;
+        getConstructSignatures(): ReadonlyArray<Signature>;
         getStringIndexType(): Type | undefined;
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;

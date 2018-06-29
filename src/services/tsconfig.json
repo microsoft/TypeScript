@@ -4,10 +4,8 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
-        { "path": "../core" },
-        { "path": "../parser" },
         { "path": "../compiler" },
-        { "path": "../jsTyping" },
+        { "path": "../jsTyping" }
     ],
     "files": [
         "types.ts",
@@ -73,6 +71,7 @@
         "codefixes/useDefaultImport.ts",
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
         "codefixes/convertToMappedObjectType.ts",
+        "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/extractSymbol.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",

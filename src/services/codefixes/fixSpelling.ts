@@ -29,7 +29,7 @@ namespace ts.codefix {
         // This is the identifier of the misspelled word. eg:
         // this.speling = 1;
         //      ^^^^^^^
-        const node = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false); // TODO: GH#15852
+        const node = getTokenAtPosition(sourceFile, pos);
         const checker = context.program.getTypeChecker();
 
         let suggestion: string | undefined;

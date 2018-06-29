@@ -12,8 +12,7 @@
         ]
     },
     "references": [
-        { "path": "../core", "prepend": true },
-        { "path": "../parser", "prepend": true },
+        { "path": "../compiler", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true }
     ],
