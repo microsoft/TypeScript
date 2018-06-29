@@ -16434,16 +16434,7 @@ namespace ts {
          * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
          */
         function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean {
-            // TODO (yuisu): comment
-            switch (tagName.kind) {
-                case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ThisKeyword:
-                    return false;
-                case SyntaxKind.Identifier:
-                    return isIntrinsicJsxName((<Identifier>tagName).escapedText);
-                default:
-                    return Debug.fail();
-            }
+            return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
         }
 
         function checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode) {
