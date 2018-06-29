@@ -20921,31 +20921,30 @@ namespace ts {
             }
 
             function reportOperatorError() {
-                let err = chainDiagnosticMessages(
-                    /*elaboration*/ undefined,
-                    Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
-                    tokenToString(operatorToken.kind),
-                    typeToString(leftType),
-                    typeToString(rightType)
-                );
-                err = giveBetterPrimaryError(err);
-
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(
-                    errorNode || operatorToken,
-                    err
-                ));
+                const leftStr = typeToString(leftType);
+                const rightStr = typeToString(rightType);
+                const errNode = errorNode || operatorToken;
+                if (!tryGiveBetterPrimaryError(errNode, leftStr, rightStr)) {
+                    error(
+                        errNode,
+                        Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
+                        tokenToString(operatorToken.kind),
+                        leftStr,
+                        rightStr,
+                    );
+                }
             }
 
-            function giveBetterPrimaryError(elaboration: DiagnosticMessageChain) {
+            function tryGiveBetterPrimaryError(errNode: Node, leftStr: string, rightStr: string) {
                 switch (operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsToken:
-                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "false");
+                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "false", leftStr, rightStr);
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "true");
+                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "true", leftStr, rightStr);
                     }
-                return elaboration;
+                return undefined;
             }
         }
 
