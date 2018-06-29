@@ -24,7 +24,7 @@ namespace ts.codefix {
                 if (node.kind === SyntaxKind.CallExpression) {
                     const usedNames: string[] = [];
                     const newNode = parseCallback(node as CallExpression, checker, usedNames);
-                    if (newNode) {
+                    if (newNode.length > 0) {
                         changes.replaceNodeWithNodes(sourceFile, stmt, newNode);
                     }
                 }
@@ -49,24 +49,23 @@ namespace ts.codefix {
             return [];
         }
 
-        if (node.kind === SyntaxKind.CallExpression && returnsAPromise(node as CallExpression, checker)) {
-            return parsePromiseCall(node as CallExpression, usedNames, checker, argName);
+        if (isCallExpression(node) && returnsAPromise(node, checker)) {
+            return parsePromiseCall(node, usedNames, checker, argName);
         }
-        else if (node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "then", checker)) {
-            return parseThen(node as CallExpression, checker, usedNames);
+        else if (isCallExpression(node) && isCallback(node, "then", checker)) {
+            return parseThen(node, checker, usedNames);
         }
-        else if (node.kind === SyntaxKind.CallExpression && isCallback(node as CallExpression, "catch", checker)) {
-            return parseCatch(node as CallExpression, checker, usedNames);
+        else if (isCallExpression(node) && isCallback(node, "catch", checker)) {
+            return parseCatch(node, checker, usedNames);
         }
-        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return parseCallback((<PropertyAccessExpression>node).expression, checker, usedNames, argName);
+        else if (isPropertyAccessExpression(node)) {
+            return parseCallback(node.expression, checker, usedNames, argName);
         }
 
         return [];
     }
 
     function parseCatch(node: CallExpression, checker: TypeChecker, usedNames: string[]): Statement[] {
-        //const func = getSynthesizedDeepClone(node.arguments[0]);
         const func = getSynthesizedDeepClone(node.arguments[0]);
         const argName = getArgName(func, checker, usedNames);
 
@@ -152,12 +151,13 @@ namespace ts.codefix {
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
                     return [func.body.statements, argName];
+                }else if(isArrowFunction(func)){
+                    return [createNodeArray([createReturn((func).body as Expression)]), argName];
                 }
                 break;
-            case SyntaxKind.ArrowFunction:
-                return [createNodeArray([createReturn((<ArrowFunction>func).body as Expression)]), argName];
         }
         return [createNodeArray([]), ""];
     }
