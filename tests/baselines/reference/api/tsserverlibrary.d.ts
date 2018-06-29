@@ -5946,6 +5946,8 @@ declare namespace ts {
         Remove_braces_from_arrow_function: DiagnosticMessage;
         Convert_default_export_to_named_export: DiagnosticMessage;
         Convert_named_export_to_default_export: DiagnosticMessage;
+        Add_missing_enum_member_0: DiagnosticMessage;
+        Add_all_missing_enum_members: DiagnosticMessage;
     };
 }
 declare namespace ts {
