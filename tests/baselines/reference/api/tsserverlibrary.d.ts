@@ -10787,7 +10787,7 @@ declare namespace ts {
      * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
      * @param predicate Additional predicate to test on the comment range.
      */
-    function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node, predicate?: (c: CommentRange) => boolean): boolean;
+    function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined;
     function hasDocComment(sourceFile: SourceFile, position: number): boolean;
     function getNodeModifiers(node: Node): string;
     function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> | undefined;
@@ -11407,8 +11407,8 @@ declare namespace ts.formatting {
     /**
      * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
      */
-    function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, onlyMultiLine: boolean, precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
-    tokenAtPosition?: Node, predicate?: (c: CommentRange) => boolean): CommentRange | undefined;
+    function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
+    tokenAtPosition?: Node): CommentRange | undefined;
     function getIndentationString(indentation: number, options: EditorSettings): string;
 }
 declare namespace ts.formatting {
