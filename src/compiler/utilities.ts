@@ -2887,6 +2887,7 @@ namespace ts {
 
         return {
             add,
+            lookup,
             getGlobalDiagnostics,
             getDiagnostics,
             reattachFileDiagnostics
@@ -2894,6 +2895,24 @@ namespace ts {
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
             forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
+        }
+
+        function lookup(diagnostic: Diagnostic): Diagnostic | undefined {
+            let diagnostics: SortedArray<Diagnostic> | undefined;
+            if (diagnostic.file) {
+                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
+            }
+            else {
+                diagnostics = nonFileDiagnostics;
+            }
+            if (!diagnostics) {
+                return undefined;
+            }
+            const result = binarySearch(diagnostics, diagnostic, identity, compareDiagnosticsSkipRelatedInformation);
+            if (result >= 0) {
+                return diagnostics[result];
+            }
+            return undefined;
         }
 
         function add(diagnostic: Diagnostic): void {
@@ -6852,12 +6871,32 @@ namespace ts {
 
     /* @internal */
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
+        return compareDiagnosticsSkipRelatedInformation(d1, d2) ||
+            compareRelatedInformation(d1, d2) ||
+            Comparison.EqualTo;
+    }
+
+    /* @internal */
+    export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
             compareMessageText(d1.messageText, d2.messageText) ||
             Comparison.EqualTo;
+    }
+
+    function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
+        if (!d1.relatedInformation && !d2.relatedInformation) {
+            return Comparison.EqualTo;
+        }
+        if (d1.relatedInformation && d2.relatedInformation) {
+            return compareValues(d1.relatedInformation.length, d2.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
+                const d2i = d2.relatedInformation![index];
+                return compareDiagnostics(d1i, d2i); // EqualTo is 0, so falsy, and will cause the next item to be compared
+            }) || Comparison.EqualTo;
+        }
+        return d1.relatedInformation ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
     function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {

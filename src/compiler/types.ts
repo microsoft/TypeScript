@@ -5351,6 +5351,9 @@ namespace ts {
         // Adds a diagnostic to this diagnostic collection.
         add(diagnostic: Diagnostic): void;
 
+        // Returns the first existing diagnostic that is equivalent to the given one (sans related information)
+        lookup(diagnostic: Diagnostic): Diagnostic | undefined;
+
         // Gets all the diagnostics that aren't associated with a file.
         getGlobalDiagnostics(): Diagnostic[];
 

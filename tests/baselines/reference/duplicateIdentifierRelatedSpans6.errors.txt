@@ -1,0 +1,88 @@
+[96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
+
+[30;47m3[0m         duplicate1: () => string;
+[30;47m [0m [91m        ~~~~~~~~~~[0m
+
+  [96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m
+    [30;47m5[0m         duplicate1(): number;
+    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    Conflicts here.
+[96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
+
+[30;47m4[0m         duplicate2: () => string;
+[30;47m [0m [91m        ~~~~~~~~~~[0m
+
+  [96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m
+    [30;47m6[0m         duplicate2(): number;
+    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    Conflicts here.
+[96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
+
+[30;47m5[0m         duplicate3: () => string;
+[30;47m [0m [91m        ~~~~~~~~~~[0m
+
+  [96mtests/cases/compiler/file2.ts[0m:[93m7[0m:[93m9[0m
+    [30;47m7[0m         duplicate3(): number;
+    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    Conflicts here.
+[96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
+
+[30;47m5[0m         duplicate1(): number;
+[30;47m [0m [91m        ~~~~~~~~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m
+    [30;47m3[0m         duplicate1: () => string;
+    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    Conflicts here.
+[96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
+
+[30;47m6[0m         duplicate2(): number;
+[30;47m [0m [91m        ~~~~~~~~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m
+    [30;47m4[0m         duplicate2: () => string;
+    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    Conflicts here.
+[96mtests/cases/compiler/file2.ts[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
+
+[30;47m7[0m         duplicate3(): number;
+[30;47m [0m [91m        ~~~~~~~~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m
+    [30;47m5[0m         duplicate3: () => string;
+    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    Conflicts here.
+
+
+==== tests/cases/compiler/file2.ts (3 errors) ====
+    /// <reference path="./file1" />
+    
+    declare module "someMod" {
+        export interface TopLevel {
+            duplicate1(): number;
+            ~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'duplicate1'.
+            duplicate2(): number;
+            ~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'duplicate2'.
+            duplicate3(): number;
+            ~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'duplicate3'.
+        }
+    }
+    export {};
+    
+==== tests/cases/compiler/file1.ts (3 errors) ====
+    declare module "someMod" {
+        export interface TopLevel {
+            duplicate1: () => string;
+            ~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'duplicate1'.
+            duplicate2: () => string;
+            ~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'duplicate2'.
+            duplicate3: () => string;
+            ~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'duplicate3'.
+        }
+    }
