@@ -1,0 +1,23 @@
+=== tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts ===
+export declare let x: null | { foo: { bar: string | null } | undefined } | undefined;
+>x : { foo: { bar: string; }; }
+>null : null
+>foo : { bar: string; }
+>bar : string
+>null : null
+
+export declare let y: { foo: { bar: number | undefined } };
+>y : { foo: { bar: number; }; }
+>foo : { bar: number; }
+>bar : number
+
+x = y;
+>x = y : { foo: { bar: number; }; }
+>x : { foo: { bar: string; }; }
+>y : { foo: { bar: number; }; }
+
+y = x;
+>y = x : { foo: { bar: string; }; }
+>y : { foo: { bar: number; }; }
+>x : { foo: { bar: string; }; }
+

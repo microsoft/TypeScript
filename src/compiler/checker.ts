@@ -10631,6 +10631,23 @@ namespace ts {
                     target = getSimplifiedType(target);
                 }
 
+                // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
+                // If so, reporting the `null` and `undefined` in the type is hardly useful.
+                // First, see if we're even relating an object type to a union.
+                // Then see if the target is stripped down to a single non-union type.
+                // Note
+                //  * We actually want to remove null and undefined naively here (rather than using getNonNullableType),
+                //    since we don't want to end up with a worse error like "`Foo` is not assignable to `NonNullable<T>`"
+                //    when dealing with generics.
+                //  * We also don't deal with primitive source types, since we already halt elaboration below.
+                if (target.flags & TypeFlags.Union && source.flags & TypeFlags.Object &&
+                    (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
+                    const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
+                    if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
+                        target = nullStrippedTarget;
+                    }
+                }
+
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
@@ -12223,7 +12240,7 @@ namespace ts {
             if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
                 return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
             }
-            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higherorder behavior
+            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higher-order behavior
         }
 
         function getNonNullableType(type: Type): Type {
