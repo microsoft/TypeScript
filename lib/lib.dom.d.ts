@@ -1274,11 +1274,6 @@ interface PushSubscriptionOptionsInit {
     userVisibleOnly?: boolean;
 }
 
-interface QueuingStrategy {
-    highWaterMark?: number;
-    size?: WritableStreamChunkCallback;
-}
-
 interface RTCAnswerOptions extends RTCOfferAnswerOptions {
 }
 
@@ -1868,13 +1863,6 @@ interface TransitionEventInit extends EventInit {
 interface UIEventInit extends EventInit {
     detail?: number;
     view?: Window | null;
-}
-
-interface UnderlyingSink {
-    abort?: WritableStreamErrorCallback;
-    close?: WritableStreamDefaultControllerCallback;
-    start: WritableStreamDefaultControllerCallback;
-    write?: WritableStreamChunkCallback;
 }
 
 interface VRDisplayEventInit extends EventInit {
@@ -3464,16 +3452,6 @@ interface Coordinates {
     readonly longitude: number;
     readonly speed: number | null;
 }
-
-interface CountQueuingStrategy {
-    highWaterMark: number;
-    size(): number;
-}
-
-declare var CountQueuingStrategy: {
-    prototype: CountQueuingStrategy;
-    new(strategy: QueuingStrategy): CountQueuingStrategy;
-};
 
 interface Crypto {
     readonly subtle: SubtleCrypto;
@@ -11675,27 +11653,155 @@ declare var Range: {
     readonly START_TO_START: number;
 };
 
-interface ReadableStream {
-    readonly locked: boolean;
-    cancel(): Promise<void>;
-    getReader(): ReadableStreamReader;
+interface QueuingStrategy<T = ArrayBufferView> {
+    size?(chunk: T): number;
+    highWaterMark?: number;
 }
 
-declare var ReadableStream: {
-    prototype: ReadableStream;
-    new(): ReadableStream;
-};
+declare class CountQueuingStrategy {
+    constructor({ highWaterMark }: { highWaterMark: number });
 
-interface ReadableStreamReader {
-    cancel(): Promise<void>;
-    read(): Promise<any>;
+    size(): 1;
+}
+
+
+interface PipeOptions {
+    preventClose?: boolean;
+    preventAbort?: boolean;
+    preventCancel?: boolean;
+}
+
+interface WritableReadablePair<T extends WritableStream<any>, U extends ReadableStream<any>> {
+    writable: T;
+    readable: U;
+}
+
+declare class ReadableStreamDefaultController<R = ArrayBufferView> {
+    readonly desiredSize: number | null;
+
+    close(): void;
+    enqueue(chunk: R): void;
+    error(e: any): void;
+}
+
+interface ReadableStreamSource<R = ArrayBufferView> {
+    start?(controller: ReadableStreamDefaultController<R>): void | Promise<any>;
+    pull?(controller: ReadableStreamDefaultController<R>): void | Promise<any>;
+    cancel?(reason: any): void | Promise<any>;
+}
+
+declare class ReadableStreamDefaultReader<R = ArrayBufferView> {
+    constructor(stream: ReadableStream<R>);
+
+    readonly closed: Promise<void>;
+
+    cancel(reason: any): Promise<void>;
+    read(): Promise<IteratorResult<R>>;
     releaseLock(): void;
 }
 
-declare var ReadableStreamReader: {
-    prototype: ReadableStreamReader;
-    new(): ReadableStreamReader;
-};
+declare class ReadableStreamBYOBRequest<R = ArrayBufferView> {
+    readonly view: R;
+
+    respond(bytesWritten: number): void;
+    respondWithNewView(view: ArrayBufferView): void;
+}
+
+declare class ReadableByteStreamController<R = ArrayBufferView> {
+    readonly byobRequest: ReadableStreamBYOBRequest<R>;
+    readonly desiredSize: number | null;
+
+    close(): void;
+    enqueue(chunk: R): void;
+    error(e: any): void;
+}
+
+interface ReadableByteStreamSource<R = ArrayBufferView> {
+    start?(controller: ReadableByteStreamController<R>): void | Promise<any>;
+    pull?(controller: ReadableByteStreamController<R>): void | Promise<any>;
+    cancel?(reason: any): void | Promise<any>;
+
+    type: "bytes";
+    autoAllocateChunkSize?: number;
+}
+
+declare class ReadableStreamBYOBReader<R = ArrayBufferView> {
+    constructor(stream: ReadableStream<R>);
+
+    readonly closed: Promise<void>;
+
+    cancel(reason: any): Promise<void>;
+    read<T extends ArrayBufferView>(view: T): Promise<IteratorResult<T>>;
+    releaseLock(): void;
+}
+
+declare class ReadableStream<R = ArrayBufferView> {
+    constructor(underlyingSource?: ReadableStreamSource<R>, strategy?: QueuingStrategy<R>);
+    constructor(underlyingSource?: ReadableByteStreamSource<R>, strategy?: QueuingStrategy<R>);
+
+    readonly locked: boolean;
+
+    cancel(reason: any): Promise<void>;
+    getReader(): ReadableStreamDefaultReader<R>;
+    getReader({ mode }: { mode: "byob" }): ReadableStreamBYOBReader<R>;
+    pipeThrough<T extends ReadableStream<any>>({ writable, readable }: WritableReadablePair<WritableStream<R>, T>, options?: PipeOptions): T;
+    pipeTo(dest: WritableStream<R>, options?: PipeOptions): Promise<void>;
+    tee(): [ReadableStream<R>, ReadableStream<R>];
+}
+
+declare class WritableStreamDefaultController<W = ArrayBufferView> {
+    error(e: any): void;
+}
+
+interface WritableStreamSink<W = ArrayBufferView> {
+    start?(controller: WritableStreamDefaultController<W>): void | Promise<any>;
+    write?(chunk: W, controller?: WritableStreamDefaultController<W>): void | Promise<any>;
+    close?(controller: WritableStreamDefaultController<W>): void | Promise<any>;
+    abort?(reason: any): void | Promise<any>;
+}
+
+declare class WritableStreamDefaultWriter<W = ArrayBufferView> {
+    constructor(stream: WritableStream<W>);
+
+    readonly closed: Promise<void>;
+    readonly desiredSize: number | null;
+    readonly ready: Promise<void>;
+
+    abort(reason: any): Promise<void>;
+    close(): Promise<void>;
+    releaseLock(): void;
+    write(chunk: W): Promise<void>;
+}
+
+declare class WritableStream<W = ArrayBufferView> {
+    constructor(underlyingSink?: WritableStreamSink<W>, strategy?: QueuingStrategy<W>);
+
+    readonly locked: boolean;
+
+    abort(reason: any): Promise<void>;
+    getWriter(): WritableStreamDefaultWriter<W>;
+}
+
+declare class TransformStreamDefaultController<R> {
+    enqueue(chunk: R): void;
+    error(reason: any): void;
+    terminate(): void;
+
+    readonly desiredSize: number | null;
+}
+
+interface TransformStreamTransformer<R, W> {
+    start?(controller: TransformStreamDefaultController<R>): void | Promise<any>;
+    transform?(chunk: W, controller: TransformStreamDefaultController<R>): void | Promise<any>;
+    flush?(controller: TransformStreamDefaultController<R>): void | Promise<any>;
+}
+
+declare class TransformStream<R, W> implements WritableReadablePair<WritableStream<W>, ReadableStream<R>> {
+    constructor(transformer?: TransformStreamTransformer<R, W>, writableStrategy?: QueuingStrategy<W>, readableStrategy?: QueuingStrategy<R>);
+
+    readonly readable: ReadableStream<R>;
+    readonly writable: WritableStream<W>;
+}
 
 interface Request extends Body {
     /**
@@ -16302,41 +16408,6 @@ declare var Worklet: {
     new(): Worklet;
 };
 
-interface WritableStream {
-    readonly locked: boolean;
-    abort(reason?: any): Promise<void>;
-    getWriter(): WritableStreamDefaultWriter;
-}
-
-declare var WritableStream: {
-    prototype: WritableStream;
-    new(underlyingSink?: UnderlyingSink, strategy?: QueuingStrategy): WritableStream;
-};
-
-interface WritableStreamDefaultController {
-    error(error?: any): void;
-}
-
-declare var WritableStreamDefaultController: {
-    prototype: WritableStreamDefaultController;
-    new(): WritableStreamDefaultController;
-};
-
-interface WritableStreamDefaultWriter {
-    readonly closed: Promise<void>;
-    readonly desiredSize: number;
-    readonly ready: Promise<void>;
-    abort(reason?: any): Promise<void>;
-    close(): Promise<void>;
-    releaseLock(): void;
-    write(chunk?: any): Promise<any>;
-}
-
-declare var WritableStreamDefaultWriter: {
-    prototype: WritableStreamDefaultWriter;
-    new(): WritableStreamDefaultWriter;
-};
-
 interface XMLDocument extends Document {
     addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: XMLDocument, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -16700,18 +16771,6 @@ interface ValidateAssertionCallback {
 
 interface VoidFunction {
     (): void;
-}
-
-interface WritableStreamChunkCallback {
-    (chunk: any, controller: WritableStreamDefaultController): void;
-}
-
-interface WritableStreamDefaultControllerCallback {
-    (controller: WritableStreamDefaultController): void;
-}
-
-interface WritableStreamErrorCallback {
-    (reason: string): void;
 }
 
 interface HTMLElementTagNameMap {
