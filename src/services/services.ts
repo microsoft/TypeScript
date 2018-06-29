@@ -1503,72 +1503,27 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
-        function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo> | undefined): DefinitionInfo[] | undefined {
-            return map(infos, info => {
-                const newLoc = sourceMapper.tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
-                return !newLoc ? info : {
-                    containerKind: info.containerKind,
-                    containerName: info.containerName,
-                    fileName: newLoc.fileName,
-                    kind: info.kind,
-                    name: info.name,
-                    textSpan: {
-                        start: newLoc.position,
-                        length: info.textSpan.length
-                    },
-                    originalFileName: info.fileName,
-                    originalTextSpan: info.textSpan,
-                };
-            });
-        }
-
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return getTargetOfMappedDeclarationFiles(GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position));
+            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined {
             synchronizeHostData();
-            const result = GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
-            if (!result) return result;
-            const mappedDefs = getTargetOfMappedDeclarationFiles(result.definitions);
-            if (mappedDefs === result.definitions) {
-                return result;
-            }
-            return {
-                definitions: mappedDefs,
-                textSpan: result.textSpan
-            };
+            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return getTargetOfMappedDeclarationFiles(GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position));
+            return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
         }
 
         /// Goto implementation
 
-        function getTargetOfMappedImplementationLocations(infos: ReadonlyArray<ImplementationLocation> | undefined): ImplementationLocation[] | undefined {
-            return map(infos, info => {
-                const newLoc = sourceMapper.tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
-                return !newLoc ? info : {
-                    fileName: newLoc.fileName,
-                    kind: info.kind,
-                    displayParts: info.displayParts,
-                    textSpan: {
-                        start: newLoc.position,
-                        length: info.textSpan.length
-                    },
-                    originalFileName: info.fileName,
-                    originalTextSpan: info.textSpan,
-                };
-            });
-        }
-
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined {
             synchronizeHostData();
-            return getTargetOfMappedImplementationLocations(FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position));
+            return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
         /// References and Occurrences

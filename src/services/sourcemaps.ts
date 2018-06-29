@@ -28,8 +28,6 @@ namespace ts {
             }
             const starts = getLineStarts(mappedFile);
             for (let index = starts.length - 1; index >= 0; index--) {
-                //sourceMapCommentRegExp.lastIndex = starts[index];
-                //const comment = sourceMapCommentRegExp.exec(mappedFile.text);
                 const lineText = mappedFile.text.substring(starts[index], starts[index + 1]);
                 const comment = sourceMapCommentRegExp.exec(lineText);
                 if (comment) {

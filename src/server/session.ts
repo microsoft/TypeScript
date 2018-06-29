@@ -323,9 +323,8 @@ namespace ts.server {
 
         const outputs: T[] = [];
 
-        while (true) {
-            const project = projectsToDo.pop();
-            if (!project) break;
+        while (projectsToDo.length) {
+            const project = Debug.assertDefined(projectsToDo.pop());
             if (!addToSeen(seenProjects, project.projectName)) continue;
 
             const sourceMapper = project.getLanguageService().getSourceMapper();
@@ -732,17 +731,27 @@ namespace ts.server {
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpan> | ReadonlyArray<DefinitionInfo> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
+            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray, project);
+            return simplifiedResult ? this.mapDefinitionInfo(definitions, project) : definitions.map(Session.mapToOriginalLocation);
+        }
 
-            const definitions = project.getLanguageService().getDefinitionAtPosition(file, position);
-            if (!definitions) {
-                return emptyArray;
-            }
-
-            if (simplifiedResult) {
-                return this.mapDefinitionInfo(definitions, project);
-            }
-
-            return definitions.map(Session.mapToOriginalLocation);
+        private mapDefinitionInfoLocations(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<DefinitionInfo> {
+            return definitions.map((info): DefinitionInfo => {
+                const newLoc = project.getSourceMapper().tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
+                return !newLoc ? info : {
+                    containerKind: info.containerKind,
+                    containerName: info.containerName,
+                    fileName: newLoc.fileName,
+                    kind: info.kind,
+                    name: info.name,
+                    textSpan: {
+                        start: newLoc.position,
+                        length: info.textSpan.length
+                    },
+                    originalFileName: info.fileName,
+                    originalTextSpan: info.textSpan,
+                };
+            });
         }
 
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
@@ -750,25 +759,28 @@ namespace ts.server {
             const position = this.getPositionInFile(args, file);
             const scriptInfo = project.getScriptInfo(file)!;
 
-            const definitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
+            const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
-            if (!definitionAndBoundSpan || !definitionAndBoundSpan.definitions) {
+            if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
                 return {
                     definitions: emptyArray,
                     textSpan: undefined! // TODO: GH#18217
                 };
             }
 
+            const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
+            const { textSpan } = unmappedDefinitionAndBoundSpan;
+
             if (simplifiedResult) {
                 return {
-                    definitions: this.mapDefinitionInfo(definitionAndBoundSpan.definitions, project),
-                    textSpan: this.toLocationTextSpan(definitionAndBoundSpan.textSpan, scriptInfo)
+                    definitions: this.mapDefinitionInfo(definitions, project),
+                    textSpan: this.toLocationTextSpan(textSpan, scriptInfo)
                 };
             }
 
             return {
-                ...definitionAndBoundSpan,
-                definitions: definitionAndBoundSpan.definitions.map(Session.mapToOriginalLocation)
+                definitions: definitions.map(Session.mapToOriginalLocation),
+                textSpan,
             };
         }
 
@@ -813,21 +825,31 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
 
-            const definitions = project.getLanguageService().getTypeDefinitionAtPosition(file, position);
-            if (!definitions) {
-                return emptyArray;
-            }
-
+            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getTypeDefinitionAtPosition(file, position) || emptyArray, project);
             return this.mapDefinitionInfo(definitions, project);
+        }
+
+        private mapImplementationLocations(implementations: ReadonlyArray<ImplementationLocation>, project: Project): ReadonlyArray<ImplementationLocation> {
+            return implementations.map((info): ImplementationLocation => {
+                const newLoc = project.getSourceMapper().tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
+                return !newLoc ? info : {
+                    fileName: newLoc.fileName,
+                    kind: info.kind,
+                    displayParts: info.displayParts,
+                    textSpan: {
+                        start: newLoc.position,
+                        length: info.textSpan.length
+                    },
+                    originalFileName: info.fileName,
+                    originalTextSpan: info.textSpan,
+                };
+            });
         }
 
         private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpan> | ReadonlyArray<ImplementationLocation> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const implementations = project.getLanguageService().getImplementationAtPosition(file, position);
-            if (!implementations) {
-                return emptyArray;
-            }
+            const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
             if (simplifiedResult) {
                 return implementations.map(({ fileName, textSpan }) => this.toFileSpan(fileName, textSpan, project));
             }

@@ -461,6 +461,11 @@ namespace ts.server {
             return this.languageService;
         }
 
+        /** @internal */
+        getSourceMapper(): SourceMapper {
+            return this.getLanguageService().getSourceMapper();
+        }
+
         private shouldEmitFile(scriptInfo: ScriptInfo) {
             return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }
