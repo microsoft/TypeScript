@@ -4161,7 +4161,7 @@ namespace ts {
                         }
                         const parent = getDeclarationContainer(node);
                         // If the node is not exported or it is not ambient module element (except import declaration)
-                        if (!(getCombinedModifierFlags(node) & ModifierFlags.Export) &&
+                        if (!(getCombinedModifierFlags(node as Declaration) & ModifierFlags.Export) &&
                             !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && parent.flags & NodeFlags.Ambient)) {
                             return isGlobalSourceFile(parent);
                         }
@@ -4525,7 +4525,7 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer ?
+            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], UnionReduction.Subtype) :
                 type;
         }
@@ -8807,7 +8807,7 @@ namespace ts {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getLateBoundSymbol(prop).nameType;
                 if (!type && !isKnownSymbol(prop)) {
-                    const name = getNameOfDeclaration(prop.valueDeclaration);
+                    const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration);
                     type = name && isNumericLiteral(name) ? getLiteralType(+name.text) :
                         name && name.kind === SyntaxKind.ComputedPropertyName && isNumericLiteral(name.expression) ? getLiteralType(+name.expression.text) :
                         getLiteralType(symbolName(prop));
@@ -10631,6 +10631,23 @@ namespace ts {
                     target = getSimplifiedType(target);
                 }
 
+                // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
+                // If so, reporting the `null` and `undefined` in the type is hardly useful.
+                // First, see if we're even relating an object type to a union.
+                // Then see if the target is stripped down to a single non-union type.
+                // Note
+                //  * We actually want to remove null and undefined naively here (rather than using getNonNullableType),
+                //    since we don't want to end up with a worse error like "`Foo` is not assignable to `NonNullable<T>`"
+                //    when dealing with generics.
+                //  * We also don't deal with primitive source types, since we already halt elaboration below.
+                if (target.flags & TypeFlags.Union && source.flags & TypeFlags.Object &&
+                    (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
+                    const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
+                    if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
+                        target = nullStrippedTarget;
+                    }
+                }
+
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
@@ -12223,7 +12240,7 @@ namespace ts {
             if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
                 return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
             }
-            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higherorder behavior
+            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higher-order behavior
         }
 
         function getNonNullableType(type: Type): Type {
@@ -16365,14 +16382,18 @@ namespace ts {
                 type.flags & TypeFlags.UnionOrIntersection && every((<UnionOrIntersectionType>type).types, isValidSpreadType));
         }
 
-        function checkJsxSelfClosingElement(node: JsxSelfClosingElement, checkMode: CheckMode | undefined): Type {
-            checkJsxOpeningLikeElementOrOpeningFragment(node, checkMode);
+        function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
+            checkJsxOpeningLikeElementOrOpeningFragment(node, CheckMode.Normal);
+        }
+
+        function checkJsxSelfClosingElement(node: JsxSelfClosingElement, _checkMode: CheckMode | undefined): Type {
+            checkNodeDeferred(node);
             return getJsxElementTypeAt(node) || anyType;
         }
 
-        function checkJsxElement(node: JsxElement, checkMode: CheckMode | undefined): Type {
+        function checkJsxElementDeferred(node: JsxElement) {
             // Check attributes
-            checkJsxOpeningLikeElementOrOpeningFragment(node.openingElement, checkMode);
+            checkJsxOpeningLikeElementOrOpeningFragment(node.openingElement, CheckMode.Normal);
 
             // Perform resolution on the closing tag so that rename/go to definition/etc work
             if (isJsxIntrinsicIdentifier(node.closingElement.tagName)) {
@@ -16381,6 +16402,10 @@ namespace ts {
             else {
                 checkExpression(node.closingElement.tagName);
             }
+        }
+
+        function checkJsxElement(node: JsxElement, _checkMode: CheckMode | undefined): Type {
+            checkNodeDeferred(node);
 
             return getJsxElementTypeAt(node) || anyType;
         }
@@ -16661,12 +16686,24 @@ namespace ts {
         }
 
         function getJsxNamespaceAt(location: Node | undefined): Symbol {
-            const namespaceName = getJsxNamespace(location);
-            const resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
-            if (resolvedNamespace) {
-                const candidate = getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace);
-                if (candidate) {
-                    return candidate;
+            const links = location && getNodeLinks(location);
+            if (links && links.jsxNamespace) {
+                return links.jsxNamespace;
+            }
+            if (!links || links.jsxNamespace !== false) {
+                const namespaceName = getJsxNamespace(location);
+                const resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
+                if (resolvedNamespace) {
+                    const candidate = getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace);
+                    if (candidate) {
+                        if (links) {
+                            links.jsxNamespace = candidate;
+                        }
+                        return candidate;
+                    }
+                    if (links) {
+                        links.jsxNamespace = false;
+                    }
                 }
             }
             // JSX global fallback
@@ -17146,7 +17183,7 @@ namespace ts {
             // sourceAttributesType is a type of an attributes properties.
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
-            const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement, checkMode);
+            const sourceAttributesType = checkExpressionCached(openingLikeElement.attributes, checkMode);
 
             // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
             const isSourceAttributeTypeAssignableToTarget = isTypeAssignableTo(sourceAttributesType, targetAttributesType);
@@ -20884,7 +20921,30 @@ namespace ts {
             }
 
             function reportOperatorError() {
-                error(errorNode || operatorToken, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(operatorToken.kind), typeToString(leftType), typeToString(rightType));
+                const leftStr = typeToString(leftType);
+                const rightStr = typeToString(rightType);
+                const errNode = errorNode || operatorToken;
+                if (!tryGiveBetterPrimaryError(errNode, leftStr, rightStr)) {
+                    error(
+                        errNode,
+                        Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
+                        tokenToString(operatorToken.kind),
+                        leftStr,
+                        rightStr,
+                    );
+                }
+            }
+
+            function tryGiveBetterPrimaryError(errNode: Node, leftStr: string, rightStr: string) {
+                switch (operatorToken.kind) {
+                    case SyntaxKind.EqualsEqualsEqualsToken:
+                    case SyntaxKind.EqualsEqualsToken:
+                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "false", leftStr, rightStr);
+                    case SyntaxKind.ExclamationEqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsToken:
+                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "true", leftStr, rightStr);
+                    }
+                return undefined;
             }
         }
 
@@ -22072,7 +22132,7 @@ namespace ts {
             return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
         }
 
-        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: ModifierFlags): ModifierFlags {
+        function getEffectiveDeclarationFlags(n: Declaration, flagsToCheck: ModifierFlags): ModifierFlags {
             let flags = getCombinedModifierFlags(n);
 
             // children of classes (even ambient classes) should not be marked as ambient or export
@@ -23244,7 +23304,7 @@ namespace ts {
                     }
                     else {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
-                        const name = getNameOfDeclaration(local.valueDeclaration);
+                        const name = local.valueDeclaration && getNameOfDeclaration(local.valueDeclaration);
                         if (parameter && name) {
                             if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
                                 addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
@@ -24541,7 +24601,7 @@ namespace ts {
                 }
 
                 const propDeclaration = prop.valueDeclaration;
-                const name = getNameOfDeclaration(propDeclaration);
+                const name = propDeclaration && getNameOfDeclaration(propDeclaration);
 
                 // index is numeric and property name is not valid numeric literal
                 if (indexKind === IndexKind.Number && !(name ? isNumericName(name) : isNumericLiteralName(prop.escapedName))) {
@@ -26090,6 +26150,12 @@ namespace ts {
                         break;
                     case SyntaxKind.ClassExpression:
                         checkClassExpressionDeferred(<ClassExpression>node);
+                        break;
+                    case SyntaxKind.JsxSelfClosingElement:
+                        checkJsxSelfClosingElementDeferred(<JsxSelfClosingElement>node);
+                        break;
+                    case SyntaxKind.JsxElement:
+                        checkJsxElementDeferred(<JsxElement>node);
                         break;
                 }
             });

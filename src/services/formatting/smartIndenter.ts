@@ -32,7 +32,7 @@ namespace ts.formatting {
                 return 0;
             }
 
-            const precedingToken = findPrecedingToken(position, sourceFile);
+            const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
             const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null); // tslint:disable-line:no-null-keyword
             if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {

@@ -1248,6 +1248,7 @@ namespace ts {
                     return host.fileExists(f);
                 },
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
+                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             };
         }
 

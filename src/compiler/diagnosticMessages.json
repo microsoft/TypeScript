@@ -1252,6 +1252,10 @@
         "category": "Error",
         "code": 2366
     },
+    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
+        "category": "Error",
+        "code": 2367
+    },
     "Type parameter name cannot be '{0}'.": {
         "category": "Error",
         "code": 2368
@@ -4442,5 +4446,13 @@
     "Convert named export to default export": {
         "category": "Message",
         "code": 95062
+    },
+    "Add missing enum member '{0}'": {
+        "category": "Message",
+        "code": 95063
+    },
+    "Add all missing enum members": {
+        "category": "Message",
+        "code": 95064
     }
 }

@@ -13,7 +13,7 @@ namespace ts.codefix {
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, start);
         const statement = findAncestor(token, isStatement)!;
         Debug.assert(statement.getStart(sourceFile) === token.getStart(sourceFile));
 

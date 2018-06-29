@@ -545,7 +545,7 @@ namespace ts {
                     return pipelineEmitWithoutComments;
 
                 case PipelinePhase.SourceMaps:
-                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
+                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile) {
                         return pipelineEmitWithSourceMap;
                     }
                     // falls through
@@ -578,7 +578,7 @@ namespace ts {
         }
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
-            Debug.assert(hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName);
+            Debug.assert(hint !== EmitHint.SourceFile);
             Debug.assertDefined(onEmitSourceMapOfNode)(hint, node, pipelineEmitWithHint);
         }
 

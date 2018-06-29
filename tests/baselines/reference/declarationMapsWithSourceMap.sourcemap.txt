@@ -304,22 +304,27 @@ sourceFile:tests/cases/compiler/a.ts
 -------------------------------------------------------------------
 >>>declare class Foo {
 1 >
-2 >^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^
+3 >              ^^^
 1 >
+2 >class 
+3 >              Foo
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 15) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 18) Source(1, 10) + SourceIndex(0)
 ---
 >>>    doThing(x: {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^
 3 >           ^
 4 >            ^^^
 5 >               ^^^^->
-1->class Foo {
+1 > {
   >    
 2 >    doThing
 3 >           (
 4 >            x: 
-1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
 3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
 4 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
