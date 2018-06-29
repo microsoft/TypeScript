@@ -225,7 +225,7 @@ performFoo();
 
 function performFoo2({ bar = null }: Foo = {}) {
 >performFoo2 : ({ bar }?: Foo) => void
->bar : number | null
+>bar : number
 >null : null
 >Foo : Foo
 >{} : {}
@@ -233,7 +233,7 @@ function performFoo2({ bar = null }: Foo = {}) {
   useBar2(bar);
 >useBar2(bar) : void
 >useBar2 : (bar: number | undefined) => void
->bar : number | null
+>bar : number
 }
 
 declare function useBar2(bar: number | undefined): void;

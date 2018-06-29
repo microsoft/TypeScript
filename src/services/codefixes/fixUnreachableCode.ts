@@ -13,8 +13,8 @@ namespace ts.codefix {
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const statement = findAncestor(token, isStatement);
+        const token = getTokenAtPosition(sourceFile, start);
+        const statement = findAncestor(token, isStatement)!;
         Debug.assert(statement.getStart(sourceFile) === token.getStart(sourceFile));
 
         const container = (isBlock(statement.parent) ? statement.parent : statement).parent;
@@ -60,6 +60,8 @@ namespace ts.codefix {
                 return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
             case SyntaxKind.EnumDeclaration:
                 return hasModifier(s, ModifierFlags.Const);
+            default:
+                return false;
         }
     }
 

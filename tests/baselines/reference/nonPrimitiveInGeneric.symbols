@@ -63,7 +63,7 @@ bound2<{}>();
 
 bound2<Object>();
 >bound2 : Symbol(bound2, Decl(nonPrimitiveInGeneric.ts, 18, 9))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 bound2<number>(); // expect error
 >bound2 : Symbol(bound2, Decl(nonPrimitiveInGeneric.ts, 18, 9))

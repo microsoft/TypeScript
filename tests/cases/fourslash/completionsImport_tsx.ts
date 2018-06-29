@@ -1,7 +1,6 @@
 /// <reference path="fourslash.ts" />
 
 // @noLib: true
-// @nolib: true
 // @jsx: preserve
 
 // @Filename: /a.tsx

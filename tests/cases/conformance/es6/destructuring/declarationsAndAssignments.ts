@@ -59,7 +59,7 @@ function f7() {
 }
 
 function f8() {
-    var [a, b, c] = [];   // Ok, [] is an array
+    var [a, b, c] = [];   // Error, [] is an empty tuple
     var [d, e, f] = [1];  // Error, [1] is a tuple
 }
 
@@ -149,31 +149,35 @@ function f19() {
 }
 
 function f20() {
-    var a: number[];
     var x: number;
     var y: number;
     var z: number;
+    var a: number[];
+    var a3: any[];
     var [...a] = [1, 2, 3];
     var [x, ...a] = [1, 2, 3];
     var [x, y, ...a] = [1, 2, 3];
-    var [x, y, z, ...a] = [1, 2, 3];
+    var [x, y, z, ...a3] = [1, 2, 3];
     [...a] = [1, 2, 3];
     [x, ...a] = [1, 2, 3];
     [x, y, ...a] = [1, 2, 3];
-    [x, y, z, ...a] = [1, 2, 3];
+    [x, y, z, ...a3] = [1, 2, 3];
 }
 
 function f21() {
-    var a: (number | string | boolean)[];
-    var x: number | string | boolean;
-    var y: number | string | boolean;
-    var z: number | string | boolean;
-    var [...a] = [1, "hello", true];
-    var [x, ...a] = [1, "hello", true];
-    var [x, y, ...a] = [1, "hello", true];
-    var [x, y, z, ...a] = [1, "hello", true];
-    [...a] = [1, "hello", true];
-    [x, ...a] = [1, "hello", true];
-    [x, y, ...a] = [1, "hello", true];
-    [x, y, z, ...a] = [1, "hello", true];
+    var x: number;
+    var y: string;
+    var z: boolean;
+    var a0: (number | string | boolean)[];
+    var a1: (string | boolean)[];
+    var a2: boolean[];
+    var a3: any[];
+    var [...a0] = [1, "hello", true];
+    var [x, ...a1] = [1, "hello", true];
+    var [x, y, ...a2] = [1, "hello", true];
+    var [x, y, z, ...a3] = [1, "hello", true];
+    [...a0] = [1, "hello", true];
+    [x, ...a1] = [1, "hello", true];
+    [x, y, ...a2] = [1, "hello", true];
+    [x, y, z, ...a3] = [1, "hello", true];
 }

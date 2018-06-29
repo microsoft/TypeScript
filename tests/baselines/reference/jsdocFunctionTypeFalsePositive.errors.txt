@@ -1,0 +1,24 @@
+/a.js(1,14): error TS1139: Type parameter declaration expected.
+/a.js(1,17): error TS1003: Identifier expected.
+/a.js(1,17): error TS1110: Type expected.
+/a.js(1,17): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+/a.js(1,18): error TS1005: '>' expected.
+/a.js(1,18): error TS1005: '}' expected.
+
+
+==== /a.js (6 errors) ====
+    /** @param {<} x */
+                 ~
+!!! error TS1139: Type parameter declaration expected.
+                    
+!!! error TS1003: Identifier expected.
+                    
+!!! error TS1110: Type expected.
+                    
+!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+                     
+!!! error TS1005: '>' expected.
+                     
+!!! error TS1005: '}' expected.
+    function f(x) {}
+    

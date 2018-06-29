@@ -23,7 +23,7 @@ namespace ts.codefix {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { program, preferences } = context;
-                const info = getInfo(diag.file!, diag.start!, program.getTypeChecker());
+                const info = getInfo(diag.file, diag.start, program.getTypeChecker());
                 if (!info) return;
                 const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
                 if (!addToSeen(seenNames, token.text)) {
@@ -32,7 +32,7 @@ namespace ts.codefix {
 
                 // Always prefer to add a method declaration if possible.
                 if (call) {
-                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, preferences);
+                    addMethodDeclaration(context, changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, preferences);
                 }
                 else {
                     if (inJs) {
@@ -52,7 +52,7 @@ namespace ts.codefix {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
-        const token = getTokenAtPosition(tokenSourceFile, tokenPos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(tokenSourceFile, tokenPos);
         if (!isIdentifier(token)) {
             return undefined;
         }
@@ -60,7 +60,7 @@ namespace ts.codefix {
         const { parent } = token;
         if (!isPropertyAccessExpression(parent)) return undefined;
 
-        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression));
+        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression)!);
         const { symbol } = leftExpressionType;
         const classDeclaration = symbol && symbol.declarations && find(symbol.declarations, isClassLike);
         if (!classDeclaration) return undefined;
@@ -84,7 +84,7 @@ namespace ts.codefix {
             if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                 return;
             }
-            const className = classDeclaration.name.getText();
+            const className = classDeclaration.name!.getText();
             const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
             changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization);
         }
@@ -109,11 +109,11 @@ namespace ts.codefix {
     }
 
     function getTypeNode(checker: TypeChecker, classDeclaration: ClassLikeDeclaration, token: Node) {
-        let typeNode: TypeNode;
+        let typeNode: TypeNode | undefined;
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
-            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
+            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)!)); // TODO: GH#18217
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
         }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -184,11 +184,12 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): CodeFixAction | undefined {
-        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
+        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
         return createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, token.text], fixId, Diagnostics.Add_all_missing_members);
     }
 
     function addMethodDeclaration(
+        context: CodeFixContextBase,
         changeTracker: textChanges.ChangeTracker,
         classDeclarationSourceFile: SourceFile,
         classDeclaration: ClassLikeDeclaration,
@@ -198,7 +199,14 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, preferences);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences);
+        const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
+
+        if (containingMethodDeclaration && containingMethodDeclaration.parent === classDeclaration) {
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, containingMethodDeclaration, methodDeclaration);
+        }
+        else {
+            changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
+        }
     }
 }

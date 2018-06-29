@@ -1,11 +1,14 @@
 tests/cases/compiler/example.js(3,20): error TS1110: Type expected.
+tests/cases/compiler/example.js(3,21): error TS2304: Cannot find name 'foo'.
 
 
-==== tests/cases/compiler/example.js (1 errors) ====
+==== tests/cases/compiler/example.js (2 errors) ====
     // @ts-check
     /**
      * @type {function(@foo)}
                        ~
 !!! error TS1110: Type expected.
+                        ~~~
+!!! error TS2304: Cannot find name 'foo'.
      */
     let x;

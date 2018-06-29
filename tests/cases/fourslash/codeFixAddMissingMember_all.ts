@@ -14,13 +14,13 @@ verify.codeFixAll({
     newFileContent:
 `class C {
     x: number;
-    y(): any {
-        throw new Error("Method not implemented.");
-    }
     method() {
         this.x = 0;
         this.y();
         this.x = "";
+    }
+    y(): any {
+        throw new Error("Method not implemented.");
     }
 }`,
 });

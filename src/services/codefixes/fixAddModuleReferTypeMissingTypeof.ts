@@ -13,11 +13,11 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-            doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start!))),
+            doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start))),
     });
 
     function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         Debug.assert(token.kind === SyntaxKind.ImportKeyword);
         Debug.assert(token.parent.kind === SyntaxKind.ImportType);
         return <ImportTypeNode>token.parent;

@@ -14,14 +14,14 @@ namespace ts.codefix {
             if (!info) return undefined;
             const { node, suggestion } = info;
             const { target } = context.host.getCompilationSettings();
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion, target));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion, target!));
             return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, suggestion], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const info = getInfo(diag.file!, diag.start!, context);
+            const info = getInfo(diag.file, diag.start, context);
             const { target } = context.host.getCompilationSettings();
-            if (info) doChange(changes, context.sourceFile, info.node, info.suggestion, target);
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestion, target!);
         }),
     });
 
@@ -29,18 +29,18 @@ namespace ts.codefix {
         // This is the identifier of the misspelled word. eg:
         // this.speling = 1;
         //      ^^^^^^^
-        const node = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false); // TODO: GH#15852
+        const node = getTokenAtPosition(sourceFile, pos);
         const checker = context.program.getTypeChecker();
 
-        let suggestion: string;
+        let suggestion: string | undefined;
         if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier);
-            const containingType = checker.getTypeAtLocation(node.parent.expression);
+            const containingType = checker.getTypeAtLocation(node.parent.expression)!;
             suggestion = checker.getSuggestionForNonexistentProperty(node as Identifier, containingType);
         }
         else if (isImportSpecifier(node.parent) && node.parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier);
-            const importDeclaration = findAncestor(node, isImportDeclaration);
+            const importDeclaration = findAncestor(node, isImportDeclaration)!;
             const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
             if (resolvedSourceFile && resolvedSourceFile.symbol) {
                 suggestion = checker.getSuggestionForNonexistentModule(node as Identifier, resolvedSourceFile.symbol);
