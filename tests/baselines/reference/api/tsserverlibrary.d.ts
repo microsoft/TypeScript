@@ -4278,6 +4278,7 @@ declare namespace ts {
     }
     interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         getCommonSourceDirectory(): string;

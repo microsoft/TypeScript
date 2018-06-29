@@ -5045,6 +5045,7 @@ namespace ts {
     /* @internal */
     export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
 
         /* @internal */
