@@ -6,6 +6,7 @@ x = y;
 
 y = x;
 
+
 //// [elaboratedErrorsOnNullableTargets01.js]
 "use strict";
 exports.__esModule = true;
