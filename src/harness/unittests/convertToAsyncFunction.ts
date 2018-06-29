@@ -395,6 +395,31 @@ function [#|finallyTest|](): Promise<void> {
 }
 `
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromise", `
+function innerPromise(): Promise<string> {
+    var blob = fetch("https://typescriptlang.org").then(resp => {
+        var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error: ${err}');
+        retrun blob2;
+    }).then(blob => {
+        return blob.toString();   
+    });
+
+    return blob;
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerVarNameConflict", `
+function f(): Promise<string> {
+    var blob = fetch("https://typescriptlang.org").then(resp => {
+        var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error: ${err}');
+    }).then(blob => {
+        return blob.toString();
+    });
+
+    return blob;
+}
+`
+        );
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string, includeLib?: boolean) {
