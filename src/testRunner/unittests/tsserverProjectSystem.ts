@@ -8853,75 +8853,111 @@ export const x = 10;`
             path: "/a/a.ts",
             content: "export function fnA() {}",
         };
-        const aTsconfig: File = {
-            path: "/a/tsconfig.json",
-            content: `{
-                "compilerOptions": {
-                    "outDir": "bin",
-                    "declaration": true,
-                    "declarationMap": true,
-                    "composite": true,
-                }
-            }`,
+        const compilerOptions: CompilerOptions = {
+            outDir: "bin",
+            declaration: true,
+            declarationMap: true,
+            composite: true,
+        };
+        const configContent = JSON.stringify({ compilerOptions });
+        const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
+
+        const aDtsMap: File = {
+            path: "/a/bin/a.d.ts.map",
+            content: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}',
+        };
+        const aDts: File = {
+            path: "/a/bin/a.d.ts",
+            // Need to mangle the sourceMappingURL part or it breaks the build
+            content: `export declare function fnA(): void;\n//# source${""}MappingURL=a.d.ts.map`,
         };
 
         const bTs: File = {
             path: "/b/b.ts",
-            content: 'import { fnA } from "../a/a";\nexport function fnB() { fnA(); }',
+            content: "export function fnB() {}",
         };
-        const bTsconfig: File = {
+        const bTsconfig: File = { path: "/b/tsconfig.json", content: configContent };
+
+        const bDtsMap: File = {
+            path: "/b/bin/b.d.ts.map",
+            content: '{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["../b.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}',
+        };
+        const bDts: File = {
+            // Need to mangle the sourceMappingURL part or it breaks the build
+            path: "/b/bin/b.d.ts",
+            content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.ts.map`,
+        };
+
+        const userTs: File = {
+            path: "/user/user.ts",
+            content: 'import { fnA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); }',
+        };
+        const userTsconfig: File = {
             path: "/b/tsconfig.json",
-            content: `{
-                "compilerOptions": {
-                    "outDir": "bin",
-                },
-            }`,
+            content: configContent,
             // Deliberately omitting "references" since shose should not be required to get services.
         };
 
-        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+        const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, userTs, userTsconfig]);
         const session = createSession(host);
 
-        writeDeclarationFiles(aTs, host, session, [
-            { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}' },
-            // Need to mangle the sourceMappingURL part or it breaks the build
-            { name: "/a/bin/a.d.ts", text: `export declare function fnA(): void;\n//# source${""}MappingURL=a.d.ts.map` },
-        ]);
+        checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
+        checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
 
-        return { session, aTs, bTs };
+        // Testing what happens if we delete the original sources.
+        host.removeFile(bTs.path);
+
+        return { session, aTs, bDts, userTs };
     }
 
     describe("tsserverProjectSystem project references", () => {
         it("goToDefinition", () => {
-            const { session, aTs, bTs } = makeSampleProjects();
+            const { session, aTs, userTs } = makeSampleProjects();
+            openFilesForSession([userTs], session);
 
-            openFilesForSession([bTs], session);
-
-            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(bTs, "fnA()"));
+            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
             const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
 
             assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(aTs, "fnA")]);
         });
 
+        it("goToDefinition -- target does not exist", () => {
+            const { session, bDts, userTs } = makeSampleProjects();
+            openFilesForSession([userTs], session);
+
+            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
+            const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
+
+            // bTs does not exist, so stick with bDts
+            assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(bDts, "fnB")]);
+        });
+
         it("navigateTo", () => {
-            const { session, aTs, bTs } = makeSampleProjects();
+            const { session, aTs, bDts, userTs } = makeSampleProjects();
 
-            openFilesForSession([bTs], session);
+            openFilesForSession([userTs], session);
 
-            const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: bTs.path, searchValue: "fn" });
+            const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
             const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
 
             assert.deepEqual(navtoResponse, [
                 {
-                    ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
-                    name: "fnA",
+                    ...protocolFileSpanFromSubstring(bDts, "export declare function fnB(): void;"),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export,declare",
+                },
+                {
+                    ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { fnA(); fnB(); }"),
+                    name: "fnUser",
                     matchKind: "prefix",
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 },
                 {
-                    ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
-                    name: "fnB",
+                    ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
+                    name: "fnA",
                     matchKind: "prefix",
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
@@ -8930,7 +8966,7 @@ export const x = 10;`
         });
     });
 
-    function writeDeclarationFiles(file: File, host: TestServerHost, session: TestSession, expectedFiles: ReadonlyArray<{ readonly name: string, readonly text: string }>): void {
+    function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: ReadonlyArray<File>): void {
         openFilesForSession([file], session);
         const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
         const program = project.getCurrentProgram();
@@ -8938,12 +8974,6 @@ export const x = 10;`
         closeFilesForSession([file], session);
 
         Debug.assert(!output.emitSkipped);
-        assert.deepEqual(output.outputFiles, expectedFiles.map(e => ({ ...e, writeByteOrderMark: false })));
-
-        for (const { name, text } of output.outputFiles) {
-            const directory: Folder = { path: getDirectoryPath(name) };
-            host.ensureFileOrFolder(directory);
-            host.writeFile(name, text);
-        }
+        assert.deepEqual(output.outputFiles, expectedFiles.map((e): OutputFile => ({ name: e.path, text: e.content, writeByteOrderMark: false })));
     }
 }

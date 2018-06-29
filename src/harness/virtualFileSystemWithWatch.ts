@@ -633,6 +633,12 @@ interface Array<T> {}`
             this.removeFileOrFolder(currentEntry, returnFalse);
         }
 
+        removeFile(filePath: string): void {
+            const file = Debug.assertDefined(this.fs.get(filePath));
+            Debug.assert(this.isFsFile(file));
+            this.removeFileOrFolder(file, notImplemented);
+        }
+
         // For overriding the methods
         invokeWatchedDirectoriesCallback(folderFullPath: string, relativePath: string) {
             invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));

@@ -13601,6 +13601,7 @@ declare namespace ts.server {
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
         getAllProjectErrors(): ReadonlyArray<Diagnostic>;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
+        getSourceMapper(): SourceMapper;
         private shouldEmitFile;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
@@ -13958,8 +13959,8 @@ declare namespace ts.server {
         getSymlinkedProjects(info: ScriptInfo): MultiMap<Project> | undefined;
         private watchClosedScriptInfo;
         private stopWatchingScriptInfo;
-        getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, hostToQueryFileExistsOn: DirectoryStructureHost | undefined): ScriptInfo | undefined;
-        getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined): ScriptInfo | undefined;
+        private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
+        private getOrCreateScriptInfoOpenedByClientForNormalizedPath;
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
             fileExists(path: string): boolean;
         }): ScriptInfo | undefined;
@@ -13974,10 +13975,15 @@ declare namespace ts.server {
         private removeRootOfInferredProjectIfNowPartOfOtherProject;
         private ensureProjectForOpenFiles;
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
-        openingProjectForFileIfNecessary(fileName: NormalizedPath, cb: (project: Project) => void): void;
+        tryOpeningProjectForFileIfNecessary(fileName: NormalizedPath): {
+            readonly fileJustOpened: boolean;
+            readonly project: Project | undefined;
+        } | undefined;
+        fileExists(fileName: NormalizedPath): boolean;
         private findExternalProjectContainingOpenScriptInfo;
         private getOrCreateConfiguredProject;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
+        tryOpenClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath, dontOpenIfNotExists?: boolean): OpenConfiguredProjectResult | undefined;
         private telemetryOnOpenFile;
         closeClientFile(uncheckedFileName: string): void;
         private collectChanges;
@@ -14073,11 +14079,13 @@ declare namespace ts.server {
         private convertToDiagnosticsWithLinePosition;
         private getDiagnosticsWorker;
         private getDefinition;
+        private mapDefinitionInfoLocations;
         private getDefinitionAndBoundSpan;
         private mapDefinitionInfo;
         private static mapToOriginalLocation;
         private toFileSpan;
         private getTypeDefinition;
+        private mapImplementationLocations;
         private getImplementation;
         private getOccurrences;
         private getSyntacticDiagnosticsSync;

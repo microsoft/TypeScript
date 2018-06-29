@@ -323,18 +323,21 @@ namespace ts.server {
 
         const outputs: T[] = [];
 
+        const filesToClose: string[] = [];
+
         while (projectsToDo.length) {
             const project = Debug.assertDefined(projectsToDo.pop());
             if (!addToSeen(seenProjects, project.projectName)) continue;
 
-            const sourceMapper = project.getLanguageService().getSourceMapper();
-
             for (const output of action(project)) {
                 if (contains(outputs, output, resultsEqual)) continue;
 
-                const mapsTo = sourceMapper.tryGetMappedLocation(getLocation(output));
-                if (mapsTo) {
-                    projectService.openingProjectForFileIfNecessary(toNormalizedPath(mapsTo.fileName), project => { projectsToDo.push(project); });
+                const mapsTo = project.getSourceMapper().tryGetMappedLocation(getLocation(output));
+                // Push the output if it doesn't map to anything, or if the mapped-to file does not exist.
+                const info = mapsTo && projectService.tryOpeningProjectForFileIfNecessary(toNormalizedPath(mapsTo.fileName));
+                if (info) {
+                    if (info.fileJustOpened) filesToClose.push(mapsTo!.fileName);
+                    if (info.project) projectsToDo.push(info.project);
                 }
                 else {
                     outputs.push(output);
@@ -342,7 +345,16 @@ namespace ts.server {
             }
         }
 
+        for (const file of filesToClose) {
+            projectService.closeClientFile(file);
+        }
+
         return outputs;
+    }
+
+    function getMappedLocation(location: sourcemaps.SourceMappableLocation, projectService: ProjectService, project: Project): sourcemaps.SourceMappableLocation | undefined {
+        const mapsTo = project.getSourceMapper().tryGetMappedLocation(location);
+        return mapsTo && projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
     }
 
     export interface SessionOptions {
@@ -737,7 +749,7 @@ namespace ts.server {
 
         private mapDefinitionInfoLocations(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<DefinitionInfo> {
             return definitions.map((info): DefinitionInfo => {
-                const newLoc = project.getSourceMapper().tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
+                const newLoc = getMappedLocation({ fileName: info.fileName, position: info.textSpan.start }, this.projectService, project);
                 return !newLoc ? info : {
                     containerKind: info.containerKind,
                     containerName: info.containerName,
@@ -831,7 +843,7 @@ namespace ts.server {
 
         private mapImplementationLocations(implementations: ReadonlyArray<ImplementationLocation>, project: Project): ReadonlyArray<ImplementationLocation> {
             return implementations.map((info): ImplementationLocation => {
-                const newLoc = project.getSourceMapper().tryGetMappedLocation({ fileName: info.fileName, position: info.textSpan.start });
+                const newLoc = getMappedLocation({ fileName: info.fileName, position: info.textSpan.start }, this.projectService, project);
                 return !newLoc ? info : {
                     fileName: newLoc.fileName,
                     kind: info.kind,
