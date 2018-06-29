@@ -83,8 +83,9 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
+    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
     function isRegionDelimiter(lineText: string) {
-        return lineText.match(/^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/);
+        return regionDelimiterRegExp.exec(lineText);
     }
 
     function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
