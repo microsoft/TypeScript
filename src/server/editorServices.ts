@@ -2074,7 +2074,7 @@ namespace ts.server {
         tryOpeningProjectForFileIfNecessary(fileName: NormalizedPath): { readonly fileJustOpened: boolean, readonly project: Project | undefined } | undefined {
             const scriptInfo = this.filenameToScriptInfo.get(fileName);
             const getProject = (configFileName: NormalizedPath | undefined) => configFileName === undefined ? undefined : this.getOrCreateConfiguredProject(configFileName).project;
-            if (scriptInfo) {
+            if (scriptInfo && scriptInfo.isScriptOpen()) {
                 return { fileJustOpened: false, project: getProject(this.getConfigFileNameForFile(scriptInfo)) };
             }
             else {

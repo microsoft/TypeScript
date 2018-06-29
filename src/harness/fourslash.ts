@@ -1007,7 +1007,7 @@ namespace FourSlash {
 
                     // If any of the expected values are undefined, assume that users don't
                     // care about them.
-                    if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
+                    if (replacementSpan && !ts.textSpansEqual(replacementSpan, entry.replacementSpan)) {
                         return false;
                     }
                     else if (expectedText && text !== expectedText) {
@@ -2125,11 +2125,10 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
             }
 
-            const duplicate = findDuplicatedElement(implementations, implementationsAreEqual);
+            const duplicate = findDuplicatedElement(implementations, ts.documentSpansEqual);
             if (duplicate) {
                 const { textSpan, fileName } = duplicate;
-                const end = textSpan.start + textSpan.length;
-                this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
+                this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${ts.textSpanEnd(textSpan)}) in ${fileName}`);
             }
 
             const ranges = this.getRanges();
@@ -2194,10 +2193,6 @@ Actual: ${stringify(fullActual)}`);
                     }
                 }
                 this.raiseError(error);
-            }
-
-            function implementationsAreEqual(a: ImplementationLocationInformation, b: ImplementationLocationInformation) {
-                return a.fileName === b.fileName && TestState.textSpansEqual(a.textSpan, b.textSpan);
             }
 
             function displayPartIsEqualTo(a: ts.SymbolDisplayPart, b: ts.SymbolDisplayPart): boolean {
@@ -3285,7 +3280,7 @@ Actual: ${stringify(fullActual)}`);
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
+                assert.isTrue(ts.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
             }
 
             eq(item.hasAction, hasAction, "hasAction");
@@ -3369,10 +3364,6 @@ Actual: ${stringify(fullActual)}`);
 
         public resetCancelled(): void {
             this.cancellationToken.resetCancelled();
-        }
-
-        private static textSpansEqual(a: ts.TextSpan | undefined, b: ts.TextSpan | undefined): boolean {
-            return !!a && !!b && a.start === b.start && a.length === b.length;
         }
 
         public getEditsForFileRename({ oldPath, newPath, newFileContents }: FourSlashInterface.GetEditsForFileRenameOptions): void {

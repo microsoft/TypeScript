@@ -42,31 +42,6 @@ namespace ts.server {
         return false;
     }
 
-    interface FileStart {
-        file: string;
-        start: protocol.Location;
-    }
-
-    function compareNumber(a: number, b: number) {
-        return a - b;
-    }
-
-    function compareFileStart(a: FileStart, b: FileStart) {
-        if (a.file < b.file) {
-            return -1;
-        }
-        else if (a.file === b.file) {
-            const n = compareNumber(a.start.line, b.start.line);
-            if (n === 0) {
-                return compareNumber(a.start.offset, b.start.offset);
-            }
-            else return n;
-        }
-        else {
-            return 1;
-        }
-    }
-
     function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic): protocol.Diagnostic {
         const scriptInfo = project.getScriptInfoForNormalizedPath(fileName)!; // TODO: GH#18217
         return {
@@ -318,38 +293,75 @@ namespace ts.server {
         getLocation: (t: T) => sourcemaps.SourceMappableLocation,
         resultsEqual: (a: T, b: T) => boolean,
     ): T[] {
-        const seenProjects = createMap<true>();
-        const projectsToDo: Project[] = (isProjectsArray(projects) ? projects : projects.projects).slice();
-
         const outputs: T[] = [];
-
-        const filesToClose: string[] = [];
-
-        while (projectsToDo.length) {
-            const project = Debug.assertDefined(projectsToDo.pop());
-            if (!addToSeen(seenProjects, project.projectName)) continue;
-
+        combineProjectOutputWorker(projects, <sourcemaps.SourceMappableLocation><any>undefined, projectService, ({ project }, tryAddToTodo) => {
             for (const output of action(project)) {
-                if (contains(outputs, output, resultsEqual)) continue;
-
-                const mapsTo = project.getSourceMapper().tryGetMappedLocation(getLocation(output));
-                // Push the output if it doesn't map to anything, or if the mapped-to file does not exist.
-                const info = mapsTo && projectService.tryOpeningProjectForFileIfNecessary(toNormalizedPath(mapsTo.fileName));
-                if (info) {
-                    if (info.fileJustOpened) filesToClose.push(mapsTo!.fileName);
-                    if (info.project) projectsToDo.push(info.project);
-                }
-                else {
+                if (!contains(outputs, output, resultsEqual) && !tryAddToTodo(project, getLocation(output))) {
                     outputs.push(output);
                 }
             }
+        });
+        return outputs;
+    }
+
+    function combineProjectOutputForReferences(projects: Projects, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService): ReadonlyArray<ReferencedSymbol> {
+        const outputs: ReferencedSymbol[] = [];
+
+        combineProjectOutputWorker(projects, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
+            for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.position) || emptyArray) {
+                let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, outputReferencedSymbol.definition));
+                if (!symbolToAddTo) {
+                    symbolToAddTo = { definition: outputReferencedSymbol.definition, references: [] };
+                    outputs.push(symbolToAddTo);
+                }
+
+                for (const ref of outputReferencedSymbol.references) {
+                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(ref))) {
+                        symbolToAddTo.references.push(ref);
+                    }
+                }
+            }
+        });
+
+        return outputs.filter(o => o.references.length !== 0);
+    }
+
+    interface ProjectAndLocation {
+        readonly project: Project;
+        readonly location: sourcemaps.SourceMappableLocation;
+    }
+
+    function combineProjectOutputWorker(
+        projects: Projects,
+        initialLocation: sourcemaps.SourceMappableLocation,
+        projectService: ProjectService,
+        cb: (where: ProjectAndLocation, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
+    ): void {
+        const seenProjects = createMap<true>();
+        const filesToClose: string[] = [];
+        const toDo: ProjectAndLocation[] = (isProjectsArray(projects) ? projects : projects.projects).map(project => ({ project, location: initialLocation }));
+
+        while (toDo.length) {
+            const { project, location } = Debug.assertDefined(toDo.pop());
+            if (!addToSeen(seenProjects, project.projectName)) continue;
+            cb({ project, location }, (project, location) => {
+                const mapsTo = project.getSourceMapper().tryGetMappedLocation(location);
+                if (!mapsTo) return false;
+                const info = mapsTo && projectService.tryOpeningProjectForFileIfNecessary(toNormalizedPath(mapsTo.fileName));
+                if (!info) return false;
+                if (info.fileJustOpened) filesToClose.push(mapsTo.fileName);
+                if (info.project) toDo.push({ project: info.project, location: mapsTo });
+                return !!info.project;
+            });
         }
 
         for (const file of filesToClose) {
             projectService.closeClientFile(file);
         }
+    }
 
-        return outputs;
+    function documentSpanLocation({ fileName, textSpan }: DocumentSpan): sourcemaps.SourceMappableLocation {
+        return { fileName, position: textSpan.start };
     }
 
     function getMappedLocation(location: sourcemaps.SourceMappableLocation, projectService: ProjectService, project: Project): sourcemaps.SourceMappableLocation | undefined {
@@ -749,7 +761,7 @@ namespace ts.server {
 
         private mapDefinitionInfoLocations(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<DefinitionInfo> {
             return definitions.map((info): DefinitionInfo => {
-                const newLoc = getMappedLocation({ fileName: info.fileName, position: info.textSpan.start }, this.projectService, project);
+                const newLoc = getMappedLocation(documentSpanLocation(info), this.projectService, project);
                 return !newLoc ? info : {
                     containerKind: info.containerKind,
                     containerName: info.containerName,
@@ -843,7 +855,7 @@ namespace ts.server {
 
         private mapImplementationLocations(implementations: ReadonlyArray<ImplementationLocation>, project: Project): ReadonlyArray<ImplementationLocation> {
             return implementations.map((info): ImplementationLocation => {
-                const newLoc = getMappedLocation({ fileName: info.fileName, position: info.textSpan.start }, this.projectService, project);
+                const newLoc = getMappedLocation(documentSpanLocation(info), this.projectService, project);
                 return !newLoc ? info : {
                     fileName: newLoc.fileName,
                     kind: info.kind,
@@ -1135,68 +1147,28 @@ namespace ts.server {
             const projects = this.getProjects(args);
 
             const defaultProject = this.getDefaultProject(args);
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
+
+            const references = combineProjectOutputForReferences(projects, { fileName: args.file, position }, this.projectService);
+
             if (simplifiedResult) {
                 const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
-                const displayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
+                const symbolDisplayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
                 const nameSpan = nameInfo && nameInfo.textSpan;
-                const nameColStart = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
-                const nameText = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
-                const refs = combineProjectOutput<NormalizedPath, protocol.ReferencesResponseItem>(
-                    file,
-                    path => this.projectService.getScriptInfoForPath(path)!.fileName,
-                    projects,
-                    (project, file) => {
-                        const references = project.getLanguageService().getReferencesAtPosition(file, position);
-                        if (!references) {
-                            return emptyArray;
-                        }
-
-                        return references.map(ref => {
-                            const refScriptInfo = project.getScriptInfo(ref.fileName)!;
-                            const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
-                            const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
-                            const lineText = refScriptInfo.getSnapshot().getText(refLineSpan.start, textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
-                            return {
-                                file: ref.fileName,
-                                start,
-                                lineText,
-                                end: refScriptInfo.positionToLineOffset(textSpanEnd(ref.textSpan)),
-                                isWriteAccess: ref.isWriteAccess,
-                                isDefinition: ref.isDefinition
-                            };
-                        });
-                    },
-                    compareFileStart,
-                    areReferencesResponseItemsForTheSameLocation
-                );
-
-                return {
-                    refs,
-                    symbolName: nameText,
-                    symbolStartOffset: nameColStart,
-                    symbolDisplayString: displayString
-                };
+                const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
+                const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
+                const refs: protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol =>
+                    referencedSymbol.references.map(({ fileName, textSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
+                        const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                        const lineText = scriptInfo.getSnapshot().getText(textSpan.start, textSpanEnd(textSpan));
+                        return { ...toFileSpan(fileName, textSpan, scriptInfo), lineText, isWriteAccess, isDefinition };
+                    }));
+                const result: protocol.ReferencesResponseBody = { refs, symbolName, symbolStartOffset, symbolDisplayString };
+                return result;
             }
             else {
-                return combineProjectOutput(
-                    file,
-                    path => this.projectService.getScriptInfoForPath(path)!.fileName,
-                    projects,
-                    (project, file) => project.getLanguageService().findReferences(file, position),
-                    /*comparer*/ undefined,
-                    equateValues
-                );
-            }
-
-            function areReferencesResponseItemsForTheSameLocation(a: protocol.ReferencesResponseItem, b: protocol.ReferencesResponseItem) {
-                if (a && b) {
-                    return a.file === b.file &&
-                        a.start === b.start &&
-                        a.end === b.end;
-                }
-                return false;
+                return references;
             }
         }
 
@@ -1683,7 +1655,7 @@ namespace ts.server {
                     this.projectService,
                     project =>
                         project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
-                    item => ({ fileName: item.fileName, position: item.textSpan.start }),
+                    documentSpanLocation,
                     navigateToItemIsEqualTo);
             }
 
@@ -2380,6 +2352,10 @@ namespace ts.server {
     interface FileAndProject {
         readonly file: NormalizedPath;
         readonly project: Project;
+    }
+
+    function toFileSpan(fileName: string, textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.FileSpan {
+        return { file: fileName, start: scriptInfo.positionToLineOffset(textSpan.start), end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)) };
     }
 
     function mapTextChangesToCodeEdits(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
