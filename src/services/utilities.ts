@@ -380,7 +380,7 @@ namespace ts {
         }
 
         function getKindOfVariableDeclaration(v: VariableDeclaration): ScriptElementKind {
-            return isConst(v)
+            return isVarConst(v)
                 ? ScriptElementKind.constElement
                 : isLet(v)
                     ? ScriptElementKind.letElement

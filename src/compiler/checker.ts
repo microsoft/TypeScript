@@ -25185,7 +25185,7 @@ namespace ts {
             }
             // In ambient enum declarations that specify no const modifier, enum member declarations that omit
             // a value are considered computed members (as opposed to having auto-incremented values).
-            if (member.parent.flags & NodeFlags.Ambient && !isConst(member.parent)) {
+            if (member.parent.flags & NodeFlags.Ambient && !isEnumConst(member.parent)) {
                 return undefined;
             }
             // If the member declaration specifies no value, the member is considered a constant enum member.
@@ -25201,7 +25201,7 @@ namespace ts {
 
         function computeConstantValue(member: EnumMember): string | number | undefined {
             const enumKind = getEnumKind(getSymbolOfNode(member.parent));
-            const isConstEnum = isConst(member.parent);
+            const isConstEnum = isEnumConst(member.parent);
             const initializer = member.initializer!;
             const value = enumKind === EnumKind.Literal && !isLiteralEnumMember(member) ? undefined : evaluate(initializer);
             if (value !== undefined) {
@@ -25336,7 +25336,7 @@ namespace ts {
 
             computeEnumMemberValues(node);
 
-            const enumIsConst = isConst(node);
+            const enumIsConst = isEnumConst(node);
             if (compilerOptions.isolatedModules && enumIsConst && node.flags & NodeFlags.Ambient) {
                 error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_isolatedModules_flag_is_provided);
             }
@@ -25353,7 +25353,7 @@ namespace ts {
                 if (enumSymbol.declarations.length > 1) {
                     // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
-                        if (isConstEnumDeclaration(decl) !== enumIsConst) {
+                        if (isEnumDeclaration(decl) && isEnumConst(decl) !== enumIsConst) {
                             error(getNameOfDeclaration(decl), Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                         }
                     });
@@ -27217,8 +27217,9 @@ namespace ts {
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 // inline property\index accesses only for const enums
-                if (isConstEnumDeclaration(symbol.valueDeclaration.parent)) {
-                    return getEnumMemberValue(<EnumMember>symbol.valueDeclaration);
+                const member = symbol.valueDeclaration as EnumMember;
+                if (isEnumConst(member.parent)) {
+                    return getEnumMemberValue(member);
                 }
             }
 
@@ -27372,7 +27373,7 @@ namespace ts {
         }
 
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
-            if (isConst(node)) {
+            if (isVariableDeclaration(node) && isVarConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
                 return !!(type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral);
             }
@@ -28677,7 +28678,7 @@ namespace ts {
             if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
                 if (node.flags & NodeFlags.Ambient) {
                     if (node.initializer) {
-                        if (isConst(node) && !node.type) {
+                        if (isVarConst(node) && !node.type) {
                             if (!isStringOrNumberLiteralExpression(node.initializer)) {
                                 return grammarErrorOnNode(node.initializer, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
                             }
@@ -28688,7 +28689,7 @@ namespace ts {
                             return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                         }
                     }
-                    if (node.initializer && !(isConst(node) && isStringOrNumberLiteralExpression(node.initializer))) {
+                    if (node.initializer && !(isVarConst(node) && isStringOrNumberLiteralExpression(node.initializer))) {
                         // Error on equals token which immediate precedes the initializer
                         const equalsTokenLength = "=".length;
                         return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
@@ -28698,7 +28699,7 @@ namespace ts {
                     if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
                         return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
                     }
-                    if (isConst(node)) {
+                    if (isVarConst(node)) {
                         return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
                     }
                 }
@@ -28713,7 +28714,7 @@ namespace ts {
                 checkESModuleMarker(node.name);
             }
 
-            const checkLetConstNames = (isLet(node) || isConst(node));
+            const checkLetConstNames = (isLet(node) || isVarConst(node));
 
             // 1. LexicalDeclaration : LetOrConst BindingList ;
             // It is a Syntax Error if the BoundNames of BindingList contains "let".
@@ -28793,7 +28794,7 @@ namespace ts {
                 if (isLet(node.declarationList)) {
                     return grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
                 }
-                else if (isConst(node.declarationList)) {
+                else if (isVarConst(node.declarationList)) {
                     return grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
                 }
             }

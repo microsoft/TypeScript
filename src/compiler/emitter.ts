@@ -1983,7 +1983,7 @@ namespace ts {
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
-            writeKeyword(isLet(node) ? "let" : isConst(node) ? "const" : "var");
+            writeKeyword(isLet(node) ? "let" : isVarConst(node) ? "const" : "var");
             writeSpace();
             emitList(node, node.declarations, ListFormat.VariableDeclarationList);
         }

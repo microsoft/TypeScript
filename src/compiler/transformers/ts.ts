@@ -2602,7 +2602,7 @@ namespace ts {
          * @param node The enum declaration node.
          */
         function shouldEmitEnumDeclaration(node: EnumDeclaration) {
-            return !isConst(node)
+            return !isEnumConst(node)
                 || compilerOptions.preserveConstEnums
                 || compilerOptions.isolatedModules;
         }
