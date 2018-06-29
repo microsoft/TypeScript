@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclarationWIthLabel_es6.ts ===
+label: function fn() { }
+>label : any
+>fn : () => void
+
+label: function* gen() { }
+>label : any
+>gen : () => IterableIterator<any>
+

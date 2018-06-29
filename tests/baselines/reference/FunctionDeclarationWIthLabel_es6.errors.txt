@@ -1,0 +1,12 @@
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclarationWIthLabel_es6.ts(1,1): error TS1344: Association of a statement label with a function declaration is not allowed.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclarationWIthLabel_es6.ts(2,1): error TS1344: Association of a statement label with a function declaration is not allowed.
+
+
+==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclarationWIthLabel_es6.ts (2 errors) ====
+    label: function fn() { }
+    ~~~~~
+!!! error TS1344: Association of a statement label with a function declaration is not allowed.
+    label: function* gen() { }
+    ~~~~~
+!!! error TS1344: Association of a statement label with a function declaration is not allowed.
+    

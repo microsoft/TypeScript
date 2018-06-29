@@ -983,6 +983,10 @@
         "category": "Error",
         "code": 1343
     },
+    "Association of a statement label with a function declaration is not allowed.": {
+        "category": "Error",
+        "code": 1344
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclarationWIthLabel.ts ===
+label: function fn() { }
+>fn : Symbol(fn, Decl(FunctionDeclarationWIthLabel.ts, 0, 6))
+
+label: function* gen() { }
+>gen : Symbol(gen, Decl(FunctionDeclarationWIthLabel.ts, 1, 6))
+

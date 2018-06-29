@@ -24905,6 +24905,9 @@ namespace ts {
                                  return false;
                              });
             }
+            if (compilerOptions.target! >= ScriptTarget.ES2015) {
+                checkGrammarLabeledFunction(node);
+            }
 
             // ensure that label is unique
             checkSourceElement(node.statement);
@@ -29425,6 +29428,10 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        function checkGrammarLabeledFunction(node: LabeledStatement): boolean {
+            return isFunctionDeclaration(node.statement) ? grammarErrorOnFirstToken(node.label, Diagnostics.Association_of_a_statement_label_with_a_function_declaration_is_not_allowed) : false;
         }
 
         function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
