@@ -2,25 +2,6 @@
 namespace ts.codefix {
     const fixName = "invalidImportSyntax";
 
-    registerCodeFix({
-        errorCodes: [Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime.code],
-        getCodeActions: getActionsForInvalidImport
-    });
-
-    function getActionsForInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
-        const sourceFile = context.sourceFile;
-
-        // This is the whole import statement, eg:
-        // import * as Bluebird from 'bluebird';
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false).parent as ImportDeclaration;
-        if (!isImportDeclaration(node)) {
-            // No import quick fix for import calls
-            return [];
-        }
-        return getCodeFixesForImportDeclaration(context, node);
-    }
-
     function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportDeclaration): CodeFixAction[] {
         const sourceFile = getSourceFileOfNode(node);
         const namespace = getNamespaceDeclarationNode(node) as NamespaceImport;
@@ -45,7 +26,7 @@ namespace ts.codefix {
 
     function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
-        return createCodeFixActionNoFixId("invalidImportSyntax", changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
+        return createCodeFixActionNoFixId(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
     }
 
     registerCodeFix({
@@ -59,11 +40,43 @@ namespace ts.codefix {
     function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const sourceFile = context.sourceFile;
         const targetKind = Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
-        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
+        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
         if (!node) {
             return [];
         }
         const expr = node.expression;
+        return getImportCodeFixesForExpression(context, expr);
+    }
+
+    registerCodeFix({
+        errorCodes: [
+            // The following error codes cover pretty much all assignability errors that could involve an expression
+            Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
+            Diagnostics.Type_0_does_not_satisfy_the_constraint_1.code,
+            Diagnostics.Type_0_is_not_assignable_to_type_1.code,
+            Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated.code,
+            Diagnostics.Type_predicate_0_is_not_assignable_to_1.code,
+            Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2.code,
+            Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2.code,
+            Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1.code,
+            Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2.code,
+            Diagnostics.Property_0_in_type_1_is_not_assignable_to_type_2.code,
+            Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property.code,
+            Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1.code,
+        ],
+        getCodeActions: getActionsForInvalidImportLocation
+    });
+
+    function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAction[] | undefined {
+        const sourceFile = context.sourceFile;
+        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length));
+        if (!node) {
+            return [];
+        }
+        return getImportCodeFixesForExpression(context, node);
+    }
+
+    function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
         const type = context.program.getTypeChecker().getTypeAtLocation(expr)!; // TODO: GH#18217
         if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
             return [];
@@ -73,8 +86,11 @@ namespace ts.codefix {
         if (!isImportCall(relatedImport)) {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }
-        const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
-        fixes.push(createCodeFixActionNoFixId(fixName, changes, Diagnostics.Use_synthetic_default_member));
+        if (isExpression(expr) && !(isNamedDeclaration(expr.parent) && expr.parent.name === expr)) {
+            const sourceFile = context.sourceFile;
+            const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
+            fixes.push(createCodeFixActionNoFixId(fixName, changes, Diagnostics.Use_synthetic_default_member));
+        }
         return fixes;
     }
 }

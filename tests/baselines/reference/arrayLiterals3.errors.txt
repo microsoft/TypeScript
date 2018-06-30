@@ -1,5 +1,5 @@
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2322: Type 'undefined[]' is not assignable to type '[any, any, any]'.
-  Property '0' is missing in type 'undefined[]'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
+  Property '0' is missing in type '[]'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,5): error TS2322: Type '[string, number, boolean]' is not assignable to type '[boolean, string, number]'.
   Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
@@ -30,8 +30,8 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     
     var a0: [any, any, any] = [];                             // Error
         ~~
-!!! error TS2322: Type 'undefined[]' is not assignable to type '[any, any, any]'.
-!!! error TS2322:   Property '0' is missing in type 'undefined[]'.
+!!! error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
+!!! error TS2322:   Property '0' is missing in type '[]'.
     var a1: [boolean, string, number] = ["string", 1, true];  // Error
         ~~
 !!! error TS2322: Type '[string, number, boolean]' is not assignable to type '[boolean, string, number]'.

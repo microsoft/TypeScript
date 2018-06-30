@@ -187,15 +187,8 @@ namespace ts.DocumentHighlights {
         });
     }
 
-    function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
-        const modifierFlag = modifierToFlag(modifier);
-        return mapDefined(getNodesToSearchForModifier(declaration, modifierFlag), node => {
-            if (getModifierFlags(node) & modifierFlag) {
-                const mod = find(node.modifiers!, m => m.kind === modifier);
-                Debug.assert(!!mod);
-                return mod;
-            }
-        });
+    function getModifierOccurrences(modifier: Modifier["kind"], declaration: Node): Node[] {
+        return mapDefined(getNodesToSearchForModifier(declaration, modifierToFlag(modifier)), node => findModifier(node, modifier));
     }
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {

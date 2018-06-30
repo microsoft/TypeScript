@@ -63,10 +63,7 @@ namespace ts.OrganizeImports {
 
             // Delete or replace the first import.
             if (newImportDecls.length === 0) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[0], {
-                    useNonAdjustedStartPosition: true, // Leave header comment in place
-                    useNonAdjustedEndPosition: false,
-                });
+                changeTracker.delete(sourceFile, oldImportDecls[0]);
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
@@ -79,7 +76,7 @@ namespace ts.OrganizeImports {
 
             // Delete any subsequent imports.
             for (let i = 1; i < oldImportDecls.length; i++) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+                changeTracker.delete(sourceFile, oldImportDecls[i]);
             }
         }
     }

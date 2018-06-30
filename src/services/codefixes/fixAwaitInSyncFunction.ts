@@ -34,7 +34,7 @@ namespace ts.codefix {
     }
 
     function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, returnType: TypeNode | undefined } | undefined {
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, start);
         const containingFunction = getContainingFunction(token);
         if (!containingFunction) {
             return;

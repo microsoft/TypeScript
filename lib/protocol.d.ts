@@ -336,6 +336,7 @@ declare namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        relatedInformation?: DiagnosticRelatedInformation[];
     }
     /**
      * Response message for "projectInfo" request
@@ -457,7 +458,7 @@ declare namespace ts.server.protocol {
         scope: OrganizeImportsScope;
     }
     interface OrganizeImportsResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
     interface GetEditsForFileRenameRequest extends Request {
         command: CommandTypes.GetEditsForFileRename;
@@ -468,7 +469,7 @@ declare namespace ts.server.protocol {
         readonly newFilePath: string;
     }
     interface GetEditsForFileRenameResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
     /**
      * Request for the available codefixes at a specific position.
@@ -1712,6 +1713,10 @@ declare namespace ts.server.protocol {
         category: string;
         reportsUnnecessary?: {};
         /**
+         * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
+         */
+        relatedInformation?: DiagnosticRelatedInformation[];
+        /**
          * The error code of the diagnostic message.
          */
         code?: number;
@@ -1725,6 +1730,22 @@ declare namespace ts.server.protocol {
          * Name of the file the diagnostic is in
          */
         fileName: string;
+    }
+    /**
+     * Represents additional spans returned with a diagnostic which are relevant to it
+     * Like DiagnosticWithLinePosition, this is provided in two forms:
+     *   - start and length of the span
+     *   - startLocation and endLocation a pair of Location objects storing the start/end line offset of the span
+     */
+    interface DiagnosticRelatedInformation {
+        /**
+         * Text of related or additional information.
+         */
+        message: string;
+        /**
+         * Associated location
+         */
+        span?: FileSpan;
     }
     interface DiagnosticEventBody {
         /**
@@ -2005,6 +2026,7 @@ declare namespace ts.server.protocol {
         kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
+        nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
     }
     type TelemetryEventName = "telemetry";

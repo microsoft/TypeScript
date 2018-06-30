@@ -18,8 +18,8 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference path="lib.es2015.symbol.d.ts" />
-/// <reference path="lib.es2015.symbol.wellknown.d.ts" />
+/// <reference lib="es2015.symbol" />
+/// <reference lib="es2015.symbol.wellknown" />
 
 interface SharedArrayBuffer {
     /**

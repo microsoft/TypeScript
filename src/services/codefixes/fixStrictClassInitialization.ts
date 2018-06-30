@@ -48,7 +48,7 @@ namespace ts.codefix {
     });
 
     function getPropertyDeclaration (sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         return isIdentifier(token) ? cast(token.parent, isPropertyDeclaration) : undefined;
     }
 
@@ -126,6 +126,9 @@ namespace ts.codefix {
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
             return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        }
+        else if (checker.isArrayLikeType(type)) {
+            return createArrayLiteral();
         }
         return undefined;
     }
