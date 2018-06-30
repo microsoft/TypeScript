@@ -11494,21 +11494,17 @@ declare namespace ts.textChanges {
         private readonly formatContext;
         private readonly changes;
         private readonly newFiles;
-        private readonly deletedNodesInLists;
         private readonly classesWithNodesInsertedAtStart;
-        private readonly deletedDeclarations;
+        private readonly deletedNodes;
         static fromContext(context: TextChangesContext): ChangeTracker;
         static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[];
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(newLineCharacter: string, formatContext: formatting.FormatContext);
         deleteRange(sourceFile: SourceFile, range: TextRange): this;
-        deleteDeclaration(sourceFile: SourceFile, node: Node): void;
-        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
-        deleteNode(sourceFile: SourceFile, node: Node, options?: ConfigurableStartEnd): this;
+        delete(sourceFile: SourceFile, node: Node): void;
         deleteModifier(sourceFile: SourceFile, modifier: Modifier): void;
         deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options?: ConfigurableStartEnd): this;
         deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options?: ConfigurableStartEnd): void;
-        deleteNodeInList(sourceFile: SourceFile, node: Node): this;
         replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options?: InsertNodeOptions): this;
         replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options?: ChangeNodeOptions): this;
         replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options?: ChangeNodeOptions): void;
@@ -11551,7 +11547,6 @@ declare namespace ts.textChanges {
          */
         insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList?: NodeArray<Node> | undefined): this;
         private finishClassesWithNodesInsertedAtStart;
-        private finishTrailingCommaAfterDeletingNodesInList;
         private finishDeleteDeclarations;
         /**
          * Note: after calling this, the TextChanges object must be discarded!
@@ -11565,6 +11560,8 @@ declare namespace ts.textChanges {
     type ValidateNonFormattedText = (node: Node, text: string) => void;
     function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string;
     function isValidLocationToAddComment(sourceFile: SourceFile, position: number): boolean;
+    /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
+    function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options?: ConfigurableStartEnd): void;
 }
 declare namespace ts {
     interface CodeFixRegistration {
