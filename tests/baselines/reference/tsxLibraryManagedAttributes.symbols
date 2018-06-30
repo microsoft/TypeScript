@@ -6,7 +6,7 @@ type Defaultize<TProps, TDefaults> =
 
     & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}
 >K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 1, 8))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
 >TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
 >TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
@@ -14,14 +14,14 @@ type Defaultize<TProps, TDefaults> =
 
     & {[K in Exclude<keyof TProps, keyof TDefaults>]: TProps[K]}
 >K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 2, 8))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
 >TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
 >TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
 >K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 2, 8))
 
     & Partial<TDefaults>;
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
 
 type InferedPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
@@ -100,14 +100,14 @@ declare class ReactComponent<P={}, S={}> {
     props: P & Readonly<{children: ReactNode[]}>;
 >props : Symbol(ReactComponent.props, Decl(tsxLibraryManagedAttributes.tsx, 23, 26))
 >P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 22, 29))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >children : Symbol(children, Decl(tsxLibraryManagedAttributes.tsx, 24, 25))
 >ReactNode : Symbol(ReactNode, Decl(tsxLibraryManagedAttributes.tsx, 18, 1))
 
     setState(s: Partial<S>): S;
 >setState : Symbol(ReactComponent.setState, Decl(tsxLibraryManagedAttributes.tsx, 24, 49))
 >s : Symbol(s, Decl(tsxLibraryManagedAttributes.tsx, 25, 13))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >S : Symbol(S, Decl(tsxLibraryManagedAttributes.tsx, 22, 34))
 >S : Symbol(S, Decl(tsxLibraryManagedAttributes.tsx, 22, 34))
 
