@@ -6627,6 +6627,7 @@ declare namespace ts {
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
     function textSpanContainsPosition(span: TextSpan, position: number): boolean;
+    function textRangeContainsPositionInclusive(span: TextRange, position: number): boolean;
     function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean;
     function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean;
     function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
