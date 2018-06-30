@@ -10871,6 +10871,8 @@ declare namespace ts {
     function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined;
     function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined;
     function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void;
+    function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined): boolean;
+    function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean;
 }
 declare namespace ts {
     function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean;
@@ -12289,6 +12291,7 @@ declare namespace ts.server.protocol {
         DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
         Implementation = "implementation",
         ImplementationFull = "implementation-full",
+        EmitOutput = "emit-output",
         Exit = "exit",
         Format = "format",
         Formatonkey = "formatonkey",
@@ -12616,6 +12619,11 @@ declare namespace ts.server.protocol {
     }
     interface DefinitionAndBoundSpanResponse extends Response {
         readonly body: DefinitionInfoAndBoundSpan;
+    }
+    interface EmitOutputRequest extends FileRequest {
+    }
+    interface EmitOutputResponse extends Response {
+        readonly body: EmitOutput;
     }
     interface TypeDefinitionRequest extends FileLocationRequest {
         command: CommandTypes.TypeDefinition;
@@ -14097,6 +14105,7 @@ declare namespace ts.server {
         private getDefinition;
         private mapDefinitionInfoLocations;
         private getDefinitionAndBoundSpan;
+        private getEmitOutput;
         private mapDefinitionInfo;
         private static mapToOriginalLocation;
         private toFileSpan;

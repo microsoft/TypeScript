@@ -1639,7 +1639,7 @@ Actual: ${stringify(fullActual)}`);
                 });
         }
 
-        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
+        private getEmitFiles(): ReadonlyArray<FourSlashFile> {
             // Find file to be emitted
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
@@ -1656,12 +1656,31 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError("No emitThisFile is specified in the test file");
             }
 
+            return emitFiles;
+        }
+
+        public verifyGetEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void {
+            const outputFiles = ts.flatMap(this.getEmitFiles(), e => this.languageService.getEmitOutput(e.fileName).outputFiles);
+
+            assert.deepEqual(outputFiles.map(f => f.name), expectedOutputFiles);
+
+            for (const { name, text } of outputFiles) {
+                const fromTestFile = this.getFileContent(name);
+                if (fromTestFile !== text) {
+                    this.raiseError("Emit output is not as expected: " + showTextDiff(fromTestFile, text));
+                }
+            }
+        }
+
+        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void {
+            ts.Debug.assert(!(insertResultsIntoVfs && this.testType === FourSlashTestType.Server), "Use verifyGetEmitOutput -- insertResultsIntoVfs doesn't work with server");
+
             Harness.Baseline.runBaseline(
-                this.testData.globalOptions[MetadataOptionNames.baselineFile],
+                ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]),
                 () => {
                     let resultString = "";
                     // Loop through all the emittedFiles and emit them one by one
-                    emitFiles.forEach(emitFile => {
+                    for (const emitFile of this.getEmitFiles()) {
                         const emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
                         // Print emitOutputStatus in readable format
                         resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
@@ -1687,13 +1706,13 @@ Actual: ${stringify(fullActual)}`);
 
                         for (const outputFile of emitOutput.outputFiles) {
                             const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
-                            resultString = resultString + fileName + outputFile.text;
+                            resultString = resultString + Harness.IO.newLine() + fileName + outputFile.text;
                             if (insertResultsIntoVfs) {
                                 this.languageServiceAdapterHost.addScript(ts.getNormalizedAbsolutePath(outputFile.name, "/"), outputFile.text, /*isRootFile*/ true);
                             }
                         }
                         resultString += Harness.IO.newLine();
-                    });
+                    }
 
                     return resultString;
                 });
@@ -3567,8 +3586,13 @@ ${code}
 
     function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string | undefined {
         for (const option in optionObject) {
-            if (option !== MetadataOptionNames.fileName) {
-                return option;
+            switch (option) {
+                case MetadataOptionNames.fileName:
+                case MetadataOptionNames.baselineFile:
+                case MetadataOptionNames.emitThisFile:
+                    break;
+                default:
+                    return option;
             }
         }
         return undefined;
@@ -4276,6 +4300,10 @@ namespace FourSlashInterface {
 
         public baselineCurrentFileNameOrDottedNameSpans() {
             this.state.baselineCurrentFileNameOrDottedNameSpans();
+        }
+
+        public getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void {
+            this.state.verifyGetEmitOutput(expectedOutputFiles);
         }
 
         public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {

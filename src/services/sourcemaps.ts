@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts {
     // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
-    const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/;
+    const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\s*$/;
     const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
     const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
 
@@ -60,7 +60,7 @@ namespace ts {
             }, mapFileName, maps, getProgram(), sourcemappedFileCache);
         }
 
-        function getSourceMapper(fileName: string, file: { sourceMapper?: sourcemaps.SourceMapper }) {
+        function getSourceMapper(fileName: string, file: SourceFileLike): sourcemaps.SourceMapper {
             if (!host.readFile || !host.fileExists) {
                 return file.sourceMapper = sourcemaps.identitySourceMapper;
             }

@@ -781,7 +781,7 @@ namespace ts.server {
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const scriptInfo = project.getScriptInfo(file)!;
+            const scriptInfo = Debug.assertDefined(project.getScriptInfo(file));
 
             const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
@@ -806,6 +806,11 @@ namespace ts.server {
                 definitions: definitions.map(Session.mapToOriginalLocation),
                 textSpan,
             };
+        }
+
+        private getEmitOutput(args: protocol.FileRequestArgs): EmitOutput {
+            const { file, project } = this.getFileAndProject(args);
+            return project.getLanguageService().getEmitOutput(file);
         }
 
         private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
@@ -1997,6 +2002,9 @@ namespace ts.server {
             },
             [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.EmitOutput]: (request: protocol.EmitOutputRequest) => {
+                return this.requiredResponse(this.getEmitOutput(request.arguments));
             },
             [CommandNames.TypeDefinition]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getTypeDefinition(request.arguments));

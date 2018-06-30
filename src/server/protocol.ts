@@ -34,6 +34,8 @@ namespace ts.server.protocol {
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
+        /* @internal */
+        EmitOutput = "emit-output",
         Exit = "exit",
         Format = "format",
         Formatonkey = "formatonkey",
@@ -800,6 +802,13 @@ namespace ts.server.protocol {
 
     export interface DefinitionAndBoundSpanResponse extends Response {
         readonly body: DefinitionInfoAndBoundSpan;
+    }
+
+    /** @internal */
+    export interface EmitOutputRequest extends FileRequest {}
+    /** @internal */
+    export interface EmitOutputResponse extends Response {
+        readonly body: EmitOutput;
     }
 
     /**
