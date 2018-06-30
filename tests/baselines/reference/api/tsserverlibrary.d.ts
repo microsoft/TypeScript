@@ -11511,7 +11511,7 @@ declare namespace ts.textChanges {
         private readonly changes;
         private readonly newFiles;
         private readonly classesWithNodesInsertedAtStart;
-        private readonly deletedDeclarations;
+        private readonly deletedNodes;
         static fromContext(context: TextChangesContext): ChangeTracker;
         static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[];
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
