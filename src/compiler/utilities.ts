@@ -4374,6 +4374,11 @@ namespace ts {
         return position >= span.start && position < textSpanEnd(span);
     }
 
+    /* @internal */
+    export function textRangeContainsPositionInclusive(span: TextRange, position: number): boolean {
+        return position >= span.pos && position <= span.end;
+    }
+
     // Returns true if 'span' contains 'other'.
     export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
         return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
