@@ -213,7 +213,7 @@ namespace ts.textChanges {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
         private readonly classesWithNodesInsertedAtStart = createMap<ClassDeclaration>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
-        private readonly deletedDeclarations: { readonly sourceFile: SourceFile, readonly node: Node }[] = [];
+        private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
             return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
@@ -234,7 +234,7 @@ namespace ts.textChanges {
         }
 
         delete(sourceFile: SourceFile, node: Node): void {
-            this.deletedDeclarations.push({ sourceFile, node, });
+            this.deletedNodes.push({ sourceFile, node, });
         }
 
         public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
@@ -658,8 +658,8 @@ namespace ts.textChanges {
 
         private finishDeleteDeclarations(): void {
             const deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
-            for (const { sourceFile, node } of this.deletedDeclarations) {
-                if (!this.deletedDeclarations.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
+            for (const { sourceFile, node } of this.deletedNodes) {
+                if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     deleteDeclaration.deleteDeclaration(this, deletedNodesInLists, sourceFile, node);
                 }
             }
