@@ -1560,6 +1560,7 @@ declare namespace ts {
     }
     interface NoSubstitutionTemplateLiteral extends LiteralExpression {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
+        templateFlags?: TokenFlags;
     }
     enum TokenFlags {
         None = 0,
@@ -1573,6 +1574,7 @@ declare namespace ts {
         BinarySpecifier = 128,
         OctalSpecifier = 256,
         ContainsSeparator = 512,
+        ContainsInvalidEscape = 1024,
         BinaryOrOctalSpecifier = 384,
         NumericLiteralFlags = 1008
     }
@@ -1583,14 +1585,17 @@ declare namespace ts {
     interface TemplateHead extends LiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
+        templateFlags?: TokenFlags;
     }
     interface TemplateMiddle extends LiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
+        templateFlags?: TokenFlags;
     }
     interface TemplateTail extends LiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
+        templateFlags?: TokenFlags;
     }
     type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
     interface TemplateExpression extends PrimaryExpression {
@@ -7075,6 +7080,8 @@ declare namespace ts {
 declare namespace ts {
     /** @internal */
     function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports;
+    /** @internal */
+    function hasInvalidEscape(template: TemplateLiteral): boolean;
     interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
@@ -8652,6 +8659,13 @@ declare namespace ts {
      * @param level Indicates the extent to which flattening should occur.
      */
     function flattenDestructuringBinding(node: VariableDeclaration | ParameterDeclaration, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, level: FlattenLevel, rval?: Expression, hoistTempVariables?: boolean, skipInitializer?: boolean): VariableDeclaration[];
+}
+declare namespace ts {
+    enum ProcessLevel {
+        LiftRestriction = 0,
+        All = 1
+    }
+    function processTaggedTemplateExpression(context: TransformationContext, node: TaggedTemplateExpression, visitor: ((node: Node) => VisitResult<Node>) | undefined, currentSourceFile: SourceFile, recordTaggedTemplateString: (temp: Identifier) => void, level: ProcessLevel): CallExpression | TaggedTemplateExpression;
 }
 declare namespace ts {
     function transformTypeScript(context: TransformationContext): (node: SourceFile | Bundle) => SourceFile | Bundle;
