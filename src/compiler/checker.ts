@@ -975,7 +975,7 @@ namespace ts {
                         : Diagnostics.Duplicate_identifier_0;
                 const sourceSymbolFile = source.declarations && getSourceFileOfNode(source.declarations[0]);
                 const targetSymbolFile = target.declarations && getSourceFileOfNode(target.declarations[0]);
-                
+
                 // Collect top-level duplicate identifier errors into one mapping, so we can then merge their diagnostics if there are a bunch
                 if (sourceSymbolFile && targetSymbolFile && amalgamatedDuplicates && !isEitherEnum && sourceSymbolFile !== targetSymbolFile) {
                     const firstFile = comparePaths(sourceSymbolFile.path, targetSymbolFile.path) === Comparison.LessThan ? sourceSymbolFile : targetSymbolFile;
