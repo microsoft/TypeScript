@@ -1002,22 +1002,25 @@ namespace ts {
                     amalgamatedDuplicates.set(cacheKey, existing);
                     return target;
                 }
-                forEach(source.declarations, node => {
-                    const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
-                    const err = lookupOrIssueError(errorNode, message, symbolToString(source));
-                    if (target.declarations && length(err.relatedInformation) < 5) { // Only report up to 5 related locations to avoid overwhelming the output in the worst case scenario
-                        addRelatedInfo(err, createDiagnosticForNode(target.declarations[0], Diagnostics.Conflicts_here));
-                    }
-                });
-                forEach(target.declarations, node => {
-                    const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
-                    const err = lookupOrIssueError(errorNode, message, symbolToString(source));
-                    if (source.declarations && length(err.relatedInformation) < 5) {
-                        addRelatedInfo(err, createDiagnosticForNode(source.declarations[0], Diagnostics.Conflicts_here));
-                    }
-                });
+                const symbolName = symbolToString(source);
+                addDuplicateDeclarationErrorsForSymbols(source, message, symbolName, target);
+                addDuplicateDeclarationErrorsForSymbols(target, message, symbolName, source);
             }
             return target;
+        }
+
+        function addDuplicateDeclarationErrorsForSymbols(target: Symbol, message: DiagnosticMessage, symbolName: string, source: Symbol) {
+            forEach(target.declarations, node => {
+                const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
+                addDuplicateDeclarationError(errorNode, message, symbolName, source.declarations && source.declarations[0]);
+            });
+        }
+
+        function addDuplicateDeclarationError(errorNode: Node, message: DiagnosticMessage, symbolName: string, relatedNode: Node | undefined) {
+            const err = lookupOrIssueError(errorNode, message, symbolName);
+            if (relatedNode && length(err.relatedInformation) < 5) {
+                addRelatedInfo(err, !length(err.relatedInformation) ? createDiagnosticForNode(relatedNode, Diagnostics._0_was_also_declared_here, symbolName) : createDiagnosticForNode(relatedNode, Diagnostics.and_here));
+            }
         }
 
         function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined {
@@ -27715,32 +27718,8 @@ namespace ts {
                 const conflictingKeys = arrayFrom(firstFileInstances.keys());
                 // If not many things conflict, issue individual errors
                 if (conflictingKeys.length < 8) {
-
-                    firstFileInstances.forEach((locations, symbolName) => {
-                        const secondFileEquivalent = secondFileInstances.get(symbolName)!;
-                        const message = locations.blockScoped
-                            ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
-                            : Diagnostics.Duplicate_identifier_0;
-                        locations.instances.forEach(node => {
-                            const err = lookupOrIssueError(node, message, symbolName);
-                            if (length(err.relatedInformation) < 5) {
-                                addRelatedInfo(err, createDiagnosticForNode(secondFileEquivalent.instances[0], Diagnostics.Conflicts_here));
-                            }
-                        });
-                    });
-
-                    secondFileInstances.forEach((locations, symbolName) => {
-                        const firstFileEquivalent = firstFileInstances.get(symbolName)!;
-                        const message = locations.blockScoped
-                            ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
-                            : Diagnostics.Duplicate_identifier_0;
-                        locations.instances.forEach(node => {
-                            const err = lookupOrIssueError(node, message, symbolName);
-                            if (length(err.relatedInformation) < 5) {
-                                addRelatedInfo(err, createDiagnosticForNode(firstFileEquivalent.instances[0], Diagnostics.Conflicts_here));
-                            }
-                        });
-                    });
+                    addErrorsForDuplicates(firstFileInstances, secondFileInstances);
+                    addErrorsForDuplicates(secondFileInstances, firstFileInstances);
                     return;
                 }
                 // Otheriwse issue top-level error since the files appear very identical in terms of what they appear
@@ -27755,6 +27734,18 @@ namespace ts {
                 ));
             });
             amalgamatedDuplicates = undefined;
+
+            function addErrorsForDuplicates(secondFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>, firstFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>) {
+                secondFileInstances.forEach((locations, symbolName) => {
+                    const firstFileEquivalent = firstFileInstances.get(symbolName)!;
+                    const message = locations.blockScoped
+                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
+                        : Diagnostics.Duplicate_identifier_0;
+                    locations.instances.forEach(node => {
+                        addDuplicateDeclarationError(node, message, symbolName, firstFileEquivalent.instances[0]);
+                    });
+                });
+            }
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {

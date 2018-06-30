@@ -3611,9 +3611,13 @@
         "category": "Message",
         "code": 6201
     },
-    "Conflicts here.": {
+    "'{0}' was also declared here.": {
         "category": "Message",
         "code": 6203
+    },
+    "and here.": {
+        "category": "Message",
+        "code": 6204
     },
 
     "Projects to reference": {

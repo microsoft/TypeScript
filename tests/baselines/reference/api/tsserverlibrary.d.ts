@@ -5741,7 +5741,8 @@ declare namespace ts {
         All_variables_are_unused: DiagnosticMessage;
         Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0: DiagnosticMessage;
         Conflicts_are_in_this_file: DiagnosticMessage;
-        Conflicts_here: DiagnosticMessage;
+        _0_was_also_declared_here: DiagnosticMessage;
+        and_here: DiagnosticMessage;
         Projects_to_reference: DiagnosticMessage;
         Enable_project_compilation: DiagnosticMessage;
         Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0: DiagnosticMessage;

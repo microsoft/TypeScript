@@ -6,7 +6,7 @@
   [96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m
     [30;47m5[0m         duplicate1(): number;
     [30;47m [0m [96m        ~~~~~~~~~~[0m
-    Conflicts here.
+    'duplicate1' was also declared here.
 [96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
 
 [30;47m4[0m         duplicate2: () => string;
@@ -15,7 +15,7 @@
   [96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m
     [30;47m6[0m         duplicate2(): number;
     [30;47m [0m [96m        ~~~~~~~~~~[0m
-    Conflicts here.
+    'duplicate2' was also declared here.
 [96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
 
 [30;47m5[0m         duplicate3: () => string;
@@ -24,7 +24,7 @@
   [96mtests/cases/compiler/file2.ts[0m:[93m7[0m:[93m9[0m
     [30;47m7[0m         duplicate3(): number;
     [30;47m [0m [96m        ~~~~~~~~~~[0m
-    Conflicts here.
+    'duplicate3' was also declared here.
 [96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
 
 [30;47m5[0m         duplicate1(): number;
@@ -33,7 +33,7 @@
   [96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m
     [30;47m3[0m         duplicate1: () => string;
     [30;47m [0m [96m        ~~~~~~~~~~[0m
-    Conflicts here.
+    'duplicate1' was also declared here.
 [96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
 
 [30;47m6[0m         duplicate2(): number;
@@ -42,7 +42,7 @@
   [96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m
     [30;47m4[0m         duplicate2: () => string;
     [30;47m [0m [96m        ~~~~~~~~~~[0m
-    Conflicts here.
+    'duplicate2' was also declared here.
 [96mtests/cases/compiler/file2.ts[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
 
 [30;47m7[0m         duplicate3(): number;
@@ -51,7 +51,7 @@
   [96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m
     [30;47m5[0m         duplicate3: () => string;
     [30;47m [0m [96m        ~~~~~~~~~~[0m
-    Conflicts here.
+    'duplicate3' was also declared here.
 
 
 ==== tests/cases/compiler/file2.ts (3 errors) ====
@@ -62,15 +62,15 @@
             duplicate1(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
-!!! related TS6203 tests/cases/compiler/file1.ts:3:9: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file1.ts:3:9: 'duplicate1' was also declared here.
             duplicate2(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
-!!! related TS6203 tests/cases/compiler/file1.ts:4:9: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file1.ts:4:9: 'duplicate2' was also declared here.
             duplicate3(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
-!!! related TS6203 tests/cases/compiler/file1.ts:5:9: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file1.ts:5:9: 'duplicate3' was also declared here.
         }
     }
     export {};
@@ -81,14 +81,14 @@
             duplicate1: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
-!!! related TS6203 tests/cases/compiler/file2.ts:5:9: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file2.ts:5:9: 'duplicate1' was also declared here.
             duplicate2: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
-!!! related TS6203 tests/cases/compiler/file2.ts:6:9: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file2.ts:6:9: 'duplicate2' was also declared here.
             duplicate3: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
-!!! related TS6203 tests/cases/compiler/file2.ts:7:9: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file2.ts:7:9: 'duplicate3' was also declared here.
         }
     }
