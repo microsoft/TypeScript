@@ -1,8 +1,0 @@
-error TS2318: Cannot find global type 'IterableIterator'.
-
-
-!!! error TS2318: Cannot find global type 'IterableIterator'.
-==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclarationWIthLabel.ts (0 errors) ====
-    label: function fn() { }
-    label: function* gen() { }
-    

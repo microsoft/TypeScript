@@ -983,7 +983,7 @@
         "category": "Error",
         "code": 1343
     },
-    "Association of a statement label with a function declaration is not allowed.": {
+    "'{0}' declarations cannot be labeled.": {
         "category": "Error",
         "code": 1344
     },

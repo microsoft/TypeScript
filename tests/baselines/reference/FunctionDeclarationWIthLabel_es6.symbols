@@ -1,7 +1,0 @@
-=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclarationWIthLabel_es6.ts ===
-label: function fn() { }
->fn : Symbol(fn, Decl(FunctionDeclarationWIthLabel_es6.ts, 0, 6))
-
-label: function* gen() { }
->gen : Symbol(gen, Decl(FunctionDeclarationWIthLabel_es6.ts, 1, 6))
-
