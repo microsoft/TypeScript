@@ -6,7 +6,7 @@ type Defaultize<TProps, TDefaults> =
     & {[K in Exclude<keyof TProps, keyof TDefaults>]: TProps[K]}
     & Partial<TDefaults>;
 
-type InferedPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
+type InferredPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
 
 declare const checkedType: unique symbol;
 interface PropTypeChecker<U, TRequired = false> {
@@ -35,11 +35,11 @@ declare namespace JSX {
     interface IntrinsicElements {}
     type LibraryManagedAttributes<TComponent, TProps> =
         TComponent extends { defaultProps: infer D; propTypes: infer P; }
-            ? Defaultize<TProps & InferedPropTypes<P>, D>
+            ? Defaultize<TProps & InferredPropTypes<P>, D>
             : TComponent extends { defaultProps: infer D }
                 ? Defaultize<TProps, D>
                 : TComponent extends { propTypes: infer P }
-                    ? TProps & InferedPropTypes<P>
+                    ? TProps & InferredPropTypes<P>
                     : TProps;
 }
 
@@ -124,3 +124,4 @@ class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
 const x = <JustDefaultPropsWithSpecifiedGeneric foo="eh" />;
 const y = <JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" />; // error, no prop named bar
 const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
+const aa = <JustDefaultPropsWithSpecifiedGeneric />;

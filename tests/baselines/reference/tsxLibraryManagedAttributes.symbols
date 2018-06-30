@@ -24,19 +24,19 @@ type Defaultize<TProps, TDefaults> =
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
 
-type InferedPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
->InferedPropTypes : Symbol(InferedPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
->P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 22))
->K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 5, 29))
->P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 22))
->P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 22))
->K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 5, 29))
+type InferredPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
+>InferredPropTypes : Symbol(InferredPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 23))
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 5, 30))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 23))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 23))
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 5, 30))
 >PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
->T : Symbol(T, Decl(tsxLibraryManagedAttributes.tsx, 5, 78))
->U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 5, 87))
+>T : Symbol(T, Decl(tsxLibraryManagedAttributes.tsx, 5, 79))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 5, 88))
 >PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
->T : Symbol(T, Decl(tsxLibraryManagedAttributes.tsx, 5, 78))
->U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 5, 87))
+>T : Symbol(T, Decl(tsxLibraryManagedAttributes.tsx, 5, 79))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 5, 88))
 >checkedType : Symbol(checkedType, Decl(tsxLibraryManagedAttributes.tsx, 7, 13))
 
 declare const checkedType: unique symbol;
@@ -138,10 +138,10 @@ declare namespace JSX {
 >propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 33, 51))
 >P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 33, 68))
 
-            ? Defaultize<TProps & InferedPropTypes<P>, D>
+            ? Defaultize<TProps & InferredPropTypes<P>, D>
 >Defaultize : Symbol(Defaultize, Decl(tsxLibraryManagedAttributes.tsx, 0, 0))
 >TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 32, 45))
->InferedPropTypes : Symbol(InferedPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
+>InferredPropTypes : Symbol(InferredPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
 >P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 33, 68))
 >D : Symbol(D, Decl(tsxLibraryManagedAttributes.tsx, 33, 48))
 
@@ -160,9 +160,9 @@ declare namespace JSX {
 >propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 37, 38))
 >P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 37, 55))
 
-                    ? TProps & InferedPropTypes<P>
+                    ? TProps & InferredPropTypes<P>
 >TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 32, 45))
->InferedPropTypes : Symbol(InferedPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
+>InferredPropTypes : Symbol(InferredPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
 >P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 37, 55))
 
                     : TProps;
@@ -479,4 +479,8 @@ const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong typ
 >z : Symbol(z, Decl(tsxLibraryManagedAttributes.tsx, 122, 5))
 >JustDefaultPropsWithSpecifiedGeneric : Symbol(JustDefaultPropsWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 112, 70))
 >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 122, 47))
+
+const aa = <JustDefaultPropsWithSpecifiedGeneric />;
+>aa : Symbol(aa, Decl(tsxLibraryManagedAttributes.tsx, 123, 5))
+>JustDefaultPropsWithSpecifiedGeneric : Symbol(JustDefaultPropsWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 112, 70))
 

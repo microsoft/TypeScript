@@ -24,8 +24,8 @@ type Defaultize<TProps, TDefaults> =
 >Partial : Partial<T>
 >TDefaults : TDefaults
 
-type InferedPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
->InferedPropTypes : InferedPropTypes<P>
+type InferredPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
+>InferredPropTypes : InferredPropTypes<P>
 >P : P
 >K : K
 >P : P
@@ -142,10 +142,10 @@ declare namespace JSX {
 >propTypes : P
 >P : P
 
-            ? Defaultize<TProps & InferedPropTypes<P>, D>
+            ? Defaultize<TProps & InferredPropTypes<P>, D>
 >Defaultize : Defaultize<TProps, TDefaults>
 >TProps : TProps
->InferedPropTypes : InferedPropTypes<P>
+>InferredPropTypes : InferredPropTypes<P>
 >P : P
 >D : D
 
@@ -164,9 +164,9 @@ declare namespace JSX {
 >propTypes : P
 >P : P
 
-                    ? TProps & InferedPropTypes<P>
+                    ? TProps & InferredPropTypes<P>
 >TProps : TProps
->InferedPropTypes : InferedPropTypes<P>
+>InferredPropTypes : InferredPropTypes<P>
 >P : P
 
                     : TProps;
@@ -543,4 +543,9 @@ const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong typ
 >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
 >foo : number
 >12 : 12
+
+const aa = <JustDefaultPropsWithSpecifiedGeneric />;
+>aa : JSX.Element
+><JustDefaultPropsWithSpecifiedGeneric /> : JSX.Element
+>JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
 
