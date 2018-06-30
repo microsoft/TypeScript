@@ -7,6 +7,9 @@
 ////        this.x = "";
 ////    }
 ////}
+////
+////enum E {}
+////E.A;
 
 verify.codeFixAll({
     fixId: "addMissingMember",
@@ -22,5 +25,10 @@ verify.codeFixAll({
     y(): any {
         throw new Error("Method not implemented.");
     }
-}`,
+}
+
+enum E {
+    A
+}
+E.A;`,
 });

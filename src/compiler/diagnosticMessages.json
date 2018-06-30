@@ -4450,9 +4450,5 @@
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
-    },
-    "Add all missing enum members": {
-        "category": "Message",
-        "code": 95064
     }
 }
