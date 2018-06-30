@@ -198,6 +198,10 @@ namespace ts.OutliningElementsCollector {
         }
 
         function spanForJSXAttributes(node: JsxAttributes): OutliningSpan | undefined {
+            if (node.properties.length === 0) {
+                return undefined;
+            }
+
             return createOutliningSpanFromBounds(node.getStart(), node.getEnd(), OutliningSpanKind.Code);
         }
 
