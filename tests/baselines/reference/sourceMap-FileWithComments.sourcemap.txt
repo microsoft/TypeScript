@@ -396,20 +396,25 @@ sourceFile:sourceMap-FileWithComments.ts
 ---
 >>>    function foo() {
 1->^^^^
-2 >    ^^->
+2 >    ^^^^^^^^^
+3 >             ^^^
 1->
   >
   >    
+2 >    export function 
+3 >             foo
 1->Emitted(20, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(20, 14) Source(24, 21) + SourceIndex(0)
+3 >Emitted(20, 17) Source(24, 24) + SourceIndex(0)
 ---
 >>>    }
-1->^^^^
+1 >^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^->
-1->export function foo() {
+1 >() {
   >    
 2 >    }
-1->Emitted(21, 5) Source(25, 5) + SourceIndex(0)
+1 >Emitted(21, 5) Source(25, 5) + SourceIndex(0)
 2 >Emitted(21, 6) Source(25, 6) + SourceIndex(0)
 ---
 >>>    Shapes.foo = foo;

@@ -897,13 +897,12 @@ namespace ts {
         return file.scriptKind === ScriptKind.JSON;
     }
 
-    export function isConstEnumDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
+    export function isEnumConst(node: EnumDeclaration): boolean {
+        return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
     }
 
-    export function isConst(node: Node): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Const)
-            || !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
+    export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
+        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
     }
 
     export function isLet(node: Node): boolean {
@@ -1184,7 +1183,7 @@ namespace ts {
     }
 
     export function isValidESSymbolDeclaration(node: Node): node is VariableDeclaration | PropertyDeclaration | SignatureDeclaration {
-        return isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+        return isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
             isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
                 isPropertySignature(node) && hasReadonlyModifier(node);
     }
@@ -1887,6 +1886,14 @@ namespace ts {
             return SpecialPropertyAssignmentKind.None;
         }
         const lhs = expr.left;
+        if (isEntityNameExpression(lhs.expression) && lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+                // F.prototype = { ... }
+                return SpecialPropertyAssignmentKind.Prototype;
+        }
+        return getSpecialPropertyAccessKind(lhs);
+    }
+
+    export function getSpecialPropertyAccessKind(lhs: PropertyAccessExpression): SpecialPropertyAssignmentKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
         }
@@ -1895,11 +1902,7 @@ namespace ts {
             return SpecialPropertyAssignmentKind.ModuleExports;
         }
         else if (isEntityNameExpression(lhs.expression)) {
-            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
-                // F.prototype = { ... }
-                return SpecialPropertyAssignmentKind.Prototype;
-            }
-            else if (isPrototypeAccess(lhs.expression)) {
+            if (isPrototypeAccess(lhs.expression)) {
                 // F.G....prototype.x = expr
                 return SpecialPropertyAssignmentKind.PrototypeProperty;
             }
@@ -4601,31 +4604,34 @@ namespace ts {
         return isEmptyBindingPattern(node.name);
     }
 
-    function walkUpBindingElementsAndPatterns(node: Node): Node {
-        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
-            node = node.parent;
+    export function walkUpBindingElementsAndPatterns(binding: BindingElement): VariableDeclaration | ParameterDeclaration {
+        let node = binding.parent;
+        while (isBindingElement(node.parent)) {
+            node = node.parent.parent;
         }
-
-        return node;
+        return node.parent;
     }
 
-    export function getCombinedModifierFlags(node: Node): ModifierFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-        let flags = getModifierFlags(node);
+    function getCombinedFlags(node: Node, getFlags: (n: Node) => number): number {
+        if (isBindingElement(node)) {
+            node = walkUpBindingElementsAndPatterns(node);
+        }
+        let flags = getFlags(node);
         if (node.kind === SyntaxKind.VariableDeclaration) {
             node = node.parent;
         }
-
         if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= getModifierFlags(node);
+            flags |= getFlags(node);
             node = node.parent;
         }
-
         if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= getModifierFlags(node);
+            flags |= getFlags(node);
         }
-
         return flags;
+    }
+
+    export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
+        return getCombinedFlags(node, getModifierFlags);
     }
 
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
@@ -4636,23 +4642,7 @@ namespace ts {
     // list.  By calling this function, all those flags are combined so that the client can treat
     // the node as if it actually had those flags.
     export function getCombinedNodeFlags(node: Node): NodeFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-
-        let flags = node.flags;
-        if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= node.flags;
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= node.flags;
-        }
-
-        return flags;
+        return getCombinedFlags(node, n => n.flags);
     }
 
     /**
@@ -4871,9 +4861,6 @@ namespace ts {
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
-        if (!declaration) {
-            return undefined;
-        }
         switch (declaration.kind) {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
@@ -4903,8 +4890,6 @@ namespace ts {
                         return undefined;
                 }
             }
-            case SyntaxKind.JSDocCallbackTag:
-                return (declaration as JSDocCallbackTag).name;
             case SyntaxKind.JSDocTypedefTag:
                 return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
             case SyntaxKind.ExportAssignment: {
@@ -5844,7 +5829,7 @@ namespace ts {
     // Keywords
 
     /* @internal */
-    export function isModifierKind(token: SyntaxKind): boolean {
+    export function isModifierKind(token: SyntaxKind): token is Modifier["kind"] {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.AsyncKeyword:
@@ -7490,19 +7475,20 @@ namespace ts {
         return true;
     }
 
-    export function tryRemoveDirectoryPrefix(path: string, dirPath: string): string | undefined {
-        const a = tryRemovePrefix(path, dirPath);
-        if (a === undefined) return undefined;
-        switch (a.charCodeAt(0)) {
-            case CharacterCodes.slash:
-            case CharacterCodes.backslash:
-                return a.slice(1);
-            default:
-                return undefined;
-        }
+    function isDirectorySeparator(charCode: number): boolean {
+        return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
     }
 
-        // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
+    function stripLeadingDirectorySeparator(s: string): string | undefined {
+        return isDirectorySeparator(s.charCodeAt(0)) ? s.slice(1) : undefined;
+    }
+
+    export function tryRemoveDirectoryPrefix(path: string, dirPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
+        const withoutPrefix = tryRemovePrefix(path, dirPath, getCanonicalFileName);
+        return withoutPrefix === undefined ? undefined : stripLeadingDirectorySeparator(withoutPrefix);
+    }
+
+    // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;

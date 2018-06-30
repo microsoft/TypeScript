@@ -13,12 +13,12 @@ namespace ts {
 
     /** If 'path' refers to an old directory, returns path in the new directory. */
     type PathUpdater = (path: string) => string | undefined;
-    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
+    // exported for tests
+    export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            const canonicalPath = getCanonicalFileName(path);
-            if (canonicalPath === canonicalOldPath) return newFileOrDirPath;
-            const suffix = tryRemoveDirectoryPrefix(canonicalPath, canonicalOldPath);
+            if (getCanonicalFileName(path) === canonicalOldPath) return newFileOrDirPath;
+            const suffix = tryRemoveDirectoryPrefix(path, canonicalOldPath, getCanonicalFileName);
             return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
         };
     }
@@ -102,7 +102,8 @@ namespace ts {
         getCanonicalFileName: GetCanonicalFileName,
         preferences: UserPreferences,
     ): void {
-        for (const sourceFile of program.getSourceFiles()) {
+        const allFiles = program.getSourceFiles();
+        for (const sourceFile of allFiles) {
             const newFromOld = oldToNew(sourceFile.fileName);
             const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.fileName;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
@@ -121,15 +122,20 @@ namespace ts {
                     return newAbsolute === undefined ? undefined : ensurePathIsNonModuleName(getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName));
                 },
                 importLiteral => {
+                    const importedModuleSymbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
+                    // No need to update if it's an ambient module^M
+                    if (importedModuleSymbol && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) return undefined;
+
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
                         ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
-                        : getSourceFileToImport(importLiteral, sourceFile, program, host, oldToNew);
-                    // If neither the importing source file nor the imported file moved, do nothing.
-                    return toImport === undefined || !toImport.updated && !importingSourceFileMoved
-                        ? undefined
-                        : moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, preferences);
+                        : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
+
+                    // Need an update if the imported file moved, or the importing file moved and was using a relative path.
+                    return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
+                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, allFiles, preferences)
+                        : undefined;
                 });
         }
     }
@@ -146,11 +152,17 @@ namespace ts {
         /** True if the imported file was renamed. */
         readonly updated: boolean;
     }
-    function getSourceFileToImport(importLiteral: StringLiteralLike, importingSourceFile: SourceFile, program: Program, host: LanguageServiceHost, oldToNew: PathUpdater): ToImport | undefined {
-        const symbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
-        if (symbol) {
-            if (symbol.declarations.some(d => isAmbientModule(d))) return undefined; // No need to update if it's an ambient module
-            const oldFileName = find(symbol.declarations, isSourceFile)!.fileName;
+    function getSourceFileToImport(
+        importedModuleSymbol: Symbol | undefined,
+        importLiteral: StringLiteralLike,
+        importingSourceFile: SourceFile,
+        program: Program,
+        host: LanguageServiceHost,
+        oldToNew: PathUpdater,
+    ): ToImport | undefined {
+        if (importedModuleSymbol) {
+            // `find` should succeed because we checked for ambient modules before calling this function.
+            const oldFileName = find(importedModuleSymbol.declarations, isSourceFile)!.fileName;
             const newFileName = oldToNew(oldFileName);
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }

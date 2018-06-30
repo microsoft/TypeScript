@@ -1239,8 +1239,16 @@ namespace ts {
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
                 readFile: f => host.readFile(f),
-                fileExists: f => host.fileExists(f),
+                fileExists: f => {
+                    // Use local caches
+                    const path = toPath(f);
+                    if (getSourceFileByPath(path)) return true;
+                    if (contains(missingFilePaths, path)) return false;
+                    // Before falling back to the host
+                    return host.fileExists(f);
+                },
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
+                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             };
         }
 
@@ -2332,7 +2340,7 @@ namespace ts {
 
         function parseProjectReferenceConfigFile(ref: ProjectReference): { commandLine: ParsedCommandLine, sourceFile: SourceFile } | undefined {
             // The actual filename (i.e. add "/tsconfig.json" if necessary)
-            const refPath = resolveProjectReferencePath(host, ref)!; // TODO: GH#18217
+            const refPath = resolveProjectReferencePath(host, ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
             const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile;
@@ -2817,11 +2825,11 @@ namespace ts {
     /**
      * Returns the target config filename of a project reference
      */
-    export function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
+    export function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName {
         if (!host.fileExists(ref.path)) {
-            return combinePaths(ref.path, "tsconfig.json");
+            return combinePaths(ref.path, "tsconfig.json") as ResolvedConfigFileName;
         }
-        return ref.path;
+        return ref.path as ResolvedConfigFileName;
     }
 
     /* @internal */

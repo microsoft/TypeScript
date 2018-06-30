@@ -627,9 +627,8 @@ namespace ts.server.protocol {
         arguments: GetEditsForFileRenameRequestArgs;
     }
 
-    // Note: The file from FileRequestArgs is just any file in the project.
-    // We will generate code changes for every file in that project, so the choice is arbitrary.
-    export interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+    /** Note: Paths may also be directories. */
+    export interface GetEditsForFileRenameRequestArgs {
         readonly oldFilePath: string;
         readonly newFilePath: string;
     }
@@ -2255,11 +2254,16 @@ namespace ts.server.protocol {
 
     /**
      * Represents additional spans returned with a diagnostic which are relevant to it
-     * Like DiagnosticWithLinePosition, this is provided in two forms:
-     *   - start and length of the span
-     *   - startLocation and endLocation a pair of Location objects storing the start/end line offset of the span
      */
     export interface DiagnosticRelatedInformation {
+        /**
+         * The category of the related information message, e.g. "error", "warning", or "suggestion".
+         */
+        category: string;
+        /**
+         * The code used ot identify the related information
+         */
+        code: number;
         /**
          * Text of related or additional information.
          */
@@ -2440,7 +2444,7 @@ namespace ts.server.protocol {
     /**
      * An item found in a navto response.
      */
-    export interface NavtoItem {
+    export interface NavtoItem extends FileSpan {
         /**
          * The symbol's name.
          */
@@ -2465,21 +2469,6 @@ namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers?: string;
-
-        /**
-         * The file in which the symbol is found.
-         */
-        file: string;
-
-        /**
-         * The location within file at which the symbol is found.
-         */
-        start: Location;
-
-        /**
-         * One past the last character of the symbol.
-         */
-        end: Location;
 
         /**
          * Name of symbol's container symbol (if any); for example,

@@ -1,19 +1,15 @@
 /// <reference path='fourslash.ts' />
 
 //@Filename: file.tsx
-//// declare module JSX {
-////     interface Element { }
-////     interface IntrinsicElements {
-////     }
-////     interface ElementAttributesProperty { props }
-//// }
-//// class [|MyClass|] {
-////   props: {
-////     name?: string;
-////     size?: number;
-//// }
+////declare module JSX {
+////    interface Element {}
+////    interface IntrinsicElements {}
+////}
+////class [|MyClass|] {}
 ////
-////
-//// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
+////<[|MyClass|]></[|MyClass|]>;
+////<[|MyClass|]/>;
 
-verify.rangesAreRenameLocations();
+const [r0, r1, r2, r3] = test.ranges();
+verify.renameLocations([r0, r3], [r0, r1, r2, r3]);
+verify.renameLocations([r1, r2], [r1, r2]);

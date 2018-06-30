@@ -487,7 +487,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非干燥生成将生成项目“{0}”]]></Val>
+            <Val><![CDATA[非 -dry 生成将生成项目“{0}”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -496,7 +496,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非干燥生成将删除以下文件: {0}]]></Val>
+            <Val><![CDATA[非 -dry 生成将删除以下文件: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

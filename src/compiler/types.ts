@@ -225,6 +225,8 @@ namespace ts {
         TypeLiteral,
         ArrayType,
         TupleType,
+        OptionalType,
+        RestType,
         UnionType,
         IntersectionType,
         ConditionalType,
@@ -269,6 +271,7 @@ namespace ts {
         AsExpression,
         NonNullExpression,
         MetaProperty,
+        SyntheticExpression,
 
         // Misc
         TemplateSpan,
@@ -1101,6 +1104,16 @@ namespace ts {
         elementTypes: NodeArray<TypeNode>;
     }
 
+    export interface OptionalTypeNode extends TypeNode {
+        kind: SyntaxKind.OptionalType;
+        type: TypeNode;
+    }
+
+    export interface RestTypeNode extends TypeNode {
+        kind: SyntaxKind.RestType;
+        type: TypeNode;
+    }
+
     export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
 
     export interface UnionTypeNode extends TypeNode {
@@ -1286,6 +1299,12 @@ namespace ts {
         kind: SyntaxKind.YieldExpression;
         asteriskToken?: AsteriskToken;
         expression?: Expression;
+    }
+
+    export interface SyntheticExpression extends Expression {
+        kind: SyntaxKind.SyntheticExpression;
+        isSpread: boolean;
+        type: Type;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -1742,7 +1761,11 @@ namespace ts {
 
     export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
 
-    export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
+    export type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess;
+
+    export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+        expression: JsxTagNameExpression;
+    }
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
         parent: JsxOpeningLikeElement;
@@ -2668,6 +2691,13 @@ namespace ts {
         readFile(path: string): string | undefined;
     }
 
+    /**
+     * Branded string for keeping track of when we've turned an ambiguous path
+     * specified like "./blah" to an absolute path to an actual
+     * tsconfig file, e.g. "/root/blah/tsconfig.json"
+     */
+    export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
+
     export type WriteFileCallback = (
         fileName: string,
         data: string,
@@ -2748,7 +2778,7 @@ namespace ts {
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
-        /* @internal */ isSourceFileDefaultLibrary(file: SourceFile): boolean;
+        isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
@@ -2964,7 +2994,7 @@ namespace ts {
          */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
-        getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
+        getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
@@ -3469,6 +3499,7 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
+        specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
     }
 
     /* @internal */
@@ -3490,14 +3521,15 @@ namespace ts {
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
+        ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 12,        // Optional parameter
+        RestParameter     = 1 << 13,        // Rest parameter
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
-        isRestParameter?: boolean;
     }
 
     /* @internal */
@@ -3607,6 +3639,7 @@ namespace ts {
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
+        jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
     }
 
     export const enum TypeFlags {
@@ -3824,6 +3857,16 @@ namespace ts {
         instantiations: Map<TypeReference>;  // Generic instantiation cache
         /* @internal */
         variances?: Variance[];  // Variance of each type parameter
+    }
+
+    export interface TupleType extends GenericType {
+        minLength: number;
+        hasRestElement: boolean;
+        associatedNames?: __String[];
+    }
+
+    export interface TupleTypeReference extends TypeReference {
+        target: TupleType;
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -4172,14 +4215,14 @@ namespace ts {
     }
 
     export interface Diagnostic extends DiagnosticRelatedInformation {
-        category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
-        code: number;
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
     export interface DiagnosticRelatedInformation {
+        category: DiagnosticCategory;
+        code: number;
         file: SourceFile | undefined;
         start: number | undefined;
         length: number | undefined;
@@ -4629,6 +4672,15 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
+    export interface UpToDateHost {
+        fileExists(fileName: string): boolean;
+        getModifiedTime(fileName: string): Date;
+        getUnchangedTime?(fileName: string): Date | undefined;
+        getLastStatus?(fileName: string): UpToDateStatus | undefined;
+        setLastStatus?(fileName: string, status: UpToDateStatus): void;
+        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
+    }
+
     export interface ModuleResolutionHost {
         // TODO: GH#18217 Optional methods frequently used as non-optional
 
@@ -4974,6 +5026,7 @@ namespace ts {
     /* @internal */
     export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
 
         /* @internal */

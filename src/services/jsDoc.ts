@@ -242,7 +242,7 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const tokenAtPos = getTokenAtPosition(sourceFile, position);
         const tokenStart = tokenAtPos.getStart(sourceFile);
         if (!tokenAtPos || tokenStart < position) {
             return undefined;
@@ -263,11 +263,7 @@ namespace ts.JsDoc {
             return { newText: singleLineResult, caretOffset: 3 };
         }
 
-        const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
-        const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
-
-        // replace non-whitespace characters in prefix with spaces.
-        const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).replace(/\S/i, () => " ");
+        const indentationStr = getIndentationStringAtPosition(sourceFile, position);
 
         // A doc comment consists of the following
         // * The opening comment line
@@ -276,8 +272,7 @@ namespace ts.JsDoc {
         // * TODO: other tags.
         // * the closing comment line
         // * if the caret was directly in front of the object, then we add an extra line and indentation.
-        const preamble = "/**" + newLine +
-            indentationStr + " * ";
+        const preamble = "/**" + newLine + indentationStr + " * ";
         const result =
             preamble + newLine +
             parameterDocComments(parameters, hasJavaScriptFileExtension(sourceFile.fileName), indentationStr, newLine) +
@@ -285,6 +280,14 @@ namespace ts.JsDoc {
             (tokenStart === position ? newLine + indentationStr : "");
 
         return { newText: result, caretOffset: preamble.length };
+    }
+
+    function getIndentationStringAtPosition(sourceFile: SourceFile, position: number): string {
+        const { text } = sourceFile;
+        const lineStart = getLineStartPositionForPosition(position, sourceFile);
+        let pos = lineStart;
+        for (; pos <= position && isWhiteSpaceSingleLine(text.charCodeAt(pos)); pos++);
+        return text.slice(lineStart, pos);
     }
 
     function parameterDocComments(parameters: ReadonlyArray<ParameterDeclaration>, isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
@@ -303,6 +306,7 @@ namespace ts.JsDoc {
         for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
             switch (commentOwner.kind) {
                 case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.MethodSignature:

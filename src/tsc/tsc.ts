@@ -19,9 +19,13 @@ namespace ts {
         }
     }
 
+    function defaultIsPretty() {
+        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+    }
+
     function shouldBePretty(options: CompilerOptions) {
         if (typeof options.pretty === "undefined") {
-            return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+            return defaultIsPretty();
         }
         return options.pretty;
     }
@@ -50,7 +54,7 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            const reportDiag = createDiagnosticReporter(sys, /*pretty*/ true);
+            const reportDiag = createDiagnosticReporter(sys, defaultIsPretty());
             const report = (message: DiagnosticMessage, ...args: string[]) => reportDiag(createCompilerDiagnostic(message, ...args));
             const buildHost: BuildHost = {
                 error: report,
