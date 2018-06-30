@@ -48,11 +48,13 @@ tests/cases/compiler/duplicateIdentifierEnum_B.ts(4,6): error TS2567: Enum decla
     enum D {
          ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! related TS6203 tests/cases/compiler/duplicateIdentifierEnum_B.ts:1:10: Conflicts here.
         bar
     }
     class E {
           ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! related TS6203 tests/cases/compiler/duplicateIdentifierEnum_B.ts:4:6: Conflicts here.
         foo: number;
     }
     // also make sure the error appears when trying to merge an enum in a separate file.
@@ -60,10 +62,12 @@ tests/cases/compiler/duplicateIdentifierEnum_B.ts(4,6): error TS2567: Enum decla
     function D() {
              ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! related TS6203 tests/cases/compiler/duplicateIdentifierEnum_A.ts:23:6: Conflicts here.
         return 0;
     }
     enum E {
          ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! related TS6203 tests/cases/compiler/duplicateIdentifierEnum_A.ts:26:7: Conflicts here.
         bar
     }

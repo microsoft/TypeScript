@@ -66,21 +66,29 @@
     class Foo { }
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/file2.ts:1:6: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file3.ts:1:6: Conflicts here.
     const Bar = 3;
           ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/compiler/file2.ts:2:7: Conflicts here.
+!!! related TS6203 tests/cases/compiler/file3.ts:2:5: Conflicts here.
 ==== tests/cases/compiler/file2.ts (2 errors) ====
     type Foo = number;
          ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/file1.ts:1:7: Conflicts here.
     class Bar {}
           ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/compiler/file1.ts:2:7: Conflicts here.
 ==== tests/cases/compiler/file3.ts (2 errors) ====
     type Foo = 54;
          ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/file1.ts:1:7: Conflicts here.
     let Bar = 42
         ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/compiler/file1.ts:2:7: Conflicts here.
     

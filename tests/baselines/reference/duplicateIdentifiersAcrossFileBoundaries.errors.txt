@@ -13,15 +13,18 @@ tests/cases/compiler/file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
     class C2 { }
           ~~
 !!! error TS2300: Duplicate identifier 'C2'.
+!!! related TS6203 tests/cases/compiler/file2.ts:3:10: Conflicts here.
     function f() { }
              ~
 !!! error TS2300: Duplicate identifier 'f'.
+!!! related TS6203 tests/cases/compiler/file2.ts:4:7: Conflicts here.
     var v = 3;
     
     class Foo {
         static x: number;
                ~
 !!! error TS2300: Duplicate identifier 'x'.
+!!! related TS6203 tests/cases/compiler/file2.ts:8:16: Conflicts here.
     }
     
     module N {
@@ -36,9 +39,11 @@ tests/cases/compiler/file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
     function C2() { } // error -- cannot merge function with non-ambient class
              ~~
 !!! error TS2300: Duplicate identifier 'C2'.
+!!! related TS6203 tests/cases/compiler/file1.ts:3:7: Conflicts here.
     class f { } // error -- cannot merge function with non-ambient class
           ~
 !!! error TS2300: Duplicate identifier 'f'.
+!!! related TS6203 tests/cases/compiler/file1.ts:4:10: Conflicts here.
     var v = 3;
     
     module Foo {
@@ -47,6 +52,7 @@ tests/cases/compiler/file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
         export var x: number; // error for redeclaring var in a different parent
                    ~
 !!! error TS2300: Duplicate identifier 'x'.
+!!! related TS6203 tests/cases/compiler/file1.ts:8:12: Conflicts here.
     }
     
     declare module N {

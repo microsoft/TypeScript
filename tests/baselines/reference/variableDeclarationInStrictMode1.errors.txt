@@ -10,3 +10,4 @@ lib.es5.d.ts(32,18): error TS2300: Duplicate identifier 'eval'.
 !!! error TS1100: Invalid use of 'eval' in strict mode.
         ~~~~
 !!! error TS2300: Duplicate identifier 'eval'.
+!!! related TS6203 /.ts/lib.es5.d.ts:32:18: Conflicts here.

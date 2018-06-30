@@ -22,6 +22,7 @@
     class A { }
     ~~~~~
 !!! error TS6200: Definitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
+!!! related TS6201 tests/cases/compiler/file2.ts:1:1: Conflicts are in this file.
     class B { }
     class C { }
     class D { }
@@ -34,6 +35,7 @@
     class A { }
     ~~~~~
 !!! error TS6200: Definitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
+!!! related TS6201 tests/cases/compiler/file1.ts:1:1: Conflicts are in this file.
     class B { }
     class C { }
     class D { }

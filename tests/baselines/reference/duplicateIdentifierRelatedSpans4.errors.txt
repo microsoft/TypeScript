@@ -22,6 +22,7 @@
     interface TopLevel {
     ~~~~~~~~~
 !!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
+!!! related TS6201 tests/cases/compiler/file2.ts:1:1: Conflicts are in this file.
         duplicate1: () => string;
         duplicate2: () => string;
         duplicate3: () => string;
@@ -35,6 +36,7 @@
     interface TopLevel {
     ~~~~~~~~~
 !!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
+!!! related TS6201 tests/cases/compiler/file1.ts:1:1: Conflicts are in this file.
         duplicate1(): number;
         duplicate2(): number;
         duplicate3(): number;

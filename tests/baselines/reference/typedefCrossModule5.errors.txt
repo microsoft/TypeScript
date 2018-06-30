@@ -40,15 +40,19 @@
     /** @typedef {number} Foo */
                           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod2.js:1:7: Conflicts here.
     class Bar {}
           ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod2.js:2:7: Conflicts here.
     
 ==== tests/cases/conformance/jsdoc/mod2.js (2 errors) ====
     class Foo { } // should error
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:1:23: Conflicts here.
     const Bar = 3;
           ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:2:7: Conflicts here.
     

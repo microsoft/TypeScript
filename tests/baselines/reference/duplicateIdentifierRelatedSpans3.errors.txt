@@ -59,23 +59,29 @@
         duplicate1: () => string;
         ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
+!!! related TS6203 tests/cases/compiler/file2.ts:2:5: Conflicts here.
         duplicate2: () => string;
         ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
+!!! related TS6203 tests/cases/compiler/file2.ts:3:5: Conflicts here.
         duplicate3: () => string;
         ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
+!!! related TS6203 tests/cases/compiler/file2.ts:4:5: Conflicts here.
     }
 ==== tests/cases/compiler/file2.ts (3 errors) ====
     interface TopLevel {
         duplicate1(): number;
         ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
+!!! related TS6203 tests/cases/compiler/file1.ts:2:5: Conflicts here.
         duplicate2(): number;
         ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
+!!! related TS6203 tests/cases/compiler/file1.ts:3:5: Conflicts here.
         duplicate3(): number;
         ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
+!!! related TS6203 tests/cases/compiler/file1.ts:4:5: Conflicts here.
     }
     

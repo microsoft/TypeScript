@@ -60,12 +60,15 @@
             duplicate1: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
+!!! related TS6203 tests/cases/compiler/file2.ts:4:9: Conflicts here.
             duplicate2: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
+!!! related TS6203 tests/cases/compiler/file2.ts:5:9: Conflicts here.
             duplicate3: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
+!!! related TS6203 tests/cases/compiler/file2.ts:6:9: Conflicts here.
         }
     }
     export {}
@@ -76,12 +79,15 @@
             duplicate1(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
+!!! related TS6203 tests/cases/compiler/file1.ts:3:9: Conflicts here.
             duplicate2(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
+!!! related TS6203 tests/cases/compiler/file1.ts:4:9: Conflicts here.
             duplicate3(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
+!!! related TS6203 tests/cases/compiler/file1.ts:5:9: Conflicts here.
         }
     }
     export {}
