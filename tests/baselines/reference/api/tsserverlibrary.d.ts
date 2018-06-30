@@ -6129,11 +6129,6 @@ declare namespace ts {
     function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile): string;
     function getTextOfConstantValue(value: string | number): string;
     function escapeLeadingUnderscores(identifier: string): __String;
-    /**
-     * @deprecated Use `id.escapedText` to get the escaped text of an Identifier.
-     * @param identifier The identifier to escape
-     */
-    function escapeIdentifier(identifier: string): string;
     function makeIdentifierFromModuleName(moduleName: string): string;
     function isBlockOrCatchScoped(declaration: Declaration): boolean;
     function isCatchClauseVariableDeclarationOrBindingElement(declaration: Declaration): boolean;
@@ -6731,13 +6726,6 @@ declare namespace ts {
     function unescapeLeadingUnderscores(identifier: __String): string;
     function idText(identifier: Identifier): string;
     function symbolName(symbol: Symbol): string;
-    /**
-     * Remove extra underscore from escaped identifier text content.
-     * @deprecated Use `id.text` for the unescaped text.
-     * @param identifier The escaped identifier text.
-     * @returns The unescaped identifier text.
-     */
-    function unescapeIdentifier(id: string): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined;
     /** @internal */
     function isNamedDeclaration(node: Node): node is NamedDeclaration & {
