@@ -1,7 +1,7 @@
 tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'constructor' of type 'Function' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'hasOwnProperty' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
+tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'hasOwnProperty' of type '(v: string | number | symbol) => boolean' is not assignable to string index type 'Object'.
 tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'propertyIsEnumerable' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
+tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'propertyIsEnumerable' of type '(v: string | number | symbol) => boolean' is not assignable to string index type 'Object'.
 tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to string index type 'Object'.
 tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'toString' of type '() => string' is not assignable to string index type 'Object'.
 tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts(5,5): error TS2411: Property 'valueOf' of type '() => Object' is not assignable to string index type 'Object'.
@@ -16,11 +16,11 @@ tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectInd
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property 'constructor' of type 'Function' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'hasOwnProperty' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'hasOwnProperty' of type '(v: string | number | symbol) => boolean' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'propertyIsEnumerable' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'propertyIsEnumerable' of type '(v: string | number | symbol) => boolean' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~

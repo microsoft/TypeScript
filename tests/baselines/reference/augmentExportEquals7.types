@@ -13,7 +13,7 @@ import * as lib from "lib";
 >lib : () => void
 
 declare module "lib" {
->"lib" : typeof "lib"
+>"lib" : typeof import("lib")
 
     export function fn(): void;
 >fn : () => void

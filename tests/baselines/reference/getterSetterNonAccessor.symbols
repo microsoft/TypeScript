@@ -7,10 +7,10 @@ function setFunc(v){}
 >v : Symbol(v, Decl(getterSetterNonAccessor.ts, 1, 17))
 
 Object.defineProperty({}, "0", <PropertyDescriptor>({
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, --, --))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 
           get: getFunc,
 >get : Symbol(get, Decl(getterSetterNonAccessor.ts, 3, 53))

@@ -320,7 +320,7 @@ export * from "class-module";
 
 === tests/cases/compiler/modules.d.ts ===
 declare module "interface" {
->"interface" : typeof "interface"
+>"interface" : typeof import("interface")
 
     interface Foo {
 >Foo : Foo
@@ -336,7 +336,7 @@ declare module "interface" {
 }
 
 declare module "variable" {
->"variable" : typeof "variable"
+>"variable" : typeof import("variable")
 
     var Foo: {
 >Foo : { a: number; b: number; }
@@ -352,7 +352,7 @@ declare module "variable" {
 }
 
 declare module "interface-variable" {
->"interface-variable" : typeof "interface-variable"
+>"interface-variable" : typeof import("interface-variable")
 
     interface Foo {
 >Foo : Foo
@@ -377,7 +377,7 @@ declare module "interface-variable" {
 }
 
 declare module "module" {
->"module" : typeof "module"
+>"module" : typeof import("module")
 
     module Foo {
 >Foo : typeof Foo
@@ -393,7 +393,7 @@ declare module "module" {
 }
 
 declare module "interface-module" {
->"interface-module" : typeof "interface-module"
+>"interface-module" : typeof import("interface-module")
 
     interface Foo {
 >Foo : Foo
@@ -418,7 +418,7 @@ declare module "interface-module" {
 }
 
 declare module "variable-module" {
->"variable-module" : typeof "variable-module"
+>"variable-module" : typeof import("variable-module")
 
     module Foo {
 >Foo : { a: number; b: number; }
@@ -447,7 +447,7 @@ declare module "variable-module" {
 }
 
 declare module "function" {
->"function" : typeof "function"
+>"function" : typeof import("function")
 
     function foo();
 >foo : () => any
@@ -457,7 +457,7 @@ declare module "function" {
 }
 
 declare module "function-module" {
->"function-module" : typeof "function-module"
+>"function-module" : typeof import("function-module")
 
     function foo();
 >foo : typeof foo
@@ -476,7 +476,7 @@ declare module "function-module" {
 }
 
 declare module "class" {
->"class" : typeof "class"
+>"class" : typeof import("class")
 
     class Foo {
 >Foo : Foo
@@ -492,7 +492,7 @@ declare module "class" {
 }
 
 declare module "class-module" {
->"class-module" : typeof "class-module"
+>"class-module" : typeof import("class-module")
 
     class Foo {
 >Foo : Foo

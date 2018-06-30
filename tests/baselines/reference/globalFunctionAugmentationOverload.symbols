@@ -1,0 +1,25 @@
+=== tests/cases/compiler/mod.d.ts ===
+declare function expect(spy: Function): void;
+>expect : Symbol(expect, Decl(mod.d.ts, 0, 0), Decl(mine.ts, 2, 16))
+>spy : Symbol(spy, Decl(mod.d.ts, 0, 24))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare module "mod" {
+>"mod" : Symbol("mod", Decl(mod.d.ts, 0, 45))
+
+    class mod {}
+>mod : Symbol(mod, Decl(mod.d.ts, 1, 22))
+
+    export = mod;
+>mod : Symbol(mod, Decl(mod.d.ts, 1, 22))
+}
+=== tests/cases/compiler/mine.ts ===
+import "mod";
+
+declare global {
+>global : Symbol(global, Decl(mine.ts, 0, 13))
+
+    function expect(element: string): void;
+>expect : Symbol(expect, Decl(mod.d.ts, 0, 0), Decl(mine.ts, 2, 16))
+>element : Symbol(element, Decl(mine.ts, 3, 20))
+}

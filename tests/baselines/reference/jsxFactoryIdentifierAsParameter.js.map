@@ -1,2 +1,2 @@
 //// [test.js.map]
-{"version":3,"file":"test.js","sourceRoot":"","sources":["test.tsx"],"names":[],"mappings":";;AAMA;IACI,MAAM,CAAC,aAAa;QAChB,MAAM,CAAC,0BAAO,CAAC;IACnB,CAAC;CACJ;AAJD,oCAIC"}
+{"version":3,"file":"test.js","sourceRoot":"","sources":["test.tsx"],"names":[],"mappings":";;AAMA,MAAa,YAAY;IACrB,MAAM,CAAC,aAAa;QAChB,OAAO,0BAAO,CAAC;IACnB,CAAC;CACJ;AAJD,oCAIC"}

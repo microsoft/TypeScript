@@ -31,26 +31,27 @@ for () { // error
 }
 
 //// [for.js]
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 10; i++) { // ok
     var x1 = i;
 }
-for (var j = 0; j < 10; j++) {
+for (var j = 0; j < 10; j++) { // ok
     var x2 = j;
 }
-for (var k = 0; k < 10;) {
+for (var k = 0; k < 10;) { // ok
     k++;
 }
-for (; i < 10;) {
+for (; i < 10;) { // ok
     i++;
 }
-for (; i > 1; i--) {
+for (; i > 1; i--) { // ok
 }
-for (var l = 0;; l++) {
+for (var l = 0;; l++) { // ok
     if (l > 10) {
         break;
     }
 }
-for (;;) {
+for (;;) { // ok
 }
-for (;;) {
+for (;; // error
+) { // error
 }

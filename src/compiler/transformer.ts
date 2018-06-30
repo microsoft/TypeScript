@@ -1,20 +1,6 @@
-/// <reference path="visitor.ts" />
-/// <reference path="transformers/utilities.ts" />
-/// <reference path="transformers/ts.ts" />
-/// <reference path="transformers/jsx.ts" />
-/// <reference path="transformers/esnext.ts" />
-/// <reference path="transformers/es2017.ts" />
-/// <reference path="transformers/es2016.ts" />
-/// <reference path="transformers/es2015.ts" />
-/// <reference path="transformers/generators.ts" />
-/// <reference path="transformers/es5.ts" />
-/// <reference path="transformers/module/module.ts" />
-/// <reference path="transformers/module/system.ts" />
-/// <reference path="transformers/module/es2015.ts" />
-
 /* @internal */
 namespace ts {
-    function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile> {
+    function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
             case ModuleKind.ES2015:
@@ -42,7 +28,7 @@ namespace ts {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const transformers: TransformerFactory<SourceFile>[] = [];
+        const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
 
         addRange(transformers, customTransformers && customTransformers.before);
 
@@ -92,7 +78,7 @@ namespace ts {
      * @param transforms An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformNodes<T extends Node>(resolver: EmitResolver, host: EmitHost, options: CompilerOptions, nodes: ReadonlyArray<T>, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): TransformationResult<T> {
+    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: ReadonlyArray<T>, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -100,17 +86,18 @@ namespace ts {
         let lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
-        let emitHelpers: EmitHelper[];
+        let emitHelpers: EmitHelper[] | undefined;
         let onSubstituteNode: TransformationContext["onSubstituteNode"] = (_, node) => node;
         let onEmitNode: TransformationContext["onEmitNode"] = (hint, node, callback) => callback(hint, node);
         let state = TransformationState.Uninitialized;
+        const diagnostics: DiagnosticWithLocation[] = [];
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
             getCompilerOptions: () => options,
-            getEmitResolver: () => resolver,
-            getEmitHost: () => host,
+            getEmitResolver: () => resolver!, // TODO: GH#18217
+            getEmitHost: () => host!, // TODO: GH#18217
             startLexicalEnvironment,
             suspendLexicalEnvironment,
             resumeLexicalEnvironment,
@@ -134,6 +121,9 @@ namespace ts {
                 Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
                 Debug.assert(value !== undefined, "Value must not be 'undefined'");
                 onEmitNode = value;
+            },
+            addDiagnostic(diag) {
+                diagnostics.push(diag);
             }
         };
 
@@ -163,7 +153,8 @@ namespace ts {
             transformed,
             substituteNode,
             emitNodeWithNotification,
-            dispose
+            dispose,
+            diagnostics
         };
 
         function transformRoot(node: T) {
@@ -279,8 +270,8 @@ namespace ts {
             lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentVariableDeclarations;
             lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentFunctionDeclarations;
             lexicalEnvironmentStackOffset++;
-            lexicalEnvironmentVariableDeclarations = undefined;
-            lexicalEnvironmentFunctionDeclarations = undefined;
+            lexicalEnvironmentVariableDeclarations = undefined!;
+            lexicalEnvironmentFunctionDeclarations = undefined!;
         }
 
         /** Suspends the current lexical environment, usually after visiting a parameter list. */
@@ -303,12 +294,12 @@ namespace ts {
          * Ends a lexical environment. The previous set of hoisted declarations are restored and
          * any hoisted declarations added in this environment are returned.
          */
-        function endLexicalEnvironment(): Statement[] {
+        function endLexicalEnvironment(): Statement[] | undefined {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
             Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
-            let statements: Statement[];
+            let statements: Statement[] | undefined;
             if (lexicalEnvironmentVariableDeclarations || lexicalEnvironmentFunctionDeclarations) {
                 if (lexicalEnvironmentFunctionDeclarations) {
                     statements = [...lexicalEnvironmentFunctionDeclarations];
@@ -363,12 +354,12 @@ namespace ts {
                 }
 
                 // Release references to external entries for GC purposes.
-                lexicalEnvironmentVariableDeclarations = undefined;
-                lexicalEnvironmentVariableDeclarationsStack = undefined;
-                lexicalEnvironmentFunctionDeclarations = undefined;
-                lexicalEnvironmentFunctionDeclarationsStack = undefined;
-                onSubstituteNode = undefined;
-                onEmitNode = undefined;
+                lexicalEnvironmentVariableDeclarations = undefined!;
+                lexicalEnvironmentVariableDeclarationsStack = undefined!;
+                lexicalEnvironmentFunctionDeclarations = undefined!;
+                lexicalEnvironmentFunctionDeclarationsStack = undefined!;
+                onSubstituteNode = undefined!;
+                onEmitNode = undefined!;
                 emitHelpers = undefined;
 
                 // Prevent further use of the transformation result.

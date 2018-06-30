@@ -37,13 +37,13 @@ interface I2<T> {
 var a: { new(x: Date): string }
 >a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures2.ts, 18, 3))
 >x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures2.ts, 18, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 var b = { new(x: RegExp) { return ''; } }; // not a construct signature, function called new
 >b : Symbol(b, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 3))
 >new : Symbol(new, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 14))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function foo1b(x: B);
 >foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 42), Decl(objectTypesIdentityWithConstructSignatures2.ts, 21, 21), Decl(objectTypesIdentityWithConstructSignatures2.ts, 22, 21))

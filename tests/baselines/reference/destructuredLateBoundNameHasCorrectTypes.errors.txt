@@ -1,0 +1,18 @@
+tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts(11,7): error TS2459: Type '{ prop: string; }' has no property '[notPresent]' and no string index signature.
+
+
+==== tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts (1 errors) ====
+    let { [Symbol.iterator]: destructured } = [];
+    void destructured;
+    
+    const named = "prop";
+    
+    let { [named]: computed } = { prop: "b" };
+    void computed;
+    
+    const notPresent = "prop2";
+    
+    let { [notPresent]: computed2 } = { prop: "b" };
+          ~~~~~~~~~~~~
+!!! error TS2459: Type '{ prop: string; }' has no property '[notPresent]' and no string index signature.
+    

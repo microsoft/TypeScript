@@ -491,7 +491,7 @@ declare class c1 {
     /** pp1 is property of c1*/
     private pp1;
     /** sum with property*/
-    private pp2(/** number to add*/ b);
+    private pp2;
     /** getter property*/
     /** setter property*/
     private pp3;
@@ -508,7 +508,7 @@ declare class c1 {
     nc_p2(b: number): number;
     nc_p3: number;
     private nc_pp1;
-    private nc_pp2(b);
+    private nc_pp2;
     private nc_pp3;
     static nc_s1: number;
     static nc_s2(b: number): number;
@@ -517,7 +517,7 @@ declare class c1 {
     a_p2(b: number): number;
     a_p3: number;
     private a_pp1;
-    private a_pp2(b);
+    private a_pp2;
     private a_pp3;
     static a_s1: number;
     static a_s2(b: number): number;
@@ -532,7 +532,7 @@ declare class c1 {
     /** pp1 is property of c1 */
     private b_pp1;
     /** sum with property */
-    private b_pp2(b);
+    private b_pp2;
     /** getter property */
     /** setter property */
     private b_pp3;

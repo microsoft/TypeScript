@@ -24,7 +24,7 @@ type T03 = { [P in keyof Item]: Date };
 >T03 : Symbol(T03, Decl(mappedTypes1.ts, 4, 41))
 >P : Symbol(P, Decl(mappedTypes1.ts, 5, 14))
 >Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 type T10 = { [P in keyof Item]: Item[P] };
 >T10 : Symbol(T10, Decl(mappedTypes1.ts, 5, 39))
@@ -65,7 +65,7 @@ type T21 = { [P in keyof Item]: Array<Item[P]> };
 >T21 : Symbol(T21, Decl(mappedTypes1.ts, 12, 49))
 >P : Symbol(P, Decl(mappedTypes1.ts, 13, 14))
 >Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
 >P : Symbol(P, Decl(mappedTypes1.ts, 13, 14))
 
@@ -142,7 +142,7 @@ declare function f3<T1 extends number>(): { [P in keyof T1]: void };
 declare function f4<T1 extends Number>(): { [P in keyof T1]: void };
 >f4 : Symbol(f4, Decl(mappedTypes1.ts, 32, 68))
 >T1 : Symbol(T1, Decl(mappedTypes1.ts, 33, 20))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypes1.ts, 33, 45))
 >T1 : Symbol(T1, Decl(mappedTypes1.ts, 33, 20))
 

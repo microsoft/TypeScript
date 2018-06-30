@@ -46,48 +46,48 @@ type T01 = { [P in number]: string };  // Error
 type T02 = { [P in Date]: number };  // Error
 >T02 : Symbol(T02, Decl(mappedTypeErrors.ts, 19, 37))
 >P : Symbol(P, Decl(mappedTypeErrors.ts, 20, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 type T03 = Record<Date, number>;  // Error
 >T03 : Symbol(T03, Decl(mappedTypeErrors.ts, 20, 35))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 type T10 = Pick<Shape, "name">;
 >T10 : Symbol(T10, Decl(mappedTypeErrors.ts, 21, 32))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 
 type T11 = Pick<Shape, "foo">;  // Error
 >T11 : Symbol(T11, Decl(mappedTypeErrors.ts, 23, 31))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 
 type T12 = Pick<Shape, "name" | "foo">;  // Error
 >T12 : Symbol(T12, Decl(mappedTypeErrors.ts, 24, 30))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 
 type T13 = Pick<Shape, keyof Named>;
 >T13 : Symbol(T13, Decl(mappedTypeErrors.ts, 25, 39))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 >Named : Symbol(Named, Decl(mappedTypeErrors.ts, 5, 1))
 
 type T14 = Pick<Shape, keyof Point>;  // Error
 >T14 : Symbol(T14, Decl(mappedTypeErrors.ts, 26, 36))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 >Point : Symbol(Point, Decl(mappedTypeErrors.ts, 9, 1))
 
 type T15 = Pick<Shape, never>;
 >T15 : Symbol(T15, Decl(mappedTypeErrors.ts, 27, 36))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 
 type T16 = Pick<Shape, undefined>;  // Error
 >T16 : Symbol(T16, Decl(mappedTypeErrors.ts, 28, 30))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 
 function f1<T>(x: T) {
@@ -98,7 +98,7 @@ function f1<T>(x: T) {
 
     let y: Pick<Shape, T>;  // Error
 >y : Symbol(y, Decl(mappedTypeErrors.ts, 32, 7))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 31, 12))
 }
@@ -111,7 +111,7 @@ function f2<T extends string | number>(x: T) {
 
     let y: Pick<Shape, T>;  // Error
 >y : Symbol(y, Decl(mappedTypeErrors.ts, 36, 7))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 35, 12))
 }
@@ -125,7 +125,7 @@ function f3<T extends keyof Shape>(x: T) {
 
     let y: Pick<Shape, T>;
 >y : Symbol(y, Decl(mappedTypeErrors.ts, 40, 7))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 39, 12))
 }
@@ -139,7 +139,7 @@ function f4<T extends keyof Named>(x: T) {
 
     let y: Pick<Shape, T>;
 >y : Symbol(y, Decl(mappedTypeErrors.ts, 44, 7))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 43, 12))
 }
@@ -236,7 +236,7 @@ declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
 >primary : Symbol(primary, Decl(mappedTypeErrors.ts, 70, 35))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 70, 32))
 >secondary : Symbol(secondary, Decl(mappedTypeErrors.ts, 70, 46))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 70, 32))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 70, 32))
 
@@ -246,7 +246,7 @@ declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
 >primary : Symbol(primary, Decl(mappedTypeErrors.ts, 71, 34))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 71, 31))
 >secondary : Symbol(secondary, Decl(mappedTypeErrors.ts, 71, 45))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 71, 31))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 71, 31))
 
@@ -326,7 +326,7 @@ function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 >obj : Symbol(obj, Decl(mappedTypeErrors.ts, 92, 40))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 92, 18))
 >props : Symbol(props, Decl(mappedTypeErrors.ts, 92, 47))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 92, 18))
 >K : Symbol(K, Decl(mappedTypeErrors.ts, 92, 20))
 
@@ -398,7 +398,7 @@ class C<T> {
 >K : Symbol(K, Decl(mappedTypeErrors.ts, 109, 13))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
 >props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
 >K : Symbol(K, Decl(mappedTypeErrors.ts, 109, 13))
 
@@ -478,7 +478,7 @@ let x1: T2 = { a: 'no' };  // Error
 
 let x2: Partial<T2> = { a: 'no' }; // Error
 >x2 : Symbol(x2, Decl(mappedTypeErrors.ts, 128, 3))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
 >a : Symbol(a, Decl(mappedTypeErrors.ts, 128, 23))
 

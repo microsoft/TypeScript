@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
-////import * as abs from "abs";
+////import {} from "abs";
 
 test.setTypesRegistry({
     "abs": undefined,

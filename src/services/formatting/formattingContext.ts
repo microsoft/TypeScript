@@ -16,13 +16,13 @@ namespace ts.formatting {
         public currentTokenParent: Node;
         public nextTokenParent: Node;
 
-        private contextNodeAllOnSameLine: boolean;
-        private nextNodeAllOnSameLine: boolean;
-        private tokensAreOnSameLine: boolean;
-        private contextNodeBlockIsOnOneLine: boolean;
-        private nextNodeBlockIsOnOneLine: boolean;
+        private contextNodeAllOnSameLine: boolean | undefined;
+        private nextNodeAllOnSameLine: boolean | undefined;
+        private tokensAreOnSameLine: boolean | undefined;
+        private contextNodeBlockIsOnOneLine: boolean | undefined;
+        private nextNodeBlockIsOnOneLine: boolean | undefined;
 
-        constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: ts.FormatCodeSettings) {
+        constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: FormatCodeSettings) {
         }
 
         public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {

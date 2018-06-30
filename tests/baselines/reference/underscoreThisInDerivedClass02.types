@@ -19,6 +19,10 @@ class D extends C {
 >C : C
 
     constructor() {
+        super();
+>super() : void
+>super : typeof C
+
         var _this = "uh-oh?";
 >_this : string
 >"uh-oh?" : "uh-oh?"

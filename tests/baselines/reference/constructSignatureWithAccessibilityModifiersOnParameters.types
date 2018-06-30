@@ -38,14 +38,14 @@ interface I2 {
 }
 
 var a: {
->a : new (public x: any) => any
+>a : new (x: any) => any
 
     new (public x);
 >x : any
 }
 
 var b: {
->b : new (private x: any) => any
+>b : new (x: any) => any
 
     new (private x);
 >x : any

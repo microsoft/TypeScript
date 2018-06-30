@@ -16,12 +16,16 @@
 ////<MainButton e=/*jsx2*/ />
 
 recommended("arg0");
-recommended("arg1", "F");
+recommended("arg1", { enumName: "F" });
 recommended("tag");
 recommended("jsx");
-recommended("jsx2");
+recommended("jsx2", { insertText: "{E}" });
 
-function recommended(markerName: string, enumName = "E") {
+function recommended(markerName: string, { insertText, enumName = "E" }: { insertText?: string, enumName?: string } = {}) {
     goTo.marker(markerName);
-    verify.completionListContains(enumName, `enum ${enumName}`, "", "enum", undefined, undefined , { isRecommended: true });
+    verify.completionListContains(enumName, `enum ${enumName}`, "", "enum", undefined, undefined , {
+        isRecommended: true,
+        includeInsertTextCompletions: true,
+        insertText,
+    });
 }

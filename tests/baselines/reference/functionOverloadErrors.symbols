@@ -25,7 +25,7 @@ function fn2b(n: number[]);
 function fn2b(n: Array<number>);
 >fn2b : Symbol(fn2b, Decl(functionOverloadErrors.ts, 9, 1), Decl(functionOverloadErrors.ts, 10, 27), Decl(functionOverloadErrors.ts, 11, 32))
 >n : Symbol(n, Decl(functionOverloadErrors.ts, 11, 14))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function fn2b() {
 >fn2b : Symbol(fn2b, Decl(functionOverloadErrors.ts, 9, 1), Decl(functionOverloadErrors.ts, 10, 27), Decl(functionOverloadErrors.ts, 11, 32))
@@ -106,11 +106,12 @@ function fn9() { }
 function fn10<T extends Window>();
 >fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
 >T : Symbol(T, Decl(functionOverloadErrors.ts, 43, 14))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 function fn10<S extends Date>();
 >fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
 >S : Symbol(S, Decl(functionOverloadErrors.ts, 44, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 function fn10() { }
 >fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
@@ -121,10 +122,12 @@ function fn10() { }
 function fn11<T extends Window>();
 >fn11 : Symbol(fn11, Decl(functionOverloadErrors.ts, 45, 19), Decl(functionOverloadErrors.ts, 49, 34), Decl(functionOverloadErrors.ts, 50, 41))
 >T : Symbol(T, Decl(functionOverloadErrors.ts, 49, 14))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 function fn11<S extends typeof window>();
 >fn11 : Symbol(fn11, Decl(functionOverloadErrors.ts, 45, 19), Decl(functionOverloadErrors.ts, 49, 34), Decl(functionOverloadErrors.ts, 50, 41))
 >S : Symbol(S, Decl(functionOverloadErrors.ts, 50, 14))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 
 function fn11() { }
 >fn11 : Symbol(fn11, Decl(functionOverloadErrors.ts, 45, 19), Decl(functionOverloadErrors.ts, 49, 34), Decl(functionOverloadErrors.ts, 50, 41))

@@ -13,7 +13,6 @@
  * @param {number?[]} a - (number | null)[]
  * @param {?number[]} b - number[] | null
  * @param {(number[])?} c - number[] | null
- * @param {?...number} d - number[] | null
  * @param {...?number} e - (number | null)[]
  * @param {...number?} f - number[] | null
  * @param {...number!?} g - number[] | null
@@ -22,5 +21,5 @@
  * @param {...number![]?} j - number[][] | null
  * @param {...number?[]!} k - (number[] | null)[]
  */
-function f(x, y, z, a, b, c, d, e, f, g, h, i, j, k) {
+function f(x, y, z, a, b, c, e, f, g, h, i, j, k) {
 }

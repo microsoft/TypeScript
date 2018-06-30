@@ -13,9 +13,12 @@ class Foo extends base {
 
 //// [collisionSuperAndNameResolution.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -29,10 +32,10 @@ var base = /** @class */ (function () {
     }
     return base;
 }());
-var Foo = /** @class */ (function (_super) {
-    __extends(Foo, _super);
+var Foo = /** @class */ (function (_super_1) {
+    __extends(Foo, _super_1);
     function Foo() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
     Foo.prototype.x = function () {
         console.log(_super); // Error as this doesnt not resolve to user defined _super

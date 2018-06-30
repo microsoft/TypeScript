@@ -5,7 +5,7 @@ class C {
     public {[name:string]:VariableDeclaration};
 > : any
 >[name:string] : any[]
->name : any
+>name : never
 >string : any
 >VariableDeclaration : any
 }

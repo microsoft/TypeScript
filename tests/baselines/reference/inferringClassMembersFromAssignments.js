@@ -14,11 +14,14 @@ class C {
     method() {
         if (Math.random()) {
             this.inMethod = 0;
+            this.inMethodNullable = null;
         }
         else {
             this.inMethod = "string"
+            this.inMethodNullable = undefined;
         }
         this.inMultiple = "string";
+        this.inMultipleMethods = "string";
 
         var action = () => {
             if (Math.random()) {
@@ -37,6 +40,7 @@ class C {
             this.inGetter = "string"
         }
         this.inMultiple = false;
+        this.inMultipleMethods = false;
     }
     set() {
         if (Math.random()) {
@@ -113,7 +117,12 @@ var stringOrNumberOrUndefined = c.inNestedArrowFunction
 
 var stringOrNumberOrBoolean: string | number | boolean;
 
-var stringOrNumberOrBoolean = c.inMultiple;
+var number: number;
+var number = c.inMultiple;
+var stringOrBooleanOrUndefined : string | boolean | undefined;
+var stringOrBooleanOrUndefined = c.inMultipleMethods;
+var any: any;
+var any = c.inMethodNullable;
 
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
@@ -148,11 +157,14 @@ var C = /** @class */ (function () {
         var _this = this;
         if (Math.random()) {
             this.inMethod = 0;
+            this.inMethodNullable = null;
         }
         else {
             this.inMethod = "string";
+            this.inMethodNullable = undefined;
         }
         this.inMultiple = "string";
+        this.inMultipleMethods = "string";
         var action = function () {
             if (Math.random()) {
                 _this.inNestedArrowFunction = 0;
@@ -170,6 +182,7 @@ var C = /** @class */ (function () {
             this.inGetter = "string";
         }
         this.inMultiple = false;
+        this.inMultipleMethods = false;
     };
     C.prototype.set = function () {
         if (Math.random()) {
@@ -232,7 +245,12 @@ var stringOrNumberOrUndefined = c.inSetter;
 var stringOrNumberOrUndefined = c.inPropertyDeclaration;
 var stringOrNumberOrUndefined = c.inNestedArrowFunction;
 var stringOrNumberOrBoolean;
-var stringOrNumberOrBoolean = c.inMultiple;
+var number;
+var number = c.inMultiple;
+var stringOrBooleanOrUndefined;
+var stringOrBooleanOrUndefined = c.inMultipleMethods;
+var any;
+var any = c.inMethodNullable;
 var stringOrNumberOrUndefined = C.inStaticMethod;
 var stringOrNumberOrUndefined = C.inStaticGetter;
 var stringOrNumberOrUndefined = C.inStaticSetter;

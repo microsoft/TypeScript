@@ -11,7 +11,7 @@
 
 //CHECK#1
 eval("\u00A0var x\u00A0= 1\u00A0");
->eval : Symbol(eval, Decl(lib.d.ts, --, --))
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
 
 if (x !== 1) {
 >x : Symbol(x, Decl(scannerS7.2_A1.5_T2.ts, 17, 4))

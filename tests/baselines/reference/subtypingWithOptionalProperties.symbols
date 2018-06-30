@@ -21,15 +21,15 @@ var r = f({ s: new Object() }); // ok
 >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
 >f : Symbol(f, Decl(subtypingWithOptionalProperties.ts, 0, 0))
 >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 8, 11))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 r.s && r.s.toFixed(); // would blow up at runtime
 >r.s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
 >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
 >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
->r.s.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>r.s.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >r.s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
 >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
 >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 

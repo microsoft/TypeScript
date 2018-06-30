@@ -53,7 +53,7 @@ tests/cases/compiler/cf.ts(36,13): error TS7027: Unreachable code detected.
         }
         catch (e) {
             x++;
-        }    
+        }
         finally {
             x+=3;
         }

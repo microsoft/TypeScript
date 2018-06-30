@@ -12,7 +12,9 @@ sourceFile:test.tsx
 >>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>class AppComponent {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^^^^^^^
+4 >                  ^^^^^^^^^^->
 1 >declare module JSX {
   >    interface IntrinsicElements {
   >        [s: string]: any;
@@ -20,7 +22,11 @@ sourceFile:test.tsx
   >}
   >
   >
+2 >export class 
+3 >      AppComponent
 1 >Emitted(3, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(7, 14) + SourceIndex(0)
+3 >Emitted(3, 19) Source(7, 26) + SourceIndex(0)
 ---
 >>>    render(createElement) {
 1->^^^^
@@ -28,7 +34,7 @@ sourceFile:test.tsx
 3 >          ^
 4 >           ^^^^^^^^^^^^^
 5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->export class AppComponent {
+1-> {
   >    
 2 >    render
 3 >          (
@@ -40,21 +46,18 @@ sourceFile:test.tsx
 ---
 >>>        return MyElement.createElement("div", null);
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                   ^
+2 >        ^^^^^^^
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                   ^
 1->) {
   >        
-2 >        return
-3 >               
-4 >               <div />
-5 >                                                   ;
+2 >        return 
+3 >               <div />
+4 >                                                   ;
 1->Emitted(5, 9) Source(9, 9) + SourceIndex(0)
-2 >Emitted(5, 15) Source(9, 15) + SourceIndex(0)
-3 >Emitted(5, 16) Source(9, 16) + SourceIndex(0)
-4 >Emitted(5, 52) Source(9, 23) + SourceIndex(0)
-5 >Emitted(5, 53) Source(9, 24) + SourceIndex(0)
+2 >Emitted(5, 16) Source(9, 16) + SourceIndex(0)
+3 >Emitted(5, 52) Source(9, 23) + SourceIndex(0)
+4 >Emitted(5, 53) Source(9, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^

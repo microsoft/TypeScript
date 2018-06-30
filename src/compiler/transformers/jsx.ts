@@ -1,14 +1,10 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="./esnext.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformJsx(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
         let currentSourceFile: SourceFile;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         /**
          * Transform JSX-specific syntax in a SourceFile.
@@ -54,7 +50,7 @@ namespace ts {
             }
         }
 
-        function transformJsxChildToExpression(node: JsxChild): Expression {
+        function transformJsxChildToExpression(node: JsxChild): Expression | undefined {
             switch (node.kind) {
                 case SyntaxKind.JsxText:
                     return visitJsxText(node);
@@ -72,8 +68,7 @@ namespace ts {
                     return visitJsxFragment(node, /*isChild*/ true);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -89,9 +84,9 @@ namespace ts {
             return visitJsxOpeningFragment(node.openingFragment, node.children, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild> | undefined, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
-            let objectProperties: Expression;
+            let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
             if (attrs.length === 0) {
                 // When there are no attributes, React wants "null"
@@ -122,8 +117,8 @@ namespace ts {
             }
 
             const element = createExpressionForJsxElement(
-                context.getEmitResolver().getJsxFactoryEntity(),
-                compilerOptions.reactNamespace,
+                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
+                compilerOptions.reactNamespace!, // TODO: GH#18217
                 tagName,
                 objectProperties,
                 mapDefined(children, transformJsxChildToExpression),
@@ -140,8 +135,8 @@ namespace ts {
 
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
-                context.getEmitResolver().getJsxFactoryEntity(),
-                compilerOptions.reactNamespace,
+                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
+                compilerOptions.reactNamespace!, // TODO: GH#18217
                 mapDefined(children, transformJsxChildToExpression),
                 node,
                 location
@@ -164,7 +159,7 @@ namespace ts {
             return createPropertyAssignment(name, expression);
         }
 
-        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression) {
+        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression | undefined): Expression {
             if (node === undefined) {
                 return createTrue();
             }
@@ -182,7 +177,7 @@ namespace ts {
                 return visitJsxExpression(node);
             }
             else {
-                Debug.failBadSyntaxKind(node);
+                return Debug.failBadSyntaxKind(node);
             }
         }
 

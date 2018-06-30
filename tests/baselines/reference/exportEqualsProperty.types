@@ -51,7 +51,7 @@ declare namespace foo.bar {
 }
 
 declare module "foobar" {
->"foobar" : typeof "foobar"
+>"foobar" : typeof import("foobar")
 
     export = foo.bar;
 >foo.bar : typeof foo.bar
@@ -60,7 +60,7 @@ declare module "foobar" {
 }
 
 declare module "foobarx" {
->"foobarx" : typeof "foobarx"
+>"foobarx" : typeof import("foobarx")
 
     export = foo.bar.X;
 >foo.bar.X : number

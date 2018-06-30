@@ -4,6 +4,6 @@
 ////    x: T;
 //// }
 ////
-//// class C implements I { } 
+//// class C implements I { }
 
 verify.not.codeFixAvailable();

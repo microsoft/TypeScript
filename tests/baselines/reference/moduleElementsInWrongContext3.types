@@ -17,7 +17,7 @@ module P {
 >K : any
 
         declare module "ambient" {
->"ambient" : typeof "ambient"
+>"ambient" : typeof import("ambient")
 
         }
 

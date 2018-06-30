@@ -9,23 +9,23 @@ declare module M {
 >args : Symbol(args, Decl(constructorOverloads4.ts, 2, 20))
     }
     export function Function(...args: any[]): any;
->Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5))
+>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50))
 >args : Symbol(args, Decl(constructorOverloads4.ts, 4, 29))
 
     export function Function(...args: string[]): Function;
->Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 4, 50))
+>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50))
 >args : Symbol(args, Decl(constructorOverloads4.ts, 5, 29))
->Function : Symbol(Function, Decl(constructorOverloads4.ts, 0, 18))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 
 (new M.Function("return 5"))();
->M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 0, 18))
+>M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50))
 >M : Symbol(M, Decl(constructorOverloads4.ts, 0, 0))
->Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 0, 18))
+>Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50))
 
 M.Function("yo");
->M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 0, 18))
+>M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50))
 >M : Symbol(M, Decl(constructorOverloads4.ts, 0, 0))
->Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 0, 18))
+>Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50))
 

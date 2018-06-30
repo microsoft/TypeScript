@@ -1,4 +1,4 @@
-tests/cases/compiler/file2.ts(1,13): error TS6133: 'n' is declared but its value is never read.
+tests/cases/compiler/file2.ts(1,1): error TS6133: 'n' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/file1.ts (0 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/file2.ts(1,13): error TS6133: 'n' is declared but its value
     
 ==== tests/cases/compiler/file2.ts (1 errors) ====
     import * as n from "./file1"
-                ~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6133: 'n' is declared but its value is never read.
     
     

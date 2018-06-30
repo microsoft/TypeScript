@@ -56,3 +56,14 @@ function f3(): never {
 function f4(): never {
 >f4 : () => never
 }
+
+for (const n of f4()) {}
+>n : any
+>f4() : never
+>f4 : () => never
+
+for (const n in f4()) {}
+>n : string
+>f4() : never
+>f4 : () => never
+

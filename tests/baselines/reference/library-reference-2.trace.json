@@ -9,7 +9,7 @@
     "File '/types/jquery/jquery.d.ts' exist - use it as a name resolution result.",
     "Resolving real path for '/types/jquery/jquery.d.ts', result '/types/jquery/jquery.d.ts'.",
     "======== Type reference directive 'jquery' was successfully resolved to '/types/jquery/jquery.d.ts', primary: true. ========",
-    "======== Resolving type reference directive 'jquery', containing file 'test/__inferred type names__.ts', root directory '/types'. ========",
+    "======== Resolving type reference directive 'jquery', containing file '/test/__inferred type names__.ts', root directory '/types'. ========",
     "Resolving with primary search path '/types'.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' has 'types' field 'jquery.d.ts' that references '/types/jquery/jquery.d.ts'.",

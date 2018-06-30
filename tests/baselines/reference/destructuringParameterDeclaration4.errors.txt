@@ -1,4 +1,3 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(11,13): error TS2370: A rest parameter must be of an array type.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(13,13): error TS2370: A rest parameter must be of an array type.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(14,17): error TS1047: A rest parameter cannot be optional.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(15,16): error TS1048: A rest parameter cannot have an initializer.
@@ -17,7 +16,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(34,28): error TS2304: Cannot find name 'E'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts (12 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts (11 errors) ====
     // If the parameter is a rest parameter, the parameter type is any[]
     // A type annotation for a rest parameter must denote an array type.
     
@@ -29,8 +28,6 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
     type stringOrNumArray = Array<String|Number>;
     
     function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2370: A rest parameter must be of an array type.
     function a1(...x: (number|string)[]) { }
     function a2(...a: someArray) { }  // Error, rest parameter must be array type
                 ~~~~~~~~~~~~~~~

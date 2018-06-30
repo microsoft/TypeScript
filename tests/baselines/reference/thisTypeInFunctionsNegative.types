@@ -725,7 +725,7 @@ function notFirst(a: number, this: C): number { return this.n; }
 
 ///// parse errors /////
 function modifiers(async this: C): number { return this.n; }
->modifiers : (async : any, this: C) => number
+>modifiers : (: any, this: C) => number
 > : any
 >this : C
 >C : C

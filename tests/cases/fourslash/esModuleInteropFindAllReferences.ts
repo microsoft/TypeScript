@@ -4,11 +4,11 @@
 
 // @Filename: /abc.d.ts
 ////declare module "a" {
-////    export const [|x|]: number;
+////    export const [|{| "isWriteAccess": true, "isDefinition": true |}x|]: number;
 ////}
 
 // @Filename: /b.ts
 ////import a from "a";
 ////a.[|x|];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("const x: number");

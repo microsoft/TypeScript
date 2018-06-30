@@ -61,46 +61,49 @@ sourceFile:Element.ts
 ---
 >>>    function isElement(el) {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^^^
+4 >                      ^
+5 >                       ^^
+6 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >    
-2 >    export function isElement(
-3 >                       el: any
+2 >    export function 
+3 >             isElement
+4 >                      (
+5 >                       el: any
 1->Emitted(5, 5) Source(14, 5) + SourceIndex(0)
-2 >Emitted(5, 24) Source(14, 31) + SourceIndex(0)
-3 >Emitted(5, 26) Source(14, 38) + SourceIndex(0)
+2 >Emitted(5, 14) Source(14, 21) + SourceIndex(0)
+3 >Emitted(5, 23) Source(14, 30) + SourceIndex(0)
+4 >Emitted(5, 24) Source(14, 31) + SourceIndex(0)
+5 >Emitted(5, 26) Source(14, 38) + SourceIndex(0)
 ---
 >>>        return el.markAsChildOfRootElement !== undefined;
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^
-5 >                 ^
-6 >                  ^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                          ^^^^^
-8 >                                               ^^^^^^^^^
-9 >                                                        ^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                          ^^^^^
+7 >                                               ^^^^^^^^^
+8 >                                                        ^
 1->): el is JSX.Element {
   >        
-2 >        return
-3 >               
-4 >               el
-5 >                 .
-6 >                  markAsChildOfRootElement
-7 >                                           !== 
-8 >                                               undefined
-9 >                                                        ;
+2 >        return 
+3 >               el
+4 >                 .
+5 >                  markAsChildOfRootElement
+6 >                                           !== 
+7 >                                               undefined
+8 >                                                        ;
 1->Emitted(6, 9) Source(15, 9) + SourceIndex(0)
-2 >Emitted(6, 15) Source(15, 15) + SourceIndex(0)
-3 >Emitted(6, 16) Source(15, 16) + SourceIndex(0)
-4 >Emitted(6, 18) Source(15, 18) + SourceIndex(0)
-5 >Emitted(6, 19) Source(15, 19) + SourceIndex(0)
-6 >Emitted(6, 43) Source(15, 43) + SourceIndex(0)
-7 >Emitted(6, 48) Source(15, 48) + SourceIndex(0)
-8 >Emitted(6, 57) Source(15, 57) + SourceIndex(0)
-9 >Emitted(6, 58) Source(15, 58) + SourceIndex(0)
+2 >Emitted(6, 16) Source(15, 16) + SourceIndex(0)
+3 >Emitted(6, 18) Source(15, 18) + SourceIndex(0)
+4 >Emitted(6, 19) Source(15, 19) + SourceIndex(0)
+5 >Emitted(6, 43) Source(15, 43) + SourceIndex(0)
+6 >Emitted(6, 48) Source(15, 48) + SourceIndex(0)
+7 >Emitted(6, 57) Source(15, 57) + SourceIndex(0)
+8 >Emitted(6, 58) Source(15, 58) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -131,36 +134,39 @@ sourceFile:Element.ts
 ---
 >>>    function createElement(args) {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^
-3 >                           ^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^^^^^^^
+4 >                          ^
+5 >                           ^^^^
 1->
   >
   >    
-2 >    export function createElement(
-3 >                           args: any[]
+2 >    export function 
+3 >             createElement
+4 >                          (
+5 >                           args: any[]
 1->Emitted(9, 5) Source(18, 5) + SourceIndex(0)
-2 >Emitted(9, 28) Source(18, 35) + SourceIndex(0)
-3 >Emitted(9, 32) Source(18, 46) + SourceIndex(0)
+2 >Emitted(9, 14) Source(18, 21) + SourceIndex(0)
+3 >Emitted(9, 27) Source(18, 34) + SourceIndex(0)
+4 >Emitted(9, 28) Source(18, 35) + SourceIndex(0)
+5 >Emitted(9, 32) Source(18, 46) + SourceIndex(0)
 ---
 >>>        return {};
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^
-5 >                 ^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
 1 >) {
   >
   >        
-2 >        return
-3 >               
-4 >               {
+2 >        return 
+3 >               {
   >                       }
-5 >                 
+4 >                 
 1 >Emitted(10, 9) Source(20, 9) + SourceIndex(0)
-2 >Emitted(10, 15) Source(20, 15) + SourceIndex(0)
-3 >Emitted(10, 16) Source(20, 16) + SourceIndex(0)
-4 >Emitted(10, 18) Source(21, 10) + SourceIndex(0)
-5 >Emitted(10, 19) Source(21, 10) + SourceIndex(0)
+2 >Emitted(10, 16) Source(20, 16) + SourceIndex(0)
+3 >Emitted(10, 18) Source(21, 10) + SourceIndex(0)
+4 >Emitted(10, 19) Source(21, 10) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -261,74 +267,77 @@ sourceFile:Element.ts
 ---
 >>>function toCamelCase(text) {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^
-3 >                     ^^^^
-4 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^
+4 >                    ^
+5 >                     ^^^^
+6 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
-2 >function toCamelCase(
-3 >                     text: string
+2 >function 
+3 >         toCamelCase
+4 >                    (
+5 >                     text: string
 1 >Emitted(15, 1) Source(27, 1) + SourceIndex(0)
-2 >Emitted(15, 22) Source(27, 22) + SourceIndex(0)
-3 >Emitted(15, 26) Source(27, 34) + SourceIndex(0)
+2 >Emitted(15, 10) Source(27, 10) + SourceIndex(0)
+3 >Emitted(15, 21) Source(27, 21) + SourceIndex(0)
+4 >Emitted(15, 22) Source(27, 22) + SourceIndex(0)
+5 >Emitted(15, 26) Source(27, 34) + SourceIndex(0)
 ---
 >>>    return text[0].toLowerCase() + text.substring(1);
 1->^^^^
-2 >    ^^^^^^
-3 >          ^
-4 >           ^^^^
-5 >               ^
-6 >                ^
-7 >                 ^
-8 >                  ^
-9 >                   ^^^^^^^^^^^
-10>                              ^^
-11>                                ^^^
-12>                                   ^^^^
-13>                                       ^
-14>                                        ^^^^^^^^^
-15>                                                 ^
-16>                                                  ^
-17>                                                   ^
-18>                                                    ^
+2 >    ^^^^^^^
+3 >           ^^^^
+4 >               ^
+5 >                ^
+6 >                 ^
+7 >                  ^
+8 >                   ^^^^^^^^^^^
+9 >                              ^^
+10>                                ^^^
+11>                                   ^^^^
+12>                                       ^
+13>                                        ^^^^^^^^^
+14>                                                 ^
+15>                                                  ^
+16>                                                   ^
+17>                                                    ^
 1->): string {
   >    
-2 >    return
-3 >           
-4 >           text
-5 >               [
-6 >                0
-7 >                 ]
-8 >                  .
-9 >                   toLowerCase
-10>                              ()
-11>                                 + 
-12>                                   text
-13>                                       .
-14>                                        substring
-15>                                                 (
-16>                                                  1
-17>                                                   )
-18>                                                    ;
+2 >    return 
+3 >           text
+4 >               [
+5 >                0
+6 >                 ]
+7 >                  .
+8 >                   toLowerCase
+9 >                              ()
+10>                                 + 
+11>                                   text
+12>                                       .
+13>                                        substring
+14>                                                 (
+15>                                                  1
+16>                                                   )
+17>                                                    ;
 1->Emitted(16, 5) Source(28, 5) + SourceIndex(0)
-2 >Emitted(16, 11) Source(28, 11) + SourceIndex(0)
-3 >Emitted(16, 12) Source(28, 12) + SourceIndex(0)
-4 >Emitted(16, 16) Source(28, 16) + SourceIndex(0)
-5 >Emitted(16, 17) Source(28, 17) + SourceIndex(0)
-6 >Emitted(16, 18) Source(28, 18) + SourceIndex(0)
-7 >Emitted(16, 19) Source(28, 19) + SourceIndex(0)
-8 >Emitted(16, 20) Source(28, 20) + SourceIndex(0)
-9 >Emitted(16, 31) Source(28, 31) + SourceIndex(0)
-10>Emitted(16, 33) Source(28, 33) + SourceIndex(0)
-11>Emitted(16, 36) Source(28, 36) + SourceIndex(0)
-12>Emitted(16, 40) Source(28, 40) + SourceIndex(0)
-13>Emitted(16, 41) Source(28, 41) + SourceIndex(0)
-14>Emitted(16, 50) Source(28, 50) + SourceIndex(0)
-15>Emitted(16, 51) Source(28, 51) + SourceIndex(0)
-16>Emitted(16, 52) Source(28, 52) + SourceIndex(0)
-17>Emitted(16, 53) Source(28, 53) + SourceIndex(0)
-18>Emitted(16, 54) Source(28, 54) + SourceIndex(0)
+2 >Emitted(16, 12) Source(28, 12) + SourceIndex(0)
+3 >Emitted(16, 16) Source(28, 16) + SourceIndex(0)
+4 >Emitted(16, 17) Source(28, 17) + SourceIndex(0)
+5 >Emitted(16, 18) Source(28, 18) + SourceIndex(0)
+6 >Emitted(16, 19) Source(28, 19) + SourceIndex(0)
+7 >Emitted(16, 20) Source(28, 20) + SourceIndex(0)
+8 >Emitted(16, 31) Source(28, 31) + SourceIndex(0)
+9 >Emitted(16, 33) Source(28, 33) + SourceIndex(0)
+10>Emitted(16, 36) Source(28, 36) + SourceIndex(0)
+11>Emitted(16, 40) Source(28, 40) + SourceIndex(0)
+12>Emitted(16, 41) Source(28, 41) + SourceIndex(0)
+13>Emitted(16, 50) Source(28, 50) + SourceIndex(0)
+14>Emitted(16, 51) Source(28, 51) + SourceIndex(0)
+15>Emitted(16, 52) Source(28, 52) + SourceIndex(0)
+16>Emitted(16, 53) Source(28, 53) + SourceIndex(0)
+17>Emitted(16, 54) Source(28, 54) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -383,17 +392,23 @@ sourceFile:test.tsx
 ---
 >>>class A {
 1->
-2 >^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^->
 1->
   >
   >
+2 >class 
+3 >      A
 1->Emitted(5, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(5, 7) Source(9, 7) + SourceIndex(0)
+3 >Emitted(5, 8) Source(9, 8) + SourceIndex(0)
 ---
 >>>    view() {
 1->^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^->
-1->class A {
+1-> {
   >	
 2 >    view
 1->Emitted(6, 5) Source(10, 2) + SourceIndex(0)
@@ -401,16 +416,13 @@ sourceFile:test.tsx
 ---
 >>>        return [
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->() {
   >		
-2 >        return
-3 >               
+2 >        return 
 1->Emitted(7, 9) Source(11, 3) + SourceIndex(0)
-2 >Emitted(7, 15) Source(11, 9) + SourceIndex(0)
-3 >Emitted(7, 16) Source(11, 10) + SourceIndex(0)
+2 >Emitted(7, 16) Source(11, 10) + SourceIndex(0)
 ---
 >>>            Element_1.Element.createElement("meta", { content: "helloworld" }),
 1->^^^^^^^^^^^^

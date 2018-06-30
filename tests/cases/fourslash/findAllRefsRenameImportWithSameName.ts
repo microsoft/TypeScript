@@ -16,5 +16,6 @@ const bGroup =  { definition: "(alias) const x: 0\nimport x", ranges: bRanges };
 verify.referenceGroups(aRanges, [aGroup, bGroup]);
 verify.referenceGroups(bRanges, [bGroup]);
 
-verify.rangesAreRenameLocations(aRanges);
-verify.rangesAreRenameLocations(aRanges);
+verify.renameLocations(r0, [r0, r1, r2, r3]);
+verify.renameLocations(r1, [r0, r1, r2, r3]);
+verify.rangesAreRenameLocations([r2, r3]);

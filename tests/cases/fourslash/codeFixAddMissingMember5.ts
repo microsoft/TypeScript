@@ -18,6 +18,7 @@ verify.codeFix({
         ()=>{ this.foo === 10 };
     }
 }
+
 C.foo = undefined;
 `
 });

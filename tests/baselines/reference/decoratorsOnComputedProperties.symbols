@@ -3,7 +3,7 @@ function x(o: object, k: PropertyKey) { }
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >o : Symbol(o, Decl(decoratorsOnComputedProperties.ts, 0, 11))
 >k : Symbol(k, Decl(decoratorsOnComputedProperties.ts, 0, 21))
->PropertyKey : Symbol(PropertyKey, Decl(lib.es2015.core.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
 
 let i = 0;
 >i : Symbol(i, Decl(decoratorsOnComputedProperties.ts, 1, 3))
@@ -33,7 +33,7 @@ class A {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(A[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 9, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -45,7 +45,7 @@ class A {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(A[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 11, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -55,7 +55,7 @@ class A {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(A[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 13, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -65,7 +65,7 @@ class A {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(A[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 15, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -109,7 +109,7 @@ void class B {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(B[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 26, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -121,7 +121,7 @@ void class B {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(B[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 28, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -131,7 +131,7 @@ void class B {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(B[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 30, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -141,7 +141,7 @@ void class B {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(B[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 32, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -186,7 +186,7 @@ class C {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(C[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 43, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -198,7 +198,7 @@ class C {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 45, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -208,7 +208,7 @@ class C {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(C[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 47, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -218,7 +218,7 @@ class C {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(C[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 49, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -265,7 +265,7 @@ void class D {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(D[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 61, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -277,7 +277,7 @@ void class D {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(D[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 63, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -287,7 +287,7 @@ void class D {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(D[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 65, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -297,7 +297,7 @@ void class D {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(D[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 67, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -345,7 +345,7 @@ class E {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(E[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 79, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -357,7 +357,7 @@ class E {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(E[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 81, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -367,7 +367,7 @@ class E {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(E[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 83, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -377,7 +377,7 @@ class E {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(E[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 85, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -424,7 +424,7 @@ void class F {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(F[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 97, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -436,7 +436,7 @@ void class F {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(F[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 99, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -446,7 +446,7 @@ void class F {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(F[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 101, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -456,7 +456,7 @@ void class F {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(F[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 103, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -504,7 +504,7 @@ class G {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(G[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 115, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -516,7 +516,7 @@ class G {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(G[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 117, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -526,7 +526,7 @@ class G {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(G[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 119, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -536,7 +536,7 @@ class G {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(G[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 121, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -586,7 +586,7 @@ void class H {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(H[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 134, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -598,7 +598,7 @@ void class H {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(H[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 136, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -608,7 +608,7 @@ void class H {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(H[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 138, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -618,7 +618,7 @@ void class H {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(H[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 140, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -669,7 +669,7 @@ class I {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(I[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 153, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -681,7 +681,7 @@ class I {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 155, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -691,7 +691,7 @@ class I {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(I[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 157, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -701,7 +701,7 @@ class I {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(I[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 159, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;
@@ -752,7 +752,7 @@ void class J {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.toStringTag] : Symbol(J[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 172, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @x ["property2"]: any = 2;
@@ -764,7 +764,7 @@ void class J {
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >[Symbol.iterator] : Symbol(J[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 174, 30))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
@@ -774,7 +774,7 @@ void class J {
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol(J[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 176, 23))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
@@ -784,7 +784,7 @@ void class J {
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol(J[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 178, 27))
 >Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [foo()]: any;

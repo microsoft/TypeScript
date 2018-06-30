@@ -1,5 +1,5 @@
-tests/cases/conformance/dynamicImport/index.ts(2,18): error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
-tests/cases/conformance/dynamicImport/index.ts(2,32): error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
+tests/cases/conformance/dynamicImport/index.ts(2,18): error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
+tests/cases/conformance/dynamicImport/index.ts(2,32): error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
 
 
 ==== tests/cases/conformance/dynamicImport/foo.ts (0 errors) ====
@@ -9,7 +9,7 @@ tests/cases/conformance/dynamicImport/index.ts(2,32): error TS1323: Dynamic impo
     async function foo() {
         return await import((await import("./foo")).default);
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
+!!! error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
                                    ~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
+!!! error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
     }

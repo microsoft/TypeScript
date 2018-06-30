@@ -18,13 +18,13 @@ module A{
 
     // expected error
     export class Point {
->Point : Symbol(A.Point, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 7, 9))
+>Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 7, 9))
 
         origin: number;
->origin : Symbol(A.Point.origin, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 9, 24))
+>origin : Symbol(Point.origin, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 9, 24))
 
         angle: number;
->angle : Symbol(A.Point.angle, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 10, 23))
+>angle : Symbol(Point.angle, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 10, 23))
     }
 }
 
@@ -52,10 +52,10 @@ module X {
 
             // expected error
             export class Line {
->Line : Symbol(Z.Line, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 23, 25))
+>Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 23, 25))
 
                 name: string;
->name : Symbol(Z.Line.name, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 25, 31))
+>name : Symbol(Line.name, Decl(TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts, 25, 31))
             }
         }
     }

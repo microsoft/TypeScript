@@ -92,14 +92,14 @@ extend1({
     }
 });
 extend2({
->extend2({    init() {        this // this: containing object literal type        this.mine    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }}) : void
+>extend2({    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }}) : void
 >extend2 : (args: IndexedWithoutThis) => void
->{    init() {        this // this: containing object literal type        this.mine    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }} : { init(): void; mine: number; foo(): void; }
+>{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init(): void; mine: number; foo(): void; }
 
     init() {
 >init : () => void
 
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
 >this : IndexedWithoutThis
 
         this.mine
@@ -115,7 +115,7 @@ extend2({
     foo() {
 >foo : () => void
 
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
 >this : IndexedWithoutThis
 
         this.mine

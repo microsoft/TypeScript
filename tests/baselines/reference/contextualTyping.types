@@ -860,29 +860,6 @@ declare class Point
 
 }
 
-function Point(x, y) {
->Point : (x: any, y: any) => any
->x : any
->y : any
-
-    this.x = x;
->this.x = x : any
->this.x : any
->this : any
->x : any
->x : any
-
-    this.y = y;
->this.y = y : any
->this.y : any
->this : any
->y : any
->y : any
-
-    return this;
->this : any
-}
-
 Point.origin = new Point(0, 0);
 >Point.origin = new Point(0, 0) : Point
 >Point.origin : Point

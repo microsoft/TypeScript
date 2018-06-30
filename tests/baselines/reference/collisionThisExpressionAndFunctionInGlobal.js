@@ -5,8 +5,8 @@ function _this() { //Error
 var f = () => this;
 
 //// [collisionThisExpressionAndFunctionInGlobal.js]
-var _this = this;
+var _this_1 = this;
 function _this() {
     return 10;
 }
-var f = function () { return _this; };
+var f = function () { return _this_1; };

@@ -64,9 +64,12 @@ class Foo4 extends Foo {
 
 //// [collisionSuperAndParameter.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -96,10 +99,10 @@ var Foo = /** @class */ (function () {
     });
     return Foo;
 }());
-var Foo2 = /** @class */ (function (_super) {
-    __extends(Foo2, _super);
+var Foo2 = /** @class */ (function (_super_1) {
+    __extends(Foo2, _super_1);
     function Foo2(_super) {
-        var _this = _super.call(this) || this;
+        var _this = _super_1.call(this) || this;
         _this.prop4 = {
             doStuff: function (_super) {
             }
@@ -126,10 +129,10 @@ var Foo2 = /** @class */ (function (_super) {
     });
     return Foo2;
 }(Foo));
-var Foo4 = /** @class */ (function (_super) {
-    __extends(Foo4, _super);
+var Foo4 = /** @class */ (function (_super_1) {
+    __extends(Foo4, _super_1);
     function Foo4(_super) {
-        return _super.call(this) || this;
+        return _super_1.call(this) || this;
     }
     Foo4.prototype.y = function (_super) {
         var _this = this;

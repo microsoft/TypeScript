@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @type {function(string): void} */
+const f = (value) => {
+>f : Symbol(f, Decl(a.js, 1, 5))
+>value : Symbol(value, Decl(a.js, 1, 11))
+
+    value = 1 // should error
+>value : Symbol(value, Decl(a.js, 1, 11))
+
+};
+/** @type {(s: string) => void} */
+function g(s) {
+>g : Symbol(g, Decl(a.js, 3, 2))
+>s : Symbol(s, Decl(a.js, 5, 11))
+
+    s = 1 // Should error
+>s : Symbol(s, Decl(a.js, 5, 11))
+}
+

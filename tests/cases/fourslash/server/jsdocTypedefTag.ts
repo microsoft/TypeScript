@@ -6,7 +6,7 @@
 //// /** @typedef {(string | number)} NumberLike */
 ////
 //// /**
-////  * @typedef Animal
+////  * @typedef Animal - think Giraffes
 ////  * @type {Object}
 ////  * @property {string} animalName
 ////  * @property {number} animalAge
@@ -36,7 +36,7 @@
 //// p.personName./*personName*/;
 //// p.personAge./*personAge*/;
 ////
-//// /** @type {Animal} */
+//// /** @type {/*AnimalType*/Animal} */
 //// var a;a./*animal*/;
 //// a.animalName./*animalName*/;
 //// a.animalAge./*animalAge*/;
@@ -86,3 +86,6 @@ goTo.marker('catName');
 verify.completionListContains('charAt');
 goTo.marker('catAge');
 verify.completionListContains('toExponential');
+
+goTo.marker("AnimalType");
+verify.quickInfoIs("type Animal = {\n    animalName: string;\n    animalAge: number;\n}", "- think Giraffes");

@@ -7,8 +7,8 @@
 /////export const x = 0;
 
 // @Filename: /src/a.ts
-////import {} from "foo/[|/*0*/|]";
-////import {} from "foo/dir/[|/*1*/|]";
+////import {} from "foo//*0*/";
+////import {} from "foo/dir//*1*/";
 
 // @Filename: /tsconfig.json
 ////{
@@ -21,5 +21,5 @@
 ////}
 
 const [r0, r1] = test.ranges();
-verify.completionsAt("0", ["a", "b", "dir"].map(name => ({ name, replacementSpan: r0 })));
-verify.completionsAt("1", ["x"].map(name => ({ name, replacementSpan: r1 })));
+verify.completionsAt("0", ["a", "b", "dir"], { isNewIdentifierLocation: true });
+verify.completionsAt("1", ["x"], { isNewIdentifierLocation: true });

@@ -9,7 +9,7 @@ interface Show {
 function f({ show: showRename = v => v }: Show) {}
 >f : ({ show: showRename }: Show) => void
 >show : any
->showRename : ((x: number) => string) | ((v: number) => number)
+>showRename : (x: number) => string
 >v => v : (v: number) => number
 >v : number
 >v : number
@@ -17,7 +17,7 @@ function f({ show: showRename = v => v }: Show) {}
 
 function f2({ "show": showRename = v => v }: Show) {}
 >f2 : ({ "show": showRename }: Show) => void
->showRename : ((x: number) => string) | ((v: number) => number)
+>showRename : (x: number) => string
 >v => v : (v: number) => number
 >v : number
 >v : number
@@ -26,7 +26,7 @@ function f2({ "show": showRename = v => v }: Show) {}
 function f3({ ["show"]: showRename = v => v }: Show) {}
 >f3 : ({ ["show"]: showRename }: Show) => void
 >"show" : "show"
->showRename : ((x: number) => string) | ((v: number) => number)
+>showRename : (x: number) => string
 >v => v : (v: number) => number
 >v : number
 >v : number
@@ -42,7 +42,7 @@ interface Nested {
 function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
 >ff : ({ nested: nestedRename }: Nested) => void
 >nested : any
->nestedRename : Show | { show: (v: number) => number; }
+>nestedRename : Show
 >{ show: v => v } : { show: (v: number) => number; }
 >show : (v: number) => number
 >v => v : (v: number) => number
@@ -59,7 +59,7 @@ interface StringIdentity {
 }
 let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentity: x => x};
 >stringIdentity : any
->id : ((s: string) => string) | ((arg: string) => number)
+>id : (s: string) => string
 >arg => arg.length : (arg: string) => number
 >arg : string
 >arg.length : number
@@ -80,7 +80,7 @@ interface Tuples {
 }
 function g({ prop = [101, 1234] }: Tuples) {}
 >g : ({ prop }: Tuples) => void
->prop : [string, number] | [number, number]
+>prop : [string, number]
 >[101, 1234] : [number, number]
 >101 : 101
 >1234 : 1234
@@ -94,7 +94,7 @@ interface StringUnion {
 }
 function h({ prop = "baz" }: StringUnion) {}
 >h : ({ prop }: StringUnion) => void
->prop : "foo" | "bar" | "baz"
+>prop : "foo" | "bar"
 >"baz" : "baz"
 >StringUnion : StringUnion
 

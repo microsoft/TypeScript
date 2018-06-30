@@ -14,7 +14,7 @@ import { Observable } from "./observable"
 >function() { } : () => void
 
 declare module "./observable" {
->"./observable" : typeof "tests/cases/compiler/observable"
+>"./observable" : typeof import("tests/cases/compiler/observable")
 
     interface I {x0}
 >I : I
@@ -37,7 +37,7 @@ import { Observable } from "./observable"
 >function() { } : () => void
 
 declare module "./observable" {
->"./observable" : typeof "tests/cases/compiler/observable"
+>"./observable" : typeof import("tests/cases/compiler/observable")
 
     interface I {x1}
 >I : I

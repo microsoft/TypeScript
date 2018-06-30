@@ -18,6 +18,6 @@ define(["require", "exports", "./folder/test"], function (require, exports) {
 
 
 //// [test.d.ts]
-export {  };
+export {};
 //// [main.d.ts]
 import "./folder/test";

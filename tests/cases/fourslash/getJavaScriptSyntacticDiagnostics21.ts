@@ -5,4 +5,4 @@
 // @Filename: a.js
 //// @internal class C {}
 
-verify.getSemanticDiagnostics(`[]`);
+verify.getSemanticDiagnostics([]);

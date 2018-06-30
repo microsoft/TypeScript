@@ -7,7 +7,7 @@ function f1([a], {b}, c, d) { // error
 >d : any
 }
 function f2([a = undefined], {b = null}, c = undefined, d = null) { // error
->f2 : ([a]: [any], { b }: { b?: null; }, c?: any, d?: any) => void
+>f2 : ([a]: [any?], { b }: { b?: any; }, c?: any, d?: any) => void
 >a : any
 >undefined : undefined
 >b : any

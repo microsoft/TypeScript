@@ -2,21 +2,21 @@
 // this is a javascript file...
 
 export const Adapter = {};
->Adapter : { [x: string]: any; }
+>Adapter : typeof Adapter
 >{} : { [x: string]: any; }
 
 Adapter.prop = {};
->Adapter.prop = {} : {}
->Adapter.prop : any
->Adapter : { [x: string]: any; }
->prop : any
->{} : {}
+>Adapter.prop = {} : { [x: string]: any; }
+>Adapter.prop : { [x: string]: any; }
+>Adapter : typeof Adapter
+>prop : { [x: string]: any; }
+>{} : { [x: string]: any; }
 
 // comment this out, and it works
 Adapter.asyncMethod = function() {}
 >Adapter.asyncMethod = function() {} : () => void
->Adapter.asyncMethod : any
->Adapter : { [x: string]: any; }
->asyncMethod : any
+>Adapter.asyncMethod : () => void
+>Adapter : typeof Adapter
+>asyncMethod : () => void
 >function() {} : () => void
 

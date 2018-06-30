@@ -13,12 +13,12 @@ declare module Express {
 }
 
 declare module "express" {
->"express" : typeof "express"
+>"express" : typeof import("express")
 
     function e(): e.Express;
 >e : typeof e
 >e : any
->Express : Express
+>Express : e.Express
 
     namespace e {
 >e : typeof e

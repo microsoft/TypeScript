@@ -1,11 +1,10 @@
 tests/cases/compiler/constructorOverloads4.ts(2,18): error TS2300: Duplicate identifier 'Function'.
 tests/cases/compiler/constructorOverloads4.ts(5,21): error TS2300: Duplicate identifier 'Function'.
 tests/cases/compiler/constructorOverloads4.ts(6,21): error TS2300: Duplicate identifier 'Function'.
-tests/cases/compiler/constructorOverloads4.ts(10,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Function' has no compatible call signatures.
-tests/cases/compiler/constructorOverloads4.ts(11,1): error TS2348: Value of type 'typeof Function' is not callable. Did you mean to include 'new'?
+tests/cases/compiler/constructorOverloads4.ts(10,2): error TS2350: Only a void function can be called with the 'new' keyword.
 
 
-==== tests/cases/compiler/constructorOverloads4.ts (5 errors) ====
+==== tests/cases/compiler/constructorOverloads4.ts (4 errors) ====
     declare module M {    
         export class Function {
                      ~~~~~~~~
@@ -22,9 +21,7 @@ tests/cases/compiler/constructorOverloads4.ts(11,1): error TS2348: Value of type
     
     
     (new M.Function("return 5"))();
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Function' has no compatible call signatures.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     M.Function("yo");
-    ~~~~~~~~~~~~~~~~
-!!! error TS2348: Value of type 'typeof Function' is not callable. Did you mean to include 'new'?
     

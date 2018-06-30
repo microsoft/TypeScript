@@ -8,6 +8,7 @@
 ////        this.a = 12;
 ////        super();
 ////    |]}
+////    m() { this.a; } // avoid unused 'a'
 ////}
 verify.rangeAfterCodeFix(`
         super();

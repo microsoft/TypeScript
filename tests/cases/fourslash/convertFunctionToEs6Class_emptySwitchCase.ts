@@ -10,8 +10,9 @@
 ////    }
 ////}
 
-verify.applicableRefactorAvailableAtMarker("");
-verify.fileAfterApplyingRefactorAtMarker("",
+verify.codeFix({
+    description: "Convert function to an ES2015 class",
+    newFileContent:
 `class MyClass {
     constructor() {
     }
@@ -22,4 +23,4 @@ verify.fileAfterApplyingRefactorAtMarker("",
     }
 }
 `,
-'Convert to ES2015 class', 'convert');
+});

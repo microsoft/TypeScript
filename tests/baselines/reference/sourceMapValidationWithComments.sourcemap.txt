@@ -247,23 +247,20 @@ sourceFile:sourceMapValidationWithComments.ts
 ---
 >>>        return true;
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^
 1 >
   >
   >
   >        
-2 >        return
-3 >               
-4 >               true
-5 >                   ;
+2 >        return 
+3 >               true
+4 >                   ;
 1 >Emitted(17, 9) Source(19, 9) + SourceIndex(0)
-2 >Emitted(17, 15) Source(19, 15) + SourceIndex(0)
-3 >Emitted(17, 16) Source(19, 16) + SourceIndex(0)
-4 >Emitted(17, 20) Source(19, 20) + SourceIndex(0)
-5 >Emitted(17, 21) Source(19, 21) + SourceIndex(0)
+2 >Emitted(17, 16) Source(19, 16) + SourceIndex(0)
+3 >Emitted(17, 20) Source(19, 20) + SourceIndex(0)
+4 >Emitted(17, 21) Source(19, 21) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^

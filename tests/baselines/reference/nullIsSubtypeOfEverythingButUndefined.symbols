@@ -39,11 +39,11 @@ var r3 = true ? null : true;
 
 var r4 = true ? new Date() : null;
 >r4 : Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 var r4 = true ? null : new Date();
 >r4 : Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 var r5 = true ? /1/ : null;
 >r5 : Symbol(r5, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 21, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 22, 3))
@@ -233,11 +233,11 @@ function f18<T, U>(x: U) {
 
 var r19 = true ? new Object() : null;
 >r19 : Symbol(r19, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 85, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 86, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r19 = true ? null : new Object();
 >r19 : Symbol(r19, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 85, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 86, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r20 = true ? {} : null;
 >r20 : Symbol(r20, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 88, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 89, 3))

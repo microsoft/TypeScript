@@ -39,6 +39,7 @@ System.register([], function (exports_1, context_1) {
             step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
     };
+    var cl1, obj, cl2, l;
     var __moduleName = context_1 && context_1.id;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -46,7 +47,6 @@ System.register([], function (exports_1, context_1) {
         });
     }
     exports_1("fn", fn);
-    var cl1, obj, cl2, l;
     return {
         setters: [],
         execute: function () {

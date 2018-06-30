@@ -13,9 +13,9 @@ var c = new C();
 
 var r: () => void = c.constructor;
 >r : Symbol(r, Decl(typesWithPublicConstructor.ts, 7, 3))
->c.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>c.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(typesWithPublicConstructor.ts, 6, 3))
->constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 
 class C2 {
 >C2 : Symbol(C2, Decl(typesWithPublicConstructor.ts, 7, 34))

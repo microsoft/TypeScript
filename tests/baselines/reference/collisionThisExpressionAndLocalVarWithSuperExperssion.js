@@ -20,9 +20,12 @@ class b2 extends a {
 
 //// [collisionThisExpressionAndLocalVarWithSuperExperssion.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -42,9 +45,9 @@ var b = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     b.prototype.foo = function () {
-        var _this = this;
+        var _this_1 = this;
         var _this = 10;
-        var f = function () { return _super.prototype.foo.call(_this); };
+        var f = function () { return _super.prototype.foo.call(_this_1); };
     };
     return b;
 }(a));
@@ -54,10 +57,10 @@ var b2 = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     b2.prototype.foo = function () {
-        var _this = this;
+        var _this_1 = this;
         var f = function () {
             var _this = 10;
-            return _super.prototype.foo.call(_this);
+            return _super.prototype.foo.call(_this_1);
         };
     };
     return b2;

@@ -7,14 +7,8 @@
 //// f2(/*2*/)
 //// f3(/*3*/)
 
-goTo.marker("1");
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("f1(a: any): a is number");
-
-goTo.marker("2");
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("f2<T>(a: any): a is T");
-
-goTo.marker("3");
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("f3(a: any, ...b: any[]): a is number");
+verify.signatureHelp(
+    { marker: "1", text: "f1(a: any): a is number" },
+    { marker: "2", text: "f2<T>(a: any): a is T" },
+    { marker: "3", text: "f3(a: any, ...b: any[]): a is number", isVariadic: true },
+)

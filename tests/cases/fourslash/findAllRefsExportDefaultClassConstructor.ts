@@ -2,4 +2,4 @@
 ////    [|constructor|]() {}
 ////}
 
-verify.singleReferenceGroup("constructor default(): default");
+verify.singleReferenceGroup("class default");

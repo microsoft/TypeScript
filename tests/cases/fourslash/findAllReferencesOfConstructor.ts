@@ -42,8 +42,8 @@
 
 const ranges = test.ranges();
 const [a0, a1, a2, a3, a4, b0, c0, d0, d1] = ranges;
-verify.referenceGroups([a0, a2], defs("constructor C(n: number): C (+1 overload)"));
-verify.referenceGroups(a1, defs("constructor C(): C (+1 overload)"));
+verify.referenceGroups([a0, a2], defs("class C"));
+verify.referenceGroups(a1, defs("class C"));
 
 function defs(definition: string) {
     return [

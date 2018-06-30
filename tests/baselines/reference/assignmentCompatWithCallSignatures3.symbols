@@ -106,23 +106,23 @@ var a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(a12, Decl(assignmentCompatWithCallSignatures3.ts, 18, 3))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 18, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 18, 25))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures3.ts, 3, 43))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
 
 var a13: (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >a13 : Symbol(a13, Decl(assignmentCompatWithCallSignatures3.ts, 19, 3))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 19, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 19, 25))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
 
 var a14: (x: { a: string; b: number }) => Object;
@@ -130,7 +130,7 @@ var a14: (x: { a: string; b: number }) => Object;
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 20, 10))
 >a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 20, 14))
 >b : Symbol(b, Decl(assignmentCompatWithCallSignatures3.ts, 20, 25))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var a15: {
 >a15 : Symbol(a15, Decl(assignmentCompatWithCallSignatures3.ts, 21, 3))
@@ -189,8 +189,8 @@ var a18: {
 
         (a: Date): Date;
 >a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 40, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     }): any[];
 }
@@ -407,14 +407,14 @@ b11 = a11; // ok
 var b12: <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
 >b12 : Symbol(b12, Decl(assignmentCompatWithCallSignatures3.ts, 77, 3))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 77, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 77, 33))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 77, 48))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 77, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
 
 a12 = b12; // ok
@@ -428,10 +428,10 @@ b12 = a12; // ok
 var b13: <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
 >b13 : Symbol(b13, Decl(assignmentCompatWithCallSignatures3.ts, 80, 3))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 80, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 80, 36))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 80, 51))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 80, 10))

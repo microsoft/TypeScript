@@ -81,8 +81,8 @@ interface IRouterMatcher<T> {
 
 type PathParams = string | RegExp | (string | RegExp)[];
 >PathParams : Symbol(PathParams, Decl(contextualTypingOfTooShortOverloads.ts, 25, 1))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type RequestHandlerParams = RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[];
 >RequestHandlerParams : Symbol(RequestHandlerParams, Decl(contextualTypingOfTooShortOverloads.ts, 27, 56))
