@@ -24,7 +24,7 @@ function f0() {
 >x : number
 >y : string
 >z : any
->[1, "hello"] : [number, string, undefined]
+>[1, "hello"] : [number, string, undefined?]
 >1 : 1
 >"hello" : "hello"
 
@@ -254,17 +254,17 @@ function f7() {
 function f8() {
 >f8 : () => void
 
-    var [a, b, c] = [];   // Ok, [] is an array
+    var [a, b, c] = [];   // Error, [] is an empty tuple
 >a : any
 >b : any
 >c : any
->[] : [undefined, undefined, undefined]
+>[] : [undefined?, undefined?, undefined?]
 
     var [d, e, f] = [1];  // Error, [1] is a tuple
 >d : number
 >e : any
 >f : any
->[1] : [number, undefined, undefined]
+>[1] : [number, undefined?, undefined?]
 >1 : 1
 }
 
@@ -681,9 +681,6 @@ function f19() {
 function f20() {
 >f20 : () => void
 
-    var a: number[];
->a : number[]
-
     var x: number;
 >x : number
 
@@ -692,6 +689,12 @@ function f20() {
 
     var z: number;
 >z : number
+
+    var a: number[];
+>a : number[]
+
+    var a3: any[];
+>a3 : any[]
 
     var [...a] = [1, 2, 3];
 >a : number[]
@@ -703,7 +706,7 @@ function f20() {
     var [x, ...a] = [1, 2, 3];
 >x : number
 >a : number[]
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -712,17 +715,17 @@ function f20() {
 >x : number
 >y : number
 >a : number[]
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
 
-    var [x, y, z, ...a] = [1, 2, 3];
+    var [x, y, z, ...a3] = [1, 2, 3];
 >x : number
 >y : number
 >z : number
->a : number[]
->[1, 2, 3] : number[]
+>a3 : any[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -738,37 +741,37 @@ function f20() {
 >3 : 3
 
     [x, ...a] = [1, 2, 3];
->[x, ...a] = [1, 2, 3] : number[]
->[x, ...a] : number[]
+>[x, ...a] = [1, 2, 3] : [number, number, number]
+>[x, ...a] : [number, ...number[]]
 >x : number
 >...a : number
 >a : number[]
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
 
     [x, y, ...a] = [1, 2, 3];
->[x, y, ...a] = [1, 2, 3] : number[]
->[x, y, ...a] : number[]
+>[x, y, ...a] = [1, 2, 3] : [number, number, number]
+>[x, y, ...a] : [number, number, ...number[]]
 >x : number
 >y : number
 >...a : number
 >a : number[]
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
 
-    [x, y, z, ...a] = [1, 2, 3];
->[x, y, z, ...a] = [1, 2, 3] : number[]
->[x, y, z, ...a] : number[]
+    [x, y, z, ...a3] = [1, 2, 3];
+>[x, y, z, ...a3] = [1, 2, 3] : [number, number, number]
+>[x, y, z, ...a3] : [number, number, number, ...any[]]
 >x : number
 >y : number
 >z : number
->...a : number
->a : number[]
->[1, 2, 3] : number[]
+>...a3 : any
+>a3 : any[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -777,94 +780,103 @@ function f20() {
 function f21() {
 >f21 : () => void
 
-    var a: (number | string | boolean)[];
->a : (string | number | boolean)[]
+    var x: number;
+>x : number
 
-    var x: number | string | boolean;
->x : string | number | boolean
+    var y: string;
+>y : string
 
-    var y: number | string | boolean;
->y : string | number | boolean
+    var z: boolean;
+>z : boolean
 
-    var z: number | string | boolean;
->z : string | number | boolean
+    var a0: (number | string | boolean)[];
+>a0 : (string | number | boolean)[]
 
-    var [...a] = [1, "hello", true];
->a : (string | number | boolean)[]
+    var a1: (string | boolean)[];
+>a1 : (string | boolean)[]
+
+    var a2: boolean[];
+>a2 : boolean[]
+
+    var a3: any[];
+>a3 : any[]
+
+    var [...a0] = [1, "hello", true];
+>a0 : (string | number | boolean)[]
 >[1, "hello", true] : (string | number | boolean)[]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
-    var [x, ...a] = [1, "hello", true];
->x : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+    var [x, ...a1] = [1, "hello", true];
+>x : number
+>a1 : (string | boolean)[]
+>[1, "hello", true] : [number, string, boolean]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
-    var [x, y, ...a] = [1, "hello", true];
->x : string | number | boolean
->y : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+    var [x, y, ...a2] = [1, "hello", true];
+>x : number
+>y : string
+>a2 : boolean[]
+>[1, "hello", true] : [number, string, boolean]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
-    var [x, y, z, ...a] = [1, "hello", true];
->x : string | number | boolean
->y : string | number | boolean
->z : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+    var [x, y, z, ...a3] = [1, "hello", true];
+>x : number
+>y : string
+>z : boolean
+>a3 : any[]
+>[1, "hello", true] : [number, string, boolean]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
-    [...a] = [1, "hello", true];
->[...a] = [1, "hello", true] : (string | number | true)[]
->[...a] : (string | number | boolean)[]
->...a : string | number | boolean
->a : (string | number | boolean)[]
+    [...a0] = [1, "hello", true];
+>[...a0] = [1, "hello", true] : (string | number | true)[]
+>[...a0] : (string | number | boolean)[]
+>...a0 : string | number | boolean
+>a0 : (string | number | boolean)[]
 >[1, "hello", true] : (string | number | true)[]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
-    [x, ...a] = [1, "hello", true];
->[x, ...a] = [1, "hello", true] : (string | number | true)[]
->[x, ...a] : (string | number | boolean)[]
->x : string | number | boolean
->...a : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | true)[]
+    [x, ...a1] = [1, "hello", true];
+>[x, ...a1] = [1, "hello", true] : [number, string, true]
+>[x, ...a1] : [number, ...(string | boolean)[]]
+>x : number
+>...a1 : string | boolean
+>a1 : (string | boolean)[]
+>[1, "hello", true] : [number, string, true]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
-    [x, y, ...a] = [1, "hello", true];
->[x, y, ...a] = [1, "hello", true] : (string | number | true)[]
->[x, y, ...a] : (string | number | boolean)[]
->x : string | number | boolean
->y : string | number | boolean
->...a : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | true)[]
+    [x, y, ...a2] = [1, "hello", true];
+>[x, y, ...a2] = [1, "hello", true] : [number, string, true]
+>[x, y, ...a2] : [number, string, ...boolean[]]
+>x : number
+>y : string
+>...a2 : boolean
+>a2 : boolean[]
+>[1, "hello", true] : [number, string, true]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
-    [x, y, z, ...a] = [1, "hello", true];
->[x, y, z, ...a] = [1, "hello", true] : (string | number | true)[]
->[x, y, z, ...a] : (string | number | boolean)[]
->x : string | number | boolean
->y : string | number | boolean
->z : string | number | boolean
->...a : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | true)[]
+    [x, y, z, ...a3] = [1, "hello", true];
+>[x, y, z, ...a3] = [1, "hello", true] : [number, string, true]
+>[x, y, z, ...a3] : [number, string, boolean, ...any[]]
+>x : number
+>y : string
+>z : boolean
+>...a3 : any
+>a3 : any[]
+>[1, "hello", true] : [number, string, true]
 >1 : 1
 >"hello" : "hello"
 >true : true

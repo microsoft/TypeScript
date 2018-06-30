@@ -183,7 +183,7 @@ namespace compiler {
 
         public getSourceMapRecord(): string | undefined {
             if (this.result!.sourceMaps && this.result!.sourceMaps!.length > 0) {
-                return Harness.SourceMapRecorder.getSourceMapRecord(this.result!.sourceMaps!, this.program!, Array.from(this.js.values()), Array.from(this.dts.values()));
+                return Harness.SourceMapRecorder.getSourceMapRecord(this.result!.sourceMaps!, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
             }
         }
 
@@ -215,6 +215,16 @@ namespace compiler {
                 }
             }
             return vpath.changeExtension(path, ext);
+        }
+
+        public getNumberOfJsFiles() {
+            let count = this.js.size;
+            this.js.forEach(document => {
+                if (ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+                    count--;
+                }
+            });
+            return count;
         }
     }
 

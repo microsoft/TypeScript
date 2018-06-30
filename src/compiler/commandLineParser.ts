@@ -1,6 +1,67 @@
 namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
+
+    // NOTE: The order here is important to default lib ordering as entries will have the same
+    //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
+    //       order also affects overload resolution when a type declared in one lib is
+    //       augmented in another lib.
+    const libEntries: [string, string][] = [
+        // JavaScript only
+        ["es5", "lib.es5.d.ts"],
+        ["es6", "lib.es2015.d.ts"],
+        ["es2015", "lib.es2015.d.ts"],
+        ["es7", "lib.es2016.d.ts"],
+        ["es2016", "lib.es2016.d.ts"],
+        ["es2017", "lib.es2017.d.ts"],
+        ["es2018", "lib.es2018.d.ts"],
+        ["esnext", "lib.esnext.d.ts"],
+        // Host only
+        ["dom", "lib.dom.d.ts"],
+        ["dom.iterable", "lib.dom.iterable.d.ts"],
+        ["webworker", "lib.webworker.d.ts"],
+        ["webworker.importscripts", "lib.webworker.importscripts.d.ts"],
+        ["scripthost", "lib.scripthost.d.ts"],
+        // ES2015 Or ESNext By-feature options
+        ["es2015.core", "lib.es2015.core.d.ts"],
+        ["es2015.collection", "lib.es2015.collection.d.ts"],
+        ["es2015.generator", "lib.es2015.generator.d.ts"],
+        ["es2015.iterable", "lib.es2015.iterable.d.ts"],
+        ["es2015.promise", "lib.es2015.promise.d.ts"],
+        ["es2015.proxy", "lib.es2015.proxy.d.ts"],
+        ["es2015.reflect", "lib.es2015.reflect.d.ts"],
+        ["es2015.symbol", "lib.es2015.symbol.d.ts"],
+        ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
+        ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+        ["es2017.object", "lib.es2017.object.d.ts"],
+        ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
+        ["es2017.string", "lib.es2017.string.d.ts"],
+        ["es2017.intl", "lib.es2017.intl.d.ts"],
+        ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
+        ["es2018.intl", "lib.es2018.intl.d.ts"],
+        ["es2018.promise", "lib.es2018.promise.d.ts"],
+        ["es2018.regexp", "lib.es2018.regexp.d.ts"],
+        ["esnext.array", "lib.esnext.array.d.ts"],
+        ["esnext.symbol", "lib.esnext.symbol.d.ts"],
+        ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
+        ["esnext.intl", "lib.esnext.intl.d.ts"]
+    ];
+
+    /**
+     * An array of supported "lib" reference file names used to determine the order for inclusion
+     * when referenced, as well as for spelling suggestions. This ensures the correct ordering for
+     * overload resolution when a type declared in one lib is extended by another.
+     */
+    /* @internal */
+    export const libs = libEntries.map(entry => entry[0]);
+
+    /**
+     * A map of lib names to lib files. This map is used both for parsing the "lib" command line
+     * option as well as for resolving lib reference directives.
+     */
+    /* @internal */
+    export const libMap = createMapFromEntries(libEntries);
+
     /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
         // CommandLine only options
@@ -48,6 +109,14 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             paramType: Diagnostics.FILE_OR_DIRECTORY,
             description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
+        },
+        {
+            name: "build",
+            type: "boolean",
+            shortName: "b",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date
         },
         {
             name: "pretty",
@@ -114,43 +183,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: createMapFromTemplate({
-                    // JavaScript only
-                    "es5": "lib.es5.d.ts",
-                    "es6": "lib.es2015.d.ts",
-                    "es2015": "lib.es2015.d.ts",
-                    "es7": "lib.es2016.d.ts",
-                    "es2016": "lib.es2016.d.ts",
-                    "es2017": "lib.es2017.d.ts",
-                    "es2018": "lib.es2018.d.ts",
-                    "esnext": "lib.esnext.d.ts",
-                    // Host only
-                    "dom": "lib.dom.d.ts",
-                    "dom.iterable": "lib.dom.iterable.d.ts",
-                    "webworker": "lib.webworker.d.ts",
-                    "scripthost": "lib.scripthost.d.ts",
-                    // ES2015 Or ESNext By-feature options
-                    "es2015.core": "lib.es2015.core.d.ts",
-                    "es2015.collection": "lib.es2015.collection.d.ts",
-                    "es2015.generator": "lib.es2015.generator.d.ts",
-                    "es2015.iterable": "lib.es2015.iterable.d.ts",
-                    "es2015.promise": "lib.es2015.promise.d.ts",
-                    "es2015.proxy": "lib.es2015.proxy.d.ts",
-                    "es2015.reflect": "lib.es2015.reflect.d.ts",
-                    "es2015.symbol": "lib.es2015.symbol.d.ts",
-                    "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-                    "es2016.array.include": "lib.es2016.array.include.d.ts",
-                    "es2017.object": "lib.es2017.object.d.ts",
-                    "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
-                    "es2017.string": "lib.es2017.string.d.ts",
-                    "es2017.intl": "lib.es2017.intl.d.ts",
-                    "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
-                    "es2018.intl": "lib.es2018.intl.d.ts",
-                    "es2018.promise": "lib.es2018.promise.d.ts",
-                    "es2018.regexp": "lib.es2018.regexp.d.ts",
-                    "esnext.array": "lib.esnext.array.d.ts",
-                    "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
-                }),
+                type: libMap
             },
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -443,7 +476,6 @@ namespace ts {
         {
             name: "sourceRoot",
             type: "string",
-            isFilePath: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
@@ -451,7 +483,6 @@ namespace ts {
         {
             name: "mapRoot",
             type: "string",
-            isFilePath: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
@@ -929,7 +960,8 @@ namespace ts {
         }
     }
 
-    function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
+    /** @internal */
+    export function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
         optionName = optionName.toLowerCase();
         const { optionNameMap, shortOptionNames } = getOptionNameMap();
         // Try to translate short option names to their full equivalents.
@@ -942,6 +974,125 @@ namespace ts {
         return optionNameMap.get(optionName);
     }
 
+
+    function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
+        const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
+        return <string>diagnostic.messageText;
+    }
+
+    /* @internal */
+    export function printVersion() {
+        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+    }
+
+    /* @internal */
+    export function printHelp(optionsList: CommandLineOption[], syntaxPrefix = "") {
+        const output: string[] = [];
+
+        // We want to align our "syntax" and "examples" commands to a certain margin.
+        const syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
+        const examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length;
+        let marginLength = Math.max(syntaxLength, examplesLength);
+
+        // Build up the syntactic skeleton.
+        let syntax = makePadding(marginLength - syntaxLength);
+        syntax += `tsc ${syntaxPrefix}[${getDiagnosticText(Diagnostics.options)}] [${getDiagnosticText(Diagnostics.file)}...]`;
+
+        output.push(getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax));
+        output.push(sys.newLine + sys.newLine);
+
+        // Build up the list of examples.
+        const padding = makePadding(marginLength);
+        output.push(getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine);
+        output.push(padding + "tsc --outFile file.js file.ts" + sys.newLine);
+        output.push(padding + "tsc @args.txt" + sys.newLine);
+        output.push(padding + "tsc --build tsconfig.json" + sys.newLine);
+        output.push(sys.newLine);
+
+        output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
+
+        // We want our descriptions to align at the same column in our output,
+        // so we keep track of the longest option usage string.
+        marginLength = 0;
+        const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
+        const descriptionColumn: string[] = [];
+
+        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
+
+        for (const option of optionsList) {
+            // If an option lacks a description,
+            // it is not officially supported.
+            if (!option.description) {
+                continue;
+            }
+
+            let usageText = " ";
+            if (option.shortName) {
+                usageText += "-" + option.shortName;
+                usageText += getParamType(option);
+                usageText += ", ";
+            }
+
+            usageText += "--" + option.name;
+            usageText += getParamType(option);
+
+            usageColumn.push(usageText);
+            let description: string;
+
+            if (option.name === "lib") {
+                description = getDiagnosticText(option.description);
+                const element = (<CommandLineOptionOfListType>option).element;
+                const typeMap = <Map<number | string>>element.type;
+                optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
+            }
+            else {
+                description = getDiagnosticText(option.description);
+            }
+
+            descriptionColumn.push(description);
+
+            // Set the new margin for the description column if necessary.
+            marginLength = Math.max(usageText.length, marginLength);
+        }
+
+        // Special case that can't fit in the loop.
+        const usageText = " @<" + getDiagnosticText(Diagnostics.file) + ">";
+        usageColumn.push(usageText);
+        descriptionColumn.push(getDiagnosticText(Diagnostics.Insert_command_line_options_and_files_from_a_file));
+        marginLength = Math.max(usageText.length, marginLength);
+
+        // Print out each row, aligning all the descriptions on the same column.
+        for (let i = 0; i < usageColumn.length; i++) {
+            const usage = usageColumn[i];
+            const description = descriptionColumn[i];
+            const kindsList = optionsDescriptionMap.get(description);
+            output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
+
+            if (kindsList) {
+                output.push(makePadding(marginLength + 4));
+                for (const kind of kindsList) {
+                    output.push(kind + " ");
+                }
+                output.push(sys.newLine);
+            }
+        }
+
+        for (const line of output) {
+            sys.write(line);
+        }
+        return;
+
+        function getParamType(option: CommandLineOption) {
+            if (option.paramType !== undefined) {
+                return " " + getDiagnosticText(option.paramType);
+            }
+            return "";
+        }
+
+        function makePadding(paddingLength: number): string {
+            return Array(paddingLength + 1).join(" ");
+        }
+    }
 
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     /**

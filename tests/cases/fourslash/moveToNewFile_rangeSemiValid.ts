@@ -9,8 +9,7 @@
 verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
-`
-/** Comment */
+`/** Comment */
 const y = 0;`,
 
         "/x.ts":

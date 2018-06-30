@@ -6,8 +6,6 @@ src/cli/util.js(262,64): error TS2339: Property 'length' does not exist on type 
 src/cli/util.js(335,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
 src/cli/util.js(396,46): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 src/cli/util.js(403,39): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
-src/common/errors.js(3,7): error TS2300: Duplicate identifier 'ConfigError'.
-src/common/errors.js(7,3): error TS2300: Duplicate identifier 'ConfigError'.
 src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 src/config/resolve-config.js(75,32): error TS2345: Argument of type '{ sync: false; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
   Property 'cache' is missing in type '{ sync: false; }'.
@@ -24,17 +22,14 @@ src/language-css/parser-postcss.js(100,30): error TS2345: Argument of type 'any'
 src/language-css/parser-postcss.js(104,28): error TS2345: Argument of type '{ [x: string]: any; groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(407,32): error TS2531: Object is possibly 'null'.
 src/language-css/printer-postcss.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
-src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type '{ plugins: { ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): voi...' is not assignable to parameter of type 'PreprocessOptions | undefined'.
-  Type '{ plugins: { ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): voi...' is not assignable to type 'PreprocessOptions'.
-    Types of property 'plugins' are incompatible.
-      Type '{ ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementN...' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; } | undefined'.
-        Type '{ ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementN...' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; }'.
-          Types of property 'ast' are incompatible.
-            Type '(() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(nod...' is not assignable to type 'ASTPluginBuilder[] | undefined'.
-              Type '(() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(nod...' is not assignable to type 'ASTPluginBuilder[]'.
-                Type '() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node...' is not assignable to type 'ASTPluginBuilder'.
-                  Type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...' is not assignable to type 'ASTPlugin'.
-                    Property 'name' is missing in type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...'.
+src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type '{ plugins: { ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): voi...' is not assignable to parameter of type 'PreprocessOptions'.
+  Types of property 'plugins' are incompatible.
+    Type '{ ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementN...' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; }'.
+      Types of property 'ast' are incompatible.
+        Type '(() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(nod...' is not assignable to type 'ASTPluginBuilder[]'.
+          Type '() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node...' is not assignable to type 'ASTPluginBuilder'.
+            Type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...' is not assignable to type 'ASTPlugin'.
+              Property 'name' is missing in type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...'.
 src/language-handlebars/printer-glimmer.js(270,7): error TS2554: Expected 0-1 arguments, but got 2.
 src/language-js/printer-estree.js(99,9): error TS2322: Type '{ [x: string]: any; type: string; }' is not assignable to type '{ [x: string]: any; type: string; parts: any; }'.
   Property 'parts' is missing in type '{ [x: string]: any; type: string; }'.

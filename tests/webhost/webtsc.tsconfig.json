@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "declaration": false,
+        "removeComments": true,
+        "noResolve": false,
+        "stripInternal": false,
+        "sourceMap": true
+    },
+    "files": [
+        "webtsc.ts"
+    ]
+}

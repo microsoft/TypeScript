@@ -4,7 +4,6 @@
 [30;47m [0m [91m[0m
 
 
-
 ==== tests/cases/compiler/index.ts (1 errors) ====
     if (true) {
     

@@ -6,6 +6,7 @@
 namespace ts.server.protocol {
     // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     export const enum CommandTypes {
+        JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         /* @internal */
         BraceFull = "brace-full",
@@ -13,7 +14,9 @@ namespace ts.server.protocol {
         GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
+        /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
         Completions = "completions",
+        CompletionInfo = "completionInfo",
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
@@ -465,6 +468,7 @@ namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        relatedInformation?: DiagnosticRelatedInformation[];
     }
 
     /**
@@ -615,7 +619,7 @@ namespace ts.server.protocol {
     }
 
     export interface OrganizeImportsResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
 
     export interface GetEditsForFileRenameRequest extends Request {
@@ -623,15 +627,14 @@ namespace ts.server.protocol {
         arguments: GetEditsForFileRenameRequestArgs;
     }
 
-    // Note: The file from FileRequestArgs is just any file in the project.
-    // We will generate code changes for every file in that project, so the choice is arbitrary.
-    export interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+    /** Note: Paths may also be directories. */
+    export interface GetEditsForFileRenameRequestArgs {
         readonly oldFilePath: string;
         readonly newFilePath: string;
     }
 
     export interface GetEditsForFileRenameResponse extends Response {
-        edits: ReadonlyArray<FileCodeEdits>;
+        body: ReadonlyArray<FileCodeEdits>;
     }
 
     /**
@@ -888,6 +891,17 @@ namespace ts.server.protocol {
          * Kind of opening brace
          */
         openingBrace: string;
+    }
+
+    export interface JsxClosingTagRequest extends FileLocationRequest {
+        readonly command: CommandTypes.JsxClosingTag;
+        readonly arguments: JsxClosingTagRequestArgs;
+    }
+
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+
+    export interface JsxClosingTagResponse extends Response {
+        readonly body: TextInsertion;
     }
 
     /**
@@ -1930,8 +1944,20 @@ namespace ts.server.protocol {
         source?: SymbolDisplayPart[];
     }
 
+    /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
     export interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
+    }
+
+    export interface CompletionInfoResponse extends Response {
+        body?: CompletionInfo;
+    }
+
+    export interface CompletionInfo {
+        readonly isGlobalCompletion: boolean;
+        readonly isMemberCompletion: boolean;
+        readonly isNewIdentifierLocation: boolean;
+        readonly entries: ReadonlyArray<CompletionEntry>;
     }
 
     export interface CompletionDetailsResponse extends Response {
@@ -2204,6 +2230,11 @@ namespace ts.server.protocol {
         reportsUnnecessary?: {};
 
         /**
+         * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
+         */
+        relatedInformation?: DiagnosticRelatedInformation[];
+
+        /**
          * The error code of the diagnostic message.
          */
         code?: number;
@@ -2219,6 +2250,28 @@ namespace ts.server.protocol {
          * Name of the file the diagnostic is in
          */
         fileName: string;
+    }
+
+    /**
+     * Represents additional spans returned with a diagnostic which are relevant to it
+     */
+    export interface DiagnosticRelatedInformation {
+        /**
+         * The category of the related information message, e.g. "error", "warning", or "suggestion".
+         */
+        category: string;
+        /**
+         * The code used ot identify the related information
+         */
+        code: number;
+        /**
+         * Text of related or additional information.
+         */
+        message: string;
+        /**
+         * Associated location
+         */
+        span?: FileSpan;
     }
 
     export interface DiagnosticEventBody {
@@ -2391,7 +2444,7 @@ namespace ts.server.protocol {
     /**
      * An item found in a navto response.
      */
-    export interface NavtoItem {
+    export interface NavtoItem extends FileSpan {
         /**
          * The symbol's name.
          */
@@ -2416,21 +2469,6 @@ namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers?: string;
-
-        /**
-         * The file in which the symbol is found.
-         */
-        file: string;
-
-        /**
-         * The location within file at which the symbol is found.
-         */
-        start: Location;
-
-        /**
-         * One past the last character of the symbol.
-         */
-        end: Location;
 
         /**
          * Name of symbol's container symbol (if any); for example,
@@ -2543,6 +2581,7 @@ namespace ts.server.protocol {
         kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
+        nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
     }
 

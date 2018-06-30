@@ -19,7 +19,7 @@ interface Snapshot<T> extends DataSnapshot {
   child<U extends Extract<keyof T, string>>(path: U): Snapshot<T[U]>;
 >child : Symbol(Snapshot.child, Decl(deeplyNestedCheck.ts, 6, 44))
 >U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(deeplyNestedCheck.ts, 6, 19))
 >path : Symbol(path, Decl(deeplyNestedCheck.ts, 7, 44))
 >U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))

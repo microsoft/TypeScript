@@ -17,13 +17,13 @@ namespace ts.Completions.PathCompletions {
     }
 
     export function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): ReadonlyArray<PathCompletion> {
-        return addReplacementSpans(node.text, node.getStart(sourceFile) + 1, getStringLiteralCompletionsFromModuleNamesWorker(node, compilerOptions, host, typeChecker));
+        return addReplacementSpans(node.text, node.getStart(sourceFile) + 1, getStringLiteralCompletionsFromModuleNamesWorker(sourceFile, node, compilerOptions, host, typeChecker));
     }
 
-    function getStringLiteralCompletionsFromModuleNamesWorker(node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): ReadonlyArray<NameAndKind> {
+    function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): ReadonlyArray<NameAndKind> {
         const literalValue = normalizeSlashes(node.text);
 
-        const scriptPath = node.getSourceFile().path;
+        const scriptPath = sourceFile.path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
@@ -37,7 +37,6 @@ namespace ts.Completions.PathCompletions {
             }
         }
         else {
-            // Check for node modules
             return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
         }
     }
@@ -225,16 +224,17 @@ namespace ts.Completions.PathCompletions {
     ): ReadonlyArray<NameAndKind> {
         if (!endsWith(path, "*")) {
             // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
-            return !stringContains(path, "*") && startsWith(path, fragment) ? [{ name: path, kind: ScriptElementKind.directory }] : emptyArray;
+            return !stringContains(path, "*") ? justPathMappingName(path) : emptyArray;
         }
 
         const pathPrefix = path.slice(0, path.length - 1);
-        if (!startsWith(fragment, pathPrefix)) {
-            return [{ name: pathPrefix, kind: ScriptElementKind.directory }];
-        }
+        const remainingFragment = tryRemovePrefix(fragment, pathPrefix);
+        return remainingFragment === undefined ? justPathMappingName(pathPrefix) : flatMap(patterns, pattern =>
+            getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
 
-        const remainingFragment = fragment.slice(pathPrefix.length);
-        return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
+        function justPathMappingName(name: string): ReadonlyArray<NameAndKind> {
+            return startsWith(name, fragment) ? [{ name, kind: ScriptElementKind.directory }] : emptyArray;
+        }
     }
 
     function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost): ReadonlyArray<NameAndKind> | undefined {
@@ -304,7 +304,7 @@ namespace ts.Completions.PathCompletions {
     }
 
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): ReadonlyArray<PathCompletion> | undefined {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, position);
         const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
         const range = commentRanges && find(commentRanges, commentRange => position >= commentRange.pos && position <= commentRange.end);
         if (!range) {

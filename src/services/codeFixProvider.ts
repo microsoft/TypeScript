@@ -79,15 +79,18 @@ namespace ts {
             return { fileName, textChanges };
         }
 
-        export function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void): CombinedCodeActions {
+        export function codeFixAll(
+            context: CodeFixAllContext,
+            errorCodes: number[],
+            use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void,
+        ): CombinedCodeActions {
             const commands: CodeActionCommand[] = [];
-            const changes = textChanges.ChangeTracker.with(context, t =>
-                eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
+            const changes = textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        function eachDiagnostic({ program, sourceFile }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void {
-            for (const diag of program.getSemanticDiagnostics(sourceFile).concat(computeSuggestionDiagnostics(sourceFile, program))) {
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void {
+            for (const diag of program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken))) {
                 if (contains(errorCodes, diag.code)) {
                     cb(diag as DiagnosticWithLocation);
                 }

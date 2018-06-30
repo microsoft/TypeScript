@@ -433,6 +433,7 @@ namespace ts {
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
@@ -448,6 +449,8 @@ namespace ts {
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
+        setModifiedTime?(path: string, time: Date): void;
+        deleteFile?(path: string): void;
         /**
          * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
          */
@@ -505,6 +508,9 @@ namespace ts {
         echo(s: string): void;
         quit(exitCode?: number): void;
         fileExists(path: string): boolean;
+        deleteFile(path: string): boolean;
+        getModifiedTime(path: string): Date;
+        setModifiedTime(path: string, time: Date): void;
         directoryExists(path: string): boolean;
         createDirectory(path: string): void;
         resolvePath(path: string): string;
@@ -592,6 +598,8 @@ namespace ts {
                 },
                 readDirectory,
                 getModifiedTime,
+                setModifiedTime,
+                deleteFile,
                 createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 createSHA256Hash: _crypto ? createSHA256Hash : undefined,
                 getMemoryUsage() {
@@ -1069,6 +1077,24 @@ namespace ts {
                 }
             }
 
+            function setModifiedTime(path: string, time: Date) {
+                try {
+                    _fs.utimesSync(path, time, time);
+                }
+                catch (e) {
+                    return;
+                }
+            }
+
+            function deleteFile(path: string) {
+                try {
+                    return _fs.unlinkSync(path);
+                }
+                catch (e) {
+                    return;
+                }
+            }
+
             /**
              * djb2 hashing algorithm
              * http://www.cse.yorku.ca/~oz/hash.html
@@ -1112,6 +1138,9 @@ namespace ts {
                 },
                 resolvePath: ChakraHost.resolvePath,
                 fileExists: ChakraHost.fileExists,
+                deleteFile: ChakraHost.deleteFile,
+                getModifiedTime: ChakraHost.getModifiedTime,
+                setModifiedTime: ChakraHost.setModifiedTime,
                 directoryExists: ChakraHost.directoryExists,
                 createDirectory: ChakraHost.createDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,

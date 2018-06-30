@@ -1,0 +1,2 @@
+//// [out/file1.js.map]
+{"version":3,"file":"file1.js","sourceRoot":"","sources":["../tests/cases/compiler/file1.ts"],"names":[],"mappings":";;AAAA,6BAAgC;AAChC,IAAI,CAAC,GAAG,EAAE,CAAC,CAAC,CAAC;AACb,6BAAgC;AAChC,IAAI,CAAC,EAAE;IACH,IAAI,CAAC,GAAG,EAAE,CAAC,CAAC,CAAC;IACb,CAAC,GAAG,CAAC,EAAE,CAAC,CAAC,KAAK,CAAC,CAAC,CAAC;CACpB"}

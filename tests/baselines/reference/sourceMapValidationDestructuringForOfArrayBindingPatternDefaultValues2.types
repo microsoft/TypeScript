@@ -489,7 +489,7 @@ for ([nameMA = "noName", [
 }
 
 for ([numberA3 = -1, ...robotAInfo] of robots) {
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1
@@ -506,7 +506,7 @@ for ([numberA3 = -1, ...robotAInfo] of robots) {
 >numberA3 : number
 }
 for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1
@@ -524,7 +524,7 @@ for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
 >numberA3 : number
 }
 for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1

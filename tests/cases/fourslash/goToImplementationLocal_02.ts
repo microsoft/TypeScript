@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-//// const x = { [|hello: () => {}|] };
+//// const x = { [|hello|]: () => {} };
 ////
 //// x.he/*function_call*/llo();
 ////

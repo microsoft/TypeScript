@@ -49,7 +49,7 @@ namespace ts.SymbolDisplay {
             if (isFirstDeclarationOfSymbolParameter(symbol)) {
                 return ScriptElementKind.parameterElement;
             }
-            else if (symbol.valueDeclaration && isConst(symbol.valueDeclaration)) {
+            else if (symbol.valueDeclaration && isVarConst(symbol.valueDeclaration as VariableDeclaration)) {
                 return ScriptElementKind.constElement;
             }
             else if (forEach(symbol.declarations, isLet)) {
@@ -298,7 +298,7 @@ namespace ts.SymbolDisplay {
         }
         if (symbolFlags & SymbolFlags.Enum) {
             prefixNextMeaning();
-            if (forEach(symbol.declarations, isConstEnumDeclaration)) {
+            if (some(symbol.declarations, d => isEnumDeclaration(d) && isEnumConst(d))) {
                 displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                 displayParts.push(spacePart());
             }
@@ -600,7 +600,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags = TypeFormatFlags.None) {
+        function addSignatureDisplayParts(signature: Signature, allSignatures: ReadonlyArray<Signature>, flags = TypeFormatFlags.None) {
             addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
             if (allSignatures.length > 1) {
                 displayParts.push(spacePart());

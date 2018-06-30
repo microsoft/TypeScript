@@ -87,7 +87,7 @@ var r6 = foo(y, x); // { x?: number; };
 var s1: (x: Object) => string;
 >s1 : Symbol(s1, Decl(genericCallWithNonSymmetricSubtypes.ts, 26, 3))
 >x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 26, 9))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var s2: (x: string) => string;
 >s2 : Symbol(s2, Decl(genericCallWithNonSymmetricSubtypes.ts, 27, 3))

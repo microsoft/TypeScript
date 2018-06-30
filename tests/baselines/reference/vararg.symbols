@@ -16,9 +16,9 @@ module M {
             for (var i=0;i<rest.length;i++) {
 >i : Symbol(i, Decl(vararg.ts, 4, 20))
 >i : Symbol(i, Decl(vararg.ts, 4, 20))
->rest.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >rest : Symbol(rest, Decl(vararg.ts, 2, 26))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(vararg.ts, 4, 20))
 
                 sum+=rest[i];
@@ -50,9 +50,9 @@ module M {
             for (var i=0;i<rest.length;i++) {
 >i : Symbol(i, Decl(vararg.ts, 17, 20))
 >i : Symbol(i, Decl(vararg.ts, 17, 20))
->rest.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >rest : Symbol(rest, Decl(vararg.ts, 15, 21))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(vararg.ts, 17, 20))
 
                 builder+=rest[i];
