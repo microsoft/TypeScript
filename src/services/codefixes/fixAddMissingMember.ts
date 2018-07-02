@@ -34,7 +34,6 @@ namespace ts.codefix {
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const checker = program.getTypeChecker();
                     const info = getInfo(diag.file, diag.start, checker);
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
