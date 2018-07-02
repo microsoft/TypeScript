@@ -297,7 +297,7 @@ namespace ts {
     const extensionsWithNoOutput: ReadonlyArray<string> = [Extension.Dts, Extension.Json];
     function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
         // outFile is handled elsewhere; .d.ts files don't generate outputs
-        if (configFile.options.outFile || fileExtensionIsOneOf(inputFileName, extensionsWithNoOutput)) {
+        if (configFile.options.outFile || configFile.options.out || fileExtensionIsOneOf(inputFileName, extensionsWithNoOutput)) {
             return emptyArray;
         }
 
