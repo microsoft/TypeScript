@@ -326,7 +326,7 @@ namespace ts.codefix {
     }
 
     function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
-        const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(context.sourceFile, context.span.start);
         const checker = context.program.getTypeChecker();
 
         let umdSymbol: Symbol | undefined;
@@ -385,7 +385,7 @@ namespace ts.codefix {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
-        const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
+        const symbolToken = getTokenAtPosition(sourceFile, span.start);
         // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
         const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
             && symbolToken.parent.tagName === symbolToken

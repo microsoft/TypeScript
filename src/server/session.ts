@@ -84,7 +84,9 @@ namespace ts.server {
     function formatRelatedInformation(info: DiagnosticRelatedInformation): protocol.DiagnosticRelatedInformation {
         if (!info.file) {
             return {
-                message: flattenDiagnosticMessageText(info.messageText, "\n")
+                message: flattenDiagnosticMessageText(info.messageText, "\n"),
+                category: diagnosticCategoryName(info),
+                code: info.code
             };
         }
         return {
@@ -93,7 +95,9 @@ namespace ts.server {
                 end: convertToLocation(getLineAndCharacterOfPosition(info.file, info.start! + info.length!)), // TODO: GH#18217
                 file: info.file.fileName
             },
-            message: flattenDiagnosticMessageText(info.messageText, "\n")
+            message: flattenDiagnosticMessageText(info.messageText, "\n"),
+            category: diagnosticCategoryName(info),
+            code: info.code
         };
     }
 
@@ -129,13 +133,8 @@ namespace ts.server {
         project: Project;
     }
 
-    function allEditsBeforePos(edits: TextChange[], pos: number) {
-        for (const edit of edits) {
-            if (textSpanEnd(edit.span) >= pos) {
-                return false;
-            }
-        }
-        return true;
+    function allEditsBeforePos(edits: ReadonlyArray<TextChange>, pos: number): boolean {
+        return edits.every(edit => textSpanEnd(edit.span) < pos);
     }
 
     // CommandNames used to be exposed before TS 2.4 as a namespace
