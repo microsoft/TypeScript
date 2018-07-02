@@ -10118,8 +10118,9 @@ namespace ts {
         function elaborateError(node: Expression | undefined, source: Type, target: Type): boolean {
             if (!node) return false;
             switch (node.kind) {
+                case SyntaxKind.JsxExpression:
                 case SyntaxKind.ParenthesizedExpression:
-                    return elaborateError((node as ParenthesizedExpression).expression, source, target);
+                    return elaborateError((node as ParenthesizedExpression | JsxExpression).expression, source, target);
                 case SyntaxKind.BinaryExpression:
                     switch ((node as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.EqualsToken:
