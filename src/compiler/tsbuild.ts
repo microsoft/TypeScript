@@ -295,7 +295,8 @@ namespace ts {
     }
 
     function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
-        if (configFile.options.outFile) {
+        // outFile is handled elsewhere; .d.ts files don't generate outputs
+        if (configFile.options.outFile || fileExtensionIs(inputFileName, Extension.Dts)) {
             return emptyArray;
         }
 
