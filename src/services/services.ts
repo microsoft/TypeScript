@@ -1756,12 +1756,12 @@ namespace ts {
         /**
          * This is a semantic operation.
          */
-        function getSignatureHelpItems(fileName: string, position: number, { triggerCharacter }: SignatureHelpItemsOptions = emptyOptions): SignatureHelpItems | undefined {
+        function getSignatureHelpItems(fileName: string, position: number, { triggerReason }: SignatureHelpItemsOptions = emptyOptions): SignatureHelpItems | undefined {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
 
-            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, triggerCharacter, cancellationToken);
+            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, triggerReason, cancellationToken);
         }
 
         /// Syntactic features

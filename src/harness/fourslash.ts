@@ -1426,17 +1426,22 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyNoSignatureHelp(triggerCharacter: ts.SignatureHelpTriggerCharacter | undefined, markers: ReadonlyArray<string>) {
+        public verifySignatureHelpPresence(expectPresent: boolean, triggerReason: ts.SignatureHelpTriggerReason | undefined, markers: ReadonlyArray<string>) {
             if (markers.length) {
                 for (const marker of markers) {
                     this.goToMarker(marker);
-                    this.verifyNoSignatureHelp(triggerCharacter, ts.emptyArray);
+                    this.verifySignatureHelpPresence(expectPresent, triggerReason, ts.emptyArray);
                 }
                 return;
             }
-            const actual = this.getSignatureHelp({ triggerCharacter });
-            if (actual) {
-                this.raiseError(`Expected no signature help, but got "${stringify(actual)}"`);
+            const actual = this.getSignatureHelp({ triggerReason });
+            if (expectPresent !== !!actual) {
+                if (actual) {
+                    this.raiseError(`Expected no signature help, but got "${stringify(actual)}"`);
+                }
+                else {
+                    this.raiseError("Expected signature help, but none was returned.")
+                }
             }
         }
 
@@ -1455,7 +1460,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private verifySignatureHelpWorker(options: FourSlashInterface.VerifySignatureHelpOptions) {
-            const help = this.getSignatureHelp({ triggerCharacter: options.triggerCharacter })!;
+            const help = this.getSignatureHelp({ triggerReason: options.triggerReason })!;
             const selectedItem = help.items[help.selectedItemIndex];
             // Argument index may exceed number of parameters
             const currentParameter = selectedItem.parameters[help.argumentIndex] as ts.SignatureHelpParameter | undefined;
@@ -1497,7 +1502,7 @@ Actual: ${stringify(fullActual)}`);
 
             const allKeys: ReadonlyArray<keyof FourSlashInterface.VerifySignatureHelpOptions> = [
                 "marker",
-                "triggerCharacter",
+                "triggerReason",
                 "overloadsCount",
                 "docComment",
                 "text",
@@ -1769,9 +1774,9 @@ Actual: ${stringify(fullActual)}`);
             Harness.IO.log(stringify(help.items[help.selectedItemIndex]));
         }
 
-        private getSignatureHelp({ triggerCharacter }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
+        private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
             return this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition, {
-                triggerCharacter
+                triggerReason
             });
         }
 
@@ -1870,7 +1875,12 @@ Actual: ${stringify(fullActual)}`);
                 if (highFidelity) {
                     if (ch === "(" || ch === "," || ch === "<") {
                         /* Signature help*/
-                        this.languageService.getSignatureHelpItems(this.activeFile.fileName, offset, { triggerCharacter: ch });
+                        this.languageService.getSignatureHelpItems(this.activeFile.fileName, offset, {
+                            triggerReason: {
+                                kind: "characterTyped",
+                                triggerCharacter: ch
+                            }
+                        });
                     }
                     else if (prevChar === " " && /A-Za-z_/.test(ch)) {
                         /* Completions */
@@ -4081,11 +4091,15 @@ namespace FourSlashInterface {
         }
 
         public noSignatureHelp(...markers: string[]): void {
-            this.state.verifyNoSignatureHelp(/*triggerCharacter*/ undefined, markers);
+            this.state.verifySignatureHelpPresence(/*expectPresent*/ false, /*triggerReason*/ undefined, markers);
         }
 
-        public noSignatureHelpForTriggerCharacter(triggerCharacter: ts.SignatureHelpTriggerCharacter, ...markers: string[]): void {
-            this.state.verifyNoSignatureHelp(triggerCharacter, markers);
+        public noSignatureHelpForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: string[]): void {
+            this.state.verifySignatureHelpPresence(/*expectPresent*/ false, reason, markers);
+        }
+
+        public signatureHelpPresentForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: string[]): void {
+            this.state.verifySignatureHelpPresence(/*expectPresent*/ true, reason, markers);
         }
 
         public signatureHelp(...options: VerifySignatureHelpOptions[]): void {
@@ -4816,7 +4830,7 @@ namespace FourSlashInterface {
         readonly isVariadic?: boolean;
         /** @default ts.emptyArray */
         readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
-        readonly triggerCharacter?: ts.SignatureHelpTriggerCharacter;
+        readonly triggerReason?: ts.SignatureHelpTriggerReason;
     }
 
     export type ArrayOrSingle<T> = T | ReadonlyArray<T>;
