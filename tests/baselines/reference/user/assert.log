@@ -33,8 +33,7 @@ node_modules/assert/assert.js(394,51): error TS2339: Property 'notStrictEqual' d
 node_modules/assert/assert.js(473,8): error TS2339: Property 'throws' does not exist on type '(value: any, message: any) => void'.
 node_modules/assert/assert.js(478,8): error TS2339: Property 'doesNotThrow' does not exist on type '(value: any, message: any) => void'.
 node_modules/assert/assert.js(482,8): error TS2339: Property 'ifError' does not exist on type '(value: any, message: any) => void'.
-node_modules/assert/test.js(25,5): error TS2367: The types of these values indicate that this condition will always be 'false'.
-  Operator '===' cannot be applied to types 'string | undefined' and 'boolean'.
+node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'boolean' have no overlap.
 node_modules/assert/test.js(39,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
 node_modules/assert/test.js(55,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
 node_modules/assert/test.js(74,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
