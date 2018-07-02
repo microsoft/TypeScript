@@ -18,7 +18,6 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(compilerOptions, importingSourceFile, importingSourceFileName, host);
         const modulePaths = getAllModulePaths(files, toFileName, info.getCanonicalFileName, host);
         return firstDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions)) ||
-            getGlobalModuleSpecifier(toFileName, info, host, compilerOptions) ||
             first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
     }
 
@@ -67,8 +66,7 @@ namespace ts.moduleSpecifiers {
         compilerOptions: CompilerOptions,
     ) {
         return tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addJsExtension)
-            || tryGetModuleNameAsNodeModule(compilerOptions, moduleFileName, host, getCanonicalFileName, sourceDirectory)
-            || compilerOptions.rootDirs && tryGetModuleNameFromRootDirs(compilerOptions.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
+            || tryGetModuleNameAsNodeModule(compilerOptions, moduleFileName, host, getCanonicalFileName, sourceDirectory);
     }
 
     function getLocalModuleSpecifiers(
@@ -76,10 +74,11 @@ namespace ts.moduleSpecifiers {
         { moduleResolutionKind, addJsExtension, getCanonicalFileName, sourceDirectory }: Info,
         compilerOptions: CompilerOptions,
         preferences: ModuleSpecifierPreferences,
-    ) {
-        const { baseUrl, paths } = compilerOptions;
+    ): ReadonlyArray<string> {
+        const { baseUrl, paths, rootDirs } = compilerOptions;
 
-        const relativePath = removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
+        const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
+            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
         if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
             return [relativePath];
         }
