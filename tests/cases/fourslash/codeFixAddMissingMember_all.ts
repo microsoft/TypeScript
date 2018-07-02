@@ -7,6 +7,20 @@
 ////        this.x = "";
 ////    }
 ////}
+////
+////class D extends C {}
+////class E extends D {
+////    method() {
+////        this.x = 0;
+////        this.ex = 0;
+////    }
+////}
+////
+////class Unrelated {
+////    method() {
+////        this.x = 0;
+////    }
+////}
 
 verify.codeFixAll({
     fixId: "addMissingMember",
@@ -21,6 +35,22 @@ verify.codeFixAll({
     }
     y(): any {
         throw new Error("Method not implemented.");
+    }
+}
+
+class D extends C {}
+class E extends D {
+    ex: number;
+    method() {
+        this.x = 0;
+        this.ex = 0;
+    }
+}
+
+class Unrelated {
+    x: number;
+    method() {
+        this.x = 0;
     }
 }`,
 });
