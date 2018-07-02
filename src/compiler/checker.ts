@@ -1655,16 +1655,32 @@ namespace ts {
             if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
 
             if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
+                let err;
+                const declarationName = declarationNameToString(getNameOfDeclaration(declaration));
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
-                    error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
+                    err = error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.Class) {
-                    error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
+                    err = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.RegularEnum) {
-                    error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
+                    err = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
+                }
+                else {
+                    Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
+                }
+
+                if (err) {
+                    placeRelatedSpanOnLaterDeclaration(declarationName, declaration, err);
                 }
             }
+        }
+
+        function placeRelatedSpanOnLaterDeclaration(declarationName: string, declarationLocation: Declaration, diagnostic: Diagnostic) {
+            Debug.assert(!diagnostic.relatedInformation);
+            diagnostic.relatedInformation = [
+                createDiagnosticForNode(declarationLocation, Diagnostics._0_was_declared_here, declarationName)
+            ];
         }
 
         /* Starting from 'initial' node walk up the parent chain until 'stopAt' node is reached.
@@ -17460,16 +17476,22 @@ namespace ts {
                 return;
             }
 
+            let err;
+            const declarationName = idText(right);
             if (isInPropertyInitializer(node) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && !isPropertyDeclaredInAncestorClass(prop)) {
-                error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, idText(right));
+                err = error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
             }
             else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
                 node.parent.kind !== SyntaxKind.TypeReference &&
                 !(valueDeclaration.flags & NodeFlags.Ambient) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)) {
-                error(right, Diagnostics.Class_0_used_before_its_declaration, idText(right));
+                err = error(right, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+            }
+
+            if (err) {
+                placeRelatedSpanOnLaterDeclaration(declarationName, valueDeclaration, err);
             }
         }
 
@@ -19083,8 +19105,8 @@ namespace ts {
             if (importNode && !isImportCall(importNode)) {
                 const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target!), kind);
                 if (!sigs || !sigs.length) return;
-                diagnostic.relatedInformation = diagnostic.relatedInformation || [];
-                diagnostic.relatedInformation.push(createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead));
+                Debug.assert(!diagnostic.relatedInformation);
+                diagnostic.relatedInformation = [createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead)];
             }
         }
 

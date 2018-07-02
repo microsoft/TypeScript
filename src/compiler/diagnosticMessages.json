@@ -2397,6 +2397,10 @@
         "category": "Error",
         "code": 2727
     },
+    "'{0}' was declared here.": {
+        "category": "Error",
+        "code": 2728
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
