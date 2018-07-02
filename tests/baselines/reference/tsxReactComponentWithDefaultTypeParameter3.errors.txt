@@ -28,3 +28,4 @@ tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type 'string' is not 
     let x2 = <MyComp a="hi"/>
                      ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'

@@ -40,8 +40,10 @@ tests/cases/conformance/jsx/file.tsx(21,11): error TS2322: Type '{ X: string; x:
     let z = <Poisoned x y/>;
                       ~
 !!! error TS2322: Type 'true' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'
                         ~
 !!! error TS2322: Type 'true' is not assignable to type '"2"'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'
     let w = <Poisoned {...{x: 5, y: "2"}}/>;
              ~~~~~~~~
 !!! error TS2322: Type '{ x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.

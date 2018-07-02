@@ -38,6 +38,7 @@ tests/cases/conformance/jsx/file.tsx(34,10): error TS2559: Type '{ prop: true; }
     let a = <RCComp x />;
                     ~
 !!! error TS2322: Type 'true' is not assignable to type 'ReactText'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:36: The expected type comes from property 'x' which is declared here on type '(IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode; }) | (IntrinsicAttributes & IntrinsicClassAttributes<RC2> & { x: string; } & { children?: ReactNode; })'
     let b = <PartRCComp x={10} />
              ~~~~~~~~~~
 !!! error TS2559: Type '{ x: number; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.

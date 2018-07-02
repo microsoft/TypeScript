@@ -25,6 +25,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     a1 = { a: 0, b: 0 };  // Error
                  ~
 !!! error TS2322: Type 'number' is not assignable to type 'string | undefined'.
+!!! related TS6500 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47: The expected type comes from property 'b' which is declared here on type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'
     a1 = { b: "y" };  // Error
     ~~
 !!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.

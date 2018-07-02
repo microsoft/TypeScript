@@ -41,6 +41,7 @@ tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(22,21): error TS2322:
                                   ~~~~~~~~
 !!! error TS2322: Type '(p: IntrinsicAttributes & LitProps<"x">) => "y"' is not assignable to type '(x: IntrinsicAttributes & LitProps<"x">) => "x"'.
 !!! error TS2322:   Type '"y"' is not assignable to type '"x"'.
+!!! related TS6500 tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx:13:34: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & LitProps<"x">'
     const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
                       ~~~~~~~
 !!! error TS2322: Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x" | "y">'.

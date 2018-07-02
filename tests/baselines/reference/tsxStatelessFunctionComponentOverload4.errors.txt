@@ -39,6 +39,7 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not 
     const c2 = <OneThing {...obj} yy1 />; // type incompatible;
                                   ~~~
 !!! error TS2322: Type 'true' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:43: The expected type comes from property 'yy1' which is declared here on type 'IntrinsicAttributes & { yy: number; yy1: string; }'
     const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK becuase all attribute are spread
     const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
                                   ~~~~~~~~~~
@@ -62,6 +63,7 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not 
     const d2 = <TestingOneThing yy="hello" direction="left" />
                                            ~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:22:50: The expected type comes from property 'direction' which is declared here on type 'IntrinsicAttributes & { yy: string; direction?: number; }'
     
     declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
     declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
@@ -71,13 +73,17 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not 
     const e1 = <TestingOptional y1 y3="hello"/>
                                    ~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:64: The expected type comes from property 'y3' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     const e2 = <TestingOptional y1="hello" y2={1000} y3 />
                                 ~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
                                 ~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
                                 ~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     

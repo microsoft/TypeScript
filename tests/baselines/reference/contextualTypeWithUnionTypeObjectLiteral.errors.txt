@@ -119,4 +119,5 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
 !!! error TS2322:   Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => number'.
 !!! error TS2322:     Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:       Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:35:5: The expected type comes from property 'commonMethodDifferentReturnType' which is declared here on type 'I11 | I21'
     };

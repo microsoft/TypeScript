@@ -10161,7 +10161,7 @@ namespace ts {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
                             checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
                         }
-                        if (resultObj.error && target.symbol && length(target.symbol.declarations)) {
+                        if (resultObj.error) {
                             const reportedDiag = resultObj.error;
                             const propertyName = isTypeUsableAsLateBoundName(nameType) ? getLateBoundNameFromType(nameType) : undefined;
                             const targetProp = propertyName !== undefined ? getPropertyOfType(target, propertyName) : undefined;
@@ -10177,9 +10177,9 @@ namespace ts {
                                 }
                             }
 
-                            if (!issuedElaboration) {
+                            if (!issuedElaboration && (length(targetProp && targetProp.declarations) || length(target.symbol && target.symbol.declarations))) {
                                 addRelatedInfo(reportedDiag, createDiagnosticForNode(
-                                    targetProp && targetProp.declarations ? targetProp.declarations[0] : target.symbol.declarations[0],
+                                    targetProp ? targetProp.declarations[0] : target.symbol.declarations[0],
                                     Diagnostics.The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1,
                                     propertyName && !(nameType.flags & TypeFlags.UniqueESSymbol) ? unescapeLeadingUnderscores(propertyName) : typeToString(nameType),
                                     typeToString(target)

@@ -30,6 +30,7 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type '{ data-prop: tr
     let b = <SFC2AndEmptyComp x="hi" />;
                               ~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:11:23: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & { x: boolean; }'
     let c = <SFC2AndEmptyComp />;
              ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type '{ x: boolean; }'.
