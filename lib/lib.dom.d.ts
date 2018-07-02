@@ -2844,6 +2844,7 @@ interface CSSStyleDeclaration {
     gridTemplateColumns: string | null;
     gridTemplateRows: string | null;
     height: string | null;
+    imageRendering: string | null;
     imeMode: string | null;
     justifyContent: string | null;
     justifyItems: string | null;
