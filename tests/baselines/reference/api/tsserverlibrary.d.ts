@@ -10055,12 +10055,42 @@ declare namespace ts {
         includeInsertTextCompletions?: boolean;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
     interface SignatureHelpItemsOptions {
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+    type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
+    /**
+     * Signals that the user manually requested signature help.
+     * The language service will unconditionally attempt to provide a result.
+     */
+    interface SignatureHelpInvokedReason {
+        kind: "invoked";
+        triggerCharacter?: undefined;
+    }
+    /**
+     * Signals that the signature help request came from a user typing a character.
+     * Depending on the character and the syntactic context, the request may or may not be served a result.
+     */
+    interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped";
         /**
-         * If the editor is asking for signature help because a certain character was typed
-         * (as opposed to when the user explicitly requested them) this should be set.
+         * Character that was responsible for triggering signature help.
          */
-        triggerCharacter?: SignatureHelpTriggerCharacter;
+        triggerCharacter: SignatureHelpTriggerCharacter;
+    }
+    /**
+     * Signals that this signature help request came from typing a character or moving the cursor.
+     * This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
+     * The language service will unconditionally attempt to provide a result.
+     * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
+     */
+    interface SignatureHelpRetriggeredReason {
+        kind: "retrigger";
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
     interface ApplyCodeActionCommandResult {
         successMessage: string;
@@ -11242,7 +11272,7 @@ declare namespace ts.Rename {
     function getRenameInfo(program: Program, sourceFile: SourceFile, position: number): RenameInfo;
 }
 declare namespace ts.SignatureHelp {
-    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerCharacter: SignatureHelpTriggerCharacter | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
+    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerReason: SignatureHelpTriggerReason | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
     interface ArgumentInfoForCompletions {
         readonly invocation: CallLikeExpression;
         readonly argumentIndex: number;
@@ -12973,8 +13003,22 @@ declare namespace ts.server.protocol {
         argumentCount: number;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
     interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
-        triggerCharacter?: SignatureHelpTriggerCharacter;
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+    type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
+    interface SignatureHelpInvokedReason {
+        kind: "invoked";
+        triggerCharacter?: undefined;
+    }
+    interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped";
+        triggerCharacter: SignatureHelpTriggerCharacter;
+    }
+    interface SignatureHelpRetriggeredReason {
+        kind: "retrigger";
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
     interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;

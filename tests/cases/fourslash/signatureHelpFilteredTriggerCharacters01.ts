@@ -9,7 +9,15 @@
 goTo.marker();
 for (const triggerCharacter of ["<", "(", ","]) {
     edit.insert(triggerCharacter);
-    verify.noSignatureHelpForTriggerCharacter(triggerCharacter);
+    verify.noSignatureHelpForTriggerReason({
+        kind: "characterTyped",
+        triggerCharacter,
+    });
+    verify.signatureHelpPresentForTriggerReason({
+        kind: "retrigger",
+        triggerCharacter,
+    });
     edit.backspace();
 }
-verify.signatureHelp({ triggerCharacter: undefined });
+verify.signatureHelpPresentForTriggerReason(/*triggerReason*/ undefined);
+verify.signatureHelpPresentForTriggerReason({ kind: "invoked" });
