@@ -294,9 +294,10 @@ namespace ts {
         return changeExtension(outputPath, (fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve) ? Extension.Jsx : Extension.Js);
     }
 
+    const extensionsWithNoOutput: ReadonlyArray<string> = [Extension.Dts, Extension.Json];
     function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
         // outFile is handled elsewhere; .d.ts files don't generate outputs
-        if (configFile.options.outFile || fileExtensionIs(inputFileName, Extension.Dts)) {
+        if (configFile.options.outFile || fileExtensionIsOneOf(inputFileName, extensionsWithNoOutput)) {
             return emptyArray;
         }
 
