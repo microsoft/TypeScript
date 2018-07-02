@@ -7069,13 +7069,6 @@ declare namespace ts {
 declare namespace ts {
     /** @internal */
     function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports;
-    /**
-     * Strip off existed single quotes or double quotes from a given string
-     *
-     * @return non-quoted string
-     */
-    function stripQuotes(name: string): string;
-    function startsWithQuote(name: string): boolean;
     interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
@@ -10860,6 +10853,13 @@ declare namespace ts {
     function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[];
     function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[];
     function isImportOrExportSpecifierName(location: Node): location is Identifier;
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
+    function stripQuotes(name: string): string;
+    function startsWithQuote(name: string): boolean;
     function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean;
     function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind;
     function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker): number;
