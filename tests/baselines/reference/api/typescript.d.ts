@@ -4476,12 +4476,12 @@ declare namespace ts {
          */
         interface UpToDate {
             type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
-            newestInputFileTime: Date;
-            newestInputFileName: string;
-            newestDeclarationFileContentChangedTime: Date;
-            newestOutputFileTime: Date;
-            newestOutputFileName: string;
-            oldestOutputFileName: string;
+            newestInputFileTime?: Date;
+            newestInputFileName?: string;
+            newestDeclarationFileContentChangedTime?: Date;
+            newestOutputFileTime?: Date;
+            newestOutputFileName?: string;
+            oldestOutputFileName?: string;
         }
         /**
          * One or more of the outputs of the project does not exist.
