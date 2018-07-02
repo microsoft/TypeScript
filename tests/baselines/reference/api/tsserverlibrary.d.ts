@@ -13342,18 +13342,21 @@ declare namespace ts.server.protocol {
     }
 }
 declare namespace ts.server {
+    interface ScriptInfoVersion {
+        svc: number;
+        text: number;
+    }
     class TextStorage {
         private readonly host;
         private readonly fileName;
+        version: ScriptInfoVersion;
         private svc;
-        private svcVersion;
         private text;
         private lineMap;
-        private textVersion;
         isOpen: boolean;
         private ownFileText;
         private pendingReloadFromDisk;
-        constructor(host: ServerHost, fileName: NormalizedPath);
+        constructor(host: ServerHost, fileName: NormalizedPath, initialVersion?: ScriptInfoVersion);
         getVersion(): string;
         hasScriptVersionCache_TestOnly(): boolean;
         useScriptVersionCache_TestOnly(): void;
@@ -13393,7 +13396,8 @@ declare namespace ts.server {
         readonly isDynamic: boolean;
         private realpath;
         cacheSourceFile: DocumentRegistrySourceFileCache;
-        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path);
+        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+        getVersion(): ScriptInfoVersion;
         isDynamicOrHasMixedContent(): boolean;
         isScriptOpen(): boolean;
         open(newText: string): void;
@@ -13803,6 +13807,7 @@ declare namespace ts.server {
         readonly typingsCache: TypingsCache;
         readonly documentRegistry: DocumentRegistry;
         private readonly filenameToScriptInfo;
+        private readonly filenameToScriptInfoVersion;
         private readonly allJsFilesForOpenFileTelemetry;
         readonly realpathToScriptInfos: MultiMap<ScriptInfo> | undefined;
         private readonly externalProjectToConfiguredProjectMap;
