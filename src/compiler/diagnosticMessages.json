@@ -1252,7 +1252,7 @@
         "category": "Error",
         "code": 2366
     },
-    "The types of these values indicate that this condition will always be '{0}'.": {
+    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
         "category": "Error",
         "code": 2367
     },
@@ -3603,6 +3603,22 @@
         "code": 6199,
         "reportsUnnecessary": true
     },
+    "Definitions of the following identifiers conflict with those in another file: {0}": {
+        "category": "Error",
+        "code": 6200
+    },
+    "Conflicts are in this file.": {
+        "category": "Message",
+        "code": 6201
+    },
+    "'{0}' was also declared here.": {
+        "category": "Message",
+        "code": 6203
+    },
+    "and here.": {
+        "category": "Message",
+        "code": 6204
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3733,6 +3749,10 @@
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
         "code": 6500
+    },
+    "The expected type comes from this index signature.": {
+        "category": "Message",
+        "code": 6501
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -4451,5 +4471,13 @@
     "Convert named export to default export": {
         "category": "Message",
         "code": 95062
+    },
+    "Add missing enum member '{0}'": {
+        "category": "Message",
+        "code": 95063
+    },
+    "Add all missing enum members": {
+        "category": "Message",
+        "code": 95064
     }
 }

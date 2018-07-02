@@ -90,4 +90,5 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type
                               ~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ colour: string; }' is not assignable to type 'Cover'.
 !!! error TS2322:   Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
+!!! related TS6501 tests/cases/compiler/objectLiteralExcessProperties.ts:28:5: The expected type comes from this index signature.
     

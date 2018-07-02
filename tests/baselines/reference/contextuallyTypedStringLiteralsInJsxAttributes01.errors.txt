@@ -20,6 +20,8 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStr
     <FooComponent foo={"f"} />;
                   ~~~
 !!! error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+!!! related TS6500 tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx:10:32: The expected type comes from property 'foo' which is declared here on type '{ foo: "A" | "B" | "C"; }'
     <FooComponent foo="f"   />;
                   ~~~
 !!! error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+!!! related TS6500 tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx:10:32: The expected type comes from property 'foo' which is declared here on type '{ foo: "A" | "B" | "C"; }'

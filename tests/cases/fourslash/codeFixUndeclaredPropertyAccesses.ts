@@ -14,4 +14,6 @@
 //// let t: T<number>;
 //// t.x;
 
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([{
+    description: "Add missing enum member 'c'"
+}]);

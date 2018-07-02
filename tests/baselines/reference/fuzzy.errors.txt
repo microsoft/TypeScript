@@ -34,6 +34,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Type '{ oneI: this; }' canno
                                      ~~~~
 !!! error TS2322: Type 'this' is not assignable to type 'I'.
 !!! error TS2322:   Type 'C' is not assignable to type 'I'.
+!!! related TS6500 tests/cases/compiler/fuzzy.ts:10:9: The expected type comes from property 'oneI' which is declared here on type 'R'
             }
     
             worksToo():R {

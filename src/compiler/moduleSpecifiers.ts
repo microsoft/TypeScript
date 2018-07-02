@@ -150,10 +150,11 @@ namespace ts.moduleSpecifiers {
         const result = createMap<string>();
         if (symlinks) {
             const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+            const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
             for (const [resolvedPath, originalPath] of symlinks) {
                 const resolvedParts = getPathComponents(toPath(resolvedPath, currentDirectory, getCanonicalFileName));
                 const originalParts = getPathComponents(toPath(originalPath, currentDirectory, getCanonicalFileName));
-                while (resolvedParts[resolvedParts.length - 1] === originalParts[originalParts.length - 1]) {
+                while (compareStrings(resolvedParts[resolvedParts.length - 1], originalParts[originalParts.length - 1]) === Comparison.EqualTo) {
                     resolvedParts.pop();
                     originalParts.pop();
                 }

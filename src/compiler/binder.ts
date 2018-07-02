@@ -26,7 +26,7 @@ namespace ts {
                 return ModuleInstanceState.NonInstantiated;
             // 2. const enum declarations
             case SyntaxKind.EnumDeclaration:
-                if (isConst(node)) {
+                if (isEnumConst(node as EnumDeclaration)) {
                     return ModuleInstanceState.ConstEnumOnly;
                 }
                 break;
@@ -2611,7 +2611,7 @@ namespace ts {
         }
 
         function bindEnumDeclaration(node: EnumDeclaration) {
-            return isConst(node)
+            return isEnumConst(node)
                 ? bindBlockScopedDeclaration(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
                 : bindBlockScopedDeclaration(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
         }
@@ -2768,7 +2768,7 @@ namespace ts {
                     // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
                     (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
                     // report error on regular enums and const enums if preserveConstEnums is set
-                    (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
+                    (isEnumDeclaration(node) && (!isEnumConst(node) || options.preserveConstEnums));
 
                 if (reportError) {
                     currentFlow = reportedUnreachableFlow;

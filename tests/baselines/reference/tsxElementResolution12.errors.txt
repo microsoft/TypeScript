@@ -49,4 +49,5 @@ tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type 'string' is not a
     <Obj4 x={'10'} />; // Error
           ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:29:37: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
     

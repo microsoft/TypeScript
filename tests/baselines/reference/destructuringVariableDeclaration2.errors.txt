@@ -11,8 +11,10 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(1
     var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // Error
                                                  ~~
 !!! error TS2322: Type 'true' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts:3:17: The expected type comes from property 'a1' which is declared here on type '{ a1: number; a2: string; }'
                                                            ~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts:3:29: The expected type comes from property 'a2' which is declared here on type '{ a1: number; a2: string; }'
     var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // Error
                                                                 ~~~~~
 !!! error TS2322: Type 'false' is not assignable to type 'string'.

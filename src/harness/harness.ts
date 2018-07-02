@@ -1348,6 +1348,12 @@ namespace Harness {
                 return "\r\n";
             }
 
+            const formatDiagnsoticHost = {
+                getCurrentDirectory: () => options && options.currentDirectory ? options.currentDirectory : "",
+                getNewLine: () => IO.newLine(),
+                getCanonicalFileName: ts.createGetCanonicalFileName(options && options.caseSensitive !== undefined ? options.caseSensitive : true),
+            };
+
             function outputErrorText(error: ts.Diagnostic) {
                 const message = ts.flattenDiagnosticMessageText(error.messageText, IO.newLine());
 
@@ -1356,6 +1362,11 @@ namespace Harness {
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
                     .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
+                if (error.relatedInformation) {
+                    for (const info of error.relatedInformation) {
+                        errLines.push(`!!! related TS${info.code}${info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : ""}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
+                    }
+                }
                 errLines.forEach(e => outputLines += (newLine() + e));
                 errorsReported++;
 

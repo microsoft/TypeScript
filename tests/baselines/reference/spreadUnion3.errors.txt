@@ -9,6 +9,7 @@ tests/cases/conformance/types/spread/spreadUnion3.ts(18,11): error TS2698: Sprea
         return { y: 123, ...x } // y: string | number
                  ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/spread/spreadUnion3.ts:1:45: The expected type comes from property 'y' which is declared here on type '{ y: string; }'
     }
     f(undefined)
     

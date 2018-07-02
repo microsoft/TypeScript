@@ -93,6 +93,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     var anObjectLiteral: I = { id: 'a string' };
                                ~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:2:5: The expected type comes from property 'id' which is declared here on type 'I'
     var anOtherObjectLiteral: { id: string } = new C();
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type '{ id: string; }'.

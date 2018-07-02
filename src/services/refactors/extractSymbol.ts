@@ -1090,7 +1090,7 @@ namespace ts.refactor.extractSymbol {
                 // Consume
                 if (node.parent.kind === SyntaxKind.ExpressionStatement) {
                     // If the parent is an expression statement, delete it.
-                    changeTracker.deleteNode(context.file, node.parent, textChanges.useNonAdjustedPositions);
+                    changeTracker.delete(context.file, node.parent);
                 }
                 else {
                     const localReference = createIdentifier(localNameText);

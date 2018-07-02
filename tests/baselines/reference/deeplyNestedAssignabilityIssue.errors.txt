@@ -4,28 +4,20 @@
 [30;47m22[0m                 thing: {}
 [30;47m  [0m [91m                ~~~~~[0m
 
-  [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m8[0m:[93m19[0m
-    [30;47m 8[0m             more: {
-    [30;47m  [0m [96m                  ~[0m
-    [30;47m 9[0m                 thing: A;
-    [30;47m  [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [30;47m10[0m             }
-    [30;47m  [0m [96m~~~~~~~~~~~~~[0m
-    The expected type comes from property '"thing"' which is declared here on type '{ thing: A; }'
+  [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m9[0m:[93m17[0m
+    [30;47m9[0m                 thing: A;
+    [30;47m [0m [96m                ~~~~~[0m
+    The expected type comes from property 'thing' which is declared here on type '{ thing: A; }'
 [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m25[0m:[93m17[0m - [91merror[0m[90m TS2322: [0mType '{}' is not assignable to type 'A'.
   Property 'a' is missing in type '{}'.
 
 [30;47m25[0m                 another: {}
 [30;47m  [0m [91m                ~~~~~~~[0m
 
-  [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m11[0m:[93m23[0m
-    [30;47m11[0m             yetstill: {
-    [30;47m  [0m [96m                      ~[0m
+  [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m12[0m:[93m17[0m
     [30;47m12[0m                 another: A;
-    [30;47m  [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [30;47m13[0m             }
-    [30;47m  [0m [96m~~~~~~~~~~~~~[0m
-    The expected type comes from property '"another"' which is declared here on type '{ another: A; }'
+    [30;47m  [0m [96m                ~~~~~~~[0m
+    The expected type comes from property 'another' which is declared here on type '{ another: A; }'
 
 
 ==== tests/cases/compiler/deeplyNestedAssignabilityIssue.ts (2 errors) ====
@@ -54,12 +46,14 @@
                     ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'A'.
 !!! error TS2322:   Property 'a' is missing in type '{}'.
+!!! related TS6500 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:9:17: The expected type comes from property 'thing' which is declared here on type '{ thing: A; }'
                 },
                 yetstill: {
                     another: {}
                     ~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'A'.
 !!! error TS2322:   Property 'a' is missing in type '{}'.
+!!! related TS6500 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:12:17: The expected type comes from property 'another' which is declared here on type '{ another: A; }'
                 }
             }
         }

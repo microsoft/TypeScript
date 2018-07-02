@@ -56,5 +56,6 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         3.0: 1,
         ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'A'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts:39:10: The expected type comes from this index signature.
         "4.0": ''
     }

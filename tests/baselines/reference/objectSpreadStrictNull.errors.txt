@@ -63,6 +63,7 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS23
     const x: Movie = { ...m, title: undefined };
                              ~~~~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:22:5: The expected type comes from property 'title' which is declared here on type 'Movie'
     
     interface Fields {
         foo: number;

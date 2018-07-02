@@ -235,12 +235,15 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: 
     let x1: T2 = { a: 'no' };  // Error
                    ~
 !!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+!!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type 'T2'
     let x2: Partial<T2> = { a: 'no' }; // Error
                             ~
 !!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+!!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type 'Partial<T2>'
     let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
                                           ~
 !!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+!!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type '{ [x: string]: any; a?: number | undefined; }'
     
     // Repro from #13044
     

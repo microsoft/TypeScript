@@ -20,6 +20,8 @@ tests/cases/compiler/objectLiteralIndexerErrors.ts(14,14): error TS2322: Type 'A
                                                          ~
 !!! error TS2322: Type 'A' is not assignable to type 'B'.
 !!! error TS2322:   Property 'y' is missing in type 'A'.
+!!! related TS6501 tests/cases/compiler/objectLiteralIndexerErrors.ts:13:26: The expected type comes from this index signature.
     o1 = { x: c, 0: a }; // string indexer is any, number indexer is A
                  ~
 !!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! related TS6501 tests/cases/compiler/objectLiteralIndexerErrors.ts:13:26: The expected type comes from this index signature.

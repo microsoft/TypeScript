@@ -1,5 +1,4 @@
-tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: The types of these values indicate that this condition will always be 'false'.
-  Operator '==' cannot be applied to types 'List<number>' and 'List<string>'.
+tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: This condition will always return 'false' since the types 'List<number>' and 'List<string>' have no overlap.
 
 
 ==== tests/cases/compiler/infinitelyExpandingTypes1.ts (1 errors) ====
@@ -25,7 +24,6 @@ tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: The types
     
     l == l2; // should error;
     ~~~~~~~
-!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
-!!! error TS2367:   Operator '==' cannot be applied to types 'List<number>' and 'List<string>'.
+!!! error TS2367: This condition will always return 'false' since the types 'List<number>' and 'List<string>' have no overlap.
     
     l == l; // should not error

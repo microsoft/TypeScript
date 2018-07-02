@@ -14,4 +14,5 @@ tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts(10,13)
     let b: I = {[SYM]: 'str'}; // Expect error
                 ~~~~~
 !!! error TS2322: Type '"str"' is not assignable to type '"sym"'.
+!!! related TS6500 tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts:5:3: The expected type comes from property 'unique symbol' which is declared here on type 'I'
     
