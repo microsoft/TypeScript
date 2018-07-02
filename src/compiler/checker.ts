@@ -20655,8 +20655,9 @@ namespace ts {
                         return silentNeverType;
                     }
 
-                    leftType = checkNonNullType(leftType, left);
-                    rightType = checkNonNullType(rightType, right);
+                    const getType = allowNullInBinaryExpression(operator) ? getNonNullableType : checkNonNullType;
+                    leftType = getType(leftType, left);
+                    rightType = getType(rightType, right);
 
                     let suggestedOperator: SyntaxKind | undefined;
                     // if a user tries to apply a bitwise operator to 2 boolean operands
@@ -20789,6 +20790,21 @@ namespace ts {
                             }
                         }
                     }
+                }
+            }
+
+            /** For these binary expressions, `null` and `undefined` are treated like `0`. The result is defined even if the inputs aren't. */
+            function allowNullInBinaryExpression(operator: SyntaxKind): boolean {
+                switch (operator) {
+                    case SyntaxKind.AmpersandToken:
+                    case SyntaxKind.BarToken:
+                    case SyntaxKind.CaretToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                    case SyntaxKind.BarEqualsToken:
+                    case SyntaxKind.CaretEqualsToken:
+                        return true;
+                    default:
+                        return false;
                 }
             }
 

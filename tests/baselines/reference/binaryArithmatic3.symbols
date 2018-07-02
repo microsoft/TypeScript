@@ -1,6 +1,0 @@
-=== tests/cases/compiler/binaryArithmatic3.ts ===
-var v = undefined | undefined;
->v : Symbol(v, Decl(binaryArithmatic3.ts, 0, 3))
->undefined : Symbol(undefined)
->undefined : Symbol(undefined)
-

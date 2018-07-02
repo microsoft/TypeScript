@@ -1,0 +1,27 @@
+=== tests/cases/compiler/binaryArithmetic.ts ===
+4 | null;
+4 | undefined;
+>undefined : Symbol(undefined)
+
+undefined | undefined;
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+null | null;
+
+function f(x: number | undefined, y: number | undefined) {
+>f : Symbol(f, Decl(binaryArithmetic.ts, 3, 12))
+>x : Symbol(x, Decl(binaryArithmetic.ts, 5, 11))
+>y : Symbol(y, Decl(binaryArithmetic.ts, 5, 33))
+
+    x |= y;
+>x : Symbol(x, Decl(binaryArithmetic.ts, 5, 11))
+>y : Symbol(y, Decl(binaryArithmetic.ts, 5, 33))
+
+    x |= 1;
+>x : Symbol(x, Decl(binaryArithmetic.ts, 5, 11))
+
+    x; // TODO: should be `number` now
+>x : Symbol(x, Decl(binaryArithmetic.ts, 5, 11))
+}
+

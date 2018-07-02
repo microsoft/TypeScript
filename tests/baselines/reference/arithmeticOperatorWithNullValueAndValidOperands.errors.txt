@@ -54,33 +54,9 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(78,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(79,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(80,19): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(83,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(84,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(85,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(86,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(87,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(88,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(89,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(90,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(93,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(94,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(95,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(96,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(97,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(98,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(99,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(100,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(103,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(104,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(105,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(106,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(107,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(108,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(109,15): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts(110,17): error TS2531: Object is possibly 'null'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts (80 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts (56 errors) ====
     // If one operand is the null or undefined value, it is treated as having the type of the
     // other operand.
     
@@ -276,78 +252,30 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
     
     // operator &
     var rh1 = null & a;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh2 = null & b;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh3 = null & 1;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh4 = null & E.a;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh5 = a & null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh6 = b & null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh7 = 0 & null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh8 = E.b & null;
-                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
     
     // operator ^
     var ri1 = null ^ a;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri2 = null ^ b;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri3 = null ^ 1;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri4 = null ^ E.a;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri5 = a ^ null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri6 = b ^ null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri7 = 0 ^ null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri8 = E.b ^ null;
-                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
     
     // operator |
     var rj1 = null | a;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj2 = null | b;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj3 = null | 1;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj4 = null | E.a;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj5 = a | null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj6 = b | null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj7 = 0 | null;
-                  ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj8 = E.b | null;
-                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
