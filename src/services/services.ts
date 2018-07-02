@@ -2202,8 +2202,7 @@ namespace ts {
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
-            const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
-            return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position);
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {

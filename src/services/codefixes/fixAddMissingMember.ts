@@ -15,7 +15,7 @@ namespace ts.codefix {
             if (info.kind === InfoKind.enum) {
                 const { token, parentDeclaration } = info;
                 const changes = textChanges.ChangeTracker.with(context, t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), token, parentDeclaration));
-                return singleElementArray(createCodeFixAction(fixName, changes, [Diagnostics.Add_missing_enum_member_0, token.text], fixId, Diagnostics.Add_all_missing_enum_members));
+                return [createCodeFixAction(fixName, changes, [Diagnostics.Add_missing_enum_member_0, token.text], fixId, Diagnostics.Add_all_missing_members)];
             }
             const { parentDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
             const methodCodeAction = call && getActionForMethodDeclaration(context, classDeclarationSourceFile, parentDeclaration, token, call, makeStatic, inJs, context.preferences);

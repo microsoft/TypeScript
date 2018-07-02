@@ -21,6 +21,9 @@
 ////        this.x = 0;
 ////    }
 ////}
+////
+////enum En {}
+////En.A;
 
 verify.codeFixAll({
     fixId: "addMissingMember",
@@ -52,5 +55,10 @@ class Unrelated {
     method() {
         this.x = 0;
     }
-}`,
+}
+
+enum En {
+    A
+}
+En.A;`,
 });
