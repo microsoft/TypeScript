@@ -853,6 +853,11 @@ namespace ts {
             return { flags: FlowFlags.Assignment, antecedent, node };
         }
 
+        function createFlowInitializer(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return { flags: FlowFlags.Initializer, antecedent, node };
+        }
+
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
             const res: FlowArrayMutation = { flags: FlowFlags.ArrayMutation, antecedent, node };
@@ -1229,12 +1234,28 @@ namespace ts {
             }
         }
 
+        function bindInitializerFlow(node: Expression): void {
+            if (isNarrowableReference(node)) {
+                currentFlow = createFlowInitializer(currentFlow, node);
+            }
+            else if (isObjectLiteralExpression(node)) {
+                for (const p of node.properties) {
+                    if (p.name && p.name.kind === SyntaxKind.Identifier) {
+                        bindInitializerFlow(p.name);
+                    }
+                    if (p.kind === SyntaxKind.PropertyAssignment) {
+                        bindInitializerFlow(p.initializer);
+                    }
+                }
+            }
+        }
+
         function bindAssignmentTargetFlow(node: Expression) {
             if (isNarrowableReference(node)) {
                 currentFlow = createFlowAssignment(currentFlow, node);
             }
-            else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
-                for (const e of (<ArrayLiteralExpression>node).elements) {
+            else if (isArrayLiteralExpression(node)) {
+                for (const e of node.elements) {
                     if (e.kind === SyntaxKind.SpreadElement) {
                         bindAssignmentTargetFlow((<SpreadElement>e).expression);
                     }
@@ -1243,8 +1264,8 @@ namespace ts {
                     }
                 }
             }
-            else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
-                for (const p of (<ObjectLiteralExpression>node).properties) {
+            else if (isObjectLiteralExpression(node)) {
+                for (const p of node.properties) {
                     if (p.kind === SyntaxKind.PropertyAssignment) {
                         bindDestructuringTargetFlow(p.initializer);
                     }
@@ -1353,6 +1374,13 @@ namespace ts {
             }
             else {
                 currentFlow = createFlowAssignment(currentFlow, node);
+                if (isVariableDeclaration(node) &&
+                    node.type &&
+                    node.initializer &&
+                    isIdentifier(node.name) &&
+                    isObjectLiteralExpression(node.initializer)) {
+                    bindInitializerFlow(node.initializer);
+                }
             }
         }
 

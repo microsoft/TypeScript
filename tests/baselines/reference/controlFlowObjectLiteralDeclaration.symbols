@@ -1,0 +1,115 @@
+=== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts ===
+type A = {
+>A : Symbol(A, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
+
+    x?: string[]
+>x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 10))
+
+    y?: number[]
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 1, 16))
+
+    z?: {
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+
+        ka?: boolean
+>ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 3, 9))
+
+        ki?: boolean
+>ki : Symbol(ki, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 20))
+    }
+    extra?: string
+>extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 6, 5))
+
+    0?: string
+>0 : Symbol(0, Decl(controlFlowObjectLiteralDeclaration.ts, 7, 18))
+
+    'two words'?: string
+>'two words' : Symbol('two words', Decl(controlFlowObjectLiteralDeclaration.ts, 8, 14))
+}
+// Note: spread assignments, as well as strings, numbers and computed properties,
+// are not supported because they are all accessed with element access, which doesn't
+// participate in control flow right now because of performance reasons.
+const y = [1, 2, 3]
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 14, 5))
+
+const wat = { extra: "life" }
+>wat : Symbol(wat, Decl(controlFlowObjectLiteralDeclaration.ts, 15, 5))
+>extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 15, 13))
+
+let a: A = {
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>A : Symbol(A, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
+
+    x: [],
+>x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 12))
+
+    y,
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 17, 10))
+
+    z: {
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 18, 6))
+
+        ka: false
+>ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 19, 8))
+
+    },
+    ...wat,
+>wat : Symbol(wat, Decl(controlFlowObjectLiteralDeclaration.ts, 15, 5))
+
+    0: 'hi',
+>0 : Symbol(0, Decl(controlFlowObjectLiteralDeclaration.ts, 22, 11))
+
+    'two words': 'ho'
+>'two words' : Symbol('two words', Decl(controlFlowObjectLiteralDeclaration.ts, 23, 12))
+}
+a.x.push('hi')
+>a.x.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 10))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 10))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+a.y.push(4)
+>a.y.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 1, 16))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 1, 16))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+let b = a.z.ka
+>b : Symbol(b, Decl(controlFlowObjectLiteralDeclaration.ts, 28, 3))
+>a.z.ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 3, 9))
+>a.z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 3, 9))
+
+b = a.z.ki // error, object is possibly undefined
+>b : Symbol(b, Decl(controlFlowObjectLiteralDeclaration.ts, 28, 3))
+>a.z.ki : Symbol(ki, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 20))
+>a.z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>ki : Symbol(ki, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 20))
+
+a.extra.length // error, reference doesn't match the spread
+>a.extra.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 6, 5))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 6, 5))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+a[0].length // error, element access doesn't narrow
+>a[0].length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>0 : Symbol(0, Decl(controlFlowObjectLiteralDeclaration.ts, 7, 18))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+a['two words'].length
+>a['two words'].length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 16, 3))
+>'two words' : Symbol('two words', Decl(controlFlowObjectLiteralDeclaration.ts, 8, 14))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+
+

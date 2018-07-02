@@ -2428,6 +2428,7 @@ namespace ts {
         Shared         = 1 << 10, // Referenced as antecedent more than once
         PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        Initializer    = 1 << 13, // Property assignment inside object literal, intended for contextually-typed objects
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -2468,6 +2469,14 @@ namespace ts {
     // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
     export interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
+        antecedent: FlowNode;
+    }
+
+    // FlowInitializer represents the name of a property assignment in an object literal
+    // that initializes a variable that has a declared type. The property assignment
+    // narrows the respective member of the declared type.
+    export interface FlowInitializer extends FlowNodeBase {
+        node: Identifier;
         antecedent: FlowNode;
     }
 

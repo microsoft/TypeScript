@@ -1610,6 +1610,7 @@ declare namespace ts {
         Shared = 1024,
         PreFinally = 2048,
         AfterFinally = 4096,
+        Initializer = 8192,
         Label = 12,
         Condition = 96
     }
@@ -1636,6 +1637,10 @@ declare namespace ts {
     }
     interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
+        antecedent: FlowNode;
+    }
+    interface FlowInitializer extends FlowNodeBase {
+        node: Identifier;
         antecedent: FlowNode;
     }
     interface FlowCondition extends FlowNodeBase {

@@ -82,9 +82,9 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >typeof o.prop1 === "string" && o.prop1.toLowerCase() : string
 >typeof o.prop1 === "string" : boolean
 >typeof o.prop1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->o.prop1 : string | number
+>o.prop1 : string
 >o : { prop1: string | number; prop2: string | boolean; }
->prop1 : string | number
+>prop1 : string
 >"string" : "string"
 >o.prop1.toLowerCase() : string
 >o.prop1.toLowerCase : () => string
@@ -94,16 +94,16 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >toLowerCase : () => string
 
 var prop1 = o.prop1;
->prop1 : string | number
->o.prop1 : string | number
+>prop1 : string
+>o.prop1 : string
 >o : { prop1: string | number; prop2: string | boolean; }
->prop1 : string | number
+>prop1 : string
 
 if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >typeof prop1 === "string" && prop1.toLocaleLowerCase() : string
 >typeof prop1 === "string" : boolean
 >typeof prop1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->prop1 : string | number
+>prop1 : string
 >"string" : "string"
 >prop1.toLocaleLowerCase() : string
 >prop1.toLocaleLowerCase : () => string

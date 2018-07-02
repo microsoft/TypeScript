@@ -1,0 +1,53 @@
+tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(30,1): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(31,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(32,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(33,1): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts (4 errors) ====
+    type A = {
+        x?: string[]
+        y?: number[]
+        z?: {
+            ka?: boolean
+            ki?: boolean
+        }
+        extra?: string
+        0?: string
+        'two words'?: string
+    }
+    // Note: spread assignments, as well as strings, numbers and computed properties,
+    // are not supported because they are all accessed with element access, which doesn't
+    // participate in control flow right now because of performance reasons.
+    const y = [1, 2, 3]
+    const wat = { extra: "life" }
+    let a: A = {
+        x: [],
+        y,
+        z: {
+            ka: false
+        },
+        ...wat,
+        0: 'hi',
+        'two words': 'ho'
+    }
+    a.x.push('hi')
+    a.y.push(4)
+    let b = a.z.ka
+    b = a.z.ki // error, object is possibly undefined
+    ~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
+    a.extra.length // error, reference doesn't match the spread
+    ~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    a[0].length // error, element access doesn't narrow
+    ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    a['two words'].length
+    ~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    
+    

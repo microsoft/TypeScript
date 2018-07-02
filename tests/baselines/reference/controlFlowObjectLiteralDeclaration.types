@@ -1,0 +1,134 @@
+=== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts ===
+type A = {
+>A : A
+
+    x?: string[]
+>x : string[] | undefined
+
+    y?: number[]
+>y : number[] | undefined
+
+    z?: {
+>z : { ka?: boolean | undefined; ki?: boolean | undefined; } | undefined
+
+        ka?: boolean
+>ka : boolean | undefined
+
+        ki?: boolean
+>ki : boolean | undefined
+    }
+    extra?: string
+>extra : string | undefined
+
+    0?: string
+>0 : string | undefined
+
+    'two words'?: string
+>'two words' : string | undefined
+}
+// Note: spread assignments, as well as strings, numbers and computed properties,
+// are not supported because they are all accessed with element access, which doesn't
+// participate in control flow right now because of performance reasons.
+const y = [1, 2, 3]
+>y : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+const wat = { extra: "life" }
+>wat : { extra: string; }
+>{ extra: "life" } : { extra: string; }
+>extra : string
+>"life" : "life"
+
+let a: A = {
+>a : A
+>A : A
+>{    x: [],    y,    z: {        ka: false    },    ...wat,    0: 'hi',    'two words': 'ho'} : { 0: string; 'two words': string; extra: string; x: never[]; y: number[]; z: { ka: false; }; }
+
+    x: [],
+>x : never[]
+>[] : never[]
+
+    y,
+>y : number[]
+
+    z: {
+>z : { ka: false; }
+>{        ka: false    } : { ka: false; }
+
+        ka: false
+>ka : false
+>false : false
+
+    },
+    ...wat,
+>wat : { extra: string; }
+
+    0: 'hi',
+>0 : string
+>'hi' : "hi"
+
+    'two words': 'ho'
+>'two words' : string
+>'ho' : "ho"
+}
+a.x.push('hi')
+>a.x.push('hi') : number
+>a.x.push : (...items: string[]) => number
+>a.x : string[]
+>a : A
+>x : string[]
+>push : (...items: string[]) => number
+>'hi' : "hi"
+
+a.y.push(4)
+>a.y.push(4) : number
+>a.y.push : (...items: number[]) => number
+>a.y : number[]
+>a : A
+>y : number[]
+>push : (...items: number[]) => number
+>4 : 4
+
+let b = a.z.ka
+>b : boolean
+>a.z.ka : false
+>a.z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>a : A
+>z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>ka : false
+
+b = a.z.ki // error, object is possibly undefined
+>b = a.z.ki : boolean | undefined
+>b : boolean
+>a.z.ki : boolean | undefined
+>a.z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>a : A
+>z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>ki : boolean | undefined
+
+a.extra.length // error, reference doesn't match the spread
+>a.extra.length : number
+>a.extra : string | undefined
+>a : A
+>extra : string | undefined
+>length : number
+
+a[0].length // error, element access doesn't narrow
+>a[0].length : number
+>a[0] : string | undefined
+>a : A
+>0 : 0
+>length : number
+
+a['two words'].length
+>a['two words'].length : number
+>a['two words'] : string | undefined
+>a : A
+>'two words' : "two words"
+>length : number
+
+
+

@@ -13857,6 +13857,13 @@ namespace ts {
                             continue;
                         }
                     }
+                    else if (flags & FlowFlags.Initializer) {
+                        type = getTypeAtFlowInitializer(flow as FlowInitializer);
+                        if (!type) {
+                            flow = (<FlowInitializer>flow).antecedent;
+                            continue;
+                        }
+                    }
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
@@ -13903,6 +13910,30 @@ namespace ts {
                     flowDepth--;
                     return type;
                 }
+            }
+
+            function getTypeAtFlowInitializer(flow: FlowInitializer): Type {
+                const node = flow.node;
+                if (isMatchingInitializerReference(reference, node.parent)) {
+                    if (declaredType.flags & TypeFlags.Union) {
+                        const sourceNode = isPropertyAssignment(node.parent) ? node.parent.initializer : (node.parent as ShorthandPropertyAssignment).name;
+                        return getAssignmentReducedType(declaredType as UnionType, getTypeOfNode(sourceNode));
+                    }
+                    return declaredType;
+                }
+                return undefined;
+            }
+
+            function isMatchingInitializerReference(reference: Node, initializer: Node): boolean {
+                if (isIdentifier(reference)) {
+                    return isVariableDeclaration(initializer) && getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(reference)) === getSymbolOfNode(initializer);
+                }
+                else if (isPropertyAccessExpression(reference)) {
+                    return (isShorthandPropertyAssignment(initializer) || isPropertyAssignment(initializer)) &&
+                        isIdentifier(initializer.name) && reference.name.escapedText === initializer.name.escapedText &&
+                        isMatchingInitializerReference(reference.expression, initializer.parent.parent);
+                }
+                return false;
             }
 
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
