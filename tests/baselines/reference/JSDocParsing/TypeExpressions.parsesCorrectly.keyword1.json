@@ -9,6 +9,7 @@
         "end": 4,
         "flags": "JSDoc",
         "originalKeywordKind": "VarKeyword",
+        "isPrivateName": false,
         "escapedText": "var"
     }
 }

@@ -683,6 +683,7 @@ namespace ts {
          */
         escapedText: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
+        isPrivateName: boolean;                                   // is private name like `this.#foo`
         /*@internal*/ autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
@@ -1574,6 +1575,7 @@ namespace ts {
         BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
         OctalSpecifier = 1 << 8,    // e.g. `0o777`
         ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
+        PrivateName = 1 << 10,      // e.g. `#foo`
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier | ContainsSeparator
     }

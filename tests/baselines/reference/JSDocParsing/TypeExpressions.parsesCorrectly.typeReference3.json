@@ -13,6 +13,7 @@
             "pos": 1,
             "end": 2,
             "flags": "JSDoc",
+            "isPrivateName": false,
             "escapedText": "a"
         },
         "right": {
@@ -21,6 +22,7 @@
             "end": 11,
             "flags": "JSDoc",
             "originalKeywordKind": "FunctionKeyword",
+            "isPrivateName": false,
             "escapedText": "function"
         }
     }

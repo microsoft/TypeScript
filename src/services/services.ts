@@ -347,6 +347,7 @@ namespace ts {
         public kind: SyntaxKind.Identifier;
         public escapedText: __String;
         public symbol: Symbol;
+        public isPrivateName: boolean;
         public autoGenerateFlags: GeneratedIdentifierFlags;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;

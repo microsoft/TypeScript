@@ -15,6 +15,7 @@
                 "end": 10,
                 "flags": "JSDoc",
                 "originalKeywordKind": "FunctionKeyword",
+                "isPrivateName": false,
                 "escapedText": "function"
             }
         },

@@ -18,6 +18,7 @@
                 "pos": 1,
                 "end": 2,
                 "flags": "JSDoc",
+                "isPrivateName": false,
                 "escapedText": "a"
             }
         }
