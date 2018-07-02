@@ -559,14 +559,6 @@ namespace ts {
         return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
     }
 
-    /**
-     * @deprecated Use `id.escapedText` to get the escaped text of an Identifier.
-     * @param identifier The identifier to escape
-     */
-    export function escapeIdentifier(identifier: string): string {
-        return identifier;
-    }
-
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
@@ -4790,16 +4782,6 @@ namespace ts {
     }
     export function symbolName(symbol: Symbol): string {
         return unescapeLeadingUnderscores(symbol.escapedName);
-    }
-
-    /**
-     * Remove extra underscore from escaped identifier text content.
-     * @deprecated Use `id.text` for the unescaped text.
-     * @param identifier The escaped identifier text.
-     * @returns The unescaped identifier text.
-     */
-    export function unescapeIdentifier(id: string): string {
-        return id;
     }
 
     /**
