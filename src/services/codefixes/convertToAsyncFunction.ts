@@ -21,9 +21,9 @@ namespace ts.codefix {
         const retStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(funcToConvert);
         for (const stmt of retStmts) {
             forEachChild(stmt, function visit(node: Node) {
-                if (node.kind === SyntaxKind.CallExpression) {
+                if (isCallExpression(node)) {
                     const usedNames: string[] = [];
-                    const newNode = parseCallback(node as CallExpression, checker, usedNames);
+                    const newNode = parseCallback(node, checker, usedNames, node);
                     if (newNode.length > 0) {
                         changes.replaceNodeWithNodes(sourceFile, stmt, newNode);
                     }
@@ -44,7 +44,7 @@ namespace ts.codefix {
         return checker.isPromiseLikeType(nodeType) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
     }
 
-    function parseCallback(node: Expression, checker: TypeChecker, usedNames: string[], argName?: string): Statement[] {
+    function parseCallback(node: Expression, checker: TypeChecker, usedNames: string[], outermostParent: CallExpression, argName?: string): Statement[] {
         if (!node) {
             return [];
         }
@@ -53,31 +53,31 @@ namespace ts.codefix {
             return parsePromiseCall(node, usedNames, checker, argName);
         }
         else if (isCallExpression(node) && isCallback(node, "then", checker)) {
-            return parseThen(node, checker, usedNames);
+            return parseThen(node, checker, usedNames, outermostParent);
         }
         else if (isCallExpression(node) && isCallback(node, "catch", checker)) {
-            return parseCatch(node, checker, usedNames);
+            return parseCatch(node, checker, usedNames, outermostParent);
         }
         else if (isPropertyAccessExpression(node)) {
-            return parseCallback(node.expression, checker, usedNames, argName);
+            return parseCallback(node.expression, checker, usedNames, outermostParent, argName);
         }
 
         return [];
     }
 
-    function parseCatch(node: CallExpression, checker: TypeChecker, usedNames: string[]): Statement[] {
+    function parseCatch(node: CallExpression, checker: TypeChecker, usedNames: string[], outermostParent: CallExpression): Statement[] {
         const func = getSynthesizedDeepClone(node.arguments[0]);
         const argName = getArgName(func, checker, usedNames);
 
-        const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames));
+        const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames, outermostParent));
 
-        const [callbackBody, argNameNew] = getCallbackBody(func, argName, node, checker, usedNames);
+        const [callbackBody, argNameNew] = getCallbackBody(func, argName, node, checker, usedNames, outermostParent);
         const catchClause = createCatchClause(argNameNew, createBlock(callbackBody));
 
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
 
-    function parseThen(node: CallExpression, checker: TypeChecker, usedNames: string[]): Statement[] {
+    function parseThen(node: CallExpression, checker: TypeChecker, usedNames: string[], outermostParent: CallExpression): Statement[] {
         const [res, rej] = node.arguments;
 
         // TODO - what if this is a binding pattern and not an Identifier
@@ -87,20 +87,20 @@ namespace ts.codefix {
             const usedCatchNames: string[] = [];
             const argNameRej = getArgName(rej, checker, usedCatchNames);
 
-            const [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames);
-            const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames, argNameResNew).concat(callbackBody));
+            const [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames, outermostParent);
+            const tryBlock = createBlock(parseCallback(node.expression, checker, usedNames, outermostParent, argNameResNew).concat(callbackBody));
 
-            const [callbackBody2, argNameRejNew] = getCallbackBody(rej, argNameRej, node, checker, usedCatchNames, /* isRej */ true);
+            const [callbackBody2, argNameRejNew] = getCallbackBody(rej, argNameRej, node, checker, usedCatchNames, outermostParent, /* isRej */ true);
             const catchClause = createCatchClause(argNameRejNew, createBlock(callbackBody2));
 
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
         else if (res) {
-            const [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames);
-            return parseCallback(node.expression, checker, usedNames, argNameResNew).concat(callbackBody);
+            const [callbackBody, argNameResNew] = getCallbackBody(res, argNameRes, node, checker, usedNames, outermostParent);
+            return parseCallback(node.expression, checker, usedNames, outermostParent, argNameResNew).concat(callbackBody);
         }
         else {
-            return parseCallback(node.expression, checker, usedNames);
+            return parseCallback(node.expression, checker, usedNames, outermostParent);
         }
     }
 
@@ -130,7 +130,7 @@ namespace ts.codefix {
         }
     }
 
-    function getCallbackBody(func: Node, argName: string, parent: CallExpression, checker: TypeChecker, usedNames: string[], isRej = false): [NodeArray<Statement>, string] {
+    function getCallbackBody(func: Node, argName: string, parent: CallExpression, checker: TypeChecker, usedNames: string[], outermostParent: CallExpression, isRej = false): [NodeArray<Statement>, string] {
         switch (func.kind) {
             case SyntaxKind.Identifier:
                 if (!argName) {
@@ -153,9 +153,33 @@ namespace ts.codefix {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    return [func.body.statements, argName];
-                }else if(isArrowFunction(func)){
-                    return [createNodeArray([createReturn((func).body as Expression)]), argName];
+                    let innerCbBody: Statement[] = [];
+                    for (const stmt of func.body.statements) {
+                        forEachChild(stmt, function visit(node: Node) {
+                            if (isCallExpression(node)) {
+                                let temp = parseCallback(node, checker, usedNames, outermostParent, argName);
+                                innerCbBody = innerCbBody.concat(temp);
+                                if (innerCbBody.length > 0) {
+                                    return;
+                                }
+                            }
+                            else if (!isFunctionLike(node)) {
+                                forEachChild(node, visit);
+                            }
+                        });
+                    }
+
+                    if(innerCbBody.length > 0){
+                        return [createNodeArray(innerCbBody), argName];
+                    }
+
+                    return [func.body.statements, argName]; //TODO: go in here and rename all usages of argName if argName changes
+
+                } else if (isArrowFunction(func)) {
+                    //if there is another outer dot then, don't actually return
+                    const nextOutermostDotThen = getNextDotThen(outermostParent, checker)
+                    return nextOutermostDotThen ? [createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(argName, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]), argName] 
+                        : [createNodeArray([createReturn(func.body as Expression)]), argName];
                 }
                 break;
         }
