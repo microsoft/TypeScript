@@ -12,5 +12,6 @@ tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts(8,30): erro
         readonly observer = this.handleIntersection;
                                  ~~~~~~~~~~~~~~~~~~
 !!! error TS2448: Block-scoped variable 'handleIntersection' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts:9:14: 'handleIntersection' was declared here.
         readonly handleIntersection = () => { }
     }

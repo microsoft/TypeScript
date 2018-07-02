@@ -9,11 +9,13 @@ tests/cases/compiler/forwardRefInClassProperties.ts(11,17): error TS2448: Block-
         _b = this._a; // undefined, no error/warning
                   ~~
 !!! error TS2448: Block-scoped variable '_a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/forwardRefInClassProperties.ts:4:5: '_a' was declared here.
         _a = 3;
     
         static _B = Test._A; // undefined, no error/warning
                          ~~
 !!! error TS2448: Block-scoped variable '_A' used before its declaration.
+!!! related TS2728 tests/cases/compiler/forwardRefInClassProperties.ts:7:12: '_A' was declared here.
         static _A = 3;
     
         method()
@@ -21,6 +23,7 @@ tests/cases/compiler/forwardRefInClassProperties.ts(11,17): error TS2448: Block-
             let a = b; // Block-scoped variable 'b' used before its declaration
                     ~
 !!! error TS2448: Block-scoped variable 'b' used before its declaration.
+!!! related TS2728 tests/cases/compiler/forwardRefInClassProperties.ts:12:13: 'b' was declared here.
             let b = 3;
         }
     }
