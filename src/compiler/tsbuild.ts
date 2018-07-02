@@ -126,12 +126,12 @@ namespace ts {
          */
         export interface UpToDate {
             type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
-            newestInputFileTime: Date;
-            newestInputFileName: string;
-            newestDeclarationFileContentChangedTime: Date;
-            newestOutputFileTime: Date;
-            newestOutputFileName: string;
-            oldestOutputFileName: string;
+            newestInputFileTime?: Date;
+            newestInputFileName?: string;
+            newestDeclarationFileContentChangedTime?: Date;
+            newestOutputFileTime?: Date;
+            newestOutputFileName?: string;
+            oldestOutputFileName?: string;
         }
 
         /**
@@ -801,14 +801,18 @@ namespace ts {
             }
 
             let newestDeclarationFileContentChangedTime = minimumDate;
+            let anyDtsChanged = false;
             program.emit(/*targetSourceFile*/ undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
 
-                if (isDeclarationFile(fileName) && compilerHost.fileExists(fileName)) {
+                if (!anyDtsChanged && isDeclarationFile(fileName) && compilerHost.fileExists(fileName)) {
                     if (compilerHost.readFile(fileName) === content) {
                         // Check for unchanged .d.ts files
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                         priorChangeTime = compilerHost.getModifiedTime && compilerHost.getModifiedTime(fileName);
+                    }
+                    else {
+                        anyDtsChanged = true;
                     }
                 }
 
@@ -819,7 +823,11 @@ namespace ts {
                 }
             });
 
-            context.projectStatus.setValue(proj, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime } as UpToDateStatus);
+            const status: UpToDateStatus = {
+                type: UpToDateStatusType.UpToDate,
+                newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
+            };
+            context.projectStatus.setValue(proj, status);
             return resultFlags;
         }
 
@@ -1134,13 +1142,13 @@ namespace ts {
 
                 // If the upstream project's newest file is older than our oldest output, we
                 // can't be out of date because of it
-                if (refStatus.newestInputFileTime <= oldestOutputFileTime) {
+                if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
                     continue;
                 }
 
                 // If the upstream project has only change .d.ts files, and we've built
                 // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                if (refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
+                if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                     pseudoUpToDate = true;
                     upstreamChangedProject = ref.path;
                     continue;
@@ -1224,8 +1232,8 @@ namespace ts {
                 if (status.newestInputFileTime !== undefined) {
                     return formatMessage(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                         relName(configFileName),
-                        relName(status.newestInputFileName),
-                        relName(status.oldestOutputFileName));
+                        relName(status.newestInputFileName || ""),
+                        relName(status.oldestOutputFileName || ""));
                 }
                 // Don't report anything for "up to date because it was already built" -- too verbose
                 break;
