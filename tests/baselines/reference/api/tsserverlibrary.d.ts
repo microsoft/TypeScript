@@ -4505,6 +4505,7 @@ declare namespace ts {
     }
     interface DiagnosticCollection {
         add(diagnostic: Diagnostic): void;
+        lookup(diagnostic: Diagnostic): Diagnostic | undefined;
         getGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(fileName: string): DiagnosticWithLocation[];
         getDiagnostics(): Diagnostic[];
@@ -5716,6 +5717,10 @@ declare namespace ts {
         Include_modules_imported_with_json_extension: DiagnosticMessage;
         All_destructured_elements_are_unused: DiagnosticMessage;
         All_variables_are_unused: DiagnosticMessage;
+        Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0: DiagnosticMessage;
+        Conflicts_are_in_this_file: DiagnosticMessage;
+        _0_was_also_declared_here: DiagnosticMessage;
+        and_here: DiagnosticMessage;
         Projects_to_reference: DiagnosticMessage;
         Enable_project_compilation: DiagnosticMessage;
         Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0: DiagnosticMessage;
@@ -7083,6 +7088,7 @@ declare namespace ts {
     function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
     function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain;
     function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison;
+    function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison;
     function getEmitScriptTarget(compilerOptions: CompilerOptions): ScriptTarget;
     function getEmitModuleKind(compilerOptions: {
         module?: CompilerOptions["module"];
@@ -8913,6 +8919,7 @@ declare namespace ts {
     }
     /** @internal */
     function formatColorAndReset(text: string, formatStyle: string): string;
+    function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color?: typeof formatColorAndReset): string;
     function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string;
     /**

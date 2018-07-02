@@ -3603,6 +3603,22 @@
         "code": 6199,
         "reportsUnnecessary": true
     },
+    "Definitions of the following identifiers conflict with those in another file: {0}": {
+        "category": "Error",
+        "code": 6200
+    },
+    "Conflicts are in this file.": {
+        "category": "Message",
+        "code": 6201
+    },
+    "'{0}' was also declared here.": {
+        "category": "Message",
+        "code": 6203
+    },
+    "and here.": {
+        "category": "Message",
+        "code": 6204
+    },
 
     "Projects to reference": {
         "category": "Message",
