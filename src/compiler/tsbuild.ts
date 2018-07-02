@@ -291,17 +291,20 @@ namespace ts {
     function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
-        return changeExtension(outputPath, (fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve) ? Extension.Jsx : Extension.Js);
+        const newExtension = fileExtensionIs(inputFileName, Extension.Json) ? Extension.Json :
+                             fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ? Extension.Jsx : Extension.Js;
+        return changeExtension(outputPath, newExtension);
     }
 
     function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
-        if (configFile.options.outFile) {
+        // outFile is handled elsewhere; .d.ts files don't generate outputs
+        if (configFile.options.outFile || configFile.options.out || fileExtensionIs(inputFileName, Extension.Dts)) {
             return emptyArray;
         }
 
         const outputs: string[] = [];
         outputs.push(getOutputJavaScriptFileName(inputFileName, configFile));
-        if (configFile.options.declaration) {
+        if (configFile.options.declaration && !fileExtensionIs(inputFileName, Extension.Json)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile);
             outputs.push(dts);
             if (configFile.options.declarationMap) {
