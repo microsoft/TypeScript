@@ -9,20 +9,19 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
 
     interface Info {
-        container: ContainerDeclaration;
-        isStatic: boolean;
-        isReadonly: boolean;
-        type: TypeNode | undefined;
-        declaration: AcceptedDeclaration;
-        fieldName: AcceptedNameType;
-        accessorName: AcceptedNameType;
-        originalName: AcceptedNameType;
-        renameAccessor: boolean;
+        readonly container: ContainerDeclaration;
+        readonly isStatic: boolean;
+        readonly isReadonly: boolean;
+        readonly type: TypeNode | undefined;
+        readonly declaration: AcceptedDeclaration;
+        readonly fieldName: AcceptedNameType;
+        readonly accessorName: AcceptedNameType;
+        readonly originalName: AcceptedNameType;
+        readonly renameAccessor: boolean;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const { file } = context;
-        if (!getConvertibleFieldAtPosition(context, file)) return undefined;
+        if (!getConvertibleFieldAtPosition(context)) return undefined;
 
         return [{
             name: actionName,
@@ -39,7 +38,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
         const { file } = context;
 
-        const fieldInfo = getConvertibleFieldAtPosition(context, file);
+        const fieldInfo = getConvertibleFieldAtPosition(context);
         if (!fieldInfo) return undefined;
 
         const isJS = isSourceFileJavaScript(file);
@@ -117,14 +116,14 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return name.charCodeAt(0) === CharacterCodes._;
     }
 
-    function getConvertibleFieldAtPosition(context: RefactorContext, file: SourceFile): Info | undefined {
-        const { startPosition, endPosition } = context;
+    function getConvertibleFieldAtPosition(context: RefactorContext): Info | undefined {
+        const { file, startPosition, endPosition } = context;
 
-        const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
+        const node = getTokenAtPosition(file, startPosition);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
-        if (!declaration || !rangeOverlapsWithStartEnd(declaration.name, startPosition, endPosition!) // TODO: GH#18217
+        if (!declaration || !nodeOverlapsWithStartEnd(declaration.name, file, startPosition, endPosition!) // TODO: GH#18217
             || !isConvertibleName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;

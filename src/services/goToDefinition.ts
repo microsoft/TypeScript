@@ -99,7 +99,7 @@ namespace ts.GoToDefinition {
      */
     function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclaration) {
         return s === calledDeclaration.symbol || s === calledDeclaration.symbol.parent ||
-            isVariableDeclaration(calledDeclaration.parent) && s === calledDeclaration.parent.symbol;
+            !isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol;
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
@@ -271,7 +271,7 @@ namespace ts.GoToDefinition {
     }
 
     export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
-        return find(refs, ref => ref.pos <= pos && pos <= ref.end);
+        return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
     function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {

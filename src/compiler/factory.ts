@@ -194,10 +194,10 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier;
-    /* @internal */ export function getGeneratedNameForNode(node: Node, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
-    export function getGeneratedNameForNode(node: Node, flags?: GeneratedIdentifierFlags): Identifier {
-        const name = createIdentifier(isIdentifier(node) ? idText(node) : "");
+    export function getGeneratedNameForNode(node: Node | undefined): Identifier;
+    /* @internal */ export function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
+    export function getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier {
+        const name = createIdentifier(node && isIdentifier(node) ? idText(node) : "");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node | flags!;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
@@ -745,9 +745,33 @@ namespace ts {
         return node;
     }
 
-    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
+    export function updateTupleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
         return node.elementTypes !== elementTypes
             ? updateNode(createTupleTypeNode(elementTypes), node)
+            : node;
+    }
+
+    export function createOptionalTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.OptionalType) as OptionalTypeNode;
+        node.type = parenthesizeArrayTypeMember(type);
+        return node;
+    }
+
+    export function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
+        return node.type !== type
+            ? updateNode(createOptionalTypeNode(type), node)
+            : node;
+    }
+
+    export function createRestTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.RestType) as RestTypeNode;
+        node.type = type;
+        return node;
+    }
+
+    export function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
+        return node.type !== type
+            ? updateNode(createRestTypeNode(type), node)
             : node;
     }
 
@@ -2587,18 +2611,41 @@ namespace ts {
         return node;
     }
 
-    export function createUnparsedSourceFile(text: string, map?: string): UnparsedSource {
+    export function createUnparsedSourceFile(text: string): UnparsedSource;
+    export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    export function createUnparsedSourceFile(text: string, mapPath?: string, map?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         node.text = text;
+        node.sourceMapPath = mapPath;
         node.sourceMapText = map;
         return node;
     }
-
-    export function createInputFiles(javascript: string, declaration: string, javascriptMapText?: string, declarationMapText?: string): InputFiles {
+    export function createInputFiles(
+        javascript: string,
+        declaration: string
+    ): InputFiles;
+    export function createInputFiles(
+        javascript: string,
+        declaration: string,
+        javascriptMapPath: string | undefined,
+        javascriptMapText: string | undefined,
+        declarationMapPath: string | undefined,
+        declarationMapText: string | undefined
+    ): InputFiles;
+    export function createInputFiles(
+        javascript: string,
+        declaration: string,
+        javascriptMapPath?: string,
+        javascriptMapText?: string,
+        declarationMapPath?: string,
+        declarationMapText?: string
+    ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
         node.javascriptText = javascript;
+        node.javascriptMapPath = javascriptMapPath;
         node.javascriptMapText = javascriptMapText;
         node.declarationText = declaration;
+        node.declarationMapPath = declarationMapPath;
         node.declarationMapText = declarationMapText;
         return node;
     }

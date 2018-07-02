@@ -194,7 +194,6 @@ namespace ts.codefix {
 
     function getCodeActionForNewImport(context: SymbolContext & { preferences: UserPreferences }, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
         const { sourceFile, symbolName, preferences } = context;
-        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifierWithoutQuotes, getQuotePreference(sourceFile, preferences));
@@ -210,14 +209,7 @@ namespace ts.codefix {
                 createIdentifier(symbolName),
                 createExternalModuleReference(quotedModuleSpecifier));
 
-        const changes = ChangeTracker.with(context, changeTracker => {
-            if (lastImportDeclaration) {
-                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
-            }
-            else {
-                changeTracker.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
-            }
-        });
+        const changes = ChangeTracker.with(context, t => insertImport(t, sourceFile, importDecl));
 
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
         // between the only import statement and user code. Otherwise just insert the statement because chances
@@ -334,7 +326,7 @@ namespace ts.codefix {
     }
 
     function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
-        const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(context.sourceFile, context.span.start);
         const checker = context.program.getTypeChecker();
 
         let umdSymbol: Symbol | undefined;
@@ -393,7 +385,7 @@ namespace ts.codefix {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
-        const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
+        const symbolToken = getTokenAtPosition(sourceFile, span.start);
         // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
         const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
             && symbolToken.parent.tagName === symbolToken

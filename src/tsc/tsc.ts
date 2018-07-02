@@ -19,9 +19,13 @@ namespace ts {
         }
     }
 
+    function defaultIsPretty() {
+        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+    }
+
     function shouldBePretty(options: CompilerOptions) {
         if (typeof options.pretty === "undefined") {
-            return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+            return defaultIsPretty();
         }
         return options.pretty;
     }
@@ -50,7 +54,7 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            const reportDiag = createDiagnosticReporter(sys, /*pretty*/ true);
+            const reportDiag = createDiagnosticReporter(sys, defaultIsPretty());
             const report = (message: DiagnosticMessage, ...args: string[]) => reportDiag(createCompilerDiagnostic(message, ...args));
             const buildHost: BuildHost = {
                 error: report,
@@ -58,7 +62,14 @@ namespace ts {
                 message: report,
                 errorDiagnostic: d => reportDiag(d)
             };
-            return performBuild(args.slice(1), createCompilerHost({}), buildHost, sys);
+            const result = performBuild(args.slice(1), createCompilerHost({}), buildHost, sys);
+            // undefined = in watch mode, do not exit
+            if (result !== undefined) {
+                return sys.exit(result);
+            }
+            else {
+                return;
+            }
         }
 
         const commandLine = parseCommandLine(args);

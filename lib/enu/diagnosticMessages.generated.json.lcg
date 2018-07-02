@@ -303,12 +303,6 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_7038" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[A namespace-style import cannot be called or constructed, and will cause a failure at runtime.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
             <Item ItemId=";A_non_dry_build_would_build_project_0_6357" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
@@ -5634,6 +5628,12 @@
             <Item ItemId=";Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_cal_1321" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cau_7038" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>

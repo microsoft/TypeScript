@@ -29,6 +29,7 @@ tests/cases/compiler/useBeforeDeclaration_superClass.ts(25,18): error TS2448: Bl
         old_x = this.x;
                      ~
 !!! error TS2448: Block-scoped variable 'x' used before its declaration.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_superClass.ts:26:5: 'x' was declared here.
         x = 1;
     }
     

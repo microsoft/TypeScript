@@ -151,6 +151,21 @@ namespace Harness.LanguageService {
             this.scriptInfos.set(vpath.resolve(this.vfs.cwd(), fileName), new ScriptInfo(fileName, content, isRootFile));
         }
 
+        public renameFileOrDirectory(oldPath: string, newPath: string): void {
+            this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
+            this.vfs.renameSync(oldPath, newPath);
+
+            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+            this.scriptInfos.forEach((scriptInfo, key) => {
+                const newFileName = updater(key);
+                if (newFileName !== undefined) {
+                    this.scriptInfos.delete(key);
+                    this.scriptInfos.set(newFileName, scriptInfo);
+                    scriptInfo.fileName = newFileName;
+                }
+            });
+        }
+
         public editScript(fileName: string, start: number, end: number, newText: string) {
             const script = this.getScriptInfo(fileName);
             if (script) {

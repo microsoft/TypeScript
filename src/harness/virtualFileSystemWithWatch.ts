@@ -571,7 +571,9 @@ interface Array<T> {}`
         }
 
         private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean) {
-            insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
+            if (!this.fs.has(fileOrDirectory.path)) {
+                insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
+            }
             folder.modifiedTime = this.now();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
@@ -611,6 +613,13 @@ interface Array<T> {}`
                     this.invokeRecursiveDirectoryWatcher(baseFolder.fullPath, fileOrDirectory.fullPath);
                 }
             }
+        }
+
+        removeFile(filePath: string) {
+            const path = this.toFullPath(filePath);
+            const currentEntry = this.fs.get(path) as FsFile;
+            Debug.assert(isFsFile(currentEntry));
+            this.removeFileOrFolder(currentEntry, returnFalse);
         }
 
         removeFolder(folderPath: string, recursive?: boolean) {

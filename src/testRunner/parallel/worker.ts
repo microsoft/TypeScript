@@ -1,312 +1,300 @@
 // tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
 
 namespace Harness.Parallel.Worker {
-    let errors: ErrorInfo[] = [];
-    let passes: TestInfo[] = [];
-    let passing = 0;
-
-    type MochaCallback = (this: Mocha.ISuiteCallbackContext, done: MochaDone) => void;
-    type Callable = () => void;
-
-    type Executor = {name: string, callback: MochaCallback, kind: "suite" | "test"} | never;
-
-    function resetShimHarnessAndExecute(runner: RunnerBase) {
-        errors = [];
-        passes = [];
-        passing = 0;
-        testList.length = 0;
-        const start = +(new Date());
-        runner.initializeTests();
-        testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
-        return { errors, passes, passing, duration: +(new Date()) - start };
-    }
-
-
-    let beforeEachFunc: Callable;
-    const namestack: string[] = [];
-    let testList: Executor[] = [];
-    function shimMochaHarness() {
-        (global as any).before = undefined;
-        (global as any).after = undefined;
-        (global as any).beforeEach = undefined;
-        (global as any).describe = ((name, callback) => {
-            testList.push({ name, callback, kind: "suite" });
-        }) as Mocha.IContextDefinition;
-        (global as any).describe.skip = ts.noop;
-        (global as any).it = ((name, callback) => {
-            if (!testList) {
-                throw new Error("Tests must occur within a describe block");
-            }
-            testList.push({ name, callback: callback!, kind: "test" });
-        }) as Mocha.ITestDefinition;
-        (global as any).it.skip = ts.noop;
-    }
-
-    function setTimeoutAndExecute(timeout: number | undefined, f: () => void) {
-        if (timeout !== undefined) {
-            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
-            process.send!(timeoutMsg);
-        }
-        f();
-        if (timeout !== undefined) {
-            // Reset timeout
-            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
-            process.send!(timeoutMsg);
-        }
-    }
-
-    function executeSuiteCallback(name: string, callback: MochaCallback) {
-        let timeout: number | undefined;
-        const fakeContext: Mocha.ISuiteCallbackContext = {
-            retries() { return this; },
-            slow() { return this; },
-            timeout(n: number) {
-                timeout = n;
-                return this;
-            },
-        };
-        namestack.push(name);
-        let beforeFunc: Callable | undefined;
-        (before as any) = (cb: Callable) => beforeFunc = cb;
-        let afterFunc: Callable | undefined;
-        (after as any) = (cb: Callable) => afterFunc = cb;
-        const savedBeforeEach = beforeEachFunc;
-        (beforeEach as any) = (cb: Callable) => beforeEachFunc = cb;
-        const savedTestList = testList;
-
-        testList = [];
-        try {
-            callback.call(fakeContext);
-        }
-        catch (e) {
-            errors.push({ error: `Error executing suite: ${e.message}`, stack: e.stack, name: [...namestack] });
-            return cleanup();
-        }
-        try {
-            if (beforeFunc) {
-                beforeFunc();
-            }
-        }
-        catch (e) {
-            errors.push({ error: `Error executing before function: ${e.message}`, stack: e.stack, name: [...namestack] });
-            return cleanup();
-        }
-        finally {
-            beforeFunc = undefined;
-        }
-
-        setTimeoutAndExecute(timeout, () => {
-            testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
-        });
-
-        try {
-            if (afterFunc) {
-                afterFunc();
-            }
-        }
-        catch (e) {
-            errors.push({ error: `Error executing after function: ${e.message}`, stack: e.stack, name: [...namestack] });
-        }
-        finally {
-            afterFunc = undefined;
-            cleanup();
-        }
-        function cleanup() {
-            testList.length = 0;
-            testList = savedTestList;
-            beforeEachFunc = savedBeforeEach;
-            namestack.pop();
-        }
-    }
-
-    function executeCallback(name: string, callback: MochaCallback, kind: "suite" | "test") {
-        if (kind === "suite") {
-            executeSuiteCallback(name, callback);
-        }
-        else {
-            executeTestCallback(name, callback);
-        }
-    }
-
-    function executeTestCallback(name: string, callback: MochaCallback) {
-        let timeout: number | undefined;
-        const fakeContext: Mocha.ITestCallbackContext = {
-            skip() { return this; },
-            timeout(n: number) {
-                timeout = n;
-                const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
-                process.send!(timeoutMsg);
-                return this;
-            },
-            retries() { return this; },
-            slow() { return this; },
-        };
-        namestack.push(name);
-        if (beforeEachFunc) {
-            try {
-                beforeEachFunc();
-            }
-            catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
-                namestack.pop();
-                return;
-            }
-        }
-        if (callback.length === 0) {
-            try {
-                // TODO: If we ever start using async test completions, polyfill promise return handling
-                callback.call(fakeContext);
-                passes.push({ name: [...namestack] });
-            }
-            catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
-                return;
-            }
-            finally {
-                namestack.pop();
-                if (timeout !== undefined) {
-                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
-                    process.send!(timeoutMsg);
-                }
-            }
-            passing++;
-        }
-        else {
-            // Uses `done` callback
-            let completed = false;
-            try {
-                callback.call(fakeContext, (err: any) => {
-                    if (completed) {
-                        throw new Error(`done() callback called multiple times; ensure it is only called once.`);
-                    }
-                    if (err) {
-                        errors.push({ error: err.toString(), stack: "", name: [...namestack] });
-                    }
-                    else {
-                        passes.push({ name: [...namestack] });
-                        passing++;
-                    }
-                    completed = true;
-                });
-            }
-            catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
-                return;
-            }
-            finally {
-                namestack.pop();
-                if (timeout !== undefined) {
-                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
-                    process.send!(timeoutMsg);
-                }
-            }
-            if (!completed) {
-                errors.push({ error: "Test completes asynchronously, which is unsupported by the parallel harness", stack: "", name: [...namestack] });
-            }
-        }
-    }
-
     export function start() {
-        let initialized = false;
-        const runners = ts.createMap<RunnerBase>();
-        process.on("message", (data: ParallelHostMessage) => {
-            if (!initialized) {
-                initialized = true;
-                shimMochaHarness();
+        function hookUncaughtExceptions() {
+            if (!exceptionsHooked) {
+                process.on("uncaughtException", handleUncaughtException);
+                process.on("unhandledRejection", handleUncaughtException);
+                exceptionsHooked = true;
             }
-            switch (data.type) {
-                case "test":
-                    const { runner, file } = data.payload;
-                    if (!runner) {
-                        console.error(data);
-                    }
-                    const message: ParallelResultMessage = { type: "result", payload: handleTest(runner, file) };
-                    process.send!(message);
-                    break;
-                case "close":
-                    process.exit(0);
-                    break;
-                case "batch": {
-                    const items = data.payload;
-                    for (let i = 0; i < items.length; i++) {
-                        const { runner, file } = items[i];
-                        if (!runner) {
-                            console.error(data);
-                        }
-                        let message: ParallelBatchProgressMessage | ParallelResultMessage;
-                        const payload = handleTest(runner, file);
-                        if (i === (items.length - 1)) {
-                            message = { type: "result", payload };
-                        }
-                        else {
-                            message = { type: "progress", payload };
-                        }
-                        process.send!(message);
-                    }
-                    break;
-                }
-            }
-        });
-        process.on("uncaughtException", error => {
-            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack!, name: [...namestack] } };
-            try {
-                process.send!(message);
-            }
-            catch (e) {
-                console.error(error);
-                throw error;
-            }
-        });
-        if (!runUnitTests) {
-            // ensure unit tests do not get run
-            (global as any).describe = ts.noop;
-        }
-        else {
-            initialized = true;
-            shimMochaHarness();
         }
 
-        function handleTest(runner: TestRunnerKind | "unittest", file: string) {
-            collectUnitTestsIfNeeded();
-            if (runner === unittest) {
-                return executeUnitTest(file);
+        function unhookUncaughtExceptions() {
+            if (exceptionsHooked) {
+                process.removeListener("uncaughtException", handleUncaughtException);
+                process.removeListener("unhandledRejection", handleUncaughtException);
+                exceptionsHooked = false;
+            }
+        }
+
+        let exceptionsHooked = false;
+        hookUncaughtExceptions();
+
+        // tslint:disable-next-line:variable-name - Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
+        const Mocha = require("mocha") as typeof import("mocha");
+
+        /**
+         * Mixin helper.
+         * @param base The base class constructor.
+         * @param mixins The mixins to apply to the constructor.
+         */
+        function mixin<T extends new (...args: any[]) => any>(base: T, ...mixins: ((klass: T) => T)[]) {
+            for (const mixin of mixins) {
+                base = mixin(base);
+            }
+            return base;
+        }
+
+        /**
+         * Mixes in overrides for `resetTimeout` and `clearTimeout` to support parallel test execution in a worker.
+         */
+        function Timeout<T extends typeof Mocha.Runnable>(base: T) {
+            return class extends (base as typeof Mocha.Runnable) {
+                resetTimeout() {
+                    this.clearTimeout();
+                    if (this.enableTimeouts()) {
+                        sendMessage({ type: "timeout", payload: { duration: this.timeout() || 1e9 } });
+                        this.timer = true;
+                    }
+                }
+                clearTimeout() {
+                    if (this.timer) {
+                        sendMessage({ type: "timeout", payload: { duration: "reset" } });
+                        this.timer = false;
+                    }
+                }
+            } as T;
+        }
+
+        /**
+         * Mixes in an override for `clone` to support parallel test execution in a worker.
+         */
+        function Clone<T extends typeof Mocha.Suite | typeof Mocha.Test>(base: T) {
+            return class extends (base as new (...args: any[]) => { clone(): any; }) {
+                clone() {
+                    const cloned = super.clone();
+                    Object.setPrototypeOf(cloned, this.constructor.prototype);
+                    return cloned;
+                }
+            } as T;
+        }
+
+        /**
+         * A `Mocha.Suite` subclass to support parallel test execution in a worker.
+         */
+        class Suite extends mixin(Mocha.Suite, Clone) {
+            _createHook(title: string, fn?: Mocha.Func | Mocha.AsyncFunc) {
+                const hook = super._createHook(title, fn);
+                Object.setPrototypeOf(hook, Hook.prototype);
+                return hook;
+            }
+        }
+
+        /**
+         * A `Mocha.Hook` subclass to support parallel test execution in a worker.
+         */
+        class Hook extends mixin(Mocha.Hook, Timeout) {
+        }
+
+        /**
+         * A `Mocha.Test` subclass to support parallel test execution in a worker.
+         */
+        class Test extends mixin(Mocha.Test, Timeout, Clone) {
+        }
+
+        /**
+         * Shims a 'bdd'-style test interface to support parallel test execution in a worker.
+         * @param rootSuite The root suite.
+         * @param context The test context (usually the NodeJS `global` object).
+         */
+        function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
+            // tslint:disable-next-line:variable-name
+            const suites = [rootSuite];
+            context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeAll(title as string, fn); };
+            context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterAll(title as string, fn); };
+            context.beforeEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeEach(title as string, fn); };
+            context.afterEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterEach(title as string, fn); };
+            context.describe = context.context = ((title: string, fn: (this: Mocha.Suite) => void) => addSuite(title, fn)) as Mocha.SuiteFunction;
+            context.describe.skip = context.xdescribe = context.xcontext = (title: string) => addSuite(title, /*fn*/ undefined);
+            context.describe.only = (title: string, fn?: (this: Mocha.Suite) => void) => addSuite(title, fn);
+            context.it = context.specify = ((title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => addTest(title, fn)) as Mocha.TestFunction;
+            context.it.skip = context.xit = context.xspecify = (title: string | Mocha.Func | Mocha.AsyncFunc) => addTest(typeof title === "function" ? title.name : title, /*fn*/ undefined);
+            context.it.only = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => addTest(title, fn);
+
+            function addSuite(title: string, fn: ((this: Mocha.Suite) => void) | undefined): Mocha.Suite {
+                const suite = new Suite(title, suites[0].ctx);
+                suites[0].addSuite(suite);
+                suite.pending = !fn;
+                suites.unshift(suite);
+                if (fn) {
+                    fn.call(suite);
+                }
+                suites.shift();
+                return suite;
+            }
+
+            function addTest(title: string | Mocha.Func | Mocha.AsyncFunc, fn: Mocha.Func | Mocha.AsyncFunc | undefined): Mocha.Test {
+                if (typeof title === "function") fn = title, title = fn.name;
+                const test = new Test(title, suites[0].pending ? undefined : fn);
+                suites[0].addTest(test);
+                return test;
+            }
+        }
+
+        /**
+         * Run the tests in the requested task.
+         */
+        function runTests(task: Task, fn: (payload: TaskResult) => void) {
+            if (task.runner === "unittest") {
+                return runUnitTests(task, fn);
             }
             else {
-                if (!runners.has(runner)) {
-                    runners.set(runner, createRunner(runner));
+                return runFileTests(task, fn);
+            }
+        }
+
+        function runUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
+            if (!unitTestSuiteMap && unitTestSuite.suites.length) {
+                unitTestSuiteMap = ts.createMap<Mocha.Suite>();
+                for (const suite of unitTestSuite.suites) {
+                    unitTestSuiteMap.set(suite.title, suite);
                 }
-                const instance = runners.get(runner)!;
-                instance.tests = [file];
-                return { ...resetShimHarnessAndExecute(instance), runner, file };
+            }
+
+            if (!unitTestSuiteMap) {
+                throw new Error(`Asked to run unit test ${task.file}, but no unit tests were discovered!`);
+            }
+
+            const suite = unitTestSuiteMap.get(task.file);
+            if (!suite) {
+                throw new Error(`Unit test with name "${task.file}" was asked to be run, but such a test does not exist!`);
+            }
+
+            const root = new Suite("", new Mocha.Context());
+            root.timeout(globalTimeout || 40_000);
+            root.addSuite(suite);
+            Object.setPrototypeOf(suite.ctx, root.ctx);
+
+            runSuite(task, suite, payload => {
+                suite.parent = unitTestSuite;
+                Object.setPrototypeOf(suite.ctx, unitTestSuite.ctx);
+                fn(payload);
+            });
+        }
+
+        function runFileTests(task: RunnerTask, fn: (result: TaskResult) => void) {
+            let instance = runners.get(task.runner);
+            if (!instance) runners.set(task.runner, instance = createRunner(task.runner));
+            instance.tests = [task.file];
+
+            const suite = new Suite("", new Mocha.Context());
+            suite.timeout(globalTimeout || 40_000);
+
+            shimTestInterface(suite, global);
+            instance.initializeTests();
+
+            runSuite(task, suite, fn);
+        }
+
+        function runSuite(task: Task, suite: Mocha.Suite, fn: (result: TaskResult) => void) {
+            const errors: ErrorInfo[] = [];
+            const passes: TestInfo[] = [];
+            const start = +new Date();
+            const runner = new Mocha.Runner(suite, /*delay*/ false);
+            const uncaught = (err: any) => runner.uncaught(err);
+
+            runner
+                .on("start", () => {
+                    unhookUncaughtExceptions(); // turn off global uncaught handling
+                    process.on("unhandledRejection", uncaught); // turn on unhandled rejection handling (not currently handled in mocha)
+                })
+                .on("pass", (test: Mocha.Test) => {
+                    passes.push({ name: test.titlePath() });
+                })
+                .on("fail", (test: Mocha.Test | Mocha.Hook, err: any) => {
+                    errors.push({ name: test.titlePath(), error: err.message, stack: err.stack });
+                })
+                .on("end", () => {
+                    process.removeListener("unhandledRejection", uncaught);
+                    hookUncaughtExceptions();
+                })
+                .run(() => {
+                    fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });
+                });
+        }
+
+        /**
+         * Validates a message received from the host is well-formed.
+         */
+        function validateHostMessage(message: ParallelHostMessage) {
+            switch (message.type) {
+                case "test": return validateTest(message.payload);
+                case "batch": return validateBatch(message.payload);
+                case "close": return true;
+                default: return false;
             }
         }
-    }
 
-    const unittest: "unittest" = "unittest";
-    let unitTests: {[name: string]: MochaCallback};
-    function collectUnitTestsIfNeeded() {
-        if (!unitTests && testList.length) {
-            unitTests = {};
-            for (const test of testList) {
-                unitTests[test.name] = test.callback;
+        /**
+         * Validates a test task is well formed.
+         */
+        function validateTest(task: Task) {
+            return !!task && !!task.runner && !!task.file;
+        }
+
+        /**
+         * Validates a batch of test tasks are well formed.
+         */
+        function validateBatch(tasks: Task[]) {
+            return !!tasks && Array.isArray(tasks) && tasks.length > 0 && tasks.every(validateTest);
+        }
+
+        function processHostMessage(message: ParallelHostMessage) {
+            if (!validateHostMessage(message)) {
+                console.log("Invalid message:", message);
+                return;
             }
-            testList.length = 0;
-        }
-    }
 
-    function executeUnitTest(name: string) {
-        if (!unitTests) {
-            throw new Error(`Asked to run unit test ${name}, but no unit tests were discovered!`);
+            switch (message.type) {
+                case "test": return processTest(message.payload, /*last*/ true);
+                case "batch": return processBatch(message.payload);
+                case "close": return process.exit(0);
+            }
         }
-        if (unitTests[name]) {
-            errors = [];
-            passes = [];
-            passing = 0;
-            const start = +(new Date());
-            executeSuiteCallback(name, unitTests[name]);
-            delete unitTests[name];
-            return { file: name, runner: unittest, errors, passes, passing, duration: +(new Date()) - start };
+
+        function processTest(task: Task, last: boolean, fn?: () => void) {
+            runTests(task, payload => {
+                sendMessage(last ? { type: "result", payload } : { type: "progress", payload });
+                if (fn) fn();
+            });
         }
-        throw new Error(`Unit test with name "${name}" was asked to be run, but such a test does not exist!`);
+
+        function processBatch(tasks: Task[], fn?: () => void) {
+            const next = () => {
+                const task = tasks.shift();
+                if (task) return processTest(task, tasks.length === 0, next);
+                if (fn) fn();
+            };
+            next();
+        }
+
+        function handleUncaughtException(err: any) {
+            const error = err instanceof Error ? err : new Error("" + err);
+            sendMessage({ type: "error", payload: { error: error.message, stack: error.stack! } });
+        }
+
+        function sendMessage(message: ParallelClientMessage) {
+            process.send!(message);
+        }
+
+        // A cache of test harness Runner instances.
+        const runners = ts.createMap<RunnerBase>();
+
+        // The root suite for all unit tests.
+        let unitTestSuite: Suite;
+        let unitTestSuiteMap: ts.Map<Mocha.Suite>;
+
+        if (runUnitTests) {
+            unitTestSuite = new Suite("", new Mocha.Context());
+            unitTestSuite.timeout(globalTimeout || 40_000);
+            shimTestInterface(unitTestSuite, global);
+        }
+        else {
+            // ensure unit tests do not get run
+            shimNoopTestInterface(global);
+        }
+
+        process.on("message", processHostMessage);
     }
 }

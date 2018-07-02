@@ -415,10 +415,33 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
+    function protocolLocationFromSubstring(str: string, substring: string) {
+        const start = str.indexOf(substring);
+        Debug.assert(start !== -1);
+        return protocolToLocation(str)(start);
+    }
+    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+        const lineStarts = computeLineStarts(text);
+        return pos => {
+            const x = computeLineAndCharacterOfPosition(lineStarts, pos);
+            return { line: x.line + 1, offset: x.character + 1 };
+        };
+    }
+    function protocolTextSpanFromSubstring(str: string, substring: string): protocol.TextSpan {
+        const span = textSpanFromSubstring(str, substring);
+        const toLocation = protocolToLocation(str);
+        return { start: toLocation(span.start), end: toLocation(span.start + span.length) };
+    }
     function textSpanFromSubstring(str: string, substring: string): TextSpan {
         const start = str.indexOf(substring);
         Debug.assert(start !== -1);
         return createTextSpan(start, substring.length);
+    }
+    function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    }
+    function protocolFileSpanFromSubstring(file: File, substring: string): protocol.FileSpan {
+        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring) };
     }
 
     /**
@@ -464,20 +487,25 @@ namespace ts.projectSystem {
         }
     }
 
-    export function makeSessionRequest<T>(command: string, args: T) {
-        const newRequest: protocol.Request = {
+    export function makeSessionRequest<T>(command: string, args: T): protocol.Request {
+        return {
             seq: 0,
             type: "request",
             command,
             arguments: args
         };
-        return newRequest;
     }
 
-    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session) {
+    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
         for (const file of files) {
             const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
+        }
+    }
+
+    export function closeFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
+        for (const file of files) {
+            session.executeCommand(makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file.path }));
         }
     }
 
@@ -503,8 +531,8 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, source: undefined };
+    function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
+        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
     }
 
     function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
@@ -3097,7 +3125,7 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [file.path]);
             checkProjectActualFiles(project, [file.path, libFile.path]);
 
-            assert.strictEqual(projectService.getDefaultProjectForFile(server.toNormalizedPath(file.path), /*ensureProject*/ true), project);
+            assert.strictEqual(projectService.ensureDefaultProjectForFile(server.toNormalizedPath(file.path)), project);
             const indexOfX = file.content.indexOf("x");
             assert.deepEqual(project.getLanguageService(/*ensureSynchronized*/ true).getQuickInfoAtPosition(file.path, indexOfX), {
                 kind: ScriptElementKind.variableElement,
@@ -4969,7 +4997,7 @@ namespace ts.projectSystem {
             assert.isTrue(error2Result.length === 0);
         });
 
-        it("should report semanitc errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
+        it("should report semantic errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
             const jsFile = {
                 path: "/a/jsFile.js",
                 content: `
@@ -4988,10 +5016,10 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
 
-        it("should report semanitc errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
+        it("should report semantic errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
             const jsconfigFile = {
                 path: "/a/jsconfig.json",
                 content: "{}"
@@ -5015,10 +5043,10 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
 
-        it("should report semanitc errors for configured js project with checkJs=true and skipLibCheck=true", () => {
+        it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
             const jsconfigFile = {
                 path: "/a/jsconfig.json",
                 content: JSON.stringify({
@@ -5044,7 +5072,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
     });
 
@@ -8011,10 +8039,10 @@ new C();`
                 checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
-            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], directories: string[]) {
+            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: string[], nonRecursiveDirectories: string[]) {
                 checkWatchedFilesDetailed(host, files.filter(f => f !== recognizersDateTimeSrcFile.path), 1);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, directories, 1, /*recursive*/ true);
+                checkWatchedDirectoriesDetailed(host, nonRecursiveDirectories, 1,  /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(host, recursiveDirectories, 1, /*recursive*/ true);
             }
 
             function createSessionAndOpenFile(host: TestServerHost) {
@@ -8035,14 +8063,15 @@ new C();`
                     const filesWithNodeModulesSetup = [...filesWithSources, nodeModulesRecorgnizersText];
                     const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
-                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, withPathMapping ? packages : recognizersDateTime, ...getTypeRootsFromLocation(recognizersDateTime)];
+                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, ...(withPathMapping ? emptyArray : [recognizersDateTime]), ...getTypeRootsFromLocation(recognizersDateTime)];
                     const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...(withPathMapping ? [recognizersText] : emptyArray), ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+                    const nonRecursiveWatchedDirectories = withPathMapping ? [packages] : emptyArray;
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithResolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule, nonRecursiveWatchedDirectories);
                         verifyErrors(session, []);
                     }
 
@@ -8050,7 +8079,7 @@ new C();`
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithUnresolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
                         const startOffset = recognizersDateTimeSrcFile.content.indexOf('"') + 1;
                         verifyErrors(session, [
                             createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0, [moduleName])
@@ -8506,6 +8535,65 @@ new C();`
                 }
             });
         });
+
+        it("when watching directories for failed lookup locations in amd resolution", () => {
+            const projectRoot = "/user/username/projects/project";
+            const nodeFile: File = {
+                path: `${projectRoot}/src/typings/node.d.ts`,
+                content: `
+declare module "fs" {
+    export interface something {
+    }
+}`
+            };
+            const electronFile: File = {
+                path: `${projectRoot}/src/typings/electron.d.ts`,
+                content: `
+declare module 'original-fs' {
+    import * as fs from 'fs';
+    export = fs;
+}`
+            };
+            const srcFile: File = {
+                path: `${projectRoot}/src/somefolder/srcfile.ts`,
+                content: `
+import { x } from "somefolder/module1";
+import { x } from "somefolder/module2";
+const y = x;`
+            };
+            const moduleFile: File = {
+                path: `${projectRoot}/src/somefolder/module1.ts`,
+                content: `
+export const x = 10;`
+            };
+            const configFile: File = {
+                path: `${projectRoot}/src/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "amd",
+                        moduleResolution: "classic",
+                        target: "es5",
+                        outDir: "../out",
+                        baseUrl: "./",
+                        typeRoots: ["typings"]
+
+                    }
+                })
+            };
+            const files = [nodeFile, electronFile, srcFile, moduleFile, configFile, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, projectRoot);
+            checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
+            checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
+            checkWatchedDirectoriesDetailed(host, [`${projectRoot}`], 1,  /*recursive*/ false); // failed lookup for fs
+            const expectedWatchedDirectories = createMap<number>();
+            expectedWatchedDirectories.set(`${projectRoot}/src`, 2); // Wild card and failed lookup
+            expectedWatchedDirectories.set(`${projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
+            expectedWatchedDirectories.set(`${projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
+            expectedWatchedDirectories.set(`${projectRoot}/src/typings`, 1); // typeroot directory
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
+        });
     });
 
     describe("tsserverProjectSystem watchDirectories implementation", () => {
@@ -8622,6 +8710,49 @@ new C();`
                 }],
             }]);
         });
+
+        it("works with multiple projects", () => {
+            const aUserTs: File = {
+                path: "/a/user.ts",
+                content: 'import { x } from "./old";',
+            };
+            const aOldTs: File = {
+                path: "/a/old.ts",
+                content: "export const x = 0;",
+            };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: "{}",
+            };
+            const bUserTs: File = {
+                path: "/b/user.ts",
+                content: 'import { x } from "../a/old";',
+            };
+            const bTsconfig: File = {
+                path: "/b/tsconfig.json",
+                content: "{}",
+            };
+
+            const host = createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aUserTs, bUserTs], session);
+
+            const renameRequest = makeSessionRequest<protocol.GetEditsForFileRenameRequestArgs>(CommandNames.GetEditsForFileRename, {
+                oldFilePath: "/a/old.ts",
+                newFilePath: "/a/new.ts",
+            });
+            const response = session.executeCommand(renameRequest).response as protocol.GetEditsForFileRenameResponse["body"];
+            assert.deepEqual(response, [
+                {
+                    fileName: aUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(aUserTs.content, "./old"), newText: "./new" }],
+                },
+                {
+                    fileName: bUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(bUserTs.content, "../a/old"), newText: "../a/new" }],
+                },
+            ]);
+        });
     });
 
     describe("tsserverProjectSystem document registry in project service", () => {
@@ -8716,4 +8847,205 @@ new C();`
             assert.equal(moduleInfo.cacheSourceFile.sourceFile.text, updatedModuleContent);
         });
     });
+
+    describe("tsserverProjectSystem syntax operations", () => {
+        function navBarFull(session: TestSession, file: File) {
+            return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
+                command: protocol.CommandTypes.NavBarFull,
+                arguments: { file: file.path }
+            }).response);
+        }
+
+        function openFile(session: TestSession, file: File) {
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: file.path, fileContent: file.content }
+            });
+        }
+
+        it("works when file is removed and added with different content", () => {
+            const projectRoot = "/user/username/projects/myproject";
+            const app: File = {
+                path: `${projectRoot}/app.ts`,
+                content: "console.log('Hello world');"
+            };
+            const unitTest1: File = {
+                path: `${projectRoot}/unitTest1.ts`,
+                content: `import assert = require('assert');
+
+describe("Test Suite 1", () => {
+    it("Test A", () => {
+        assert.ok(true, "This shouldn't fail");
+    });
+
+    it("Test B", () => {
+        assert.ok(1 === 1, "This shouldn't fail");
+        assert.ok(false, "This should fail");
+    });
+});`
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [app, libFile, tsconfig];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFile(session, app);
+
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            const expectedFilesWithoutUnitTest1 = files.map(f => f.path);
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            host.writeFile(unitTest1.path, unitTest1.content);
+            host.runQueuedTimeoutCallbacks();
+            const expectedFilesWithUnitTest1 = expectedFilesWithoutUnitTest1.concat(unitTest1.path);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            openFile(session, unitTest1);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            const navBarResultUnitTest1 = navBarFull(session, unitTest1);
+            host.removeFile(unitTest1.path);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            session.executeCommandSeq<protocol.CloseRequest>({
+                command: protocol.CommandTypes.Close,
+                arguments: { file: unitTest1.path }
+            });
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            const unitTest1WithChangedContent: File = {
+                path: unitTest1.path,
+                content: `import assert = require('assert');
+
+export function Test1() {
+    assert.ok(true, "This shouldn't fail");
+};
+
+export function Test2() {
+    assert.ok(1 === 1, "This shouldn't fail");
+    assert.ok(false, "This should fail");
+};`
+            };
+            host.writeFile(unitTest1.path, unitTest1WithChangedContent.content);
+            host.runQueuedTimeoutCallbacks();
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            openFile(session, unitTest1WithChangedContent);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+            const sourceFile = project.getLanguageService().getNonBoundSourceFile(unitTest1WithChangedContent.path);
+            assert.strictEqual(sourceFile.text, unitTest1WithChangedContent.content);
+
+            const navBarResultUnitTest1WithChangedContent = navBarFull(session, unitTest1WithChangedContent);
+            assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
+        });
+    });
+
+    function makeSampleProjects() {
+        const aTs: File = {
+            path: "/a/a.ts",
+            content: "export function fnA() {}",
+        };
+        const aTsconfig: File = {
+            path: "/a/tsconfig.json",
+            content: `{
+                "compilerOptions": {
+                    "outDir": "bin",
+                    "declaration": true,
+                    "declarationMap": true,
+                    "composite": true,
+                }
+            }`,
+        };
+
+        const bTs: File = {
+            path: "/b/b.ts",
+            content: 'import { fnA } from "../a/a";\nexport function fnB() { fnA(); }',
+        };
+        const bTsconfig: File = {
+            path: "/b/tsconfig.json",
+            content: `{
+                "compilerOptions": {
+                    "outDir": "bin",
+                },
+                "references": [
+                    { "path": "../a" }
+                ]
+            }`,
+        };
+
+        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+        const session = createSession(host);
+
+        writeDeclarationFiles(aTs, host, session, [
+            { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}' },
+            // Need to mangle the sourceMappingURL part or it breaks the build
+            { name: "/a/bin/a.d.ts", text: `export declare function fnA(): void;\n//# source${""}MappingURL=a.d.ts.map` },
+        ]);
+
+        return { session, aTs, bTs };
+    }
+
+    describe("tsserverProjectSystem project references", () => {
+        it("goToDefinition", () => {
+            const { session, aTs, bTs } = makeSampleProjects();
+
+            openFilesForSession([bTs], session);
+
+            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(bTs, "fnA()"));
+            const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
+
+            assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        });
+
+        it("navigateTo", () => {
+            const { session, bTs } = makeSampleProjects();
+
+            openFilesForSession([bTs], session);
+
+            const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: bTs.path, searchValue: "fn" });
+            const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
+
+            assert.deepEqual(navtoResponse, [
+                // TODO: First result should be from a.ts, not a.d.ts
+                {
+                    file: "/a/bin/a.d.ts",
+                    start: { line: 1, offset: 1 },
+                    end: { line: 1, offset: 37 },
+                    name: "fnA",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export,declare",
+                },
+                {
+                    ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
+        });
+    });
+
+    function writeDeclarationFiles(file: File, host: TestServerHost, session: TestSession, expectedFiles: ReadonlyArray<{ readonly name: string, readonly text: string }>): void {
+        openFilesForSession([file], session);
+        const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
+        const program = project.getCurrentProgram();
+        const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+        closeFilesForSession([file], session);
+
+        Debug.assert(!output.emitSkipped);
+        assert.deepEqual(output.outputFiles, expectedFiles.map(e => ({ ...e, writeByteOrderMark: false })));
+
+        for (const { name, text } of output.outputFiles) {
+            const directory: Folder = { path: getDirectoryPath(name) };
+            host.ensureFileOrFolder(directory);
+            host.writeFile(name, text);
+        }
+    }
 }

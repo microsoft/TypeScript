@@ -1,11 +1,17 @@
 ﻿// @module: commonjs
 // @skipLibCheck: true
-// @includebuiltfile: typescript_standalone.d.ts
+// @includebuiltfile: typescriptServices.d.ts
 // @noImplicitAny:true
-// @strict:true
+// @strictNullChecks:true
 
+// @filename: node_modules/typescript/index.d.ts
+declare module "typescript" {
+    export = ts;
+}
+
+// @filename: APISample_WatchWithOwnWatchHost.ts
 /*
- * Note: This test is a public API sample. This sample verifies creating abstract builder to watch list of root files 
+ * Note: This test is a public API sample. This sample verifies creating abstract builder to watch list of root files
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 

@@ -192,6 +192,11 @@ namespace ts {
             // Setup and perform the transformation to retrieve declarations from the input files
             const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
             const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
+            if (emitOnlyDtsFiles && !compilerOptions.declaration) {
+                // Checker wont collect the linked aliases since thats only done when declaration is enabled.
+                // Do that here when emitting only dts files
+                nonJsFiles.forEach(collectLinkedAliases);
+            }
             const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, concatenate([transformDeclarations], declarationTransformers), /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
                 for (const diagnostic of declarationTransform.diagnostics!) {
@@ -219,6 +224,20 @@ namespace ts {
                 printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
             }
             declarationTransform.dispose();
+        }
+
+        function collectLinkedAliases(node: Node) {
+            if (isExportAssignment(node)) {
+                if (node.expression.kind === SyntaxKind.Identifier) {
+                    resolver.collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
+                }
+                return;
+            }
+            else if (isExportSpecifier(node)) {
+                resolver.collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
+                return;
+            }
+            forEachChild(node, collectLinkedAliases);
         }
 
         function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapRecorder: SourceMapWriter) {
@@ -526,7 +545,7 @@ namespace ts {
                     return pipelineEmitWithoutComments;
 
                 case PipelinePhase.SourceMaps:
-                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
+                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile) {
                         return pipelineEmitWithSourceMap;
                     }
                     // falls through
@@ -559,7 +578,7 @@ namespace ts {
         }
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
-            Debug.assert(hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName);
+            Debug.assert(hint !== EmitHint.SourceFile);
             Debug.assertDefined(onEmitSourceMapOfNode)(hint, node, pipelineEmitWithHint);
         }
 
@@ -640,6 +659,8 @@ namespace ts {
                         return emitArrayType(<ArrayTypeNode>node);
                     case SyntaxKind.TupleType:
                         return emitTupleType(<TupleTypeNode>node);
+                    case SyntaxKind.OptionalType:
+                        return emitOptionalType(<OptionalTypeNode>node);
                     case SyntaxKind.UnionType:
                         return emitUnionType(<UnionTypeNode>node);
                     case SyntaxKind.IntersectionType:
@@ -676,8 +697,9 @@ namespace ts {
                         return emitJSDocNonNullableType(node as JSDocNonNullableType);
                     case SyntaxKind.JSDocOptionalType:
                         return emitJSDocOptionalType(node as JSDocOptionalType);
+                    case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
-                        return emitJSDocVariadicType(node as JSDocVariadicType);
+                        return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
 
                     // Binding patterns
                     case SyntaxKind.ObjectBindingPattern:
@@ -1285,7 +1307,7 @@ namespace ts {
             writePunctuation("]");
         }
 
-        function emitJSDocVariadicType(node: JSDocVariadicType) {
+        function emitRestOrJSDocVariadicType(node: RestTypeNode | JSDocVariadicType) {
             write("...");
             emit(node.type);
         }
@@ -1294,6 +1316,11 @@ namespace ts {
             writePunctuation("[");
             emitList(node, node.elementTypes, ListFormat.TupleTypeElements);
             writePunctuation("]");
+        }
+
+        function emitOptionalType(node: OptionalTypeNode) {
+            emit(node.type);
+            write("?");
         }
 
         function emitUnionType(node: UnionTypeNode) {
@@ -1956,7 +1983,7 @@ namespace ts {
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
-            writeKeyword(isLet(node) ? "let" : isConst(node) ? "const" : "var");
+            writeKeyword(isLet(node) ? "let" : isVarConst(node) ? "const" : "var");
             writeSpace();
             emitList(node, node.declarations, ListFormat.VariableDeclarationList);
         }
@@ -2424,7 +2451,7 @@ namespace ts {
 
         function emitJsxTagName(node: JsxTagNameExpression) {
             if (node.kind === SyntaxKind.Identifier) {
-                emitExpression(<Identifier>node);
+                emitExpression(node);
             }
             else {
                 emit(node);

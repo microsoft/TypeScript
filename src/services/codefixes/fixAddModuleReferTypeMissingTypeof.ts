@@ -17,7 +17,7 @@ namespace ts.codefix {
     });
 
     function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         Debug.assert(token.kind === SyntaxKind.ImportKeyword);
         Debug.assert(token.parent.kind === SyntaxKind.ImportType);
         return <ImportTypeNode>token.parent;
