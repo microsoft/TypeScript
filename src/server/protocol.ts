@@ -2090,8 +2090,8 @@ namespace ts.server.protocol {
      * The language service will unconditionally attempt to provide a result.
      */
     export interface SignatureHelpInvokedReason {
-        kind: "invoked",
-        triggerCharacter?: undefined,
+        kind: "invoked";
+        triggerCharacter?: undefined;
     }
 
     /**
@@ -2099,11 +2099,11 @@ namespace ts.server.protocol {
      * Depending on the character and the syntactic context, the request may or may not be served a result.
      */
     export interface SignatureHelpCharacterTypedReason {
-        kind: "characterTyped",
+        kind: "characterTyped";
         /**
          * Character that was responsible for triggering signature help.
          */
-        triggerCharacter: SignatureHelpTriggerCharacter,
+        triggerCharacter: SignatureHelpTriggerCharacter;
     }
 
     /**
@@ -2113,11 +2113,11 @@ namespace ts.server.protocol {
      * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
      */
     export interface SignatureHelpRetriggeredReason {
-        kind: "retrigger",
+        kind: "retrigger";
         /**
          * Character that was responsible for triggering signature help.
          */
-        triggerCharacter?: SignatureHelpRetriggerCharacter,
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
 
     /**

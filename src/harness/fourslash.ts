@@ -1440,7 +1440,7 @@ Actual: ${stringify(fullActual)}`);
                     this.raiseError(`Expected no signature help, but got "${stringify(actual)}"`);
                 }
                 else {
-                    this.raiseError("Expected signature help, but none was returned.")
+                    this.raiseError("Expected signature help, but none was returned.");
                 }
             }
         }
