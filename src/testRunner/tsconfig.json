@@ -39,7 +39,7 @@
         "unittests/extractTestHelpers.ts",
         "unittests/tsserverProjectSystem.ts",
         "unittests/typingsInstaller.ts",
-        
+
         "unittests/asserts.ts",
         "unittests/base64.ts",
         "unittests/builder.ts",
@@ -54,6 +54,7 @@
         "unittests/extractConstants.ts",
         "unittests/extractFunctions.ts",
         "unittests/extractRanges.ts",
+        "unittests/factory.ts",
         "unittests/hostNewLineSupport.ts",
         "unittests/incrementalParser.ts",
         "unittests/initializeTSConfig.ts",
