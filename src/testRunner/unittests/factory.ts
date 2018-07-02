@@ -13,12 +13,12 @@ namespace ts {
                 }
 
                 const clazz = createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.createProperty(/*decorators*/ undefined, [ts.createToken(ts.SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, ts.createLiteral("1")),
+                    createProperty(/*decorators*/ undefined, [createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, createLiteral("1")),
                 ]);
                 checkExpression(clazz);
                 checkExpression(createPropertyAccess(clazz, "prop"));
 
-                const func = createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, ts.createBlock([]));
+                const func = createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createBlock([]));
                 checkExpression(func);
                 checkExpression(createCall(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
 
