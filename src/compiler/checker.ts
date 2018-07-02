@@ -12386,22 +12386,7 @@ namespace ts {
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
             if (targetRestTypeVariable) {
-                const sourceRestTypeVariable = getRestTypeParameter(source);
-                if (sourceRestTypeVariable && paramCount === sourceCount - 1) {
-                    callback(sourceRestTypeVariable, targetRestTypeVariable);
-                }
-                else {
-                    const types = [];
-                    const names = [];
-                    for (let i = paramCount; i < maxCount; i++) {
-                        types.push(getTypeAtPosition(source, i));
-                        names.push(getParameterNameAtPosition(source, i));
-                    }
-                    const minArgumentCount = getMinArgumentCount(source);
-                    const minLength = minArgumentCount < paramCount ? 0 : minArgumentCount - paramCount;
-                    const rest = createTupleType(types, minLength, sourceHasRest, names);
-                    callback(rest, targetRestTypeVariable);
-                }
+                callback(getRestTypeAtPosition(source, paramCount), targetRestTypeVariable);
             }
         }
 
@@ -15203,43 +15188,35 @@ namespace ts {
             }
             const iife = getImmediatelyInvokedFunctionExpression(func);
             if (iife && iife.arguments) {
+                const args = getEffectiveCallArguments(iife)!;
                 const indexOfParameter = func.parameters.indexOf(parameter);
                 if (parameter.dotDotDotToken) {
-                    const restTypes: Type[] = [];
-                    for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                        restTypes.push(getWidenedLiteralType(checkExpression(iife.arguments[i])));
-                    }
-                    return restTypes.length ? createArrayType(getUnionType(restTypes)) : undefined;
+                    return getSpreadArgumentType(iife, args, indexOfParameter, args.length, anyType, /*context*/ undefined);
                 }
                 const links = getNodeLinks(iife);
                 const cached = links.resolvedSignature;
                 links.resolvedSignature = anySignature;
-                const type = indexOfParameter < iife.arguments.length ?
-                    getWidenedLiteralType(checkExpression(iife.arguments[indexOfParameter])) :
+                const type = indexOfParameter < args.length ?
+                    getWidenedLiteralType(checkExpression(args[indexOfParameter])) :
                     parameter.initializer ? undefined : undefinedWideningType;
                 links.resolvedSignature = cached;
                 return type;
             }
             const contextualSignature = getContextualSignature(func);
             if (contextualSignature) {
-                const funcHasRestParameters = hasRestParameter(func);
-                const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
+                const funcHasRestParameter = hasRestParameter(func);
+                const len = func.parameters.length - (funcHasRestParameter ? 1 : 0);
                 let indexOfParameter = func.parameters.indexOf(parameter);
                 if (getThisParameter(func) !== undefined && !contextualSignature.thisParameter) {
                     Debug.assert(indexOfParameter !== 0); // Otherwise we should not have called `getContextuallyTypedParameterType`.
                     indexOfParameter -= 1;
                 }
-
                 if (indexOfParameter < len) {
                     return getTypeAtPosition(contextualSignature, indexOfParameter);
                 }
-
                 // If last parameter is contextually rest parameter get its type
-                if (funcHasRestParameters &&
-                    indexOfParameter === func.parameters.length - 1 &&
-                    hasEffectiveRestParameter(contextualSignature) &&
-                    func.parameters.length >= contextualSignature.parameters.length) {
-                    return getTypeOfRestParameter(contextualSignature);
+                if (funcHasRestParameter && indexOfParameter === len) {
+                    return getRestTypeAtPosition(contextualSignature, indexOfParameter);
                 }
             }
         }
@@ -17806,7 +17783,7 @@ namespace ts {
             }
         }
 
-        function isSpreadArgument(arg: Expression | undefined) {
+        function isSpreadArgument(arg: Expression | undefined): arg is Expression {
             return !!arg && (arg.kind === SyntaxKind.SpreadElement || arg.kind === SyntaxKind.SyntheticExpression && (<SyntheticExpression>arg).isSpread);
         }
 
@@ -18028,12 +18005,14 @@ namespace ts {
         }
 
         function getSpreadArgumentType(node: CallLikeExpression, args: ReadonlyArray<Expression>, index: number, argCount: number, restType: TypeParameter, context: InferenceContext | undefined) {
-            if (index === argCount - 1) {
-                const arg = getEffectiveArgument(node, args, index);
+            if (index >= argCount - 1) {
+                const arg = getEffectiveArgument(node, args, argCount - 1);
                 if (isSpreadArgument(arg)) {
                     // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                     // and the argument are ...x forms.
-                    return checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context);
+                    return arg.kind === SyntaxKind.SyntheticExpression ?
+                        createArrayType((<SyntheticExpression>arg).type) :
+                        checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context);
                 }
             }
             const contextualType = getIndexTypeOfType(restType, IndexKind.Number) || anyType;
@@ -19560,6 +19539,27 @@ namespace ts {
             return anyType;
         }
 
+        function getRestTypeAtPosition(source: Signature, pos: number): Type {
+            const paramCount = getParameterCount(source);
+            const hasRest = hasEffectiveRestParameter(source);
+            if (hasRest && pos === paramCount - 1) {
+                const restTypeVariable = getRestTypeParameter(source);
+                if (restTypeVariable) {
+                    return restTypeVariable;
+                }
+            }
+            const start = hasRest ? Math.min(pos, paramCount - 1) : pos;
+            const types = [];
+            const names = [];
+            for (let i = start; i < paramCount; i++) {
+                types.push(getTypeAtPosition(source, i));
+                names.push(getParameterNameAtPosition(source, i));
+            }
+            const minArgumentCount = getMinArgumentCount(source);
+            const minLength = minArgumentCount < start ? 0 : minArgumentCount - start;
+            return createTupleType(types, minLength, hasRest, names);
+        }
+
         function getTypeOfRestParameter(signature: Signature) {
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
@@ -19653,11 +19653,11 @@ namespace ts {
                     assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
             }
-            if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
+            if (signature.hasRestParameter) {
                 // parameter might be a transient symbol generated by use of `arguments` in the function body.
                 const parameter = last(signature.parameters);
                 if (isTransientSymbol(parameter) || !getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
-                    const contextualParameterType = getTypeOfSymbol(last(context.parameters));
+                    const contextualParameterType = getRestTypeAtPosition(context, len);
                     assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
             }
