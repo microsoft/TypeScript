@@ -1655,32 +1655,27 @@ namespace ts {
             if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
 
             if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
-                let err;
+                let diagnosticMessage;
                 const declarationName = declarationNameToString(getNameOfDeclaration(declaration));
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
-                    err = error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
+                    diagnosticMessage = error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.Class) {
-                    err = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+                    diagnosticMessage = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.RegularEnum) {
-                    err = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
+                    diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                 }
                 else {
                     Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
                 }
 
-                if (err) {
-                    placeRelatedSpanOnLaterDeclaration(declarationName, declaration, err);
+                if (diagnosticMessage) {
+                    addRelatedInfo(diagnosticMessage,
+                        createDiagnosticForNode(declaration, Diagnostics._0_was_declared_here, declarationName)
+                    );
                 }
             }
-        }
-
-        function placeRelatedSpanOnLaterDeclaration(declarationName: string, declarationLocation: Declaration, diagnostic: Diagnostic) {
-            Debug.assert(!diagnostic.relatedInformation);
-            diagnostic.relatedInformation = [
-                createDiagnosticForNode(declarationLocation, Diagnostics._0_was_declared_here, declarationName)
-            ];
         }
 
         /* Starting from 'initial' node walk up the parent chain until 'stopAt' node is reached.
@@ -17476,22 +17471,24 @@ namespace ts {
                 return;
             }
 
-            let err;
+            let diagnosticMessage;
             const declarationName = idText(right);
             if (isInPropertyInitializer(node) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && !isPropertyDeclaredInAncestorClass(prop)) {
-                err = error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
+                diagnosticMessage = error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
             }
             else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
                 node.parent.kind !== SyntaxKind.TypeReference &&
                 !(valueDeclaration.flags & NodeFlags.Ambient) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)) {
-                err = error(right, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+                diagnosticMessage = error(right, Diagnostics.Class_0_used_before_its_declaration, declarationName);
             }
 
-            if (err) {
-                placeRelatedSpanOnLaterDeclaration(declarationName, valueDeclaration, err);
+            if (diagnosticMessage) {
+                addRelatedInfo(diagnosticMessage,
+                    createDiagnosticForNode(valueDeclaration, Diagnostics._0_was_declared_here, declarationName)
+                );
             }
         }
 
