@@ -1,58 +1,120 @@
 /* @internal */
 namespace ts.codefix {
-    import ChangeTracker = textChanges.ChangeTracker;
+    export const importFixId = "fixMissingImport";
+    const errorCodes: ReadonlyArray<number> = [
+        Diagnostics.Cannot_find_name_0.code,
+        Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
+        Diagnostics.Cannot_find_namespace_0.code,
+        Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code,
+        Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here.code,
+    ];
 
     registerCodeFix({
-        errorCodes: [
-            Diagnostics.Cannot_find_name_0.code,
-            Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
-            Diagnostics.Cannot_find_namespace_0.code,
-            Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code,
-            Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here.code,
-        ],
-        getCodeActions: context => context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
-            ? getActionsForUMDImport(context)
-            : getActionsForNonUMDImport(context),
-        // TODO: GH#20315
-        fixIds: [],
-        getAllCodeActions: notImplemented,
+        errorCodes,
+        getCodeActions(context) {
+            const { errorCode, preferences, sourceFile, span } = context;
+            const info = getFixesInfo(context, errorCode, span.start);
+            if (!info) return undefined;
+            const { fixes, symbolName } = info;
+            const quotePreference = getQuotePreference(sourceFile, preferences);
+            return fixes.map(fix => codeActionForFix(context, sourceFile, symbolName, fix, quotePreference));
+        },
+        fixIds: [importFixId],
+        getAllCodeActions: context => {
+            const { sourceFile, preferences } = context;
+
+            // Namespace fixes don't conflict, so just build a list.
+            const addToNamespace: FixUseNamespaceImport[] = [];
+            // Keys are import clause node IDs.
+            const addToExisting = createMap<{ readonly importClause: ImportClause, defaultImport: string | undefined; readonly namedImports: string[] }>();
+            // Keys are module specifiers.
+            const newImports = createMap<Mutable<ImportsCollection>>();
+
+            eachDiagnostic(context, errorCodes, diag => {
+                const info = getFixesInfo(context, diag.code, diag.start);
+                if (!info || !info.fixes.length) return;
+                const { fixes, symbolName } = info;
+
+                const fix = first(fixes);
+                switch (fix.kind) {
+                    case ImportFixKind.UseNamespace:
+                        addToNamespace.push(fix);
+                        break;
+                    case ImportFixKind.AddToExisting: {
+                        const { importClause, importKind } = fix;
+                        const key = String(getNodeId(importClause));
+                        let entry = addToExisting.get(key);
+                        if (!entry) {
+                            addToExisting.set(key, entry = { importClause, defaultImport: undefined, namedImports: [] });
+                        }
+                        if (importKind === ImportKind.Named) {
+                            pushIfUnique(entry.namedImports, symbolName);
+                        }
+                        else {
+                            Debug.assert(entry.defaultImport === undefined || entry.defaultImport === symbolName);
+                            entry.defaultImport = symbolName;
+                        }
+                        break;
+                    }
+                    case ImportFixKind.AddNew: {
+                        const { moduleSpecifier, importKind } = fix;
+                        let entry = newImports.get(moduleSpecifier);
+                        if (!entry) {
+                            newImports.set(moduleSpecifier, entry = { defaultImport: undefined, namedImports: [], namespaceLikeImport: undefined });
+                        }
+                        switch (importKind) {
+                            case ImportKind.Default:
+                                Debug.assert(entry.defaultImport === undefined || entry.defaultImport === symbolName);
+                                entry.defaultImport = symbolName;
+                                break;
+                            case ImportKind.Named:
+                                pushIfUnique(entry.namedImports, symbolName);
+                                break;
+                            case ImportKind.Equals:
+                            case ImportKind.Namespace:
+                                Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName);
+                                entry.namespaceLikeImport = { importKind, name: symbolName };
+                                break;
+                        }
+                        break;
+                    }
+                    default:
+                        Debug.assertNever(fix);
+                }
+            });
+
+            return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
+                for (const fix of addToNamespace) {
+                    addNamespaceQualifier(changes, sourceFile, fix);
+                }
+                addToExisting.forEach(({ importClause, defaultImport, namedImports }) => {
+                    doAddExistingFix(changes, sourceFile, importClause, defaultImport, namedImports);
+                });
+                const quotePreference = getQuotePreference(sourceFile, preferences);
+                newImports.forEach((imports, moduleSpecifier) => {
+                    addNewImports(changes, sourceFile, moduleSpecifier, quotePreference, imports);
+                });
+            }));
+        },
     });
 
-    interface SymbolContext extends textChanges.TextChangesContext {
-        sourceFile: SourceFile;
-        symbolName: string;
+    // Sorted with the preferred fix coming first.
+    const enum ImportFixKind { UseNamespace, AddToExisting, AddNew }
+    type ImportFix = FixUseNamespaceImport | FixAddToExistingImport | FixAddNewImport;
+    interface FixUseNamespaceImport {
+        readonly kind: ImportFixKind.UseNamespace;
+        readonly namespacePrefix: string;
+        readonly symbolToken: Identifier;
     }
-
-    interface ImportCodeFixContext extends SymbolContext {
-        symbolToken: Node | undefined;
-        program: Program;
-        checker: TypeChecker;
-        compilerOptions: CompilerOptions;
-        getCanonicalFileName: GetCanonicalFileName;
-        preferences: UserPreferences;
+    interface FixAddToExistingImport {
+        readonly kind: ImportFixKind.AddToExisting;
+        readonly importClause: ImportClause;
+        readonly importKind: ImportKind.Default | ImportKind.Named;
     }
-
-    function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: [string, string], changes: FileTextChanges[]): CodeFixAction {
-        // TODO: GH#20315
-        return createCodeFixActionNoFixId("import", changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
-    }
-
-    function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
-        const { program } = context;
-        const checker = program.getTypeChecker();
-
-        return {
-            host: context.host,
-            formatContext: context.formatContext,
-            sourceFile: context.sourceFile,
-            program,
-            checker,
-            compilerOptions: program.getCompilerOptions(),
-            getCanonicalFileName: createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(context.host)),
-            symbolName,
-            symbolToken,
-            preferences: context.preferences,
-        };
+    interface FixAddNewImport {
+        readonly kind: ImportFixKind.AddNew;
+        readonly moduleSpecifier: string;
+        readonly importKind: ImportKind;
     }
 
     const enum ImportKind {
@@ -69,14 +131,8 @@ namespace ts.codefix {
     }
 
     /** Information needed to augment an existing import declaration. */
-    interface ExistingImportInfo {
+    interface FixAddToExistingImportInfo {
         readonly declaration: AnyImportSyntax;
-        readonly importKind: ImportKind;
-    }
-
-    /** Information needed to create a new import declaration. */
-    interface NewImportInfo {
-        readonly moduleSpecifier: string;
         readonly importKind: ImportKind;
     }
 
@@ -88,10 +144,8 @@ namespace ts.codefix {
         host: LanguageServiceHost,
         program: Program,
         checker: TypeChecker,
-        compilerOptions: CompilerOptions,
         allSourceFiles: ReadonlyArray<SourceFile>,
         formatContext: formatting.FormatContext,
-        getCanonicalFileName: GetCanonicalFileName,
         symbolToken: Node | undefined,
         preferences: UserPreferences,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
@@ -99,8 +153,8 @@ namespace ts.codefix {
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, host, preferences)).moduleSpecifier;
-        const ctx: ImportCodeFixContext = { host, program, checker, compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken, preferences };
-        return { moduleSpecifier, codeAction: first(getCodeActionsForImport(exportInfos, ctx)) };
+        const fix = first(getFixForImport(exportInfos, symbolName, symbolToken, program, sourceFile, host, preferences));
+        return { moduleSpecifier, codeAction: codeActionForFix({ host, formatContext }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences)) };
     }
     function getAllReExportingModules(exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, sourceFile: SourceFile, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
         const result: SymbolExportInfo[] = [];
@@ -120,26 +174,25 @@ namespace ts.codefix {
         return result;
     }
 
-    function getCodeActionsForImport(exportInfos: ReadonlyArray<SymbolExportInfo>, context: ImportCodeFixContext): CodeFixAction[] {
-        const result: CodeFixAction[] = [];
-        getCodeActionsForImport_separateExistingAndNew(exportInfos, context, result, result);
-        return result;
+    function getFixForImport(
+        exportInfos: ReadonlyArray<SymbolExportInfo>,
+        symbolName: string,
+        symbolToken: Node | undefined,
+        program: Program,
+        sourceFile: SourceFile,
+        host: LanguageServiceHost,
+        preferences: UserPreferences,
+    ): ReadonlyArray<ImportFix> {
+        const checker = program.getTypeChecker();
+        const existingImports = flatMap(exportInfos, info => getExistingImportDeclarations(info, checker, sourceFile));
+        const useNamespace = tryUseExistingNamespaceImport(existingImports, symbolName, symbolToken, checker);
+        const addToExisting = tryAddToExistingImport(existingImports);
+        // Don't bother providing an action to add a new import if we can add to an existing one.
+        const addImport = addToExisting ? [addToExisting] : getCodeActionsForAddImport(exportInfos, existingImports, program, sourceFile, host, preferences);
+        return [...(useNamespace ? [useNamespace] : emptyArray), ...addImport];
     }
 
-    function getCodeActionsForImport_separateExistingAndNew(exportInfos: ReadonlyArray<SymbolExportInfo>, context: ImportCodeFixContext, useExisting: Push<CodeFixAction>, addNew: Push<CodeFixAction>): void {
-        const existingImports = flatMap(exportInfos, info => getExistingImportDeclarations(info, context.checker, context.sourceFile));
-
-        append(useExisting, tryUseExistingNamespaceImport(existingImports, context, context.symbolToken, context.checker));
-        const addToExisting = tryAddToExistingImport(existingImports, context);
-
-        if (addToExisting) {
-            useExisting.push(addToExisting);
-        }
-        else { // Don't bother providing an action to add a new import if we can add to an existing one.
-            getCodeActionsForAddImport(exportInfos, context, existingImports, addNew);
-        }
-    }
-    function tryUseExistingNamespaceImport(existingImports: ReadonlyArray<ExistingImportInfo>, context: SymbolContext, symbolToken: Node | undefined, checker: TypeChecker): CodeFixAction | undefined {
+    function tryUseExistingNamespaceImport(existingImports: ReadonlyArray<FixAddToExistingImportInfo>, symbolName: string, symbolToken: Node | undefined, checker: TypeChecker): FixUseNamespaceImport | undefined {
         // It is possible that multiple import statements with the same specifier exist in the file.
         // e.g.
         //
@@ -152,25 +205,26 @@ namespace ts.codefix {
         //     1. change "member3" to "ns.member3"
         //     2. add "member3" to the second import statement's import list
         // and it is up to the user to decide which one fits best.
-        return !symbolToken || !isIdentifier(symbolToken) ? undefined : firstDefined(existingImports, ({ declaration }) => {
+        return !symbolToken || !isIdentifier(symbolToken) ? undefined : firstDefined(existingImports, ({ declaration }): FixUseNamespaceImport | undefined => {
             const namespace = getNamespaceImportName(declaration);
             if (namespace) {
-                const moduleSymbol = namespace && checker.getAliasedSymbol(checker.getSymbolAtLocation(namespace)!);
-                if (moduleSymbol && moduleSymbol.exports!.has(escapeLeadingUnderscores(context.symbolName))) {
-                    return getCodeActionForUseExistingNamespaceImport(namespace.text, context, symbolToken);
+                const moduleSymbol = checker.getAliasedSymbol(checker.getSymbolAtLocation(namespace)!);
+                if (moduleSymbol && moduleSymbol.exports!.has(escapeLeadingUnderscores(symbolName))) {
+                    return { kind: ImportFixKind.UseNamespace, namespacePrefix: namespace.text, symbolToken };
                 }
             }
         });
     }
-    function tryAddToExistingImport(existingImports: ReadonlyArray<ExistingImportInfo>, context: SymbolContext): CodeFixAction | undefined {
-        return firstDefined(existingImports, ({ declaration, importKind }) => {
-            if (declaration.kind === SyntaxKind.ImportDeclaration && declaration.importClause) {
-                const changes = tryUpdateExistingImport(context, declaration.importClause, importKind);
-                if (changes) {
-                    const moduleSpecifierWithoutQuotes = stripQuotes(declaration.moduleSpecifier.getText());
-                    return createCodeAction(Diagnostics.Add_0_to_existing_import_declaration_from_1, [context.symbolName, moduleSpecifierWithoutQuotes], changes);
-                }
-            }
+
+    function tryAddToExistingImport(existingImports: ReadonlyArray<FixAddToExistingImportInfo>): FixAddToExistingImport | undefined {
+        return firstDefined(existingImports, ({ declaration, importKind }): FixAddToExistingImport | undefined => {
+            if (declaration.kind !== SyntaxKind.ImportDeclaration) return undefined;
+            const { importClause } = declaration;
+            if (!importClause) return undefined;
+            const { name, namedBindings } = importClause;
+            return importKind === ImportKind.Default && !name || importKind === ImportKind.Named && (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports)
+                ? { kind: ImportFixKind.AddToExisting, importClause, importKind }
+                : undefined;
         });
     }
 
@@ -184,51 +238,12 @@ namespace ts.codefix {
         }
     }
 
-    function getExistingImportDeclarations({ moduleSymbol, importKind }: SymbolExportInfo, checker: TypeChecker, { imports }: SourceFile): ReadonlyArray<ExistingImportInfo> {
-        return mapDefined<StringLiteralLike, ExistingImportInfo>(imports, moduleSpecifier => {
+    function getExistingImportDeclarations({ moduleSymbol, importKind }: SymbolExportInfo, checker: TypeChecker, { imports }: SourceFile): ReadonlyArray<FixAddToExistingImportInfo> {
+        return mapDefined<StringLiteralLike, FixAddToExistingImportInfo>(imports, moduleSpecifier => {
             const i = importFromModuleSpecifier(moduleSpecifier);
             return (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
                 && checker.getSymbolAtLocation(moduleSpecifier) === moduleSymbol ? { declaration: i, importKind } : undefined;
         });
-    }
-
-    function getCodeActionForNewImport(context: SymbolContext & { preferences: UserPreferences }, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
-        const { sourceFile, symbolName, preferences } = context;
-
-        const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
-        const quotedModuleSpecifier = makeStringLiteral(moduleSpecifierWithoutQuotes, getQuotePreference(sourceFile, preferences));
-        const importDecl = importKind !== ImportKind.Equals
-            ? createImportDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                createImportClauseOfKind(importKind, symbolName),
-                quotedModuleSpecifier)
-            : createImportEqualsDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                createIdentifier(symbolName),
-                createExternalModuleReference(quotedModuleSpecifier));
-
-        const changes = ChangeTracker.with(context, t => insertImport(t, sourceFile, importDecl));
-
-        // if this file doesn't have any import statements, insert an import statement and then insert a new line
-        // between the only import statement and user code. Otherwise just insert the statement because chances
-        // are there are already a new line separating code and import statements.
-        return createCodeAction(Diagnostics.Import_0_from_module_1, [symbolName, moduleSpecifierWithoutQuotes], changes);
-    }
-
-    function createImportClauseOfKind(kind: ImportKind.Default | ImportKind.Named | ImportKind.Namespace, symbolName: string) {
-        const id = createIdentifier(symbolName);
-        switch (kind) {
-            case ImportKind.Default:
-                return createImportClause(id, /*namedBindings*/ undefined);
-            case ImportKind.Namespace:
-                return createImportClause(/*name*/ undefined, createNamespaceImport(id));
-            case ImportKind.Named:
-                return createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, id)]));
-            default:
-                Debug.assertNever(kind);
-        }
     }
 
     function getNewImportInfos(
@@ -237,127 +252,68 @@ namespace ts.codefix {
         moduleSymbols: ReadonlyArray<SymbolExportInfo>,
         host: LanguageServiceHost,
         preferences: UserPreferences,
-    ): ReadonlyArray<NewImportInfo> {
-        const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
+    ): ReadonlyArray<FixAddNewImport> {
+        const choicesForEachExportingModule = flatMap<SymbolExportInfo, ReadonlyArray<FixAddNewImport>>(moduleSymbols, ({ moduleSymbol, importKind }) => {
             const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences);
-            return modulePathsGroups.map(group => group.map(moduleSpecifier => ({ moduleSpecifier, importKind })));
+            return modulePathsGroups.map(group => group.map((moduleSpecifier): FixAddNewImport => ({ kind: ImportFixKind.AddNew, moduleSpecifier, importKind })));
         });
         // Sort to keep the shortest paths first, but keep [relativePath, importRelativeToBaseUrl] groups together
-        return flatten<NewImportInfo>(choicesForEachExportingModule.sort((a, b) => first(a).moduleSpecifier.length - first(b).moduleSpecifier.length));
+        return flatten<FixAddNewImport>(choicesForEachExportingModule.sort((a, b) => first(a).moduleSpecifier.length - first(b).moduleSpecifier.length));
     }
 
     function getCodeActionsForAddImport(
         exportInfos: ReadonlyArray<SymbolExportInfo>,
-        ctx: ImportCodeFixContext,
-        existingImports: ReadonlyArray<ExistingImportInfo>,
-        addNew: Push<CodeFixAction>,
-    ): void {
+        existingImports: ReadonlyArray<FixAddToExistingImportInfo>,
+        program: Program,
+        sourceFile: SourceFile,
+        host: LanguageServiceHost,
+        preferences: UserPreferences,
+    ): ReadonlyArray<FixAddNewImport> {
         const existingDeclaration = firstDefined(existingImports, newImportInfoFromExistingSpecifier);
-        const newImportInfos = existingDeclaration
-            ? [existingDeclaration]
-            : getNewImportInfos(ctx.program, ctx.sourceFile, exportInfos, ctx.host, ctx.preferences);
-        for (const info of newImportInfos) {
-            addNew.push(getCodeActionForNewImport(ctx, info));
-        }
+        return existingDeclaration ? [existingDeclaration] : getNewImportInfos(program, sourceFile, exportInfos, host, preferences);
     }
 
-    function newImportInfoFromExistingSpecifier({ declaration, importKind }: ExistingImportInfo): NewImportInfo | undefined {
+    function newImportInfoFromExistingSpecifier({ declaration, importKind }: FixAddToExistingImportInfo): FixAddNewImport | undefined {
         const expression = declaration.kind === SyntaxKind.ImportDeclaration
             ? declaration.moduleSpecifier
             : declaration.moduleReference.kind === SyntaxKind.ExternalModuleReference
                 ? declaration.moduleReference.expression
                 : undefined;
-        return expression && isStringLiteral(expression) ? { moduleSpecifier: expression.text, importKind } : undefined;
+        return expression && isStringLiteral(expression) ? { kind: ImportFixKind.AddNew, moduleSpecifier: expression.text, importKind } : undefined;
     }
 
-    function tryUpdateExistingImport(context: SymbolContext, importClause: ImportClause | ImportEqualsDeclaration, importKind: ImportKind): FileTextChanges[] | undefined {
-        const { symbolName, sourceFile } = context;
-        const { name } = importClause;
-        const { namedBindings } = (importClause.kind !== SyntaxKind.ImportEqualsDeclaration && importClause) as ImportClause; // TODO: GH#18217
-        switch (importKind) {
-            case ImportKind.Default:
-                return name ? undefined : ChangeTracker.with(context, t =>
-                    t.replaceNode(sourceFile, importClause, createImportClause(createIdentifier(symbolName), namedBindings)));
-
-            case ImportKind.Named: {
-                const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName));
-                if (namedBindings && namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length !== 0) {
-                    // There are already named imports; add another.
-                    return ChangeTracker.with(context, t => t.insertNodeInListAfter(
-                        sourceFile,
-                        namedBindings.elements[namedBindings.elements.length - 1],
-                        newImportSpecifier));
-                }
-                if (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length === 0) {
-                    return ChangeTracker.with(context, t =>
-                        t.replaceNode(sourceFile, importClause, createImportClause(name, createNamedImports([newImportSpecifier]))));
-                }
-                return undefined;
-            }
-
-            case ImportKind.Namespace:
-                return namedBindings ? undefined : ChangeTracker.with(context, t =>
-                    t.replaceNode(sourceFile, importClause, createImportClause(name, createNamespaceImport(createIdentifier(symbolName)))));
-
-            case ImportKind.Equals:
-                return undefined;
-
-            default:
-                Debug.assertNever(importKind);
-        }
+    interface FixesInfo { readonly fixes: ReadonlyArray<ImportFix>; readonly symbolName: string; }
+    function getFixesInfo(context: CodeFixContextBase, errorCode: number, pos: number): FixesInfo | undefined {
+        const symbolToken = getTokenAtPosition(context.sourceFile, pos);
+        const info = errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
+            ? getFixesInfoForUMDImport(context, symbolToken)
+            : getFixesInfoForNonUMDImport(context, symbolToken);
+        return info && { ...info, fixes: sort(info.fixes, (a, b) => a.kind - b.kind) };
     }
 
-    function getCodeActionForUseExistingNamespaceImport(namespacePrefix: string, context: SymbolContext, symbolToken: Identifier): CodeFixAction {
-        const { symbolName, sourceFile } = context;
+    function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: CodeFixContextBase, token: Node): FixesInfo | undefined {
+        const checker = program.getTypeChecker();
+        const umdSymbol = getUmdSymbol(token, checker);
+        if (!umdSymbol) return undefined;
+        const symbol = checker.getAliasedSymbol(umdSymbol);
+        const symbolName = umdSymbol.name;
+        const exportInfos: ReadonlyArray<SymbolExportInfo> = [{ moduleSymbol: symbol, importKind: getUmdImportKind(program.getCompilerOptions()) }];
+        const fixes = getFixForImport(exportInfos, symbolName, token, program, sourceFile, host, preferences);
+        return { fixes, symbolName };
+    }
+    function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
+        // try the identifier to see if it is the umd symbol
+        const umdSymbol = isIdentifier(token) ? checker.getSymbolAtLocation(token) : undefined;
+        if (isUMDExportSymbol(umdSymbol)) return umdSymbol;
 
-        /**
-         * Cases:
-         *     import * as ns from "mod"
-         *     import default, * as ns from "mod"
-         *     import ns = require("mod")
-         *
-         * Because there is no import list, we alter the reference to include the
-         * namespace instead of altering the import declaration. For example, "foo" would
-         * become "ns.foo"
-         */
-        const changes = ChangeTracker.with(context, tracker =>
-            tracker.replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), symbolToken)));
-        return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes);
+        // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
+        const { parent } = token;
+        return (isJsxOpeningLikeElement(parent) && parent.tagName === token) || isJsxOpeningFragment(parent)
+            ? tryCast(checker.resolveName(checker.getJsxNamespace(parent), isJsxOpeningLikeElement(parent) ? token : parent, SymbolFlags.Value, /*excludeGlobals*/ false), isUMDExportSymbol)
+            : undefined;
     }
 
-    function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
-        const token = getTokenAtPosition(context.sourceFile, context.span.start);
-        const checker = context.program.getTypeChecker();
-
-        let umdSymbol: Symbol | undefined;
-
-        if (isIdentifier(token)) {
-            // try the identifier to see if it is the umd symbol
-            umdSymbol = checker.getSymbolAtLocation(token);
-        }
-
-        if (!isUMDExportSymbol(umdSymbol)) {
-            // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-            const parent = token.parent;
-            const isNodeOpeningLikeElement = isJsxOpeningLikeElement(parent);
-            if ((isJsxOpeningLikeElement && (<JsxOpeningLikeElement>parent).tagName === token) || parent.kind === SyntaxKind.JsxOpeningFragment) {
-                umdSymbol = checker.resolveName(checker.getJsxNamespace(parent),
-                    isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>parent).tagName : parent, SymbolFlags.Value, /*excludeGlobals*/ false);
-            }
-        }
-
-        if (isUMDExportSymbol(umdSymbol)) {
-            const symbol = checker.getAliasedSymbol(umdSymbol!);
-            if (symbol) {
-                return getCodeActionsForImport([{ moduleSymbol: symbol, importKind: getUmdImportKind(context.program.getCompilerOptions()) }],
-                    convertToImportCodeFixContext(context, token, umdSymbol!.name));
-            }
-        }
-
-        return undefined;
-    }
-
-    function getUmdImportKind(compilerOptions: CompilerOptions) {
+    function getUmdImportKind(compilerOptions: CompilerOptions): ImportKind {
         // Import a synthetic `default` if enabled.
         if (getAllowSyntheticDefaultImports(compilerOptions)) {
             return ImportKind.Default;
@@ -381,11 +337,9 @@ namespace ts.codefix {
         }
     }
 
-    function getActionsForNonUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
+    function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Node): FixesInfo | undefined {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
-        const { sourceFile, span, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
-        const symbolToken = getTokenAtPosition(sourceFile, span.start);
         // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
         const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
             && symbolToken.parent.tagName === symbolToken
@@ -394,17 +348,22 @@ namespace ts.codefix {
             : isIdentifier(symbolToken) ? symbolToken.text : undefined;
         if (!symbolName) return undefined;
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
-        Debug.assert(symbolName !== "default");
+        Debug.assert(symbolName !== InternalSymbolName.Default);
 
-        const addToExistingDeclaration: CodeFixAction[] = [];
-        const addNewDeclaration: CodeFixAction[] = [];
-        getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program).forEach(exportInfos => {
-            getCodeActionsForImport_separateExistingAndNew(exportInfos, convertToImportCodeFixContext(context, symbolToken, symbolName), addToExistingDeclaration, addNewDeclaration);
-        });
-        return [...addToExistingDeclaration, ...addNewDeclaration];
+        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program).entries(), ([_, exportInfos]) =>
+            getFixForImport(exportInfos, symbolName, symbolToken, program, sourceFile, host, preferences)));
+        return { fixes, symbolName };
     }
 
-    function getExportInfos(symbolName: string, currentTokenMeaning: SemanticMeaning, cancellationToken: CancellationToken, sourceFile: SourceFile, checker: TypeChecker, program: Program): ReadonlyMap<ReadonlyArray<SymbolExportInfo>> {
+    // Returns a map from an exported symbol's ID to a list of every way it's (re-)exported.
+    function getExportInfos(
+        symbolName: string,
+        currentTokenMeaning: SemanticMeaning,
+        cancellationToken: CancellationToken,
+        sourceFile: SourceFile,
+        checker: TypeChecker,
+        program: Program,
+    ): ReadonlyMap<ReadonlyArray<SymbolExportInfo>> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
         const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
@@ -422,14 +381,14 @@ namespace ts.codefix {
                         localSymbol && localSymbol.escapedName === symbolName ||
                         getEscapedNameForExportDefault(defaultExport) === symbolName ||
                         moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!) === symbolName
-                    ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
+                    ) && symbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }
             }
 
             // check exports with the same name
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol);
-            if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
+            if (exportSymbolWithIdenticalName && symbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 addSymbol(moduleSymbol, exportSymbolWithIdenticalName, ImportKind.Named);
             }
 
@@ -450,7 +409,88 @@ namespace ts.codefix {
         return originalSymbolToExportInfos;
     }
 
-    function checkSymbolHasMeaning({ declarations }: Symbol, meaning: SemanticMeaning): boolean {
+    function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, quotePreference: QuotePreference): CodeFixAction {
+        let diag!: DiagnosticAndArguments;
+        const changes = textChanges.ChangeTracker.with(context, tracker => {
+            diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, quotePreference);
+        });
+        return createCodeFixAction("import", changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
+    }
+    function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, quotePreference: QuotePreference): DiagnosticAndArguments {
+        switch (fix.kind) {
+            case ImportFixKind.UseNamespace:
+                addNamespaceQualifier(changes, sourceFile, fix);
+                return [Diagnostics.Change_0_to_1, symbolName, `${fix.namespacePrefix}.${symbolName}`];
+            case ImportFixKind.AddToExisting: {
+                const { importClause, importKind } = fix;
+                doAddExistingFix(changes, sourceFile, importClause, importKind === ImportKind.Default ? symbolName : undefined, importKind === ImportKind.Named ? [symbolName] : emptyArray);
+                const moduleSpecifierWithoutQuotes = stripQuotes(importClause.parent.moduleSpecifier.getText());
+                return [Diagnostics.Add_0_to_existing_import_declaration_from_1, symbolName, moduleSpecifierWithoutQuotes];
+            }
+            case ImportFixKind.AddNew: {
+                const { importKind, moduleSpecifier } = fix;
+                addNewImports(changes, sourceFile, moduleSpecifier, quotePreference, importKind === ImportKind.Default ? { defaultImport: symbolName, namedImports: emptyArray, namespaceLikeImport: undefined }
+                    : importKind === ImportKind.Named ? { defaultImport: undefined, namedImports: [symbolName], namespaceLikeImport: undefined }
+                    : { defaultImport: undefined, namedImports: emptyArray, namespaceLikeImport: { importKind, name: symbolName } });
+                return [Diagnostics.Import_0_from_module_1, symbolName, moduleSpecifier];
+            }
+            default:
+                return Debug.assertNever(fix);
+        }
+    }
+
+    function doAddExistingFix(changes: textChanges.ChangeTracker, sourceFile: SourceFile, clause: ImportClause, defaultImport: string | undefined, namedImports: ReadonlyArray<string>): void {
+        if (defaultImport) {
+            Debug.assert(!clause.name);
+            changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), createIdentifier(defaultImport), { suffix: ", " });
+        }
+
+        if (namedImports.length) {
+            const specifiers = namedImports.map(name => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name)));
+            if (clause.namedBindings && cast(clause.namedBindings, isNamedImports).elements.length) {
+                for (const spec of specifiers) {
+                    changes.insertNodeInListAfter(sourceFile, last(cast(clause.namedBindings, isNamedImports).elements), spec);
+                }
+            }
+            else {
+                if (specifiers.length) {
+                    const namedImports = createNamedImports(specifiers);
+                    if (clause.namedBindings) {
+                        changes.replaceNode(sourceFile, clause.namedBindings, namedImports);
+                    }
+                    else {
+                        changes.insertNodeAfter(sourceFile, Debug.assertDefined(clause.name), namedImports);
+                    }
+                }
+            }
+        }
+    }
+
+    function addNamespaceQualifier(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { namespacePrefix, symbolToken }: FixUseNamespaceImport): void {
+        changes.replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), symbolToken));
+    }
+
+    interface ImportsCollection {
+        readonly defaultImport: string | undefined;
+        readonly namedImports: string[];
+        readonly namespaceLikeImport: { readonly importKind: ImportKind.Equals | ImportKind.Namespace, readonly name: string } | undefined;
+    }
+    function addNewImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, moduleSpecifier: string, quotePreference: QuotePreference, { defaultImport, namedImports, namespaceLikeImport }: ImportsCollection): void {
+        const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
+        if (defaultImport !== undefined || namedImports.length) {
+            insertImport(changes, sourceFile,
+                makeImport(
+                    defaultImport === undefined ? undefined : createIdentifier(defaultImport),
+                    namedImports.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference));
+        }
+        if (namespaceLikeImport) {
+            insertImport(changes, sourceFile, namespaceLikeImport.importKind === ImportKind.Equals
+                ? createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(namespaceLikeImport.name), createExternalModuleReference(quotedModuleSpecifier))
+                : createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(namespaceLikeImport.name))), quotedModuleSpecifier));
+        }
+    }
+
+    function symbolHasMeaning({ declarations }: Symbol, meaning: SemanticMeaning): boolean {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
