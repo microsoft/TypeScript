@@ -710,14 +710,6 @@ namespace ts {
             }
         }
 
-        function addRelatedInfo(diagnostic: Diagnostic, ...relatedInformation: DiagnosticRelatedInformation[]) {
-            if (!diagnostic.relatedInformation) {
-                diagnostic.relatedInformation = [];
-            }
-            diagnostic.relatedInformation.push(...relatedInformation);
-            return diagnostic;
-        }
-
         function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
             const diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)

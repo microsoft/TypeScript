@@ -8108,4 +8108,12 @@ namespace ts {
     }
 
     export type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
+
+    export function addRelatedInfo<T extends Diagnostic>(diagnostic: T, ...relatedInformation: DiagnosticRelatedInformation[]): T {
+        if (!diagnostic.relatedInformation) {
+            diagnostic.relatedInformation = [];
+        }
+        diagnostic.relatedInformation.push(...relatedInformation);
+        return diagnostic;
+    }
 }

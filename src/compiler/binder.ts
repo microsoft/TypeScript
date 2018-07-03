@@ -410,7 +410,11 @@ namespace ts {
                         forEach(symbol.declarations, declaration => {
                             file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(declaration) || declaration, message, getDisplayName(declaration)));
                         });
-                        file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(node) || node, message, getDisplayName(node)));
+                        const declarationName = getNameOfDeclaration(node) || node;
+                        const diag = createDiagnosticForNode(declarationName, message, getDisplayName(node))
+                        file.bindDiagnostics.push(
+                            isDefaultExport ? addRelatedInfo( diag, createDiagnosticForNode(declarationName, Diagnostics.This_export_conflicts_with_the_first)) : diag
+                        );
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }

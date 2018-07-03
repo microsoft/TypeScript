@@ -2409,6 +2409,10 @@
         "category": "Error",
         "code": 2729
     },
+    "This export conflicts with the first.": {
+        "category": "Error",
+        "code": 2730
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
