@@ -1073,6 +1073,17 @@ namespace ts.server.protocol {
         arguments: RenameRequestArgs;
     }
 
+    /* @internal */
+    export interface RenameFullRequest extends FileLocationRequest {
+        readonly command: CommandTypes.RenameLocationsFull;
+        readonly arguments: RenameRequestArgs;
+    }
+
+    /* @internal */
+    export interface RenameFullResponse extends Response {
+        readonly body: ReadonlyArray<RenameLocation>;
+    }
+
     /**
      * Information about the item to be renamed.
      */

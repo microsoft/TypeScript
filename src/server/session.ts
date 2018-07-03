@@ -304,6 +304,20 @@ namespace ts.server {
         return outputs;
     }
 
+    function combineProjectOutputForRenameLocations(projects: Projects, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> {
+        const outputs: RenameLocation[] = [];
+
+        combineProjectOutputWorker(projects, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
+            for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.position, findInStrings, findInComments) || emptyArray) {
+                if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
+                    outputs.push(output);
+                }
+            }
+        });
+
+        return outputs;
+    }
+
     function combineProjectOutputForReferences(projects: Projects, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService): ReadonlyArray<ReferencedSymbol> {
         const outputs: ReferencedSymbol[] = [];
 
@@ -340,9 +354,17 @@ namespace ts.server {
         const seenProjects = createMap<true>();
         const filesToClose: string[] = [];
         const toDo: ProjectAndLocation[] = (isProjectsArray(projects) ? projects : projects.projects).map(project => ({ project, location: initialLocation }));
+        if (!isArray(projects) && projects.symLinkedProjects) {
+            projects.symLinkedProjects.forEach((symlinkedProjects, path) => {
+                for (const project of symlinkedProjects) {
+                    toDo.push({ project, location: { fileName: path, position: initialLocation.position } });
+                }
+            });
+        }
 
         while (toDo.length) {
             const { project, location } = Debug.assertDefined(toDo.pop());
+            if (project.getCancellationToken().isCancellationRequested()) continue;
             if (!addToSeen(seenProjects, project.projectName)) continue;
             cb({ project, location }, (project, location) => {
                 const mapsTo = project.getSourceMapper().tryGetMappedLocation(location);
@@ -1041,123 +1063,43 @@ namespace ts.server {
             return info.getDefaultProject();
         }
 
-        private getRenameLocations(args: protocol.RenameRequestArgs, simplifiedResult: boolean): protocol.RenameResponseBody | ReadonlyArray<RenameLocation> | undefined {
+        private getRenameLocations(args: protocol.RenameRequestArgs, simplifiedResult: boolean): protocol.RenameResponseBody | ReadonlyArray<RenameLocation> {
             const file = toNormalizedPath(args.file);
             const position = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
-            if (simplifiedResult) {
 
-                const defaultProject = this.getDefaultProject(args);
-                // The rename info should be the same for every project
-                const renameInfo = defaultProject.getLanguageService().getRenameInfo(file, position);
-                if (!renameInfo) {
-                    return undefined;
-                }
+            const locations = combineProjectOutputForRenameLocations(projects, { fileName: args.file, position }, this.projectService, !!args.findInStrings, !!args.findInComments);
+            if (!simplifiedResult) return locations;
 
-                if (!renameInfo.canRename) {
-                    return {
-                        info: renameInfo,
-                        locs: emptyArray
-                    };
-                }
+            const defaultProject = this.getDefaultProject(args);
+            const renameInfo = Session.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position));
+            return { info: renameInfo, locs: this.toSpanGroups(locations) };
+        }
 
-                const fileSpans = combineProjectOutput(
-                    file,
-                    path => this.projectService.getScriptInfoForPath(path)!.fileName,
-                    projects,
-                    (project, file) => {
-                        const renameLocations = project.getLanguageService().findRenameLocations(file, position, args.findInStrings!, args.findInComments!);
-                        if (!renameLocations) {
-                            return emptyArray;
-                        }
+        // strips 'triggerSpan'
+        private static mapRenameInfo({ canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers }: RenameInfo): protocol.RenameInfo {
+            return { canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers };
+        }
 
-                        return renameLocations.map(location => {
-                            const locationScriptInfo = project.getScriptInfo(location.fileName)!;
-                            return {
-                                file: location.fileName,
-                                start: locationScriptInfo.positionToLineOffset(location.textSpan.start),
-                                end: locationScriptInfo.positionToLineOffset(textSpanEnd(location.textSpan)),
-                            };
-                        });
-                    },
-                    compareRenameLocation,
-                    (a, b) => a.file === b.file && a.start.line === b.start.line && a.start.offset === b.start.offset
-                );
-
-                const locs: protocol.SpanGroup[] = [];
-                for (const cur of fileSpans) {
-                    let curFileAccum: protocol.SpanGroup | undefined;
-                    if (locs.length > 0) {
-                        curFileAccum = locs[locs.length - 1];
-                        if (curFileAccum.file !== cur.file) {
-                            curFileAccum = undefined;
-                        }
-                    }
-                    if (!curFileAccum) {
-                        curFileAccum = { file: cur.file, locs: [] };
-                        locs.push(curFileAccum);
-                    }
-                    curFileAccum.locs.push({ start: cur.start, end: cur.end });
-                }
-
-                return { info: renameInfo, locs };
+        private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {
+            const map = createMap<protocol.SpanGroup>();
+            for (const { fileName, textSpan } of locations) {
+                let group = map.get(fileName);
+                if (!group) map.set(fileName, group = { file: fileName, locs: [] });
+                group.locs.push(this.toLocationTextSpan(textSpan, Debug.assertDefined(this.projectService.getScriptInfo(fileName))));
             }
-            else {
-                return combineProjectOutput(
-                    file,
-                    path => this.projectService.getScriptInfoForPath(path)!.fileName,
-                    projects,
-                    (p, file) => p.getLanguageService().findRenameLocations(file, position, args.findInStrings!, args.findInComments!),
-                    /*comparer*/ undefined,
-                    renameLocationIsEqualTo
-                );
-            }
-
-            function renameLocationIsEqualTo(a: RenameLocation, b: RenameLocation) {
-                if (a === b) {
-                    return true;
-                }
-                if (!a || !b) {
-                    return false;
-                }
-                return a.fileName === b.fileName &&
-                    a.textSpan.start === b.textSpan.start &&
-                    a.textSpan.length === b.textSpan.length;
-            }
-
-            function compareRenameLocation(a: protocol.FileSpan, b: protocol.FileSpan) {
-                if (a.file < b.file) {
-                    return -1;
-                }
-                else if (a.file > b.file) {
-                    return 1;
-                }
-                else {
-                    // reverse sort assuming no overlap
-                    if (a.start.line < b.start.line) {
-                        return 1;
-                    }
-                    else if (a.start.line > b.start.line) {
-                        return -1;
-                    }
-                    else {
-                        return b.start.offset - a.start.offset;
-                    }
-                }
-            }
+            return arrayFrom(map.values());
         }
 
         private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | undefined | ReadonlyArray<ReferencedSymbol> {
             const file = toNormalizedPath(args.file);
             const projects = this.getProjects(args);
-
-            const defaultProject = this.getDefaultProject(args);
-            const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
-            const position = this.getPosition(args, scriptInfo);
-
+            const position = this.getPositionInFile(args, file);
             const references = combineProjectOutputForReferences(projects, { fileName: args.file, position }, this.projectService);
 
             if (simplifiedResult) {
+                const defaultProject = this.getDefaultProject(args);
+                const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
                 const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
                 const symbolDisplayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
                 const nameSpan = nameInfo && nameInfo.textSpan;
@@ -2021,10 +1963,10 @@ namespace ts.server {
             [CommandNames.ReferencesFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.Rename]: (request: protocol.Request) => {
+            [CommandNames.Rename]: (request: protocol.RenameRequest) => {
                 return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.RenameLocationsFull]: (request: protocol.RenameRequest) => {
+            [CommandNames.RenameLocationsFull]: (request: protocol.RenameFullRequest) => {
                 return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
