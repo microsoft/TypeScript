@@ -5930,13 +5930,10 @@ declare namespace ts {
         Add_or_remove_braces_in_an_arrow_function: DiagnosticMessage;
         Add_braces_to_arrow_function: DiagnosticMessage;
         Remove_braces_from_arrow_function: DiagnosticMessage;
-<<<<<<< HEAD
-        Add_all_missing_imports: DiagnosticMessage;
-=======
         Convert_default_export_to_named_export: DiagnosticMessage;
         Convert_named_export_to_default_export: DiagnosticMessage;
         Add_missing_enum_member_0: DiagnosticMessage;
->>>>>>> master
+        Add_all_missing_imports: DiagnosticMessage;
     };
 }
 declare namespace ts {
@@ -11613,11 +11610,7 @@ declare namespace ts {
         function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions;
         function createFileTextChanges(fileName: string, textChanges: TextChange[]): FileTextChanges;
         function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void): CombinedCodeActions;
-<<<<<<< HEAD
         function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: ReadonlyArray<number>, cb: (diag: DiagnosticWithLocation) => void): void;
-=======
-        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void;
->>>>>>> master
     }
 }
 declare namespace ts {
