@@ -9278,7 +9278,7 @@ declare namespace ts.moduleSpecifiers {
     interface ModuleSpecifierPreferences {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
-    function getModuleSpecifier(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: string, toFileName: string, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences?: ModuleSpecifierPreferences): string;
+    function getModuleSpecifier(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: Path, toFileName: string, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences?: ModuleSpecifierPreferences): string;
     function getModuleSpecifiers(moduleSymbol: Symbol, compilerOptions: CompilerOptions, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
 }
 declare namespace ts {
