@@ -5296,6 +5296,7 @@ namespace ts {
     export interface EmitTextWriter extends SymbolWriter {
         write(s: string): void;
         writeTextOfNode(text: string, node: Node): void;
+        writeTrailingSemicolon(text: string): void;
         getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;

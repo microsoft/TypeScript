@@ -763,6 +763,9 @@ namespace ts {
                     writePunctuation(text) {
                         return underlying.writePunctuation(text);
                     },
+                    writeTrailingSemicolon(text) {
+                        return underlying.writePunctuation(text);
+                    },
                     writeSpace(text) {
                         return underlying.writeSpace(text);
                     },
@@ -3025,7 +3028,7 @@ namespace ts {
                 const sig = nodeBuilder.signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
                 const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-                printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, writer); // TODO: GH#18217
+                printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonOmittingWriter(writer)); // TODO: GH#18217
                 return writer;
             }
         }

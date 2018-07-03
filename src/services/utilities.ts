@@ -1424,6 +1424,7 @@ namespace ts {
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
             writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
             writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
+            writeTrailingSemicolon: text => writeKind(text, SymbolDisplayPartKind.punctuation),
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),

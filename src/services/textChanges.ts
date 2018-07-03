@@ -907,6 +907,10 @@ namespace ts.textChanges {
             this.writer.writePunctuation(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
+        writeTrailingSemicolon(s: string): void {
+            this.writer.writeTrailingSemicolon(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
         writeParameter(s: string): void {
             this.writer.writeParameter(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);

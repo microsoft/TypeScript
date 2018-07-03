@@ -159,8 +159,19 @@ namespace ts {
             // Transform the source files
             const transform = transformNodes(resolver, host, compilerOptions, [sourceFileOrBundle], transformers!, /*allowDtsFiles*/ false);
 
+            const printerOptions: PrinterOptions = {
+                removeComments: compilerOptions.removeComments,
+                newLine: compilerOptions.newLine,
+                noEmitHelpers: compilerOptions.noEmitHelpers,
+                module: compilerOptions.module,
+                target: compilerOptions.target,
+                sourceMap: compilerOptions.sourceMap,
+                inlineSourceMap: compilerOptions.inlineSourceMap,
+                extendedDiagnostics: compilerOptions.extendedDiagnostics,
+            };
+
             // Create a printer to print the nodes
-            const printer = createPrinter({ ...compilerOptions, noEmitHelpers: compilerOptions.noEmitHelpers } as PrinterOptions, {
+            const printer = createPrinter(printerOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
@@ -203,7 +214,20 @@ namespace ts {
                     emitterDiagnostics.add(diagnostic);
                 }
             }
-            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true, noEmitHelpers: true } as PrinterOptions, {
+
+            const printerOptions: PrinterOptions = {
+                removeComments: compilerOptions.removeComments,
+                newLine: compilerOptions.newLine,
+                noEmitHelpers: true,
+                module: compilerOptions.module,
+                target: compilerOptions.target,
+                sourceMap: compilerOptions.sourceMap,
+                inlineSourceMap: compilerOptions.inlineSourceMap,
+                extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                onlyPrintJsDocStyle: true,
+            };
+
+            const declarationPrinter = createPrinter(printerOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
@@ -333,13 +357,6 @@ namespace ts {
         let writer: EmitTextWriter;
         let ownWriter: EmitTextWriter;
         let write = writeBase;
-        let commitPendingSemicolon: typeof commitPendingSemicolonInternal = noop;
-        let writeSemicolon: typeof writeSemicolonInternal = writeSemicolonInternal;
-        let pendingSemicolon = false;
-        if (printerOptions.omitTrailingSemicolon) {
-            commitPendingSemicolon = commitPendingSemicolonInternal;
-            writeSemicolon = deferWriteSemicolon;
-        }
         const syntheticParent: TextRange = { pos: -1, end: -1 };
         const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = createMap<boolean>();
@@ -497,6 +514,9 @@ namespace ts {
         }
 
         function setWriter(output: EmitTextWriter | undefined) {
+            if (output && printerOptions.omitTrailingSemicolon) {
+                output = getTrailingSemicolonOmittingWriter(output);
+            }
             writer = output!; // TODO: GH#18217
             comments.setWriter(output!);
         }
@@ -2413,8 +2433,7 @@ namespace ts {
         }
 
         function emitJsxText(node: JsxText) {
-            commitPendingSemicolon();
-            writer.writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
+            writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
         }
 
         function emitJsxClosingElementOrFragment(node: JsxClosingElement | JsxClosingFragment) {
@@ -3014,83 +3033,59 @@ namespace ts {
             }
         }
 
-        function commitPendingSemicolonInternal() {
-            if (pendingSemicolon) {
-                writeSemicolonInternal();
-                pendingSemicolon = false;
-            }
-        }
-
         function writeLiteral(s: string) {
-            commitPendingSemicolon();
             writer.writeLiteral(s);
         }
 
         function writeStringLiteral(s: string) {
-            commitPendingSemicolon();
             writer.writeStringLiteral(s);
         }
 
         function writeBase(s: string) {
-            commitPendingSemicolon();
             writer.write(s);
         }
 
         function writeSymbol(s: string, sym: Symbol) {
-            commitPendingSemicolon();
             writer.writeSymbol(s, sym);
         }
 
         function writePunctuation(s: string) {
-            commitPendingSemicolon();
             writer.writePunctuation(s);
         }
 
-        function deferWriteSemicolon() {
-            pendingSemicolon = true;
-        }
-
-        function writeSemicolonInternal() {
-            writer.writePunctuation(";");
+        function writeSemicolon() {
+            writer.writeTrailingSemicolon(";");
         }
 
         function writeKeyword(s: string) {
-            commitPendingSemicolon();
             writer.writeKeyword(s);
         }
 
         function writeOperator(s: string) {
-            commitPendingSemicolon();
             writer.writeOperator(s);
         }
 
         function writeParameter(s: string) {
-            commitPendingSemicolon();
             writer.writeParameter(s);
         }
 
         function writeSpace() {
-            commitPendingSemicolon();
             writer.writeSpace(" ");
         }
 
         function writeProperty(s: string) {
-            commitPendingSemicolon();
             writer.writeProperty(s);
         }
 
         function writeLine() {
-            commitPendingSemicolon();
             writer.writeLine();
         }
 
         function increaseIndent() {
-            commitPendingSemicolon();
             writer.increaseIndent();
         }
 
         function decreaseIndent() {
-            commitPendingSemicolon();
             writer.decreaseIndent();
         }
 
