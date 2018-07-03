@@ -6840,11 +6840,12 @@ namespace ts {
             return type.resolvedBaseConstraint;
 
             function getBaseConstraint(t: Type): Type | undefined {
-                if (!pushTypeResolution(t, TypeSystemPropertyName.ResolvedBaseConstraint)) {
+                const simplified = getSimplifiedType(t);
+                if (!pushTypeResolution(simplified, TypeSystemPropertyName.ResolvedBaseConstraint)) {
                     circular = true;
                     return undefined;
                 }
-                const result = computeBaseConstraint(getSimplifiedType(t));
+                const result = computeBaseConstraint(simplified);
                 if (!popTypeResolution()) {
                     circular = true;
                     return undefined;
