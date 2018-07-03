@@ -31,7 +31,7 @@ namespace ts.SignatureHelp {
 
         if (shouldCarefullyCheckContext(triggerReason)) {
             // In the middle of a string, don't provide signature help unless the user explicitly requested it.
-            if (isInString(sourceFile, position, startingToken)) {
+            if (isInString(sourceFile, position, startingToken) || isInComment(sourceFile, position)) {
                 return undefined;
             }
         }
