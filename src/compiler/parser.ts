@@ -2101,7 +2101,7 @@ namespace ts {
         }
 
         function isMissingList(arr: NodeArray<Node>): boolean {
-            return (arr as MissingList<Node>).isMissingList;
+            return !!(arr as MissingList<Node>).isMissingList;
         }
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): NodeArray<T> {
