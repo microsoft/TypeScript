@@ -415,10 +415,33 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
+    function protocolLocationFromSubstring(str: string, substring: string) {
+        const start = str.indexOf(substring);
+        Debug.assert(start !== -1);
+        return protocolToLocation(str)(start);
+    }
+    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+        const lineStarts = computeLineStarts(text);
+        return pos => {
+            const x = computeLineAndCharacterOfPosition(lineStarts, pos);
+            return { line: x.line + 1, offset: x.character + 1 };
+        };
+    }
+    function protocolTextSpanFromSubstring(str: string, substring: string): protocol.TextSpan {
+        const span = textSpanFromSubstring(str, substring);
+        const toLocation = protocolToLocation(str);
+        return { start: toLocation(span.start), end: toLocation(span.start + span.length) };
+    }
     function textSpanFromSubstring(str: string, substring: string): TextSpan {
         const start = str.indexOf(substring);
         Debug.assert(start !== -1);
         return createTextSpan(start, substring.length);
+    }
+    function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    }
+    function protocolFileSpanFromSubstring(file: File, substring: string): protocol.FileSpan {
+        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring) };
     }
 
     /**
@@ -464,20 +487,25 @@ namespace ts.projectSystem {
         }
     }
 
-    export function makeSessionRequest<T>(command: string, args: T) {
-        const newRequest: protocol.Request = {
+    export function makeSessionRequest<T>(command: string, args: T): protocol.Request {
+        return {
             seq: 0,
             type: "request",
             command,
             arguments: args
         };
-        return newRequest;
     }
 
-    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session) {
+    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
         for (const file of files) {
             const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
+        }
+    }
+
+    export function closeFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
+        for (const file of files) {
+            session.executeCommand(makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file.path }));
         }
     }
 
@@ -3097,7 +3125,7 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [file.path]);
             checkProjectActualFiles(project, [file.path, libFile.path]);
 
-            assert.strictEqual(projectService.getDefaultProjectForFile(server.toNormalizedPath(file.path), /*ensureProject*/ true), project);
+            assert.strictEqual(projectService.ensureDefaultProjectForFile(server.toNormalizedPath(file.path)), project);
             const indexOfX = file.content.indexOf("x");
             assert.deepEqual(project.getLanguageService(/*ensureSynchronized*/ true).getQuickInfoAtPosition(file.path, indexOfX), {
                 kind: ScriptElementKind.variableElement,
@@ -4969,7 +4997,7 @@ namespace ts.projectSystem {
             assert.isTrue(error2Result.length === 0);
         });
 
-        it("should report semanitc errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
+        it("should report semantic errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
             const jsFile = {
                 path: "/a/jsFile.js",
                 content: `
@@ -4988,10 +5016,10 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
 
-        it("should report semanitc errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
+        it("should report semantic errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
             const jsconfigFile = {
                 path: "/a/jsconfig.json",
                 content: "{}"
@@ -5015,10 +5043,10 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
 
-        it("should report semanitc errors for configured js project with checkJs=true and skipLibCheck=true", () => {
+        it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
             const jsconfigFile = {
                 path: "/a/jsconfig.json",
                 content: JSON.stringify({
@@ -5044,7 +5072,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
     });
 
@@ -8682,6 +8710,49 @@ export const x = 10;`
                 }],
             }]);
         });
+
+        it("works with multiple projects", () => {
+            const aUserTs: File = {
+                path: "/a/user.ts",
+                content: 'import { x } from "./old";',
+            };
+            const aOldTs: File = {
+                path: "/a/old.ts",
+                content: "export const x = 0;",
+            };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: "{}",
+            };
+            const bUserTs: File = {
+                path: "/b/user.ts",
+                content: 'import { x } from "../a/old";',
+            };
+            const bTsconfig: File = {
+                path: "/b/tsconfig.json",
+                content: "{}",
+            };
+
+            const host = createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aUserTs, bUserTs], session);
+
+            const renameRequest = makeSessionRequest<protocol.GetEditsForFileRenameRequestArgs>(CommandNames.GetEditsForFileRename, {
+                oldFilePath: "/a/old.ts",
+                newFilePath: "/a/new.ts",
+            });
+            const response = session.executeCommand(renameRequest).response as protocol.GetEditsForFileRenameResponse["body"];
+            assert.deepEqual(response, [
+                {
+                    fileName: aUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(aUserTs.content, "./old"), newText: "./new" }],
+                },
+                {
+                    fileName: bUserTs.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(bUserTs.content, "../a/old"), newText: "../a/new" }],
+                },
+            ]);
+        });
     });
 
     describe("tsserverProjectSystem document registry in project service", () => {
@@ -8776,4 +8847,205 @@ export const x = 10;`
             assert.equal(moduleInfo.cacheSourceFile.sourceFile.text, updatedModuleContent);
         });
     });
+
+    describe("tsserverProjectSystem syntax operations", () => {
+        function navBarFull(session: TestSession, file: File) {
+            return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
+                command: protocol.CommandTypes.NavBarFull,
+                arguments: { file: file.path }
+            }).response);
+        }
+
+        function openFile(session: TestSession, file: File) {
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: file.path, fileContent: file.content }
+            });
+        }
+
+        it("works when file is removed and added with different content", () => {
+            const projectRoot = "/user/username/projects/myproject";
+            const app: File = {
+                path: `${projectRoot}/app.ts`,
+                content: "console.log('Hello world');"
+            };
+            const unitTest1: File = {
+                path: `${projectRoot}/unitTest1.ts`,
+                content: `import assert = require('assert');
+
+describe("Test Suite 1", () => {
+    it("Test A", () => {
+        assert.ok(true, "This shouldn't fail");
+    });
+
+    it("Test B", () => {
+        assert.ok(1 === 1, "This shouldn't fail");
+        assert.ok(false, "This should fail");
+    });
+});`
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [app, libFile, tsconfig];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFile(session, app);
+
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            const expectedFilesWithoutUnitTest1 = files.map(f => f.path);
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            host.writeFile(unitTest1.path, unitTest1.content);
+            host.runQueuedTimeoutCallbacks();
+            const expectedFilesWithUnitTest1 = expectedFilesWithoutUnitTest1.concat(unitTest1.path);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            openFile(session, unitTest1);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            const navBarResultUnitTest1 = navBarFull(session, unitTest1);
+            host.removeFile(unitTest1.path);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            session.executeCommandSeq<protocol.CloseRequest>({
+                command: protocol.CommandTypes.Close,
+                arguments: { file: unitTest1.path }
+            });
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            const unitTest1WithChangedContent: File = {
+                path: unitTest1.path,
+                content: `import assert = require('assert');
+
+export function Test1() {
+    assert.ok(true, "This shouldn't fail");
+};
+
+export function Test2() {
+    assert.ok(1 === 1, "This shouldn't fail");
+    assert.ok(false, "This should fail");
+};`
+            };
+            host.writeFile(unitTest1.path, unitTest1WithChangedContent.content);
+            host.runQueuedTimeoutCallbacks();
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            openFile(session, unitTest1WithChangedContent);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+            const sourceFile = project.getLanguageService().getNonBoundSourceFile(unitTest1WithChangedContent.path);
+            assert.strictEqual(sourceFile.text, unitTest1WithChangedContent.content);
+
+            const navBarResultUnitTest1WithChangedContent = navBarFull(session, unitTest1WithChangedContent);
+            assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
+        });
+    });
+
+    function makeSampleProjects() {
+        const aTs: File = {
+            path: "/a/a.ts",
+            content: "export function fnA() {}",
+        };
+        const aTsconfig: File = {
+            path: "/a/tsconfig.json",
+            content: `{
+                "compilerOptions": {
+                    "outDir": "bin",
+                    "declaration": true,
+                    "declarationMap": true,
+                    "composite": true,
+                }
+            }`,
+        };
+
+        const bTs: File = {
+            path: "/b/b.ts",
+            content: 'import { fnA } from "../a/a";\nexport function fnB() { fnA(); }',
+        };
+        const bTsconfig: File = {
+            path: "/b/tsconfig.json",
+            content: `{
+                "compilerOptions": {
+                    "outDir": "bin",
+                },
+                "references": [
+                    { "path": "../a" }
+                ]
+            }`,
+        };
+
+        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+        const session = createSession(host);
+
+        writeDeclarationFiles(aTs, host, session, [
+            { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}' },
+            // Need to mangle the sourceMappingURL part or it breaks the build
+            { name: "/a/bin/a.d.ts", text: `export declare function fnA(): void;\n//# source${""}MappingURL=a.d.ts.map` },
+        ]);
+
+        return { session, aTs, bTs };
+    }
+
+    describe("tsserverProjectSystem project references", () => {
+        it("goToDefinition", () => {
+            const { session, aTs, bTs } = makeSampleProjects();
+
+            openFilesForSession([bTs], session);
+
+            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(bTs, "fnA()"));
+            const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
+
+            assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        });
+
+        it("navigateTo", () => {
+            const { session, bTs } = makeSampleProjects();
+
+            openFilesForSession([bTs], session);
+
+            const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: bTs.path, searchValue: "fn" });
+            const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
+
+            assert.deepEqual(navtoResponse, [
+                // TODO: First result should be from a.ts, not a.d.ts
+                {
+                    file: "/a/bin/a.d.ts",
+                    start: { line: 1, offset: 1 },
+                    end: { line: 1, offset: 37 },
+                    name: "fnA",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export,declare",
+                },
+                {
+                    ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
+        });
+    });
+
+    function writeDeclarationFiles(file: File, host: TestServerHost, session: TestSession, expectedFiles: ReadonlyArray<{ readonly name: string, readonly text: string }>): void {
+        openFilesForSession([file], session);
+        const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
+        const program = project.getCurrentProgram();
+        const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+        closeFilesForSession([file], session);
+
+        Debug.assert(!output.emitSkipped);
+        assert.deepEqual(output.outputFiles, expectedFiles.map(e => ({ ...e, writeByteOrderMark: false })));
+
+        for (const { name, text } of output.outputFiles) {
+            const directory: Folder = { path: getDirectoryPath(name) };
+            host.ensureFileOrFolder(directory);
+            host.writeFile(name, text);
+        }
+    }
 }

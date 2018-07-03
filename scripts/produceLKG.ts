@@ -17,7 +17,6 @@ async function produceLKG() {
     await copyLocalizedDiagnostics();
     await buildProtocol();
     await copyScriptOutputs();
-    await buildTsc();
     await copyDeclarationOutputs();
     await writeGitAttributes();
 }
@@ -53,16 +52,12 @@ async function buildProtocol() {
 
 async function copyScriptOutputs() {
     await copyWithCopyright("cancellationToken.js");
-    await copyWithCopyright("tsc.js");
+    await copyWithCopyright("tsc.release.js", "tsc.js");
     await copyWithCopyright("tsserver.js");
     await copyWithCopyright("typescript.js");
     await copyWithCopyright("typescriptServices.js");
     await copyWithCopyright("typingsInstaller.js");
     await copyWithCopyright("watchGuard.js");
-}
-
-async function buildTsc() {
-    await exec(path.join(source, "tsc.js"), [`-b -f ${path.join(root, "src/tsc/tsconfig.release.json")}`]);
 }
 
 async function copyDeclarationOutputs() {
@@ -75,9 +70,9 @@ async function writeGitAttributes() {
     await fs.writeFile(path.join(dest, ".gitattributes"), `* text eol=lf`, "utf-8");
 }
 
-async function copyWithCopyright(fileName: string) {
+async function copyWithCopyright(fileName: string, destName = fileName) {
     const content = await fs.readFile(path.join(source, fileName), "utf-8");
-    await fs.writeFile(path.join(dest, fileName), copyright + "\n" + content);
+    await fs.writeFile(path.join(dest, destName), copyright + "\n" + content);
 }
 
 async function copyFromBuiltLocal(fileName: string) {

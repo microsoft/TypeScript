@@ -325,7 +325,7 @@ namespace ts.refactor {
                 break;
             case SyntaxKind.ImportEqualsDeclaration:
                 if (isUnused(importDecl.name)) {
-                    changes.deleteNode(sourceFile, importDecl);
+                    changes.delete(sourceFile, importDecl);
                 }
                 break;
             case SyntaxKind.VariableDeclaration:
@@ -342,19 +342,19 @@ namespace ts.refactor {
         const namedBindingsUnused = !namedBindings ||
             (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name) : namedBindings.elements.every(e => isUnused(e.name)));
         if (defaultUnused && namedBindingsUnused) {
-            changes.deleteNode(sourceFile, importDecl);
+            changes.delete(sourceFile, importDecl);
         }
         else {
             if (name && defaultUnused) {
-                changes.deleteNode(sourceFile, name);
+                changes.delete(sourceFile, name);
             }
             if (namedBindings) {
                 if (namedBindingsUnused) {
-                    changes.deleteNode(sourceFile, namedBindings);
+                    changes.delete(sourceFile, namedBindings);
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
                     for (const element of namedBindings.elements) {
-                        if (isUnused(element.name)) changes.deleteNodeInList(sourceFile, element);
+                        if (isUnused(element.name)) changes.delete(sourceFile, element);
                     }
                 }
             }
@@ -365,20 +365,20 @@ namespace ts.refactor {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 if (isUnused(name)) {
-                    changes.deleteNode(sourceFile, name);
+                    changes.delete(sourceFile, name);
                 }
                 break;
             case SyntaxKind.ArrayBindingPattern:
                 break;
             case SyntaxKind.ObjectBindingPattern:
                 if (name.elements.every(e => isIdentifier(e.name) && isUnused(e.name))) {
-                    changes.deleteNode(sourceFile,
+                    changes.delete(sourceFile,
                         isVariableDeclarationList(varDecl.parent) && varDecl.parent.declarations.length === 1 ? varDecl.parent.parent : varDecl);
                 }
                 else {
                     for (const element of name.elements) {
                         if (isIdentifier(element.name) && isUnused(element.name)) {
-                            changes.deleteNode(sourceFile, element.name);
+                            changes.delete(sourceFile, element.name);
                         }
                     }
                 }

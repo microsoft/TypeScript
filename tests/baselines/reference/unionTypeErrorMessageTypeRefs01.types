@@ -1,0 +1,153 @@
+=== tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts ===
+interface Foo { foo: any }
+>Foo : Foo
+>foo : any
+
+interface Bar { bar: any }
+>Bar : Bar
+>bar : any
+
+interface Baz { baz: any }
+>Baz : Baz
+>baz : any
+
+interface Kwah { kwah: any }
+>Kwah : Kwah
+>kwah : any
+
+////////
+
+interface A<T> {
+>A : A<T>
+>T : T
+
+    aProp: T;
+>aProp : T
+>T : T
+}
+
+interface B<T> {
+>B : B<T>
+>T : T
+
+    bProp: T;
+>bProp : T
+>T : T
+}
+
+interface C<T> {
+>C : C<T>
+>T : T
+
+    cProp: T;
+>cProp : T
+>T : T
+}
+
+declare const a: A<Foo>;
+>a : A<Foo>
+>A : A<T>
+>Foo : Foo
+
+declare const b: B<Foo>;
+>b : B<Foo>
+>B : B<T>
+>Foo : Foo
+
+declare const c: C<Foo>;
+>c : C<Foo>
+>C : C<T>
+>Foo : Foo
+
+declare let thingOfInterfaces: A<Bar> | B<Baz> | C<Kwah>;
+>thingOfInterfaces : A<Bar> | B<Baz> | C<Kwah>
+>A : A<T>
+>Bar : Bar
+>B : B<T>
+>Baz : Baz
+>C : C<T>
+>Kwah : Kwah
+
+thingOfInterfaces = a;
+>thingOfInterfaces = a : A<Foo>
+>thingOfInterfaces : A<Bar> | B<Baz> | C<Kwah>
+>a : A<Foo>
+
+thingOfInterfaces = b;
+>thingOfInterfaces = b : B<Foo>
+>thingOfInterfaces : A<Bar> | B<Baz> | C<Kwah>
+>b : B<Foo>
+
+thingOfInterfaces = c;
+>thingOfInterfaces = c : C<Foo>
+>thingOfInterfaces : A<Bar> | B<Baz> | C<Kwah>
+>c : C<Foo>
+
+////////
+
+type X<T> = {
+>X : X<T>
+>T : T
+
+    xProp: T;
+>xProp : T
+>T : T
+}
+
+type Y<T> = {
+>Y : Y<T>
+>T : T
+
+    yProp: T;
+>yProp : T
+>T : T
+}
+
+type Z<T> = {
+>Z : Z<T>
+>T : T
+
+    zProp: T;
+>zProp : T
+>T : T
+}
+
+declare const x: X<Foo>;
+>x : X<Foo>
+>X : X<T>
+>Foo : Foo
+
+declare const y: Y<Foo>;
+>y : Y<Foo>
+>Y : Y<T>
+>Foo : Foo
+
+declare const z: Z<Foo>;
+>z : Z<Foo>
+>Z : Z<T>
+>Foo : Foo
+
+declare let thingOfTypeAliases: X<Bar> | Y<Baz> | Z<Kwah>;
+>thingOfTypeAliases : X<Bar> | Y<Baz> | Z<Kwah>
+>X : X<T>
+>Bar : Bar
+>Y : Y<T>
+>Baz : Baz
+>Z : Z<T>
+>Kwah : Kwah
+
+thingOfTypeAliases = x;
+>thingOfTypeAliases = x : X<Foo>
+>thingOfTypeAliases : X<Bar> | Y<Baz> | Z<Kwah>
+>x : X<Foo>
+
+thingOfTypeAliases = y;
+>thingOfTypeAliases = y : Y<Foo>
+>thingOfTypeAliases : X<Bar> | Y<Baz> | Z<Kwah>
+>y : Y<Foo>
+
+thingOfTypeAliases = z;
+>thingOfTypeAliases = z : Z<Foo>
+>thingOfTypeAliases : X<Bar> | Y<Baz> | Z<Kwah>
+>z : Z<Foo>
+

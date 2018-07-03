@@ -142,7 +142,7 @@ namespace ts {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
         if (ensureUseStrict && !startsWithUseStrict(statements)) {
-            statements = setTextRange(createNodeArray([createStatement(createLiteral("use strict")), ...statements]), statements);
+            statements = setTextRange(createNodeArray([createExpressionStatement(createLiteral("use strict")), ...statements]), statements);
         }
         const declarations = context.endLexicalEnvironment();
         return setTextRange(createNodeArray(concatenate(declarations, statements)), statements);
@@ -372,8 +372,16 @@ namespace ts {
                     visitNode((<ArrayTypeNode>node).elementType, visitor, isTypeNode));
 
             case SyntaxKind.TupleType:
-                return updateTypleTypeNode((<TupleTypeNode>node),
+                return updateTupleTypeNode((<TupleTypeNode>node),
                     nodesVisitor((<TupleTypeNode>node).elementTypes, visitor, isTypeNode));
+
+            case SyntaxKind.OptionalType:
+                return updateOptionalTypeNode((<OptionalTypeNode>node),
+                    visitNode((<OptionalTypeNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.RestType:
+                return updateRestTypeNode((<RestTypeNode>node),
+                    visitNode((<RestTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.UnionType:
                 return updateUnionTypeNode(<UnionTypeNode>node,
@@ -606,7 +614,7 @@ namespace ts {
                     visitNode((<VariableStatement>node).declarationList, visitor, isVariableDeclarationList));
 
             case SyntaxKind.ExpressionStatement:
-                return updateStatement(<ExpressionStatement>node,
+                return updateExpressionStatement(<ExpressionStatement>node,
                     visitNode((<ExpressionStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.IfStatement:

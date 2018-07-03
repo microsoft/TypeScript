@@ -27,14 +27,16 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
  */
 function runConsoleTests(runJs, defaultReporter, runInParallel) {
     let testTimeout = cmdLineOptions.timeout;
+    let tests = cmdLineOptions.tests;
     const lintFlag = cmdLineOptions.lint;
     const debug = cmdLineOptions.debug;
     const inspect = cmdLineOptions.inspect;
-    const tests = cmdLineOptions.tests;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
     const testConfigFile = "test.config";
+    const failed = cmdLineOptions.failed;
+    const keepFailed = cmdLineOptions.keepFailed || failed;
     return cleanTestDirs()
         .then(() => {
             if (fs.existsSync(testConfigFile)) {
@@ -59,8 +61,8 @@ function runConsoleTests(runJs, defaultReporter, runInParallel) {
                 testTimeout = 400000;
             }
 
-            if (tests || runners || light || testTimeout || taskConfigsFolder) {
-                writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout);
+            if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed) {
+                writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
             }
 
             const colors = cmdLineOptions.colors;
@@ -75,7 +77,8 @@ function runConsoleTests(runJs, defaultReporter, runInParallel) {
             // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
             // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
             if (!runInParallel) {
-                args.push("-R", reporter);
+                args.push("-R", "scripts/failed-tests");
+                args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
                 if (tests) {
                     args.push("-g", `"${tests}"`);
                 }
@@ -103,7 +106,12 @@ function runConsoleTests(runJs, defaultReporter, runInParallel) {
                 args.push(runJs);
             }
             setNodeEnvToDevelopment();
-            return exec(host, [runJs]);
+            if (failed) {
+                return exec(host, ["scripts/run-failed-tests.js"].concat(args));
+            }
+            else {
+                return exec(host, args);
+            }
         })
         .then(({ exitCode }) => {
             if (exitCode !== 0) return finish(undefined, exitCode);
@@ -148,8 +156,9 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {string | number} [workerCount]
  * @param {string} [stackTraceLimit]
  * @param {string | number} [timeout]
+ * @param {boolean} [keepFailed]
  */
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runner: runners ? runners.split(",") : undefined,
@@ -159,6 +168,7 @@ function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCou
         taskConfigsFolder,
         noColor: !cmdLineOptions.colors,
         timeout,
+        keepFailed
     });
     log.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);

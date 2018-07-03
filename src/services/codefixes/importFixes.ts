@@ -284,7 +284,7 @@ namespace ts.codefix {
 
     interface FixesInfo { readonly fixes: ReadonlyArray<ImportFix>; readonly symbolName: string; }
     function getFixesInfo(context: CodeFixContextBase, errorCode: number, pos: number): FixesInfo | undefined {
-        const symbolToken = getTokenAtPosition(context.sourceFile, pos, /*includeJsDocComment*/ false);
+        const symbolToken = getTokenAtPosition(context.sourceFile, pos);
         const info = errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getFixesInfoForUMDImport(context, symbolToken)
             : getFixesInfoForNonUMDImport(context, symbolToken);

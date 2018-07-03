@@ -745,9 +745,33 @@ namespace ts {
         return node;
     }
 
-    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
+    export function updateTupleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
         return node.elementTypes !== elementTypes
             ? updateNode(createTupleTypeNode(elementTypes), node)
+            : node;
+    }
+
+    export function createOptionalTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.OptionalType) as OptionalTypeNode;
+        node.type = parenthesizeArrayTypeMember(type);
+        return node;
+    }
+
+    export function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
+        return node.type !== type
+            ? updateNode(createOptionalTypeNode(type), node)
+            : node;
+    }
+
+    export function createRestTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.RestType) as RestTypeNode;
+        node.type = type;
+        return node;
+    }
+
+    export function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
+        return node.type !== type
+            ? updateNode(createRestTypeNode(type), node)
             : node;
     }
 
@@ -1507,13 +1531,6 @@ namespace ts {
         return block;
     }
 
-    /* @internal */
-    export function createExpressionStatement(expression: Expression): ExpressionStatement {
-        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
-        node.expression = expression;
-        return node;
-    }
-
     export function updateBlock(node: Block, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createBlock(statements, node.multiLine), node)
@@ -1539,15 +1556,22 @@ namespace ts {
         return <EmptyStatement>createSynthesizedNode(SyntaxKind.EmptyStatement);
     }
 
-    export function createStatement(expression: Expression) {
-        return createExpressionStatement(parenthesizeExpressionForExpressionStatement(expression));
+    export function createExpressionStatement(expression: Expression): ExpressionStatement {
+        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
+        node.expression = parenthesizeExpressionForExpressionStatement(expression);
+        return node;
     }
 
-    export function updateStatement(node: ExpressionStatement, expression: Expression) {
+    export function updateExpressionStatement(node: ExpressionStatement, expression: Expression) {
         return node.expression !== expression
-            ? updateNode(createStatement(expression), node)
+            ? updateNode(createExpressionStatement(expression), node)
             : node;
     }
+
+    /** @deprecated Use `createExpressionStatement` instead.  */
+    export const createStatement = createExpressionStatement;
+    /** @deprecated Use `updateExpressionStatement` instead.  */
+    export const updateStatement = updateExpressionStatement;
 
     export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = <IfStatement>createSynthesizedNode(SyntaxKind.IfStatement);

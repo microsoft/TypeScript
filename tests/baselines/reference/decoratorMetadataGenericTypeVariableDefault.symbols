@@ -1,0 +1,11 @@
+=== tests/cases/compiler/decoratorMetadataGenericTypeVariableDefault.ts ===
+export class C<TypeVariable = string> {
+>C : Symbol(C, Decl(decoratorMetadataGenericTypeVariableDefault.ts, 0, 0))
+>TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariableDefault.ts, 0, 15))
+
+  @Decorate
+  member: TypeVariable;
+>member : Symbol(C.member, Decl(decoratorMetadataGenericTypeVariableDefault.ts, 0, 39))
+>TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariableDefault.ts, 0, 15))
+}
+

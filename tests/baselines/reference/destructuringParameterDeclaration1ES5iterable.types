@@ -229,7 +229,7 @@ function c5([a, b, [[c]]]) { }
 >c : any
 
 function c6([a, b, [[c=1]]]) { }
->c6 : ([a, b, [[c]]]: [any, any, [[number]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
 >a : any
 >b : any
 >c : number

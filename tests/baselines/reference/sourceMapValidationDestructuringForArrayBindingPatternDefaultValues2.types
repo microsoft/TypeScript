@@ -666,7 +666,7 @@ for ([nameMA = "noName",
 for ([numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >[numberA3 = -1, ...robotAInfo] = robotA, i = 0 : 0
 >[numberA3 = -1, ...robotAInfo] = robotA : [number, string, string]
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1
@@ -693,7 +693,7 @@ for ([numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 for ([numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >[numberA3 = -1, ...robotAInfo] = getRobot(), i = 0 : 0
 >[numberA3 = -1, ...robotAInfo] = getRobot() : [number, string, string]
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1
@@ -721,7 +721,7 @@ for ([numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 for ([numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0 : 0
 >[numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : [number, string, string]
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1
