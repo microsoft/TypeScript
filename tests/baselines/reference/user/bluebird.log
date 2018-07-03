@@ -7,18 +7,13 @@ node_modules/bluebird/js/release/async.js(94,21): error TS2300: Duplicate identi
 node_modules/bluebird/js/release/async.js(96,21): error TS2300: Duplicate identifier 'invokeLater'.
 node_modules/bluebird/js/release/async.js(108,21): error TS2300: Duplicate identifier 'invoke'.
 node_modules/bluebird/js/release/async.js(118,21): error TS2300: Duplicate identifier 'settlePromises'.
-node_modules/bluebird/js/release/bluebird.js(5,15): error TS2367: The types of these values indicate that this condition will always be 'false'.
-  Operator '===' cannot be applied to types 'PromiseConstructor' and 'typeof Promise'.
+node_modules/bluebird/js/release/bluebird.js(5,15): error TS2367: This condition will always return 'false' since the types 'PromiseConstructor' and 'typeof Promise' have no overlap.
 node_modules/bluebird/js/release/bluebird.js(10,10): error TS2339: Property 'noConflict' does not exist on type 'typeof Promise'.
 node_modules/bluebird/js/release/catch_filter.js(27,28): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: {}) => string[]) | ((o: any) => string[])' has no compatible call signatures.
-node_modules/bluebird/js/release/debuggability.js(18,20): error TS2367: The types of these values indicate that this condition will always be 'true'.
-  Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
-node_modules/bluebird/js/release/debuggability.js(23,19): error TS2367: The types of these values indicate that this condition will always be 'true'.
-  Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
-node_modules/bluebird/js/release/debuggability.js(26,26): error TS2367: The types of these values indicate that this condition will always be 'true'.
-  Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
-node_modules/bluebird/js/release/debuggability.js(29,24): error TS2367: The types of these values indicate that this condition will always be 'true'.
-  Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
+node_modules/bluebird/js/release/debuggability.js(18,20): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
+node_modules/bluebird/js/release/debuggability.js(23,19): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
+node_modules/bluebird/js/release/debuggability.js(26,26): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
+node_modules/bluebird/js/release/debuggability.js(29,24): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
 node_modules/bluebird/js/release/debuggability.js(160,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(166,26): error TS2339: Property 'detail' does not exist on type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(476,19): error TS2350: Only a void function can be called with the 'new' keyword.

@@ -1713,7 +1713,10 @@ declare namespace ts {
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
     type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
-    type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
+    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess;
+    interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+        expression: JsxTagNameExpression;
+    }
     interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
         parent: JsxOpeningLikeElement;
     }
@@ -2628,11 +2631,6 @@ declare namespace ts {
         writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
         writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
         writeTypePredicate(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
-        /**
-         * @deprecated Use the createX factory functions or XToY typechecker methods and `createPrinter` or the `xToString` methods instead
-         * This will be removed in a future version.
-         */
-        getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
@@ -2820,25 +2818,6 @@ declare namespace ts {
             visitedSymbols: ReadonlyArray<Symbol>;
         };
     }
-    /**
-     * @deprecated
-     */
-    interface SymbolDisplayBuilder {
-        /** @deprecated */ buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        /** @deprecated */ buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
-        /** @deprecated */ buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
-        /** @deprecated */ buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
-        /** @deprecated */ buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        /** @deprecated */ buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        /** @deprecated */ buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        /** @deprecated */ buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        /** @deprecated */ buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        /** @deprecated */ buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        /** @deprecated */ buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-    }
-    /**
-     * @deprecated Migrate to other methods of generating symbol names, ex symbolToEntityName + a printer or symbolToString
-     */
     interface SymbolWriter extends SymbolTracker {
         writeKeyword(text: string): void;
         writeOperator(text: string): void;
@@ -4278,6 +4257,7 @@ declare namespace ts {
     }
     interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
         getSourceFiles(): ReadonlyArray<SourceFile>;
+        useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         getCommonSourceDirectory(): string;
@@ -4507,7 +4487,6 @@ declare namespace ts {
         readFile?(path: string): string | undefined;
         getSourceFiles?(): ReadonlyArray<SourceFile>;
     }
-    /** @deprecated See comment on SymbolWriter */
     interface SymbolTracker {
         trackSymbol?(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError?(): void;
@@ -4526,6 +4505,7 @@ declare namespace ts {
     }
     interface DiagnosticCollection {
         add(diagnostic: Diagnostic): void;
+        lookup(diagnostic: Diagnostic): Diagnostic | undefined;
         getGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(fileName: string): DiagnosticWithLocation[];
         getDiagnostics(): Diagnostic[];
@@ -5152,7 +5132,7 @@ declare namespace ts {
         The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access: DiagnosticMessage;
         Operator_0_cannot_be_applied_to_types_1_and_2: DiagnosticMessage;
         Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined: DiagnosticMessage;
-        The_types_of_these_values_indicate_that_this_condition_will_always_be_0: DiagnosticMessage;
+        This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap: DiagnosticMessage;
         Type_parameter_name_cannot_be_0: DiagnosticMessage;
         A_parameter_property_is_only_allowed_in_a_constructor_implementation: DiagnosticMessage;
         A_rest_parameter_must_be_of_an_array_type: DiagnosticMessage;
@@ -5438,6 +5418,7 @@ declare namespace ts {
         Class_name_cannot_be_Object_when_targeting_ES5_with_module_0: DiagnosticMessage;
         Cannot_find_lib_definition_for_0: DiagnosticMessage;
         Cannot_find_lib_definition_for_0_Did_you_mean_1: DiagnosticMessage;
+        _0_was_declared_here: DiagnosticMessage;
         Import_declaration_0_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: DiagnosticMessage;
@@ -5737,6 +5718,10 @@ declare namespace ts {
         Include_modules_imported_with_json_extension: DiagnosticMessage;
         All_destructured_elements_are_unused: DiagnosticMessage;
         All_variables_are_unused: DiagnosticMessage;
+        Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0: DiagnosticMessage;
+        Conflicts_are_in_this_file: DiagnosticMessage;
+        _0_was_also_declared_here: DiagnosticMessage;
+        and_here: DiagnosticMessage;
         Projects_to_reference: DiagnosticMessage;
         Enable_project_compilation: DiagnosticMessage;
         Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0: DiagnosticMessage;
@@ -5946,6 +5931,7 @@ declare namespace ts {
         Remove_braces_from_arrow_function: DiagnosticMessage;
         Convert_default_export_to_named_export: DiagnosticMessage;
         Convert_named_export_to_default_export: DiagnosticMessage;
+        Add_missing_enum_member_0: DiagnosticMessage;
     };
 }
 declare namespace ts {
@@ -6123,11 +6109,6 @@ declare namespace ts {
     function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile): string;
     function getTextOfConstantValue(value: string | number): string;
     function escapeLeadingUnderscores(identifier: string): __String;
-    /**
-     * @deprecated Use `id.escapedText` to get the escaped text of an Identifier.
-     * @param identifier The identifier to escape
-     */
-    function escapeIdentifier(identifier: string): string;
     function makeIdentifierFromModuleName(moduleName: string): string;
     function isBlockOrCatchScoped(declaration: Declaration): boolean;
     function isCatchClauseVariableDeclarationOrBindingElement(declaration: Declaration): boolean;
@@ -6168,8 +6149,8 @@ declare namespace ts {
     function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan;
     function isExternalOrCommonJsModule(file: SourceFile): boolean;
     function isJsonSourceFile(file: SourceFile): file is JsonSourceFile;
-    function isConstEnumDeclaration(node: Node): boolean;
-    function isConst(node: Node): boolean;
+    function isEnumConst(node: EnumDeclaration): boolean;
+    function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean;
     function isLet(node: Node): boolean;
     function isSuperCall(n: Node): n is SuperCall;
     function isImportCall(n: Node): n is ImportCall;
@@ -6646,6 +6627,7 @@ declare namespace ts {
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
     function textSpanContainsPosition(span: TextSpan, position: number): boolean;
+    function textRangeContainsPositionInclusive(span: TextRange, position: number): boolean;
     function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean;
     function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean;
     function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
@@ -6725,13 +6707,6 @@ declare namespace ts {
     function unescapeLeadingUnderscores(identifier: __String): string;
     function idText(identifier: Identifier): string;
     function symbolName(symbol: Symbol): string;
-    /**
-     * Remove extra underscore from escaped identifier text content.
-     * @deprecated Use `id.text` for the unescaped text.
-     * @param identifier The escaped identifier text.
-     * @returns The unescaped identifier text.
-     */
-    function unescapeIdentifier(id: string): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined;
     /** @internal */
     function isNamedDeclaration(node: Node): node is NamedDeclaration & {
@@ -7113,6 +7088,7 @@ declare namespace ts {
     function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
     function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain;
     function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison;
+    function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison;
     function getEmitScriptTarget(compilerOptions: CompilerOptions): ScriptTarget;
     function getEmitModuleKind(compilerOptions: {
         module?: CompilerOptions["module"];
@@ -7918,13 +7894,16 @@ declare namespace ts {
     function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
     function createSemicolonClassElement(): SemicolonClassElement;
     function createBlock(statements: ReadonlyArray<Statement>, multiLine?: boolean): Block;
-    function createExpressionStatement(expression: Expression): ExpressionStatement;
     function updateBlock(node: Block, statements: ReadonlyArray<Statement>): Block;
     function createVariableStatement(modifiers: ReadonlyArray<Modifier> | undefined, declarationList: VariableDeclarationList | ReadonlyArray<VariableDeclaration>): VariableStatement;
     function updateVariableStatement(node: VariableStatement, modifiers: ReadonlyArray<Modifier> | undefined, declarationList: VariableDeclarationList): VariableStatement;
     function createEmptyStatement(): EmptyStatement;
-    function createStatement(expression: Expression): ExpressionStatement;
-    function updateStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
+    function createExpressionStatement(expression: Expression): ExpressionStatement;
+    function updateExpressionStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
+    /** @deprecated Use `createExpressionStatement` instead.  */
+    const createStatement: typeof createExpressionStatement;
+    /** @deprecated Use `updateExpressionStatement` instead.  */
+    const updateStatement: typeof updateExpressionStatement;
     function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement): IfStatement;
     function updateIf(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement | undefined): IfStatement;
     function createDo(statement: Statement, expression: Expression): DoStatement;
@@ -8955,6 +8934,7 @@ declare namespace ts {
     }
     /** @internal */
     function formatColorAndReset(text: string, formatStyle: string): string;
+    function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color?: typeof formatColorAndReset): string;
     function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string;
     /**
@@ -9562,12 +9542,12 @@ declare namespace ts {
          */
         interface UpToDate {
             type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
-            newestInputFileTime: Date;
-            newestInputFileName: string;
-            newestDeclarationFileContentChangedTime: Date;
-            newestOutputFileTime: Date;
-            newestOutputFileName: string;
-            oldestOutputFileName: string;
+            newestInputFileTime?: Date;
+            newestInputFileName?: string;
+            newestDeclarationFileContentChangedTime?: Date;
+            newestOutputFileTime?: Date;
+            newestOutputFileName?: string;
+            oldestOutputFileName?: string;
         }
         /**
          * One or more of the outputs of the project does not exist.
@@ -10799,7 +10779,7 @@ declare namespace ts {
      * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
      * @param predicate Additional predicate to test on the comment range.
      */
-    function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node, predicate?: (c: CommentRange) => boolean): boolean;
+    function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined;
     function hasDocComment(sourceFile: SourceFile, position: number): boolean;
     function getNodeModifiers(node: Node): string;
     function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> | undefined;
@@ -10867,6 +10847,18 @@ declare namespace ts {
         has(node: Node): boolean;
         forEach(cb: (node: Node) => void): void;
         some(pred: (node: Node) => boolean): boolean;
+    }
+    interface ReadonlyNodeMap<TNode extends Node, TValue> {
+        get(node: TNode): TValue | undefined;
+        has(node: TNode): boolean;
+    }
+    class NodeMap<TNode extends Node, TValue> implements ReadonlyNodeMap<TNode, TValue> {
+        private map;
+        get(node: TNode): TValue | undefined;
+        getOrUpdate(node: TNode, setValue: () => TValue): TValue;
+        set(node: TNode, value: TValue): void;
+        has(node: TNode): boolean;
+        forEach(cb: (value: TValue, node: TNode) => void): void;
     }
     function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined;
     function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined;
@@ -11270,7 +11262,7 @@ declare namespace ts {
     function preProcessFile(sourceText: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): PreProcessedFileInfo;
 }
 declare namespace ts.Rename {
-    function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo;
+    function getRenameInfo(program: Program, sourceFile: SourceFile, position: number): RenameInfo;
 }
 declare namespace ts.SignatureHelp {
     function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
@@ -11429,8 +11421,8 @@ declare namespace ts.formatting {
     /**
      * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
      */
-    function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, onlyMultiLine: boolean, precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
-    tokenAtPosition?: Node, predicate?: (c: CommentRange) => boolean): CommentRange | undefined;
+    function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
+    tokenAtPosition?: Node): CommentRange | undefined;
     function getIndentationString(indentation: number, options: EditorSettings): string;
 }
 declare namespace ts.formatting {
@@ -11541,21 +11533,17 @@ declare namespace ts.textChanges {
         private readonly formatContext;
         private readonly changes;
         private readonly newFiles;
-        private readonly deletedNodesInLists;
         private readonly classesWithNodesInsertedAtStart;
-        private readonly deletedDeclarations;
+        private readonly deletedNodes;
         static fromContext(context: TextChangesContext): ChangeTracker;
         static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[];
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(newLineCharacter: string, formatContext: formatting.FormatContext);
         deleteRange(sourceFile: SourceFile, range: TextRange): this;
-        deleteDeclaration(sourceFile: SourceFile, node: Node): void;
-        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
-        deleteNode(sourceFile: SourceFile, node: Node, options?: ConfigurableStartEnd): this;
+        delete(sourceFile: SourceFile, node: Node): void;
         deleteModifier(sourceFile: SourceFile, modifier: Modifier): void;
         deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options?: ConfigurableStartEnd): this;
         deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options?: ConfigurableStartEnd): void;
-        deleteNodeInList(sourceFile: SourceFile, node: Node): this;
         replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options?: InsertNodeOptions): this;
         replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options?: ChangeNodeOptions): this;
         replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options?: ChangeNodeOptions): void;
@@ -11598,7 +11586,6 @@ declare namespace ts.textChanges {
          */
         insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList?: NodeArray<Node> | undefined): this;
         private finishClassesWithNodesInsertedAtStart;
-        private finishTrailingCommaAfterDeletingNodesInList;
         private finishDeleteDeclarations;
         /**
          * Note: after calling this, the TextChanges object must be discarded!
@@ -11612,6 +11599,8 @@ declare namespace ts.textChanges {
     type ValidateNonFormattedText = (node: Node, text: string) => void;
     function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string;
     function isValidLocationToAddComment(sourceFile: SourceFile, position: number): boolean;
+    /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
+    function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options?: ConfigurableStartEnd): void;
 }
 declare namespace ts {
     interface CodeFixRegistration {
@@ -11641,8 +11630,10 @@ declare namespace ts {
         function getSupportedErrorCodes(): string[];
         function getFixes(context: CodeFixContext): CodeFixAction[];
         function getAllFixes(context: CodeFixAllContext): CombinedCodeActions;
+        function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions;
         function createFileTextChanges(fileName: string, textChanges: TextChange[]): FileTextChanges;
         function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void): CombinedCodeActions;
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void;
     }
 }
 declare namespace ts {
@@ -13407,18 +13398,21 @@ declare namespace ts.server.protocol {
     }
 }
 declare namespace ts.server {
+    interface ScriptInfoVersion {
+        svc: number;
+        text: number;
+    }
     class TextStorage {
         private readonly host;
         private readonly fileName;
+        version: ScriptInfoVersion;
         private svc;
-        private svcVersion;
         private text;
         private lineMap;
-        private textVersion;
         isOpen: boolean;
         private ownFileText;
         private pendingReloadFromDisk;
-        constructor(host: ServerHost, fileName: NormalizedPath);
+        constructor(host: ServerHost, fileName: NormalizedPath, initialVersion?: ScriptInfoVersion);
         getVersion(): string;
         hasScriptVersionCache_TestOnly(): boolean;
         useScriptVersionCache_TestOnly(): void;
@@ -13458,7 +13452,8 @@ declare namespace ts.server {
         readonly isDynamic: boolean;
         private realpath;
         cacheSourceFile: DocumentRegistrySourceFileCache;
-        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path);
+        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+        getVersion(): ScriptInfoVersion;
         isDynamicOrHasMixedContent(): boolean;
         isScriptOpen(): boolean;
         open(newText: string): void;
@@ -13869,6 +13864,7 @@ declare namespace ts.server {
         readonly typingsCache: TypingsCache;
         readonly documentRegistry: DocumentRegistry;
         private readonly filenameToScriptInfo;
+        private readonly filenameToScriptInfoVersion;
         private readonly allJsFilesForOpenFileTelemetry;
         readonly realpathToScriptInfos: MultiMap<ScriptInfo> | undefined;
         private readonly externalProjectToConfiguredProjectMap;

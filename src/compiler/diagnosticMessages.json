@@ -1252,7 +1252,7 @@
         "category": "Error",
         "code": 2366
     },
-    "The types of these values indicate that this condition will always be '{0}'.": {
+    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
         "category": "Error",
         "code": 2367
     },
@@ -2396,6 +2396,10 @@
     "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2727
+    },
+    "'{0}' was declared here.": {
+        "category": "Error",
+        "code": 2728
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3603,6 +3607,22 @@
         "code": 6199,
         "reportsUnnecessary": true
     },
+    "Definitions of the following identifiers conflict with those in another file: {0}": {
+        "category": "Error",
+        "code": 6200
+    },
+    "Conflicts are in this file.": {
+        "category": "Message",
+        "code": 6201
+    },
+    "'{0}' was also declared here.": {
+        "category": "Message",
+        "code": 6203
+    },
+    "and here.": {
+        "category": "Message",
+        "code": 6204
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4446,5 +4466,9 @@
     "Convert named export to default export": {
         "category": "Message",
         "code": 95062
+    },
+    "Add missing enum member '{0}'": {
+        "category": "Message",
+        "code": 95063
     }
 }

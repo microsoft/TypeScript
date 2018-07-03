@@ -1,7 +1,5 @@
-tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(174,13): error TS2367: The types of these values indicate that this condition will always be 'false'.
-  Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: The types of these values indicate that this condition will always be 'false'.
-  Operator '==' cannot be applied to types '0' and '1'.
+tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(174,13): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
 
 
 ==== tests/cases/compiler/capturedLetConstInLoop5_ES6.ts (2 errors) ====
@@ -180,8 +178,7 @@ tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: The t
             (() => x + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
-!!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
                 return;
             }
         }
@@ -238,8 +235,7 @@ tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: The t
             (() => x + y + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2367: The types of these values indicate that this condition will always be 'false'.
-!!! error TS2367:   Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
                 return;
             }
         }

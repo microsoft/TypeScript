@@ -32,14 +32,14 @@ namespace ts.codefix {
                 // falls through
             case SyntaxKind.WhileStatement:
             case SyntaxKind.ForStatement:
-                changes.deleteNode(sourceFile, container);
+                changes.delete(sourceFile, container);
                 break;
             default:
                 if (isBlock(statement.parent)) {
                     split(sliceAfter(statement.parent.statements, statement), shouldRemove, (start, end) => changes.deleteNodeRange(sourceFile, start, end));
                 }
                 else {
-                    changes.deleteNode(sourceFile, statement);
+                    changes.delete(sourceFile, statement);
                 }
         }
     }

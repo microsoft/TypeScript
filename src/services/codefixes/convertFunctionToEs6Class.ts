@@ -13,7 +13,6 @@ namespace ts.codefix {
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
-        const deletedNodes: { node: Node, inList: boolean }[] = [];
         const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
 
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
@@ -28,7 +27,7 @@ namespace ts.codefix {
         switch (ctorDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
                 precedingNode = ctorDeclaration;
-                deleteNode(ctorDeclaration);
+                changes.delete(sourceFile, ctorDeclaration);
                 newClassDeclaration = createClassFromFunctionDeclaration(ctorDeclaration as FunctionDeclaration);
                 break;
 
@@ -37,10 +36,10 @@ namespace ts.codefix {
                 newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
                     copyComments(precedingNode, newClassDeclaration!, sourceFile); // TODO: GH#18217
-                    deleteNode(precedingNode);
+                    changes.delete(sourceFile, precedingNode);
                 }
                 else {
-                    deleteNode(ctorDeclaration, /*inList*/ true);
+                    changes.delete(sourceFile, ctorDeclaration);
                 }
                 break;
         }
@@ -53,21 +52,6 @@ namespace ts.codefix {
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
         changes.insertNodeAfter(sourceFile, precedingNode!, newClassDeclaration);
-        for (const { node, inList } of deletedNodes) {
-            if (inList) {
-                changes.deleteNodeInList(sourceFile, node);
-            }
-            else {
-                changes.deleteNode(sourceFile, node);
-            }
-        }
-
-        function deleteNode(node: Node, inList = false) {
-            // If parent node has already been deleted, do nothing
-            if (!deletedNodes.some(n => isNodeDescendantOf(node, n.node))) {
-                deletedNodes.push({ node, inList });
-            }
-        }
 
         function createClassElementsFromSymbol(symbol: Symbol) {
             const memberElements: ClassElement[] = [];
@@ -115,7 +99,7 @@ namespace ts.codefix {
                 // delete the entire statement if this expression is the sole expression to take care of the semicolon at the end
                 const nodeToDelete = assignmentBinaryExpression.parent && assignmentBinaryExpression.parent.kind === SyntaxKind.ExpressionStatement
                     ? assignmentBinaryExpression.parent : assignmentBinaryExpression;
-                deleteNode(nodeToDelete);
+                changes.delete(sourceFile, nodeToDelete);
 
                 if (!assignmentBinaryExpression.right) {
                     return createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,

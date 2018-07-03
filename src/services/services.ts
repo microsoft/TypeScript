@@ -1891,8 +1891,8 @@ namespace ts {
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const range = formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
-            return range && createTextSpanFromRange(range);
+            const range = formatting.getRangeOfEnclosingComment(sourceFile, position);
+            return range && (!onlyMultiLine || range.kind === SyntaxKind.MultiLineCommentTrivia) ? createTextSpanFromRange(range) : undefined;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -2044,8 +2044,7 @@ namespace ts {
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
-            const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
-            return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position);
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {

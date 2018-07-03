@@ -12,14 +12,18 @@ tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts(8,6): 
         static readonly [A.p1] = 0;
                          ~
 !!! error TS2449: Class 'A' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' was declared here.
         static [A.p2]() { return 0 };
                 ~
 !!! error TS2449: Class 'A' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' was declared here.
         [A.p1]() { }
          ~
 !!! error TS2449: Class 'A' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' was declared here.
         [A.p2] = 0
          ~
 !!! error TS2449: Class 'A' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' was declared here.
     }
     

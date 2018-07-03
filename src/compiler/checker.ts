@@ -182,7 +182,6 @@ namespace ts {
             writeTypePredicate: (predicate, enclosingDeclaration, flags, writer) => {
                 return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
-            getSymbolDisplayBuilder, // TODO (weswigham): Remove once deprecation process is complete
             getAugmentedPropertiesOfType,
             getRootSymbols,
             getContextualType: nodeIn => {
@@ -423,6 +422,7 @@ namespace ts {
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createSymbolTable();
+        let amalgamatedDuplicates: Map<{ firstFile: SourceFile, secondFile: SourceFile, firstFileInstances: Map<{ instances: Node[], blockScoped: boolean }>, secondFileInstances: Map<{ instances: Node[], blockScoped: boolean }> }> | undefined;
         const reverseMappedCache = createMap<Type | undefined>();
         let ambientModulesCache: Symbol[] | undefined;
         /**
@@ -655,145 +655,6 @@ namespace ts {
 
         return checker;
 
-        /**
-         * @deprecated
-         */
-        function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
-            return {
-                buildTypeDisplay(type, writer, enclosingDeclaration?, flags?) {
-                    typeToString(type, enclosingDeclaration, flags, emitTextWriterWrapper(writer));
-                },
-                buildSymbolDisplay(symbol, writer, enclosingDeclaration?, meaning?, flags = SymbolFormatFlags.None) {
-                    symbolToString(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.AllowAnyNodeKind, emitTextWriterWrapper(writer));
-                },
-                buildSignatureDisplay(signature, writer, enclosing?, flags?, kind?) {
-                    signatureToString(signature, enclosing, flags, kind, emitTextWriterWrapper(writer));
-                },
-                buildIndexSignatureDisplay(info, writer, kind, enclosing?, flags?) {
-                    const sig = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, kind, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
-                    const printer = createPrinter({ removeComments: true });
-                    printer.writeNode(EmitHint.Unspecified, sig, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
-                },
-                buildParameterDisplay(symbol, writer, enclosing?, flags?) {
-                    const node = nodeBuilder.symbolToParameterDeclaration(symbol, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
-                    const printer = createPrinter({ removeComments: true });
-                    printer.writeNode(EmitHint.Unspecified, node!, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));  // TODO: GH#18217
-                },
-                buildTypeParameterDisplay(tp, writer, enclosing?, flags?) {
-                    const node = nodeBuilder.typeParameterToDeclaration(tp, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.OmitParameterModifiers, writer);
-                    const printer = createPrinter({ removeComments: true });
-                    printer.writeNode(EmitHint.Unspecified, node!, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));  // TODO: GH#18217
-                },
-                buildTypePredicateDisplay(predicate, writer, enclosing?, flags?) {
-                    typePredicateToString(predicate, enclosing, flags, emitTextWriterWrapper(writer));
-                },
-                buildTypeParameterDisplayFromSymbol(symbol, writer, enclosing?, flags?) {
-                    const nodes = nodeBuilder.symbolToTypeParameterDeclarations(symbol, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
-                    const printer = createPrinter({ removeComments: true });
-                    printer.writeList(ListFormat.TypeParameters, nodes, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
-                },
-                buildDisplayForParametersAndDelimiters(thisParameter, parameters, writer, enclosing?, originalFlags?) {
-                    const printer = createPrinter({ removeComments: true });
-                    const flags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | toNodeBuilderFlags(originalFlags);
-                    const thisParameterArray = thisParameter ? [nodeBuilder.symbolToParameterDeclaration(thisParameter, enclosing, flags)!] : []; // TODO: GH#18217
-                    const params = createNodeArray([...thisParameterArray, ...map(parameters, param => nodeBuilder.symbolToParameterDeclaration(param, enclosing, flags)!)]); // TODO: GH#18217
-                    printer.writeList(ListFormat.CallExpressionArguments, params, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
-                },
-                buildDisplayForTypeParametersAndDelimiters(typeParameters, writer, enclosing?, flags?) {
-                    const printer = createPrinter({ removeComments: true });
-                    const args = createNodeArray(map(typeParameters, p => nodeBuilder.typeParameterToDeclaration(p, enclosing, toNodeBuilderFlags(flags))!)); // TODO: GH#18217
-                    printer.writeList(ListFormat.TypeParameters, args, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
-                },
-                buildReturnTypeDisplay(signature, writer, enclosing?, flags?) {
-                    writer.writePunctuation(":");
-                    writer.writeSpace(" ");
-                    const predicate = getTypePredicateOfSignature(signature);
-                    if (predicate) {
-                        return typePredicateToString(predicate, enclosing, flags, emitTextWriterWrapper(writer));
-                    }
-                    const node = nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
-                    const printer = createPrinter({ removeComments: true });
-                    printer.writeNode(EmitHint.Unspecified, node!, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer)); // TODO: GH#18217
-                }
-            };
-
-            function emitTextWriterWrapper(underlying: SymbolWriter): EmitTextWriter {
-                return {
-                    write: noop,
-                    writeTextOfNode: noop,
-                    writeLine: noop,
-                    increaseIndent() {
-                        return underlying.increaseIndent();
-                    },
-                    decreaseIndent() {
-                        return underlying.decreaseIndent();
-                    },
-                    getText() {
-                        return "";
-                    },
-                    rawWrite: noop,
-                    writeLiteral(s) {
-                        return underlying.writeStringLiteral(s);
-                    },
-                    getTextPos() {
-                        return 0;
-                    },
-                    getLine() {
-                        return 0;
-                    },
-                    getColumn() {
-                        return 0;
-                    },
-                    getIndent() {
-                        return 0;
-                    },
-                    isAtStartOfLine() {
-                        return false;
-                    },
-                    clear() {
-                        return underlying.clear();
-                    },
-
-                    writeKeyword(text) {
-                        return underlying.writeKeyword(text);
-                    },
-                    writeOperator(text) {
-                        return underlying.writeOperator(text);
-                    },
-                    writePunctuation(text) {
-                        return underlying.writePunctuation(text);
-                    },
-                    writeSpace(text) {
-                        return underlying.writeSpace(text);
-                    },
-                    writeStringLiteral(text) {
-                        return underlying.writeStringLiteral(text);
-                    },
-                    writeParameter(text) {
-                        return underlying.writeParameter(text);
-                    },
-                    writeProperty(text) {
-                        return underlying.writeProperty(text);
-                    },
-                    writeSymbol(text, symbol) {
-                        return underlying.writeSymbol(text, symbol);
-                    },
-                    trackSymbol(symbol, enclosing?, meaning?) {
-                        return underlying.trackSymbol && underlying.trackSymbol(symbol, enclosing, meaning);
-                    },
-                    reportInaccessibleThisError() {
-                        return underlying.reportInaccessibleThisError && underlying.reportInaccessibleThisError();
-                    },
-                    reportPrivateInBaseOfClassExpression(name) {
-                        return underlying.reportPrivateInBaseOfClassExpression && underlying.reportPrivateInBaseOfClassExpression(name);
-                    },
-                    reportInaccessibleUniqueSymbolError() {
-                        return underlying.reportInaccessibleUniqueSymbolError && underlying.reportInaccessibleUniqueSymbolError();
-                    }
-                };
-            }
-        }
-
         function getJsxNamespace(location: Node | undefined): __String {
             if (location) {
                 const file = getSourceFileOfNode(location);
@@ -831,6 +692,28 @@ namespace ts {
             // emitter questions of this resolver will return the right information.
             getDiagnostics(sourceFile, cancellationToken);
             return emitResolver;
+        }
+
+        function lookupOrIssueError(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+            const diagnostic = location
+                ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
+                : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
+            const existing = diagnostics.lookup(diagnostic);
+            if (existing) {
+                return existing;
+            }
+            else {
+                diagnostics.add(diagnostic);
+                return diagnostic;
+            }
+        }
+
+        function addRelatedInfo(diagnostic: Diagnostic, ...relatedInformation: DiagnosticRelatedInformation[]) {
+            if (!diagnostic.relatedInformation) {
+                diagnostic.relatedInformation = [];
+            }
+            diagnostic.relatedInformation.push(...relatedInformation);
+            return diagnostic;
         }
 
         function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
@@ -943,21 +826,61 @@ namespace ts {
                 error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
             }
             else {
-                const message = target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum
+                const isEitherEnum = !!(target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum);
+                const isEitherBlockScoped = !!(target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable);
+                const message = isEitherEnum
                     ? Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations
-                    : target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
+                    : isEitherBlockScoped
                         ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                         : Diagnostics.Duplicate_identifier_0;
-                forEach(source.declarations, node => {
-                    const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
-                    error(errorNode, message, symbolToString(source));
-                });
-                forEach(target.declarations, node => {
-                    const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
-                    error(errorNode, message, symbolToString(source));
-                });
+                const sourceSymbolFile = source.declarations && getSourceFileOfNode(source.declarations[0]);
+                const targetSymbolFile = target.declarations && getSourceFileOfNode(target.declarations[0]);
+
+                // Collect top-level duplicate identifier errors into one mapping, so we can then merge their diagnostics if there are a bunch
+                if (sourceSymbolFile && targetSymbolFile && amalgamatedDuplicates && !isEitherEnum && sourceSymbolFile !== targetSymbolFile) {
+                    const firstFile = comparePaths(sourceSymbolFile.path, targetSymbolFile.path) === Comparison.LessThan ? sourceSymbolFile : targetSymbolFile;
+                    const secondFile = firstFile === sourceSymbolFile ? targetSymbolFile : sourceSymbolFile;
+                    const cacheKey = `${firstFile.path}|${secondFile.path}`;
+                    const existing = amalgamatedDuplicates.get(cacheKey) || { firstFile, secondFile, firstFileInstances: createMap(), secondFileInstances: createMap() };
+                    const symbolName = symbolToString(source);
+                    const firstInstanceList = existing.firstFileInstances.get(symbolName) || { instances: [], blockScoped: isEitherBlockScoped };
+                    const secondInstanceList = existing.secondFileInstances.get(symbolName) || { instances: [], blockScoped: isEitherBlockScoped };
+
+                    forEach(source.declarations, node => {
+                        const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
+                        const targetList = sourceSymbolFile === firstFile ? firstInstanceList : secondInstanceList;
+                        targetList.instances.push(errorNode);
+                    });
+                    forEach(target.declarations, node => {
+                        const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
+                        const targetList = targetSymbolFile === firstFile ? firstInstanceList : secondInstanceList;
+                        targetList.instances.push(errorNode);
+                    });
+
+                    existing.firstFileInstances.set(symbolName, firstInstanceList);
+                    existing.secondFileInstances.set(symbolName, secondInstanceList);
+                    amalgamatedDuplicates.set(cacheKey, existing);
+                    return target;
+                }
+                const symbolName = symbolToString(source);
+                addDuplicateDeclarationErrorsForSymbols(source, message, symbolName, target);
+                addDuplicateDeclarationErrorsForSymbols(target, message, symbolName, source);
             }
             return target;
+        }
+
+        function addDuplicateDeclarationErrorsForSymbols(target: Symbol, message: DiagnosticMessage, symbolName: string, source: Symbol) {
+            forEach(target.declarations, node => {
+                const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
+                addDuplicateDeclarationError(errorNode, message, symbolName, source.declarations && source.declarations[0]);
+            });
+        }
+
+        function addDuplicateDeclarationError(errorNode: Node, message: DiagnosticMessage, symbolName: string, relatedNode: Node | undefined) {
+            const err = lookupOrIssueError(errorNode, message, symbolName);
+            if (relatedNode && length(err.relatedInformation) < 5) {
+                addRelatedInfo(err, !length(err.relatedInformation) ? createDiagnosticForNode(relatedNode, Diagnostics._0_was_also_declared_here, symbolName) : createDiagnosticForNode(relatedNode, Diagnostics.and_here));
+            }
         }
 
         function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined {
@@ -1732,14 +1655,25 @@ namespace ts {
             if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
 
             if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
+                let diagnosticMessage;
+                const declarationName = declarationNameToString(getNameOfDeclaration(declaration));
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
-                    error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
+                    diagnosticMessage = error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.Class) {
-                    error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
+                    diagnosticMessage = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.RegularEnum) {
-                    error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
+                    diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
+                }
+                else {
+                    Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
+                }
+
+                if (diagnosticMessage) {
+                    addRelatedInfo(diagnosticMessage,
+                        createDiagnosticForNode(declaration, Diagnostics._0_was_declared_here, declarationName)
+                    );
                 }
             }
         }
@@ -10631,6 +10565,23 @@ namespace ts {
                     target = getSimplifiedType(target);
                 }
 
+                // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
+                // If so, reporting the `null` and `undefined` in the type is hardly useful.
+                // First, see if we're even relating an object type to a union.
+                // Then see if the target is stripped down to a single non-union type.
+                // Note
+                //  * We actually want to remove null and undefined naively here (rather than using getNonNullableType),
+                //    since we don't want to end up with a worse error like "`Foo` is not assignable to `NonNullable<T>`"
+                //    when dealing with generics.
+                //  * We also don't deal with primitive source types, since we already halt elaboration below.
+                if (target.flags & TypeFlags.Union && source.flags & TypeFlags.Object &&
+                    (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
+                    const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
+                    if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
+                        target = nullStrippedTarget;
+                    }
+                }
+
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
@@ -12223,7 +12174,7 @@ namespace ts {
             if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
                 return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
             }
-            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higherorder behavior
+            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higher-order behavior
         }
 
         function getNonNullableType(type: Type): Type {
@@ -15853,8 +15804,9 @@ namespace ts {
             return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromClassType(t, isJs, context, /*reportErrors*/ false) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
         }
 
-        function getJsxPropsTypeFromCallSignature(sig: Signature, context: Node) {
+        function getJsxPropsTypeFromCallSignature(sig: Signature, context: JsxOpeningLikeElement) {
             let propsType = getTypeOfFirstParameterOfSignatureWithFallback(sig, emptyObjectType);
+            propsType = getJsxManagedAttributesFromLocatedAttributes(context, getJsxNamespaceAt(context), propsType);
             const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
             if (intrinsicAttribs !== errorType) {
                 propsType = intersectTypes(intrinsicAttribs, propsType);
@@ -15867,9 +15819,26 @@ namespace ts {
             return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
         }
 
+        function getJsxManagedAttributesFromLocatedAttributes(context: JsxOpeningLikeElement, ns: Symbol, attributesType: Type) {
+            const managedSym = getJsxLibraryManagedAttributes(ns);
+            if (managedSym) {
+                const declaredManagedType = getDeclaredTypeOfSymbol(managedSym);
+                if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
+                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJavaScriptFile(context));
+                    return createTypeReference((declaredManagedType as GenericType), args);
+                }
+                else if (length(declaredManagedType.aliasTypeArguments) >= 2) {
+                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], declaredManagedType.aliasTypeArguments!, 2, isInJavaScriptFile(context));
+                    return getTypeAliasInstantiation(declaredManagedType.aliasSymbol!, args);
+                }
+            }
+            return attributesType;
+        }
+
         function getJsxPropsTypeFromClassType(sig: Signature, isJs: boolean, context: JsxOpeningLikeElement, reportErrors: boolean) {
-            const forcedLookupLocation = getJsxElementPropertiesName(getJsxNamespaceAt(context));
-            const attributesType = forcedLookupLocation === undefined
+            const ns = getJsxNamespaceAt(context);
+            const forcedLookupLocation = getJsxElementPropertiesName(ns);
+            let attributesType = forcedLookupLocation === undefined
                 // If there is no type ElementAttributesProperty, return the type of the first parameter of the signature, which should be the props type
                 ? getTypeOfFirstParameterOfSignatureWithFallback(sig, emptyObjectType)
                 : forcedLookupLocation === ""
@@ -15885,7 +15854,10 @@ namespace ts {
                 }
                 return emptyObjectType;
             }
-            else if (isTypeAny(attributesType)) {
+
+            attributesType = getJsxManagedAttributesFromLocatedAttributes(context, ns, attributesType);
+
+            if (isTypeAny(attributesType)) {
                 // Props is of type 'any' or unknown
                 return attributesType;
             }
@@ -16417,16 +16389,7 @@ namespace ts {
          * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
          */
         function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean {
-            // TODO (yuisu): comment
-            switch (tagName.kind) {
-                case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ThisKeyword:
-                    return false;
-                case SyntaxKind.Identifier:
-                    return isIntrinsicJsxName((<Identifier>tagName).escapedText);
-                default:
-                    return Debug.fail();
-            }
+            return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
         }
 
         function checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode) {
@@ -16723,6 +16686,11 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function getJsxLibraryManagedAttributes(jsxNamespace: Symbol) {
+            // JSX.LibraryManagedAttributes [symbol]
+            return jsxNamespace && getSymbol(jsxNamespace.exports!, JsxNames.LibraryManagedAttributes, SymbolFlags.Type);
         }
 
         /// e.g. "props" for React.d.ts,
@@ -17503,16 +17471,24 @@ namespace ts {
                 return;
             }
 
+            let diagnosticMessage;
+            const declarationName = idText(right);
             if (isInPropertyInitializer(node) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && !isPropertyDeclaredInAncestorClass(prop)) {
-                error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, idText(right));
+                diagnosticMessage = error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
             }
             else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
                 node.parent.kind !== SyntaxKind.TypeReference &&
                 !(valueDeclaration.flags & NodeFlags.Ambient) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)) {
-                error(right, Diagnostics.Class_0_used_before_its_declaration, idText(right));
+                diagnosticMessage = error(right, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+            }
+
+            if (diagnosticMessage) {
+                addRelatedInfo(diagnosticMessage,
+                    createDiagnosticForNode(valueDeclaration, Diagnostics._0_was_declared_here, declarationName)
+                );
             }
         }
 
@@ -19126,8 +19102,8 @@ namespace ts {
             if (importNode && !isImportCall(importNode)) {
                 const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target!), kind);
                 if (!sigs || !sigs.length) return;
-                diagnostic.relatedInformation = diagnostic.relatedInformation || [];
-                diagnostic.relatedInformation.push(createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead));
+                Debug.assert(!diagnostic.relatedInformation);
+                diagnostic.relatedInformation = [createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead)];
             }
         }
 
@@ -20904,31 +20880,30 @@ namespace ts {
             }
 
             function reportOperatorError() {
-                let err = chainDiagnosticMessages(
-                    /*elaboration*/ undefined,
-                    Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
-                    tokenToString(operatorToken.kind),
-                    typeToString(leftType),
-                    typeToString(rightType)
-                );
-                err = giveBetterPrimaryError(err);
-
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(
-                    errorNode || operatorToken,
-                    err
-                ));
+                const leftStr = typeToString(leftType);
+                const rightStr = typeToString(rightType);
+                const errNode = errorNode || operatorToken;
+                if (!tryGiveBetterPrimaryError(errNode, leftStr, rightStr)) {
+                    error(
+                        errNode,
+                        Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
+                        tokenToString(operatorToken.kind),
+                        leftStr,
+                        rightStr,
+                    );
+                }
             }
 
-            function giveBetterPrimaryError(elaboration: DiagnosticMessageChain) {
+            function tryGiveBetterPrimaryError(errNode: Node, leftStr: string, rightStr: string) {
                 switch (operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsToken:
-                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "false");
+                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "false", leftStr, rightStr);
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        return chainDiagnosticMessages(elaboration, Diagnostics.The_types_of_these_values_indicate_that_this_condition_will_always_be_0, "true");
+                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "true", leftStr, rightStr);
                     }
-                return elaboration;
+                return undefined;
             }
         }
 
@@ -25169,7 +25144,7 @@ namespace ts {
             }
             // In ambient enum declarations that specify no const modifier, enum member declarations that omit
             // a value are considered computed members (as opposed to having auto-incremented values).
-            if (member.parent.flags & NodeFlags.Ambient && !isConst(member.parent)) {
+            if (member.parent.flags & NodeFlags.Ambient && !isEnumConst(member.parent)) {
                 return undefined;
             }
             // If the member declaration specifies no value, the member is considered a constant enum member.
@@ -25185,7 +25160,7 @@ namespace ts {
 
         function computeConstantValue(member: EnumMember): string | number | undefined {
             const enumKind = getEnumKind(getSymbolOfNode(member.parent));
-            const isConstEnum = isConst(member.parent);
+            const isConstEnum = isEnumConst(member.parent);
             const initializer = member.initializer!;
             const value = enumKind === EnumKind.Literal && !isLiteralEnumMember(member) ? undefined : evaluate(initializer);
             if (value !== undefined) {
@@ -25320,7 +25295,7 @@ namespace ts {
 
             computeEnumMemberValues(node);
 
-            const enumIsConst = isConst(node);
+            const enumIsConst = isEnumConst(node);
             if (compilerOptions.isolatedModules && enumIsConst && node.flags & NodeFlags.Ambient) {
                 error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_isolatedModules_flag_is_provided);
             }
@@ -25337,7 +25312,7 @@ namespace ts {
                 if (enumSymbol.declarations.length > 1) {
                     // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
-                        if (isConstEnumDeclaration(decl) !== enumIsConst) {
+                        if (isEnumDeclaration(decl) && isEnumConst(decl) !== enumIsConst) {
                             error(getNameOfDeclaration(decl), Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                         }
                     });
@@ -27201,8 +27176,9 @@ namespace ts {
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 // inline property\index accesses only for const enums
-                if (isConstEnumDeclaration(symbol.valueDeclaration.parent)) {
-                    return getEnumMemberValue(<EnumMember>symbol.valueDeclaration);
+                const member = symbol.valueDeclaration as EnumMember;
+                if (isEnumConst(member.parent)) {
+                    return getEnumMemberValue(member);
                 }
             }
 
@@ -27356,7 +27332,7 @@ namespace ts {
         }
 
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
-            if (isConst(node)) {
+            if (isVariableDeclaration(node) && isVarConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
                 return !!(type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral);
             }
@@ -27555,6 +27531,8 @@ namespace ts {
                 bindSourceFile(file, compilerOptions);
             }
 
+            amalgamatedDuplicates = createMap();
+
             // Initialize global symbol table
             let augmentations: ReadonlyArray<StringLiteral | Identifier>[] | undefined;
             for (const file of host.getSourceFiles()) {
@@ -27631,6 +27609,39 @@ namespace ts {
                         mergeModuleAugmentation(augmentation);
                     }
                 }
+            }
+
+            amalgamatedDuplicates.forEach(({ firstFile, secondFile, firstFileInstances, secondFileInstances }) => {
+                const conflictingKeys = arrayFrom(firstFileInstances.keys());
+                // If not many things conflict, issue individual errors
+                if (conflictingKeys.length < 8) {
+                    addErrorsForDuplicates(firstFileInstances, secondFileInstances);
+                    addErrorsForDuplicates(secondFileInstances, firstFileInstances);
+                    return;
+                }
+                // Otheriwse issue top-level error since the files appear very identical in terms of what they appear
+                const list = conflictingKeys.join(", ");
+                diagnostics.add(addRelatedInfo(
+                    createDiagnosticForNode(firstFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
+                    createDiagnosticForNode(secondFile, Diagnostics.Conflicts_are_in_this_file)
+                ));
+                diagnostics.add(addRelatedInfo(
+                    createDiagnosticForNode(secondFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
+                    createDiagnosticForNode(firstFile, Diagnostics.Conflicts_are_in_this_file)
+                ));
+            });
+            amalgamatedDuplicates = undefined;
+
+            function addErrorsForDuplicates(secondFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>, firstFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>) {
+                secondFileInstances.forEach((locations, symbolName) => {
+                    const firstFileEquivalent = firstFileInstances.get(symbolName)!;
+                    const message = locations.blockScoped
+                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
+                        : Diagnostics.Duplicate_identifier_0;
+                    locations.instances.forEach(node => {
+                        addDuplicateDeclarationError(node, message, symbolName, firstFileEquivalent.instances[0]);
+                    });
+                });
             }
         }
 
@@ -28661,7 +28672,7 @@ namespace ts {
             if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
                 if (node.flags & NodeFlags.Ambient) {
                     if (node.initializer) {
-                        if (isConst(node) && !node.type) {
+                        if (isVarConst(node) && !node.type) {
                             if (!isStringOrNumberLiteralExpression(node.initializer)) {
                                 return grammarErrorOnNode(node.initializer, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
                             }
@@ -28672,7 +28683,7 @@ namespace ts {
                             return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                         }
                     }
-                    if (node.initializer && !(isConst(node) && isStringOrNumberLiteralExpression(node.initializer))) {
+                    if (node.initializer && !(isVarConst(node) && isStringOrNumberLiteralExpression(node.initializer))) {
                         // Error on equals token which immediate precedes the initializer
                         const equalsTokenLength = "=".length;
                         return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
@@ -28682,7 +28693,7 @@ namespace ts {
                     if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
                         return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
                     }
-                    if (isConst(node)) {
+                    if (isVarConst(node)) {
                         return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
                     }
                 }
@@ -28697,7 +28708,7 @@ namespace ts {
                 checkESModuleMarker(node.name);
             }
 
-            const checkLetConstNames = (isLet(node) || isConst(node));
+            const checkLetConstNames = (isLet(node) || isVarConst(node));
 
             // 1. LexicalDeclaration : LetOrConst BindingList ;
             // It is a Syntax Error if the BoundNames of BindingList contains "let".
@@ -28777,7 +28788,7 @@ namespace ts {
                 if (isLet(node.declarationList)) {
                     return grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
                 }
-                else if (isConst(node.declarationList)) {
+                else if (isVarConst(node.declarationList)) {
                     return grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
                 }
             }
@@ -29059,6 +29070,7 @@ namespace ts {
         export const Element = "Element" as __String;
         export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
         export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
+        export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
         // tslint:enable variable-name
     }
 }
