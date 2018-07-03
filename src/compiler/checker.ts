@@ -10107,6 +10107,10 @@ namespace ts {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject);
         }
 
+        /**
+         * Like `checkTypeAssignableTo`, but if it would issue an error, instead performs structural comparisons of the types using the given expression node to
+         * attempt to issue more specific errors on, for example, specific object literal properties or tuple members.
+         */
         function checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             if (isTypeAssignableTo(source, target)) return true;
             if (!elaborateError(expr, source, target)) {
@@ -10138,12 +10142,17 @@ namespace ts {
             return false;
         }
 
-        type ElaborationIterator = IterableIterator<[Node, Expression | undefined, Type]>;
+        type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type }>;
+        /**
+         * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
+         * If that element would issue an error, we first attempt to dive into that element's inner expression and issue a more specific error by recuring into `elaborateError`
+         * Otherwise, we issue an error on _every_ element which fail the assignability check
+         */
         function elaborateElementwise(iterator: ElaborationIterator, source: Type, target: Type) {
             // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
-                const [prop, next, nameType] = status.value;
+                const { errorNode: prop, innerExpression: next, nameType } = status.value;
                 const sourcePropType = getIndexedAccessType(source, nameType);
                 const targetPropType = getIndexedAccessType(target, nameType);
                 if (!isTypeAssignableTo(sourcePropType, targetPropType)) {
@@ -10197,7 +10206,7 @@ namespace ts {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isJsxSpreadAttribute(prop)) continue;
-                yield [prop.name, prop.initializer, getLiteralType(idText(prop.name))];
+                yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getLiteralType(idText(prop.name)) };
             }
         }
 
@@ -10214,7 +10223,7 @@ namespace ts {
                 const elem = node.elements[i];
                 if (isOmittedExpression(elem)) continue;
                 const nameType = getLiteralType(i);
-                yield [elem, elem, nameType];
+                yield { errorNode: elem, innerExpression: elem, nameType };
             }
         }
 
@@ -10238,10 +10247,10 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.ShorthandPropertyAssignment:
-                        yield [prop.name, undefined, type];
+                        yield { errorNode: prop.name, innerExpression: undefined, nameType: type };
                         break;
                     case SyntaxKind.PropertyAssignment:
-                        yield [prop.name, prop.initializer, type];
+                        yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: type };
                         break;
                     default:
                         Debug.assertNever(prop);
