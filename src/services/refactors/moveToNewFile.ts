@@ -472,7 +472,7 @@ namespace ts.refactor {
                     if (isInImport(decl)) {
                         oldImportsNeededByNewFile.add(symbol);
                     }
-                    else if (isTopLevelDeclaration(decl) && !movedSymbols.has(symbol)) {
+                    else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
                         newFileImportsFromOldFile.add(symbol);
                     }
                 }
@@ -614,7 +614,11 @@ namespace ts.refactor {
     interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
     type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration;
     function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
-        return isNonVariableTopLevelDeclaration(node) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
+        return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
+    }
+
+    function sourceFileOfTopLevelDeclaration(node: TopLevelDeclaration): Node {
+        return isVariableDeclaration(node) ? node.parent.parent.parent : node.parent;
     }
 
     function isTopLevelDeclarationStatement(node: Node): node is TopLevelDeclarationStatement {
