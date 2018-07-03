@@ -8105,4 +8105,10 @@ namespace ts {
 
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
+
+    export function sliceAfter<T>(arr: ReadonlyArray<T>, value: T): ReadonlyArray<T> {
+        const index = arr.indexOf(value);
+        Debug.assert(index !== -1);
+        return arr.slice(index);
+    }
 }

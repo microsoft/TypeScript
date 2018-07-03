@@ -2799,11 +2799,43 @@ namespace ts {
                                 node.declarationList.declarations.some(d => !!d.initializer)
                             );
 
-                        errorOrSuggestionOnRange(isError, node, isBlock(node.parent) ? last(node.parent.statements) : node, Diagnostics.Unreachable_code_detected);
+                        eachUnreachableRange(node, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
                     }
                 }
             }
             return true;
+        }
+    }
+
+    function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void): void {
+        if (isStatement(node) && isExecutableStatement(node) && isBlock(node.parent)) {
+            const { statements } = node.parent;
+            const slice = sliceAfter(statements, node);
+            getRangesWhere(slice, isExecutableStatement, (start, afterEnd) => cb(slice[start], slice[afterEnd - 1]));
+        }
+        else {
+            cb(node, node);
+        }
+    }
+    // As opposed to a pure declaration like an `interface`
+    function isExecutableStatement(s: Statement): boolean {
+        // Don't remove statements that can validly be used before they appear.
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+            // `var x;` may declare a variable used above
+            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
+    }
+
+    function isPurelyTypeDeclaration(s: Statement): boolean {
+        switch (s.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            case SyntaxKind.EnumDeclaration:
+                return hasModifier(s, ModifierFlags.Const);
+            default:
+                return false;
         }
     }
 
