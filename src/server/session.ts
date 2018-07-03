@@ -366,9 +366,20 @@ namespace ts.server {
             if (project.getCancellationToken().isCancellationRequested()) continue;
             cb({ project, location }, (project, location) => {
                 const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
-                const originalProject = originalLocation && projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
-                if (originalProject) addToTodo({ project: originalProject, location: originalLocation! });
-                return !!originalProject;
+                if (!originalLocation) return false;
+                const originalProjectAndScriptInfo = projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
+                if (!originalProjectAndScriptInfo) return false;
+
+                if (originalProjectAndScriptInfo) {
+                    addToTodo({ project: originalProjectAndScriptInfo.project, location: originalLocation });
+                    const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalProjectAndScriptInfo.scriptInfo);
+                    if (symlinkedProjectsMap) {
+                        symlinkedProjectsMap.forEach((symlinkedProjects) => {
+                            for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation });
+                        });
+                    }
+                }
+                return !!originalProjectAndScriptInfo;
             });
         }
 
