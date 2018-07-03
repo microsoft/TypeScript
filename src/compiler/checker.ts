@@ -3997,7 +3997,7 @@ namespace ts {
                             const ambientDecls = filter(symbol.declarations, isAmbientModule);
                             if (length(ambientDecls)) {
                                 for (const decl of ambientDecls) {
-                                    context!.tracker.trackReferencedAmbientModule!(decl); // TODO: GH#18217
+                                    context!.tracker.trackReferencedAmbientModule!(decl, symbol); // TODO: GH#18217
                                 }
                             }
                         }
