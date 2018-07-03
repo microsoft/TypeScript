@@ -1827,7 +1827,7 @@ namespace ts.server {
 
         private mapTextChangeToCodeEdit(project: Project, change: FileTextChanges): protocol.FileCodeEdits {
             const path = normalizedPathToPath(toNormalizedPath(change.fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
-            return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(path));
+            return mapTextChangesToCodeEditsForFile(change, project.getSourceFileOrConfigFile(path));
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
@@ -2332,8 +2332,8 @@ namespace ts.server {
         readonly project: Project;
     }
 
-    function mapTextChangesToCodeEdits(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
-        Debug.assert(!!textChanges.isNewFile === !sourceFile);
+    function mapTextChangesToCodeEditsForFile(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
+        Debug.assert(!!textChanges.isNewFile === !sourceFile, "Expected isNewFile for (only) new files", () => JSON.stringify({ isNewFile: textChanges.isNewFile, hasSourceFile: !!sourceFile }));
         if (sourceFile) {
             return {
                 fileName: textChanges.fileName,
