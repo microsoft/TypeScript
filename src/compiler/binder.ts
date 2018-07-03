@@ -26,7 +26,7 @@ namespace ts {
                 return ModuleInstanceState.NonInstantiated;
             // 2. const enum declarations
             case SyntaxKind.EnumDeclaration:
-                if (isConst(node)) {
+                if (isEnumConst(node as EnumDeclaration)) {
                     return ModuleInstanceState.ConstEnumOnly;
                 }
                 break;
@@ -697,10 +697,11 @@ namespace ts {
                     bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag);
                     break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
-                case SyntaxKind.SourceFile:
+                case SyntaxKind.SourceFile: {
                     bindEachFunctionsFirst((node as SourceFile).statements);
                     bind((node as SourceFile).endOfFileToken);
                     break;
+                }
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                     bindEachFunctionsFirst((node as Block).statements);
@@ -1975,7 +1976,10 @@ namespace ts {
             }
             else if (!skipTransformFlagAggregation && (node.transformFlags & TransformFlags.HasComputedFlags) === 0) {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
+                const saveParent = parent;
+                if (node.kind === SyntaxKind.EndOfFileToken) parent = node;
                 bindJSDoc(node);
+                parent = saveParent;
             }
             inStrictMode = saveInStrictMode;
         }
@@ -2607,7 +2611,7 @@ namespace ts {
         }
 
         function bindEnumDeclaration(node: EnumDeclaration) {
-            return isConst(node)
+            return isEnumConst(node)
                 ? bindBlockScopedDeclaration(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
                 : bindBlockScopedDeclaration(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
         }
@@ -2764,7 +2768,7 @@ namespace ts {
                     // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
                     (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
                     // report error on regular enums and const enums if preserveConstEnums is set
-                    (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
+                    (isEnumDeclaration(node) && (!isEnumConst(node) || options.preserveConstEnums));
 
                 if (reportError) {
                     currentFlow = reportedUnreachableFlow;
@@ -3606,6 +3610,8 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
             case SyntaxKind.ArrayType:
             case SyntaxKind.TupleType:
+            case SyntaxKind.OptionalType:
+            case SyntaxKind.RestType:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
             case SyntaxKind.ConditionalType:

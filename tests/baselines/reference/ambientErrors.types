@@ -97,16 +97,16 @@ module M2 {
 >M2 : any
 
     declare module 'nope' { }
->'nope' : typeof 'nope'
+>'nope' : typeof import("nope")
 }
 
 // Ambient external module with a string literal name that isn't a top level external module name
 declare module '../foo' { }
->'../foo' : typeof '../foo'
+>'../foo' : typeof import("../foo")
 
 // Ambient external module with export assignment and other exported members
 declare module 'bar' {
->'bar' : typeof 'bar'
+>'bar' : typeof import("bar")
 
     var n;
 >n : any

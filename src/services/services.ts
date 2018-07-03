@@ -261,7 +261,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
         }
 
         public getFirstToken(): Node | undefined {
@@ -1510,7 +1510,8 @@ namespace ts {
         }
 
         // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
-        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/gm;
+        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/;
+        const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
         const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -1519,10 +1520,14 @@ namespace ts {
             }
             const starts = getLineStarts(mappedFile);
             for (let index = starts.length - 1; index >= 0; index--) {
-                sourceMapCommentRegExp.lastIndex = starts[index];
-                const comment = sourceMapCommentRegExp.exec(mappedFile.text);
+                const lineText = mappedFile.text.substring(starts[index], starts[index + 1]);
+                const comment = sourceMapCommentRegExp.exec(lineText);
                 if (comment) {
                     return comment[1];
+                }
+                // If we see a nonwhitespace/map comment-like line, break, to avoid scanning up the entire file
+                else if (!lineText.match(whitespaceOrMapCommentRegExp)) {
+                    break;
                 }
             }
         }
@@ -1697,15 +1702,25 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
-            const refs = getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
-            return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const node = getTouchingPropertyName(sourceFile, position);
+            if (isIdentifier(node) && isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
+                const { openingElement, closingElement } = node.parent.parent;
+                return [openingElement, closingElement].map((node): RenameLocation => ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
+            }
+            else {
+                const refs = getReferences(node, position, { findInStrings, findInComments, isForRename: true });
+                return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
+            }
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
-            return getReferences(fileName, position)!;
+            synchronizeHostData();
+            return getReferences(getTouchingPropertyName(getValidSourceFile(fileName), position), position);
         }
 
-        function getReferences(fileName: string, position: number, options?: FindAllReferences.Options): ReferenceEntry[] | undefined {
+        function getReferences(node: Node, position: number, options?: FindAllReferences.Options): ReferenceEntry[] | undefined {
             synchronizeHostData();
 
             // Exclude default library when renaming as commonly user don't want to change that file.
@@ -1713,7 +1728,7 @@ namespace ts {
                 ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
                 : program.getSourceFiles();
 
-            return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
+            return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, node, position, options);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined {
@@ -1875,7 +1890,7 @@ namespace ts {
 
         function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const token = getTouchingToken(sourceFile, position, /*includeJsDocComment*/ false);
+            const token = getTouchingToken(sourceFile, position);
             const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
             const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
             // We want to order the braces when we return the result.
@@ -2034,8 +2049,8 @@ namespace ts {
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const range = formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
-            return range && createTextSpanFromRange(range);
+            const range = formatting.getRangeOfEnclosingComment(sourceFile, position);
+            return range && (!onlyMultiLine || range.kind === SyntaxKind.MultiLineCommentTrivia) ? createTextSpanFromRange(range) : undefined;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -2187,8 +2202,7 @@ namespace ts {
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
-            const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
-            return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position);
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {

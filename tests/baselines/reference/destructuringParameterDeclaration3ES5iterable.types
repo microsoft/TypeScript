@@ -52,7 +52,7 @@ function a9([a, b, [[c]]]) { }
 >c : any
 
 function a10([a, b, [[c]], ...x]) { }
->a10 : ([a, b, [[c]], ...x]: any[]) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >a : any
 >b : any
 >c : any
@@ -107,19 +107,19 @@ a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]
 
 a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 >a10([1, 2, [["string"]], false, true]) : void
->a10 : ([a, b, [[c]], ...x]: any[]) => void
->[1, 2, [["string"]], false, true] : (number | boolean | string[][])[]
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
+>[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
 >1 : 1
 >2 : 2
->[["string"]] : string[][]
->["string"] : string[]
+>[["string"]] : [[string]]
+>["string"] : [string]
 >"string" : "string"
 >false : false
 >true : true
 
 a10([1, 2, 3, false, true]);              // Parameter type is any[]
 >a10([1, 2, 3, false, true]) : void
->a10 : ([a, b, [[c]], ...x]: any[]) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >[1, 2, 3, false, true] : (number | boolean)[]
 >1 : 1
 >2 : 2
@@ -129,7 +129,7 @@ a10([1, 2, 3, false, true]);              // Parameter type is any[]
 
 a10([1, 2]);                              // Parameter type is any[]
 >a10([1, 2]) : void
->a10 : ([a, b, [[c]], ...x]: any[]) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >[1, 2] : number[]
 >1 : 1
 >2 : 2

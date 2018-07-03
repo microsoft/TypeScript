@@ -19,7 +19,7 @@ var sid = s => s + "!";
 
 /** @type {NoReturn} */
 var noreturn = obj => void obj.title
->noreturn : (s: { e: number; m: number; title: string; }) => any
+>noreturn : NoReturn
 >obj => void obj.title : (obj: { e: number; m: number; title: string; }) => any
 >obj : { e: number; m: number; title: string; }
 >void obj.title : undefined

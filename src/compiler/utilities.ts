@@ -559,14 +559,6 @@ namespace ts {
         return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
     }
 
-    /**
-     * @deprecated Use `id.escapedText` to get the escaped text of an Identifier.
-     * @param identifier The identifier to escape
-     */
-    export function escapeIdentifier(identifier: string): string {
-        return identifier;
-    }
-
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
@@ -897,13 +889,12 @@ namespace ts {
         return file.scriptKind === ScriptKind.JSON;
     }
 
-    export function isConstEnumDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
+    export function isEnumConst(node: EnumDeclaration): boolean {
+        return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
     }
 
-    export function isConst(node: Node): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Const)
-            || !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
+    export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
+        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
     }
 
     export function isLet(node: Node): boolean {
@@ -1184,7 +1175,7 @@ namespace ts {
     }
 
     export function isValidESSymbolDeclaration(node: Node): node is VariableDeclaration | PropertyDeclaration | SignatureDeclaration {
-        return isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+        return isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
             isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
                 isPropertySignature(node) && hasReadonlyModifier(node);
     }
@@ -2887,6 +2878,7 @@ namespace ts {
 
         return {
             add,
+            lookup,
             getGlobalDiagnostics,
             getDiagnostics,
             reattachFileDiagnostics
@@ -2894,6 +2886,24 @@ namespace ts {
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
             forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
+        }
+
+        function lookup(diagnostic: Diagnostic): Diagnostic | undefined {
+            let diagnostics: SortedArray<Diagnostic> | undefined;
+            if (diagnostic.file) {
+                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
+            }
+            else {
+                diagnostics = nonFileDiagnostics;
+            }
+            if (!diagnostics) {
+                return undefined;
+            }
+            const result = binarySearch(diagnostics, diagnostic, identity, compareDiagnosticsSkipRelatedInformation);
+            if (result >= 0) {
+                return diagnostics[result];
+            }
+            return undefined;
         }
 
         function add(diagnostic: Diagnostic): void {
@@ -4375,6 +4385,11 @@ namespace ts {
         return position >= span.start && position < textSpanEnd(span);
     }
 
+    /* @internal */
+    export function textRangeContainsPositionInclusive(span: TextRange, position: number): boolean {
+        return position >= span.pos && position <= span.end;
+    }
+
     // Returns true if 'span' contains 'other'.
     export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
         return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
@@ -4605,31 +4620,34 @@ namespace ts {
         return isEmptyBindingPattern(node.name);
     }
 
-    function walkUpBindingElementsAndPatterns(node: Node): Node {
-        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
-            node = node.parent;
+    export function walkUpBindingElementsAndPatterns(binding: BindingElement): VariableDeclaration | ParameterDeclaration {
+        let node = binding.parent;
+        while (isBindingElement(node.parent)) {
+            node = node.parent.parent;
         }
-
-        return node;
+        return node.parent;
     }
 
-    export function getCombinedModifierFlags(node: Node): ModifierFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-        let flags = getModifierFlags(node);
+    function getCombinedFlags(node: Node, getFlags: (n: Node) => number): number {
+        if (isBindingElement(node)) {
+            node = walkUpBindingElementsAndPatterns(node);
+        }
+        let flags = getFlags(node);
         if (node.kind === SyntaxKind.VariableDeclaration) {
             node = node.parent;
         }
-
         if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= getModifierFlags(node);
+            flags |= getFlags(node);
             node = node.parent;
         }
-
         if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= getModifierFlags(node);
+            flags |= getFlags(node);
         }
-
         return flags;
+    }
+
+    export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
+        return getCombinedFlags(node, getModifierFlags);
     }
 
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
@@ -4640,23 +4658,7 @@ namespace ts {
     // list.  By calling this function, all those flags are combined so that the client can treat
     // the node as if it actually had those flags.
     export function getCombinedNodeFlags(node: Node): NodeFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-
-        let flags = node.flags;
-        if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= node.flags;
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= node.flags;
-        }
-
-        return flags;
+        return getCombinedFlags(node, n => n.flags);
     }
 
     /**
@@ -4802,16 +4804,6 @@ namespace ts {
     }
 
     /**
-     * Remove extra underscore from escaped identifier text content.
-     * @deprecated Use `id.text` for the unescaped text.
-     * @param identifier The escaped identifier text.
-     * @returns The unescaped identifier text.
-     */
-    export function unescapeIdentifier(id: string): string {
-        return id;
-    }
-
-    /**
      * A JSDocTypedef tag has an _optional_ name field - if a name is not directly present, we should
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
      * will be merged with)
@@ -4899,8 +4891,6 @@ namespace ts {
                         return undefined;
                 }
             }
-            case SyntaxKind.JSDocCallbackTag:
-                return (declaration as JSDocCallbackTag).name;
             case SyntaxKind.JSDocTypedefTag:
                 return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
             case SyntaxKind.ExportAssignment: {
@@ -4912,7 +4902,7 @@ namespace ts {
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
-        if (declaration === undefined) return undefined; // TODO: GH#18217
+        if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
             (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
     }
@@ -6868,12 +6858,32 @@ namespace ts {
 
     /* @internal */
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
+        return compareDiagnosticsSkipRelatedInformation(d1, d2) ||
+            compareRelatedInformation(d1, d2) ||
+            Comparison.EqualTo;
+    }
+
+    /* @internal */
+    export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
             compareMessageText(d1.messageText, d2.messageText) ||
             Comparison.EqualTo;
+    }
+
+    function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
+        if (!d1.relatedInformation && !d2.relatedInformation) {
+            return Comparison.EqualTo;
+        }
+        if (d1.relatedInformation && d2.relatedInformation) {
+            return compareValues(d1.relatedInformation.length, d2.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
+                const d2i = d2.relatedInformation![index];
+                return compareDiagnostics(d1i, d2i); // EqualTo is 0, so falsy, and will cause the next item to be compared
+            }) || Comparison.EqualTo;
+        }
+        return d1.relatedInformation ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
     function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {

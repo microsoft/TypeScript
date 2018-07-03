@@ -1,0 +1,23 @@
+=== tests/cases/compiler/types/component.d.ts ===
+declare module '@namespace/component' {
+>'@namespace/component' : typeof import("@namespace/component")
+
+    export class Foo {}
+>Foo : Foo
+}
+=== tests/cases/compiler/packages/somepackage/index.d.ts ===
+import { Foo } from "@namespace/component";
+>Foo : typeof Foo
+
+export declare const item: typeof Foo;
+>item : typeof Foo
+>Foo : typeof Foo
+
+=== tests/cases/compiler/packages/secondpackage/index.ts ===
+import { item } from "../somepackage";
+>item : typeof import("@namespace/component").Foo
+
+export const reeexported = item;
+>reeexported : typeof import("@namespace/component").Foo
+>item : typeof import("@namespace/component").Foo
+

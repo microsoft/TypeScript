@@ -42,15 +42,21 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 ---
 >>>    function P() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^
+3 >             ^
+4 >              ^^^^^^^->
 1-> {
   >    
+2 >    function 
+3 >             P
 1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 14) Source(2, 14) + SourceIndex(0)
+3 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
 ---
 >>>        // Test this
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
-1->function P() {
+1->() {
   >        
 2 >        // Test this
 1->Emitted(4, 9) Source(3, 9) + SourceIndex(0)
