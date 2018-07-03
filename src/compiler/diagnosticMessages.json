@@ -1304,7 +1304,7 @@
         "category": "Error",
         "code": 2379
     },
-    "'get' and 'set' accessor must have the same type.": {
+    "'get' and 'set' accessor must have the same type '{0}', but this 'get' accessor has the type '{1}'.": {
         "category": "Error",
         "code": 2380
     },
@@ -2396,6 +2396,10 @@
     "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2727
+    },
+    "The respective 'set' accessor has the type '{0}'.": {
+        "category": "Error",
+        "code": 2730
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
