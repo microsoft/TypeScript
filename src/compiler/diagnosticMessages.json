@@ -2397,6 +2397,10 @@
         "category": "Error",
         "code": 2727
     },
+    "'{0}' was declared here.": {
+        "category": "Error",
+        "code": 2728
+    },
     "The respective 'set' accessor has the type '{0}'.": {
         "category": "Error",
         "code": 2730
@@ -3607,6 +3611,22 @@
         "code": 6199,
         "reportsUnnecessary": true
     },
+    "Definitions of the following identifiers conflict with those in another file: {0}": {
+        "category": "Error",
+        "code": 6200
+    },
+    "Conflicts are in this file.": {
+        "category": "Message",
+        "code": 6201
+    },
+    "'{0}' was also declared here.": {
+        "category": "Message",
+        "code": 6203
+    },
+    "and here.": {
+        "category": "Message",
+        "code": 6204
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4454,9 +4474,5 @@
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
-    },
-    "Add all missing enum members": {
-        "category": "Message",
-        "code": 95064
     }
 }

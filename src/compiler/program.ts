@@ -329,16 +329,17 @@ namespace ts {
         return context;
     }
 
-    function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost) {
+    /* @internal */
+    export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset) {
         const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
         const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
         let output = "";
-        output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
+        output += color(relativeFileName, ForegroundColorEscapeSequences.Cyan);
         output += ":";
-        output += formatColorAndReset(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
+        output += color(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
         output += ":";
-        output += formatColorAndReset(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
+        output += color(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
         return output;
     }
 

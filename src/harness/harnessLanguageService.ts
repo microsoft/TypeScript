@@ -155,7 +155,7 @@ namespace Harness.LanguageService {
             this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
             this.vfs.renameSync(oldPath, newPath);
 
-            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()));
             this.scriptInfos.forEach((scriptInfo, key) => {
                 const newFileName = updater(key);
                 if (newFileName !== undefined) {
@@ -188,6 +188,10 @@ namespace Harness.LanguageService {
             const script: ScriptInfo = this.getScriptInfo(fileName)!;
             assert.isOk(script);
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
+        }
+
+        useCaseSensitiveFileNames() {
+            return !this.vfs.ignoreCase;
         }
     }
 
@@ -250,7 +254,6 @@ namespace Harness.LanguageService {
         getTypeRootsVersion() {
             return 0;
         }
-
 
         log = ts.noop;
         trace = ts.noop;
@@ -449,8 +452,8 @@ namespace Harness.LanguageService {
         getBreakpointStatementAtPosition(fileName: string, position: number): ts.TextSpan {
             return unwrapJSONCallResult(this.shim.getBreakpointStatementAtPosition(fileName, position));
         }
-        getSignatureHelpItems(fileName: string, position: number): ts.SignatureHelpItems {
-            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position));
+        getSignatureHelpItems(fileName: string, position: number, options: ts.SignatureHelpItemsOptions | undefined): ts.SignatureHelpItems {
+            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position, options));
         }
         getRenameInfo(fileName: string, position: number): ts.RenameInfo {
             return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));

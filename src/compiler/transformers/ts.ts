@@ -638,7 +638,7 @@ namespace ts {
 
             // Write any pending expressions from elided or moved computed property names
             if (some(pendingExpressions)) {
-                statements.push(createStatement(inlineExpressions(pendingExpressions!)));
+                statements.push(createExpressionStatement(inlineExpressions(pendingExpressions!)));
             }
             pendingExpressions = savedPendingExpressions;
 
@@ -1069,7 +1069,7 @@ namespace ts {
                 //  super(...arguments);
                 //
                 statements.push(
-                    createStatement(
+                    createExpressionStatement(
                         createCall(
                             createSuper(),
                             /*typeArguments*/ undefined,
@@ -1175,7 +1175,7 @@ namespace ts {
             return startOnNewLine(
                 setEmitFlags(
                     setTextRange(
-                        createStatement(
+                        createExpressionStatement(
                             createAssignment(
                                 setTextRange(
                                     createPropertyAccess(
@@ -1242,7 +1242,7 @@ namespace ts {
          */
         function addInitializedPropertyStatements(statements: Statement[], properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const statement = createStatement(transformInitializedProperty(property, receiver));
+                const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 statements.push(statement);
@@ -1596,7 +1596,7 @@ namespace ts {
         function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration) {
             const expression = generateConstructorDecorationExpression(node);
             if (expression) {
-                statements.push(setOriginalNode(createStatement(expression), node));
+                statements.push(setOriginalNode(createExpressionStatement(expression), node));
             }
         }
 
@@ -2481,7 +2481,7 @@ namespace ts {
                 }
 
                 return setTextRange(
-                    createStatement(
+                    createExpressionStatement(
                         inlineExpressions(
                             map(variables, transformInitializedVariable)
                         )
@@ -2669,7 +2669,7 @@ namespace ts {
             //      x[x["y"] = 0] = "y";
             //      ...
             //  })(x || (x = {}));
-            const enumStatement = createStatement(
+            const enumStatement = createExpressionStatement(
                 createCall(
                     createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -2746,7 +2746,7 @@ namespace ts {
                     name
                 );
             return setTextRange(
-                createStatement(
+                createExpressionStatement(
                     setTextRange(
                         outerAssignment,
                         member
@@ -2957,7 +2957,7 @@ namespace ts {
             //  (function (x_1) {
             //      x_1.y = ...;
             //  })(x || (x = {}));
-            const moduleStatement = createStatement(
+            const moduleStatement = createExpressionStatement(
                 createCall(
                     createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -3309,7 +3309,7 @@ namespace ts {
          * Creates a statement for the provided expression. This is used in calls to `map`.
          */
         function expressionToStatement(expression: Expression) {
-            return createStatement(expression);
+            return createExpressionStatement(expression);
         }
 
         function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
@@ -3319,14 +3319,14 @@ namespace ts {
             );
             setSourceMapRange(expression, createRange(node.name ? node.name.pos : node.pos, node.end));
 
-            const statement = createStatement(expression);
+            const statement = createExpressionStatement(expression);
             setSourceMapRange(statement, createRange(-1, node.end));
             statements.push(statement);
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
             return setTextRange(
-                createStatement(
+                createExpressionStatement(
                     createAssignment(
                         getNamespaceMemberName(currentNamespaceContainerName, exportName, /*allowComments*/ false, /*allowSourceMaps*/ true),
                         exportValue

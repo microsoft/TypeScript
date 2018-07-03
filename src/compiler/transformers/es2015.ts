@@ -855,7 +855,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     setTextRange(
-                        createStatement(
+                        createExpressionStatement(
                             createExtendsHelper(context, getInternalName(node))
                         ),
                         /*location*/ extendsClauseElement
@@ -1280,7 +1280,7 @@ namespace ts {
             else if (initializer) {
                 statements.push(
                     setEmitFlags(
-                        createStatement(
+                        createExpressionStatement(
                             createAssignment(
                                 temp,
                                 visitNode(initializer, visitor, isExpression)
@@ -1307,7 +1307,7 @@ namespace ts {
                 setEmitFlags(
                     setTextRange(
                         createBlock([
-                            createStatement(
+                            createExpressionStatement(
                                 setEmitFlags(
                                     setTextRange(
                                         createAssignment(
@@ -1409,7 +1409,7 @@ namespace ts {
                 createBlock([
                     startOnNewLine(
                         setTextRange(
-                            createStatement(
+                            createExpressionStatement(
                                 createAssignment(
                                     createElementAccess(
                                         expressionName,
@@ -1594,7 +1594,7 @@ namespace ts {
             setSourceMapRange(memberFunction, sourceMapRange);
 
             const statement = setTextRange(
-                createStatement(
+                createExpressionStatement(
                     createAssignment(memberName, memberFunction)
                 ),
                 /*location*/ member
@@ -1619,7 +1619,7 @@ namespace ts {
          * @param accessors The set of related get/set accessors.
          */
         function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations, container: Node): Statement {
-            const statement = createStatement(transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false));
+            const statement = createExpressionStatement(transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false));
             // The location for the statement is used to emit source maps only.
             // No comments should be emitted for this statement to align with the
             // old emitter.
@@ -1949,9 +1949,9 @@ namespace ts {
             // If we are here it is most likely because our expression is a destructuring assignment.
             switch (node.expression.kind) {
                 case SyntaxKind.ParenthesizedExpression:
-                    return updateStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
+                    return updateExpressionStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
                 case SyntaxKind.BinaryExpression:
-                    return updateStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
+                    return updateExpressionStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
             }
             return visitEachChild(node, visitor, context);
         }
@@ -2026,7 +2026,7 @@ namespace ts {
                     }
                 }
                 if (assignments) {
-                    updated = setTextRange(createStatement(inlineExpressions(assignments)), node);
+                    updated = setTextRange(createExpressionStatement(inlineExpressions(assignments)), node);
                 }
                 else {
                     // none of declarations has initializer - the entire variable statement can be deleted
@@ -2330,11 +2330,11 @@ namespace ts {
                 const assignment = createAssignment(initializer, boundValue);
                 if (isDestructuringAssignment(assignment)) {
                     aggregateTransformFlags(assignment);
-                    statements.push(createStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
+                    statements.push(createExpressionStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
                 }
                 else {
                     assignment.end = initializer.end;
-                    statements.push(setTextRange(createStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
+                    statements.push(setTextRange(createExpressionStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
                 }
             }
 
@@ -2483,7 +2483,7 @@ namespace ts {
                 createCatchClause(createVariableDeclaration(catchVariable),
                     setEmitFlags(
                         createBlock([
-                            createStatement(
+                            createExpressionStatement(
                                 createAssignment(
                                     errorRecord,
                                     createObjectLiteral([
@@ -2512,7 +2512,7 @@ namespace ts {
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(
+                                    createExpressionStatement(
                                         createFunctionCall(returnMethod, iterator, [])
                                     )
                                 ),
@@ -2868,7 +2868,7 @@ namespace ts {
 
         function copyOutParameters(outParams: LoopOutParameter[], copyDirection: CopyDirection, statements: Statement[]): void {
             for (const outParam of outParams) {
-                statements.push(createStatement(copyOutParameter(outParam, copyDirection)));
+                statements.push(createExpressionStatement(copyOutParameter(outParam, copyDirection)));
             }
         }
 
@@ -2892,7 +2892,7 @@ namespace ts {
                 )
                 : call;
             if (isSimpleLoop) {
-                statements.push(createStatement(callResult));
+                statements.push(createExpressionStatement(callResult));
                 copyOutParameters(state.loopOutParameters!, CopyDirection.ToOriginal, statements);
             }
             else {
@@ -3358,7 +3358,7 @@ namespace ts {
 
                 // Add the class alias following the declaration.
                 statements.push(
-                    createStatement(
+                    createExpressionStatement(
                         createAssignment(
                             aliasAssignment.left,
                             cast(variable.name, isIdentifier)

@@ -1525,13 +1525,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences)!;
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, emptyOptions)!;
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences)!;
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, emptyOptions)!;
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1557,11 +1557,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences)!;
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, emptyOptions)!;
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences)!;
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, emptyOptions)!;
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram()!.getSourceFile(f2.path)!;
             assert.equal(sf2.text, "");
@@ -2201,7 +2201,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, defaultPreferences);
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, emptyOptions);
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -2215,7 +2215,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, defaultPreferences);
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, emptyOptions);
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -8701,7 +8701,7 @@ export const x = 10;`
 
             Debug.assert(!!project.resolveModuleNames);
 
-            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions, defaultPreferences);
+            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions, emptyOptions);
             assert.deepEqual<ReadonlyArray<FileTextChanges>>(edits, [{
                 fileName: "/user.ts",
                 textChanges: [{
@@ -8848,6 +8848,103 @@ export const x = 10;`
         });
     });
 
+    describe("tsserverProjectSystem syntax operations", () => {
+        function navBarFull(session: TestSession, file: File) {
+            return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
+                command: protocol.CommandTypes.NavBarFull,
+                arguments: { file: file.path }
+            }).response);
+        }
+
+        function openFile(session: TestSession, file: File) {
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: file.path, fileContent: file.content }
+            });
+        }
+
+        it("works when file is removed and added with different content", () => {
+            const projectRoot = "/user/username/projects/myproject";
+            const app: File = {
+                path: `${projectRoot}/app.ts`,
+                content: "console.log('Hello world');"
+            };
+            const unitTest1: File = {
+                path: `${projectRoot}/unitTest1.ts`,
+                content: `import assert = require('assert');
+
+describe("Test Suite 1", () => {
+    it("Test A", () => {
+        assert.ok(true, "This shouldn't fail");
+    });
+
+    it("Test B", () => {
+        assert.ok(1 === 1, "This shouldn't fail");
+        assert.ok(false, "This should fail");
+    });
+});`
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [app, libFile, tsconfig];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFile(session, app);
+
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            const expectedFilesWithoutUnitTest1 = files.map(f => f.path);
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            host.writeFile(unitTest1.path, unitTest1.content);
+            host.runQueuedTimeoutCallbacks();
+            const expectedFilesWithUnitTest1 = expectedFilesWithoutUnitTest1.concat(unitTest1.path);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            openFile(session, unitTest1);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            const navBarResultUnitTest1 = navBarFull(session, unitTest1);
+            host.removeFile(unitTest1.path);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            session.executeCommandSeq<protocol.CloseRequest>({
+                command: protocol.CommandTypes.Close,
+                arguments: { file: unitTest1.path }
+            });
+            checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+
+            const unitTest1WithChangedContent: File = {
+                path: unitTest1.path,
+                content: `import assert = require('assert');
+
+export function Test1() {
+    assert.ok(true, "This shouldn't fail");
+};
+
+export function Test2() {
+    assert.ok(1 === 1, "This shouldn't fail");
+    assert.ok(false, "This should fail");
+};`
+            };
+            host.writeFile(unitTest1.path, unitTest1WithChangedContent.content);
+            host.runQueuedTimeoutCallbacks();
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+
+            openFile(session, unitTest1WithChangedContent);
+            checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+            const sourceFile = project.getLanguageService().getNonBoundSourceFile(unitTest1WithChangedContent.path);
+            assert.strictEqual(sourceFile.text, unitTest1WithChangedContent.content);
+
+            const navBarResultUnitTest1WithChangedContent = navBarFull(session, unitTest1WithChangedContent);
+            assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
+        });
+    });
+
     function makeSampleProjects() {
         const aTs: File = {
             path: "/a/a.ts",
@@ -8913,7 +9010,7 @@ export const x = 10;`
             const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: bTs.path, searchValue: "fn" });
             const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
 
-            assert.deepEqual(navtoResponse, [
+            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(navtoResponse, [
                 // TODO: First result should be from a.ts, not a.d.ts
                 {
                     file: "/a/bin/a.d.ts",
@@ -8921,6 +9018,7 @@ export const x = 10;`
                     end: { line: 1, offset: 37 },
                     name: "fnA",
                     matchKind: "prefix",
+                    isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export,declare",
                 },
@@ -8928,6 +9026,7 @@ export const x = 10;`
                     ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
                     name: "fnB",
                     matchKind: "prefix",
+                    isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 }

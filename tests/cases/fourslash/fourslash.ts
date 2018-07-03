@@ -139,7 +139,6 @@ declare namespace FourSlashInterface {
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
         selectRange(range: Range): void;
-        selectAllInFile(fileName: string): void;
     }
     class verifyNegatable {
         private negative;
@@ -179,7 +178,7 @@ declare namespace FourSlashInterface {
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
-            newFileContent?: NewFileContent,
+            newFileContent?: string | { readonly [fileName: string]: string },
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
@@ -191,7 +190,6 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
-        refactorsAvailable(names: ReadonlyArray<string>): void;
         refactor(options: {
             name: string;
             actionName: string;
@@ -257,14 +255,16 @@ declare namespace FourSlashInterface {
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<FourSlashInterface.ReferenceGroup>): void;
+        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         noSignatureHelp(...markers: string[]): void;
-        signatureHelp(...options: VerifySignatureHelpOptions[]): void;
+        noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
+        signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
+        signatureHelp(...options: VerifySignatureHelpOptions[], ): void;
         // Checks that there are no compile errors.
         noErrors(): void;
         numberOfErrorsInCurrentFile(expected: number): void;
@@ -289,8 +289,7 @@ declare namespace FourSlashInterface {
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
-        navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
-        navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
+        navigateTo(...options: VerifyNavigateToOptions[]);
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
@@ -337,7 +336,7 @@ declare namespace FourSlashInterface {
         getEditsForFileRename(options: {
             oldPath: string;
             newPath: string;
-            newFileContents: { readonly [fileName: string]: string };
+            newFileContents: { [fileName: string]: string };
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
@@ -358,7 +357,7 @@ declare namespace FourSlashInterface {
         enableFormatting(): void;
         disableFormatting(): void;
 
-        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: NewFileContent }): void;
+        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: string }): void;
     }
     class debug {
         printCurrentParameterHelp(): void;
@@ -513,10 +512,6 @@ declare namespace FourSlashInterface {
         text: string;
         range: Range;
     }
-    interface ReferenceGroup {
-        readonly definition: ReferencesDefinition;
-        readonly ranges: ReadonlyArray<Range>;
-    }
     interface Diagnostic {
         message: string;
         /** @default `test.ranges()[0]` */
@@ -566,6 +561,63 @@ declare namespace FourSlashInterface {
         argumentCount?: number;
         isVariadic?: boolean;
         tags?: ReadonlyArray<JSDocTagInfo>;
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+
+    export type SignatureHelpTriggerReason =
+        | SignatureHelpInvokedReason
+        | SignatureHelpCharacterTypedReason
+        | SignatureHelpRetriggeredReason;
+
+    /**
+     * Signals that the user manually requested signature help.
+     * The language service will unconditionally attempt to provide a result.
+     */
+    export interface SignatureHelpInvokedReason {
+        kind: "invoked",
+        triggerCharacter?: undefined,
+    }
+
+    /**
+     * Signals that the signature help request came from a user typing a character.
+     * Depending on the character and the syntactic context, the request may or may not be served a result.
+     */
+    export interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped",
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter: string,
+    }
+
+    /**
+     * Signals that this signature help request came from typing a character or moving the cursor.
+     * This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
+     * The language service will unconditionally attempt to provide a result.
+     * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
+     */
+    export interface SignatureHelpRetriggeredReason {
+        kind: "retrigger",
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter?: string,
+    }
+
+    interface VerifyNavigateToOptions {
+        readonly pattern: string;
+        readonly fileName?: string;
+        readonly expected: ReadonlyArray<ExpectedNavigateToItem>;
+    }
+    interface ExpectedNavigateToItem {
+        readonly name: string;
+        readonly kind: string;
+        readonly kindModifiers?: string; // default: ""
+        readonly matchKind?: string; // default: "exact"
+        readonly isCaseSensitive?: boolean; // default: "true"
+        readonly range: Range;
+        readonly containerName?: string; // default: ""
+        readonly containerKind?: string; // default: ScriptElementKind.unknown
     }
 
     interface JSDocTagInfo {
@@ -574,7 +626,6 @@ declare namespace FourSlashInterface {
     }
 
     type ArrayOrSingle<T> = T | ReadonlyArray<T>;
-    type NewFileContent = string | { readonly [fileName: string]: string };
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
