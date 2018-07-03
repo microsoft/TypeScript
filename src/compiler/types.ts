@@ -3802,6 +3802,12 @@ namespace ts {
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
+        /* @internal */ members?: SymbolTable;             // Properties by name
+        /* @internal */ properties?: Symbol[];             // Properties
+        /* @internal */ callSignatures?: ReadonlyArray<Signature>;      // Call signatures of type
+        /* @internal */ constructSignatures?: ReadonlyArray<Signature>; // Construct signatures of type
+        /* @internal */ stringIndexInfo?: IndexInfo;      // String indexing info
+        /* @internal */ numberIndexInfo?: IndexInfo;      // Numeric indexing info
     }
 
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
@@ -3928,8 +3934,6 @@ namespace ts {
         properties: Symbol[];             // Properties
         callSignatures: ReadonlyArray<Signature>;      // Call signatures of type
         constructSignatures: ReadonlyArray<Signature>; // Construct signatures of type
-        stringIndexInfo?: IndexInfo;      // String indexing info
-        numberIndexInfo?: IndexInfo;      // Numeric indexing info
     }
 
     /* @internal */
@@ -5312,7 +5316,7 @@ namespace ts {
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost;
-        trackReferencedAmbientModule?(decl: ModuleDeclaration): void;
+        trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
     }
 
     export interface TextSpan {

@@ -132,7 +132,7 @@ declare namespace ts {
      */
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
     function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined;
-    function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U>;
+    function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => ReadonlyArray<U> | Iterator<U> | undefined): Iterator<U>;
     /**
      * Maps an array. If the mapped value is an array, it is spread into the result.
      * Avoids allocation if all elements map to themselves.
@@ -347,6 +347,7 @@ declare namespace ts {
      */
     function isString(text: any): text is string;
     function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
+    function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
     function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut;
     /** Does nothing. */
     function noop(_?: {} | null | undefined): void;
@@ -3292,6 +3293,12 @@ declare namespace ts {
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
+        members?: SymbolTable;
+        properties?: Symbol[];
+        callSignatures?: ReadonlyArray<Signature>;
+        constructSignatures?: ReadonlyArray<Signature>;
+        stringIndexInfo?: IndexInfo;
+        numberIndexInfo?: IndexInfo;
     }
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
     interface InterfaceType extends ObjectType {
@@ -3382,8 +3389,6 @@ declare namespace ts {
         properties: Symbol[];
         callSignatures: ReadonlyArray<Signature>;
         constructSignatures: ReadonlyArray<Signature>;
-        stringIndexInfo?: IndexInfo;
-        numberIndexInfo?: IndexInfo;
     }
     interface FreshObjectLiteralType extends ResolvedType {
         regularType: ResolvedType;
@@ -4493,7 +4498,7 @@ declare namespace ts {
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost;
-        trackReferencedAmbientModule?(decl: ModuleDeclaration): void;
+        trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
     }
     interface TextSpan {
         start: number;
@@ -5419,6 +5424,7 @@ declare namespace ts {
         Cannot_find_lib_definition_for_0: DiagnosticMessage;
         Cannot_find_lib_definition_for_0_Did_you_mean_1: DiagnosticMessage;
         _0_was_declared_here: DiagnosticMessage;
+        Property_0_is_used_before_its_initialization: DiagnosticMessage;
         Import_declaration_0_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: DiagnosticMessage;
@@ -5932,6 +5938,7 @@ declare namespace ts {
         Convert_default_export_to_named_export: DiagnosticMessage;
         Convert_named_export_to_default_export: DiagnosticMessage;
         Add_missing_enum_member_0: DiagnosticMessage;
+        Add_all_missing_imports: DiagnosticMessage;
     };
 }
 declare namespace ts {
@@ -6614,7 +6621,7 @@ declare namespace ts {
     function getObjectFlags(type: Type): ObjectFlags;
     function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker): boolean;
     function forSomeAncestorDirectory(directory: string, callback: (directory: string) => boolean): boolean;
-    function isUMDExportSymbol(symbol: Symbol | undefined): boolean | undefined;
+    function isUMDExportSymbol(symbol: Symbol | undefined): boolean;
     function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string;
     function getLastChild(node: Node): Node | undefined;
     /** Add a value to a set, and return true if it wasn't already present. */
@@ -6712,6 +6719,8 @@ declare namespace ts {
     function isNamedDeclaration(node: Node): node is NamedDeclaration & {
         name: DeclarationName;
     };
+    /** @internal */
+    function getNonAssignedNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
@@ -7378,6 +7387,9 @@ declare namespace ts {
      * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
      */
     function matchPatternOrExact(patternStrings: ReadonlyArray<string>, candidate: string): string | Pattern | undefined;
+    type Mutable<T extends object> = {
+        -readonly [K in keyof T]: T[K];
+    };
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
@@ -7846,7 +7858,7 @@ declare namespace ts {
     function createFunctionExpression(modifiers: ReadonlyArray<Modifier> | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration> | undefined, type: TypeNode | undefined, body: Block): FunctionExpression;
     function updateFunctionExpression(node: FunctionExpression, modifiers: ReadonlyArray<Modifier> | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined, body: Block): FunctionExpression;
     function createArrowFunction(modifiers: ReadonlyArray<Modifier> | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody): ArrowFunction;
-    function updateArrowFunction(node: ArrowFunction, modifiers: ReadonlyArray<Modifier> | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
+    /** @deprecated */ function updateArrowFunction(node: ArrowFunction, modifiers: ReadonlyArray<Modifier> | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
     function updateArrowFunction(node: ArrowFunction, modifiers: ReadonlyArray<Modifier> | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined, equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>, body: ConciseBody): ArrowFunction;
     function createDelete(expression: Expression): DeleteExpression;
     function updateDelete(node: DeleteExpression, expression: Expression): DeleteExpression;
@@ -7864,7 +7876,7 @@ declare namespace ts {
     function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken): BinaryExpression;
     function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
     function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
-    function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    /** @deprecated */ function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
     function updateConditional(node: ConditionalExpression, condition: Expression, questionToken: Token<SyntaxKind.QuestionToken>, whenTrue: Expression, colonToken: Token<SyntaxKind.ColonToken>, whenFalse: Expression): ConditionalExpression;
     function createTemplateExpression(head: TemplateHead, templateSpans: ReadonlyArray<TemplateSpan>): TemplateExpression;
     function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: ReadonlyArray<TemplateSpan>): TemplateExpression;
@@ -9272,7 +9284,7 @@ declare namespace ts.moduleSpecifiers {
     interface ModuleSpecifierPreferences {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
-    function getModuleSpecifier(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: string, toFileName: string, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences?: ModuleSpecifierPreferences): string;
+    function getModuleSpecifier(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: Path, toFileName: string, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences?: ModuleSpecifierPreferences): string;
     function getModuleSpecifiers(moduleSymbol: Symbol, compilerOptions: CompilerOptions, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
 }
 declare namespace ts {
@@ -9864,7 +9876,7 @@ declare namespace ts {
         version: string;
         scriptSnapshot: IScriptSnapshot | undefined;
         nameTable: UnderscoreEscapedMap<number> | undefined;
-        getNamedDeclarations(): Map<Declaration[]>;
+        getNamedDeclarations(): Map<ReadonlyArray<Declaration>>;
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
         getLineStarts(): ReadonlyArray<number>;
@@ -9961,7 +9973,7 @@ declare namespace ts {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
     }
-    const defaultPreferences: UserPreferences;
+    const emptyOptions: {};
     interface LanguageService {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
@@ -9985,7 +9997,7 @@ declare namespace ts {
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
@@ -10046,12 +10058,53 @@ declare namespace ts {
     type OrganizeImportsScope = CombinedCodeFixScope;
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
-        /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
+        /**
+         * If the editor is asking for completions because a certain character was typed
+         * (as opposed to when the user explicitly requested them) this should be set.
+         */
         triggerCharacter?: CompletionsTriggerCharacter;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+    type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
+    interface SignatureHelpItemsOptions {
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+    type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
+    /**
+     * Signals that the user manually requested signature help.
+     * The language service will unconditionally attempt to provide a result.
+     */
+    interface SignatureHelpInvokedReason {
+        kind: "invoked";
+        triggerCharacter?: undefined;
+    }
+    /**
+     * Signals that the signature help request came from a user typing a character.
+     * Depending on the character and the syntactic context, the request may or may not be served a result.
+     */
+    interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped";
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter: SignatureHelpTriggerCharacter;
+    }
+    /**
+     * Signals that this signature help request came from typing a character or moving the cursor.
+     * This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
+     * The language service will unconditionally attempt to provide a result.
+     * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
+     */
+    interface SignatureHelpRetriggeredReason {
+        kind: "retrigger";
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
     interface ApplyCodeActionCommandResult {
         successMessage: string;
@@ -10243,7 +10296,7 @@ declare namespace ts {
         name: string;
         kind: ScriptElementKind;
         kindModifiers: string;
-        matchKind: string;
+        matchKind: "exact" | "prefix" | "substring" | "camelCase";
         isCaseSensitive: boolean;
         fileName: string;
         textSpan: TextSpan;
@@ -10932,7 +10985,7 @@ declare namespace ts.Completions {
         name: string;
         source?: string;
     }
-    function getCompletionEntryDetails(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier, host: LanguageServiceHost, formatContext: formatting.FormatContext, getCanonicalFileName: GetCanonicalFileName, preferences: UserPreferences, cancellationToken: CancellationToken): CompletionEntryDetails | undefined;
+    function getCompletionEntryDetails(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences, cancellationToken: CancellationToken): CompletionEntryDetails | undefined;
     function getCompletionEntrySymbol(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier): Symbol | undefined;
 }
 declare namespace ts.DocumentHighlights {
@@ -11245,7 +11298,7 @@ declare namespace ts.Rename {
     function getRenameInfo(program: Program, sourceFile: SourceFile, position: number): RenameInfo;
 }
 declare namespace ts.SignatureHelp {
-    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
+    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerReason: SignatureHelpTriggerReason | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
     interface ArgumentInfoForCompletions {
         readonly invocation: CallLikeExpression;
         readonly argumentIndex: number;
@@ -11524,7 +11577,7 @@ declare namespace ts.textChanges {
         replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options?: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd): this;
         private nextCommaToken;
         replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment): this;
-        private insertNodeAt;
+        insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options?: InsertNodeOptions): void;
         private insertNodesAt;
         insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void;
         insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween?: boolean): void;
@@ -11576,9 +11629,9 @@ declare namespace ts.textChanges {
 }
 declare namespace ts {
     interface CodeFixRegistration {
-        errorCodes: number[];
+        errorCodes: ReadonlyArray<number>;
         getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
-        fixIds?: string[];
+        fixIds?: ReadonlyArray<string>;
         getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
     }
     interface CodeFixContextBase extends textChanges.TextChangesContext {
@@ -11605,7 +11658,7 @@ declare namespace ts {
         function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions;
         function createFileTextChanges(fileName: string, textChanges: TextChange[]): FileTextChanges;
         function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void): CombinedCodeActions;
-        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void;
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: ReadonlyArray<number>, cb: (diag: DiagnosticWithLocation) => void): void;
     }
 }
 declare namespace ts {
@@ -11646,7 +11699,8 @@ declare namespace ts.codefix {
 declare namespace ts.codefix {
 }
 declare namespace ts.codefix {
-    function getImportCompletionAction(exportedSymbol: Symbol, moduleSymbol: Symbol, sourceFile: SourceFile, symbolName: string, host: LanguageServiceHost, program: Program, checker: TypeChecker, compilerOptions: CompilerOptions, allSourceFiles: ReadonlyArray<SourceFile>, formatContext: formatting.FormatContext, getCanonicalFileName: GetCanonicalFileName, symbolToken: Node | undefined, preferences: UserPreferences): {
+    const importFixId = "fixMissingImport";
+    function getImportCompletionAction(exportedSymbol: Symbol, moduleSymbol: Symbol, sourceFile: SourceFile, symbolName: string, host: LanguageServiceHost, program: Program, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, formatContext: formatting.FormatContext, symbolToken: Node | undefined, preferences: UserPreferences): {
         readonly moduleSpecifier: string;
         readonly codeAction: CodeAction;
     };
@@ -11942,7 +11996,7 @@ declare namespace ts {
         getQuickInfoAtPosition(fileName: string, position: number): string;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
-        getSignatureHelpItems(fileName: string, position: number): string;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string;
         /**
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
@@ -12977,7 +13031,23 @@ declare namespace ts.server.protocol {
         argumentIndex: number;
         argumentCount: number;
     }
+    type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
     interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+    type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
+    interface SignatureHelpInvokedReason {
+        kind: "invoked";
+        triggerCharacter?: undefined;
+    }
+    interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped";
+        triggerCharacter: SignatureHelpTriggerCharacter;
+    }
+    interface SignatureHelpRetriggeredReason {
+        kind: "retrigger";
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
     interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;
@@ -13118,8 +13188,8 @@ declare namespace ts.server.protocol {
     interface NavtoItem extends FileSpan {
         name: string;
         kind: ScriptElementKind;
-        matchKind?: string;
-        isCaseSensitive?: boolean;
+        matchKind: string;
+        isCaseSensitive: boolean;
         kindModifiers?: string;
         containerName?: string;
         containerKind?: ScriptElementKind;

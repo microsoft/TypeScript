@@ -549,7 +549,6 @@ namespace ts.Completions {
         entryId: CompletionEntryIdentifier,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
-        getCanonicalFileName: GetCanonicalFileName,
         preferences: UserPreferences,
         cancellationToken: CancellationToken,
     ): CompletionEntryDetails | undefined {
@@ -583,7 +582,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap, previousToken } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, program.getSourceFiles(), preferences);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, previousToken, formatContext, program.getSourceFiles(), preferences);
                 return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location!, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "literal": {
@@ -645,7 +644,6 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         previousToken: Node | undefined,
         formatContext: formatting.FormatContext,
-        getCanonicalFileName: GetCanonicalFileName,
         allSourceFiles: ReadonlyArray<SourceFile>,
         preferences: UserPreferences,
     ): CodeActionsAndSourceDisplay {
@@ -664,10 +662,8 @@ namespace ts.Completions {
             host,
             program,
             checker,
-            compilerOptions,
             allSourceFiles,
             formatContext,
-            getCanonicalFileName,
             previousToken,
             preferences);
         return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
@@ -1653,8 +1649,8 @@ namespace ts.Completions {
             if (!(classElementModifierFlags & ModifierFlags.Private)) {
                 // List of property symbols of base type that are not private and already implemented
                 const baseSymbols = flatMap(getAllSuperTypeNodes(decl), baseTypeNode => {
-                    const type = typeChecker.getTypeAtLocation(baseTypeNode)!; // TODO: GH#18217
-                    return typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl) : type);
+                    const type = typeChecker.getTypeAtLocation(baseTypeNode);
+                    return type && typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl) : type);
                 });
                 symbols = filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags);
             }

@@ -2401,6 +2401,10 @@
         "category": "Error",
         "code": 2728
     },
+    "Property '{0}' is used before its initialization.": {
+        "category": "Error",
+        "code": 2729
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4470,5 +4474,9 @@
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
+    },
+    "Add all missing imports": {
+        "category": "Message",
+        "code": 95064
     }
 }

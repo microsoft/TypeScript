@@ -124,7 +124,7 @@ namespace ts {
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
-                preferences: defaultPreferences,
+                preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
@@ -188,7 +188,7 @@ namespace ts {
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
-                preferences: defaultPreferences,
+                preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);

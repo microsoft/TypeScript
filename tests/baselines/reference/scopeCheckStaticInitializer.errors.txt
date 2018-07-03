@@ -1,6 +1,6 @@
-tests/cases/compiler/scopeCheckStaticInitializer.ts(2,38): error TS2448: Block-scoped variable 'data' used before its declaration.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(2,38): error TS2729: Property 'data' is used before its initialization.
 tests/cases/compiler/scopeCheckStaticInitializer.ts(5,23): error TS2449: Class 'After' used before its declaration.
-tests/cases/compiler/scopeCheckStaticInitializer.ts(5,29): error TS2448: Block-scoped variable 'data' used before its declaration.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(5,29): error TS2729: Property 'data' is used before its initialization.
 tests/cases/compiler/scopeCheckStaticInitializer.ts(6,23): error TS2449: Class 'After' used before its declaration.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/scopeCheckStaticInitializer.ts(6,23): error TS2449: Class '
     class X {
         static illegalBeforeProperty = X.data;
                                          ~~~~
-!!! error TS2448: Block-scoped variable 'data' used before its declaration.
+!!! error TS2729: Property 'data' is used before its initialization.
 !!! related TS2728 tests/cases/compiler/scopeCheckStaticInitializer.ts:7:12: 'data' was declared here.
         static okBeforeMethod = X.method;
     
@@ -17,7 +17,7 @@ tests/cases/compiler/scopeCheckStaticInitializer.ts(6,23): error TS2449: Class '
 !!! error TS2449: Class 'After' used before its declaration.
 !!! related TS2728 tests/cases/compiler/scopeCheckStaticInitializer.ts:10:7: 'After' was declared here.
                                 ~~~~
-!!! error TS2448: Block-scoped variable 'data' used before its declaration.
+!!! error TS2729: Property 'data' is used before its initialization.
 !!! related TS2728 tests/cases/compiler/scopeCheckStaticInitializer.ts:11:12: 'data' was declared here.
         static illegal3 = After.method;
                           ~~~~~

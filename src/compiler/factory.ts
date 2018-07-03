@@ -1170,7 +1170,7 @@ namespace ts {
         return node;
     }
 
-    /* @deprecated */ export function updateArrowFunction(
+    /** @deprecated */ export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
@@ -1319,7 +1319,7 @@ namespace ts {
         return node;
     }
 
-    /* @deprecated */ export function updateConditional(
+    /** @deprecated */ export function updateConditional(
         node: ConditionalExpression,
         condition: Expression,
         whenTrue: Expression,

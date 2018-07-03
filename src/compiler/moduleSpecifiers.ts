@@ -9,7 +9,7 @@ namespace ts.moduleSpecifiers {
     export function getModuleSpecifier(
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
-        importingSourceFileName: string,
+        importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
@@ -48,10 +48,10 @@ namespace ts.moduleSpecifiers {
         readonly moduleResolutionKind: ModuleResolutionKind;
         readonly addJsExtension: boolean;
         readonly getCanonicalFileName: GetCanonicalFileName;
-        readonly sourceDirectory: string;
+        readonly sourceDirectory: Path;
     }
     // importingSourceFileName is separate because getEditsForFileRename may need to specify an updated path
-    function getInfo(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: string, host: ModuleSpecifierResolutionHost): Info {
+    function getInfo(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: Path, host: ModuleSpecifierResolutionHost): Info {
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const addJsExtension = usesJsExtensionOnImports(importingSourceFile);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true);
@@ -271,7 +271,7 @@ namespace ts.moduleSpecifiers {
         moduleFileName: string,
         host: ModuleSpecifierResolutionHost,
         getCanonicalFileName: (file: string) => string,
-        sourceDirectory: string,
+        sourceDirectory: Path,
     ): string | undefined {
         if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
             // nothing to do here
@@ -290,7 +290,7 @@ namespace ts.moduleSpecifiers {
         const moduleSpecifier = getDirectoryOrExtensionlessFileName(moduleFileName);
         // Get a path that's relative to node_modules or the importing file's path
         // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
-        if (!startsWith(sourceDirectory, moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex))) return undefined;
+        if (!startsWith(sourceDirectory, getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex)))) return undefined;
         // If the module was found in @types, get the actual Node package name
         return getPackageNameFromAtTypesDirectory(moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1));
 

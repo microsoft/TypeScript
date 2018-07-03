@@ -124,8 +124,6 @@ namespace ts {
             return undefined;
         }
 
-        candidateContainers = candidateContainers || [];
-
         // -1 because the last part was checked against the name, and only the rest
         // of the parts are checked against the container.
         if (dotSeparatedSegments.length - 1 > candidateContainers.length) {

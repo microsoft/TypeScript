@@ -4312,8 +4312,8 @@ namespace ts {
         return !!forEachAncestorDirectory(directory, d => callback(d) ? true : undefined);
     }
 
-    export function isUMDExportSymbol(symbol: Symbol | undefined) {
-        return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
+    export function isUMDExportSymbol(symbol: Symbol | undefined): boolean {
+        return !!symbol && !!symbol.declarations && !!symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
     }
 
     export function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string {
@@ -4866,14 +4866,9 @@ namespace ts {
         return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
     }
 
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+    /** @internal */
+    export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         switch (declaration.kind) {
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.FunctionExpression:
-                if (!(declaration as ClassExpression | FunctionExpression).name) {
-                    return getAssignedName(declaration);
-                }
-                break;
             case SyntaxKind.Identifier:
                 return declaration as Identifier;
             case SyntaxKind.JSDocPropertyTag:
@@ -4904,6 +4899,12 @@ namespace ts {
             }
         }
         return (declaration as NamedDeclaration).name;
+    }
+
+    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+        if (declaration === undefined) return undefined;
+        return getNonAssignedNameOfDeclaration(declaration) ||
+            (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
     }
 
     function getAssignedName(node: Node): DeclarationName | undefined {
@@ -8105,6 +8106,8 @@ namespace ts {
 
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
+
+    export type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
 
     export function sliceAfter<T>(arr: ReadonlyArray<T>, value: T): ReadonlyArray<T> {
         const index = arr.indexOf(value);
