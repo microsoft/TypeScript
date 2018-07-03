@@ -432,7 +432,7 @@ namespace ts.server {
 
             if (preferences) {
                 if (!this.preferences) {
-                    this.preferences = defaultPreferences;
+                    this.preferences = emptyOptions;
                 }
                 this.preferences = { ...this.preferences, ...preferences };
             }
