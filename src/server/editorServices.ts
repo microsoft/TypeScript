@@ -1301,10 +1301,10 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private getConfigFileNameForFile(info: ScriptInfo) {
-            Debug.assert(info.isScriptOpen());
+        private getConfigFileNameForFile(info: ScriptInfo, infoShouldBeOpen: boolean) {
+            if (infoShouldBeOpen) Debug.assert(info.isScriptOpen());
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
-            const configFileName = this.forEachConfigFileLocation(info, /*infoShouldBeOpen*/ true, (configFileName, canonicalConfigFilePath) =>
+            const configFileName = this.forEachConfigFileLocation(info, infoShouldBeOpen, (configFileName, canonicalConfigFilePath) =>
                 this.configFileExists(configFileName, canonicalConfigFilePath, info));
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
@@ -1313,11 +1313,6 @@ namespace ts.server {
                 this.logger.info(`For info: ${info.fileName} :: No config files found.`);
             }
             return configFileName;
-        }
-
-        private getConfigFileNameForPossiblyClosedFile(info: ScriptInfo): NormalizedPath | undefined {
-            return this.forEachConfigFileLocation(info, /*infoShouldBeOpen*/ false, (configFileName, canonicalConfigFilePath) =>
-                this.configFileExists(configFileName, canonicalConfigFilePath, info));
         }
 
         private printProjects() {
@@ -1844,34 +1839,34 @@ namespace ts.server {
         }
 
         private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, hostToQueryFileExistsOn: DirectoryStructureHost | undefined) {
-            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, GetScriptInfoKind.KeepClosed, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
-        private getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, openIfNotExists: boolean) {
-            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, openIfNotExists ? GetScriptInfoKind.Open : GetScriptInfoKind.OpenIfExists, fileContent, scriptKind, hasMixedContent);
+        private getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined) {
+            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
         }
 
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
-            return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient ? GetScriptInfoKind.Open : GetScriptInfoKind.KeepClosed, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+            return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
-        private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, kind: GetScriptInfoKind, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
-            Debug.assert(fileContent === undefined || kind === GetScriptInfoKind.Open, "ScriptInfo needs to be opened by client to be able to set its user defined content");
+        private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
+            Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
             const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
                 const isDynamic = isDynamicFileName(fileName);
-                Debug.assert(isRootedDiskPath(fileName) || isDynamic || kind === GetScriptInfoKind.Open, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info`);
+                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info`);
                 Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
                 Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always have current directory context since containing external project name will always match the script info name.`);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
-                if (kind !== GetScriptInfoKind.Open && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
+                if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
                 }
                 info = new ScriptInfo(this.host, fileName, scriptKind!, !!hasMixedContent, path, this.filenameToScriptInfoVersion.get(path)); // TODO: GH#18217
                 this.filenameToScriptInfo.set(info.path, info);
                 this.filenameToScriptInfoVersion.delete(info.path);
-                if (kind === GetScriptInfoKind.KeepClosed) {
+                if (!openedByClient) {
                     this.watchClosedScriptInfo(info);
                 }
                 else if (!isRootedDiskPath(fileName) && currentDirectory !== this.currentDirectory) {
@@ -1879,7 +1874,7 @@ namespace ts.server {
                     this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }
             }
-            if (kind !== GetScriptInfoKind.KeepClosed && !info.isScriptOpen()) {
+            if (openedByClient && !info.isScriptOpen()) {
                 // Opening closed script info
                 // either it was created just now, or was part of projects but was closed
                 this.stopWatchingScriptInfo(info);
@@ -1990,7 +1985,7 @@ namespace ts.server {
                 // we first detect if there is already a configured project created for it: if so,
                 // we re- read the tsconfig file content and update the project only if we havent already done so
                 // otherwise we create a new one.
-                const configFileName = this.getConfigFileNameForFile(info);
+                const configFileName = this.getConfigFileNameForFile(info, /*infoShouldBeOpen*/ true);
                 if (configFileName) {
                     const project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
@@ -2081,9 +2076,9 @@ namespace ts.server {
         /** @internal */
         getProjectForFileWithoutOpening(fileName: NormalizedPath): Project | undefined {
             const scriptInfo = this.filenameToScriptInfo.get(fileName) ||
-                this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, this.currentDirectory, /*fileContent*/ undefined, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, /*openIfNotExists*/ false);
-            const configFileName = scriptInfo && this.getConfigFileNameForPossiblyClosedFile(scriptInfo);
-            return configFileName === undefined ? undefined : this.getOrCreateConfiguredProject(configFileName).project;
+                this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName, this.currentDirectory, /*fileContent*/ undefined, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined);
+            const configFileName = scriptInfo && this.getConfigFileNameForFile(scriptInfo, /*infoShouldBeOpen*/ false);
+            return configFileName === undefined ? undefined : this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
         }
 
         /** @internal */
@@ -2099,31 +2094,20 @@ namespace ts.server {
             });
         }
 
-        private getOrCreateConfiguredProject(configFileName: NormalizedPath): { readonly project: ConfiguredProject, readonly didCreate: boolean } {
-            const project = this.findConfiguredProjectByProjectName(configFileName);
-            return project ? { project, didCreate: false } : { project: this.createConfiguredProject(configFileName), didCreate: true };
-        }
-
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
-            return this.tryOpenClientFileWithNormalizedPath(fileName, fileContent, scriptKind, hasMixedContent, projectRootPath)!; // TODO: GH#18217
-        }
-
-        /** @internal */
-        tryOpenClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath, dontOpenIfNotExists?: boolean): OpenConfiguredProjectResult | undefined {
             let configFileName: NormalizedPath | undefined;
             let configFileErrors: ReadonlyArray<Diagnostic> | undefined;
 
-            const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent, !dontOpenIfNotExists);
-            if (!info) return undefined;
+            const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent)!; // TODO: GH#18217
 
             this.openFiles.set(info.path, projectRootPath);
             let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
             if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
-                configFileName = this.getConfigFileNameForFile(info);
+                configFileName = this.getConfigFileNameForFile(info, /*infoShouldBeOpen*/ true);
                 if (configFileName) {
-                    let didCreate: boolean;
-                    ({ project, didCreate } = this.getOrCreateConfiguredProject(configFileName));
-                    if (didCreate) {
+                    project = this.findConfiguredProjectByProjectName(configFileName);
+                    if (!project) {
+                        project = this.createConfiguredProject(configFileName);
                         // Send the event only if the project got created as part of this open request and info is part of the project
                         if (info.isOrphan()) {
                             // Since the file isnt part of configured project, do not send config file info
@@ -2553,6 +2537,4 @@ namespace ts.server {
             return false;
         }
     }
-
-    const enum GetScriptInfoKind { KeepClosed, Open, OpenIfExists }
 }
