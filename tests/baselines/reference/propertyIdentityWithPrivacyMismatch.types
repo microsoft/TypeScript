@@ -38,7 +38,7 @@ var y: Foo2;
 
 === tests/cases/compiler/propertyIdentityWithPrivacyMismatch_0.ts ===
 declare module 'mod1' {
->'mod1' : typeof 'mod1'
+>'mod1' : typeof import("mod1")
 
     class Foo {
 >Foo : Foo
@@ -48,7 +48,7 @@ declare module 'mod1' {
     }
 }
 declare module 'mod2' {
->'mod2' : typeof 'mod2'
+>'mod2' : typeof import("mod2")
 
     class Foo {
 >Foo : Foo

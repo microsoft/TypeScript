@@ -1,6 +1,6 @@
 === tests/cases/compiler/passport.d.ts ===
 declare module 'passport' {
->'passport' : typeof 'passport'
+>'passport' : typeof import("passport")
 
     namespace passport {
 >passport : PassportStatic

@@ -3,10 +3,10 @@ declare module "file1" {
 >"file1" : typeof import("file1")
 
     function foo(): void;
->foo : typeof foo
+>foo : typeof import("o")
 
     namespace foo {
->foo : typeof foo
+>foo : typeof import("o")
 
         export var v: number;
 >v : number

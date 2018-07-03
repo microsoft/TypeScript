@@ -4,7 +4,7 @@ class List<T> { }
 >T : T
 
 declare module 'mod1' {
->'mod1' : typeof 'mod1'
+>'mod1' : typeof import("mod1")
 
     class Foo {
 >Foo : Foo
@@ -12,7 +12,7 @@ declare module 'mod1' {
 }
 
 declare module 'moo' {
->'moo' : typeof 'moo'
+>'moo' : typeof import("moo")
 
     import x = require('mod1');
 >x : typeof x
