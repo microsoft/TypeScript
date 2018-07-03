@@ -11276,7 +11276,7 @@ declare namespace ts.SignatureHelp {
 declare namespace ts {
     interface SourceMapper {
         toLineColumnOffset(fileName: string, position: number): LineAndCharacter;
-        tryGetMappedLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
+        tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
         clearCache(): void;
     }
     function getSourceMapper(getCanonicalFileName: GetCanonicalFileName, currentDirectory: string, log: (message: string) => void, host: LanguageServiceHost, getProgram: () => Program): SourceMapper;
@@ -12714,6 +12714,13 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Rename;
         arguments: RenameRequestArgs;
     }
+    interface RenameFullRequest extends FileLocationRequest {
+        readonly command: CommandTypes.RenameLocationsFull;
+        readonly arguments: RenameRequestArgs;
+    }
+    interface RenameFullResponse extends Response {
+        readonly body: ReadonlyArray<RenameLocation>;
+    }
     interface RenameInfo {
         canRename: boolean;
         localizedErrorMessage?: string;
@@ -14121,6 +14128,8 @@ declare namespace ts.server {
         private getProjects;
         private getDefaultProject;
         private getRenameLocations;
+        private static mapRenameInfo;
+        private toSpanGroups;
         private getReferences;
         private openClientFile;
         private getPosition;

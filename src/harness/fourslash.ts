@@ -1672,9 +1672,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void {
-            ts.Debug.assert(!(insertResultsIntoVfs && this.testType === FourSlashTestType.Server), "Use verifyGetEmitOutput -- insertResultsIntoVfs doesn't work with server");
-
+        public baselineGetEmitOutput(): void {
             Harness.Baseline.runBaseline(
                 ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]),
                 () => {
@@ -1707,9 +1705,6 @@ Actual: ${stringify(fullActual)}`);
                         for (const outputFile of emitOutput.outputFiles) {
                             const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
                             resultString = resultString + Harness.IO.newLine() + fileName + outputFile.text;
-                            if (insertResultsIntoVfs) {
-                                this.languageServiceAdapterHost.addScript(ts.getNormalizedAbsolutePath(outputFile.name, "/"), outputFile.text, /*isRootFile*/ true);
-                            }
                         }
                         resultString += Harness.IO.newLine();
                     }
@@ -4306,8 +4301,8 @@ namespace FourSlashInterface {
             this.state.verifyGetEmitOutput(expectedOutputFiles);
         }
 
-        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
-            this.state.baselineGetEmitOutput(insertResultsIntoVfs);
+        public baselineGetEmitOutput() {
+            this.state.baselineGetEmitOutput();
         }
 
         public baselineQuickInfo() {

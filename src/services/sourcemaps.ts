@@ -7,7 +7,7 @@ namespace ts {
 
     export interface SourceMapper {
         toLineColumnOffset(fileName: string, position: number): LineAndCharacter;
-        tryGetMappedLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
+        tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
         clearCache(): void;
     }
 
@@ -19,7 +19,7 @@ namespace ts {
         getProgram: () => Program,
     ): SourceMapper {
         let sourcemappedFileCache: SourceFileLikeCache;
-        return { tryGetMappedLocation, toLineColumnOffset, clearCache };
+        return { tryGetOriginalLocation, toLineColumnOffset, clearCache };
 
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -93,13 +93,13 @@ namespace ts {
             return file.sourceMapper = sourcemaps.identitySourceMapper;
         }
 
-        function tryGetMappedLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
+        function tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
             if (!isDeclarationFileName(info.fileName)) return undefined;
 
             const file = getProgram().getSourceFile(info.fileName) || sourcemappedFileCache.get(toPath(info.fileName, currentDirectory, getCanonicalFileName));
             if (!file) return undefined;
             const newLoc = getSourceMapper(info.fileName, file).getOriginalPosition(info);
-            return newLoc === info ? undefined : tryGetMappedLocation(newLoc) || newLoc;
+            return newLoc === info ? undefined : tryGetOriginalLocation(newLoc) || newLoc;
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {

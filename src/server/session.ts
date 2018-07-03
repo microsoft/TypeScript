@@ -367,7 +367,7 @@ namespace ts.server {
             if (project.getCancellationToken().isCancellationRequested()) continue;
             if (!addToSeen(seenProjects, project.projectName)) continue;
             cb({ project, location }, (project, location) => {
-                const mapsTo = project.getSourceMapper().tryGetMappedLocation(location);
+                const mapsTo = project.getSourceMapper().tryGetOriginalLocation(location);
                 if (!mapsTo) return false;
                 const info = mapsTo && projectService.tryOpeningProjectForFileIfNecessary(toNormalizedPath(mapsTo.fileName));
                 if (!info) return false;
@@ -387,7 +387,7 @@ namespace ts.server {
     }
 
     function getMappedLocation(location: sourcemaps.SourceMappableLocation, projectService: ProjectService, project: Project): sourcemaps.SourceMappableLocation | undefined {
-        const mapsTo = project.getSourceMapper().tryGetMappedLocation(location);
+        const mapsTo = project.getSourceMapper().tryGetOriginalLocation(location);
         return mapsTo && projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
     }
 
