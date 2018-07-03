@@ -1452,6 +1452,10 @@
         "category": "Error",
         "code": 2417
     },
+    "Type of computed property value is '{0}', which is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 2418
+    },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
         "code": 2420

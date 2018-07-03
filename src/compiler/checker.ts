@@ -10142,7 +10142,7 @@ namespace ts {
             return false;
         }
 
-        type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type }>;
+        type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
         /**
          * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
          * If that element would issue an error, we first attempt to dive into that element's inner expression and issue a more specific error by recuring into `elaborateError`
@@ -10152,7 +10152,7 @@ namespace ts {
             // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
-                const { errorNode: prop, innerExpression: next, nameType } = status.value;
+                const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
                 const sourcePropType = getIndexedAccessType(source, nameType);
                 const targetPropType = getIndexedAccessType(target, nameType);
                 if (!isTypeAssignableTo(sourcePropType, targetPropType)) {
@@ -10165,10 +10165,10 @@ namespace ts {
                         const resultObj: { error?: Diagnostic } = {};
                         // Use the expression type, if available
                         const specificSource = next ? checkExpressionForMutableLocation(next, CheckMode.Normal, sourcePropType) : sourcePropType;
-                        const result = checkTypeAssignableTo(specificSource, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
+                        const result = checkTypeAssignableTo(specificSource, targetPropType, prop, errorMessage, /*containingChain*/ undefined, resultObj);
                         if (result && specificSource !== sourcePropType) {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                            checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, /*containingChain*/ undefined, resultObj);
+                            checkTypeAssignableTo(sourcePropType, targetPropType, prop, errorMessage, /*containingChain*/ undefined, resultObj);
                         }
                         if (resultObj.error) {
                             const reportedDiag = resultObj.error;
@@ -10250,7 +10250,7 @@ namespace ts {
                         yield { errorNode: prop.name, innerExpression: undefined, nameType: type };
                         break;
                     case SyntaxKind.PropertyAssignment:
-                        yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: type };
+                        yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: type, errorMessage: isComputedNonLiteralName(prop.name) ? Diagnostics.Type_of_computed_property_value_is_0_which_is_not_assignable_to_type_1 : undefined };
                         break;
                     default:
                         Debug.assertNever(prop);
