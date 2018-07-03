@@ -3292,6 +3292,12 @@ declare namespace ts {
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
+        members?: SymbolTable;
+        properties?: Symbol[];
+        callSignatures?: ReadonlyArray<Signature>;
+        constructSignatures?: ReadonlyArray<Signature>;
+        stringIndexInfo?: IndexInfo;
+        numberIndexInfo?: IndexInfo;
     }
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
     interface InterfaceType extends ObjectType {
@@ -3382,8 +3388,6 @@ declare namespace ts {
         properties: Symbol[];
         callSignatures: ReadonlyArray<Signature>;
         constructSignatures: ReadonlyArray<Signature>;
-        stringIndexInfo?: IndexInfo;
-        numberIndexInfo?: IndexInfo;
     }
     interface FreshObjectLiteralType extends ResolvedType {
         regularType: ResolvedType;
