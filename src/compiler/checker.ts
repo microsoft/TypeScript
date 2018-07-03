@@ -6754,8 +6754,7 @@ namespace ts {
                 const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
                 if (expected && typeIsLiteralType(expected)) {
                     const actual = getTypeOfNode(property);
-                    // Apparently two literal types for the same literal are still not equal.
-                    return !!actual && (!typeIsLiteralType(actual) || actual.value !== expected.value);
+                    return !!actual && !isTypeIdenticalTo(actual, expected);
                 }
                 return false;
             });
