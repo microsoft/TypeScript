@@ -3253,6 +3253,7 @@ declare namespace ts {
         aliasSymbol?: Symbol;
         aliasTypeArguments?: ReadonlyArray<Type>;
         wildcardInstantiation?: Type;
+        immediateBaseConstraint?: Type;
     }
     interface IntrinsicType extends Type {
         intrinsicName: string;
