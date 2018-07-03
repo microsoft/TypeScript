@@ -3296,7 +3296,7 @@ declare namespace ts {
         Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here: DiagnosticMessage;
         Type_arguments_cannot_be_used_here: DiagnosticMessage;
         The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_options: DiagnosticMessage;
-        _0_declarations_cannot_be_labeled: DiagnosticMessage;
+        A_label_is_not_allowed_here: DiagnosticMessage;
         Duplicate_identifier_0: DiagnosticMessage;
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: DiagnosticMessage;
         Static_members_cannot_reference_class_type_parameters: DiagnosticMessage;

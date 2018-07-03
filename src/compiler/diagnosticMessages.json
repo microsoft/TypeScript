@@ -983,7 +983,7 @@
         "category": "Error",
         "code": 1343
     },
-    "'{0}' declarations cannot be labeled.": {
+    "'A label is not allowed here.": {
         "category": "Error",
         "code": 1344
     },
