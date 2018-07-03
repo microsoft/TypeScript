@@ -2313,6 +2313,21 @@ declare module "fs" {
     });
 
     describe("tsc-watch console clearing", () => {
+        const currentDirectoryLog = "Current directory: / CaseSensitiveFileNames: false\n";
+        const fileWatcherAddedLog = [
+            "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
+            "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
+        ];
+
+        function getProgramSynchronizingLog(options: CompilerOptions) {
+            return [
+                "Synchronizing program\n",
+                "CreatingProgramWith::\n",
+                "  roots: [\"f.ts\"]\n",
+                `  options: ${JSON.stringify(options)}\n`
+            ];
+        }
+
         function checkConsoleClearing(options: CompilerOptions = {}) {
             const file = {
                 path: "f.ts",
@@ -2320,31 +2335,23 @@ declare module "fs" {
             };
             const files = [file, libFile];
             const disableConsoleClear = options.diagnostics || options.extendedDiagnostics || options.preserveWatchOutput;
+            const hasLog = options.extendedDiagnostics || options.diagnostics;
             const host = createWatchedSystem(files);
             createWatchOfFilesAndCompilerOptions([file.path], host, options);
-            checkOutputErrorsInitial(host, emptyArray, disableConsoleClear, options.extendedDiagnostics ? [
-                "Current directory: / CaseSensitiveFileNames: false\n",
-                "Synchronizing program\n",
-                "CreatingProgramWith::\n",
-                "  roots: [\"f.ts\"]\n",
-                "  options: {\"extendedDiagnostics\":true}\n",
-                "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
-                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
+            checkOutputErrorsInitial(host, emptyArray, disableConsoleClear, hasLog ? [
+                currentDirectoryLog,
+                ...getProgramSynchronizingLog(options),
+                ...(options.extendedDiagnostics ? fileWatcherAddedLog : emptyArray)
             ] : undefined);
 
             file.content = "//";
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
-            checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, options.extendedDiagnostics ? [
+            checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, hasLog ? [
                 "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n",
                 "Scheduling update\n",
                 "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n"
-            ] : undefined, options.extendedDiagnostics ? [
-                "Synchronizing program\n",
-                "CreatingProgramWith::\n",
-                "  roots: [\"f.ts\"]\n",
-                "  options: {\"extendedDiagnostics\":true}\n"
-            ] : undefined);
+            ] : undefined, hasLog ? getProgramSynchronizingLog(options) : undefined);
         }
 
         it("without --diagnostics or --extendedDiagnostics", () => {
