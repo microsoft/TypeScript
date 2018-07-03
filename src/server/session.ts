@@ -363,13 +363,17 @@ namespace ts.server {
 
         while (toDo.length) {
             const { project, location } = Debug.assertDefined(toDo.pop());
-            if (project.getCancellationToken().isCancellationRequested() || !addToSeen(seenProjects, project.projectName)) continue;
+            if (project.getCancellationToken().isCancellationRequested()) continue;
             cb({ project, location }, (project, location) => {
                 const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
                 const originalProject = originalLocation && projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
-                if (originalProject) toDo.push({ project: originalProject, location: originalLocation! });
+                if (originalProject) addToTodo({ project: originalProject, location: originalLocation! });
                 return !!originalProject;
             });
+        }
+
+        function addToTodo(projectAndLocation: ProjectAndLocation): void {
+            if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
         }
     }
 
