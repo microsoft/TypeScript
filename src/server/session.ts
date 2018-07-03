@@ -352,7 +352,6 @@ namespace ts.server {
         cb: (where: ProjectAndLocation, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
     ): void {
         const seenProjects = createMap<true>();
-        const filesToClose: string[] = [];
         const toDo: ProjectAndLocation[] = (isProjectsArray(projects) ? projects : projects.projects).map(project => ({ project, location: initialLocation }));
         if (!isArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((symlinkedProjects, path) => {
@@ -364,21 +363,13 @@ namespace ts.server {
 
         while (toDo.length) {
             const { project, location } = Debug.assertDefined(toDo.pop());
-            if (project.getCancellationToken().isCancellationRequested()) continue;
-            if (!addToSeen(seenProjects, project.projectName)) continue;
+            if (project.getCancellationToken().isCancellationRequested() || !addToSeen(seenProjects, project.projectName)) continue;
             cb({ project, location }, (project, location) => {
-                const mapsTo = project.getSourceMapper().tryGetOriginalLocation(location);
-                if (!mapsTo) return false;
-                const info = mapsTo && projectService.tryOpeningProjectForFileIfNecessary(toNormalizedPath(mapsTo.fileName));
-                if (!info) return false;
-                if (info.fileJustOpened) filesToClose.push(mapsTo.fileName);
-                if (info.project) toDo.push({ project: info.project, location: mapsTo });
-                return !!info.project;
+                const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
+                const originalProject = originalLocation && projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
+                if (originalProject) toDo.push({ project: originalProject, location: originalLocation! });
+                return !!originalProject;
             });
-        }
-
-        for (const file of filesToClose) {
-            projectService.closeClientFile(file);
         }
     }
 

@@ -14025,6 +14025,7 @@ declare namespace ts.server {
         stopWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo): void;
         private forEachConfigFileLocation;
         private getConfigFileNameForFile;
+        private getConfigFileNameForPossiblyClosedFile;
         private printProjects;
         private findConfiguredProjectByProjectName;
         private getConfiguredProjectByCanonicalConfigFilePath;
@@ -14065,10 +14066,7 @@ declare namespace ts.server {
         private removeRootOfInferredProjectIfNowPartOfOtherProject;
         private ensureProjectForOpenFiles;
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
-        tryOpeningProjectForFileIfNecessary(fileName: NormalizedPath): {
-            readonly fileJustOpened: boolean;
-            readonly project: Project | undefined;
-        } | undefined;
+        getProjectForFileWithoutOpening(fileName: NormalizedPath): Project | undefined;
         fileExists(fileName: NormalizedPath): boolean;
         private findExternalProjectContainingOpenScriptInfo;
         private getOrCreateConfiguredProject;

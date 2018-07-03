@@ -1171,7 +1171,7 @@ namespace ts.server {
          */
         private stopWatchingConfigFilesForClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.isScriptOpen());
-            this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
+            this.forEachConfigFileLocation(info, /*infoShouldBeOpen*/ true, (configFileName, canonicalConfigFilePath) => {
                 const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (configFileExistenceInfo) {
                     const infoIsRootOfInferredProject = configFileExistenceInfo.openFilesImpactedByConfigFile.get(info.path);
@@ -1205,7 +1205,7 @@ namespace ts.server {
         /* @internal */
         startWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
-            this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
+            this.forEachConfigFileLocation(info, /*infoShouldBeOpen*/ true, (configFileName, canonicalConfigFilePath) => {
                 let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (!configFileExistenceInfo) {
                     // Create the cache
@@ -1233,7 +1233,7 @@ namespace ts.server {
          */
         /* @internal */
         stopWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
-            this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
+            this.forEachConfigFileLocation(info, /*infoShouldBeOpen*/ true, (configFileName, canonicalConfigFilePath) => {
                 const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (configFileExistenceInfo && configFileExistenceInfo.openFilesImpactedByConfigFile.has(info.path)) {
                     Debug.assert(info.isScriptOpen());
@@ -1256,18 +1256,18 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private forEachConfigFileLocation(info: ScriptInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
+        private forEachConfigFileLocation(info: ScriptInfo, infoShouldBeOpen: boolean, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
             if (this.syntaxOnly) {
                 return undefined;
             }
 
-            Debug.assert(this.openFiles.has(info.path));
+            Debug.assert(!infoShouldBeOpen || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
             const isSearchPathInProjectRoot = () => containsPath(projectRootPath!, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
-            // If projectRootPath doesnt contain info.path, then do normal search for config file
+            // If projectRootPath doesn't contain info.path, then do normal search for config file
             const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
             do {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
@@ -1304,10 +1304,8 @@ namespace ts.server {
         private getConfigFileNameForFile(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
-            const configFileName = this.forEachConfigFileLocation(info,
-                (configFileName, canonicalConfigFilePath) =>
-                    this.configFileExists(configFileName, canonicalConfigFilePath, info)
-            );
+            const configFileName = this.forEachConfigFileLocation(info, /*infoShouldBeOpen*/ true, (configFileName, canonicalConfigFilePath) =>
+                this.configFileExists(configFileName, canonicalConfigFilePath, info));
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
             }
@@ -1315,6 +1313,11 @@ namespace ts.server {
                 this.logger.info(`For info: ${info.fileName} :: No config files found.`);
             }
             return configFileName;
+        }
+
+        private getConfigFileNameForPossiblyClosedFile(info: ScriptInfo): NormalizedPath | undefined {
+            return this.forEachConfigFileLocation(info, /*infoShouldBeOpen*/ false, (configFileName, canonicalConfigFilePath) =>
+                this.configFileExists(configFileName, canonicalConfigFilePath, info));
         }
 
         private printProjects() {
@@ -2075,20 +2078,12 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
-        /**
-         * @internal
-         * Returns undefined if the file does not exist.
-         */
-        tryOpeningProjectForFileIfNecessary(fileName: NormalizedPath): { readonly fileJustOpened: boolean, readonly project: Project | undefined } | undefined {
-            const scriptInfo = this.filenameToScriptInfo.get(fileName);
-            const getProject = (configFileName: NormalizedPath | undefined) => configFileName === undefined ? undefined : this.getOrCreateConfiguredProject(configFileName).project;
-            if (scriptInfo && scriptInfo.isScriptOpen()) {
-                return { fileJustOpened: false, project: getProject(this.getConfigFileNameForFile(scriptInfo)) };
-            }
-            else {
-                const openResult = this.tryOpenClientFileWithNormalizedPath(fileName, /*fileContent*/ undefined, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, /*projectRootPath*/ undefined, /*dontOpenIfNotExists*/ true);
-                return openResult && { fileJustOpened: true, project: getProject(openResult.configFileName) };
-            }
+        /** @internal */
+        getProjectForFileWithoutOpening(fileName: NormalizedPath): Project | undefined {
+            const scriptInfo = this.filenameToScriptInfo.get(fileName) ||
+                this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, this.currentDirectory, /*fileContent*/ undefined, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, /*openIfNotExists*/ false);
+            const configFileName = scriptInfo && this.getConfigFileNameForPossiblyClosedFile(scriptInfo);
+            return configFileName === undefined ? undefined : this.getOrCreateConfiguredProject(configFileName).project;
         }
 
         /** @internal */
