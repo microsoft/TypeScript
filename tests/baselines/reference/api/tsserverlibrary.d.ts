@@ -6712,6 +6712,8 @@ declare namespace ts {
     function isNamedDeclaration(node: Node): node is NamedDeclaration & {
         name: DeclarationName;
     };
+    /** @internal */
+    function getNonAssignedNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
@@ -9864,7 +9866,7 @@ declare namespace ts {
         version: string;
         scriptSnapshot: IScriptSnapshot | undefined;
         nameTable: UnderscoreEscapedMap<number> | undefined;
-        getNamedDeclarations(): Map<Declaration[]>;
+        getNamedDeclarations(): Map<ReadonlyArray<Declaration>>;
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
         getLineStarts(): ReadonlyArray<number>;
@@ -9961,7 +9963,7 @@ declare namespace ts {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
     }
-    const defaultPreferences: UserPreferences;
+    const emptyOptions: {};
     interface LanguageService {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
@@ -9985,7 +9987,7 @@ declare namespace ts {
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
@@ -10046,12 +10048,53 @@ declare namespace ts {
     type OrganizeImportsScope = CombinedCodeFixScope;
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
-        /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
+        /**
+         * If the editor is asking for completions because a certain character was typed
+         * (as opposed to when the user explicitly requested them) this should be set.
+         */
         triggerCharacter?: CompletionsTriggerCharacter;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+    type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
+    interface SignatureHelpItemsOptions {
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+    type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
+    /**
+     * Signals that the user manually requested signature help.
+     * The language service will unconditionally attempt to provide a result.
+     */
+    interface SignatureHelpInvokedReason {
+        kind: "invoked";
+        triggerCharacter?: undefined;
+    }
+    /**
+     * Signals that the signature help request came from a user typing a character.
+     * Depending on the character and the syntactic context, the request may or may not be served a result.
+     */
+    interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped";
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter: SignatureHelpTriggerCharacter;
+    }
+    /**
+     * Signals that this signature help request came from typing a character or moving the cursor.
+     * This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
+     * The language service will unconditionally attempt to provide a result.
+     * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
+     */
+    interface SignatureHelpRetriggeredReason {
+        kind: "retrigger";
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
     interface ApplyCodeActionCommandResult {
         successMessage: string;
@@ -10243,7 +10286,7 @@ declare namespace ts {
         name: string;
         kind: ScriptElementKind;
         kindModifiers: string;
-        matchKind: string;
+        matchKind: "exact" | "prefix" | "substring" | "camelCase";
         isCaseSensitive: boolean;
         fileName: string;
         textSpan: TextSpan;
@@ -10830,6 +10873,18 @@ declare namespace ts {
         forEach(cb: (node: Node) => void): void;
         some(pred: (node: Node) => boolean): boolean;
     }
+    interface ReadonlyNodeMap<TNode extends Node, TValue> {
+        get(node: TNode): TValue | undefined;
+        has(node: TNode): boolean;
+    }
+    class NodeMap<TNode extends Node, TValue> implements ReadonlyNodeMap<TNode, TValue> {
+        private map;
+        get(node: TNode): TValue | undefined;
+        getOrUpdate(node: TNode, setValue: () => TValue): TValue;
+        set(node: TNode, value: TValue): void;
+        has(node: TNode): boolean;
+        forEach(cb: (value: TValue, node: TNode) => void): void;
+    }
     function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined;
     function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined;
     function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void;
@@ -11233,7 +11288,7 @@ declare namespace ts.Rename {
     function getRenameInfo(program: Program, sourceFile: SourceFile, position: number): RenameInfo;
 }
 declare namespace ts.SignatureHelp {
-    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
+    function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerReason: SignatureHelpTriggerReason | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined;
     interface ArgumentInfoForCompletions {
         readonly invocation: CallLikeExpression;
         readonly argumentIndex: number;
@@ -11590,8 +11645,10 @@ declare namespace ts {
         function getSupportedErrorCodes(): string[];
         function getFixes(context: CodeFixContext): CodeFixAction[];
         function getAllFixes(context: CodeFixAllContext): CombinedCodeActions;
+        function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions;
         function createFileTextChanges(fileName: string, textChanges: TextChange[]): FileTextChanges;
         function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void): CombinedCodeActions;
+        function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void;
     }
 }
 declare namespace ts {
@@ -11928,7 +11985,7 @@ declare namespace ts {
         getQuickInfoAtPosition(fileName: string, position: number): string;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
-        getSignatureHelpItems(fileName: string, position: number): string;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string;
         /**
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
@@ -12963,7 +13020,23 @@ declare namespace ts.server.protocol {
         argumentIndex: number;
         argumentCount: number;
     }
+    type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
     interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+    type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
+    interface SignatureHelpInvokedReason {
+        kind: "invoked";
+        triggerCharacter?: undefined;
+    }
+    interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped";
+        triggerCharacter: SignatureHelpTriggerCharacter;
+    }
+    interface SignatureHelpRetriggeredReason {
+        kind: "retrigger";
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
     interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;
@@ -13104,8 +13177,8 @@ declare namespace ts.server.protocol {
     interface NavtoItem extends FileSpan {
         name: string;
         kind: ScriptElementKind;
-        matchKind?: string;
-        isCaseSensitive?: boolean;
+        matchKind: string;
+        isCaseSensitive: boolean;
         kindModifiers?: string;
         containerName?: string;
         containerKind?: ScriptElementKind;

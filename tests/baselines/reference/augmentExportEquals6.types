@@ -1,9 +1,9 @@
 === tests/cases/compiler/file1.ts ===
 class foo {}
->foo : foo
+>foo : import("o")
 
 namespace foo {
->foo : typeof foo
+>foo : typeof import("o")
 
     export class A {}
 >A : A

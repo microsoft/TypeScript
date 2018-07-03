@@ -8,8 +8,22 @@
 ////    }
 ////}
 ////
-////enum E {}
-////E.A;
+////class D extends C {}
+////class E extends D {
+////    method() {
+////        this.x = 0;
+////        this.ex = 0;
+////    }
+////}
+////
+////class Unrelated {
+////    method() {
+////        this.x = 0;
+////    }
+////}
+////
+////enum En {}
+////En.A;
 
 verify.codeFixAll({
     fixId: "addMissingMember",
@@ -27,8 +41,24 @@ verify.codeFixAll({
     }
 }
 
-enum E {
+class D extends C {}
+class E extends D {
+    ex: number;
+    method() {
+        this.x = 0;
+        this.ex = 0;
+    }
+}
+
+class Unrelated {
+    x: number;
+    method() {
+        this.x = 0;
+    }
+}
+
+enum En {
     A
 }
-E.A;`,
+En.A;`,
 });

@@ -3733,19 +3733,56 @@ namespace ts {
                 return top;
             }
 
+            function getSpecifierForModuleSymbol(symbol: Symbol, context: NodeBuilderContext) {
+                const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
+                if (file && file.moduleName !== undefined) {
+                    // Use the amd name if it is available
+                    return file.moduleName;
+                }
+                if (!file) {
+                    if (context.tracker.trackReferencedAmbientModule) {
+                        const ambientDecls = filter(symbol.declarations, isAmbientModule);
+                        if (length(ambientDecls)) {
+                            for (const decl of ambientDecls) {
+                                context.tracker.trackReferencedAmbientModule(decl, symbol);
+                            }
+                        }
+                    }
+                    return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
+                }
+                else {
+                    if (!context.enclosingDeclaration || !context.tracker.moduleResolverHost) {
+                        // If there's no context declaration, we can't lookup a non-ambient specifier, so we just use the symbol name
+                        return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
+                    }
+                    const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
+                    const links = getSymbolLinks(symbol);
+                    let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
+                    if (!specifier) {
+                        specifier = flatten(moduleSpecifiers.getModuleSpecifiers(
+                            symbol,
+                            compilerOptions,
+                            contextFile,
+                            context.tracker.moduleResolverHost,
+                            context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
+                            { importModuleSpecifierPreference: "non-relative" }
+                        ))[0];
+                        links.specifierCache = links.specifierCache || createMap();
+                        links.specifierCache.set(contextFile.path, specifier);
+                    }
+                    return specifier;
+                }
+            }
+
             function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: ReadonlyArray<TypeNode>): TypeNode {
                 const chain = lookupSymbolChain(symbol, context, meaning, !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope)); // If we're using aliases outside the current scope, dont bother with the module
 
-                context.flags |= NodeBuilderFlags.InInitialEntityName;
-                const rootName = getNameOfSymbolAsWritten(chain[0], context);
-                context.flags ^= NodeBuilderFlags.InInitialEntityName;
-
                 const isTypeOf = meaning === SymbolFlags.Value;
-                if (ambientModuleSymbolRegex.test(rootName)) {
+                if (some(chain[0].declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                     // module is root, must use `ImportTypeNode`
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
-                    const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
+                    const lit = createLiteralTypeNode(createLiteral(getSpecifierForModuleSymbol(chain[0], context)));
                     if (!nonRootParts || isEntityName(nonRootParts)) {
                         if (nonRootParts) {
                             const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
@@ -3990,41 +4027,6 @@ namespace ts {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
-                if (some(symbol.declarations, hasExternalModuleSymbol) && context!.enclosingDeclaration) { // TODO: GH#18217
-                    const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
-                    if (!file || !context!.tracker.moduleResolverHost) {
-                        if (context!.tracker.trackReferencedAmbientModule) {
-                            const ambientDecls = filter(symbol.declarations, isAmbientModule);
-                            if (length(ambientDecls)) {
-                                for (const decl of ambientDecls) {
-                                    context!.tracker.trackReferencedAmbientModule!(decl, symbol); // TODO: GH#18217
-                                }
-                            }
-                        }
-                        // ambient module, just use declaration/symbol name (fallthrough)
-                    }
-                    else {
-                        if (file.moduleName) {
-                            return `"${file.moduleName}"`;
-                        }
-                        const contextFile = getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration))!;
-                        const links = getSymbolLinks(symbol);
-                        let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
-                        if (!specifier) {
-                            specifier = flatten(moduleSpecifiers.getModuleSpecifiers(
-                                symbol,
-                                compilerOptions,
-                                contextFile,
-                                context!.tracker.moduleResolverHost!,
-                                context!.tracker.moduleResolverHost!.getSourceFiles!(),
-                                { importModuleSpecifierPreference: "non-relative" }
-                            ))[0];
-                            links.specifierCache = links.specifierCache || createMap();
-                            links.specifierCache.set(contextFile.path, specifier);
-                        }
-                        return `"${specifier}"`;
-                    }
-                }
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
@@ -19102,8 +19104,10 @@ namespace ts {
             if (importNode && !isImportCall(importNode)) {
                 const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target!), kind);
                 if (!sigs || !sigs.length) return;
-                Debug.assert(!diagnostic.relatedInformation);
-                diagnostic.relatedInformation = [createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead)];
+
+                addRelatedInfo(diagnostic,
+                    createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead)
+                );
             }
         }
 

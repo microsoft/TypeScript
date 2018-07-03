@@ -1434,7 +1434,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
-            const helpItems = project.getLanguageService().getSignatureHelpItems(file, position);
+            const helpItems = project.getLanguageService().getSignatureHelpItems(file, position, args);
             if (!helpItems) {
                 return undefined;
             }
@@ -1591,15 +1591,14 @@ namespace ts.server {
                             const bakedItem: protocol.NavtoItem = {
                                 name: navItem.name,
                                 kind: navItem.kind,
+                                isCaseSensitive: navItem.isCaseSensitive,
+                                matchKind: navItem.matchKind,
                                 file: navItem.fileName,
                                 start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
                                 end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
                             };
                             if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                                 bakedItem.kindModifiers = navItem.kindModifiers;
-                            }
-                            if (navItem.matchKind !== "none") {
-                                bakedItem.matchKind = navItem.matchKind;
                             }
                             if (navItem.containerName && (navItem.containerName.length > 0)) {
                                 bakedItem.containerName = navItem.containerName;
