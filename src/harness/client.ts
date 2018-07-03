@@ -224,9 +224,9 @@ namespace ts.server {
                 containerName: entry.containerName || "",
                 containerKind: entry.containerKind || ScriptElementKind.unknown,
                 kind: entry.kind,
-                kindModifiers: entry.kindModifiers!, // TODO: GH#18217
-                matchKind: entry.matchKind!, // TODO: GH#18217
-                isCaseSensitive: entry.isCaseSensitive!, // TODO: GH#18217
+                kindModifiers: entry.kindModifiers || "",
+                matchKind: entry.matchKind as keyof typeof PatternMatchKind,
+                isCaseSensitive: entry.isCaseSensitive,
                 fileName: entry.file,
                 textSpan: this.decodeSpan(entry),
             }));

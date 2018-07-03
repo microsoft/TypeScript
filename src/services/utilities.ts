@@ -347,7 +347,6 @@ namespace ts {
             case SyntaxKind.Parameter: return hasModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.ImportClause:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
@@ -375,6 +374,8 @@ namespace ts {
                         return ScriptElementKind.unknown;
                     }
                 }
+            case SyntaxKind.Identifier:
+                return isImportClause(node.parent) ? ScriptElementKind.alias : ScriptElementKind.unknown;
             default:
                 return ScriptElementKind.unknown;
         }

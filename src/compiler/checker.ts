@@ -2542,6 +2542,12 @@ namespace ts {
             const type = <ObjectType>createType(TypeFlags.Object);
             type.objectFlags = objectFlags;
             type.symbol = symbol!;
+            type.members = undefined;
+            type.properties = undefined;
+            type.callSignatures = undefined;
+            type.constructSignatures = undefined;
+            type.stringIndexInfo = undefined;
+            type.numberIndexInfo = undefined;
             return type;
         }
 
@@ -2563,11 +2569,8 @@ namespace ts {
         function getNamedMembers(members: SymbolTable): Symbol[] {
             let result: Symbol[] | undefined;
             members.forEach((symbol, id) => {
-                if (!isReservedMemberName(id)) {
-                    if (!result) result = [];
-                    if (symbolIsValue(symbol)) {
-                        result.push(symbol);
-                    }
+                if (!isReservedMemberName(id) && symbolIsValue(symbol)) {
+                    (result || (result = [])).push(symbol);
                 }
             });
             return result || emptyArray;
@@ -2575,11 +2578,11 @@ namespace ts {
 
         function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: ReadonlyArray<Signature>, constructSignatures: ReadonlyArray<Signature>, stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
             (<ResolvedType>type).members = members;
-            (<ResolvedType>type).properties = getNamedMembers(members);
+            (<ResolvedType>type).properties = members === emptySymbols ? emptyArray : getNamedMembers(members);
             (<ResolvedType>type).callSignatures = callSignatures;
             (<ResolvedType>type).constructSignatures = constructSignatures;
-            if (stringIndexInfo) (<ResolvedType>type).stringIndexInfo = stringIndexInfo;
-            if (numberIndexInfo) (<ResolvedType>type).numberIndexInfo = numberIndexInfo;
+            (<ResolvedType>type).stringIndexInfo = stringIndexInfo;
+            (<ResolvedType>type).numberIndexInfo = numberIndexInfo;
             return <ResolvedType>type;
         }
 
@@ -3733,19 +3736,56 @@ namespace ts {
                 return top;
             }
 
+            function getSpecifierForModuleSymbol(symbol: Symbol, context: NodeBuilderContext) {
+                const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
+                if (file && file.moduleName !== undefined) {
+                    // Use the amd name if it is available
+                    return file.moduleName;
+                }
+                if (!file) {
+                    if (context.tracker.trackReferencedAmbientModule) {
+                        const ambientDecls = filter(symbol.declarations, isAmbientModule);
+                        if (length(ambientDecls)) {
+                            for (const decl of ambientDecls) {
+                                context.tracker.trackReferencedAmbientModule(decl);
+                            }
+                        }
+                    }
+                    return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
+                }
+                else {
+                    if (!context.enclosingDeclaration || !context.tracker.moduleResolverHost) {
+                        // If there's no context declaration, we can't lookup a non-ambient specifier, so we just use the symbol name
+                        return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
+                    }
+                    const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
+                    const links = getSymbolLinks(symbol);
+                    let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
+                    if (!specifier) {
+                        specifier = flatten(moduleSpecifiers.getModuleSpecifiers(
+                            symbol,
+                            compilerOptions,
+                            contextFile,
+                            context.tracker.moduleResolverHost,
+                            context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
+                            { importModuleSpecifierPreference: "non-relative" }
+                        ))[0];
+                        links.specifierCache = links.specifierCache || createMap();
+                        links.specifierCache.set(contextFile.path, specifier);
+                    }
+                    return specifier;
+                }
+            }
+
             function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: ReadonlyArray<TypeNode>): TypeNode {
                 const chain = lookupSymbolChain(symbol, context, meaning, !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope)); // If we're using aliases outside the current scope, dont bother with the module
 
-                context.flags |= NodeBuilderFlags.InInitialEntityName;
-                const rootName = getNameOfSymbolAsWritten(chain[0], context);
-                context.flags ^= NodeBuilderFlags.InInitialEntityName;
-
                 const isTypeOf = meaning === SymbolFlags.Value;
-                if (ambientModuleSymbolRegex.test(rootName)) {
+                if (some(chain[0].declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                     // module is root, must use `ImportTypeNode`
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
-                    const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
+                    const lit = createLiteralTypeNode(createLiteral(getSpecifierForModuleSymbol(chain[0], context)));
                     if (!nonRootParts || isEntityName(nonRootParts)) {
                         if (nonRootParts) {
                             const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
@@ -3990,41 +4030,6 @@ namespace ts {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
-                if (some(symbol.declarations, hasExternalModuleSymbol) && context!.enclosingDeclaration) { // TODO: GH#18217
-                    const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
-                    if (!file || !context!.tracker.moduleResolverHost) {
-                        if (context!.tracker.trackReferencedAmbientModule) {
-                            const ambientDecls = filter(symbol.declarations, isAmbientModule);
-                            if (length(ambientDecls)) {
-                                for (const decl of ambientDecls) {
-                                    context!.tracker.trackReferencedAmbientModule!(decl); // TODO: GH#18217
-                                }
-                            }
-                        }
-                        // ambient module, just use declaration/symbol name (fallthrough)
-                    }
-                    else {
-                        if (file.moduleName) {
-                            return `"${file.moduleName}"`;
-                        }
-                        const contextFile = getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration))!;
-                        const links = getSymbolLinks(symbol);
-                        let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
-                        if (!specifier) {
-                            specifier = flatten(moduleSpecifiers.getModuleSpecifiers(
-                                symbol,
-                                compilerOptions,
-                                contextFile,
-                                context!.tracker.moduleResolverHost!,
-                                context!.tracker.moduleResolverHost!.getSourceFiles!(),
-                                { importModuleSpecifierPreference: "non-relative" }
-                            ))[0];
-                            links.specifierCache = links.specifierCache || createMap();
-                            links.specifierCache.set(contextFile.path, specifier);
-                        }
-                        return `"${specifier}"`;
-                    }
-                }
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
@@ -5448,7 +5453,7 @@ namespace ts {
                 // (otherwise there'd be an error from hasBaseType) - this is fine, but `.members` should be reset
                 // as `getIndexedAccessType` via `instantiateType` via `getTypeFromClassOrInterfaceReference` forces a
                 // partial instantiation of the members without the base types fully resolved
-                (type as Type as ResolvedType).members = undefined!; // TODO: GH#18217
+                type.members = undefined;
             }
             return type.resolvedBaseTypes = [baseType];
         }
@@ -6378,6 +6383,7 @@ namespace ts {
         function resolveAnonymousTypeMembers(type: AnonymousType) {
             const symbol = type.symbol;
             if (type.target) {
+                setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
                 const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper!, /*mappingThisOnly*/ false);
                 const callSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper!);
                 const constructSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper!);
@@ -6386,6 +6392,7 @@ namespace ts {
                 setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
+                setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
                 const members = getMembersOfSymbol(symbol);
                 const callSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.Call));
                 const constructSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.New));
@@ -6419,7 +6426,7 @@ namespace ts {
                 // in the process of resolving (see issue #6072). The temporarily empty signature list
                 // will never be observed because a qualified name can't reference signatures.
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-                    (<ResolvedType>type).callSignatures = getSignaturesOfSymbol(symbol);
+                    type.callSignatures = getSignaturesOfSymbol(symbol);
                 }
                 // And likewise for construct signatures for classes
                 if (symbol.flags & SymbolFlags.Class) {
@@ -6428,7 +6435,7 @@ namespace ts {
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    (<ResolvedType>type).constructSignatures = constructSignatures;
+                    type.constructSignatures = constructSignatures;
                 }
             }
         }
@@ -7608,7 +7615,7 @@ namespace ts {
             // will result in a different declaration kind.
             if (!signature.isolatedSignatureType) {
                 const isConstructor = signature.declaration!.kind === SyntaxKind.Constructor || signature.declaration!.kind === SyntaxKind.ConstructSignature; // TODO: GH#18217
-                const type = <ResolvedType>createObjectType(ObjectFlags.Anonymous);
+                const type = createObjectType(ObjectFlags.Anonymous);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
                 type.callSignatures = !isConstructor ? [signature] : emptyArray;
@@ -10044,7 +10051,7 @@ namespace ts {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 if (resolved.constructSignatures.length) {
-                    const result = <ResolvedType>createObjectType(ObjectFlags.Anonymous, type.symbol);
+                    const result = createObjectType(ObjectFlags.Anonymous, type.symbol);
                     result.members = resolved.members;
                     result.properties = resolved.properties;
                     result.callSignatures = emptyArray;
@@ -19102,8 +19109,10 @@ namespace ts {
             if (importNode && !isImportCall(importNode)) {
                 const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target!), kind);
                 if (!sigs || !sigs.length) return;
-                Debug.assert(!diagnostic.relatedInformation);
-                diagnostic.relatedInformation = [createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead)];
+
+                addRelatedInfo(diagnostic,
+                    createDiagnosticForNode(importNode, Diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead)
+                );
             }
         }
 

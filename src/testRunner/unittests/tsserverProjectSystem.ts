@@ -1544,13 +1544,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences)!;
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, emptyOptions)!;
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences)!;
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, emptyOptions)!;
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1576,11 +1576,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences)!;
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, emptyOptions)!;
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences)!;
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, emptyOptions)!;
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram()!.getSourceFile(f2.path)!;
             assert.equal(sf2.text, "");
@@ -2220,7 +2220,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, defaultPreferences);
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, emptyOptions);
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -2234,7 +2234,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, defaultPreferences);
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, emptyOptions);
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -8651,7 +8651,7 @@ export const x = 10;`
 
             Debug.assert(!!project.resolveModuleNames);
 
-            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions, defaultPreferences);
+            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions, emptyOptions);
             assert.deepEqual<ReadonlyArray<FileTextChanges>>(edits, [{
                 fileName: "/user.ts",
                 textChanges: [{
@@ -9008,11 +9008,12 @@ export function Test2() {
         it("navigateTo", () => {
             const { session, aTs, bDts, userTs } = makeSampleProjects();
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
-            const expected: ReadonlyArray<protocol.NavtoItem> = [
+            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(response, [
                 {
                     ...protocolFileSpanFromSubstring(bDts, "export declare function fnB(): void;"),
                     name: "fnB",
                     matchKind: "prefix",
+                    isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export,declare",
                 },
@@ -9020,6 +9021,7 @@ export function Test2() {
                     ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { fnA(); fnB(); instanceA; }"),
                     name: "fnUser",
                     matchKind: "prefix",
+                    isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 },
@@ -9027,11 +9029,11 @@ export function Test2() {
                     ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
                     name: "fnA",
                     matchKind: "prefix",
+                    isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 },
-            ];
-            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(response, expected);
+            ]);
         });
 
         it("findAllReferences", () => {

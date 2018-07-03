@@ -449,8 +449,8 @@ namespace Harness.LanguageService {
         getBreakpointStatementAtPosition(fileName: string, position: number): ts.TextSpan {
             return unwrapJSONCallResult(this.shim.getBreakpointStatementAtPosition(fileName, position));
         }
-        getSignatureHelpItems(fileName: string, position: number): ts.SignatureHelpItems {
-            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position));
+        getSignatureHelpItems(fileName: string, position: number, options: ts.SignatureHelpItemsOptions | undefined): ts.SignatureHelpItems {
+            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position, options));
         }
         getRenameInfo(fileName: string, position: number): ts.RenameInfo {
             return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));
