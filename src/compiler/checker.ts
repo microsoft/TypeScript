@@ -19073,11 +19073,22 @@ namespace ts {
                     let baseTypes = getBaseTypes(containingType as InterfaceType);
                     while (baseTypes.length) {
                         const baseType = baseTypes[0];
-                        if (modifiers & ModifierFlags.Protected &&
-                            baseType.symbol === declaration.parent.symbol) {
-                            return true;
+                        if (baseType.flags & TypeFlags.Intersection) {
+                            for (const intersectionMember of (baseType as IntersectionType).types) {
+                                if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                                    baseTypes = getBaseTypes(intersectionMember as InterfaceType);
+                                    break;
+                                }
+                            }
+                            baseTypes = emptyArray;
                         }
-                        baseTypes = getBaseTypes(baseType as InterfaceType);
+                        else {
+                            if (modifiers & ModifierFlags.Protected &&
+                                baseType.symbol === declaration.parent.symbol) {
+                                return true;
+                            }
+                            baseTypes = getBaseTypes(baseType as InterfaceType);
+                        }
                     }
                 }
                 if (modifiers & ModifierFlags.Private) {
