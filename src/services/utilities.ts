@@ -1632,6 +1632,41 @@ namespace ts {
         return clone;
     }
 
+    export function getSynthesizedMaybeRenamedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true ): T{
+        const clone = node && getSynthesizedMaybeRenamedDeepCloneWorker(node as NonNullable<T>) 
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        return clone;
+    }
+
+    function getSynthesizedMaybeRenamedDeepCloneWorker<T extends Node>(node: T): T {
+        const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+        if (visited === node) {
+            // This only happens for leaf nodes - internal nodes always see their children change.
+            let clone;
+            if (isIdentifier(node)) {
+                clone = createIdentifier("NEWNAME");
+            } 
+            else {
+                clone = getSynthesizedClone(node);
+            }
+
+            if (isStringLiteral(clone)) {
+                clone.textSourceNode = node as any;
+            }
+            else if (isNumericLiteral(clone)) {
+                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
+            }
+            return setTextRange(clone as T, node);
+        }
+
+        // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
+        // the new node created by visitEachChild with the extra changes getSynthesizedClone
+        // would have made.
+        visited.parent = undefined!;
+        return visited;
+    }
+
+
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {
         const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
         if (visited === node) {

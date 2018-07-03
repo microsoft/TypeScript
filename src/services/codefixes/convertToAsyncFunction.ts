@@ -17,7 +17,35 @@ namespace ts.codefix {
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);
 
-        // const stmts: NodeArray<Statement> = (<FunctionBody>funcToConvert.body).statements;
+        // rename conflicting variables
+        let allVarNames: Map<[Symbol]> = new MapCtr();
+        forEachChild(funcToConvert, function visit(node: Node) {
+            if (isIdentifier(node)) {
+                let symbol = checker.getSymbolAtLocation(node);
+                if (symbol && allVarNames.get(node.text) && allVarNames.get(node.text)!.filter(elem => elem === symbol).length == 0) {
+                    allVarNames.get(node.text)!.push(symbol);
+                } 
+                else if (symbol && !allVarNames.get(node.text)) {
+                    allVarNames.set(node.text, [symbol])
+                }
+            }
+
+            forEachChild(node, visit);
+        });
+
+        forEachChild(funcToConvert, function visit(node: Node) {
+            const symbol = isIdentifier(node) ? checker.getSymbolAtLocation(node) : undefined;
+
+            // don't rename the first instance of the variable
+            if (isIdentifier(node) && symbol && allVarNames.get(node.text) && allVarNames.get(node.text)!.length > 1 && allVarNames.get(node.text)![0] !== symbol) {
+                getSynthesizedMaybeRenamedDeepClone(node);
+            }
+            else {
+                getSynthesizedDeepClone(node);
+            }
+            forEachChild(node, visit);
+        });
+
         const retStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(funcToConvert);
         for (const stmt of retStmts) {
             forEachChild(stmt, function visit(node: Node) {
@@ -178,12 +206,35 @@ namespace ts.codefix {
                 } else if (isArrowFunction(func)) {
                     //if there is another outer dot then, don't actually return
                     const nextOutermostDotThen = getNextDotThen(outermostParent, checker)
-                    return nextOutermostDotThen ? [createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(argName, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]), argName] 
-                        : [createNodeArray([createReturn(func.body as Expression)]), argName];
+                    
+                    if (!nextOutermostDotThen) {
+                        usedNames.push(argName);
+                        renameAllUsages(argName, getArgName(func, checker, usedNames), [func.body]);
+                    }
+
+                    return nextOutermostDotThen ? [createNodeArray([createReturn(func.body as Expression)]), argName]
+                        : [createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(argName, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]), getArgName(func, checker, usedNames)]
                 }
                 break;
         }
         return [createNodeArray([]), ""];
+    }
+
+    function renameAllUsages(oldName: string, newName: string, codeToRename: Node[]): Node[] {
+        let renamedCode: Node[] = [];
+        for (let stmt of codeToRename){
+            forEachChild(stmt, function visit(node: Node){
+                if (isIdentifier(node) && node.text === oldName) {
+                    newName;
+                    //change the text name 
+                }
+                else if (!isFunctionLike(node)){
+                    forEachChild(node, visit);
+                }
+            });
+        }
+
+        return renamedCode;
     }
 
     function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
