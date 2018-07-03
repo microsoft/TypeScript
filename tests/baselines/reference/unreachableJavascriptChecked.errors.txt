@@ -5,6 +5,9 @@ tests/cases/compiler/unreachable.js(3,5): error TS7027: Unreachable code detecte
     function unreachable() {
         return 1;
         return 2;
-        ~~~~~~
+        ~~~~~~~~~
+        return 3;
+    ~~~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     }
+    

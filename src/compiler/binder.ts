@@ -1211,7 +1211,7 @@ namespace ts {
             bind(node.statement);
             popActiveLabel();
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
-                errorOrSuggestionOnFirstToken(unusedLabelIsError(options), node, Diagnostics.Unused_label);
+                errorOrSuggestionOnNode(unusedLabelIsError(options), node.label, Diagnostics.Unused_label);
             }
             if (!node.statement || node.statement.kind !== SyntaxKind.DoStatement) {
                 // do statement sets current flow inside bindDoStatement
@@ -1918,9 +1918,16 @@ namespace ts {
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function errorOrSuggestionOnFirstToken(isError: boolean, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
-            const span = getSpanOfTokenAtPosition(file, node.pos);
-            const diag = createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2);
+        function errorOrSuggestionOnNode(isError: boolean, node: Node, message: DiagnosticMessage): void {
+            errorOrSuggestionOnRange(isError, node, node, message);
+        }
+
+        function errorOrSuggestionOnRange(isError: boolean, startNode: Node, endNode: Node, message: DiagnosticMessage): void {
+            addErrorOrSuggestionDiagnostic(isError, { pos: getTokenPosOfNode(startNode, file), end: endNode.end }, message);
+        }
+
+        function addErrorOrSuggestionDiagnostic(isError: boolean, range: TextRange, message: DiagnosticMessage): void {
+            const diag = createFileDiagnostic(file, range.pos, range.end - range.pos, message);
             if (isError) {
                 file.bindDiagnostics.push(diag);
             }
@@ -2792,7 +2799,7 @@ namespace ts {
                                 node.declarationList.declarations.some(d => !!d.initializer)
                             );
 
-                        errorOrSuggestionOnFirstToken(isError, node, Diagnostics.Unreachable_code_detected);
+                        errorOrSuggestionOnRange(isError, node, isBlock(node.parent) ? last(node.parent.statements) : node, Diagnostics.Unreachable_code_detected);
                     }
                 }
             }

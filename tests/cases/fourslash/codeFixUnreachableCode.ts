@@ -2,7 +2,7 @@
 
 ////function f() {
 ////    return f();
-////    [|return|] 1;
+////    [|return 1;
 ////    function f() {}
 ////    return 2;
 ////    type T = number;
@@ -13,7 +13,7 @@
 ////    namespace N { export const x: T = 0; }
 ////    var x: I;
 ////    var y: T = 0;
-////    E; N; x; y;
+////    E; N; x; y;|]
 ////}
 
 verify.getSuggestionDiagnostics([{
