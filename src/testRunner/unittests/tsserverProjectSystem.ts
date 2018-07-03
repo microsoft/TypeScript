@@ -9010,7 +9010,7 @@ export function Test2() {
             const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: bTs.path, searchValue: "fn" });
             const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
 
-            assert.deepEqual(navtoResponse, [
+            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(navtoResponse, [
                 // TODO: First result should be from a.ts, not a.d.ts
                 {
                     file: "/a/bin/a.d.ts",
@@ -9018,6 +9018,7 @@ export function Test2() {
                     end: { line: 1, offset: 37 },
                     name: "fnA",
                     matchKind: "prefix",
+                    isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export,declare",
                 },
@@ -9025,6 +9026,7 @@ export function Test2() {
                     ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
                     name: "fnB",
                     matchKind: "prefix",
+                    isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 }

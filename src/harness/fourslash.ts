@@ -2775,57 +2775,20 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        /*
-            Check number of navigationItems which match both searchValue and matchKind,
-            if a filename is passed in, limit the results to that file.
-            Report an error if expected value and actual value do not match.
-        */
-        public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string, fileName?: string) {
-            const items = this.languageService.getNavigateToItems(searchValue, /*maxResultCount*/ undefined, fileName);
-            let actual = 0;
-
-            // Count only the match that match the same MatchKind
-            for (const item of items) {
-                if (!matchKind || item.matchKind === matchKind) {
-                    actual++;
-                }
-            }
-
-            if (expected !== actual) {
-                this.raiseError(`verifyNavigationItemsCount failed - found: ${actual} navigation items, expected: ${expected}.`);
-            }
-        }
-
-        /*
-            Verify that returned navigationItems from getNavigateToItems have matched searchValue, matchKind, and kind.
-            Report an error if getNavigateToItems does not find any matched searchValue.
-        */
-        public verifyNavigationItemsListContains(
-            name: string,
-            kind: string,
-            searchValue: string,
-            matchKind: string,
-            fileName?: string,
-            parentName?: string) {
-            const items = this.languageService.getNavigateToItems(searchValue);
-
-            if (!items || items.length === 0) {
-                this.raiseError("verifyNavigationItemsListContains failed - found 0 navigation items, expected at least one.");
-            }
-
-            for (const item of items) {
-                if (item && item.name === name && item.kind === kind &&
-                    (matchKind === undefined || item.matchKind === matchKind) &&
-                    (fileName === undefined || item.fileName === fileName) &&
-                    (parentName === undefined || item.containerName === parentName)) {
-                    return;
-                }
-            }
-
-            // if there was an explicit match kind specified, then it should be validated.
-            if (matchKind !== undefined) {
-                const missingItem = { name, kind, searchValue, matchKind, fileName, parentName };
-                this.raiseError(`verifyNavigationItemsListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(items)})`);
+        public verifyNavigateTo(options: ReadonlyArray<FourSlashInterface.VerifyNavigateToOptions>): void {
+            for (const { pattern, expected, fileName } of options) {
+                const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, fileName);
+                this.assertObjectsEqual(items, expected.map((e): ts.NavigateToItem => ({
+                    name: e.name,
+                    kind: e.kind,
+                    kindModifiers: e.kindModifiers || "",
+                    matchKind: e.matchKind || "exact",
+                    isCaseSensitive: e.isCaseSensitive === undefined ? true : e.isCaseSensitive,
+                    fileName: e.range.fileName,
+                    textSpan: ts.createTextSpanFromRange(e.range),
+                    containerName: e.containerName || "",
+                    containerKind: e.containerKind || ts.ScriptElementKind.unknown,
+                })));
             }
         }
 
@@ -4361,24 +4324,8 @@ namespace FourSlashInterface {
             this.state.verifyNavigationTree(json, options);
         }
 
-        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {
-            this.state.verifyNavigationItemsCount(count, searchValue, matchKind, fileName);
-        }
-
-        public navigationItemsListContains(
-            name: string,
-            kind: string,
-            searchValue: string,
-            matchKind: string,
-            fileName?: string,
-            parentName?: string) {
-            this.state.verifyNavigationItemsListContains(
-                name,
-                kind,
-                searchValue,
-                matchKind,
-                fileName,
-                parentName);
+        public navigateTo(...options: VerifyNavigateToOptions[]): void {
+            this.state.verifyNavigateTo(options);
         }
 
         public occurrencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
@@ -4810,6 +4757,23 @@ namespace FourSlashInterface {
         readonly isVariadic?: boolean;
         /** @default ts.emptyArray */
         readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
+    }
+
+    export interface VerifyNavigateToOptions {
+        readonly pattern: string;
+        readonly fileName?: string;
+        readonly expected: ReadonlyArray<ExpectedNavigateToItem>;
+    }
+
+    export interface ExpectedNavigateToItem {
+        readonly name: string;
+        readonly kind: ts.ScriptElementKind;
+        readonly kindModifiers?: string;
+        readonly matchKind?: keyof typeof ts.PatternMatchKind;
+        readonly isCaseSensitive?: boolean;
+        readonly range: FourSlash.Range;
+        readonly containerName?: string;
+        readonly containerKind?: ts.ScriptElementKind;
     }
 
     export type ArrayOrSingle<T> = T | ReadonlyArray<T>;

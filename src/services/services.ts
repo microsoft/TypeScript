@@ -633,7 +633,7 @@ namespace ts {
         private computeNamedDeclarations(): Map<Declaration[]> {
             const result = createMultiMap<Declaration>();
 
-            forEachChild(this, visit);
+            this.forEachChild(visit);
 
             return result;
 
@@ -653,7 +653,7 @@ namespace ts {
             }
 
             function getDeclarationName(declaration: Declaration) {
-                const name = getNameOfDeclaration(declaration);
+                const name = getNonAssignedNameOfDeclaration(declaration);
                 return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
                     : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
             }
@@ -742,7 +742,7 @@ namespace ts {
                             // Handle default import case e.g.:
                             //    import d from "mod";
                             if (importClause.name) {
-                                addDeclaration(importClause);
+                                addDeclaration(importClause.name);
                             }
 
                             // Handle named bindings in imports e.g.:
