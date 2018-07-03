@@ -155,7 +155,7 @@ namespace Harness.LanguageService {
             this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
             this.vfs.renameSync(oldPath, newPath);
 
-            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()));
             this.scriptInfos.forEach((scriptInfo, key) => {
                 const newFileName = updater(key);
                 if (newFileName !== undefined) {
@@ -188,6 +188,10 @@ namespace Harness.LanguageService {
             const script: ScriptInfo = this.getScriptInfo(fileName)!;
             assert.isOk(script);
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
+        }
+
+        useCaseSensitiveFileNames() {
+            return !this.vfs.ignoreCase;
         }
     }
 
@@ -250,7 +254,6 @@ namespace Harness.LanguageService {
         getTypeRootsVersion() {
             return 0;
         }
-
 
         log = ts.noop;
         trace = ts.noop;

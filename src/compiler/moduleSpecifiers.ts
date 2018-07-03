@@ -9,7 +9,7 @@ namespace ts.moduleSpecifiers {
     export function getModuleSpecifier(
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
-        importingSourceFileName: string,
+        importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
@@ -49,10 +49,10 @@ namespace ts.moduleSpecifiers {
         readonly moduleResolutionKind: ModuleResolutionKind;
         readonly addJsExtension: boolean;
         readonly getCanonicalFileName: GetCanonicalFileName;
-        readonly sourceDirectory: string;
+        readonly sourceDirectory: Path;
     }
     // importingSourceFileName is separate because getEditsForFileRename may need to specify an updated path
-    function getInfo(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: string, host: ModuleSpecifierResolutionHost): Info {
+    function getInfo(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: Path, host: ModuleSpecifierResolutionHost): Info {
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const addJsExtension = usesJsExtensionOnImports(importingSourceFile);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true);
@@ -271,7 +271,7 @@ namespace ts.moduleSpecifiers {
         moduleFileName: string,
         host: ModuleSpecifierResolutionHost,
         getCanonicalFileName: (file: string) => string,
-        sourceDirectory: string,
+        sourceDirectory: Path,
     ): string | undefined {
         if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
             // nothing to do here
