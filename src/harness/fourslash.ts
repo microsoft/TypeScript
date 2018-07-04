@@ -1515,7 +1515,9 @@ Actual: ${stringify(fullActual)}`);
                 "argumentCount",
             ];
             for (const key in options) {
-                ts.Debug.assert(ts.contains(allKeys, key));
+                if (!ts.contains(allKeys, key)) {
+                    ts.Debug.fail("Unexpected key " + key);
+                }
             }
         }
 

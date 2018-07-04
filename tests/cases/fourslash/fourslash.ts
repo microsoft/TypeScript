@@ -553,7 +553,6 @@ declare namespace FourSlashInterface {
         overloadsCount?: number;
         docComment?: string;
         text?: string;
-        name?: string;
         parameterName?: string;
         parameterSpan?: string;
         parameterDocComment?: string;
