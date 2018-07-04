@@ -1452,7 +1452,7 @@
         "category": "Error",
         "code": 2417
     },
-    "Type of computed property value is '{0}', which is not assignable to type '{1}'.": {
+    "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2418
     },

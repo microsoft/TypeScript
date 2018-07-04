@@ -10250,7 +10250,7 @@ namespace ts {
                         yield { errorNode: prop.name, innerExpression: undefined, nameType: type };
                         break;
                     case SyntaxKind.PropertyAssignment:
-                        yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: type, errorMessage: isComputedNonLiteralName(prop.name) ? Diagnostics.Type_of_computed_property_value_is_0_which_is_not_assignable_to_type_1 : undefined };
+                        yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: type, errorMessage: isComputedNonLiteralName(prop.name) ? Diagnostics.Type_of_computed_property_s_value_is_0_which_is_not_assignable_to_type_1 : undefined };
                         break;
                     default:
                         Debug.assertNever(prop);

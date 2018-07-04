@@ -5182,7 +5182,7 @@ declare namespace ts {
         Class_0_incorrectly_extends_base_class_1: DiagnosticMessage;
         Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2: DiagnosticMessage;
         Class_static_side_0_incorrectly_extends_base_class_static_side_1: DiagnosticMessage;
-        Type_of_computed_property_value_is_0_which_is_not_assignable_to_type_1: DiagnosticMessage;
+        Type_of_computed_property_s_value_is_0_which_is_not_assignable_to_type_1: DiagnosticMessage;
         Class_0_incorrectly_implements_interface_1: DiagnosticMessage;
         A_class_may_only_implement_another_class_or_interface: DiagnosticMessage;
         Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor: DiagnosticMessage;
