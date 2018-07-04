@@ -4354,19 +4354,17 @@ namespace ts {
                 case SyntaxKind.ConditionalExpression:
                     node = (<ConditionalExpression>node).condition;
                     continue;
-
                 case SyntaxKind.CallExpression:
                     if (stopAtCallExpressions) {
                         return node;
                     }
                     // falls through
+                case SyntaxKind.AsExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
-                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
-                    continue;
-
+                case SyntaxKind.NonNullExpression:
                 case SyntaxKind.PartiallyEmittedExpression:
-                    node = (<PartiallyEmittedExpression>node).expression;
+                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression>node).expression;
                     continue;
             }
 
