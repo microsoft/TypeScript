@@ -393,24 +393,28 @@ namespace ts {
 
                     const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
                     const resolvedPathCache = createMap<string>();
-                    sourcemaps.calculateDecodedMappings(originalMap, (raw): void => {
+                    const absolutePathCache = createMap<string>();
+                    const sourcemapIterator = sourcemaps.decodeMappings(originalMap);
+                    for (let { value: raw, done } = sourcemapIterator.next(); !done; { value: raw, done } = sourcemapIterator.next()) {
                         // Apply offsets to each position and fixup source entries
-                        const rawPath = originalMap.sources[raw.sourceIndex];
-                        const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
-                        const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
-                        if (!resolvedPathCache.has(combinedPath)) {
-                            resolvedPathCache.set(combinedPath, getRelativePathToDirectoryOrUrl(
+                        if (!resolvedPathCache.has("" + raw.sourceIndex)) {
+                            const rawPath = originalMap.sources[raw.sourceIndex];
+                            const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
+                            const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
+                            const resolvedPath = getRelativePathToDirectoryOrUrl(
                                 sourcesDirectoryPath,
                                 combinedPath,
                                 host.getCurrentDirectory(),
                                 host.getCanonicalFileName,
                                 /*isAbsolutePathAnUrl*/ true
-                            ));
+                            );
+                            resolvedPathCache.set("" + raw.sourceIndex, resolvedPath);
+                            absolutePathCache.set("" + raw.sourceIndex, getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath));
                         }
-                        const resolvedPath = resolvedPathCache.get(combinedPath)!;
-                        const absolutePath = getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath);
+                        const resolvedPath = resolvedPathCache.get("" + raw.sourceIndex)!;
+                        const absolutePath = absolutePathCache.get("" + raw.sourceIndex)!;
                         // tslint:disable-next-line:no-null-keyword
-                        setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
+                        setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null, resolvedPath); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
                         // Then reencode all the updated spans into the overall map
                         encodeLastRecordedSourceMapSpan();
@@ -420,7 +424,7 @@ namespace ts {
                             emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset) : raw.emittedColumn,
                             sourceIndex: newIndex,
                         };
-                    });
+                    }
                     // And actually emit the text these sourcemaps are for
                     return emitCallback(hint, node);
                 }
@@ -519,17 +523,19 @@ namespace ts {
             setupSourceEntry(sourceFile.fileName, sourceFile.text);
         }
 
-        function setupSourceEntry(fileName: string, content: string | null) {
-            // Add the file to tsFilePaths
-            // If sourceroot option: Use the relative path corresponding to the common directory path
-            // otherwise source locations relative to map file location
-            const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+        function setupSourceEntry(fileName: string, content: string | null, source?: string) {
+            if (!source) {
+                // Add the file to tsFilePaths
+                // If sourceroot option: Use the relative path corresponding to the common directory path
+                // otherwise source locations relative to map file location
+                const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
-            const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                fileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-                /*isAbsolutePathAnUrl*/ true);
+                source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
+                    fileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ true);
+            }
 
             sourceMapSourceIndex = sourceMapData.sourceMapSources.indexOf(source);
             if (sourceMapSourceIndex === -1) {

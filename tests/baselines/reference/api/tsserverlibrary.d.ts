@@ -8598,17 +8598,6 @@ declare namespace ts.sourcemaps {
         readonly lastSpan: SourceMapSpan;
     }
     function decodeMappings(map: SourceMapData): MappingsDecoder;
-    function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: {
-        log?(s: string): void;
-    }): T[];
-    interface RawSourceMapPosition {
-        emittedLine: number;
-        emittedColumn: number;
-        sourceLine: number;
-        sourceColumn: number;
-        sourceIndex: number;
-        nameIndex?: number;
-    }
 }
 declare namespace ts {
     function getOriginalNodeId(node: Node): number;
