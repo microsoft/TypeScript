@@ -18,7 +18,7 @@ var funcExp2 = function (...rest) { }
 var funcExp3 = (function (...rest) { })()
 >funcExp3 : void
 >(function (...rest) { })() : void
->(function (...rest) { }) : (...rest: any[]) => void
->function (...rest) { } : (...rest: any[]) => void
->rest : any[]
+>(function (...rest) { }) : () => void
+>function (...rest) { } : () => void
+>rest : []
 

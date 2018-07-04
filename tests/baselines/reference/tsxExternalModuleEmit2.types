@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsx/modules.d.ts ===
 declare module 'mod' {
->'mod' : typeof 'mod'
+>'mod' : typeof import("mod")
 
   var y: any;
 >y : any

@@ -158,7 +158,7 @@ namespace ts {
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
 
-        getSignatureHelpItems(fileName: string, position: number): string;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -769,10 +769,10 @@ namespace ts {
 
         /// SIGNATUREHELP
 
-        public getSignatureHelpItems(fileName: string, position: number): string {
+        public getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string {
             return this.forwardJSONCall(
                 `getSignatureHelpItems('${fileName}', ${position})`,
-                () => this.languageService.getSignatureHelpItems(fileName, position)
+                () => this.languageService.getSignatureHelpItems(fileName, position, options)
             );
         }
 

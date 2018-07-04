@@ -2,7 +2,7 @@
 const strSet: Set<string> = new Set()
 >strSet : Set<string>
 >Set : Set<T>
->new Set() : Set<any>
+>new Set() : Set<string>
 >Set : SetConstructor
 
 strSet.add('Hello')

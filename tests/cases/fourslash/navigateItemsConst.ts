@@ -1,16 +1,15 @@
 /// <reference path="fourslash.ts" />
 
-////{| "itemName": "c", "kind": "const", "parentName": "" |}const c = 10;
+// @noLib: true
+
+////const [|{| "name": "c", "kind": "const" |}c = 10|];
 ////function foo() {
-////    {| "itemName": "d", "kind": "const", "parentName": "foo" |}const d = 10;
+////    const [|{| "name": "d", "kind": "const", "containerName": "foo", "containerKind": "function" |}d = 10|];
 ////}
 
-test.markers().forEach(marker => {
-    verify.navigationItemsListContains(
-        marker.data.itemName,
-        marker.data.kind,
-        marker.data.itemName,
-        "exact",
-        marker.fileName,
-        marker.data.parentName);
-});
+for (const range of test.ranges()) {
+    verify.navigateTo({
+        pattern: range.marker.data.name,
+        expected: [{ ...range.marker.data, range }],
+    })
+}
