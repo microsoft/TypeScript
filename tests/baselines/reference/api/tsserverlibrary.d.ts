@@ -8371,6 +8371,9 @@ declare namespace ts {
     function parenthesizeElementTypeMembers(members: ReadonlyArray<TypeNode>): NodeArray<TypeNode>;
     function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode> | undefined): MutableNodeArray<TypeNode> | undefined;
     function parenthesizeConciseBody(body: ConciseBody): ConciseBody;
+    function isCommaSequence(node: Expression): node is (BinaryExpression & {
+        operatorToken: Token<SyntaxKind.CommaToken>;
+    }) | CommaListExpression;
     enum OuterExpressionKinds {
         Parentheses = 1,
         Assertions = 2,
