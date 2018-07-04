@@ -19049,6 +19049,38 @@ namespace ts {
             return resolveErrorCall(node);
         }
 
+        function typeHasProtectedAccessibleBase(target: Symbol, type: InterfaceType): boolean {
+            const baseTypes = getBaseTypes(type as InterfaceType);
+            if (!length(baseTypes)) {
+                return false;
+            }
+            const firstBase = baseTypes[0];
+            if (firstBase.flags & TypeFlags.Intersection) {
+                const types = (firstBase as IntersectionType).types;
+                const mixinCount = countWhere(types, isMixinConstructorType);
+                let i = 0;
+                for (const intersectionMember of (firstBase as IntersectionType).types) {
+                    i++;
+                    // We want to ignore mixin ctors
+                    if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(intersectionMember)) {
+                        if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                            if (intersectionMember.symbol === target) {
+                                return true;
+                            }
+                            if (typeHasProtectedAccessibleBase(target, intersectionMember as InterfaceType)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+            if (firstBase.symbol === target) {
+                return true;
+            }
+            return typeHasProtectedAccessibleBase(target, firstBase as InterfaceType);
+        }
+
         function isConstructorAccessible(node: NewExpression, signature: Signature) {
             if (!signature || !signature.declaration) {
                 return true;
@@ -19068,27 +19100,10 @@ namespace ts {
             // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
             if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                 const containingClass = getContainingClass(node);
-                if (containingClass) {
+                if (containingClass && modifiers & ModifierFlags.Protected) {
                     const containingType = getTypeOfNode(containingClass);
-                    let baseTypes = getBaseTypes(containingType as InterfaceType);
-                    while (baseTypes.length) {
-                        const baseType = baseTypes[0];
-                        if (baseType.flags & TypeFlags.Intersection) {
-                            for (const intersectionMember of (baseType as IntersectionType).types) {
-                                if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
-                                    baseTypes = getBaseTypes(intersectionMember as InterfaceType);
-                                    break;
-                                }
-                            }
-                            baseTypes = emptyArray;
-                        }
-                        else {
-                            if (modifiers & ModifierFlags.Protected &&
-                                baseType.symbol === declaration.parent.symbol) {
-                                return true;
-                            }
-                            baseTypes = getBaseTypes(baseType as InterfaceType);
-                        }
+                    if (typeHasProtectedAccessibleBase(declaration.parent.symbol, containingType as InterfaceType)) {
+                        return true;
                     }
                 }
                 if (modifiers & ModifierFlags.Private) {
