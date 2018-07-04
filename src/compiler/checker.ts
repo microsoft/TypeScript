@@ -10653,6 +10653,7 @@ namespace ts {
                 }
 
                 let result = Ternary.False;
+                let strongIntersectionTarget: Type | undefined;
                 const saveErrorInfo = errorInfo;
                 const saveIsIntersectionConstituent = isIntersectionConstituent;
                 isIntersectionConstituent = false;
@@ -10672,6 +10673,23 @@ namespace ts {
                     else if (target.flags & TypeFlags.Intersection) {
                         isIntersectionConstituent = true;
                         result = typeRelatedToEachType(source, target as IntersectionType, reportErrors);
+
+                        // We don't report errors at first.  If the types aren't related then we'll try to see if
+                        // the intersection contains any "weak" types that aren't contributing anything to relating the two types
+                        // (but carefully in case *all* the types in the target are weak).
+                        // If so, we'll drop them and report the error on a smaller intersection which should be more readable.
+                        // If not, re-trigger the original relationship check.
+                        result = typeRelatedToEachType(source, target as IntersectionType, /*reportErrors*/ false);
+                        if (reportErrors && !result && some((target as IntersectionType).types, isWeakType) && !isWeakType(target)) {
+                            const constituents = filter((target as IntersectionType).types, t => !isWeakType(t));
+                            Debug.assert(!!constituents.length, "Should have at least one non-weak constituent result.");
+                            Debug.assert(constituents.length < (target as IntersectionType).types.length, "Should have fewer constituents");
+                            strongIntersectionTarget = getIntersectionType(constituents);
+                            if (isRelatedTo(source, strongIntersectionTarget, reportErrors)) {
+                                typeRelatedToEachType(source, target as IntersectionType, reportErrors);
+                                strongIntersectionTarget = undefined;
+                            }
+                        }
                     }
                     else if (source.flags & TypeFlags.Intersection) {
                         // Check to see if any constituents of the intersection are immediately related to the target.
@@ -10716,6 +10734,11 @@ namespace ts {
                 isIntersectionConstituent = saveIsIntersectionConstituent;
 
                 if (!result && reportErrors) {
+                    if (strongIntersectionTarget) {
+                        // Should have reported an error above.
+                        return result;
+                    }
+
                     if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
