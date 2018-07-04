@@ -3,7 +3,7 @@
 namespace ts.moduleSpecifiers {
     export interface ModuleSpecifierPreferences {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
-        readonly includeExtensionInImports?: boolean
+        readonly includeExtensionInImports?: boolean;
     }
 
     // Note: importingSourceFile is just for usesJsExtensionOnImports
