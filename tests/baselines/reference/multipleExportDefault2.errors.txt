@@ -10,6 +10,7 @@ tests/cases/conformance/externalModules/multipleExportDefault2.ts(5,25): error T
     };
     ~~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2730 tests/cases/conformance/externalModules/multipleExportDefault2.ts:1:1: This export conflicts with the first.
     
     export default function Foo() { }
                             ~~~

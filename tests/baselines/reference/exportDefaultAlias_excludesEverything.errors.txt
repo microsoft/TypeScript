@@ -10,4 +10,5 @@ tests/cases/compiler/exportDefaultAlias_excludesEverything.ts(3,16): error TS252
     export default B;
                    ~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2730 tests/cases/compiler/exportDefaultAlias_excludesEverything.ts:3:16: This export conflicts with the first.
     

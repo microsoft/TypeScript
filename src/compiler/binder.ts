@@ -388,12 +388,14 @@ namespace ts {
                             message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
                         }
 
-                        if (symbol.declarations && symbol.declarations.length) {
+                        let multipleDefaultExports = false;
+                        if (length(symbol.declarations)) {
                             // If the current node is a default export of some sort, then check if
                             // there are any other default exports that we need to error on.
                             // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
                             if (isDefaultExport) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                multipleDefaultExports = true;
                             }
                             else {
                                 // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
@@ -403,6 +405,7 @@ namespace ts {
                                 if (symbol.declarations && symbol.declarations.length &&
                                     (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                                     message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                    multipleDefaultExports = true;
                                 }
                             }
                         }
@@ -413,7 +416,7 @@ namespace ts {
                         const declarationName = getNameOfDeclaration(node) || node;
                         const diag = createDiagnosticForNode(declarationName, message, getDisplayName(node))
                         file.bindDiagnostics.push(
-                            isDefaultExport ? addRelatedInfo( diag, createDiagnosticForNode(declarationName, Diagnostics.This_export_conflicts_with_the_first)) : diag
+                            multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, Diagnostics.This_export_conflicts_with_the_first)) : diag
                         );
 
                         symbol = createSymbol(SymbolFlags.None, name);

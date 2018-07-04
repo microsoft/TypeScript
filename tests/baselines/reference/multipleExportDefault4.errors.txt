@@ -14,3 +14,4 @@ tests/cases/conformance/externalModules/multipleExportDefault4.ts(3,1): error TS
     };
     ~~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2730 tests/cases/conformance/externalModules/multipleExportDefault4.ts:3:1: This export conflicts with the first.

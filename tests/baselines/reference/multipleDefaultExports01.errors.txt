@@ -7,6 +7,7 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
     export default class foo {
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2730 tests/cases/conformance/es6/modules/m1.ts:1:22: This export conflicts with the first.
     
     }
     
@@ -20,6 +21,7 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
     export default x;
                    ~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2730 tests/cases/conformance/es6/modules/m1.ts:10:16: This export conflicts with the first.
     
 ==== tests/cases/conformance/es6/modules/m2.ts (0 errors) ====
     import Entity from "./m1"

@@ -14,5 +14,6 @@ tests/cases/conformance/externalModules/multipleExportDefault3.ts(5,22): error T
     export default class C { }
                          ~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2730 tests/cases/conformance/externalModules/multipleExportDefault3.ts:5:22: This export conflicts with the first.
     
     

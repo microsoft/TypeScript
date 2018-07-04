@@ -5432,6 +5432,7 @@ declare namespace ts {
         Cannot_find_lib_definition_for_0_Did_you_mean_1: DiagnosticMessage;
         _0_was_declared_here: DiagnosticMessage;
         Property_0_is_used_before_its_initialization: DiagnosticMessage;
+        This_export_conflicts_with_the_first: DiagnosticMessage;
         Import_declaration_0_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: DiagnosticMessage;
@@ -7399,6 +7400,7 @@ declare namespace ts {
     type Mutable<T extends object> = {
         -readonly [K in keyof T]: T[K];
     };
+    function addRelatedInfo<T extends Diagnostic>(diagnostic: T, ...relatedInformation: DiagnosticRelatedInformation[]): T;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
