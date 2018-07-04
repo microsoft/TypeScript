@@ -22062,14 +22062,11 @@ namespace ts {
             const firstType = getAnnotatedType(first);
             const secondType = getAnnotatedType(second);
             if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
-                
-                if(isGetAccessor(first)){
-                    const typeNameFirstType = typeToString(firstType);
-                    const typeNameSecondType = typeToString(secondType);
+                const typeNameFirstType = typeToString(firstType);
+                const typeNameSecondType = typeToString(secondType);
 
-                    const diagnostic: Diagnostic = error(first, message, typeNameSecondType, typeNameFirstType);
-                    diagnostic.relatedInformation = [createDiagnosticForNode(first, Diagnostics.The_respective_set_accessor_has_the_type_0, typeNameSecondType)];
-                }
+                const diagnostic: Diagnostic = error(first, message, typeNameSecondType, typeNameFirstType);
+                addRelatedInfo(diagnostic, createDiagnosticForNode(first, Diagnostics.The_respective_set_accessor_has_the_type_0, typeNameSecondType));
             }
         }
 

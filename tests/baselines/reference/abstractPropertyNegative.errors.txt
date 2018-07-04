@@ -1,5 +1,5 @@
-tests/cases/compiler/abstractPropertyNegative.ts(10,18): error TS2380: 'get' and 'set' accessor must have the same type.
-tests/cases/compiler/abstractPropertyNegative.ts(11,18): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/compiler/abstractPropertyNegative.ts(10,18): error TS2380: 'get' and 'set' accessor must have the same type 'number', but this 'get' accessor has the type 'string'.
+tests/cases/compiler/abstractPropertyNegative.ts(11,18): error TS2380: 'get' and 'set' accessor must have the same type 'string', but this 'get' accessor has the type 'number'.
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
@@ -31,10 +31,12 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
         abstract m(): string;
         abstract get mismatch(): string;
                      ~~~~~~~~
-!!! error TS2380: 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type 'number', but this 'get' accessor has the type 'string'.
+!!! related TS2730 tests/cases/compiler/abstractPropertyNegative.ts:10:18: The respective 'set' accessor has the type 'number'.
         abstract set mismatch(val: number); // error, not same type
                      ~~~~~~~~
-!!! error TS2380: 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type 'string', but this 'get' accessor has the type 'number'.
+!!! related TS2730 tests/cases/compiler/abstractPropertyNegative.ts:11:18: The respective 'set' accessor has the type 'string'.
     }
     class C extends B {
           ~

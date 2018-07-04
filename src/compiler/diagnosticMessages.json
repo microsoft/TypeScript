@@ -2410,7 +2410,7 @@
         "code": 2729
     },
     "The respective 'set' accessor has the type '{0}'.": {
-        "category": "Error",
+        "category": "Message",
         "code": 2730
     },
 

@@ -5156,7 +5156,7 @@ declare namespace ts {
         Constructors_for_derived_classes_must_contain_a_super_call: DiagnosticMessage;
         A_get_accessor_must_return_a_value: DiagnosticMessage;
         Getter_and_setter_accessors_do_not_agree_in_visibility: DiagnosticMessage;
-        get_and_set_accessor_must_have_the_same_type: DiagnosticMessage;
+        get_and_set_accessor_must_have_the_same_type_0_but_this_get_accessor_has_the_type_1: DiagnosticMessage;
         A_signature_with_an_implementation_cannot_use_a_string_literal_type: DiagnosticMessage;
         Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature: DiagnosticMessage;
         Overload_signatures_must_all_be_exported_or_non_exported: DiagnosticMessage;
@@ -5432,6 +5432,7 @@ declare namespace ts {
         Cannot_find_lib_definition_for_0_Did_you_mean_1: DiagnosticMessage;
         _0_was_declared_here: DiagnosticMessage;
         Property_0_is_used_before_its_initialization: DiagnosticMessage;
+        The_respective_set_accessor_has_the_type_0: DiagnosticMessage;
         Import_declaration_0_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: DiagnosticMessage;

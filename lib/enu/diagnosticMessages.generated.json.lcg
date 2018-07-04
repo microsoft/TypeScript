@@ -6323,7 +6323,7 @@
             </Item>
             <Item ItemId=";get_and_set_accessor_must_have_the_same_type_2380" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA['get' and 'set' accessor must have the same type '{0}', but this 'get' accessor has the type '{1}'.]]></Val>
+                <Val><![CDATA['get' and 'set' accessor must have the same type.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
