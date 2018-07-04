@@ -3,6 +3,7 @@
 namespace ts.moduleSpecifiers {
     export interface ModuleSpecifierPreferences {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly includeExtensionInImports?: boolean
     }
 
     // Note: importingSourceFile is just for usesJsExtensionOnImports
@@ -17,7 +18,7 @@ namespace ts.moduleSpecifiers {
     ): string {
         const info = getInfo(compilerOptions, importingSourceFile, importingSourceFileName, host);
         const modulePaths = getAllModulePaths(files, toFileName, info.getCanonicalFileName, host);
-        return firstDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions)) ||
+        return firstDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions, preferences)) ||
             first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
     }
 
@@ -39,46 +40,47 @@ namespace ts.moduleSpecifiers {
         }
         const modulePaths = getAllModulePaths(files, getSourceFileOfNode(moduleSymbol.valueDeclaration).fileName, info.getCanonicalFileName, host);
 
-        const global = mapDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions));
+        const global = mapDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions, preferences));
         return global.length ? global.map(g => [g]) : modulePaths.map(moduleFileName =>
             getLocalModuleSpecifiers(moduleFileName, info, compilerOptions, preferences));
     }
 
     interface Info {
         readonly moduleResolutionKind: ModuleResolutionKind;
-        readonly addJsExtension: boolean;
+        readonly addExtension: boolean;
         readonly getCanonicalFileName: GetCanonicalFileName;
         readonly sourceDirectory: Path;
     }
     // importingSourceFileName is separate because getEditsForFileRename may need to specify an updated path
     function getInfo(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: Path, host: ModuleSpecifierResolutionHost): Info {
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
-        const addJsExtension = usesJsExtensionOnImports(importingSourceFile);
+        const addExtension = usesExtensionOnImports(importingSourceFile);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true);
         const sourceDirectory = getDirectoryPath(importingSourceFileName);
-        return { moduleResolutionKind, addJsExtension, getCanonicalFileName, sourceDirectory };
+        return { moduleResolutionKind, addExtension, getCanonicalFileName, sourceDirectory };
     }
 
     function getGlobalModuleSpecifier(
         moduleFileName: string,
-        { addJsExtension, getCanonicalFileName, sourceDirectory }: Info,
+        { addExtension, getCanonicalFileName, sourceDirectory }: Info,
         host: ModuleSpecifierResolutionHost,
         compilerOptions: CompilerOptions,
+        preferences: ModuleSpecifierPreferences
     ) {
-        return tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addJsExtension)
+        return tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addExtension, preferences)
             || tryGetModuleNameAsNodeModule(compilerOptions, moduleFileName, host, getCanonicalFileName, sourceDirectory);
     }
 
     function getLocalModuleSpecifiers(
         moduleFileName: string,
-        { moduleResolutionKind, addJsExtension, getCanonicalFileName, sourceDirectory }: Info,
+        { moduleResolutionKind, addExtension, getCanonicalFileName, sourceDirectory }: Info,
         compilerOptions: CompilerOptions,
         preferences: ModuleSpecifierPreferences,
     ): ReadonlyArray<string> {
         const { baseUrl, paths, rootDirs } = compilerOptions;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
+            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addExtension, compilerOptions, preferences);
         if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
             return [relativePath];
         }
@@ -88,7 +90,7 @@ namespace ts.moduleSpecifiers {
             return [relativePath];
         }
 
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addJsExtension);
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addExtension, compilerOptions, preferences);
         if (paths) {
             const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
             if (fromPaths) {
@@ -138,8 +140,8 @@ namespace ts.moduleSpecifiers {
         return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
     }
 
-    function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
+    function usesExtensionOnImports({ imports }: SourceFile): boolean {
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? fileExtensionIsOneOf(text, [Extension.Js, Extension.Jsx]) : undefined) || false;
     }
 
     function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost) {
@@ -256,14 +258,15 @@ namespace ts.moduleSpecifiers {
         host: GetEffectiveTypeRootsHost,
         getCanonicalFileName: (file: string) => string,
         moduleFileName: string,
-        addJsExtension: boolean,
+        addExtension: boolean,
+        preferences: ModuleSpecifierPreferences
     ): string | undefined {
         const roots = getEffectiveTypeRoots(options, host);
         return firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
                 // For a type definition, we can strip `/index` even with classic resolution.
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), ModuleResolutionKind.NodeJs, addJsExtension);
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), ModuleResolutionKind.NodeJs, addExtension, options, preferences);
             }
         });
     }
@@ -408,10 +411,25 @@ namespace ts.moduleSpecifiers {
         });
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, moduleResolutionKind: ModuleResolutionKind, addJsExtension: boolean): string {
+    function tryGetActualExtension(text: string, compilerOptions: CompilerOptions) {
+        const extension = pathIsRelative(text) && tryGetExtensionFromPath(text);
+        if (!extension) return undefined;
+
+        switch (extension) {
+            case Extension.Ts:
+                return Extension.Js;
+            case Extension.Tsx:
+                return compilerOptions.jsx === JsxEmit.React || compilerOptions.jsx === JsxEmit.ReactNative ? Extension.Js : Extension.Jsx;
+            default:
+                return extension;
+        }
+    }
+
+    function removeExtensionAndIndexPostFix(fileName: string, moduleResolutionKind: ModuleResolutionKind, addJsExtension: boolean, compilerOptions: CompilerOptions, preferences: ModuleSpecifierPreferences): string {
         const noExtension = removeFileExtension(fileName);
-        return addJsExtension
-            ? noExtension + ".js"
+        const actualExtension = tryGetActualExtension(fileName, compilerOptions);
+        return (actualExtension && (preferences.includeExtensionInImports !== undefined && preferences.includeExtensionInImports || addJsExtension))
+            ? noExtension + actualExtension
             : moduleResolutionKind === ModuleResolutionKind.NodeJs
                 ? removeSuffix(noExtension, "/index")
                 : noExtension;

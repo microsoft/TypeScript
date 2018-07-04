@@ -4303,6 +4303,103 @@ declare namespace ts {
     function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): BuilderProgram;
 }
 declare namespace ts {
+<<<<<<< HEAD
+=======
+    /** This is the cache of module/typedirectives resolution that can be retained across program */
+    interface ResolutionCache {
+        startRecordingFilesWithChangedResolutions(): void;
+        finishRecordingFilesWithChangedResolutions(): Path[] | undefined;
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined): ResolvedModuleFull[];
+        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): CachedResolvedModuleWithFailedLookupLocations | undefined;
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        invalidateResolutionOfFile(filePath: Path): void;
+        removeResolutionsOfFile(filePath: Path): void;
+        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<ReadonlyArray<string>>): void;
+        createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
+        startCachingPerDirectoryResolution(): void;
+        finishCachingPerDirectoryResolution(): void;
+        updateTypeRootsWatch(): void;
+        closeTypeRootsWatch(): void;
+        clear(): void;
+    }
+    interface ResolutionWithFailedLookupLocations {
+        readonly failedLookupLocations: ReadonlyArray<string>;
+        isInvalidated?: boolean;
+        refCount?: number;
+    }
+    interface CachedResolvedModuleWithFailedLookupLocations extends ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
+    }
+    interface ResolutionCacheHost extends ModuleResolutionHost {
+        toPath(fileName: string): Path;
+        getCanonicalFileName: GetCanonicalFileName;
+        getCompilationSettings(): CompilerOptions;
+        watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
+        onInvalidatedResolution(): void;
+        watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
+        onChangedAutomaticTypeDirectiveNames(): void;
+        getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
+        projectName?: string;
+        getGlobalCache?(): string | undefined;
+        writeLog(s: string): void;
+        maxNumberOfFilesToIterateForInvalidation?: number;
+        getCurrentProgram(): Program;
+    }
+    const maxNumberOfFilesToIterateForInvalidation = 256;
+    function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache;
+}
+declare namespace ts.moduleSpecifiers {
+    interface ModuleSpecifierPreferences {
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly includeExtensionInImports?: boolean;
+    }
+    function getModuleSpecifier(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: Path, toFileName: string, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences?: ModuleSpecifierPreferences): string;
+    function getModuleSpecifiers(moduleSymbol: Symbol, compilerOptions: CompilerOptions, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, files: ReadonlyArray<SourceFile>, preferences: ModuleSpecifierPreferences): ReadonlyArray<ReadonlyArray<string>>;
+}
+declare namespace ts {
+    /**
+     * Create a function that reports error by writing to the system and handles the formating of the diagnostic
+     */
+    function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter;
+    /** @internal */
+    const nonClearingMessageCodes: number[];
+    /** @internal */
+    const screenStartingMessageCodes: number[];
+    /**
+     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     */
+    function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter;
+    /** Parses config file using System interface */
+    function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter): ParsedCommandLine | undefined;
+    /**
+     * Program structure needed to emit the files and report diagnostics
+     */
+    interface ProgramToEmitFilesAndReportErrors {
+        getCurrentDirectory(): string;
+        getCompilerOptions(): CompilerOptions;
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        getSyntacticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getOptionsDiagnostics(): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        emit(): EmitResult;
+    }
+    type ReportEmitErrorSummary = (errorCount: number) => void;
+    /**
+     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
+     */
+    function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary): ExitStatus;
+    /**
+     * Creates the watch compiler host from system for config file in watch mode
+     */
+    function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile<T>;
+    /**
+     * Creates the watch compiler host from system for compiling root files and options in watch mode
+     */
+    function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions<T>;
+}
+declare namespace ts {
+>>>>>>> add support of extension preference
     type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
@@ -4811,6 +4908,7 @@ declare namespace ts {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly includeExtensionInImports?: boolean;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -7962,6 +8060,7 @@ declare namespace ts.server.protocol {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly includeExtensionInImports?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
