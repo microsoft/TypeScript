@@ -5193,6 +5193,7 @@ declare namespace ts {
         Class_0_incorrectly_extends_base_class_1: DiagnosticMessage;
         Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2: DiagnosticMessage;
         Class_static_side_0_incorrectly_extends_base_class_static_side_1: DiagnosticMessage;
+        Type_of_computed_property_s_value_is_0_which_is_not_assignable_to_type_1: DiagnosticMessage;
         Class_0_incorrectly_implements_interface_1: DiagnosticMessage;
         A_class_may_only_implement_another_class_or_interface: DiagnosticMessage;
         Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor: DiagnosticMessage;
@@ -5765,6 +5766,8 @@ declare namespace ts {
         Option_build_must_be_the_first_command_line_argument: DiagnosticMessage;
         Options_0_and_1_cannot_be_combined: DiagnosticMessage;
         Skipping_clean_because_not_all_projects_could_be_located: DiagnosticMessage;
+        The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1: DiagnosticMessage;
+        The_expected_type_comes_from_this_index_signature: DiagnosticMessage;
         Variable_0_implicitly_has_an_1_type: DiagnosticMessage;
         Parameter_0_implicitly_has_an_1_type: DiagnosticMessage;
         Member_0_implicitly_has_an_1_type: DiagnosticMessage;
