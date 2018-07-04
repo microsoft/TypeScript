@@ -5073,7 +5073,7 @@ declare namespace ts {
         An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead: DiagnosticMessage;
         infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type: DiagnosticMessage;
         Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here: DiagnosticMessage;
-        Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here: DiagnosticMessage;
+        Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0: DiagnosticMessage;
         Type_arguments_cannot_be_used_here: DiagnosticMessage;
         The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_options: DiagnosticMessage;
         Duplicate_identifier_0: DiagnosticMessage;
