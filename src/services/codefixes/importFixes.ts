@@ -188,7 +188,7 @@ namespace ts.codefix {
         const useNamespace = tryUseExistingNamespaceImport(existingImports, symbolName, symbolToken, checker);
         const addToExisting = tryAddToExistingImport(existingImports);
         // Don't bother providing an action to add a new import if we can add to an existing one.
-        const addImport = addToExisting ? [addToExisting] : getCodeActionsForAddImport(exportInfos, existingImports, program, sourceFile, host, preferences);
+        const addImport = addToExisting ? [addToExisting] : getFixesForAddImport(exportInfos, existingImports, program, sourceFile, host, preferences);
         return [...(useNamespace ? [useNamespace] : emptyArray), ...addImport];
     }
 
@@ -261,7 +261,7 @@ namespace ts.codefix {
         return flatten<FixAddNewImport>(choicesForEachExportingModule.sort((a, b) => first(a).moduleSpecifier.length - first(b).moduleSpecifier.length));
     }
 
-    function getCodeActionsForAddImport(
+    function getFixesForAddImport(
         exportInfos: ReadonlyArray<SymbolExportInfo>,
         existingImports: ReadonlyArray<FixAddToExistingImportInfo>,
         program: Program,
@@ -376,13 +376,9 @@ namespace ts.codefix {
             // check the default export
             const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
             if (defaultExport) {
-                const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if ((
-                        localSymbol && localSymbol.escapedName === symbolName ||
-                        getEscapedNameForExportDefault(defaultExport) === symbolName ||
-                        moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!) === symbolName
-                    ) && symbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
-                    addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
+                const info = getDefaultExportInfo(defaultExport, moduleSymbol, program);
+                if (info && info.name === symbolName && symbolHasMeaning(info.symbolForMeaning, currentTokenMeaning)) {
+                    addSymbol(moduleSymbol, defaultExport, ImportKind.Default);
                 }
             }
 
@@ -391,22 +387,41 @@ namespace ts.codefix {
             if (exportSymbolWithIdenticalName && symbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 addSymbol(moduleSymbol, exportSymbolWithIdenticalName, ImportKind.Named);
             }
-
-            function getEscapedNameForExportDefault(symbol: Symbol): __String | undefined {
-                return symbol.declarations && firstDefined(symbol.declarations, declaration => {
-                    if (isExportAssignment(declaration)) {
-                        if (isIdentifier(declaration.expression)) {
-                            return declaration.expression.escapedText;
-                        }
-                    }
-                    else if (isExportSpecifier(declaration)) {
-                        Debug.assert(declaration.name.escapedText === InternalSymbolName.Default);
-                        return declaration.propertyName && declaration.propertyName.escapedText;
-                    }
-                });
-            }
         });
         return originalSymbolToExportInfos;
+    }
+
+    function getDefaultExportInfo(defaultExport: Symbol, moduleSymbol: Symbol, program: Program): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
+        const checker = program.getTypeChecker();
+
+        const localSymbol = getLocalSymbolForExportDefault(defaultExport);
+        if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
+
+        const name = getNameForExportDefault(defaultExport);
+        if (name !== undefined) return { symbolForMeaning: defaultExport, name };
+
+        if (defaultExport.flags & SymbolFlags.Alias) {
+            const aliased = checker.getAliasedSymbol(defaultExport);
+            return getDefaultExportInfo(aliased, Debug.assertDefined(aliased.parent), program);
+        }
+        else {
+            const moduleName = moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!);
+            return moduleName === undefined ? undefined : { symbolForMeaning: defaultExport, name: moduleName };
+        }
+    }
+
+    function getNameForExportDefault(symbol: Symbol): string | undefined {
+        return symbol.declarations && firstDefined(symbol.declarations, declaration => {
+            if (isExportAssignment(declaration)) {
+                if (isIdentifier(declaration.expression)) {
+                    return declaration.expression.text;
+                }
+            }
+            else if (isExportSpecifier(declaration)) {
+                Debug.assert(declaration.name.text === InternalSymbolName.Default);
+                return declaration.propertyName && declaration.propertyName.text;
+            }
+        });
     }
 
     function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, quotePreference: QuotePreference): CodeFixAction {
