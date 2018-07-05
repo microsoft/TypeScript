@@ -2081,7 +2081,7 @@ namespace ts.server {
             if (scriptInfo.containingProjects.length) {
                 return { scriptInfo, projects: scriptInfo.containingProjects };
             }
-            const configFileName = scriptInfo && this.getConfigFileNameForFile(scriptInfo, /*infoShouldBeOpen*/ false);
+            const configFileName = this.getConfigFileNameForFile(scriptInfo, /*infoShouldBeOpen*/ false);
             const project = configFileName === undefined ? undefined : this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
             return project && project.containsScriptInfo(scriptInfo) ? { scriptInfo, projects: [project] } : undefined;
         }
