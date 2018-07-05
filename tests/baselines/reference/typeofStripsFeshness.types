@@ -1,0 +1,56 @@
+=== tests/cases/compiler/typeofStripsFeshness.ts ===
+interface Collection<T> {
+>Collection : Collection<T>
+>T : T
+
+    elems: T[];
+>elems : T[]
+>T : T
+}
+interface CollectionStatic {
+>CollectionStatic : CollectionStatic
+
+    new <T>(): Collection<T>;
+>T : T
+>Collection : Collection<T>
+>T : T
+}
+declare const Collection: CollectionStatic;
+>Collection : CollectionStatic
+>CollectionStatic : CollectionStatic
+
+const ALL = "all";
+>ALL : "all"
+>"all" : "all"
+
+type All = typeof ALL;
+>All : "all"
+>ALL : "all"
+
+const result: Collection<All> = new Collection();
+>result : Collection<"all">
+>Collection : Collection<T>
+>All : "all"
+>new Collection() : Collection<"all">
+>Collection : CollectionStatic
+
+const ANOTHER = "another";
+>ANOTHER : "another"
+>"another" : "another"
+
+type Another = typeof ANOTHER;
+>Another : "another"
+>ANOTHER : "another"
+
+type Both = Another | All;
+>Both : Both
+>Another : "another"
+>All : "all"
+
+const result2: Collection<Both> = new Collection();
+>result2 : Collection<Both>
+>Collection : Collection<T>
+>Both : Both
+>new Collection() : Collection<Both>
+>Collection : CollectionStatic
+
