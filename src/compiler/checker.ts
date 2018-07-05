@@ -19458,7 +19458,8 @@ namespace ts {
         function getAssignedClassType(symbol: Symbol) {
             const decl = symbol.valueDeclaration;
             const assignmentSymbol = decl && decl.parent &&
-                (isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
+                (isFunctionDeclaration(decl) && getSymbolOfNode(decl) ||
+                 isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
                  isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
             if (assignmentSymbol) {
                 const prototype = forEach(assignmentSymbol.declarations, getAssignedJavascriptPrototype);
