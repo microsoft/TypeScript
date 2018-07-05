@@ -1822,7 +1822,6 @@ declare namespace ts {
         inputSourceFileNames: string[];
         sourceMapNames?: string[];
         sourceMapMappings: string;
-        sourceMapDecodedMappings: SourceMapSpan[];
     }
     /** Return code used by getEmitOutput function to indicate status of the function */
     enum ExitStatus {

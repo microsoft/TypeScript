@@ -156,7 +156,6 @@ namespace ts {
                 sourceMapNames: [],
                 sourceMapMappings: "",
                 sourceMapSourcesContent: compilerOptions.inlineSources ? [] : undefined,
-                sourceMapDecodedMappings: []
             };
 
             // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
@@ -299,7 +298,6 @@ namespace ts {
             }
 
             lastEncodedSourceMapSpan = lastRecordedSourceMapSpan;
-            sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
         /**
