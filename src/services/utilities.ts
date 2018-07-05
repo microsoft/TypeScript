@@ -1626,49 +1626,24 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
-        const clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>);
+    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<string>, checker?: TypeChecker): T {
+        const clone = renameMap && checker && needsRenaming(node, checker) ? 
+                    node && createIdentifier(renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node!)!)))!) : 
+                    node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker);
+
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-        return clone;
+        return clone as T;
     }
 
-    export function getSynthesizedMaybeRenamedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true ): T{
-        const clone = node && getSynthesizedMaybeRenamedDeepCloneWorker(node as NonNullable<T>) 
-        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-        return clone;
+    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker): boolean{
+        return !!(node && isIdentifier(node!) && checker.getSymbolAtLocation(node!));
     }
 
-    function getSynthesizedMaybeRenamedDeepCloneWorker<T extends Node>(node: T): T {
-        const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
-        if (visited === node) {
-            // This only happens for leaf nodes - internal nodes always see their children change.
-            let clone;
-            if (isIdentifier(node)) {
-                clone = createIdentifier("NEWNAME");
-            } 
-            else {
-                clone = getSynthesizedClone(node);
-            }
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<string>, checker?: TypeChecker): T {
+        const visited = visitEachChild(node, function wrapper(node){
+                return getSynthesizedDeepClone(node, true, renameMap, checker);
+            }, nullTransformationContext);
 
-            if (isStringLiteral(clone)) {
-                clone.textSourceNode = node as any;
-            }
-            else if (isNumericLiteral(clone)) {
-                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
-            }
-            return setTextRange(clone as T, node);
-        }
-
-        // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
-        // the new node created by visitEachChild with the extra changes getSynthesizedClone
-        // would have made.
-        visited.parent = undefined!;
-        return visited;
-    }
-
-
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {
-        const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
             const clone = getSynthesizedClone(node);
