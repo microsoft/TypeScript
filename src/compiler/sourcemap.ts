@@ -215,17 +215,6 @@ namespace ts {
             sourceMapDataList = undefined!;
         }
 
-        interface SourceMapSection {
-            version: 3;
-            file: string;
-            sourceRoot?: string;
-            sources: string[];
-            names?: string[];
-            mappings: string;
-            sourcesContent?: (string | null)[];
-            sections?: undefined;
-        }
-
         type SourceMapSectionDefinition =
             | { offset: { line: number, column: number }, url: string } // Included for completeness
             | { offset: { line: number, column: number }, map: SourceMap };
@@ -580,6 +569,17 @@ namespace ts {
                 return sourceMapData.jsSourceMappingURL;
             }
         }
+    }
+
+    export interface SourceMapSection {
+        version: 3;
+        file: string;
+        sourceRoot?: string;
+        sources: string[];
+        names?: string[];
+        mappings: string;
+        sourcesContent?: (string | null)[];
+        sections?: undefined;
     }
 
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

@@ -34,6 +34,8 @@ namespace ts.server.protocol {
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
+        /* @internal */
+        EmitOutput = "emit-output",
         Exit = "exit",
         Format = "format",
         Formatonkey = "formatonkey",
@@ -794,6 +796,21 @@ namespace ts.server.protocol {
         command: CommandTypes.Definition;
     }
 
+    export interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
+        readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+
+    export interface DefinitionAndBoundSpanResponse extends Response {
+        readonly body: DefinitionInfoAndBoundSpan;
+    }
+
+    /** @internal */
+    export interface EmitOutputRequest extends FileRequest {}
+    /** @internal */
+    export interface EmitOutputResponse extends Response {
+        readonly body: EmitOutput;
+    }
+
     /**
      * Go to type request; value of command field is
      * "typeDefinition". Return response giving the file locations that
@@ -1054,6 +1071,17 @@ namespace ts.server.protocol {
     export interface RenameRequest extends FileLocationRequest {
         command: CommandTypes.Rename;
         arguments: RenameRequestArgs;
+    }
+
+    /* @internal */
+    export interface RenameFullRequest extends FileLocationRequest {
+        readonly command: CommandTypes.RenameLocationsFull;
+        readonly arguments: RenameRequestArgs;
+    }
+
+    /* @internal */
+    export interface RenameFullResponse extends Response {
+        readonly body: ReadonlyArray<RenameLocation>;
     }
 
     /**
