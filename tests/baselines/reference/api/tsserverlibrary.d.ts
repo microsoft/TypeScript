@@ -14067,7 +14067,7 @@ declare namespace ts.server {
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
         getProjectForFileWithoutOpening(fileName: NormalizedPath): {
             readonly scriptInfo: ScriptInfo;
-            readonly project: Project;
+            readonly projects: ReadonlyArray<Project>;
         } | undefined;
         fileExists(fileName: NormalizedPath): boolean;
         private findExternalProjectContainingOpenScriptInfo;
