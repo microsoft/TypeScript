@@ -2463,17 +2463,26 @@ namespace ts {
          * Attempts to find the symbol corresponding to the container a symbol is in - usually this
          * is just its' `.parent`, but for locals, this value is `undefined`
          */
-        function getContainerOfSymbol(symbol: Symbol): Symbol | undefined {
+        function getContainersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined): Symbol[] | undefined {
             const container = getParentOfSymbol(symbol);
             if (container) {
-                return container;
+                const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
+                if (enclosingDeclaration && getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)) {
+                    return concatenate([container], additionalContainers); // This order expresses a preference for the real container if it is in scope
+                }
+                return append(additionalContainers, container);
             }
-            const candidate = forEach(symbol.declarations, d => !isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent) ? getSymbolOfNode(d.parent) : undefined);
-            if (!candidate) {
+            const candidates = mapDefined(symbol.declarations, d => !isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent) ? getSymbolOfNode(d.parent) : undefined);
+            if (!length(candidates)) {
                 return undefined;
             }
-            const alias = getAliasForSymbolInContainer(candidate, symbol);
-            return alias ? candidate : undefined;
+            return mapDefined(candidates, candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
+
+            function fileSymbolIfFileSymbolExportEqualsContainer(d: Declaration) {
+                const fileSymbol = getExternalModuleContainer(d);
+                const exported = fileSymbol && fileSymbol.exports && fileSymbol.exports.get(InternalSymbolName.ExportEquals);
+                return resolveSymbol(exported) === resolveSymbol(container) ? fileSymbol : undefined;
+            }
         }
 
         function getAliasForSymbolInContainer(container: Symbol, symbol: Symbol) {
@@ -2759,6 +2768,56 @@ namespace ts {
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
+        function isAnySymbolAccessible(symbols: Symbol[] | undefined, enclosingDeclaration: Node, initialSymbol: Symbol, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult | undefined {
+            if (!length(symbols)) return;
+
+            let hadAccessibleChain: Symbol | undefined;
+            for (const symbol of symbols!) {
+                // Symbol is accessible if it by itself is accessible
+                const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, /*useOnlyExternalAliasing*/ false);
+                if (accessibleSymbolChain) {
+                    hadAccessibleChain = symbol;
+                    const hasAccessibleDeclarations = hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible);
+                    if (hasAccessibleDeclarations) {
+                        return hasAccessibleDeclarations;
+                    }
+                }
+                else {
+                    if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                        // Any meaning of a module symbol is always accessible via an `import` type
+                        return {
+                            accessibility: SymbolAccessibility.Accessible
+                        };
+                    }
+                }
+
+                // If we haven't got the accessible symbol, it doesn't mean the symbol is actually inaccessible.
+                // It could be a qualified symbol and hence verify the path
+                // e.g.:
+                // module m {
+                //     export class c {
+                //     }
+                // }
+                // const x: typeof m.c
+                // In the above example when we start with checking if typeof m.c symbol is accessible,
+                // we are going to see if c can be accessed in scope directly.
+                // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
+                // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
+                const parentResult = isAnySymbolAccessible(getContainersOfSymbol(symbol, enclosingDeclaration), enclosingDeclaration, initialSymbol, initialSymbol === symbol ? getQualifiedLeftMeaning(meaning) : meaning, shouldComputeAliasesToMakeVisible);
+                if (parentResult) {
+                    return parentResult;
+                }
+            }
+
+            if (hadAccessibleChain) {
+                return {
+                    accessibility: SymbolAccessibility.NotAccessible,
+                    errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
+                    errorModuleName: hadAccessibleChain !== initialSymbol ? symbolToString(hadAccessibleChain, enclosingDeclaration, SymbolFlags.Namespace) : undefined,
+                };
+            }
+        }
+
         /**
          * Check if the given symbol in given enclosing declaration is accessible and mark all associated alias to be visible if requested
          *
@@ -2769,57 +2828,21 @@ namespace ts {
          */
         function isSymbolAccessible(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
             if (symbol && enclosingDeclaration) {
-                const initialSymbol = symbol;
-                let meaningToLook = meaning;
-                while (symbol) {
-                    // Symbol is accessible if it by itself is accessible
-                    const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaningToLook, /*useOnlyExternalAliasing*/ false);
-                    if (accessibleSymbolChain) {
-                        const hasAccessibleDeclarations = hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible);
-                        if (!hasAccessibleDeclarations) {
-                            return {
-                                accessibility: SymbolAccessibility.NotAccessible,
-                                errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
-                                errorModuleName: symbol !== initialSymbol ? symbolToString(symbol, enclosingDeclaration, SymbolFlags.Namespace) : undefined,
-                            };
-                        }
-                        return hasAccessibleDeclarations;
-                    }
-                    else {
-                        if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                            // Any meaning of a module symbol is always accessible via an `import` type
-                            return {
-                                accessibility: SymbolAccessibility.Accessible
-                            };
-                        }
-                    }
-
-                    // If we haven't got the accessible symbol, it doesn't mean the symbol is actually inaccessible.
-                    // It could be a qualified symbol and hence verify the path
-                    // e.g.:
-                    // module m {
-                    //     export class c {
-                    //     }
-                    // }
-                    // const x: typeof m.c
-                    // In the above example when we start with checking if typeof m.c symbol is accessible,
-                    // we are going to see if c can be accessed in scope directly.
-                    // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
-                    // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
-                    meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = getContainerOfSymbol(symbol);
+                const result = isAnySymbolAccessible([symbol], enclosingDeclaration, symbol, meaning, shouldComputeAliasesToMakeVisible);
+                if (result) {
+                    return result;
                 }
 
                 // This could be a symbol that is not exported in the external module
                 // or it could be a symbol from different external module that is not aliased and hence cannot be named
-                const symbolExternalModule = forEach(initialSymbol.declarations, getExternalModuleContainer);
+                const symbolExternalModule = forEach(symbol.declarations, getExternalModuleContainer);
                 if (symbolExternalModule) {
                     const enclosingExternalModule = getExternalModuleContainer(enclosingDeclaration);
                     if (symbolExternalModule !== enclosingExternalModule) {
                         // name from different external module that is not visible
                         return {
                             accessibility: SymbolAccessibility.CannotBeNamed,
-                            errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
+                            errorSymbolName: symbolToString(symbol, enclosingDeclaration, meaning),
                             errorModuleName: symbolToString(symbolExternalModule)
                         };
                     }
@@ -2828,16 +2851,16 @@ namespace ts {
                 // Just a local name that is not accessible
                 return {
                     accessibility: SymbolAccessibility.NotAccessible,
-                    errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
+                    errorSymbolName: symbolToString(symbol, enclosingDeclaration, meaning),
                 };
             }
 
             return { accessibility: SymbolAccessibility.Accessible };
+        }
 
-            function getExternalModuleContainer(declaration: Node) {
-                const node = findAncestor(declaration, hasExternalModuleSymbol);
-                return node && getSymbolOfNode(node);
-            }
+        function getExternalModuleContainer(declaration: Node) {
+            const node = findAncestor(declaration, hasExternalModuleSymbol);
+            return node && getSymbolOfNode(node);
         }
 
         function hasExternalModuleSymbol(declaration: Node) {
@@ -3667,18 +3690,19 @@ namespace ts {
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
                     let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, !!(context.flags & NodeBuilderFlags.UseOnlyExternalAliasing));
-                    let parentSymbol: Symbol | undefined;
 
                     if (!accessibleSymbolChain ||
                         needsQualification(accessibleSymbolChain[0], context.enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
                         // Go up and add our parent.
-                        const parent = getContainerOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
-                        if (parent) {
-                            const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
-                            if (parentChain) {
-                                parentSymbol = parent;
-                                accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
+                        const parents = getContainersOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol, context.enclosingDeclaration);
+                        if (length(parents)) {
+                            for (const parent of parents!) {
+                                const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
+                                if (parentChain) {
+                                    accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -3689,11 +3713,12 @@ namespace ts {
                     if (
                         // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
                         endOfChain ||
-                        // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-                        (yieldModuleSymbol || !(!parentSymbol && forEach(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol))) &&
                         // If a parent symbol is an anonymous type, don't write it.
                         !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
-
+                        // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
+                        if (!endOfChain && !yieldModuleSymbol && !!forEach(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                            return;
+                        }
                         return [symbol];
                     }
                 }
