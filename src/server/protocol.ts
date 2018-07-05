@@ -1246,7 +1246,7 @@ namespace ts.server.protocol {
     /* @internal */
     export interface ProjectFiles {
         /**
-         * Information abount project verison
+         * Information about project verison
          */
         info?: ProjectVersionInfo;
         /**
