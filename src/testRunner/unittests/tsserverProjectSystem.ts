@@ -8623,10 +8623,10 @@ export const x = 10;`
                 tscWatchDirectory === Tsc_WatchDirectory.WatchFile ?
                     expectedWatchedFiles :
                     createMap();
-            // For failed resolution lookup and tsconfig files
-            mapOfDirectories.set(projectFolder, 2);
+            // For failed resolution lookup and tsconfig files => cached so only watched only once
+            mapOfDirectories.set(projectFolder, 1);
             // Through above recursive watches
-            mapOfDirectories.set(projectSrcFolder, 2);
+            mapOfDirectories.set(projectSrcFolder, 1);
             // node_modules/@types folder
             mapOfDirectories.set(`${projectFolder}/${nodeModulesAtTypes}`, 1);
             const expectedCompletions = ["file1"];

@@ -4766,9 +4766,9 @@ declare namespace ts {
     function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolean;
     interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
+        useCaseSensitiveFileNames: boolean;
         getAccessibleSortedChildDirectories(path: string): ReadonlyArray<string>;
         directoryExists(dir: string): boolean;
-        filePathComparer: Comparer<string>;
         realpath(s: string): string;
     }
     /**
