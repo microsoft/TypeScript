@@ -2074,12 +2074,16 @@ namespace ts.server {
         }
 
         /** @internal */
-        getProjectForFileWithoutOpening(fileName: NormalizedPath): { readonly scriptInfo: ScriptInfo, readonly project: Project } | undefined {
+        getProjectForFileWithoutOpening(fileName: NormalizedPath): { readonly scriptInfo: ScriptInfo, readonly projects: ReadonlyArray<Project> } | undefined {
             const scriptInfo = this.filenameToScriptInfo.get(fileName) ||
                 this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName, this.currentDirectory, /*fileContent*/ undefined, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined);
+            if (!scriptInfo) return undefined;
+            if (scriptInfo.containingProjects.length) {
+                return { scriptInfo, projects: scriptInfo.containingProjects };
+            }
             const configFileName = scriptInfo && this.getConfigFileNameForFile(scriptInfo, /*infoShouldBeOpen*/ false);
             const project = configFileName === undefined ? undefined : this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
-            return scriptInfo && project && { scriptInfo, project };
+            return project && project.containsScriptInfo(scriptInfo) ? { scriptInfo, projects: [project] } : undefined;
         }
 
         /** @internal */

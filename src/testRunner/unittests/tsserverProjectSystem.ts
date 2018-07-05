@@ -7896,10 +7896,10 @@ namespace ts.projectSystem {
                     localizedErrorMessage: undefined,
                 },
                 locs: [
-                    { file: bFc, locs: cLocs },
-                    { file: bFile.path, locs: abLocs },
                     { file: aFc, locs: cLocs },
                     { file: aFile.path, locs: abLocs },
+                    { file: bFc, locs: cLocs },
+                    { file: bFile.path, locs: abLocs },
                 ],
             });
         });

@@ -345,47 +345,80 @@ namespace ts.server {
         readonly location: sourcemaps.SourceMappableLocation;
     }
 
+    interface ToDoAndSeenProjects {
+        readonly toDo: ProjectAndLocation[];
+        readonly seenProjects: Map<true>;
+    }
+
     function combineProjectOutputWorker(
         projects: Projects,
         initialLocation: sourcemaps.SourceMappableLocation,
         projectService: ProjectService,
         cb: (where: ProjectAndLocation, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
     ): void {
-        const seenProjects = createMap<true>();
-        const toDo: ProjectAndLocation[] = (isProjectsArray(projects) ? projects : projects.projects).map(project => ({ project, location: initialLocation }));
+        let toDoAndSeenProjects: ToDoAndSeenProjects | undefined;
+        for (const project of isProjectsArray(projects) ? projects : projects.projects) {
+            toDoAndSeenProjects = callbackProjectAndLocation(projects, { project, location: initialLocation }, projectService, toDoAndSeenProjects, cb);
+        }
         if (!isArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((symlinkedProjects, path) => {
                 for (const project of symlinkedProjects) {
-                    toDo.push({ project, location: { fileName: path, position: initialLocation.position } });
+                    toDoAndSeenProjects = callbackProjectAndLocation(projects, { project, location: { fileName: path, position: initialLocation.position } }, projectService, toDoAndSeenProjects, cb);
                 }
             });
         }
 
-        while (toDo.length) {
-            const { project, location } = Debug.assertDefined(toDo.pop());
-            if (project.getCancellationToken().isCancellationRequested()) continue;
-            cb({ project, location }, (project, location) => {
-                const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
-                if (!originalLocation) return false;
-                const originalProjectAndScriptInfo = projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
-                if (!originalProjectAndScriptInfo) return false;
+        while (toDoAndSeenProjects && toDoAndSeenProjects.toDo.length) {
+            toDoAndSeenProjects = callbackProjectAndLocation(projects, Debug.assertDefined(toDoAndSeenProjects.toDo.pop()), projectService, toDoAndSeenProjects, cb);
+        }
+    }
 
-                if (originalProjectAndScriptInfo) {
-                    addToTodo({ project: originalProjectAndScriptInfo.project, location: originalLocation });
-                    const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalProjectAndScriptInfo.scriptInfo);
-                    if (symlinkedProjectsMap) {
-                        symlinkedProjectsMap.forEach((symlinkedProjects) => {
-                            for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation });
+    function callbackProjectAndLocation(
+        originalProjects: Projects, // For lazily populating seenProjects
+        projectAndLocation: ProjectAndLocation,
+        projectService: ProjectService,
+        toDoAndSeenProjects: ToDoAndSeenProjects | undefined,
+        cb: (where: ProjectAndLocation, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
+    ): ToDoAndSeenProjects | undefined {
+        if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
+        cb(projectAndLocation, (project, location) => {
+            const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
+            if (!originalLocation) return false;
+            const originalProjectAndScriptInfo = projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
+            if (!originalProjectAndScriptInfo) return false;
+
+            if (originalProjectAndScriptInfo) {
+                if (toDoAndSeenProjects === undefined) {
+                    toDoAndSeenProjects = { toDo: [], seenProjects: createMap<true>() };
+                    for (const project of isProjectsArray(originalProjects) ? originalProjects : originalProjects.projects) {
+                        toDoAndSeenProjects.seenProjects.set(project.projectName, true);
+                    }
+                    if (!isArray(originalProjects) && originalProjects.symLinkedProjects) {
+                        originalProjects.symLinkedProjects.forEach(symlinkedProjects => {
+                            for (const project of symlinkedProjects) {
+                                toDoAndSeenProjects!.seenProjects.set(project.projectName, true);
+                            }
                         });
                     }
                 }
-                return !!originalProjectAndScriptInfo;
-            });
-        }
 
-        function addToTodo(projectAndLocation: ProjectAndLocation): void {
-            if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
-        }
+                for (const project of originalProjectAndScriptInfo.projects) {
+                    addToTodo({ project, location: originalLocation }, toDoAndSeenProjects);
+                }
+                const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalProjectAndScriptInfo.scriptInfo);
+                if (symlinkedProjectsMap) {
+                    symlinkedProjectsMap.forEach((symlinkedProjects) => {
+                        for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation }, toDoAndSeenProjects!);
+                    });
+                }
+            }
+            return true;
+        });
+        return toDoAndSeenProjects;
+    }
+
+    function addToTodo(projectAndLocation: ProjectAndLocation, { seenProjects, toDo }: ToDoAndSeenProjects): void {
+        if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
     }
 
     function documentSpanLocation({ fileName, textSpan }: DocumentSpan): sourcemaps.SourceMappableLocation {
