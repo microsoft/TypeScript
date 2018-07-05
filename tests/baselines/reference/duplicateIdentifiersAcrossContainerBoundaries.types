@@ -22,7 +22,7 @@ module M {
 >M : typeof M
 
     export class f { } // error
->f : M.f
+>f : f
 }
 
 module M {

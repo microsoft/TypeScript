@@ -1,14 +1,13 @@
-tests/cases/compiler/tupleTypes.ts(1,9): error TS1122: A tuple type element list cannot be empty.
-tests/cases/compiler/tupleTypes.ts(14,1): error TS2322: Type 'undefined[]' is not assignable to type '[number, string]'.
-  Property '0' is missing in type 'undefined[]'.
+tests/cases/compiler/tupleTypes.ts(14,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.
+  Property '0' is missing in type '[]'.
 tests/cases/compiler/tupleTypes.ts(15,1): error TS2322: Type '[number]' is not assignable to type '[number, string]'.
   Property '1' is missing in type '[number]'.
-tests/cases/compiler/tupleTypes.ts(17,1): error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
-  Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/tupleTypes.ts(17,6): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/tupleTypes.ts(17,15): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/tupleTypes.ts(18,1): error TS2322: Type '[number, string, number]' is not assignable to type '[number, string]'.
   Types of property 'length' are incompatible.
     Type '3' is not assignable to type '2'.
-tests/cases/compiler/tupleTypes.ts(41,1): error TS2322: Type 'undefined[]' is not assignable to type '[number, string]'.
+tests/cases/compiler/tupleTypes.ts(41,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.
 tests/cases/compiler/tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Types of property 'pop' are incompatible.
     Type '() => string | number' is not assignable to type '() => number'.
@@ -27,8 +26,6 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
 
 ==== tests/cases/compiler/tupleTypes.ts (10 errors) ====
     var v1: [];  // Error
-            ~~
-!!! error TS1122: A tuple type element list cannot be empty.
     var v2: [number];
     var v3: [number, string];
     var v4: [number, [string, string]];
@@ -43,17 +40,18 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     
     t = [];               // Error
     ~
-!!! error TS2322: Type 'undefined[]' is not assignable to type '[number, string]'.
-!!! error TS2322:   Property '0' is missing in type 'undefined[]'.
+!!! error TS2322: Type '[]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Property '0' is missing in type '[]'.
     t = [1];              // Error
     ~
 !!! error TS2322: Type '[number]' is not assignable to type '[number, string]'.
 !!! error TS2322:   Property '1' is missing in type '[number]'.
     t = [1, "hello"];     // Ok
     t = ["hello", 1];     // Error
-    ~
-!!! error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
-!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+         ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+                  ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     t = [1, "hello", 2];  // Error
     ~
 !!! error TS2322: Type '[number, string, number]' is not assignable to type '[number, string]'.
@@ -83,7 +81,7 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     tt = [undefined, undefined];
     tt = [];  // Error
     ~~
-!!! error TS2322: Type 'undefined[]' is not assignable to type '[number, string]'.
+!!! error TS2322: Type '[]' is not assignable to type '[number, string]'.
     
     var a: number[];
     var a1: [number, string];

@@ -21,4 +21,5 @@ tests/cases/compiler/user.ts(3,25): error TS2448: Block-scoped variable 'Obj' us
 !!! error TS2395: Individual declarations in merged declaration 'Obj' must be all exported or all local.
                             ~~~
 !!! error TS2448: Block-scoped variable 'Obj' used before its declaration.
+!!! related TS2728 tests/cases/compiler/user.ts:3:14: 'Obj' was declared here.
     

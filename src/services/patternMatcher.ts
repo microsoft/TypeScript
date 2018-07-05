@@ -119,12 +119,10 @@ namespace ts {
         // First, check that the last part of the dot separated pattern matches the name of the
         // candidate.  If not, then there's no point in proceeding and doing the more
         // expensive work.
-        const candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments), stringToWordSpans);
+        const candidateMatch = matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans);
         if (!candidateMatch) {
             return undefined;
         }
-
-        candidateContainers = candidateContainers || [];
 
         // -1 because the last part was checked against the name, and only the rest
         // of the parts are checked against the container.
@@ -203,7 +201,7 @@ namespace ts {
         }
     }
 
-    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch {
+    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
         // First check if the segment matches as is.  This is also useful if the segment contains
         // characters we would normally strip when splitting into parts that we also may want to
         // match in the candidate.  For example if the segment is "@int" and the candidate is
@@ -260,7 +258,7 @@ namespace ts {
         return bestMatch;
     }
 
-    function betterMatch(a: PatternMatch | undefined, b: PatternMatch | undefined): PatternMatch {
+    function betterMatch(a: PatternMatch | undefined, b: PatternMatch | undefined): PatternMatch | undefined {
         return min(a, b, compareMatches);
     }
     function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined): Comparison {
@@ -287,8 +285,8 @@ namespace ts {
 
         let currentCandidate = 0;
         let currentChunkSpan = 0;
-        let firstMatch: number;
-        let contiguous: boolean;
+        let firstMatch: number | undefined;
+        let contiguous: boolean | undefined;
 
         while (true) {
             // Let's consider our termination cases

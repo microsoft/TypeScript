@@ -13,8 +13,8 @@ namespace ts.codefix {
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const statement = findAncestor(token, isStatement);
+        const token = getTokenAtPosition(sourceFile, start);
+        const statement = findAncestor(token, isStatement)!;
         Debug.assert(statement.getStart(sourceFile) === token.getStart(sourceFile));
 
         const container = (isBlock(statement.parent) ? statement.parent : statement).parent;
@@ -32,14 +32,14 @@ namespace ts.codefix {
                 // falls through
             case SyntaxKind.WhileStatement:
             case SyntaxKind.ForStatement:
-                changes.deleteNode(sourceFile, container);
+                changes.delete(sourceFile, container);
                 break;
             default:
                 if (isBlock(statement.parent)) {
                     split(sliceAfter(statement.parent.statements, statement), shouldRemove, (start, end) => changes.deleteNodeRange(sourceFile, start, end));
                 }
                 else {
-                    changes.deleteNode(sourceFile, statement);
+                    changes.delete(sourceFile, statement);
                 }
         }
     }
@@ -60,6 +60,8 @@ namespace ts.codefix {
                 return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
             case SyntaxKind.EnumDeclaration:
                 return hasModifier(s, ModifierFlags.Const);
+            default:
+                return false;
         }
     }
 

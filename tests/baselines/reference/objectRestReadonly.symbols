@@ -15,7 +15,7 @@ type ObjType = {
 
 const obj: Readonly<ObjType> = {
 >obj : Symbol(obj, Decl(objectRestReadonly.ts, 7, 5))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >ObjType : Symbol(ObjType, Decl(objectRestReadonly.ts, 0, 0))
 
   foo: 'bar',

@@ -9,8 +9,9 @@
         "esnext",
         // Host only
         "dom.generated",
-        "dom.iterable",
+        "dom.iterable.generated",
         "webworker.generated",
+        "webworker.importscripts",
         "scripthost",
         // By-feature options
         "es2015.core",
@@ -33,69 +34,21 @@
         "es2018.intl",
         "esnext.asynciterable",
         "esnext.array",
+        "esnext.symbol",
+        "esnext.intl",
         // Default libraries
         "es5.full",
         "es2015.full",
         "es2016.full",
         "es2017.full",
+        "es2018.full",
         "esnext.full"
     ],
     "paths": {
         "dom.generated": "lib.dom.d.ts",
+        "dom.iterable.generated": "lib.dom.iterable.d.ts",
         "webworker.generated": "lib.webworker.d.ts",
         "es5.full": "lib.d.ts",
         "es2015.full": "lib.es6.d.ts"
-    },
-    "sources": {
-        "es5.full": [
-            "es5.d.ts",
-            "dom.generated.d.ts",
-            "webworker.importscripts.d.ts",
-            "scripthost.d.ts"
-        ],
-        "es2015.full": [
-            "es5.d.ts",
-            "es2015.core.d.ts",
-            "es2015.collection.d.ts",
-            "es2015.generator.d.ts",
-            "es2015.iterable.d.ts",
-            "es2015.promise.d.ts",
-            "es2015.proxy.d.ts",
-            "es2015.reflect.d.ts",
-            "es2015.symbol.d.ts",
-            "es2015.symbol.wellknown.d.ts",
-            "dom.generated.d.ts",
-            "webworker.importscripts.d.ts",
-            "scripthost.d.ts",
-            "dom.iterable.d.ts"
-        ],
-        "es2016.full": [
-            "es2016.d.ts",
-            "dom.generated.d.ts",
-            "webworker.importscripts.d.ts",
-            "scripthost.d.ts",
-            "dom.iterable.d.ts"
-        ],
-        "es2017.full": [
-            "es2017.d.ts",
-            "dom.generated.d.ts",
-            "webworker.importscripts.d.ts",
-            "scripthost.d.ts",
-            "dom.iterable.d.ts"
-        ],
-        "es2018.full": [
-            "es2018.d.ts",
-            "dom.generated.d.ts",
-            "webworker.importscripts.d.ts",
-            "scripthost.d.ts",
-            "dom.iterable.d.ts"
-        ],
-        "esnext.full": [
-            "esnext.d.ts",
-            "dom.generated.d.ts",
-            "webworker.importscripts.d.ts",
-            "scripthost.d.ts",
-            "dom.iterable.d.ts"
-        ]
     }
 }

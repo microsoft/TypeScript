@@ -218,7 +218,7 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
->true ? 1 : 'string' : 1 | "string"
+>true ? 1 : 'string' : "string" | 1
 >true : true
 >1 : 1
 >'string' : "string"

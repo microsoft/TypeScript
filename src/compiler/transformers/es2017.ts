@@ -116,10 +116,10 @@ namespace ts {
 
         function visitCatchClauseInAsyncBody(node: CatchClause) {
             const catchClauseNames = createUnderscoreEscapedMap<true>();
-            recordDeclarationName(node.variableDeclaration, catchClauseNames);
+            recordDeclarationName(node.variableDeclaration!, catchClauseNames); // TODO: GH#18217
 
             // names declared in a catch variable are block scoped
-            let catchClauseUnshadowedNames: UnderscoreEscapedMap<true>;
+            let catchClauseUnshadowedNames: UnderscoreEscapedMap<true> | undefined;
             catchClauseNames.forEach((_, escapedName) => {
                 if (enclosingFunctionParameterNames.has(escapedName)) {
                     if (!catchClauseUnshadowedNames) {
@@ -144,7 +144,7 @@ namespace ts {
         function visitVariableStatementInAsyncBody(node: VariableStatement) {
             if (isVariableDeclarationListWithCollidingName(node.declarationList)) {
                 const expression = visitVariableDeclarationListWithCollidingNames(node.declarationList, /*hasReceiver*/ false);
-                return expression ? createStatement(expression) : undefined;
+                return expression ? createExpressionStatement(expression) : undefined;
             }
             return visitEachChild(node, visitor, context);
         }
@@ -153,7 +153,7 @@ namespace ts {
             return updateForIn(
                 node,
                 isVariableDeclarationListWithCollidingName(node.initializer)
-                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)
+                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.expression, visitor, isExpression),
                 visitNode(node.statement, asyncBodyVisitor, isStatement, liftToBlock)
@@ -165,7 +165,7 @@ namespace ts {
                 node,
                 visitNode(node.awaitModifier, visitor, isToken),
                 isVariableDeclarationListWithCollidingName(node.initializer)
-                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)
+                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.expression, visitor, isExpression),
                 visitNode(node.statement, asyncBodyVisitor, isStatement, liftToBlock)
@@ -173,10 +173,11 @@ namespace ts {
         }
 
         function visitForStatementInAsyncBody(node: ForStatement) {
+            const initializer = node.initializer!; // TODO: GH#18217
             return updateFor(
                 node,
-                isVariableDeclarationListWithCollidingName(node.initializer)
-                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ false)
+                isVariableDeclarationListWithCollidingName(initializer)
+                    ? visitVariableDeclarationListWithCollidingNames(initializer, /*hasReceiver*/ false)
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
                 visitNode(node.incrementor, visitor, isExpression),
@@ -312,10 +313,10 @@ namespace ts {
         }
 
         function isVariableDeclarationListWithCollidingName(node: ForInitializer): node is VariableDeclarationList {
-            return node
+            return !!node
                 && isVariableDeclarationList(node)
                 && !(node.flags & NodeFlags.BlockScoped)
-                && forEach(node.declarations, collidesWithParameterName);
+                && node.declarations.some(collidesWithParameterName);
         }
 
         function visitVariableDeclarationListWithCollidingNames(node: VariableDeclarationList, hasReceiver: boolean) {
@@ -353,7 +354,7 @@ namespace ts {
             const converted = setSourceMapRange(
                 createAssignment(
                     convertToAssignmentElementTarget(node.name),
-                    node.initializer
+                    node.initializer!
                 ),
                 node
             );
@@ -412,7 +413,7 @@ namespace ts {
                     )
                 );
 
-                prependRange(statements, endLexicalEnvironment());
+                prependStatements(statements, endLexicalEnvironment());
 
                 const block = createBlock(statements, /*multiLine*/ true);
                 setTextRange(block, node.body);
@@ -437,7 +438,7 @@ namespace ts {
                     context,
                     hasLexicalArguments,
                     promiseConstructor,
-                    transformAsyncFunctionBodyWorker(node.body)
+                    transformAsyncFunctionBodyWorker(node.body!)
                 );
 
                 const declarations = endLexicalEnvironment();
@@ -463,7 +464,7 @@ namespace ts {
             }
         }
 
-        function getPromiseConstructor(type: TypeNode) {
+        function getPromiseConstructor(type: TypeNode | undefined) {
             const typeName = type && getEntityNameFromTypeNode(type);
             if (typeName && isEntityName(typeName)) {
                 const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
@@ -634,7 +635,7 @@ namespace ts {
             };`
     };
 
-    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = createFunctionExpression(
@@ -648,7 +649,7 @@ namespace ts {
         );
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
             getHelperName("__awaiter"),

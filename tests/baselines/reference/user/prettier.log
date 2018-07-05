@@ -6,8 +6,6 @@ src/cli/util.js(262,64): error TS2339: Property 'length' does not exist on type 
 src/cli/util.js(335,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
 src/cli/util.js(396,46): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 src/cli/util.js(403,39): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
-src/common/errors.js(3,7): error TS2300: Duplicate identifier 'ConfigError'.
-src/common/errors.js(7,3): error TS2300: Duplicate identifier 'ConfigError'.
 src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 src/config/resolve-config.js(75,32): error TS2345: Argument of type '{ sync: false; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
   Property 'cache' is missing in type '{ sync: false; }'.
@@ -24,17 +22,14 @@ src/language-css/parser-postcss.js(100,30): error TS2345: Argument of type 'any'
 src/language-css/parser-postcss.js(104,28): error TS2345: Argument of type '{ [x: string]: any; groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(407,32): error TS2531: Object is possibly 'null'.
 src/language-css/printer-postcss.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
-src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type '{ plugins: { ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): voi...' is not assignable to parameter of type 'PreprocessOptions | undefined'.
-  Type '{ plugins: { ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): voi...' is not assignable to type 'PreprocessOptions'.
-    Types of property 'plugins' are incompatible.
-      Type '{ ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementN...' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; } | undefined'.
-        Type '{ ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementN...' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; }'.
-          Types of property 'ast' are incompatible.
-            Type '(() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(nod...' is not assignable to type 'ASTPluginBuilder[] | undefined'.
-              Type '(() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(nod...' is not assignable to type 'ASTPluginBuilder[]'.
-                Type '() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node...' is not assignable to type 'ASTPluginBuilder'.
-                  Type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...' is not assignable to type 'ASTPlugin'.
-                    Property 'name' is missing in type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...'.
+src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type '{ plugins: { ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): voi...' is not assignable to parameter of type 'PreprocessOptions'.
+  Types of property 'plugins' are incompatible.
+    Type '{ ast: (() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementN...' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; }'.
+      Types of property 'ast' are incompatible.
+        Type '(() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(nod...' is not assignable to type 'ASTPluginBuilder[]'.
+          Type '() => { [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node...' is not assignable to type 'ASTPluginBuilder'.
+            Type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...' is not assignable to type 'ASTPlugin'.
+              Property 'name' is missing in type '{ [x: string]: any; visitor: { [x: string]: any; Program(node: any): void; ElementNode(node: any)...'.
 src/language-handlebars/printer-glimmer.js(270,7): error TS2554: Expected 0-1 arguments, but got 2.
 src/language-js/printer-estree.js(99,9): error TS2322: Type '{ [x: string]: any; type: string; }' is not assignable to type '{ [x: string]: any; type: string; parts: any; }'.
   Property 'parts' is missing in type '{ [x: string]: any; type: string; }'.
@@ -76,10 +71,28 @@ src/language-vue/parser-vue.js(398,23): error TS2345: Argument of type '{ [x: st
   Property 'contentStart' is missing in type '{ [x: string]: any; tag: any; attrs: any; unary: any; start: any; children: never[]; }'.
 src/language-vue/parser-vue.js(399,9): error TS2322: Type '{ [x: string]: any; tag: any; attrs: any; unary: any; start: any; children: never[]; }' is not assignable to type '{ [x: string]: any; tag: string; attrs: never[]; unary: boolean; start: number; contentStart: num...'.
 src/main/core-options.js(51,43): error TS1005: '}' expected.
-src/main/core-options.js(63,5): error TS2322: Type '{ cursorOffset: { since: string; category: string; type: "int"; default: number; range: { start: ...' is not assignable to type '{ [name: string]: OptionInfo; }'.
-  Property 'cursorOffset' is incompatible with index signature.
-    Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: num...' is not assignable to type 'OptionInfo'.
-      Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(63,5): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: num...' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(69,5): error TS2322: Type 'undefined' is not assignable to type 'string | number | boolean | { since: string; value: string | number | boolean; }[] | [{ value: (s...'.
+src/main/core-options.js(82,5): error TS2322: Type '{ since: string; category: string; type: "boolean"; default: false; description: string; cliCateg...' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(92,5): error TS2322: Type '({ [x: string]: any; value: string; description: string; } | { [x: string]: any; value: string; s...' is not assignable to type 'OptionChoiceInfo'.
+  Property 'value' is missing in type '({ [x: string]: any; value: string; description: string; } | { [x: string]: any; value: string; s...'.
+src/main/core-options.js(122,5): error TS2322: Type '{ since: string; type: "path"; array: true; default: [{ value: never[]; }]; category: string; des...' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliName' does not exist in type 'OptionInfo'.
+src/main/core-options.js(125,3): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; description: string; range: { st...' is not assignable to type 'OptionInfo'.
+  Property 'array' is missing in type '{ since: string; category: string; type: "int"; default: number; description: string; range: { st...'.
+src/main/core-options.js(144,5): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: num...' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(157,5): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: num...' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(168,5): error TS2322: Type '{ since: string; category: string; type: "boolean"; default: false; description: any; cliCategory...' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(170,3): error TS2322: Type '{ type: "int"; category: string; default: number; description: string; range: { start: number; en...' is not assignable to type 'OptionInfo'.
+  Property 'since' is missing in type '{ type: "int"; category: string; default: number; description: string; range: { start: number; en...'.
+src/main/core-options.js(182,5): error TS2322: Type 'string' is not assignable to type 'boolean | null'.
+src/main/core-options.js(187,3): error TS2322: Type '{ since: string; category: string; type: "boolean"; default: false; description: string; }' is not assignable to type 'OptionInfo'.
+  Property 'array' is missing in type '{ since: string; category: string; type: "boolean"; default: false; description: string; }'.
 src/main/parser.js(61,9): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.

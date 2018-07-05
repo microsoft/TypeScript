@@ -89,9 +89,9 @@ export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
 >12 : 12
 
 export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
->y : Bar.I<{ x: number; }>
+>y : import("tests/cases/conformance/types/import/foo2").Bar.I<{ x: number; }>
 >Bar : any
->I : Bar.I<T>
+>I : import("tests/cases/conformance/types/import/foo2").Bar.I<T>
 >x : number
 >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
 >a : string

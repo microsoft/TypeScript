@@ -12,28 +12,19 @@ lib/Browser.js(71,43): error TS2345: Argument of type '() => Promise<CDPSession>
                   Type 'T' is not assignable to type 'symbol'.
                     Type 'string | number | symbol' is not assignable to type 'symbol'.
                       Type 'string' is not assignable to type 'symbol'.
-lib/Connection.js(24,7): error TS2300: Duplicate identifier 'Connection'.
-lib/Connection.js(246,19): error TS2300: Duplicate identifier 'Connection'.
-lib/Coverage.js(26,7): error TS2300: Duplicate identifier 'Coverage'.
-lib/Coverage.js(64,19): error TS2300: Duplicate identifier 'Coverage'.
 lib/Coverage.js(109,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Coverage.js(196,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ElementHandle.js(24,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ElementHandle.js(83,29): error TS2503: Cannot find namespace 'Protocol'.
 lib/EmulationManager.js(36,16): error TS2503: Cannot find namespace 'Protocol'.
-lib/ExecutionContext.js(19,7): error TS2300: Duplicate identifier 'ExecutionContext'.
 lib/ExecutionContext.js(22,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/ExecutionContext.js(87,15): error TS2304: Cannot find name 'Frame'.
 lib/ExecutionContext.js(132,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/ExecutionContext.js(225,19): error TS2300: Duplicate identifier 'ExecutionContext'.
-lib/FrameManager.js(25,7): error TS2300: Duplicate identifier 'FrameManager'.
 lib/FrameManager.js(28,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(54,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(76,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(127,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(773,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/FrameManager.js(998,19): error TS2300: Duplicate identifier 'FrameManager'.
-lib/Input.js(29,7): error TS2300: Duplicate identifier 'Keyboard'.
-lib/Input.js(306,20): error TS2300: Duplicate identifier 'Keyboard'.
 lib/NetworkManager.js(129,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(174,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(207,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -41,10 +32,8 @@ lib/NetworkManager.js(224,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(256,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(270,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(286,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(305,7): error TS2300: Duplicate identifier 'Request'.
 lib/NetworkManager.js(313,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(640,13): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(796,19): error TS2300: Duplicate identifier 'Request'.
 lib/Page.js(66,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(185,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(394,22): error TS2503: Cannot find namespace 'Protocol'.
@@ -62,7 +51,6 @@ lib/externs.d.ts(17,121): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(59,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(77,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(101,15): error TS2503: Cannot find namespace 'Protocol'.
-node_modules/@types/node/index.d.ts(911,22): error TS2300: Duplicate identifier 'EventEmitter'.
 
 
 

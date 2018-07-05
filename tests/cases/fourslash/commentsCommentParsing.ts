@@ -420,7 +420,7 @@ verify.signatureHelp({ marker: "38", docComment: concatDoc, parameterDocComment:
 verify.quickInfoAt("38aq", "(parameter) bar: string", "is second string");
 
 goTo.marker('39');
-verify.completionListContains("a", "(parameter) a: number", "it is first parameter\nthis is inline comment for a ");
+verify.completionListContains("a", "(parameter) a: number", "this is inline comment for a \nit is first parameter");
 verify.completionListContains("b", "(parameter) b: number", "this is inline comment for b");
 verify.completionListContains("c", "(parameter) c: number", "it is third parameter");
 verify.completionListContains("d", "(parameter) d: number", "");
@@ -430,7 +430,7 @@ const jsdocTestTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
     { name: "param", text: "a it is first parameter" },
     { name: "param", text: "c it is third parameter" },
 ];
-verify.signatureHelp({ marker: "40", docComment: jsdocTestDocComment, parameterDocComment: "it is first parameter\nthis is inline comment for a ", tags: jsdocTestTags });
+verify.signatureHelp({ marker: "40", docComment: jsdocTestDocComment, parameterDocComment: "this is inline comment for a \nit is first parameter", tags: jsdocTestTags });
 verify.quickInfos({
     "40q": [
         "function jsDocParamTest(a: number, b: number, c: number, d: number): number",
@@ -438,7 +438,7 @@ verify.quickInfos({
     ],
     "40aq": [
         "(parameter) a: number",
-        "it is first parameter\nthis is inline comment for a "
+        "this is inline comment for a \nit is first parameter"
     ]
 });
 

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/subclassWithPolymorphicThisIsAssignable.ts ===
+/* taken from mongoose.Document */
+interface Document {
+>Document : Document
+
+    increment(): this;
+>increment : () => this
+}
+
+/* our custom model extends the mongoose document */
+interface CustomDocument extends Document { }
+>CustomDocument : CustomDocument
+>Document : Document
+
+export class Example<Z extends CustomDocument> {
+>Example : Example<Z>
+>Z : Z
+>CustomDocument : CustomDocument
+
+    constructor() {
+        // types of increment not compatible??
+        this.test<Z>();
+>this.test<Z>() : void
+>this.test : <Z extends Document>() => void
+>this : this
+>test : <Z extends Document>() => void
+>Z : Z
+    }
+
+    public test<Z extends Document>() { }
+>test : <Z extends Document>() => void
+>Z : Z
+>Document : Document
+}
+

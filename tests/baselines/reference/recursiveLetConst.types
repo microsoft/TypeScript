@@ -49,7 +49,7 @@ for (let [v] of v) { }
 let [x2 = x2] = []
 >x2 : any
 >x2 : any
->[] : [any]
+>[] : [any?]
 
 let z0 = () => z0;
 >z0 : () => any

@@ -5,7 +5,7 @@ tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(26,15): error 
 ==== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js (2 errors) ====
     /**
      * @param {T} t
-     * @template {T}
+     * @template T
      */
     function Zet(t) {
         /** @type {T} */
