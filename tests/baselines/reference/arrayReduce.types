@@ -2,7 +2,6 @@
 function toStrings(arr: ReadonlyArray<object>): string[] {
 >toStrings : (arr: ReadonlyArray<object>) => string[]
 >arr : ReadonlyArray<object>
->ReadonlyArray : ReadonlyArray<T>
 
 	return arr.reduce((acc, obj) => {
 >arr.reduce((acc, obj) => {		acc.push(obj.toString());		return acc;	}, [] as string[]) : string[]
@@ -29,5 +28,48 @@ function toStrings(arr: ReadonlyArray<object>): string[] {
 	}, [] as string[]);
 >[] as string[] : string[]
 >[] : undefined[]
+}
+
+interface Operation { readonly kind: "add" | "subtract"; readonly value: number; }
+>kind : "add" | "subtract"
+>value : number
+
+function add(arr: ReadonlyArray<Operation>): Operation {
+>add : (arr: ReadonlyArray<Operation>) => Operation
+>arr : ReadonlyArray<Operation>
+
+	return arr.reduce(({ value }, { kind, value: v }) => {
+>arr.reduce(({ value }, { kind, value: v }) => {		return { kind: "add", value: kind === "add" ? value + v : value - v };	}, { kind: "add", value: 5 }) : { kind: string; value: number; }
+>arr.reduce : { (callbackfn: (previousValue: Operation, currentValue: Operation, currentIndex: number, array: ReadonlyArray<Operation>) => Operation): Operation; <U>(callbackfn: (previousValue: U, currentValue: Operation, currentIndex: number, array: ReadonlyArray<Operation>) => U, initialValue: U): U; }
+>arr : ReadonlyArray<Operation>
+>reduce : { (callbackfn: (previousValue: Operation, currentValue: Operation, currentIndex: number, array: ReadonlyArray<Operation>) => Operation): Operation; <U>(callbackfn: (previousValue: U, currentValue: Operation, currentIndex: number, array: ReadonlyArray<Operation>) => U, initialValue: U): U; }
+>({ value }, { kind, value: v }) => {		return { kind: "add", value: kind === "add" ? value + v : value - v };	} : ({ value }: { kind: string; value: number; }, { kind, value: v }: Operation) => { kind: string; value: number; }
+>value : number
+>kind : "add" | "subtract"
+>value : any
+>v : number
+
+		return { kind: "add", value: kind === "add" ? value + v : value - v };
+>{ kind: "add", value: kind === "add" ? value + v : value - v } : { kind: string; value: number; }
+>kind : string
+>"add" : "add"
+>value : number
+>kind === "add" ? value + v : value - v : number
+>kind === "add" : boolean
+>kind : "add" | "subtract"
+>"add" : "add"
+>value + v : number
+>value : number
+>v : number
+>value - v : number
+>value : number
+>v : number
+
+	}, { kind: "add", value: 5 });
+>{ kind: "add", value: 5 } : { kind: string; value: number; }
+>kind : string
+>"add" : "add"
+>value : number
+>5 : 5
 }
 

@@ -89,12 +89,12 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
 
       return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {
->Object.keys(arg).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.keys(arg).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(recursiveTypeRelations.ts, 26, 55))
 >key : Symbol(key, Decl(recursiveTypeRelations.ts, 26, 76))
 >S : Symbol(S, Decl(recursiveTypeRelations.ts, 17, 20))

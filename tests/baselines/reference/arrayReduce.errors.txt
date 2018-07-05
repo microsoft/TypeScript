@@ -1,0 +1,26 @@
+tests/cases/compiler/arrayReduce.ts(10,2): error TS2322: Type '{ kind: string; value: number; }' is not assignable to type 'Operation'.
+  Types of property 'kind' are incompatible.
+    Type 'string' is not assignable to type '"add" | "subtract"'.
+
+
+==== tests/cases/compiler/arrayReduce.ts (1 errors) ====
+    function toStrings(arr: ReadonlyArray<object>): string[] {
+    	return arr.reduce((acc, obj) => {
+    		acc.push(obj.toString());
+    		return acc;
+    	}, [] as string[]);
+    }
+    
+    interface Operation { readonly kind: "add" | "subtract"; readonly value: number; }
+    function add(arr: ReadonlyArray<Operation>): Operation {
+    	return arr.reduce(({ value }, { kind, value: v }) => {
+    	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    		return { kind: "add", value: kind === "add" ? value + v : value - v };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    	}, { kind: "add", value: 5 });
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ kind: string; value: number; }' is not assignable to type 'Operation'.
+!!! error TS2322:   Types of property 'kind' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"add" | "subtract"'.
+    }
+    

@@ -4692,7 +4692,7 @@ module Harness {
 
             var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
 >minDistFromStart : Symbol(minDistFromStart, Decl(parserharness.ts, 1595, 15))
->entries.map(x => x.editRange.minChar).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries.map(x => x.editRange.minChar).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(entries, Decl(parserharness.ts, 1593, 15))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -4700,7 +4700,7 @@ module Harness {
 >x.editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
 >x : Symbol(x, Decl(parserharness.ts, 1595, 47))
 >editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1595, 81))
 >current : Symbol(current, Decl(parserharness.ts, 1595, 86))
 >Math.min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
@@ -4711,7 +4711,7 @@ module Harness {
 
             var minDistFromEnd = entries.map(x => x.length - x.editRange.limChar).reduce((prev, current) => Math.min(prev, current));
 >minDistFromEnd : Symbol(minDistFromEnd, Decl(parserharness.ts, 1596, 15))
->entries.map(x => x.length - x.editRange.limChar).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries.map(x => x.length - x.editRange.limChar).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(entries, Decl(parserharness.ts, 1593, 15))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -4722,7 +4722,7 @@ module Harness {
 >x.editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
 >x : Symbol(x, Decl(parserharness.ts, 1596, 45))
 >editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1596, 90))
 >current : Symbol(current, Decl(parserharness.ts, 1596, 95))
 >Math.min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
@@ -4733,7 +4733,7 @@ module Harness {
 
             var aggDelta = entries.map(x => x.editRange.delta).reduce((prev, current) => prev + current);
 >aggDelta : Symbol(aggDelta, Decl(parserharness.ts, 1597, 15))
->entries.map(x => x.editRange.delta).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries.map(x => x.editRange.delta).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(entries, Decl(parserharness.ts, 1593, 15))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -4741,7 +4741,7 @@ module Harness {
 >x.editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
 >x : Symbol(x, Decl(parserharness.ts, 1597, 39))
 >editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1597, 71))
 >current : Symbol(current, Decl(parserharness.ts, 1597, 76))
 >prev : Symbol(prev, Decl(parserharness.ts, 1597, 71))

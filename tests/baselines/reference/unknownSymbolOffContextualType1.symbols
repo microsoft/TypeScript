@@ -61,9 +61,9 @@ function getMaxWidth(elementNames: string[]) {
     });
     var maxWidth = widths.reduce(function (a, b) {
 >maxWidth : Symbol(maxWidth, Decl(unknownSymbolOffContextualType1.ts, 17, 7))
->widths.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>widths.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >widths : Symbol(widths, Decl(unknownSymbolOffContextualType1.ts, 14, 7))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(unknownSymbolOffContextualType1.ts, 17, 43))
 >b : Symbol(b, Decl(unknownSymbolOffContextualType1.ts, 17, 45))
 

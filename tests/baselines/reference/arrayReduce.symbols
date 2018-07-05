@@ -25,3 +25,38 @@ function toStrings(arr: ReadonlyArray<object>): string[] {
 	}, [] as string[]);
 }
 
+interface Operation { readonly kind: "add" | "subtract"; readonly value: number; }
+>Operation : Symbol(Operation, Decl(arrayReduce.ts, 5, 1))
+>kind : Symbol(Operation.kind, Decl(arrayReduce.ts, 7, 21))
+>value : Symbol(Operation.value, Decl(arrayReduce.ts, 7, 56))
+
+function add(arr: ReadonlyArray<Operation>): Operation {
+>add : Symbol(add, Decl(arrayReduce.ts, 7, 82))
+>arr : Symbol(arr, Decl(arrayReduce.ts, 8, 13))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>Operation : Symbol(Operation, Decl(arrayReduce.ts, 5, 1))
+>Operation : Symbol(Operation, Decl(arrayReduce.ts, 5, 1))
+
+	return arr.reduce(({ value }, { kind, value: v }) => {
+>arr.reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayReduce.ts, 8, 13))
+>reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(arrayReduce.ts, 9, 21))
+>kind : Symbol(kind, Decl(arrayReduce.ts, 9, 32))
+>value : Symbol(Operation.value, Decl(arrayReduce.ts, 7, 56))
+>v : Symbol(v, Decl(arrayReduce.ts, 9, 38))
+
+		return { kind: "add", value: kind === "add" ? value + v : value - v };
+>kind : Symbol(kind, Decl(arrayReduce.ts, 10, 10))
+>value : Symbol(value, Decl(arrayReduce.ts, 10, 23))
+>kind : Symbol(kind, Decl(arrayReduce.ts, 9, 32))
+>value : Symbol(value, Decl(arrayReduce.ts, 9, 21))
+>v : Symbol(v, Decl(arrayReduce.ts, 9, 38))
+>value : Symbol(value, Decl(arrayReduce.ts, 9, 21))
+>v : Symbol(v, Decl(arrayReduce.ts, 9, 38))
+
+	}, { kind: "add", value: 5 });
+>kind : Symbol(kind, Decl(arrayReduce.ts, 11, 5))
+>value : Symbol(value, Decl(arrayReduce.ts, 11, 18))
+}
+

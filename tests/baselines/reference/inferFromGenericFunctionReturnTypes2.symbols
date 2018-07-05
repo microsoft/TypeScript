@@ -292,9 +292,9 @@ function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
   return (x: T) => fns.reduce((prev, fn) => fn(prev), x);
 >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 10))
 >T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes2.ts, 48, 17))
->fns.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fns.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >fns : Symbol(fns, Decl(inferFromGenericFunctionReturnTypes2.ts, 48, 20))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 31))
 >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 36))
 >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 36))
