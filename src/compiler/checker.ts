@@ -9264,7 +9264,7 @@ namespace ts {
                         resolveImportSymbolType(node, links, moduleSymbol, targetMeaning);
                     }
                     else {
-                        error(node, targetMeaning === SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here, moduleName);
+                        error(node, targetMeaning === SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Did_you_mean_typeof_import_0, moduleName);
                         links.resolvedSymbol = unknownSymbol;
                         links.resolvedType = errorType;
                     }
