@@ -22,9 +22,9 @@ var b = a.map(s => s.length);
 var n1 = b.reduce((x, y) => x + y);
 >n1 : number
 >b.reduce((x, y) => x + y) : number
->b.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>b.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >b : number[]
->reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >(x, y) => x + y : (x: number, y: number) => number
 >x : number
 >y : number
@@ -35,9 +35,9 @@ var n1 = b.reduce((x, y) => x + y);
 var n2 = b.reduceRight((x, y) => x + y);
 >n2 : number
 >b.reduceRight((x, y) => x + y) : number
->b.reduceRight : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>b.reduceRight : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >b : number[]
->reduceRight : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>reduceRight : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >(x, y) => x + y : (x: number, y: number) => number
 >x : number
 >y : number
@@ -76,9 +76,9 @@ n2.toExponential(2); // should not error if 'n2' is correctly number.
 var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type string
 >n3 : string
 >b.reduce<string>( (x, y) => x + y, "") : string
->b.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>b.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >b : number[]
->reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >(x, y) => x + y : (x: string, y: number) => string
 >x : string
 >y : number

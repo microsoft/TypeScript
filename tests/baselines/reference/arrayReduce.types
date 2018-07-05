@@ -1,0 +1,33 @@
+=== tests/cases/compiler/arrayReduce.ts ===
+function toStrings(arr: ReadonlyArray<object>): string[] {
+>toStrings : (arr: ReadonlyArray<object>) => string[]
+>arr : ReadonlyArray<object>
+>ReadonlyArray : ReadonlyArray<T>
+
+	return arr.reduce((acc, obj) => {
+>arr.reduce((acc, obj) => {		acc.push(obj.toString());		return acc;	}, [] as string[]) : string[]
+>arr.reduce : { (callbackfn: (previousValue: object, currentValue: object, currentIndex: number, array: ReadonlyArray<object>) => object): object; <U>(callbackfn: (previousValue: U, currentValue: object, currentIndex: number, array: ReadonlyArray<object>) => U, initialValue: U): U; }
+>arr : ReadonlyArray<object>
+>reduce : { (callbackfn: (previousValue: object, currentValue: object, currentIndex: number, array: ReadonlyArray<object>) => object): object; <U>(callbackfn: (previousValue: U, currentValue: object, currentIndex: number, array: ReadonlyArray<object>) => U, initialValue: U): U; }
+>(acc, obj) => {		acc.push(obj.toString());		return acc;	} : (acc: string[], obj: object) => string[]
+>acc : string[]
+>obj : object
+
+		acc.push(obj.toString());
+>acc.push(obj.toString()) : number
+>acc.push : (...items: string[]) => number
+>acc : string[]
+>push : (...items: string[]) => number
+>obj.toString() : string
+>obj.toString : () => string
+>obj : object
+>toString : () => string
+
+		return acc;
+>acc : string[]
+
+	}, [] as string[]);
+>[] as string[] : string[]
+>[] : undefined[]
+}
+
