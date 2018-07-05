@@ -1,4 +1,4 @@
-//// [typeofStripsFeshness.ts]
+//// [typeofStripsFreshness.ts]
 interface Collection<T> {
     elems: T[];
 }
@@ -20,7 +20,7 @@ type Both = Another | All;
 const result2: Collection<Both> = new Collection();
 
 
-//// [typeofStripsFeshness.js]
+//// [typeofStripsFreshness.js]
 var ALL = "all";
 var result = new Collection();
 var ANOTHER = "another";

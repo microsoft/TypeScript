@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeofStripsFeshness.ts ===
+=== tests/cases/compiler/typeofStripsFreshness.ts ===
 interface Collection<T> {
 >Collection : Collection<T>
 >T : T
