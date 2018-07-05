@@ -394,8 +394,9 @@ namespace ts {
                     const absolutePathCache = createMap<string>();
                     const sourcemapIterator = sourcemaps.decodeMappings(originalMap);
                     for (let { value: raw, done } = sourcemapIterator.next(); !done; { value: raw, done } = sourcemapIterator.next()) {
+                        const pathCacheKey = "" + raw.sourceIndex;
                         // Apply offsets to each position and fixup source entries
-                        if (!resolvedPathCache.has("" + raw.sourceIndex)) {
+                        if (!resolvedPathCache.has(pathCacheKey)) {
                             const rawPath = originalMap.sources[raw.sourceIndex];
                             const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
                             const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
@@ -406,11 +407,11 @@ namespace ts {
                                 host.getCanonicalFileName,
                                 /*isAbsolutePathAnUrl*/ true
                             );
-                            resolvedPathCache.set("" + raw.sourceIndex, resolvedPath);
-                            absolutePathCache.set("" + raw.sourceIndex, getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath));
+                            resolvedPathCache.set(pathCacheKey, resolvedPath);
+                            absolutePathCache.set(pathCacheKey, getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath));
                         }
-                        const resolvedPath = resolvedPathCache.get("" + raw.sourceIndex)!;
-                        const absolutePath = absolutePathCache.get("" + raw.sourceIndex)!;
+                        const resolvedPath = resolvedPathCache.get(pathCacheKey)!;
+                        const absolutePath = absolutePathCache.get(pathCacheKey)!;
                         // tslint:disable-next-line:no-null-keyword
                         setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null, resolvedPath); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
