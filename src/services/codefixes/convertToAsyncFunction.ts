@@ -174,7 +174,8 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
                     let innerCbBody: Statement[] = [];
-                    for (const stmt of func.body.statements) {
+                    let innerRetStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(func.body);
+                    for (const stmt of innerRetStmts) {
                         forEachChild(stmt, function visit(node: Node) {
                             if (isCallExpression(node)) {
                                 let temp = parseCallback(node, checker, /*usedNames,*/ outermostParent, argName);
