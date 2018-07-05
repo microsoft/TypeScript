@@ -5266,7 +5266,7 @@ declare namespace ts {
         Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher: DiagnosticMessage;
         Type_0_is_not_an_array_type_or_a_string_type: DiagnosticMessage;
         The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression: DiagnosticMessage;
-        Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct: DiagnosticMessage;
+        ECMAScript_imports_can_only_reference_an_export_declaration_with_the_esModuleInterop_flag_enabled_and_by_using_default_imports: DiagnosticMessage;
         Module_0_uses_export_and_cannot_be_used_with_export_Asterisk: DiagnosticMessage;
         An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments: DiagnosticMessage;
         A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments: DiagnosticMessage;

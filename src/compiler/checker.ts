@@ -2269,7 +2269,8 @@ namespace ts {
             const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
             if (!dontResolveAlias && symbol) {
                 if (!(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
-                    error(referencingLocation, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol!));
+                    error(referencingLocation, Diagnostics.ECMAScript_imports_can_only_reference_an_export_declaration_with_the_esModuleInterop_flag_enabled_and_by_using_default_imports);
+
                     return symbol;
                 }
                 if (compilerOptions.esModuleInterop) {

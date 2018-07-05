@@ -1744,7 +1744,7 @@
         "category": "Error",
         "code": 2496
     },
-    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "ECMAScript imports can only reference an 'export =' declaration with the 'esModuleInterop' flag enabled and by using default imports.": {
         "category": "Error",
         "code": 2497
     },
