@@ -531,7 +531,7 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U> {
+    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => ReadonlyArray<U> | Iterator<U> | undefined): Iterator<U> {
         const first = iter.next();
         if (first.done) {
             return emptyIterator;
@@ -1418,7 +1418,9 @@ namespace ts {
         return typeof text === "string";
     }
 
-    export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
+    export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
+    export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
+    export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {
         return value !== undefined && test(value) ? value : undefined;
     }
 

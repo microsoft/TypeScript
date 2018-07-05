@@ -2844,7 +2844,6 @@ namespace ts {
         inputSourceFileNames: string[];      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
         sourceMapNames?: string[];           // Source map's names field - list of names that can be indexed in this source map
         sourceMapMappings: string;           // Source map's mapping field - encoded source map spans
-        sourceMapDecodedMappings: SourceMapSpan[];  // Raw source map spans that were encoded into the sourceMapMappings
     }
 
     /** Return code used by getEmitOutput function to indicate status of the function */
@@ -2883,6 +2882,7 @@ namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
+        /* @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
@@ -3045,6 +3045,11 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ isArrayLikeType(type: Type): boolean;
+        /**
+         * True if `contextualType` should not be considered for completions because
+         * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
+         */
+        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression): boolean;
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
@@ -3748,6 +3753,8 @@ namespace ts {
         aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
         /* @internal */
         wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
+        /* @internal */
+        immediateBaseConstraint?: Type;  // Immediate base constraint cache
     }
 
     /* @internal */
