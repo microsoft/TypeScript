@@ -607,7 +607,7 @@ namespace ts {
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType,
-            ResolvedBaseConstraint,
+            ImmediateBaseConstraint,
         }
 
         const enum CheckMode {
@@ -4255,8 +4255,8 @@ namespace ts {
             if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
                 return !!(<Signature>target).resolvedReturnType;
             }
-            if (propertyName === TypeSystemPropertyName.ResolvedBaseConstraint) {
-                const bc = (<TypeParameter | UnionOrIntersectionType>target).resolvedBaseConstraint;
+            if (propertyName === TypeSystemPropertyName.ImmediateBaseConstraint) {
+                const bc = (<Type>target).immediateBaseConstraint;
                 return !!bc && bc !== circularConstraintType;
             }
 
@@ -6854,15 +6854,21 @@ namespace ts {
             return type.resolvedBaseConstraint;
 
             function getBaseConstraint(t: Type): Type | undefined {
-                if (!pushTypeResolution(t, TypeSystemPropertyName.ResolvedBaseConstraint)) {
+                if (t.immediateBaseConstraint) {
+                    return t.immediateBaseConstraint === noConstraintType ? undefined : t.immediateBaseConstraint;
+                }
+                if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
                     circular = true;
+                    t.immediateBaseConstraint = circularConstraintType;
                     return undefined;
                 }
                 const result = computeBaseConstraint(getSimplifiedType(t));
                 if (!popTypeResolution()) {
                     circular = true;
+                    t.immediateBaseConstraint = circularConstraintType;
                     return undefined;
                 }
+                t.immediateBaseConstraint = !result ? noConstraintType : result;
                 return result;
             }
 

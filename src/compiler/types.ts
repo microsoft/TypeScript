@@ -3753,6 +3753,8 @@ namespace ts {
         aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
         /* @internal */
         wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
+        /* @internal */
+        immediateBaseConstraint?: Type;  // Immediate base constraint cache
     }
 
     /* @internal */
