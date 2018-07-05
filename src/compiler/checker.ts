@@ -27700,6 +27700,9 @@ namespace ts {
             // Initialize global symbol table
             let augmentations: ReadonlyArray<StringLiteral | Identifier>[] | undefined;
             for (const file of host.getSourceFiles()) {
+                if (file.redirectInfo) {
+                    continue;
+                }
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals!);
                 }
