@@ -3351,21 +3351,6 @@ namespace ts {
         return node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
-    /**
-     * Gets the effective type parameters. If the node was parsed in a
-     * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
-     */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        if (isJSDocSignature(node)) {
-            return emptyArray;
-        }
-        if (isJSDocTypeAlias(node)) {
-            Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
-            return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
-        }
-        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
-    }
-
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
         return flatMap(getJSDocTags(node), tag => isNonTypeAliasTemplate(tag) ? tag.typeParameters : undefined);
     }
@@ -5022,14 +5007,27 @@ namespace ts {
     }
 
     /**
-     * Gets the return type node for the node if provided via JSDoc's return tag.
+     * Gets the return type node for the node if provided via JSDoc return tag or type tag.
      *
      * @remarks `getJSDocReturnTag` just gets the whole JSDoc tag. This function
-     * gets the type from inside the braces.
+     * gets the type from inside the braces, after the fat arrow, etc.
      */
     export function getJSDocReturnType(node: Node): TypeNode | undefined {
         const returnTag = getJSDocReturnTag(node);
-        return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
+        if (returnTag && returnTag.typeExpression) {
+            return returnTag.typeExpression.type;
+        }
+        const typeTag = getJSDocTypeTag(node);
+        if (typeTag && typeTag.typeExpression) {
+            const type = typeTag.typeExpression.type;
+            if (isTypeLiteralNode(type)) {
+                const sig = find(type.members, isCallSignatureDeclaration);
+                return sig && sig.type;
+            }
+            if (isFunctionTypeNode(type)) {
+                return type.type;
+            }
+        }
     }
 
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
@@ -5052,6 +5050,21 @@ namespace ts {
     /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
     export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
+    }
+
+    /**
+     * Gets the effective type parameters. If the node was parsed in a
+     * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
+     */
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
+        if (isJSDocSignature(node)) {
+            return emptyArray;
+        }
+        if (isJSDocTypeAlias(node)) {
+            Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
+            return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
+        }
+        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
     }
 }
 
@@ -6570,45 +6583,6 @@ namespace ts {
     /* @internal */
     export function hasType(node: Node): node is HasType {
         return !!(node as HasType).type;
-    }
-
-    /* True if the node could have a type node a `.type` */
-    /* @internal */
-    export function couldHaveType(node: Node): node is HasType {
-        switch (node.kind) {
-            case SyntaxKind.Parameter:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.Constructor:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.CallSignature:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.IndexSignature:
-            case SyntaxKind.TypePredicate:
-            case SyntaxKind.FunctionType:
-            case SyntaxKind.ConstructorType:
-            case SyntaxKind.ParenthesizedType:
-            case SyntaxKind.TypeOperator:
-            case SyntaxKind.MappedType:
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.JSDocTypeExpression:
-            case SyntaxKind.JSDocNullableType:
-            case SyntaxKind.JSDocNonNullableType:
-            case SyntaxKind.JSDocOptionalType:
-            case SyntaxKind.JSDocFunctionType:
-            case SyntaxKind.JSDocVariadicType:
-                return true;
-        }
-        return false;
     }
 
     /** True if has initializer node attached to it. */
