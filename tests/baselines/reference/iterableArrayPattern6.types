@@ -47,7 +47,7 @@ var a: Bar, b: string[];
 
 [a, ...b] = new FooIterator;
 >[a, ...b] = new FooIterator : FooIterator
->[a, ...b] : (string | Bar)[]
+>[a, ...b] : [Bar, ...string[]]
 >a : Bar
 >...b : string
 >b : string[]

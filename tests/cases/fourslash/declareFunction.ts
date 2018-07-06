@@ -1,7 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-//// /**/declare function
+////declare function
 
-goTo.marker();
-//verify there is no empty navigation item.
-verify.navigationItemsListCount(0, "")
+verify.navigateTo({ pattern: "", expected: [] });

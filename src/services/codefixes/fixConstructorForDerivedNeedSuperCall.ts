@@ -16,7 +16,7 @@ namespace ts.codefix {
     });
 
     function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         Debug.assert(token.kind === SyntaxKind.ConstructorKeyword);
         return token.parent as ConstructorDeclaration;
     }

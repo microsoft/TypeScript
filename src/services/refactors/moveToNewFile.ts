@@ -118,9 +118,10 @@ namespace ts.refactor {
         }
 
         const useEs6ModuleSyntax = !!oldFile.externalModuleIndicator;
-        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, preferences);
+        const quotePreference = getQuotePreference(oldFile, preferences);
+        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
         if (importsFromNewFile) {
-            changes.insertNodeBefore(oldFile, oldFile.statements[0], importsFromNewFile, /*blankLineBetween*/ true);
+            insertImport(changes, oldFile, importsFromNewFile);
         }
 
         deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
@@ -129,7 +130,7 @@ namespace ts.refactor {
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
         return [
-            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, preferences),
+            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference),
             ...addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax),
         ];
     }
@@ -268,7 +269,7 @@ namespace ts.refactor {
         | ImportEqualsDeclaration
         | VariableStatement;
 
-    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, preferences: UserPreferences): Statement | undefined {
+    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
         let defaultImport: Identifier | undefined;
         const imports: string[] = [];
         newFileNeedExport.forEach(symbol => {
@@ -279,14 +280,14 @@ namespace ts.refactor {
                 imports.push(symbol.name);
             }
         });
-        return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, preferences);
+        return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, quotePreference);
     }
 
-    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean, preferences: UserPreferences): Statement | undefined {
+    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
         path = ensurePathIsNonModuleName(path);
         if (useEs6Imports) {
             const specifiers = imports.map(i => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(i)));
-            return makeImportIfNecessary(defaultImport, specifiers, path, preferences);
+            return makeImportIfNecessary(defaultImport, specifiers, path, quotePreference);
         }
         else {
             Debug.assert(!defaultImport); // If there's a default export, it should have been an es6 module.
@@ -324,7 +325,7 @@ namespace ts.refactor {
                 break;
             case SyntaxKind.ImportEqualsDeclaration:
                 if (isUnused(importDecl.name)) {
-                    changes.deleteNode(sourceFile, importDecl);
+                    changes.delete(sourceFile, importDecl);
                 }
                 break;
             case SyntaxKind.VariableDeclaration:
@@ -341,19 +342,19 @@ namespace ts.refactor {
         const namedBindingsUnused = !namedBindings ||
             (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name) : namedBindings.elements.every(e => isUnused(e.name)));
         if (defaultUnused && namedBindingsUnused) {
-            changes.deleteNode(sourceFile, importDecl);
+            changes.delete(sourceFile, importDecl);
         }
         else {
             if (name && defaultUnused) {
-                changes.deleteNode(sourceFile, name);
+                changes.delete(sourceFile, name);
             }
             if (namedBindings) {
                 if (namedBindingsUnused) {
-                    changes.deleteNode(sourceFile, namedBindings);
+                    changes.delete(sourceFile, namedBindings);
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
                     for (const element of namedBindings.elements) {
-                        if (isUnused(element.name)) changes.deleteNodeInList(sourceFile, element);
+                        if (isUnused(element.name)) changes.delete(sourceFile, element);
                     }
                 }
             }
@@ -364,20 +365,20 @@ namespace ts.refactor {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 if (isUnused(name)) {
-                    changes.deleteNode(sourceFile, name);
+                    changes.delete(sourceFile, name);
                 }
                 break;
             case SyntaxKind.ArrayBindingPattern:
                 break;
             case SyntaxKind.ObjectBindingPattern:
                 if (name.elements.every(e => isIdentifier(e.name) && isUnused(e.name))) {
-                    changes.deleteNode(sourceFile,
+                    changes.delete(sourceFile,
                         isVariableDeclarationList(varDecl.parent) && varDecl.parent.declarations.length === 1 ? varDecl.parent.parent : varDecl);
                 }
                 else {
                     for (const element of name.elements) {
                         if (isIdentifier(element.name) && isUnused(element.name)) {
-                            changes.deleteNode(sourceFile, element.name);
+                            changes.delete(sourceFile, element.name);
                         }
                     }
                 }
@@ -392,7 +393,7 @@ namespace ts.refactor {
         changes: textChanges.ChangeTracker,
         checker: TypeChecker,
         useEs6ModuleSyntax: boolean,
-        preferences: UserPreferences,
+        quotePreference: QuotePreference,
     ): ReadonlyArray<SupportedImportStatement> {
         const copiedOldImports: SupportedImportStatement[] = [];
         for (const oldStatement of oldFile.statements) {
@@ -424,7 +425,7 @@ namespace ts.refactor {
             }
         });
 
-        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax, preferences));
+        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax, quotePreference));
         return copiedOldImports;
     }
 

@@ -19,7 +19,7 @@ namespace ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerReason: SignatureHelpTriggerReason | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
         const typeChecker = program.getTypeChecker();
 
         // Decide whether to show signature help
@@ -27,6 +27,13 @@ namespace ts.SignatureHelp {
         if (!startingToken) {
             // We are at the beginning of the file
             return undefined;
+        }
+
+        if (shouldCarefullyCheckContext(triggerReason)) {
+            // In the middle of a string, don't provide signature help unless the user explicitly requested it.
+            if (isInString(sourceFile, position, startingToken)) {
+                return undefined;
+            }
         }
 
         const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile);
@@ -48,6 +55,11 @@ namespace ts.SignatureHelp {
         }
 
         return typeChecker.runWithCancellationToken(cancellationToken, typeChecker => createSignatureHelpItems(candidateInfo.candidates, candidateInfo.resolvedSignature, argumentInfo, sourceFile, typeChecker));
+    }
+
+    function shouldCarefullyCheckContext(reason: SignatureHelpTriggerReason | undefined) {
+        // Only need to be careful if the user typed a character and signature help wasn't showing.
+        return !!reason && reason.kind === "characterTyped";
     }
 
     function getCandidateInfo(argumentInfo: ArgumentListInfo, checker: TypeChecker): { readonly candidates: ReadonlyArray<Signature>, readonly resolvedSignature: Signature } | undefined {
@@ -366,7 +378,7 @@ namespace ts.SignatureHelp {
         return invocation.kind === InvocationKind.Call ? getInvokedExpression(invocation.node) : invocation.called;
     }
 
-    const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors;
+    const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
     function createSignatureHelpItems(candidates: ReadonlyArray<Signature>, resolvedSignature: Signature, argumentListInfo: ArgumentListInfo, sourceFile: SourceFile, typeChecker: TypeChecker): SignatureHelpItems {
         const { argumentCount, argumentsSpan: applicableSpan, invocation, argumentIndex } = argumentListInfo;
         const isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;

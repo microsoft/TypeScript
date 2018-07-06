@@ -3,7 +3,7 @@ export = foo;
 >foo : any
 
 declare namespace foo {
->foo : typeof foo
+>foo : typeof import("o")
 
     export type T = number;
 >T : number

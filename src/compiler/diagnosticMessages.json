@@ -367,10 +367,6 @@
         "category": "Error",
         "code": 1121
     },
-    "A tuple type element list cannot be empty.": {
-        "category": "Error",
-        "code": 1122
-    },
     "Variable declaration list cannot be empty.": {
         "category": "Error",
         "code": 1123
@@ -847,6 +843,14 @@
         "category": "Error",
         "code": 1255
     },
+    "A rest element must be last in a tuple type.": {
+        "category": "Error",
+        "code": 1256
+    },
+    "A required element cannot follow an optional element.": {
+        "category": "Error",
+        "code": 1257
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -967,7 +971,7 @@
         "category": "Error",
         "code": 1339
     },
-    "Module '{0}' does not refer to a type, but is used as a type here.": {
+    "Module '{0}' does not refer to a type, but is used as a type here. Did you mean 'typeof import('{0}')'?": {
         "category": "Error",
         "code": 1340
     },
@@ -1248,6 +1252,10 @@
         "category": "Error",
         "code": 2366
     },
+    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
+        "category": "Error",
+        "code": 2367
+    },
     "Type parameter name cannot be '{0}'.": {
         "category": "Error",
         "code": 2368
@@ -1443,6 +1451,10 @@
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
+    },
+    "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 2418
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -2032,6 +2044,18 @@
         "category": "Error",
         "code": 2571
     },
+    "Rest signatures are incompatible.": {
+        "category": "Error",
+        "code": 2572
+    },
+    "Property '{0}' is incompatible with rest element type.": {
+        "category": "Error",
+        "code": 2573
+    },
+    "A rest element type must be an array type.": {
+        "category": "Error",
+        "code": 2574
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2376,6 +2400,14 @@
     "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2727
+    },
+    "'{0}' is declared here.": {
+        "category": "Message",
+        "code": 2728
+    },
+    "Property '{0}' is used before its initialization.": {
+        "category": "Error",
+        "code": 2729
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3583,6 +3615,22 @@
         "code": 6199,
         "reportsUnnecessary": true
     },
+    "Definitions of the following identifiers conflict with those in another file: {0}": {
+        "category": "Error",
+        "code": 6200
+    },
+    "Conflicts are in this file.": {
+        "category": "Message",
+        "code": 6201
+    },
+    "'{0}' was also declared here.": {
+        "category": "Message",
+        "code": 6203
+    },
+    "and here.": {
+        "category": "Message",
+        "code": 6204
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3619,6 +3667,104 @@
     "Output file '{0}' from project '{1}' does not exist": {
         "category": "Error",
         "code": 6309
+    },
+    "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
+        "category": "Message",
+        "code": 6350
+    },
+    "Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}'": {
+        "category": "Message",
+        "code": 6351
+    },
+    "Project '{0}' is out of date because output file '{1}' does not exist": {
+        "category": "Message",
+        "code": 6352
+    },
+    "Project '{0}' is out of date because its dependency '{1}' is out of date": {
+        "category": "Message",
+        "code": 6353
+    },
+
+    "Project '{0}' is up to date with .d.ts files from its dependencies": {
+        "category": "Message",
+        "code": 6354
+    },
+    "Projects in this build: {0}": {
+        "category": "Message",
+        "code": 6355
+    },
+    "A non-dry build would delete the following files: {0}": {
+        "category": "Message",
+        "code": 6356
+    },
+    "A non-dry build would build project '{0}'": {
+        "category": "Message",
+        "code": 6357
+    },
+    "Building project '{0}'...": {
+        "category": "Message",
+        "code": 6358
+    },
+    "Updating output timestamps of project '{0}'...": {
+        "category": "Message",
+        "code": 6359
+    },
+    "delete this - Project '{0}' is up to date because it was previously built": {
+        "category": "Message",
+        "code": 6360
+    },
+    "Project '{0}' is up to date": {
+        "category": "Message",
+        "code": 6361
+    },
+    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6362
+    },
+    "Project '{0}' can't be built because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6363
+    },
+    "Build one or more projects and their dependencies, if out of date": {
+        "category": "Message",
+        "code": 6364
+    },
+    "Delete the outputs of all projects": {
+        "category": "Message",
+        "code": 6365
+    },
+    "Enable verbose logging": {
+        "category": "Message",
+        "code": 6366
+    },
+    "Show what would be built (or deleted, if specified with '--clean')": {
+        "category": "Message",
+        "code": 6367
+    },
+    "Build all projects, including those that appear to be up to date": {
+        "category": "Message",
+        "code": 6368
+    },
+    "Option '--build' must be the first command line argument.": {
+        "category": "Error",
+        "code": 6369
+    },
+    "Options '{0}' and '{1}' cannot be combined.": {
+        "category": "Error",
+        "code": 6370
+    },
+    "Skipping clean because not all projects could be located": {
+        "category": "Error",
+        "code": 6371
+    },
+
+    "The expected type comes from property '{0}' which is declared here on type '{1}'": {
+        "category": "Message",
+        "code": 6500
+    },
+    "The expected type comes from this index signature.": {
+        "category": "Message",
+        "code": 6501
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -3739,13 +3885,17 @@
         "category": "Message",
         "code": 7037
     },
-    "A namespace-style import cannot be called or constructed, and will cause a failure at runtime.": {
-        "category": "Error",
+    "Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.": {
+        "category": "Message",
         "code": 7038
     },
     "Mapped object type implicitly has an 'any' template type.": {
         "category": "Error",
         "code": 7039
+    },
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+        "category": "Error",
+        "code": 7040
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -4313,5 +4463,33 @@
     "Convert named imports to namespace import": {
         "category": "Message",
         "code": 95057
+    },
+    "Add or remove braces in an arrow function": {
+        "category": "Message",
+        "code": 95058
+    },
+    "Add braces to arrow function": {
+        "category": "Message",
+        "code": 95059
+    },
+    "Remove braces from arrow function": {
+        "category": "Message",
+        "code": 95060
+    },
+    "Convert default export to named export": {
+        "category": "Message",
+        "code": 95061
+    },
+    "Convert named export to default export": {
+        "category": "Message",
+        "code": 95062
+    },
+    "Add missing enum member '{0}'": {
+        "category": "Message",
+        "code": 95063
+    },
+    "Add all missing imports": {
+        "category": "Message",
+        "code": 95064
     }
 }

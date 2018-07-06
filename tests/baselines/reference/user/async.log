@@ -122,16 +122,14 @@ node_modules/async/dist/async.js(1951,10): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(1951,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/dist/async.js(1990,16): error TS2554: Expected 3 arguments, but got 1.
 node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'number | undefined'.
-  Type 'Function' is not assignable to type 'number | undefined'.
-    Type 'Function' is not assignable to type 'number'.
+  Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2274,21): error TS2554: Expected 0 arguments, but got 2.
 node_modules/async/dist/async.js(2425,20): error TS1005: '}' expected.
 node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturat...' is not assignable to type 'NodeModule'.
   Property 'exports' is missing in type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturat...'.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[] | undefined'.
-  Type 'IArguments' is not assignable to type 'any[]'.
-    Property 'flatMap' is missing in type 'IArguments'.
+node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+  Property 'push' is missing in type 'IArguments'.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.
@@ -174,7 +172,7 @@ node_modules/async/dist/async.js(4163,26): error TS2339: Property 'process' does
 node_modules/async/dist/async.js(4167,14): error TS2339: Property 'unshift' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(4381,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
   Type '{}' is not assignable to type 'any[]'.
-    Property 'flatMap' is missing in type '{}'.
+    Property 'length' is missing in type '{}'.
 node_modules/async/dist/async.js(4617,17): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(4617,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.

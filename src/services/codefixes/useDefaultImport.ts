@@ -24,7 +24,7 @@ namespace ts.codefix {
         readonly moduleSpecifier: Expression;
     }
     function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
-        const name = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const name = getTokenAtPosition(sourceFile, pos);
         if (!isIdentifier(name)) return undefined; // bad input
         const { parent } = name;
         if (isImportEqualsDeclaration(parent) && isExternalModuleReference(parent.moduleReference)) {
@@ -37,6 +37,6 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
-        changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, preferences));
+        changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreference(sourceFile, preferences)));
     }
 }

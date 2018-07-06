@@ -66,7 +66,13 @@ namespace ts {
             }
         }
 
-        function trackReferencedAmbientModule(node: ModuleDeclaration) {
+        function trackReferencedAmbientModule(node: ModuleDeclaration, symbol: Symbol) {
+            // If it is visible via `// <reference types="..."/>`, then we should just use that
+            const directives = resolver.getTypeReferenceDirectivesForSymbol(symbol, SymbolFlags.All);
+            if (length(directives)) {
+                return recordTypeReferenceDirectivesIfNecessary(directives);
+            }
+            // Otherwise we should emit a path-based reference
             const container = getSourceFileOfNode(node);
             refs.set("" + getOriginalNodeId(container), container);
         }
@@ -180,7 +186,7 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        return createUnparsedSourceFile(prepend.declarationText);
+                        return createUnparsedSourceFile(prepend.declarationText, prepend.declarationMapPath, prepend.declarationMapText);
                     }
                 }));
                 bundle.syntheticFileReferences = [];
@@ -1022,7 +1028,7 @@ namespace ts {
                     }
                     const members = createNodeArray(concatenate(parameterProperties, visitNodes(input.members, visitDeclarationSubtree)));
 
-                    const extendsClause = getClassExtendsHeritageClauseElement(input);
+                    const extendsClause = getEffectiveBaseTypeNode(input);
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                         // We must add a temporary declaration for the extends clause expression
 

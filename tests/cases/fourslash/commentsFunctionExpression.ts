@@ -32,7 +32,7 @@
 ////}
 ////assig/*16*/ned/*17*/(/*18*/"hey");
 
-verify.quickInfoAt("1", "var lambdaFoo: (a: number, b: number) => number", "lambdaFoo var comment\nthis is lambda comment");
+verify.quickInfoAt("1", "var lambdaFoo: (a: number, b: number) => number", "this is lambda comment\nlambdaFoo var comment");
 
 goTo.marker('2');
 verify.completionListContains('a', '(parameter) a: number', 'param a');
@@ -42,18 +42,18 @@ verify.completionListContains('b', '(parameter) b: number', 'param b');
 verify.quickInfoAt("3", "var lambddaNoVarComment: (a: number, b: number) => number", "this is lambda multiplication");
 
 goTo.marker('4');
-verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', 'lambdaFoo var comment\nthis is lambda comment');
+verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', "this is lambda comment\nlambdaFoo var comment");
 verify.completionListContains('lambddaNoVarComment', 'var lambddaNoVarComment: (a: number, b: number) => number', 'this is lambda multiplication');
 
 verify.signatureHelp(
     {
         marker: "5",
-        docComment: "lambdaFoo var comment\nthis is lambda comment",
+        docComment: "this is lambda comment\nlambdaFoo var comment",
         parameterDocComment: "param a",
     },
     {
         marker: "6",
-        docComment: "lambdaFoo var comment\nthis is lambda comment",
+        docComment: "this is lambda comment\nlambdaFoo var comment",
         parameterDocComment: "param b",
     },
 );
@@ -61,31 +61,31 @@ verify.signatureHelp(
 // no documentation from nested lambda
 verify.quickInfos({
     7: "function anotherFunc(a: number): string",
-    8: ["(local var) lambdaVar: (b: string) => string", "documentation\ninner docs "],
+    8: ["(local var) lambdaVar: (b: string) => string", "inner docs \ndocumentation"],
     9: ["(parameter) b: string", "inner parameter "],
     10: "(local var) localVar: string",
     11: "(local var) localVar: string",
     12: ["(parameter) b: string", "inner parameter "],
-    13: ["(local var) lambdaVar: (b: string) => string", "documentation\ninner docs "],
+    13: ["(local var) lambdaVar: (b: string) => string", "inner docs \ndocumentation"],
     14: [
         "var assigned: (s: string) => number",
-        "On variable\nSummary on expression"
+        "Summary on expression\nOn variable"
     ]
 });
 
 goTo.marker('15');
-verify.completionListContains('s', '(parameter) s: string', "the first parameter!\nparam on expression\nOn parameter ");
-verify.quickInfoAt("16", "var assigned: (s: string) => number", "On variable\nSummary on expression");
+verify.completionListContains('s', '(parameter) s: string', "On parameter \nparam on expression\nthe first parameter!");
+verify.quickInfoAt("16", "var assigned: (s: string) => number", "Summary on expression\nOn variable");
 goTo.marker('17');
-verify.completionListContains("assigned", "var assigned: (s: string) => number", "On variable\nSummary on expression");
+verify.completionListContains("assigned", "var assigned: (s: string) => number", "Summary on expression\nOn variable");
 verify.signatureHelp({
     marker: "18",
-    docComment: "On variable\nSummary on expression",
-    parameterDocComment: "the first parameter!\nparam on expression\nOn parameter ",
+    docComment: "Summary on expression\nOn variable",
+    parameterDocComment: "On parameter \nparam on expression\nthe first parameter!",
     tags: [
-        { name: "param", text: "s the first parameter!" },
-        { name: "returns", text: "the parameter's length" },
         { name: "param", text: "s param on expression" },
         { name: "returns", text: "return on expression" },
+        { name: "param", text: "s the first parameter!" },
+        { name: "returns", text: "the parameter's length" },
     ],
 });

@@ -1,31 +1,3 @@
-
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-
-/// <reference path="..\services\services.ts" />
-/// <reference path="..\services\shims.ts" />
-/// <reference path="..\server\session.ts" />
-/// <reference path="..\server\client.ts" />
-/// <reference path="sourceMapRecorder.ts"/>
-/// <reference path="runnerbase.ts"/>
-/// <reference path="./vfs.ts" />
-/// <reference types="node" />
-/// <reference types="mocha" />
-/// <reference types="chai" />
-
-
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
 
@@ -35,7 +7,7 @@ var assert: typeof _chai.assert = _chai.assert;
 {
     // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
     // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
-    assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
+    assert.isFalse = (expr: any, msg: string) => { if (expr !== false) throw new Error(msg); };
 
     const assertDeepImpl = assert.deepEqual;
     assert.deepEqual = (a, b, msg) => {
@@ -1136,6 +1108,7 @@ namespace Harness {
             { name: "noImplicitReferences", type: "boolean" },
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
+            { name: "link", type: "string" },
             // Emitted js baseline will print full paths for every output file
             { name: "fullEmitPaths", type: "boolean" }
         ];
@@ -1207,7 +1180,9 @@ namespace Harness {
             harnessSettings: TestCaseParser.CompilerSettings | undefined,
             compilerOptions: ts.CompilerOptions | undefined,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-            currentDirectory: string | undefined): compiler.CompilationResult {
+            currentDirectory: string | undefined,
+            symlinks?: vfs.FileSet
+        ): compiler.CompilationResult {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -1244,6 +1219,9 @@ namespace Harness {
 
             const docs = inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile);
             const fs = vfs.createFromFileSystem(IO, !useCaseSensitiveFileNames, { documents: docs, cwd: currentDirectory });
+            if (symlinks) {
+                fs.apply(symlinks);
+            }
             const host = new fakes.CompilerHost(fs, options);
             return compiler.compileFiles(host, programFileNames, options);
         }
@@ -1370,6 +1348,12 @@ namespace Harness {
                 return "\r\n";
             }
 
+            const formatDiagnsoticHost = {
+                getCurrentDirectory: () => options && options.currentDirectory ? options.currentDirectory : "",
+                getNewLine: () => IO.newLine(),
+                getCanonicalFileName: ts.createGetCanonicalFileName(options && options.caseSensitive !== undefined ? options.caseSensitive : true),
+            };
+
             function outputErrorText(error: ts.Diagnostic) {
                 const message = ts.flattenDiagnosticMessageText(error.messageText, IO.newLine());
 
@@ -1378,6 +1362,11 @@ namespace Harness {
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
                     .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
+                if (error.relatedInformation) {
+                    for (const info of error.relatedInformation) {
+                        errLines.push(`!!! related TS${info.code}${info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : ""}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
+                    }
+                }
                 errLines.forEach(e => outputLines += (newLine() + e));
                 errorsReported++;
 
@@ -1864,6 +1853,7 @@ namespace Harness {
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
+        const linkRegex = /^[\/]{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
         export function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
@@ -1883,6 +1873,7 @@ namespace Harness {
             testUnitData: TestUnitData[];
             tsConfig: ts.ParsedCommandLine | undefined;
             tsConfigFileUnitData: TestUnitData | undefined;
+            symlinks?: vfs.FileSet;
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
@@ -1897,10 +1888,16 @@ namespace Harness {
             let currentFileOptions: any = {};
             let currentFileName: any;
             let refs: string[] = [];
+            let symlinks: vfs.FileSet | undefined;
 
             for (const line of lines) {
-                const testMetaData = optionRegex.exec(line);
-                if (testMetaData) {
+                let testMetaData: RegExpExecArray | null;
+                const linkMetaData = linkRegex.exec(line);
+                if (linkMetaData) {
+                    if (!symlinks) symlinks = {};
+                    symlinks[linkMetaData[2].trim()] = new vfs.Symlink(linkMetaData[1].trim());
+                }
+                else if (testMetaData = optionRegex.exec(line)) {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     const metaDataName = testMetaData[1].toLowerCase();
@@ -1989,7 +1986,7 @@ namespace Harness {
                     break;
                 }
             }
-            return { settings, testUnitData, tsConfig, tsConfigFileUnitData };
+            return { settings, testUnitData, tsConfig, tsConfigFileUnitData, symlinks };
         }
     }
 

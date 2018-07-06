@@ -28,11 +28,12 @@ namespace ts.GoToDefinition {
         }
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
-        if (calledDeclaration) {
+        // Don't go to the component constructor definition for a JSX element, just go to the component definition.
+        if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorDeclaration(calledDeclaration))) {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
-            if (typeChecker.getRootSymbols(symbol).some(s => calledDeclaration.symbol === s || calledDeclaration.symbol.parent === s) ||
+            if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration)) ||
                 // TODO: GH#23742 Following check shouldn't be necessary if 'require' is an alias
                 symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
                 return [sigInfo];
@@ -91,6 +92,15 @@ namespace ts.GoToDefinition {
                 getDefinitionFromSymbol(typeChecker, propertySymbol, node));
         }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
+    }
+
+    /**
+     * True if we should not add definitions for both the signature symbol and the definition symbol.
+     * True for `const |f = |() => 0`, false for `function |f() {} const |g = f;`.
+     */
+    function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclaration) {
+        return s === calledDeclaration.symbol || s === calledDeclaration.symbol.parent ||
+            !isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol;
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
@@ -262,7 +272,7 @@ namespace ts.GoToDefinition {
     }
 
     export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
-        return find(refs, ref => ref.pos <= pos && pos <= ref.end);
+        return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
     function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {

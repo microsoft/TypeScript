@@ -1,7 +1,14 @@
+//// [tests/cases/compiler/APISample_Watch.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_Watch.ts]
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript-wiki/blob/master/Using-the-Compiler-API.md#writing-an-incremental-program-watcher
+ *       at: https://github.com/Microsoft/TypeScript-wiki/blob/master/Using-the-Compiler-API.md#writing-an-incremental-program-watcher
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -79,7 +86,7 @@ watchMain();
 "use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript-wiki/blob/master/Using-the-Compiler-API.md#writing-an-incremental-program-watcher
+ *       at: https://github.com/Microsoft/TypeScript-wiki/blob/master/Using-the-Compiler-API.md#writing-an-incremental-program-watcher
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;

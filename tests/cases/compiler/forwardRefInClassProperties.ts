@@ -8,7 +8,7 @@ class Test
 
     method()
     {
-        let a = b; // Block-scoped variable 'b' used before its declaration
+        let a = b; // Property 'b' is used before its initialization.
         let b = 3;
     }
 }

@@ -64,10 +64,10 @@ namespace ts {
 
     // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
     const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
-        emittedLine: 1,
-        emittedColumn: 1,
-        sourceLine: 1,
-        sourceColumn: 1,
+        emittedLine: 0,
+        emittedColumn: 0,
+        sourceLine: 0,
+        sourceColumn: 0,
         sourceIndex: 0
     };
 
@@ -156,7 +156,6 @@ namespace ts {
                 sourceMapNames: [],
                 sourceMapMappings: "",
                 sourceMapSourcesContent: compilerOptions.inlineSources ? [] : undefined,
-                sourceMapDecodedMappings: []
             };
 
             // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
@@ -216,11 +215,41 @@ namespace ts {
             sourceMapDataList = undefined!;
         }
 
+        type SourceMapSectionDefinition =
+            | { offset: { line: number, column: number }, url: string } // Included for completeness
+            | { offset: { line: number, column: number }, map: SourceMap };
+
+        interface SectionalSourceMap {
+            version: 3;
+            file: string;
+            sections: SourceMapSectionDefinition[];
+        }
+
+        type SourceMap = SectionalSourceMap | SourceMapSection;
+
+        function captureSection(): SourceMapSection {
+            return {
+                version: 3,
+                file: sourceMapData.sourceMapFile,
+                sourceRoot: sourceMapData.sourceMapSourceRoot,
+                sources: sourceMapData.sourceMapSources,
+                names: sourceMapData.sourceMapNames,
+                mappings: sourceMapData.sourceMapMappings,
+                sourcesContent: sourceMapData.sourceMapSourcesContent,
+            };
+        }
+
+
         // Encoding for sourcemap span
         function encodeLastRecordedSourceMapSpan() {
             if (!lastRecordedSourceMapSpan || lastRecordedSourceMapSpan === lastEncodedSourceMapSpan) {
                 return;
             }
+
+            Debug.assert(lastRecordedSourceMapSpan.emittedColumn >= 0, "lastEncodedSourceMapSpan.emittedColumn was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceIndex >= 0, "lastEncodedSourceMapSpan.sourceIndex was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceLine >= 0, "lastEncodedSourceMapSpan.sourceLine was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceColumn >= 0, "lastEncodedSourceMapSpan.sourceColumn was negative");
 
             let prevEncodedEmittedColumn = lastEncodedSourceMapSpan!.emittedColumn;
             // Line/Comma delimiters
@@ -235,7 +264,7 @@ namespace ts {
                 for (let encodedLine = lastEncodedSourceMapSpan!.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
                     sourceMapData.sourceMapMappings += ";";
                 }
-                prevEncodedEmittedColumn = 1;
+                prevEncodedEmittedColumn = 0;
             }
 
             // 1. Relative Column 0 based
@@ -258,7 +287,6 @@ namespace ts {
             }
 
             lastEncodedSourceMapSpan = lastRecordedSourceMapSpan;
-            sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
         /**
@@ -279,10 +307,6 @@ namespace ts {
             }
 
             const sourceLinePos = getLineAndCharacterOfPosition(currentSource, pos);
-
-            // Convert the location to be one-based.
-            sourceLinePos.line++;
-            sourceLinePos.character++;
 
             const emittedLine = writer.getLine();
             const emittedColumn = writer.getColumn();
@@ -320,6 +344,10 @@ namespace ts {
             }
         }
 
+        function isPossiblySourceMap(x: {}): x is SourceMapSection {
+            return typeof x === "object" && !!(x as any).mappings && typeof (x as any).mappings === "string" && !!(x as any).sources;
+        }
+
         /**
          * Emits a node with possible leading and trailing source maps.
          *
@@ -333,6 +361,61 @@ namespace ts {
             }
 
             if (node) {
+                if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
+                    const text = node.sourceMapText;
+                    let parsed: {} | undefined;
+                    try {
+                        parsed = JSON.parse(text);
+                    }
+                    catch {
+                        // empty
+                    }
+                    if (!parsed || !isPossiblySourceMap(parsed)) {
+                        return emitCallback(hint, node);
+                    }
+                    const offsetLine = writer.getLine();
+                    const firstLineColumnOffset = writer.getColumn();
+                    // First, decode the old component sourcemap
+                    const originalMap = parsed;
+
+                    const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+                    const resolvedPathCache = createMap<string>();
+                    const absolutePathCache = createMap<string>();
+                    const sourcemapIterator = sourcemaps.decodeMappings(originalMap);
+                    for (let { value: raw, done } = sourcemapIterator.next(); !done; { value: raw, done } = sourcemapIterator.next()) {
+                        const pathCacheKey = "" + raw.sourceIndex;
+                        // Apply offsets to each position and fixup source entries
+                        if (!resolvedPathCache.has(pathCacheKey)) {
+                            const rawPath = originalMap.sources[raw.sourceIndex];
+                            const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
+                            const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
+                            const resolvedPath = getRelativePathToDirectoryOrUrl(
+                                sourcesDirectoryPath,
+                                combinedPath,
+                                host.getCurrentDirectory(),
+                                host.getCanonicalFileName,
+                                /*isAbsolutePathAnUrl*/ true
+                            );
+                            resolvedPathCache.set(pathCacheKey, resolvedPath);
+                            absolutePathCache.set(pathCacheKey, getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath));
+                        }
+                        const resolvedPath = resolvedPathCache.get(pathCacheKey)!;
+                        const absolutePath = absolutePathCache.get(pathCacheKey)!;
+                        // tslint:disable-next-line:no-null-keyword
+                        setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null, resolvedPath); // TODO: Lookup content for inlining?
+                        const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
+                        // Then reencode all the updated spans into the overall map
+                        encodeLastRecordedSourceMapSpan();
+                        lastRecordedSourceMapSpan = {
+                            ...raw,
+                            emittedLine: raw.emittedLine + offsetLine,
+                            emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset) : raw.emittedColumn,
+                            sourceIndex: newIndex,
+                        };
+                    }
+                    // And actually emit the text these sourcemaps are for
+                    return emitCallback(hint, node);
+                }
                 const emitNode = node.emitNode;
                 const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
                 const range = emitNode && emitNode.sourceMapRange;
@@ -425,16 +508,22 @@ namespace ts {
                 return;
             }
 
-            // Add the file to tsFilePaths
-            // If sourceroot option: Use the relative path corresponding to the common directory path
-            // otherwise source locations relative to map file location
-            const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+            setupSourceEntry(sourceFile.fileName, sourceFile.text);
+        }
 
-            const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                currentSource.fileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-                /*isAbsolutePathAnUrl*/ true);
+        function setupSourceEntry(fileName: string, content: string | null, source?: string) {
+            if (!source) {
+                // Add the file to tsFilePaths
+                // If sourceroot option: Use the relative path corresponding to the common directory path
+                // otherwise source locations relative to map file location
+                const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+
+                source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
+                    fileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ true);
+            }
 
             sourceMapSourceIndex = sourceMapData.sourceMapSources.indexOf(source);
             if (sourceMapSourceIndex === -1) {
@@ -442,10 +531,10 @@ namespace ts {
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(currentSource.fileName);
+                sourceMapData.inputSourceFileNames.push(fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent!.push(currentSource.text);
+                    sourceMapData.sourceMapSourcesContent!.push(content);
                 }
             }
         }
@@ -460,15 +549,7 @@ namespace ts {
 
             encodeLastRecordedSourceMapSpan();
 
-            return JSON.stringify({
-                version: 3,
-                file: sourceMapData.sourceMapFile,
-                sourceRoot: sourceMapData.sourceMapSourceRoot,
-                sources: sourceMapData.sourceMapSources,
-                names: sourceMapData.sourceMapNames,
-                mappings: sourceMapData.sourceMapMappings,
-                sourcesContent: sourceMapData.sourceMapSourcesContent,
-            });
+            return JSON.stringify(captureSection());
         }
 
         /**
@@ -488,6 +569,17 @@ namespace ts {
                 return sourceMapData.jsSourceMappingURL;
             }
         }
+    }
+
+    export interface SourceMapSection {
+        version: 3;
+        file: string;
+        sourceRoot?: string;
+        sources: string[];
+        names?: string[];
+        mappings: string;
+        sourcesContent?: (string | null)[];
+        sections?: undefined;
     }
 
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
