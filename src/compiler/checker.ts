@@ -22046,7 +22046,7 @@ namespace ts {
 
                         // TypeScript 1.0 spec (April 2014): 4.5
                         // If both accessors include type annotations, the specified types must be identical.
-                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type_0_but_this_get_accessor_has_the_type_1);
+                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type_0);
                         checkAccessorDeclarationTypesIdentical(node, otherAccessor, getThisTypeOfDeclaration, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
                 }
@@ -22062,11 +22062,14 @@ namespace ts {
             const firstType = getAnnotatedType(first);
             const secondType = getAnnotatedType(second);
             if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
-                const typeNameFirstType = typeToString(firstType);
                 const typeNameSecondType = typeToString(secondType);
 
-                const diagnostic: Diagnostic = error(first, message, typeNameSecondType, typeNameFirstType);
-                addRelatedInfo(diagnostic, createDiagnosticForNode(first, Diagnostics.The_respective_set_accessor_has_the_type_0, typeNameSecondType));
+                if(isGetAccessor(first)){
+
+                    const diagnostic: Diagnostic = error(first, message, typeNameSecondType);
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(first, Diagnostics.The_respective_set_accessor_has_the_type_0, typeNameSecondType));
+
+                }
             }
         }
 

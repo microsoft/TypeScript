@@ -1304,7 +1304,7 @@
         "category": "Error",
         "code": 2379
     },
-    "'get' and 'set' accessor must have the same type '{0}', but this 'get' accessor has the type '{1}'.": {
+    "'get' and 'set' accessor must have the same type '{0}'.": {
         "category": "Error",
         "code": 2380
     },
