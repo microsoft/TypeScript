@@ -7072,7 +7072,6 @@ declare namespace ts {
     function hasJSDocNodes(node: Node): node is HasJSDoc;
     /** True if has type node attached to it. */
     function hasType(node: Node): node is HasType;
-    function couldHaveType(node: Node): node is HasType;
     /** True if has initializer node attached to it. */
     function hasInitializer(node: Node): node is HasInitializer;
     /** True if has initializer node attached to it. */
