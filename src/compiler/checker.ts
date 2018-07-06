@@ -295,7 +295,7 @@ namespace ts {
             getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
-            getSuggestionForNonexistentModule: (node, target) => getSuggestionForNonexistentModule(node, target),
+            getSuggestionForNonexistentExport: (node, target) => getSuggestionForNonexistentExport(node, target),
             getBaseConstraintOfType,
             getDefaultFromTypeParameter: type => type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined,
             resolveName(name, location, meaning, excludeGlobals) {
@@ -17787,7 +17787,7 @@ namespace ts {
             return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
         }
 
-        function getSuggestionForNonexistentModule(name: Identifier, targetModule: Symbol): string | undefined {
+        function getSuggestionForNonexistentExport(name: Identifier, targetModule: Symbol): string | undefined {
             const suggestion = getSuggestedSymbolForNonexistentModule(name, targetModule);
             return suggestion && symbolName(suggestion);
         }
