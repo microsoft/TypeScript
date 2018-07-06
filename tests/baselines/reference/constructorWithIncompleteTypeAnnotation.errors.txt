@@ -466,6 +466,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                 return this.method1(2);
                             ~~~~~~~
 !!! error TS2551: Property 'method1' does not exist on type 'B'. Did you mean 'method2'?
+!!! related TS2728 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts:245:16: 'method2' is declared here.
             }
         }
     

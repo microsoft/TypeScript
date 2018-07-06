@@ -2675,7 +2675,7 @@ declare namespace ts {
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
-        getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
+        getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
         getAnyType(): Type;
@@ -5430,7 +5430,7 @@ declare namespace ts {
         Class_name_cannot_be_Object_when_targeting_ES5_with_module_0: DiagnosticMessage;
         Cannot_find_lib_definition_for_0: DiagnosticMessage;
         Cannot_find_lib_definition_for_0_Did_you_mean_1: DiagnosticMessage;
-        _0_was_declared_here: DiagnosticMessage;
+        _0_is_declared_here: DiagnosticMessage;
         Property_0_is_used_before_its_initialization: DiagnosticMessage;
         Import_declaration_0_is_using_private_name_1: DiagnosticMessage;
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: DiagnosticMessage;
