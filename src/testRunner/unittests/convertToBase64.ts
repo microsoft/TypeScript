@@ -2,7 +2,7 @@ namespace ts {
     describe("convertToBase64", () => {
         function runTest(input: string): void {
             const actual = convertToBase64(input);
-            const expected = new Buffer(input).toString("base64");
+            const expected = (Buffer.from ? Buffer.from(input) : new Buffer(input)).toString("base64");
             assert.equal(actual, expected, "Encoded string using convertToBase64 does not match buffer.toString('base64')");
         }
 

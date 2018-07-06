@@ -1,0 +1,86 @@
+=== tests/cases/compiler/constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts ===
+// https://github.com/Microsoft/TypeScript/issues/25379
+
+interface Map<K, V> {
+>Map : Symbol(Map, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 0, 0))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 2, 14))
+>V : Symbol(V, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 2, 16))
+
+    // ...
+}
+
+export type ImmutableTypes = IImmutableMap<any>;
+>ImmutableTypes : Symbol(ImmutableTypes, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 4, 1))
+>IImmutableMap : Symbol(IImmutableMap, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 95))
+
+export type ImmutableModel<T> = { [K in keyof T]: T[K] extends ImmutableTypes ? T[K] : never };
+>ImmutableModel : Symbol(ImmutableModel, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 6, 48))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 27))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 35))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 27))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 27))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 35))
+>ImmutableTypes : Symbol(ImmutableTypes, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 4, 1))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 27))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 35))
+
+export interface IImmutableMap<T extends ImmutableModel<T>> extends Map<string, any> {
+>IImmutableMap : Symbol(IImmutableMap, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 95))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 10, 31))
+>ImmutableModel : Symbol(ImmutableModel, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 6, 48))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 10, 31))
+>Map : Symbol(Map, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 0, 0))
+
+    set<K extends keyof T>(key: K, value: T[K]): IImmutableMap<T>;
+>set : Symbol(IImmutableMap.set, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 10, 86))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 11, 8))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 10, 31))
+>key : Symbol(key, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 11, 27))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 11, 8))
+>value : Symbol(value, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 11, 34))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 10, 31))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 11, 8))
+>IImmutableMap : Symbol(IImmutableMap, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 8, 95))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 10, 31))
+}
+
+export type ImmutableTypes2 = IImmutableMap2<any>;
+>ImmutableTypes2 : Symbol(ImmutableTypes2, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 12, 1))
+>IImmutableMap2 : Symbol(IImmutableMap2, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 75))
+
+type isImmutableType<T> = [T] extends [ImmutableTypes2] ? T : never;
+>isImmutableType : Symbol(isImmutableType, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 14, 50))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 15, 21))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 15, 21))
+>ImmutableTypes2 : Symbol(ImmutableTypes2, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 12, 1))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 15, 21))
+
+export type ImmutableModel2<T> = { [K in keyof T]: isImmutableType<T[K]> };
+>ImmutableModel2 : Symbol(ImmutableModel2, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 15, 68))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 28))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 36))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 28))
+>isImmutableType : Symbol(isImmutableType, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 14, 50))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 28))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 36))
+
+export interface IImmutableMap2<T extends ImmutableModel2<T>> extends Map<string, any> {
+>IImmutableMap2 : Symbol(IImmutableMap2, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 75))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 17, 32))
+>ImmutableModel2 : Symbol(ImmutableModel2, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 15, 68))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 17, 32))
+>Map : Symbol(Map, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 0, 0))
+
+    set<K extends keyof T>(key: K, value: T[K]): IImmutableMap2<T>;
+>set : Symbol(IImmutableMap2.set, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 17, 88))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 18, 8))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 17, 32))
+>key : Symbol(key, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 18, 27))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 18, 8))
+>value : Symbol(value, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 18, 34))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 17, 32))
+>K : Symbol(K, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 18, 8))
+>IImmutableMap2 : Symbol(IImmutableMap2, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 16, 75))
+>T : Symbol(T, Decl(constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts, 17, 32))
+}
+

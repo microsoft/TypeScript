@@ -17,7 +17,7 @@ namespace ts.NavigateTo {
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
 
-            if (excludeDtsFiles && fileExtensionIs(sourceFile.fileName, Extension.Dts)) {
+            if (excludeDtsFiles && sourceFile.isDeclarationFile) {
                 continue;
             }
 

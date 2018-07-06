@@ -29,6 +29,7 @@
         "preProcess.ts",
         "rename.ts",
         "signatureHelp.ts",
+        "sourcemaps.ts",
         "suggestionDiagnostics.ts",
         "symbolDisplay.ts",
         "transpile.ts",

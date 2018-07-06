@@ -1007,7 +1007,7 @@ namespace FourSlash {
 
                     // If any of the expected values are undefined, assume that users don't
                     // care about them.
-                    if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
+                    if (replacementSpan && !ts.textSpansEqual(replacementSpan, entry.replacementSpan)) {
                         return false;
                     }
                     else if (expectedText && text !== expectedText) {
@@ -1644,7 +1644,7 @@ Actual: ${stringify(fullActual)}`);
                 });
         }
 
-        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
+        private getEmitFiles(): ReadonlyArray<FourSlashFile> {
             // Find file to be emitted
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
@@ -1661,12 +1661,29 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError("No emitThisFile is specified in the test file");
             }
 
+            return emitFiles;
+        }
+
+        public verifyGetEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void {
+            const outputFiles = ts.flatMap(this.getEmitFiles(), e => this.languageService.getEmitOutput(e.fileName).outputFiles);
+
+            assert.deepEqual(outputFiles.map(f => f.name), expectedOutputFiles);
+
+            for (const { name, text } of outputFiles) {
+                const fromTestFile = this.getFileContent(name);
+                if (fromTestFile !== text) {
+                    this.raiseError("Emit output is not as expected: " + showTextDiff(fromTestFile, text));
+                }
+            }
+        }
+
+        public baselineGetEmitOutput(): void {
             Harness.Baseline.runBaseline(
-                this.testData.globalOptions[MetadataOptionNames.baselineFile],
+                ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]),
                 () => {
                     let resultString = "";
                     // Loop through all the emittedFiles and emit them one by one
-                    emitFiles.forEach(emitFile => {
+                    for (const emitFile of this.getEmitFiles()) {
                         const emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
                         // Print emitOutputStatus in readable format
                         resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
@@ -1692,13 +1709,10 @@ Actual: ${stringify(fullActual)}`);
 
                         for (const outputFile of emitOutput.outputFiles) {
                             const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
-                            resultString = resultString + fileName + outputFile.text;
-                            if (insertResultsIntoVfs) {
-                                this.languageServiceAdapterHost.addScript(ts.getNormalizedAbsolutePath(outputFile.name, "/"), outputFile.text, /*isRootFile*/ true);
-                            }
+                            resultString = resultString + Harness.IO.newLine() + fileName + outputFile.text;
                         }
                         resultString += Harness.IO.newLine();
-                    });
+                    }
 
                     return resultString;
                 });
@@ -2137,11 +2151,10 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
             }
 
-            const duplicate = findDuplicatedElement(implementations, implementationsAreEqual);
+            const duplicate = findDuplicatedElement(implementations, ts.documentSpansEqual);
             if (duplicate) {
                 const { textSpan, fileName } = duplicate;
-                const end = textSpan.start + textSpan.length;
-                this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
+                this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${ts.textSpanEnd(textSpan)}) in ${fileName}`);
             }
 
             const ranges = this.getRanges();
@@ -2206,10 +2219,6 @@ Actual: ${stringify(fullActual)}`);
                     }
                 }
                 this.raiseError(error);
-            }
-
-            function implementationsAreEqual(a: ImplementationLocationInformation, b: ImplementationLocationInformation) {
-                return a.fileName === b.fileName && TestState.textSpansEqual(a.textSpan, b.textSpan);
             }
 
             function displayPartIsEqualTo(a: ts.SymbolDisplayPart, b: ts.SymbolDisplayPart): boolean {
@@ -3260,7 +3269,7 @@ Actual: ${stringify(fullActual)}`);
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
+                assert.isTrue(ts.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
             }
 
             eq(item.hasAction, hasAction, "hasAction");
@@ -3344,10 +3353,6 @@ Actual: ${stringify(fullActual)}`);
 
         public resetCancelled(): void {
             this.cancellationToken.resetCancelled();
-        }
-
-        private static textSpansEqual(a: ts.TextSpan | undefined, b: ts.TextSpan | undefined): boolean {
-            return !!a && !!b && a.start === b.start && a.length === b.length;
         }
 
         public getEditsForFileRename({ oldPath, newPath, newFileContents }: FourSlashInterface.GetEditsForFileRenameOptions): void {
@@ -3551,8 +3556,13 @@ ${code}
 
     function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string | undefined {
         for (const option in optionObject) {
-            if (option !== MetadataOptionNames.fileName) {
-                return option;
+            switch (option) {
+                case MetadataOptionNames.fileName:
+                case MetadataOptionNames.baselineFile:
+                case MetadataOptionNames.emitThisFile:
+                    break;
+                default:
+                    return option;
             }
         }
         return undefined;
@@ -4270,8 +4280,12 @@ namespace FourSlashInterface {
             this.state.baselineCurrentFileNameOrDottedNameSpans();
         }
 
-        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
-            this.state.baselineGetEmitOutput(insertResultsIntoVfs);
+        public getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void {
+            this.state.verifyGetEmitOutput(expectedOutputFiles);
+        }
+
+        public baselineGetEmitOutput() {
+            this.state.baselineGetEmitOutput();
         }
 
         public baselineQuickInfo() {
