@@ -17780,7 +17780,7 @@ namespace ts {
 
         function getSuggestionForNonexistentSymbol(location: Node | undefined, outerName: __String, meaning: SymbolFlags): string | undefined {
             const symbolResult = getSuggestedSymbolForNonexistentSymbol(location, outerName, meaning);
-            return symbolResult && symbolName(symbolResult)
+            return symbolResult && symbolName(symbolResult);
         }
 
         function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
