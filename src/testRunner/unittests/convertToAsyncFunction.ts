@@ -516,6 +516,34 @@ function [#|f|](){
 `
 );
 
+_testConvertToAsyncFunction("convertToAsyncFunction_Scope3", `
+function [#|f|]() {
+  var obj;
+  return fetch("https://typescriptlang.org").then(function (res) {
+    obj = {
+      func: function f() {
+        console.log(res);
+      }
+    };
+  });
+} 
+`
+);
+
+_testConvertToAsyncFunction("convertToAsyncFunction_NestedFunction", `
+function [#|f|]() {
+    function fn2(){
+        function fn3(){
+            return fetch("https://typescriptlang.org").then(res => console.log(res));
+        }
+        return fn3();
+    }
+    return fn2();
+} 
+`);
+
+
+
 });
 
     function _testConvertToAsyncFunction(caption: string, text: string, includeLib?: boolean) {
