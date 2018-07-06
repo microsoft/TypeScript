@@ -166,11 +166,16 @@ namespace ts.codefix {
     }
 
     function getCallbackBody(func: Node, prevArgName: string | undefined, argName: string, parent: CallExpression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<string>, isRej = false): NodeArray<Statement> {
-        if (!prevArgName) {
+        if (!prevArgName && argName) {
                     prevArgName = argName;
-       }
+        }
+
         switch (func.kind) {
             case SyntaxKind.Identifier:
+                if (!prevArgName || !argName) {
+                    break;
+                }
+
                 let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)]);
                 const nextDotThen = getNextDotThen(parent.original as Expression, checker);
                 if (!nextDotThen || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
@@ -190,7 +195,7 @@ namespace ts.codefix {
                     for (const stmt of innerRetStmts) {
                         forEachChild(stmt, function visit(node: Node) {
                             if (isCallExpression(node)) {
-                                let temp = parseCallback(node, checker, outermostParent, synthNamesMap, prevArgName);
+                                let temp = parseCallback(node, checker, node, synthNamesMap, prevArgName);
                                 innerCbBody = innerCbBody.concat(temp);
                                 if (innerCbBody.length > 0) {
                                     return;
@@ -213,7 +218,7 @@ namespace ts.codefix {
                     const nextOutermostDotThen = getNextDotThen(outermostParent.original as Expression, checker);
 
                     return nextOutermostDotThen ?
-                        createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]) :
+                        createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName!, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]) :
                         createNodeArray([createReturn(func.body as Expression)])
                 }
                 break;
