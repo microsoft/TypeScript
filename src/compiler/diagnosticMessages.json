@@ -2401,7 +2401,7 @@
         "category": "Error",
         "code": 2727
     },
-    "'{0}' was declared here.": {
+    "'{0}' is declared here.": {
         "category": "Error",
         "code": 2728
     },
