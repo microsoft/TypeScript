@@ -9004,7 +9004,7 @@ namespace ts {
                 if (!(getObjectFlags(type) & ObjectFlags.Mapped)) return false;
                 const constraint = getConstraintTypeFromMappedType(type as MappedType);
                 return some(set, t => getIndexType(t) === constraint);
-            }
+            };
         }
 
         function getSimplifiedType(type: Type): Type {
@@ -9061,7 +9061,7 @@ namespace ts {
                     for (const t of (<IntersectionType>objectType).types) {
                         if (isInSet(t)) {
                             const constraint = getConstraintTypeFromMappedType(t as MappedType);
-                            let matchIndex: number;
+                            let matchIndex: number | undefined;
                             const match = forEach((<IntersectionType>objectType).types, (t, i) => getIndexType(t) === constraint ? (matchIndex = i, t) : undefined)!;
                             const indexedMatch = getIndexedAccessType(match, getTypeParameterFromMappedType(t as MappedType));
                             const newTemaplate = getIntersectionType([indexedMatch, getTemplateTypeFromMappedType(t as MappedType)]);
