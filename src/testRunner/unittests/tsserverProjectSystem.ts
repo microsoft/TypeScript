@@ -415,7 +415,7 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
-    function protocolLocationFromSubstring(str: string, substring: string) {
+    function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
         const start = str.indexOf(substring);
         Debug.assert(start !== -1);
         return protocolToLocation(str)(start);
@@ -427,21 +427,36 @@ namespace ts.projectSystem {
             return { line: x.line + 1, offset: x.character + 1 };
         };
     }
-    function protocolTextSpanFromSubstring(str: string, substring: string): protocol.TextSpan {
-        const span = textSpanFromSubstring(str, substring);
+    function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.TextSpan {
+        const span = textSpanFromSubstring(str, substring, options);
         const toLocation = protocolToLocation(str);
-        return { start: toLocation(span.start), end: toLocation(span.start + span.length) };
+        return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
     }
-    function textSpanFromSubstring(str: string, substring: string): TextSpan {
-        const start = str.indexOf(substring);
+    function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
         return createTextSpan(start, substring.length);
     }
     function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
         return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
     }
-    function protocolFileSpanFromSubstring(file: File, substring: string): protocol.FileSpan {
-        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring) };
+    function protocolFileSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions) {
+        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring, options) };
+    }
+    function documentSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): DocumentSpan {
+        return { fileName: file.path, textSpan: textSpanFromSubstring(file.content, substring, options) };
+    }
+    interface SpanFromSubstringOptions {
+        readonly index: number;
+    }
+
+    function nthIndexOf(str: string, substr: string, n: number): number {
+        let index = -1;
+        for (; n >= 0; n--) {
+            index = str.indexOf(substr, index + 1);
+            if (index === -1) return -1;
+        }
+        return index;
     }
 
     /**
@@ -496,10 +511,14 @@ namespace ts.projectSystem {
         };
     }
 
-    export function openFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
+    export function executeSessionRequest<TRequest extends protocol.Request, TResponse extends protocol.Response>(session: server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
+        return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
+    }
+
+    export function openFilesForSession(files: ReadonlyArray<File | { readonly file: File | string, readonly projectRootPath: string }>, session: server.Session): void {
         for (const file of files) {
-            const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
-            session.executeCommand(request);
+            session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
+                "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path }));
         }
     }
 
@@ -3385,7 +3404,7 @@ namespace ts.projectSystem {
             host.reloadFS(files.map(f => f === fileSubA ? fileA : f));
             host.checkTimeoutQueueLength(2);
 
-            closeFile(fileSubA);
+            closeFilesForSession([fileSubA], session);
             // This should cancel existing updates and schedule new ones
             host.checkTimeoutQueueLength(2);
             checkNumberOfProjects(services, { configuredProjects: 1 });
@@ -3405,7 +3424,7 @@ namespace ts.projectSystem {
             // file is deleted but watches are not yet invoked
             const originalFileExists = host.fileExists;
             host.fileExists = s => s === fileA.path ? false : originalFileExists.call(host, s);
-            closeFile(fileA);
+            closeFilesForSession([fileA], session);
             host.checkTimeoutQueueLength(2); // Update configured project and projects for open file
             checkProjectActualFiles(services.configuredProjects.get(config.path)!, filesWithFileA.map(f => f.path));
 
@@ -3453,23 +3472,7 @@ namespace ts.projectSystem {
             assert.isFalse(hasErrorMsg());
 
             function openFile(file: File) {
-                session.executeCommandSeq<protocol.OpenRequest>({
-                    command: protocol.CommandTypes.Open,
-                    arguments: {
-                        file: file.path,
-                        fileContent: file.content,
-                        projectRootPath
-                    }
-                });
-            }
-
-            function closeFile(file: File) {
-                session.executeCommandSeq<protocol.CloseRequest>({
-                    command: protocol.CommandTypes.Close,
-                    arguments: {
-                        file: file.path
-                    }
-                });
+                openFilesForSession([{ file, projectRootPath }], session);
             }
         });
     });
@@ -3686,40 +3689,17 @@ namespace ts.projectSystem {
             const files = [libFile, app, serverUtilities, backendTest];
             const host = createServerHost(files);
             const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true });
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: app.path,
-                    projectRootPath: projectRoot
-                }
-            });
+            openFilesForSession([{ file: app, projectRootPath: projectRoot }], session);
             const service = session.getProjectService();
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
             checkProjectActualFiles(project, [libFile.path, app.path]);
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: backendTest.path,
-                    projectRootPath: projectRoot
-                }
-            });
+            openFilesForSession([{ file: backendTest, projectRootPath: projectRoot }], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             checkProjectActualFiles(project, files.map(f => f.path));
             checkErrors([backendTest.path, app.path]);
-            session.executeCommandSeq<protocol.CloseRequest>({
-                command: protocol.CommandTypes.Close,
-                arguments: {
-                    file: backendTest.path
-                }
-            });
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: serverUtilities.path,
-                    projectRootPath: projectRoot
-                }
-            });
+            closeFilesForSession([backendTest], session);
+            openFilesForSession([{ file: serverUtilities.path, projectRootPath: projectRoot }], session);
             checkErrors([serverUtilities.path, app.path]);
 
             function checkErrors(openFiles: [string, string]) {
@@ -7886,72 +7866,42 @@ namespace ts.projectSystem {
             const host = createServerHost(files);
             const session = createSession(host);
             const projectService = session.getProjectService();
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: aFile.path,
-                    projectRootPath: folderA
-                }
-            });
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: bFile.path,
-                    projectRootPath: folderB
-                }
-            });
-
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: aFc,
-                    projectRootPath: folderA
-                }
-            });
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: bFc,
-                    projectRootPath: folderB
-                }
-            });
+            openFilesForSession(
+                [
+                    { file: aFile, projectRootPath: folderA },
+                    { file: bFile, projectRootPath: folderB },
+                    { file: aFc, projectRootPath: folderA },
+                    { file: bFc, projectRootPath: folderB },
+                ],
+                session);
             checkNumberOfProjects(projectService, { configuredProjects: 2 });
             assert.isDefined(projectService.configuredProjects.get(aTsconfig.path));
             assert.isDefined(projectService.configuredProjects.get(bTsconfig.path));
 
-            verifyRenameResponse(session.executeCommandSeq<protocol.RenameRequest>({
-                command: protocol.CommandTypes.Rename,
-                arguments: {
-                    file: aFc,
-                    line: 1,
-                    offset: 14,
-                    findInStrings: false,
-                    findInComments: false
-                }
-            }).response as protocol.RenameResponseBody);
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") });
 
-            function verifyRenameResponse({ info, locs }: protocol.RenameResponseBody) {
-                assert.isTrue(info.canRename);
-                assert.equal(locs.length, 4);
-                verifyLocations(0, aFile.path, aFc);
-                verifyLocations(2, bFile.path, bFc);
-
-                function verifyLocations(locStartIndex: number, firstFile: string, secondFile: string) {
-                    assert.deepEqual(locs[locStartIndex], {
-                        file: firstFile,
-                        locs: [
-                            { start: { line: 1, offset: 39 }, end: { line: 1, offset: 40 } },
-                            { start: { line: 1, offset: 9 }, end: { line: 1, offset: 10 } }
-                        ]
-                    });
-                    assert.deepEqual(locs[locStartIndex + 1], {
-                        file: secondFile,
-                        locs: [
-                            { start: { line: 1, offset: 14 }, end: { line: 1, offset: 15 } }
-                        ]
-                    });
-                }
-            }
+            assert.equal(aFile.content, bFile.content);
+            const abLocs: protocol.TextSpan[] = [
+                protocolTextSpanFromSubstring(aFile.content, "C"),
+                protocolTextSpanFromSubstring(aFile.content, "C", { index: 1 }),
+            ];
+            const cLocs: protocol.TextSpan[] = [protocolTextSpanFromSubstring(cFile.content, "C")];
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    displayName: "C",
+                    fullDisplayName: '"/users/username/projects/a/c/fc".C',
+                    kind: ScriptElementKind.constElement,
+                    kindModifiers: ScriptElementKindModifier.exportedModifier,
+                    localizedErrorMessage: undefined,
+                },
+                locs: [
+                    { file: aFc, locs: cLocs },
+                    { file: aFile.path, locs: abLocs },
+                    { file: bFc, locs: cLocs },
+                    { file: bFile.path, locs: abLocs },
+                ],
+            });
         });
 
         describe("module resolution when symlinked folder contents change and resolve modules", () => {
@@ -8948,93 +8898,323 @@ export function Test2() {
     function makeSampleProjects() {
         const aTs: File = {
             path: "/a/a.ts",
-            content: "export function fnA() {}",
+            content: "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};",
         };
-        const aTsconfig: File = {
-            path: "/a/tsconfig.json",
-            content: `{
-                "compilerOptions": {
-                    "outDir": "bin",
-                    "declaration": true,
-                    "declarationMap": true,
-                    "composite": true,
-                }
-            }`,
+        const compilerOptions: CompilerOptions = {
+            outDir: "bin",
+            declaration: true,
+            declarationMap: true,
+            composite: true,
+        };
+        const configContent = JSON.stringify({ compilerOptions });
+        const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
+
+        const aDtsMapContent: SourceMapSection = {
+            version: 3,
+            file: "a.d.ts",
+            sourceRoot: "",
+            sources: ["../a.ts"],
+            names: [],
+            mappings: "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
+        };
+        const aDtsMap: File = {
+            path: "/a/bin/a.d.ts.map",
+            content: JSON.stringify(aDtsMapContent),
+        };
+        const aDts: File = {
+            path: "/a/bin/a.d.ts",
+            // Need to mangle the sourceMappingURL part or it breaks the build
+            content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
         };
 
         const bTs: File = {
             path: "/b/b.ts",
-            content: 'import { fnA } from "../a/a";\nexport function fnB() { fnA(); }',
+            content: "export function fnB() {}",
         };
-        const bTsconfig: File = {
-            path: "/b/tsconfig.json",
-            content: `{
-                "compilerOptions": {
-                    "outDir": "bin",
-                },
-                "references": [
-                    { "path": "../a" }
-                ]
-            }`,
+        const bTsconfig: File = { path: "/b/tsconfig.json", content: configContent };
+
+        const bDtsMapContent: SourceMapSection = {
+            version: 3,
+            file: "b.d.ts",
+            sourceRoot: "",
+            sources: ["../b.ts"],
+            names: [],
+            mappings: "AAAA,wBAAgB,GAAG,SAAK",
+        };
+        const bDtsMap: File = {
+            path: "/b/bin/b.d.ts.map",
+            content: JSON.stringify(bDtsMapContent),
+        };
+        const bDts: File = {
+            // Need to mangle the sourceMappingURL part or it breaks the build
+            path: "/b/bin/b.d.ts",
+            content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.ts.map`,
         };
 
-        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+        const userTs: File = {
+            path: "/user/user.ts",
+            content: 'import { fnA, instanceA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
+        };
+
+        const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, userTs]);
         const session = createSession(host);
 
-        writeDeclarationFiles(aTs, host, session, [
-            { name: "/a/bin/a.d.ts.map", text: '{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}' },
-            // Need to mangle the sourceMappingURL part or it breaks the build
-            { name: "/a/bin/a.d.ts", text: `export declare function fnA(): void;\n//# source${""}MappingURL=a.d.ts.map` },
-        ]);
+        checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
+        checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
 
-        return { session, aTs, bTs };
+        // Testing what happens if we delete the original sources.
+        host.removeFile(bTs.path);
+
+        openFilesForSession([userTs], session);
+
+        return { session, aTs, bDts, userTs };
     }
 
     describe("tsserverProjectSystem project references", () => {
         it("goToDefinition", () => {
-            const { session, aTs, bTs } = makeSampleProjects();
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        });
 
-            openFilesForSession([bTs], session);
+        it("getDefinitionAndBoundSpan", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, {
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
+            });
+        });
 
-            const definitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Definition, protocolFileLocationFromSubstring(bTs, "fnA()"));
-            const definitionResponse = session.executeCommand(definitionRequest).response as protocol.DefinitionResponse["body"];
+        it("goToType", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.TypeDefinitionRequest, protocol.TypeDefinitionResponse>(session, protocol.CommandTypes.TypeDefinition, protocolFileLocationFromSubstring(userTs, "instanceA"));
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "IfaceA")]);
+        });
 
-            assert.deepEqual(definitionResponse, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        it("goToImplementation", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.ImplementationRequest, protocol.ImplementationResponse>(session, protocol.CommandTypes.Implementation, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+        });
+
+        it("goToDefinition -- target does not exist", () => {
+            const { session, bDts, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
+            // bTs does not exist, so stick with bDts
+            assert.deepEqual(response, [protocolFileSpanFromSubstring(bDts, "fnB")]);
         });
 
         it("navigateTo", () => {
-            const { session, bTs } = makeSampleProjects();
-
-            openFilesForSession([bTs], session);
-
-            const navtoRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { file: bTs.path, searchValue: "fn" });
-            const navtoResponse = session.executeCommand(navtoRequest).response as protocol.NavtoResponse["body"];
-
-            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(navtoResponse, [
-                // TODO: First result should be from a.ts, not a.d.ts
+            const { session, aTs, bDts, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
+            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(response, [
                 {
-                    file: "/a/bin/a.d.ts",
-                    start: { line: 1, offset: 1 },
-                    end: { line: 1, offset: 37 },
-                    name: "fnA",
+                    ...protocolFileSpanFromSubstring(bDts, "export declare function fnB(): void;"),
+                    name: "fnB",
                     matchKind: "prefix",
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export,declare",
                 },
                 {
-                    ...protocolFileSpanFromSubstring(bTs, "export function fnB() { fnA(); }"),
-                    name: "fnB",
+                    ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { fnA(); fnB(); instanceA; }"),
+                    name: "fnUser",
                     matchKind: "prefix",
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
+                },
+                {
+                    ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
+                    name: "fnA",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                },
+            ]);
+        });
+
+        it("findAllReferences", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+
+            const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
+                refs: [
+                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnA"),
+                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", { index: 1 }),
+                    makeReferenceItem(aTs, /*isDefinition*/ true, "fnA"),
+                ],
+                symbolName: "fnA",
+                symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
+                symbolDisplayString: "(alias) fnA(): void\nimport fnA",
+            });
+        });
+
+        it("findAllReferencesFull", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+
+            interface ReferencesFullRequest extends protocol.FileLocationRequest { command: protocol.CommandTypes.ReferencesFull; }
+            interface ReferencesFullResponse extends protocol.Response { body: ReadonlyArray<ReferencedSymbol>; }
+            const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
+
+            function fnAVoid(kind: SymbolDisplayPartKind): SymbolDisplayPart[] {
+                return [
+                    keywordPart(SyntaxKind.FunctionKeyword),
+                    spacePart(),
+                    displayPart("fnA", kind),
+                    punctuationPart(SyntaxKind.OpenParenToken),
+                    punctuationPart(SyntaxKind.CloseParenToken),
+                    punctuationPart(SyntaxKind.ColonToken),
+                    spacePart(),
+                    keywordPart(SyntaxKind.VoidKeyword),
+                ];
+            }
+            assert.deepEqual<ReadonlyArray<ReferencedSymbol>>(responseFull, [
+                {
+                    definition: {
+                        ...documentSpanFromSubstring(userTs, "fnA"),
+                        kind: ScriptElementKind.alias,
+                        name: "(alias) function fnA(): void\nimport fnA",
+                        containerKind: ScriptElementKind.unknown,
+                        containerName: "",
+                        displayParts: [
+                            punctuationPart(SyntaxKind.OpenParenToken),
+                            textPart("alias"),
+                            punctuationPart(SyntaxKind.CloseParenToken),
+                            spacePart(),
+                            ...fnAVoid(SymbolDisplayPartKind.aliasName),
+                            lineBreakPart(),
+                            keywordPart(SyntaxKind.ImportKeyword),
+                            spacePart(),
+                            displayPart("fnA", SymbolDisplayPartKind.aliasName),
+                        ],
+                    },
+                    references: [
+                        makeReferenceEntry(userTs, /*isDefinition*/ true, "fnA"),
+                        makeReferenceEntry(userTs, /*isDefinition*/ false, "fnA", { index: 1 }),
+                    ],
+                },
+                {
+                    definition: {
+                        ...documentSpanFromSubstring(aTs, "fnA"),
+                        kind: ScriptElementKind.functionElement,
+                        name: "function fnA(): void",
+                        containerKind: ScriptElementKind.unknown,
+                        containerName: "",
+                        displayParts: fnAVoid(SymbolDisplayPartKind.functionName),
+                    },
+                    references: [
+                        makeReferenceEntry(aTs, /*isDefinition*/ true, "fnA"),
+                    ],
                 }
             ]);
         });
+
+        it("findAllReferences -- target does not exist", () => {
+            const { session, bDts, userTs } = makeSampleProjects();
+
+            const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
+            assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
+                refs: [
+                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnB"),
+                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnB", { index: 1 }),
+                    makeReferenceItem(bDts, /*isDefinition*/ true, "fnB"),
+                ],
+                symbolName: "fnB",
+                symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnB()").offset,
+                symbolDisplayString: "(alias) fnB(): void\nimport fnB",
+            });
+        });
+
+        it("renameLocations", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    displayName: "fnA",
+                    fullDisplayName: "fnA",
+                    kind: ScriptElementKind.alias,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    localizedErrorMessage: undefined,
+                },
+                locs: [
+                    {
+                        file: userTs.path,
+                        locs: [
+                            protocolTextSpanFromSubstring(userTs.content, "fnA"),
+                            protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                        ],
+                    },
+                    {
+                        file: aTs.path,
+                        locs: [protocolTextSpanFromSubstring(aTs.content, "fnA")],
+                    }
+                ],
+            });
+        });
+
+        it("renameLocationsFull", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual<ReadonlyArray<RenameLocation>>(response, [
+                documentSpanFromSubstring(userTs, "fnA"),
+                documentSpanFromSubstring(userTs, "fnA", { index: 1 }),
+                documentSpanFromSubstring(aTs, "fnA"),
+            ]);
+        });
+
+        it("renameLocations -- target does not exist", () => {
+            const { session, bDts, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnB()"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    displayName: "fnB",
+                    fullDisplayName: "fnB",
+                    kind: ScriptElementKind.alias,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    localizedErrorMessage: undefined,
+                },
+                locs: [
+                    {
+                        file: userTs.path,
+                        locs: [
+                            protocolTextSpanFromSubstring(userTs.content, "fnB"),
+                            protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
+                        ],
+                    },
+                    {
+                        file: bDts.path,
+                        locs: [protocolTextSpanFromSubstring(bDts.content, "fnB")],
+                    }
+                ],
+            });
+
+        });
     });
 
-    function writeDeclarationFiles(file: File, host: TestServerHost, session: TestSession, expectedFiles: ReadonlyArray<{ readonly name: string, readonly text: string }>): void {
+    function makeReferenceItem(file: File, isDefinition: boolean, text: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
+        return {
+            ...protocolFileSpanFromSubstring(file, text, options),
+            isDefinition,
+            isWriteAccess: isDefinition,
+            lineText: text,
+        };
+    }
+
+    function makeReferenceEntry(file: File, isDefinition: boolean, text: string, options?: SpanFromSubstringOptions): ReferenceEntry {
+        return {
+            ...documentSpanFromSubstring(file, text, options),
+            isDefinition,
+            isWriteAccess: isDefinition,
+            isInString: undefined,
+        };
+    }
+
+    function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: ReadonlyArray<File>): void {
         openFilesForSession([file], session);
         const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
         const program = project.getCurrentProgram();
@@ -9042,12 +9222,6 @@ export function Test2() {
         closeFilesForSession([file], session);
 
         Debug.assert(!output.emitSkipped);
-        assert.deepEqual(output.outputFiles, expectedFiles.map(e => ({ ...e, writeByteOrderMark: false })));
-
-        for (const { name, text } of output.outputFiles) {
-            const directory: Folder = { path: getDirectoryPath(name) };
-            host.ensureFileOrFolder(directory);
-            host.writeFile(name, text);
-        }
+        assert.deepEqual(output.outputFiles, expectedFiles.map((e): OutputFile => ({ name: e.path, text: e.content, writeByteOrderMark: false })));
     }
 }

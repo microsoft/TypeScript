@@ -1855,7 +1855,7 @@ namespace ts {
     }
 
     export function getRightMostAssignedExpression(node: Expression): Expression {
-        while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
+        while (isAssignmentExpression(node, /*excludeCompoundAssignments*/ true)) {
             node = node.right;
         }
         return node;

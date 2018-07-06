@@ -272,10 +272,9 @@ namespace ts {
     }
 
     function parenthesizeForComputedName(expression: Expression): Expression {
-        return (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken) ||
-            expression.kind === SyntaxKind.CommaListExpression ?
-            createParen(expression) :
-            expression;
+        return isCommaSequence(expression)
+            ? createParen(expression)
+            : expression;
     }
 
     export function createComputedPropertyName(expression: Expression) {
@@ -4166,8 +4165,7 @@ namespace ts {
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
         const emittedExpression = skipPartiallyEmittedExpressions(e);
-        return emittedExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>emittedExpression).operatorToken.kind === SyntaxKind.CommaToken ||
-            emittedExpression.kind === SyntaxKind.CommaListExpression
+        return isCommaSequence(emittedExpression)
             ? createParen(e)
             : e;
     }
@@ -4185,8 +4183,7 @@ namespace ts {
      */
     export function parenthesizeDefaultExpression(e: Expression) {
         const check = skipPartiallyEmittedExpressions(e);
-        let needsParens = check.kind === SyntaxKind.CommaListExpression ||
-            isBinaryExpression(check) && check.operatorToken.kind === SyntaxKind.CommaToken;
+        let needsParens = isCommaSequence(check);
         if (!needsParens) {
             switch (getLeftmostExpression(check, /*stopAtCallExpression*/ false).kind) {
                 case SyntaxKind.ClassExpression:
@@ -4378,11 +4375,16 @@ namespace ts {
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
             return setTextRange(createParen(body), body);
         }
 
         return body;
+    }
+
+    export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
+        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.CommaToken ||
+            node.kind === SyntaxKind.CommaListExpression;
     }
 
     export const enum OuterExpressionKinds {

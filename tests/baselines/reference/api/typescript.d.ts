@@ -1822,7 +1822,6 @@ declare namespace ts {
         inputSourceFileNames: string[];
         sourceMapNames?: string[];
         sourceMapMappings: string;
-        sourceMapDecodedMappings: SourceMapSpan[];
     }
     /** Return code used by getEmitOutput function to indicate status of the function */
     enum ExitStatus {
@@ -4140,10 +4139,14 @@ declare namespace ts {
      * @returns A 'Program' object.
      */
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
+    interface ResolveProjectReferencePathHost {
+        fileExists(fileName: string): boolean;
+    }
     /**
-     * Returns the target config filename of a project reference
+     * Returns the target config filename of a project reference.
+     * Note: The file might not exist.
      */
-    function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName;
+    function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
 }
 declare namespace ts {
     interface EmitOutput {
