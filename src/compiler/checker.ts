@@ -3006,7 +3006,8 @@ namespace ts {
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
+            const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0), writer);
             if (typeNode === undefined) return Debug.fail("should always get typenode");
             const options = { removeComments: true };
             const printer = createPrinter(options);
@@ -3014,7 +3015,7 @@ namespace ts {
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
 
-            const maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
+            const maxLength = noTruncation ? undefined : defaultMaximumTruncationLength * 2;
             if (maxLength && result && result.length >= maxLength) {
                 return result.substr(0, maxLength - "...".length) + "...";
             }
@@ -3053,10 +3054,16 @@ namespace ts {
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
                     encounteredError: false,
                     visitedSymbols: undefined,
-                    inferTypeParameters: undefined
+                    inferTypeParameters: undefined,
+                    approximateLength: 0
                 };
                 const resultingNode = cb(context);
                 return context.encounteredError ? undefined : resultingNode;
+            }
+
+            function checkTruncationLength(context: NodeBuilderContext): boolean {
+                if (context.truncating) return context.truncating;
+                return context.truncating = !(context.flags & NodeBuilderFlags.NoTruncation) && context.approximateLength > defaultMaximumTruncationLength;
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
@@ -3072,66 +3079,83 @@ namespace ts {
                 }
 
                 if (type.flags & TypeFlags.Any) {
+                    context.approximateLength += 3;
                     return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 if (type.flags & TypeFlags.Unknown) {
                     return createKeywordTypeNode(SyntaxKind.UnknownKeyword);
                 }
                 if (type.flags & TypeFlags.String) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.StringKeyword);
                 }
                 if (type.flags & TypeFlags.Number) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.NumberKeyword);
                 }
                 if (type.flags & TypeFlags.Boolean) {
+                    context.approximateLength += 7;
                     return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
                     const parentSymbol = getParentOfSymbol(type.symbol)!;
                     const parentName = symbolToName(parentSymbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                     const enumLiteralName = getDeclaredTypeOfSymbol(parentSymbol) === type ? parentName : createQualifiedName(parentName, symbolName(type.symbol));
+                    context.approximateLength += symbolName(type.symbol).length;
                     return createTypeReferenceNode(enumLiteralName, /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.EnumLike) {
                     const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
+                    context.approximateLength += symbolName(type.symbol).length;
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (type.flags & (TypeFlags.StringLiteral)) {
+                if (type.flags & TypeFlags.StringLiteral) {
+                    context.approximateLength += ((<StringLiteralType>type).value.length + 2);
                     return createLiteralTypeNode(setEmitFlags(createLiteral((<StringLiteralType>type).value), EmitFlags.NoAsciiEscaping));
                 }
-                if (type.flags & (TypeFlags.NumberLiteral)) {
+                if (type.flags & TypeFlags.NumberLiteral) {
+                    context.approximateLength += (("" + (<NumberLiteralType>type).value).length);
                     return createLiteralTypeNode((createLiteral((<NumberLiteralType>type).value)));
                 }
                 if (type.flags & TypeFlags.BooleanLiteral) {
+                    context.approximateLength += (<IntrinsicType>type).intrinsicName.length;
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
                         if (isValueSymbolAccessible(type.symbol, context.enclosingDeclaration!)) {
+                            context.approximateLength += 6;
                             return symbolToTypeNode(type.symbol, context, SymbolFlags.Value);
                         }
                         if (context.tracker.reportInaccessibleUniqueSymbolError) {
                             context.tracker.reportInaccessibleUniqueSymbolError();
                         }
                     }
+                    context.approximateLength += 13;
                     return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.SymbolKeyword));
                 }
                 if (type.flags & TypeFlags.Void) {
+                    context.approximateLength += 4;
                     return createKeywordTypeNode(SyntaxKind.VoidKeyword);
                 }
                 if (type.flags & TypeFlags.Undefined) {
+                    context.approximateLength += 9;
                     return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                 }
                 if (type.flags & TypeFlags.Null) {
+                    context.approximateLength += 4;
                     return createKeywordTypeNode(SyntaxKind.NullKeyword);
                 }
                 if (type.flags & TypeFlags.Never) {
+                    context.approximateLength += 5;
                     return createKeywordTypeNode(SyntaxKind.NeverKeyword);
                 }
                 if (type.flags & TypeFlags.ESSymbol) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.SymbolKeyword);
                 }
                 if (type.flags & TypeFlags.NonPrimitive) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.ObjectKeyword);
                 }
                 if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
@@ -3143,6 +3167,7 @@ namespace ts {
                             context.tracker.reportInaccessibleThisError();
                         }
                     }
+                    context.approximateLength += 4;
                     return createThis();
                 }
 
@@ -3154,6 +3179,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
+                        context.approximateLength += (symbolName(type.symbol).length + 6);
                         return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
@@ -3162,7 +3188,9 @@ namespace ts {
                         isTypeParameterDeclaration(type.symbol.declarations[0]) &&
                         typeParameterShadowsNameInScope(type, context) &&
                         !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
-                        return createTypeReferenceNode(getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
+                        const name = (type.symbol.declarations[0] as TypeParameterDeclaration).name;
+                        context.approximateLength += idText(name).length;
+                        return createTypeReferenceNode(getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
                     }
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return type.symbol
@@ -3176,7 +3204,7 @@ namespace ts {
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
-                    const typeNodes = mapToTypeNodes(types, context);
+                    const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
                     if (typeNodes && typeNodes.length > 0) {
                         const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
                         return unionOrIntersectionTypeNode;
@@ -3195,12 +3223,14 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Index) {
                     const indexedType = (<IndexType>type).type;
+                    context.approximateLength += 6;
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
                     return createTypeOperatorNode(indexTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
+                    context.approximateLength += 2;
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
@@ -3211,6 +3241,7 @@ namespace ts {
                     context.inferTypeParameters = saveInferTypeParameters;
                     const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
                     const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
+                    context.approximateLength += 15;
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
@@ -3235,6 +3266,7 @@ namespace ts {
                     const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
                     const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                    context.approximateLength += 10;
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
 
@@ -3263,6 +3295,7 @@ namespace ts {
                                 return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
                             }
                             else {
+                                context.approximateLength += 3;
                                 return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                             }
                         }
@@ -3307,6 +3340,7 @@ namespace ts {
                     const resolved = resolveStructuredTypeMembers(type);
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
+                            context.approximateLength += 2;
                             return setEmitFlags(createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
                         }
 
@@ -3329,6 +3363,7 @@ namespace ts {
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
+                    context.approximateLength += 2;
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
 
@@ -3450,6 +3485,9 @@ namespace ts {
                 }
 
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
+                    if (checkTruncationLength(context)) {
+                        return [createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined)];
+                    }
                     const typeElements: TypeElement[] = [];
                     for (const signature of resolvedType.callSignatures) {
                         typeElements.push(<CallSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.CallSignature, context));
@@ -3472,7 +3510,9 @@ namespace ts {
                         return typeElements;
                     }
 
+                    let i = 0;
                     for (const propertySymbol of properties) {
+                        i++;
                         if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) {
                             if (propertySymbol.flags & SymbolFlags.Prototype) {
                                 continue;
@@ -3481,65 +3521,102 @@ namespace ts {
                                 context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
                             }
                         }
-                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
-                            anyType : getTypeOfSymbol(propertySymbol);
-                        const saveEnclosingDeclaration = context.enclosingDeclaration;
-                        context.enclosingDeclaration = undefined;
-                        if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
-                            const decl = first(propertySymbol.declarations);
-                            if (context.tracker.trackSymbol && hasLateBindableName(decl)) {
-                                // get symbol of the first identifier of the entityName
-                                const firstIdentifier = getFirstIdentifier(decl.name.expression);
-                                const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
-                                if (name) {
-                                    context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
-                                }
-                            }
+                        if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
+                            typeElements.push(createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                            addPropertyToElementList(properties[properties.length - 1], context, typeElements);
+                            break;
                         }
-                        const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
-                        context.enclosingDeclaration = saveEnclosingDeclaration;
-                        const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                        if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
-                            const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
-                            for (const signature of signatures) {
-                                const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context);
-                                methodDeclaration.name = propertyName;
-                                methodDeclaration.questionToken = optionalToken;
-                                if (propertySymbol.valueDeclaration) {
-                                    // Copy comments to node for declaration emit
-                                    setCommentRange(methodDeclaration, propertySymbol.valueDeclaration);
-                                }
-                                typeElements.push(methodDeclaration);
-                            }
-                        }
-                        else {
-                            const savedFlags = context.flags;
-                            context.flags |= !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped) ? NodeBuilderFlags.InReverseMappedType : 0;
-                            const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
-                            context.flags = savedFlags;
+                        addPropertyToElementList(propertySymbol, context, typeElements);
 
-                            const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
-                            const propertySignature = createPropertySignature(
-                                modifiers,
-                                propertyName,
-                                optionalToken,
-                                propertyTypeNode,
-                               /*initializer*/ undefined);
-                            if (propertySymbol.valueDeclaration) {
-                                // Copy comments to node for declaration emit
-                                setCommentRange(propertySignature, propertySymbol.valueDeclaration);
-                            }
-                            typeElements.push(propertySignature);
-                        }
                     }
                     return typeElements.length ? typeElements : undefined;
                 }
             }
 
-            function mapToTypeNodes(types: ReadonlyArray<Type> | undefined, context: NodeBuilderContext): TypeNode[] | undefined {
+            function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
+                const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
+                    anyType : getTypeOfSymbol(propertySymbol);
+                const saveEnclosingDeclaration = context.enclosingDeclaration;
+                context.enclosingDeclaration = undefined;
+                if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
+                    const decl = first(propertySymbol.declarations);
+                    if (context.tracker.trackSymbol && hasLateBindableName(decl)) {
+                        // get symbol of the first identifier of the entityName
+                        const firstIdentifier = getFirstIdentifier(decl.name.expression);
+                        const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+                        if (name) {
+                            context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                        }
+                    }
+                }
+                const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
+                context.approximateLength += (symbolName(propertySymbol).length + 1);
+                context.enclosingDeclaration = saveEnclosingDeclaration;
+                const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
+                    const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
+                    for (const signature of signatures) {
+                        const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context);
+                        methodDeclaration.name = propertyName;
+                        methodDeclaration.questionToken = optionalToken;
+                        if (propertySymbol.valueDeclaration) {
+                            // Copy comments to node for declaration emit
+                            setCommentRange(methodDeclaration, propertySymbol.valueDeclaration);
+                        }
+                        typeElements.push(methodDeclaration);
+                    }
+                }
+                else {
+                    const savedFlags = context.flags;
+                    context.flags |= !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped) ? NodeBuilderFlags.InReverseMappedType : 0;
+                    const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    context.flags = savedFlags;
+
+                    const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+                    if (modifiers) {
+                        context.approximateLength += 9;
+                    }
+                    const propertySignature = createPropertySignature(
+                        modifiers,
+                        propertyName,
+                        optionalToken,
+                        propertyTypeNode,
+                    /*initializer*/ undefined);
+                    if (propertySymbol.valueDeclaration) {
+                        // Copy comments to node for declaration emit
+                        setCommentRange(propertySignature, propertySymbol.valueDeclaration);
+                    }
+                    typeElements.push(propertySignature);
+                }
+            }
+
+            function mapToTypeNodes(types: ReadonlyArray<Type> | undefined, context: NodeBuilderContext, isBareList?: boolean): TypeNode[] | undefined {
                 if (some(types)) {
+                    if (checkTruncationLength(context)) {
+                        if (!isBareList) {
+                            return [createTypeReferenceNode("...", /*typeArguments*/ undefined)];
+                        }
+                        else if (types.length > 2) {
+                            return [
+                                typeToTypeNodeHelper(types[0], context),
+                                createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
+                                typeToTypeNodeHelper(types[types.length - 1], context)
+                            ];
+                        }
+                    }
                     const result = [];
+                    let i = 0;
                     for (const type of types) {
+                        i++;
+                        if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
+                            result.push(createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
+                            const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
+                            if (typeNode) {
+                                result.push(typeNode);
+                            }
+                            break;
+                        }
+                        context.approximateLength += 2; // Account for whitespace + separator
                         const typeNode = typeToTypeNodeHelper(type, context);
                         if (typeNode) {
                             result.push(typeNode);
@@ -3566,6 +3643,7 @@ namespace ts {
                 if (!indexInfo.type && !(context.flags & NodeBuilderFlags.AllowEmptyIndexInfoType)) {
                     context.encounteredError = true;
                 }
+                context.approximateLength += (name.length + 4);
                 return createIndexSignature(
                     /*decorators*/ undefined,
                     indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
@@ -3610,6 +3688,7 @@ namespace ts {
                 else if (!returnTypeNode) {
                     returnTypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
+                context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
@@ -3671,6 +3750,7 @@ namespace ts {
                     questionToken,
                     parameterTypeNode,
                     /*initializer*/ undefined);
+                context.approximateLength += symbolName(parameterSymbol).length + 3;
                 return parameterNode;
 
                 function cloneBindingName(node: BindingName): BindingName {
@@ -3825,7 +3905,9 @@ namespace ts {
                     // module is root, must use `ImportTypeNode`
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
-                    const lit = createLiteralTypeNode(createLiteral(getSpecifierForModuleSymbol(chain[0], context)));
+                    const specifier = getSpecifierForModuleSymbol(chain[0], context);
+                    const lit = createLiteralTypeNode(createLiteral(specifier));
+                    context.approximateLength += specifier.length + 10; // specifier + import("")
                     if (!nonRootParts || isEntityName(nonRootParts)) {
                         if (nonRootParts) {
                             const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
@@ -3862,6 +3944,7 @@ namespace ts {
                        context.flags |= NodeBuilderFlags.InInitialEntityName;
                     }
                     const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    context.approximateLength += symbolName.length + 1;
                     if (index === 0) {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
@@ -4046,6 +4129,8 @@ namespace ts {
             encounteredError: boolean;
             visitedSymbols: Map<true> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
+            approximateLength: number;
+            truncating?: boolean;
         }
 
         function isDefaultBindingContext(location: Node) {
