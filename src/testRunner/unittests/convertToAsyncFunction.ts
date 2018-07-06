@@ -366,26 +366,26 @@ function res(result){
     console.log(result);
 }
 `
-    );
+        );
         _testConvertToAsyncFunction("convertToAsyncFunction_NoBrackets", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => console.log(result));
 }
 `
-    );
+        );
         _testConvertToAsyncFunction("convertToAsyncFunction_Finally1", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").then(res => console.log(res)).catch(rej => console.log("error", rej)).finally(console.log("finally!"));
 }
 `
-    );
+        );
 
         _testConvertToAsyncFunction("convertToAsyncFunction_Finally2", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").then(res => console.log(res)).finally(console.log("finally!"));
 }
 `
-    );
+        );
 
         _testConvertToAsyncFunction("convertToAsyncFunction_Finally3", `
 function [#|finallyTest|](): Promise<void> {
@@ -418,7 +418,105 @@ function [#|f|](): Promise<string> {
 }
 `
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseSimple", `
+function [#|f|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(blob => blob.byteOffset);
+    }).then(blob => {
+        return blob.toString();
     });
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen", `
+function [#|f|]() {
+    return Promise.resolve().then(function () {
+        return Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+                return fetch("https://github.com");
+              }).then(res => res.toString())]);
+            });
+          }
+    );
+}
+`
+);
+    _testConvertToAsyncFunction("convertToAsyncFunction_Scope", `
+function [#|f|]() {
+    var var1:Response, var2;
+    return fetch('https://typescriptlang.org').then( _ => 
+      Promise.resolve().then( res => {
+        var2 = "test";
+        return fetch("https://microsoft.com");
+      }).then(res =>
+         var1 === res
+      )
+    ).then(res);
+  }
+` );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_Conditionals", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res => {
+      if (res.ok) {
+        return fetch("https://microsoft.com");
+      } else {
+        if (res.buffer.length > 5) {
+          return res;
+        } else {
+            return fetch("https://github.com");
+        }
+      }
+    });
+}
+`
+);
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThen", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result){
+    return result;
+}
+
+function rej(reject){
+    return reject;
+}
+`
+);
+
+_testConvertToAsyncFunction("convertToAsyncFunction_Scope2", `
+function [#|f|](){
+    var i:number;
+    return fetch("https://typescriptlang.org").then(i => i.ok).then(res => i+1).catch(err => i-1)
+}
+`
+);
+
+_testConvertToAsyncFunction("convertToAsyncFunction_Loop", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res => { for(let i=0; i<10; i++){
+        console.log(res);
+    }})
+}
+`
+);
+
+_testConvertToAsyncFunction("convertToAsyncFunction_Conditional2", `
+function [#|f|](){
+    var res = 100;
+    if (res > 50) {
+        return fetch("https://typescriptlang.org").then(res => console.log(res));
+    }
+    else {
+        return fetch("https://typescriptlang.org").then(res_func);
+    }
+}
+`
+);
+
+});
 
     function _testConvertToAsyncFunction(caption: string, text: string, includeLib?: boolean) {
         testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.Convert_to_async_function, includeLib);
