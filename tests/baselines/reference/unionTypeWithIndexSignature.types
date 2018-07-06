@@ -8,7 +8,7 @@ type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
 >true : true
 >s : string
 
-declare var u: Two;
+declare var u: Two
 >u : Two
 >Two : Two
 
@@ -32,7 +32,7 @@ type Three = { foo: number } | { [s: string]: string } | { [s: string]: boolean 
 >s : string
 >s : string
 
-declare var v: Three;
+declare var v: Three
 >v : Three
 >Three : Three
 
@@ -51,7 +51,7 @@ type Missing = { foo: number, bar: true } | { [s: string]: string } | { foo: boo
 >s : string
 >foo : boolean
 
-declare var m: Missing;
+declare var m: Missing
 >m : Missing
 >Missing : Missing
 
@@ -72,7 +72,7 @@ type RO = { foo: number } | { readonly [s: string]: string }
 >foo : number
 >s : string
 
-declare var ro: RO;
+declare var ro: RO
 >ro : RO
 >RO : RO
 
@@ -88,7 +88,7 @@ type Num = { '0': string } | { [n: number]: number }
 >'0' : string
 >n : number
 
-declare var num: Num;
+declare var num: Num
 >num : Num
 >Num : Num
 
@@ -105,4 +105,57 @@ num['0'] = 'ok'
 >num : Num
 >'0' : "0"
 >'ok' : "ok"
+
+const sym = Symbol()
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+type Both = { s: number, '0': number, [sym]: boolean } | { [n: number]: number, [s: string]: string | number }
+>Both : Both
+>s : number
+>'0' : number
+>[sym] : boolean
+>sym : unique symbol
+>n : number
+>s : string
+
+declare var both: Both
+>both : Both
+>Both : Both
+
+both['s'] = 'ok'
+>both['s'] = 'ok' : "ok"
+>both['s'] : string | number
+>both : Both
+>'s' : "s"
+>'ok' : "ok"
+
+both[0] = 1
+>both[0] = 1 : 1
+>both[0] : number
+>both : Both
+>0 : 0
+>1 : 1
+
+both[1] = 0 // not ok
+>both[1] = 0 : 0
+>both[1] : any
+>both : Both
+>1 : 1
+>0 : 0
+
+both[0] = 'not ok'
+>both[0] = 'not ok' : "not ok"
+>both[0] : number
+>both : Both
+>0 : 0
+>'not ok' : "not ok"
+
+both[sym] = 'not ok'
+>both[sym] = 'not ok' : "not ok"
+>both[sym] : any
+>both : Both
+>sym : unique symbol
+>'not ok' : "not ok"
 

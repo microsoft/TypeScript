@@ -5938,6 +5938,12 @@ namespace ts {
                 && isTypeUsableAsLateBoundName(checkComputedPropertyName(node));
         }
 
+        function isLateBoundName(name: __String): boolean {
+            return (name as string).charCodeAt(0) === CharacterCodes._ &&
+                (name as string).charCodeAt(1) === CharacterCodes._ &&
+                (name as string).charCodeAt(2) === CharacterCodes.at;
+        }
+
         /**
          * Indicates whether a declaration has a late-bindable dynamic name.
          */
@@ -7049,7 +7055,7 @@ namespace ts {
                         }
                     }
                     else if (isUnion) {
-                        const index = getIndexInfoOfType(type, IndexKind.String) || (isNumericLiteralName(name) && getIndexInfoOfType(type, IndexKind.Number));
+                        const index = !isLateBoundName(name) && ((isNumericLiteralName(name) && getIndexInfoOfType(type, IndexKind.Number)) || getIndexInfoOfType(type, IndexKind.String));
                         if (index) {
                             checkFlags |= index.isReadonly ? CheckFlags.Readonly : 0;
                             indexTypes = append(indexTypes, index.type);
