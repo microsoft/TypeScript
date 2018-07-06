@@ -4,6 +4,7 @@ Diagnostics:
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 
 EmitSkipped: false
+
 FileName : /tests/cases/fourslash/a.js
 function foo2() { return 30; } // no error - should emit a.js
 

@@ -21,6 +21,7 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
             super(0, loc);
                      ~~~
 !!! error TS2552: Cannot find name 'loc'. Did you mean 'ELoc'?
+!!! related TS2728 tests/cases/compiler/baseCheck.ts:2:7: 'ELoc' is declared here.
         }
     
         m() {

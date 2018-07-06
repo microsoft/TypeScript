@@ -1,5 +1,4 @@
-tests/cases/compiler/file.tsx(11,14): error TS2326: Types of property 'prop' are incompatible.
-  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/file.tsx(11,14): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/file.tsx (1 errors) ====
@@ -14,7 +13,7 @@ tests/cases/compiler/file.tsx(11,14): error TS2326: Types of property 'prop' are
     }
     
     <SFC<string> prop={1}></SFC>; // should error
-                 ~~~~~~~~
-!!! error TS2326: Types of property 'prop' are incompatible.
-!!! error TS2326:   Type 'number' is not assignable to type 'string'.
+                 ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 /.ts/lib.es5.d.ts:1382:39: The expected type comes from property 'prop' which is declared here on type 'Record<string, string>'
     
