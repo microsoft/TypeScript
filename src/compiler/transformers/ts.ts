@@ -2035,7 +2035,7 @@ namespace ts {
 
         /**
          * Serializes an entity name which may not exist at runtime, but whose access shouldn't throw
-         * 
+         *
          * @param node The entity name to serialize.
          */
         function serializeEntityNameAsExpressionFallback(node: EntityName): BinaryExpression {
