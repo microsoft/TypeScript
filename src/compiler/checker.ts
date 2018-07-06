@@ -720,8 +720,9 @@ namespace ts {
             function emitTextWriterWrapper(underlying: SymbolWriter): EmitTextWriter {
                 return {
                     write: noop,
-                    writeTextOfNode: noop,
+                    writeComment: noop,
                     writeLine: noop,
+                    flush: noop,
                     increaseIndent() {
                         return underlying.increaseIndent();
                     },

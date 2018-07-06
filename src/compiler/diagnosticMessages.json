@@ -3600,6 +3600,12 @@
         "reportsUnnecessary": true
     },
 
+    "Do not emit insignificant whitespace or insignificant trailing semicolons to output.": {
+        "category": "Message",
+        "code": 6200
+    },
+
+
     "Projects to reference": {
         "category": "Message",
         "code": 6300

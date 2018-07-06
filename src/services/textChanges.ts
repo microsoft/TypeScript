@@ -895,6 +895,9 @@ namespace ts.textChanges {
             this.writer.write(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
+        writeComment(s: string): void {
+            this.writer.writeComment(s);
+        }
         writeKeyword(s: string): void {
             this.writer.writeKeyword(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
@@ -931,9 +934,6 @@ namespace ts.textChanges {
             this.writer.writeSymbol(s, sym);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeTextOfNode(text: string, node: Node): void {
-            this.writer.writeTextOfNode(text, node);
-        }
         writeLine(): void {
             this.writer.writeLine();
         }
@@ -968,6 +968,9 @@ namespace ts.textChanges {
         }
         isAtStartOfLine(): boolean {
             return this.writer.isAtStartOfLine();
+        }
+        flush(): void {
+            this.writer.flush();
         }
         clear(): void {
             this.writer.clear();

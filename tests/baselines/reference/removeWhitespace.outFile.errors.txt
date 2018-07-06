@@ -1,0 +1,16 @@
+error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+
+
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+==== tests/cases/conformance/removeWhitespace/a.ts (0 errors) ====
+    let a = 1;
+    
+==== tests/cases/conformance/removeWhitespace/b.ts (0 errors) ====
+    let b = 2;
+    
+==== tests/cases/conformance/removeWhitespace/c.ts (0 errors) ====
+    class C {}
+    
+==== tests/cases/conformance/removeWhitespace/d.ts (0 errors) ====
+    function d() {}
+    

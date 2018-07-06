@@ -1,0 +1,18 @@
+=== tests/cases/conformance/removeWhitespace/a.ts ===
+let a = 1;
+>a : number
+>1 : 1
+
+=== tests/cases/conformance/removeWhitespace/b.ts ===
+let b = 2;
+>b : number
+>2 : 2
+
+=== tests/cases/conformance/removeWhitespace/c.ts ===
+class C {}
+>C : C
+
+=== tests/cases/conformance/removeWhitespace/d.ts ===
+function d() {}
+>d : () => void
+

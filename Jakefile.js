@@ -365,7 +365,7 @@ file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
         const servicesContent = readFileSync(Paths.servicesDefinitionFile);
         const servicesContentWithoutConstEnums = removeConstModifierFromEnumDeclarations(servicesContent);
         fs.writeFileSync(Paths.servicesDefinitionFile, servicesContentWithoutConstEnums);
-        
+
         // Also build typescript.js, typescript.js.map, and typescript.d.ts
         jake.cpR(Paths.servicesFile, Paths.typescriptFile);
         if (fs.existsSync(Paths.servicesFile + ".map")) {

@@ -59,11 +59,10 @@ namespace ts {
         let str = "";
 
         const writeText: (text: string) => void = text => str += text;
-        return {
+        const writer: EmitTextWriter = {
             getText: () => str,
             write: writeText,
             rawWrite: writeText,
-            writeTextOfNode: writeText,
             writeKeyword: writeText,
             writeOperator: writeText,
             writePunctuation: writeText,
@@ -72,8 +71,9 @@ namespace ts {
             writeLiteral: writeText,
             writeParameter: writeText,
             writeProperty: writeText,
-            writeSymbol: writeText,
+            writeSymbol: (s, _) => writeText(s),
             writeTrailingSemicolon: writeText,
+            writeComment: writeText,
             getTextPos: () => str.length,
             getLine: () => 0,
             getColumn: () => 0,
@@ -86,11 +86,13 @@ namespace ts {
             increaseIndent: noop,
             decreaseIndent: noop,
             clear: () => str = "",
+            flush: noop,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
             reportInaccessibleUniqueSymbolError: noop,
-            reportPrivateInBaseOfClassExpression: noop,
+            reportPrivateInBaseOfClassExpression: noop
         };
+        return writer;
     }
 
     export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
@@ -3084,18 +3086,11 @@ namespace ts {
             }
         }
 
-        function writeTextOfNode(text: string, node: Node) {
-            const s = getTextOfNodeFromSourceText(text, node);
-            write(s);
-            updateLineCountAndPosFor(s);
-        }
-
         reset();
 
-        return {
+        const writer: EmitTextWriter = {
             write,
             rawWrite,
-            writeTextOfNode,
             writeLiteral,
             writeLine,
             increaseIndent: () => { indent++; },
@@ -3107,6 +3102,7 @@ namespace ts {
             getText: () => output,
             isAtStartOfLine: () => lineStart,
             clear: reset,
+            flush: noop,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
             reportInaccessibleUniqueSymbolError: noop,
@@ -3118,9 +3114,12 @@ namespace ts {
             writePunctuation: write,
             writeSpace: write,
             writeStringLiteral: write,
-            writeSymbol: write,
-            writeTrailingSemicolon: write
+            writeSymbol: (s, _) => write(s),
+            writeTrailingSemicolon: write,
+            writeComment: write
         };
+
+        return writer;
     }
 
     export function getTrailingSemicolonOmittingWriter(writer: EmitTextWriter): EmitTextWriter {
@@ -3174,6 +3173,10 @@ namespace ts {
                 commitPendingTrailingSemicolon();
                 writer.writeProperty(s);
             },
+            writeComment(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeComment(s);
+            },
             writeLine() {
                 commitPendingTrailingSemicolon();
                 writer.writeLine();
@@ -3185,6 +3188,293 @@ namespace ts {
             decreaseIndent() {
                 commitPendingTrailingSemicolon();
                 writer.decreaseIndent();
+            }
+        };
+    }
+
+    enum SourceMapInfoKind {
+        emitMapping,
+        emitSourceMap,
+    }
+
+    type SourceMapInfo =
+        | { kind: SourceMapInfoKind.emitMapping, sourceIndex: number | undefined, sourceLine: number | undefined, sourceCharacter: number | undefined, nameIndex: number | undefined }
+        | { kind: SourceMapInfoKind.emitSourceMap, map: RawSourceMap, sourceMapPath: string };
+
+    const enum WriteKind {
+        none,
+        write,
+        writeKeyword,
+        writeOperator,
+        writePunctuation,
+        writeTrailingSemicolon,
+        writeStringLiteral,
+        writeLiteral,
+        writeParameter,
+        writeProperty,
+        writeComment,
+        writeSymbol,
+    }
+
+    export function getWhitespaceRemovingTextWriter(writer: EmitTextWriter): EmitTextWriter {
+        let pendingWrite = WriteKind.none;
+        let pendingText = "";
+        let pendingSymbol: Symbol | undefined;
+        let pendingSourceMapInfo: SourceMapInfo[] | undefined;
+        let requestedSourceMapInfoBeforeSpace: SourceMapInfo[] | undefined;
+        let requestedSourceMapInfoAfterSpace: SourceMapInfo[] | undefined;
+        let requestedSpace = false;
+        let sourceMapGenerator: SourceMapGenerator | undefined;
+        let sourceMapEmitter: SourceMapEmitter | undefined;
+
+        function getRequestedSourceMapInfoArray(): SourceMapInfo[] {
+            return requestedSpace
+                ? requestedSourceMapInfoAfterSpace || (requestedSourceMapInfoAfterSpace = [])
+                : requestedSourceMapInfoBeforeSpace || (requestedSourceMapInfoBeforeSpace = []);
+        }
+
+        function pushMapping(sourceIndex?: number, sourceLine?: number, sourceCharacter?: number, nameIndex?: number) {
+            getRequestedSourceMapInfoArray().push({ kind: SourceMapInfoKind.emitMapping, sourceIndex, sourceLine, sourceCharacter, nameIndex });
+        }
+
+        function pushSourceMap(map: RawSourceMap, sourceMapPath: string) {
+            getRequestedSourceMapInfoArray().push({ kind: SourceMapInfoKind.emitSourceMap, map, sourceMapPath });
+        }
+
+        function pushRequestedSourceMapInfo(requestedSourceMapInfo: SourceMapInfo[] | undefined) {
+            if (some(requestedSourceMapInfo)) {
+                if (!pendingSourceMapInfo) pendingSourceMapInfo = [];
+                pendingSourceMapInfo.push(...requestedSourceMapInfo);
+                clear(requestedSourceMapInfo);
+            }
+        }
+
+        function pushWrite(kind: WriteKind, text: string) {
+            commitPendingWrite();
+            pushRequestedSourceMapInfo(requestedSourceMapInfoBeforeSpace);
+            pushRequestedSourceMapInfo(requestedSourceMapInfoAfterSpace);
+            pendingWrite = kind;
+            pendingText = text;
+        }
+
+        function commitPendingSourceMapInfo() {
+            forEach(pendingSourceMapInfo, processPendingSourceMapInfo);
+            clear(pendingSourceMapInfo);
+        }
+
+        function commitPendingWrite() {
+            commitPendingSourceMapInfo();
+            processPendingWrite();
+            discardPendingWrite();
+        }
+
+        function discardPendingWrite() {
+            pendingWrite = WriteKind.none;
+            pendingText = "";
+            pendingSymbol = undefined;
+            if (some(pendingSourceMapInfo)) {
+                if (!requestedSourceMapInfoBeforeSpace) requestedSourceMapInfoBeforeSpace = [];
+                requestedSourceMapInfoBeforeSpace.unshift(...pendingSourceMapInfo);
+            }
+        }
+
+        function processPendingSourceMapInfo(info: SourceMapInfo) {
+            switch (info.kind) {
+                case SourceMapInfoKind.emitMapping: return sourceMapGenerator!.addMapping(writer.getLine(), writer.getColumn(), info.sourceIndex!, info.sourceLine!, info.sourceCharacter!, info.nameIndex);
+                case SourceMapInfoKind.emitSourceMap: return sourceMapGenerator!.appendSourceMap(writer.getLine(), writer.getColumn(), info.map, info.sourceMapPath);
+                default: return Debug.assertNever(info);
+            }
+        }
+
+        function processPendingWrite() {
+            switch (pendingWrite) {
+                case WriteKind.none: return;
+                case WriteKind.write: return writer.write(pendingText);
+                case WriteKind.writeKeyword: return writer.writeKeyword(pendingText);
+                case WriteKind.writeOperator: return writer.writeOperator(pendingText);
+                case WriteKind.writePunctuation: return writer.writePunctuation(pendingText);
+                case WriteKind.writeTrailingSemicolon: return writer.writeTrailingSemicolon(pendingText);
+                case WriteKind.writeStringLiteral: return writer.writeStringLiteral(pendingText);
+                case WriteKind.writeLiteral: return writer.writeLiteral(pendingText);
+                case WriteKind.writeParameter: return writer.writeParameter(pendingText);
+                case WriteKind.writeProperty: return writer.writeProperty(pendingText);
+                case WriteKind.writeComment: return writer.writeComment(pendingText);
+                case WriteKind.writeSymbol: return writer.writeSymbol(pendingText, pendingSymbol!);
+                default: return Debug.assertNever(pendingWrite);
+            }
+        }
+
+        function flush() {
+            commitPendingWrite();
+            pushRequestedSourceMapInfo(requestedSourceMapInfoBeforeSpace);
+            pushRequestedSourceMapInfo(requestedSourceMapInfoAfterSpace);
+            commitPendingSourceMapInfo();
+        }
+
+        function beforeWrite() {
+            commitPendingWrite();
+            pushRequestedSourceMapInfo(requestedSourceMapInfoBeforeSpace);
+            commitPendingSourceMapInfo();
+        }
+
+        function writeSpace() {
+            beforeWrite();
+            writer.writeSpace(" ");
+            requestedSpace = false;
+        }
+
+        function writeSpaceBeforeWordIfNeeded() {
+            if (!requestedSpace) return;
+            if (pendingWrite === WriteKind.writeKeyword ||
+                pendingWrite === WriteKind.writeParameter ||
+                pendingWrite === WriteKind.writeProperty ||
+                pendingWrite === WriteKind.write) {
+                writeSpace();
+            }
+        }
+
+        function writeSpaceBeforeLiteralIfNeeded(s: string) {
+            if (isIdentifierPart(s.charCodeAt(0), /*languageVersion*/ undefined)) {
+                writeSpaceBeforeWordIfNeeded();
+            }
+        }
+
+        function writeSpaceBeforeOperatorIfNeeded(s: string) {
+            if (!requestedSpace || pendingWrite !== WriteKind.writeOperator) return;
+            if (pendingText === "+" && (s === "+" || s === "++") ||
+                pendingText === "-" && (s === "-" || s === "--")) {
+                writeSpace();
+            }
+        }
+
+        function writeDotBeforeDotIfNeeded(s: string) {
+            if (s === "." && pendingWrite === WriteKind.writeStringLiteral) {
+                const ch = pendingText.charCodeAt(0);
+                if (ch === CharacterCodes._0 && pendingText.length > 1) {
+                    // prefixed literals (00, 0o, 0x, 0b, etc.) do not need a `.`. Also catches 0. and 0e
+                    return;
+                }
+                if (ch === CharacterCodes.dot) {
+                    // decimal literal with leading `.` does not require a `.`
+                    return;
+                }
+                if (isDigit(ch)) {
+                    for (let i = 1; i < pendingText.length; i++) {
+                        const ch = pendingText.charCodeAt(i);
+                        if (ch === CharacterCodes.dot || ch === CharacterCodes.E || ch === CharacterCodes.e) {
+                            // decimal literal with a `.` or scientific notation does not require a `.`
+                            return;
+                        }
+                    }
+                }
+                pushWrite(WriteKind.writePunctuation, ".");
+                requestedSpace = false;
+            }
+        }
+
+        function discardTrailingSemicolonBeforeEndBrace(s: string) {
+            if (s === "}" && pendingWrite === WriteKind.writeTrailingSemicolon) {
+                discardPendingWrite();
+            }
+        }
+
+        function discardTrailingSemicolonBeforeTrailingSemicolon() {
+            if (pendingWrite === WriteKind.writeTrailingSemicolon) {
+                discardPendingWrite();
+            }
+        }
+
+        return {
+            getTextPos: writer.getTextPos,
+            getLine: writer.getLine,
+            getColumn: writer.getColumn,
+            getIndent: writer.getIndent,
+            isAtStartOfLine: writer.isAtStartOfLine,
+            increaseIndent: noop,
+            decreaseIndent: noop,
+            clear() {
+                writer.clear();
+                discardPendingWrite();
+                clear(requestedSourceMapInfoBeforeSpace);
+                clear(requestedSourceMapInfoAfterSpace);
+                requestedSpace = false;
+                sourceMapGenerator = undefined;
+            },
+            flush,
+            write(s) {
+                writeSpaceBeforeWordIfNeeded();
+                pushWrite(WriteKind.write, s);
+            },
+            rawWrite(s) {
+                flush();
+                writer.rawWrite(s);
+            },
+            writeKeyword(s) {
+                writeSpaceBeforeWordIfNeeded();
+                pushWrite(WriteKind.writeKeyword, s);
+            },
+            writeOperator(s) {
+                writeSpaceBeforeOperatorIfNeeded(s);
+                pushWrite(WriteKind.writeOperator, s);
+            },
+            writePunctuation(s) {
+                discardTrailingSemicolonBeforeEndBrace(s);
+                writeDotBeforeDotIfNeeded(s);
+                pushWrite(WriteKind.writePunctuation, s);
+            },
+            writeTrailingSemicolon(s) {
+                discardTrailingSemicolonBeforeTrailingSemicolon();
+                pushWrite(WriteKind.writeTrailingSemicolon, s);
+            },
+            writeSpace(_) {
+                requestedSpace = true;
+            },
+            writeStringLiteral(s) {
+                writeSpaceBeforeLiteralIfNeeded(s);
+                pushWrite(WriteKind.writeStringLiteral, s);
+            },
+            writeLiteral(s) {
+                writeSpaceBeforeLiteralIfNeeded(s);
+                pushWrite(WriteKind.writeLiteral, s);
+            },
+            writeParameter(s) {
+                pushWrite(WriteKind.writeParameter, s);
+            },
+            writeProperty(s) {
+                pushWrite(WriteKind.writeProperty, s);
+            },
+            writeComment(s) {
+                pushWrite(WriteKind.writeComment, s);
+            },
+            writeSymbol(text, symbol) {
+                writeSpaceBeforeWordIfNeeded();
+                pendingWrite = WriteKind.writeSymbol;
+                pendingText = text;
+                pendingSymbol = symbol;
+            },
+            writeLine() {
+                if (pendingWrite === WriteKind.writeComment) {
+                    flush();
+                    writer.writeLine();
+                    requestedSpace = false;
+                }
+                else {
+                    requestedSpace = true;
+                }
+            },
+            getText() {
+                flush();
+                return writer.getText();
+            },
+            getSourceMapEmitter(writer) {
+                sourceMapGenerator = writer;
+                if (!sourceMapEmitter) {
+                    sourceMapEmitter = {
+                        emitMapping: pushMapping,
+                        emitSourceMap: pushSourceMap
+                    };
+                }
+                return sourceMapEmitter;
             }
         };
     }
@@ -3473,13 +3763,13 @@ namespace ts {
         writeComment: (text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void) {
         if (comments && comments.length > 0) {
             if (leadingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
 
             let emitInterveningSeparator = false;
             for (const comment of comments) {
                 if (emitInterveningSeparator) {
-                    writer.write(" ");
+                    writer.writeSpace(" ");
                     emitInterveningSeparator = false;
                 }
 
@@ -3493,7 +3783,7 @@ namespace ts {
             }
 
             if (emitInterveningSeparator && trailingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
         }
     }
@@ -3627,7 +3917,7 @@ namespace ts {
         }
         else {
             // Single line comment of style //....
-            writer.write(text.substring(commentPos, commentEnd));
+            writer.writeComment(text.substring(commentPos, commentEnd));
         }
     }
 
@@ -3636,14 +3926,14 @@ namespace ts {
         const currentLineText = text.substring(pos, end).replace(/^\s+|\s+$/g, "");
         if (currentLineText) {
             // trimmed forward and ending spaces text
-            writer.write(currentLineText);
+            writer.writeComment(currentLineText);
             if (end !== commentEnd) {
                 writer.writeLine();
             }
         }
         else {
             // Empty string - make sure we write empty line
-            writer.writeLiteral(newLine);
+            writer.rawWrite(newLine);
         }
     }
 

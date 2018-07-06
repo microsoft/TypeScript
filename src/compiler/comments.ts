@@ -153,13 +153,13 @@ namespace ts {
                 writer.writeLine();
             }
             else {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
         }
 
         function emitTrailingSynthesizedComment(comment: SynthesizedComment) {
             if (!writer.isAtStartOfLine()) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
             writeSynthesizedComment(comment);
             if (comment.hasTrailingNewLine) {
@@ -281,7 +281,7 @@ namespace ts {
                 writer.writeLine();
             }
             else if (kind === SyntaxKind.MultiLineCommentTrivia) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
         }
 
@@ -301,7 +301,7 @@ namespace ts {
             if (!shouldWriteComment(currentText, commentPos)) return;
             // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
             if (!writer.isAtStartOfLine()) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
 
             if (emitPos) emitPos(commentPos);
@@ -340,7 +340,7 @@ namespace ts {
                 writer.writeLine();
             }
             else {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
         }
 

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/removeWhitespace/a.ts ===
+let a = 1;
+>a : Symbol(a, Decl(a.ts, 0, 3))
+
+=== tests/cases/conformance/removeWhitespace/b.ts ===
+let b = 2;
+>b : Symbol(b, Decl(b.ts, 0, 3))
+
+=== tests/cases/conformance/removeWhitespace/c.ts ===
+class C {}
+>C : Symbol(C, Decl(c.ts, 0, 0))
+
+=== tests/cases/conformance/removeWhitespace/d.ts ===
+function d() {}
+>d : Symbol(d, Decl(d.ts, 0, 0))
+

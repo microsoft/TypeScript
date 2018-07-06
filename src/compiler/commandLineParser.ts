@@ -534,6 +534,12 @@ namespace ts {
             description: Diagnostics.Show_verbose_diagnostic_information
         },
         {
+            name: "removeWhitespace",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Do_not_emit_insignificant_whitespace_or_insignificant_trailing_semicolons_to_output
+        },
+        {
             name: "traceResolution",
             type: "boolean",
             category: Diagnostics.Advanced_Options,

@@ -100,9 +100,10 @@ namespace ts {
         const sourceMapDataList: SourceMapData[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
-        const newLine = host.getNewLine();
+        const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
         const writer = createTextWriter(newLine);
-        const sourceMap = createSourceMapWriter(host, writer);
+        const javaScriptWriter = compilerOptions.removeWhitespace ? getWhitespaceRemovingTextWriter(writer) : writer;
+        const sourceMap = createSourceMapWriter(host, javaScriptWriter);
         const declarationSourceMap = createSourceMapWriter(host, writer, {
             sourceMap: compilerOptions.declarationMap,
             sourceRoot: compilerOptions.sourceRoot,
@@ -161,6 +162,7 @@ namespace ts {
 
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
+                removeWhitespace: compilerOptions.removeWhitespace,
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: compilerOptions.noEmitHelpers,
                 module: compilerOptions.module,
@@ -189,7 +191,7 @@ namespace ts {
             });
 
             Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleInfoPath, printer, sourceMap);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleInfoPath, printer, sourceMap, javaScriptWriter);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -245,7 +247,7 @@ namespace ts {
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
-                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap, writer);
             }
             declarationTransform.dispose();
         }
@@ -264,7 +266,7 @@ namespace ts {
             forEachChild(node, collectLinkedAliases);
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapRecorder: SourceMapWriter) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapRecorder: SourceMapWriter, writer: EmitTextWriter) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
@@ -277,16 +279,22 @@ namespace ts {
                 printer.writeFile(sourceFile!, writer);
             }
 
-            writer.writeLine();
-
             const sourceMappingURL = mapRecorder.getSourceMappingURL();
             if (sourceMappingURL) {
-                writer.write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
+                writer.flush();
+                if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
+                writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
+            }
+            else {
+                writer.writeLine();
             }
 
             // Write the source map
-            if (sourceMapFilePath) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath, mapRecorder.getText(), /*writeByteOrderMark*/ false, sourceFiles);
+            if (sourceMapFilePath && sourceMap) {
+                const sourceMap = mapRecorder.getText();
+                if (sourceMap) {
+                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
+                }
             }
 
             // Write the output file
@@ -337,6 +345,7 @@ namespace ts {
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
+        const removeWhitespace = printerOptions.removeWhitespace;
         const comments = createCommentWriter(printerOptions, onEmitSourceMapOfPosition);
         const {
             emitNodeWithComments,
@@ -452,8 +461,8 @@ namespace ts {
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
 
             for (const prepend of bundle.prepends) {
+                writeSignificantLine();
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
-                writeLine();
             }
 
             if (bundleInfo) {
@@ -606,6 +615,10 @@ namespace ts {
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
             if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
+            if (hint === EmitHint.EmbeddedStatement) {
+                Debug.assertNode(node, isEmptyStatement);
+                return emitEmptyStatement(/*isEmbeddedStatement*/ true);
+            }
             if (hint === EmitHint.Unspecified) {
                 if (isKeyword(node.kind)) return writeTokenNode(node, writeKeyword);
 
@@ -706,10 +719,10 @@ namespace ts {
                     case SyntaxKind.ImportType:
                         return emitImportTypeNode(<ImportTypeNode>node);
                     case SyntaxKind.JSDocAllType:
-                        write("*");
+                        writePunctuation("*");
                         return;
                     case SyntaxKind.JSDocUnknownType:
-                        write("?");
+                        writePunctuation("?");
                         return;
                     case SyntaxKind.JSDocNullableType:
                         return emitJSDocNullableType(node as JSDocNullableType);
@@ -741,7 +754,7 @@ namespace ts {
                     case SyntaxKind.VariableStatement:
                         return emitVariableStatement(<VariableStatement>node);
                     case SyntaxKind.EmptyStatement:
-                        return emitEmptyStatement();
+                        return emitEmptyStatement(/*isEmbeddedStatement*/ false);
                     case SyntaxKind.ExpressionStatement:
                         return emitExpressionStatement(<ExpressionStatement>node);
                     case SyntaxKind.IfStatement:
@@ -1157,7 +1170,7 @@ namespace ts {
             emitNodeWithWriter(node.name, writeProperty);
             emit(node.questionToken);
             emitTypeAnnotation(node.type);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitPropertyDeclaration(node: PropertyDeclaration) {
@@ -1168,7 +1181,7 @@ namespace ts {
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
             emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end, node);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitMethodSignature(node: MethodSignature) {
@@ -1180,7 +1193,7 @@ namespace ts {
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
             emitTypeAnnotation(node.type);
-            writeSemicolon();
+            writeTrailingSemicolon();
             popNameGenerationScope(node);
         }
 
@@ -1215,7 +1228,7 @@ namespace ts {
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
             emitTypeAnnotation(node.type);
-            writeSemicolon();
+            writeTrailingSemicolon();
             popNameGenerationScope(node);
         }
 
@@ -1228,7 +1241,7 @@ namespace ts {
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
             emitTypeAnnotation(node.type);
-            writeSemicolon();
+            writeTrailingSemicolon();
             popNameGenerationScope(node);
         }
 
@@ -1237,11 +1250,11 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitParametersForIndexSignature(node, node.parameters);
             emitTypeAnnotation(node.type);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitSemicolonClassElement() {
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         //
@@ -1273,26 +1286,26 @@ namespace ts {
         }
 
         function emitJSDocFunctionType(node: JSDocFunctionType) {
-            write("function");
+            writeKeyword("function");
             emitParameters(node, node.parameters);
-            write(":");
+            writePunctuation(":");
             emit(node.type);
         }
 
 
         function emitJSDocNullableType(node: JSDocNullableType) {
-            write("?");
+            writePunctuation("?");
             emit(node.type);
         }
 
         function emitJSDocNonNullableType(node: JSDocNonNullableType) {
-            write("!");
+            writePunctuation("!");
             emit(node.type);
         }
 
         function emitJSDocOptionalType(node: JSDocOptionalType) {
             emit(node.type);
-            write("=");
+            writePunctuation("=");
         }
 
         function emitConstructorType(node: ConstructorTypeNode) {
@@ -1328,7 +1341,7 @@ namespace ts {
         }
 
         function emitRestOrJSDocVariadicType(node: RestTypeNode | JSDocVariadicType) {
-            write("...");
+            writePunctuation("...");
             emit(node.type);
         }
 
@@ -1340,7 +1353,7 @@ namespace ts {
 
         function emitOptionalType(node: OptionalTypeNode) {
             emit(node.type);
-            write("?");
+            writePunctuation("?");
         }
 
         function emitUnionType(node: UnionTypeNode) {
@@ -1428,7 +1441,7 @@ namespace ts {
             writePunctuation(":");
             writeSpace();
             emit(node.type);
-            writeSemicolon();
+            writeTrailingSemicolon();
             if (emitFlags & EmitFlags.SingleLine) {
                 writeSpace();
             }
@@ -1516,7 +1529,7 @@ namespace ts {
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             let indentBeforeDot = false;
             let indentAfterDot = false;
-            if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
+            if (!(getEmitFlags(node) & EmitFlags.NoIndentation) && !removeWhitespace) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
                 const dotToken = createToken(SyntaxKind.DotToken);
@@ -1529,7 +1542,7 @@ namespace ts {
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);
 
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
+            const shouldEmitDotDot = !indentBeforeDot && !removeWhitespace && needsDotDotForPropertyAccess(node.expression);
             if (shouldEmitDotDot) {
                 writePunctuation(".");
             }
@@ -1682,11 +1695,11 @@ namespace ts {
             const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
 
             emitExpression(node.left);
-            increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
+            increaseIndentIf(indentBeforeOperator, isCommaOperator);
             emitLeadingCommentsOfPosition(node.operatorToken.pos);
-            writeTokenNode(node.operatorToken, writeOperator);
+            writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
             emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-            increaseIndentIf(indentAfterOperator, " ");
+            increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
         }
@@ -1698,15 +1711,15 @@ namespace ts {
             const indentAfterColon = needsIndentation(node, node.colonToken, node.whenFalse);
 
             emitExpression(node.condition);
-            increaseIndentIf(indentBeforeQuestion, " ");
+            increaseIndentIf(indentBeforeQuestion, /*writeSpaceIfNotIndenting*/ true);
             emit(node.questionToken);
-            increaseIndentIf(indentAfterQuestion, " ");
+            increaseIndentIf(indentAfterQuestion, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenTrue);
             decreaseIndentIf(indentBeforeQuestion, indentAfterQuestion);
 
-            increaseIndentIf(indentBeforeColon, " ");
+            increaseIndentIf(indentBeforeColon, /*writeSpaceIfNotIndenting*/ true);
             emit(node.colonToken);
-            increaseIndentIf(indentAfterColon, " ");
+            increaseIndentIf(indentAfterColon, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenFalse);
             decreaseIndentIf(indentBeforeColon, indentAfterColon);
         }
@@ -1785,17 +1798,24 @@ namespace ts {
         function emitVariableStatement(node: VariableStatement) {
             emitModifiers(node, node.modifiers);
             emit(node.declarationList);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
-        function emitEmptyStatement() {
-            writeSemicolon();
+        function emitEmptyStatement(isEmbeddedStatement: boolean) {
+            // While most trailing semicolons are possibly insignificant, an embedded "empty"
+            // statement is significant and cannot be elided by the whitespace-removing writer.
+            if (isEmbeddedStatement) {
+                writePunctuation(";");
+            }
+            else {
+                writeTrailingSemicolon();
+            }
         }
 
         function emitExpressionStatement(node: ExpressionStatement) {
             emitExpression(node.expression);
             if (!isJsonSourceFile(currentSourceFile)) {
-                writeSemicolon();
+                writeTrailingSemicolon();
             }
         }
 
@@ -1851,9 +1871,9 @@ namespace ts {
             writeSpace();
             let pos = emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, /*contextNode*/ node);
             emitForBinding(node.initializer);
-            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.initializer ? node.initializer.end : pos, writeSemicolon, node);
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.initializer ? node.initializer.end : pos, writePunctuation, node);
             emitExpressionWithLeadingSpace(node.condition);
-            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.condition ? node.condition.end : pos, writeSemicolon, node);
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.condition ? node.condition.end : pos, writePunctuation, node);
             emitExpressionWithLeadingSpace(node.incrementor);
             emitTokenWithComment(SyntaxKind.CloseParenToken, node.incrementor ? node.incrementor.end : pos, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
@@ -1900,13 +1920,13 @@ namespace ts {
         function emitContinueStatement(node: ContinueStatement) {
             emitTokenWithComment(SyntaxKind.ContinueKeyword, node.pos, writeKeyword, node);
             emitWithLeadingSpace(node.label);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitBreakStatement(node: BreakStatement) {
             emitTokenWithComment(SyntaxKind.BreakKeyword, node.pos, writeKeyword, node);
             emitWithLeadingSpace(node.label);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode: Node, indentLeading?: boolean) {
@@ -1936,7 +1956,7 @@ namespace ts {
         function emitReturnStatement(node: ReturnStatement) {
             emitTokenWithComment(SyntaxKind.ReturnKeyword, node.pos, writeKeyword, /*contextNode*/ node);
             emitExpressionWithLeadingSpace(node.expression);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitWithStatement(node: WithStatement) {
@@ -1968,7 +1988,7 @@ namespace ts {
         function emitThrowStatement(node: ThrowStatement) {
             emitTokenWithComment(SyntaxKind.ThrowKeyword, node.pos, writeKeyword, node);
             emitExpressionWithLeadingSpace(node.expression);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitTryStatement(node: TryStatement) {
@@ -1989,7 +2009,7 @@ namespace ts {
 
         function emitDebuggerStatement(node: DebuggerStatement) {
             writeToken(SyntaxKind.DebuggerKeyword, node.pos, writeKeyword);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         //
@@ -2060,7 +2080,7 @@ namespace ts {
             }
             else {
                 emitSignatureHead(node);
-                writeSemicolon();
+                writeTrailingSemicolon();
             }
 
         }
@@ -2206,7 +2226,7 @@ namespace ts {
             writePunctuation("=");
             writeSpace();
             emit(node.type);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitEnumDeclaration(node: EnumDeclaration) {
@@ -2230,7 +2250,7 @@ namespace ts {
             emit(node.name);
 
             let body = node.body;
-            if (!body) return writeSemicolon();
+            if (!body) return writeTrailingSemicolon();
             while (body.kind === SyntaxKind.ModuleDeclaration) {
                 writePunctuation(".");
                 emit((<ModuleDeclaration>body).name);
@@ -2263,7 +2283,7 @@ namespace ts {
             emitTokenWithComment(SyntaxKind.EqualsToken, node.name.end, writePunctuation, node);
             writeSpace();
             emitModuleReference(node.moduleReference);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitModuleReference(node: ModuleReference) {
@@ -2286,7 +2306,7 @@ namespace ts {
                 writeSpace();
             }
             emitExpression(node.moduleSpecifier);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitImportClause(node: ImportClause) {
@@ -2325,7 +2345,7 @@ namespace ts {
             }
             writeSpace();
             emitExpression(node.expression);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
@@ -2344,7 +2364,7 @@ namespace ts {
                 writeSpace();
                 emitExpression(node.moduleSpecifier);
             }
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
@@ -2355,7 +2375,7 @@ namespace ts {
             nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
             writeSpace();
             emit(node.name);
-            writeSemicolon();
+            writeTrailingSemicolon();
         }
 
         function emitNamedExports(node: NamedExports) {
@@ -2589,7 +2609,11 @@ namespace ts {
         //
 
         function emitSourceFile(node: SourceFile) {
-            writeLine();
+            // NOTE: Our source map tests currently require each new source file be on a new
+            //       generated line. Until we can rework the source map support in the test
+            //       harness, ensure each source file is on a new line, even when using a
+            //       whitespace-removing writer.
+            writeSignificantLine();
             const statements = node.statements;
             if (emitBodyWithDetachedComments) {
                 // Emit detached comment if there are no prologue directives or if the first node is synthesized.
@@ -2615,30 +2639,30 @@ namespace ts {
 
         function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
             if (hasNoDefaultLib) {
-                write(`/// <reference no-default-lib="true"/>`);
+                writeComment(`/// <reference no-default-lib="true"/>`);
                 writeLine();
             }
             if (currentSourceFile && currentSourceFile.moduleName) {
-                write(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
+                writeComment(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
                 writeLine();
             }
             if (currentSourceFile && currentSourceFile.amdDependencies) {
                 for (const dep of currentSourceFile.amdDependencies) {
                     if (dep.name) {
-                        write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                        writeComment(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
                     }
                     else {
-                        write(`/// <amd-dependency path="${dep.path}" />`);
+                        writeComment(`/// <amd-dependency path="${dep.path}" />`);
                     }
                     writeLine();
                 }
             }
             for (const directive of files) {
-                write(`/// <reference path="${directive.fileName}" />`);
+                writeComment(`/// <reference path="${directive.fileName}" />`);
                 writeLine();
             }
             for (const directive of types) {
-                write(`/// <reference types="${directive.fileName}" />`);
+                writeComment(`/// <reference types="${directive.fileName}" />`);
                 writeLine();
             }
         }
@@ -2710,7 +2734,7 @@ namespace ts {
             if (isSourceFile(sourceFileOrBundle)) {
                 const shebang = getShebang(sourceFileOrBundle.text);
                 if (shebang) {
-                    write(shebang);
+                    writeComment(shebang);
                     writeLine();
                     return true;
                 }
@@ -2797,7 +2821,13 @@ namespace ts {
             else {
                 writeLine();
                 increaseIndent();
-                emit(node);
+                if (isEmptyStatement(node)) {
+                    const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.EmbeddedStatement);
+                    pipelinePhase(EmitHint.EmbeddedStatement, node);
+                }
+                else {
+                    emit(node);
+                }
                 decreaseIndent();
             }
         }
@@ -3053,7 +3083,7 @@ namespace ts {
             writer.writePunctuation(s);
         }
 
-        function writeSemicolon() {
+        function writeTrailingSemicolon() {
             writer.writeTrailingSemicolon(";");
         }
 
@@ -3069,12 +3099,22 @@ namespace ts {
             writer.writeParameter(s);
         }
 
+        function writeComment(s: string) {
+            writer.writeComment(s);
+        }
+
         function writeSpace() {
             writer.writeSpace(" ");
         }
 
         function writeProperty(s: string) {
             writer.writeProperty(s);
+        }
+
+        function writeSignificantLine() {
+            // writer.flush();
+            // if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
+            writeLine();
         }
 
         function writeLine() {
@@ -3130,18 +3170,18 @@ namespace ts {
                 if (line.length) {
                     writeLine();
                     write(line);
-                    writeLine();
+                    writer.rawWrite(newLine);
                 }
             }
         }
 
-        function increaseIndentIf(value: boolean, valueToWriteWhenNotIndenting?: string) {
+        function increaseIndentIf(value: boolean, writeSpaceIfNotIndenting?: boolean) {
             if (value) {
                 increaseIndent();
                 writeLine();
             }
-            else if (valueToWriteWhenNotIndenting) {
-                write(valueToWriteWhenNotIndenting);
+            else if (writeSpaceIfNotIndenting) {
+                writeSpace();
             }
         }
 

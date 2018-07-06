@@ -420,7 +420,8 @@ namespace ts {
               ch === CharacterCodes.paragraphSeparator;
       }
 
-      function isDigit(ch: number): boolean {
+      /* @internal */
+      export function isDigit(ch: number): boolean {
           return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
       }
 

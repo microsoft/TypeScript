@@ -1,0 +1,76 @@
+===================================================================
+JsFile: combined.js
+mapUrl: combined.js.map
+sourceRoot: 
+sources: tests/cases/conformance/removeWhitespace/a.ts,tests/cases/conformance/removeWhitespace/b.ts,tests/cases/conformance/removeWhitespace/c.ts,tests/cases/conformance/removeWhitespace/d.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:combined.js
+sourceFile:tests/cases/conformance/removeWhitespace/a.ts
+-------------------------------------------------------------------
+>>>let a=1;let b=2;class C{}function d(){}
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^
+6 >       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >let 
+3 >    a
+4 >      = 
+5 >      1
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 7) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 8) Source(1, 10) + SourceIndex(0)
+---
+-------------------------------------------------------------------
+emittedFile:combined.js (1, 9)
+sourceFile:tests/cases/conformance/removeWhitespace/b.ts
+-------------------------------------------------------------------
+>>>let a=1;let b=2;class C{}function d(){}
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^
+6 >               ^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >        let 
+3 >            b
+4 >              = 
+5 >              2
+1->Emitted(1, 9) Source(1, 1) + SourceIndex(1)
+2 >Emitted(1, 13) Source(1, 5) + SourceIndex(1)
+3 >Emitted(1, 14) Source(1, 6) + SourceIndex(1)
+4 >Emitted(1, 15) Source(1, 9) + SourceIndex(1)
+5 >Emitted(1, 16) Source(1, 10) + SourceIndex(1)
+---
+-------------------------------------------------------------------
+emittedFile:combined.js (1, 17)
+sourceFile:tests/cases/conformance/removeWhitespace/c.ts
+-------------------------------------------------------------------
+>>>let a=1;let b=2;class C{}function d(){}
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^^^^^^^^^^^^^->
+1->
+1->Emitted(1, 17) Source(1, 1) + SourceIndex(2)
+---
+-------------------------------------------------------------------
+emittedFile:combined.js (1, 26)
+sourceFile:tests/cases/conformance/removeWhitespace/d.ts
+-------------------------------------------------------------------
+>>>let a=1;let b=2;class C{}function d(){}
+1->^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                         ^^^^^^^^^^^^^
+3 >                                      ^
+1->
+2 >                         function d() {
+3 >                                      }
+1->Emitted(1, 26) Source(1, 1) + SourceIndex(3)
+2 >Emitted(1, 39) Source(1, 15) + SourceIndex(3)
+3 >Emitted(1, 40) Source(1, 16) + SourceIndex(3)
+---
+>>>//# sourceMappingURL=combined.js.map

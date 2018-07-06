@@ -2510,6 +2510,7 @@ declare namespace ts {
         jsxFactory?: string;
         composite?: boolean;
         removeComments?: boolean;
+        removeWhitespace?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -2780,7 +2781,8 @@ declare namespace ts {
         Expression = 1,
         IdentifierName = 2,
         MappedTypeParameter = 3,
-        Unspecified = 4
+        Unspecified = 4,
+        EmbeddedStatement = 5
     }
     interface TransformationContext {
         /** Gets the compiler options supplied to the transformer. */

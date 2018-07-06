@@ -1,0 +1,575 @@
+=== tests/cases/conformance/removeWhitespace/global.d.ts ===
+declare let obj: any, i: any, fn;
+>obj : any
+>i : any
+>fn : any
+
+=== tests/cases/conformance/removeWhitespace/propertyAccess.ts ===
+obj.a
+>obj.a : any
+>obj : any
+>a : any
+
+obj .a
+>obj .a : any
+>obj : any
+>a : any
+
+obj. a
+>obj. a : any
+>obj : any
+>a : any
+
+obj . a
+>obj . a : any
+>obj : any
+>a : any
+
+obj.
+>obj.    a : any
+>obj : any
+
+    a
+>a : any
+
+obj
+>obj    .a : any
+>obj : any
+
+    .a
+>a : any
+
+obj
+>obj    .    a : any
+>obj : any
+
+    .
+    a
+>a : any
+
+obj // comment
+>obj // comment    . // comment    a : any
+>obj : any
+
+    . // comment
+    a // comment
+>a : any
+
+obj /* comment */
+>obj /* comment */    . /* comment */    a : any
+>obj : any
+
+    . /* comment */
+    a /* comment */
+>a : any
+
+1..valueOf
+>1..valueOf : () => number
+>1. : 1
+>valueOf : () => number
+
+1.. valueOf
+>1.. valueOf : () => number
+>1. : 1
+>valueOf : () => number
+
+1. .valueOf
+>1. .valueOf : () => number
+>1. : 1
+>valueOf : () => number
+
+1. . valueOf
+>1. . valueOf : () => number
+>1. : 1
+>valueOf : () => number
+
+1 .valueOf
+>1 .valueOf : () => number
+>1 : 1
+>valueOf : () => number
+
+1 . valueOf
+>1 . valueOf : () => number
+>1 : 1
+>valueOf : () => number
+
+1..
+>1..    valueOf : () => number
+>1. : 1
+
+    valueOf
+>valueOf : () => number
+
+1.
+>1.    .valueOf : () => number
+>1. : 1
+
+    .valueOf
+>valueOf : () => number
+
+1.
+>1.    .    valueOf : () => number
+>1. : 1
+
+    .
+    valueOf
+>valueOf : () => number
+
+1. // comment
+>1. // comment    . // comment    valueOf : () => number
+>1. : 1
+
+    . // comment
+    valueOf // comment
+>valueOf : () => number
+
+1. /* comment */
+>1. /* comment */    . /* comment */    valueOf : () => number
+>1. : 1
+
+    . /* comment */
+    valueOf /* comment */
+>valueOf : () => number
+
+1
+>1    .valueOf : () => number
+>1 : 1
+
+    .valueOf
+>valueOf : () => number
+
+1
+>1    .    valueOf : () => number
+>1 : 1
+
+    .
+    valueOf
+>valueOf : () => number
+
+1 // comment
+>1 // comment    . // comment    valueOf : () => number
+>1 : 1
+
+    . // comment
+    valueOf // comment
+>valueOf : () => number
+
+1 /* comment */
+>1 /* comment */    . /* comment */    valueOf : () => number
+>1 : 1
+
+    . /* comment */
+    valueOf /* comment */
+>valueOf : () => number
+
+=== tests/cases/conformance/removeWhitespace/elementAccess.ts ===
+obj["a"]
+>obj["a"] : any
+>obj : any
+>"a" : "a"
+
+obj [ "a" ]
+>obj [ "a" ] : any
+>obj : any
+>"a" : "a"
+
+obj [
+>obj [    "a" ] : any
+>obj : any
+
+    "a" ]
+>"a" : "a"
+
+obj
+>obj    [    "a"    ] : any
+>obj : any
+
+    [
+    "a"
+>"a" : "a"
+
+    ]
+
+obj // comment
+>obj // comment    [ // comment    "a" // comment    ] : any
+>obj : any
+
+    [ // comment
+    "a" // comment
+>"a" : "a"
+
+    ] // comment
+
+obj /* comment */
+>obj /* comment */    [ /* comment */    "a" /* comment */    ] : any
+>obj : any
+
+    [ /* comment */
+    "a" /* comment */
+>"a" : "a"
+
+    ] /* comment */
+
+=== tests/cases/conformance/removeWhitespace/update.ts ===
+i + + i
+>i + + i : any
+>i : any
+>+ i : number
+>i : any
+
+i + +i
+>i + +i : any
+>i : any
+>+i : number
+>i : any
+
+i+ + i
+>i+ + i : any
+>i : any
+>+ i : number
+>i : any
+
+i+ +i
+>i+ +i : any
+>i : any
+>+i : number
+>i : any
+
+i + ++ i
+>i + ++ i : any
+>i : any
+>++ i : number
+>i : any
+
+i + ++i
+>i + ++i : any
+>i : any
+>++i : number
+>i : any
+
+i+ ++ i
+>i+ ++ i : any
+>i : any
+>++ i : number
+>i : any
+
+i+ ++i
+>i+ ++i : any
+>i : any
+>++i : number
+>i : any
+
+i ++ + i
+>i ++ + i : any
+>i ++ : number
+>i : any
+>i : any
+
+i ++ +i
+>i ++ +i : any
+>i ++ : number
+>i : any
+>i : any
+
+i++ + i
+>i++ + i : any
+>i++ : number
+>i : any
+>i : any
+
+i++ +i
+>i++ +i : any
+>i++ : number
+>i : any
+>i : any
+
+i+++i
+>i+++i : any
+>i++ : number
+>i : any
+>i : any
+
+i - - i
+>i - - i : number
+>i : any
+>- i : number
+>i : any
+
+i - -i
+>i - -i : number
+>i : any
+>-i : number
+>i : any
+
+i- - i
+>i- - i : number
+>i : any
+>- i : number
+>i : any
+
+i- -i
+>i- -i : number
+>i : any
+>-i : number
+>i : any
+
+i - -- i
+>i - -- i : number
+>i : any
+>-- i : number
+>i : any
+
+i - --i
+>i - --i : number
+>i : any
+>--i : number
+>i : any
+
+i- -- i
+>i- -- i : number
+>i : any
+>-- i : number
+>i : any
+
+i- --i
+>i- --i : number
+>i : any
+>--i : number
+>i : any
+
+i -- - i
+>i -- - i : number
+>i -- : number
+>i : any
+>i : any
+
+i -- -i
+>i -- -i : number
+>i -- : number
+>i : any
+>i : any
+
+i-- - i
+>i-- - i : number
+>i-- : number
+>i : any
+>i : any
+
+i-- -i
+>i-- -i : number
+>i-- : number
+>i : any
+>i : any
+
+i---i
+>i---i : number
+>i-- : number
+>i : any
+>i : any
+
+=== tests/cases/conformance/removeWhitespace/switch.ts ===
+switch (i) {
+>i : any
+
+    case 0: break;
+>0 : 0
+
+    case 1: break;
+>1 : 1
+
+    default: break;
+}
+
+=== tests/cases/conformance/removeWhitespace/keywords.ts ===
+delete obj.a
+>delete obj.a : boolean
+>obj.a : any
+>obj : any
+>a : any
+
+delete (obj).a
+>delete (obj).a : boolean
+>(obj).a : any
+>(obj) : any
+>obj : any
+>a : any
+
+delete [][0]
+>delete [][0] : boolean
+>[][0] : undefined
+>[] : undefined[]
+>0 : 0
+
+void obj.a
+>void obj.a : undefined
+>obj.a : any
+>obj : any
+>a : any
+
+void (obj).a
+>void (obj).a : undefined
+>(obj).a : any
+>(obj) : any
+>obj : any
+>a : any
+
+void [][0]
+>void [][0] : undefined
+>[][0] : undefined
+>[] : undefined[]
+>0 : 0
+
+typeof obj.a
+>typeof obj.a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj.a : any
+>obj : any
+>a : any
+
+typeof (obj).a
+>typeof (obj).a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(obj).a : any
+>(obj) : any
+>obj : any
+>a : any
+
+typeof [][0]
+>typeof [][0] : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>[][0] : undefined
+>[] : undefined[]
+>0 : 0
+
+function f1() {
+>f1 : () => "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+
+    return typeof obj
+>typeof obj : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj : any
+}
+async function* f2() {
+>f2 : () => AsyncIterableIterator<any>
+
+    yield 1
+>yield 1 : any
+>1 : 1
+
+    yield obj
+>yield obj : any
+>obj : any
+
+    yield (obj)
+>yield (obj) : any
+>(obj) : any
+>obj : any
+
+    yield []
+>yield [] : any
+>[] : undefined[]
+
+    yield* []
+>yield* [] : any
+>[] : undefined[]
+
+    yield *[]
+>yield *[] : any
+>[] : undefined[]
+
+    yield * []
+>yield * [] : any
+>[] : undefined[]
+
+    yield
+>yield : any
+
+    i
+>i : any
+
+    yield yield
+>yield yield : any
+>yield : any
+
+    yield typeof obj
+>yield typeof obj : any
+>typeof obj : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj : any
+
+    yield void obj
+>yield void obj : any
+>void obj : undefined
+>obj : any
+
+    yield delete obj.a
+>yield delete obj.a : any
+>delete obj.a : boolean
+>obj.a : any
+>obj : any
+>a : any
+
+    await 1
+>await 1 : 1
+>1 : 1
+
+    await obj
+>await obj : any
+>obj : any
+
+    for await (const x of []);
+>x : any
+>[] : undefined[]
+
+    return yield await obj
+>yield await obj : any
+>await obj : any
+>obj : any
+}
+export class C {}
+>C : C
+
+export default function() {}
+
+=== tests/cases/conformance/removeWhitespace/statements.ts ===
+obj;
+>obj : any
+
+fn();
+>fn() : any
+>fn : any
+
+;
+function fn3() {
+>fn3 : () => void
+
+    obj;
+>obj : any
+
+    fn();
+>fn() : any
+>fn : any
+
+    ;
+    function f() {}
+>f : () => void
+
+    return;
+    function g() {}
+>g : () => void
+}
+
+=== tests/cases/conformance/removeWhitespace/variables.ts ===
+var a = 0, b, { c } = obj, [d] = obj;
+>a : number
+>0 : 0
+>b : any
+>c : any
+>obj : any
+>d : any
+>obj : any
+
+let e = 0, f, { g } = obj, [h] = obj;
+>e : number
+>0 : 0
+>f : any
+>g : any
+>obj : any
+>h : any
+>obj : any
+
