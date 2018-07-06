@@ -1435,7 +1435,7 @@ namespace ts {
 
     const displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-        const maximumApproximateLength = defaultMaximumTruncationLength;
+        const absoluteMaximumLength = defaultMaximumTruncationLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
         let displayParts: SymbolDisplayPart[];
         let lineStart: boolean;
         let indent: number;
@@ -1446,7 +1446,7 @@ namespace ts {
         return {
             displayParts: () => {
                 const finalText = displayParts.length && displayParts[displayParts.length - 1].text;
-                if (length > maximumApproximateLength && finalText && finalText !== "...") {
+                if (length > absoluteMaximumLength && finalText && finalText !== "...") {
                     if (!isWhiteSpaceLike(finalText.charCodeAt(finalText.length - 1))) {
                         displayParts.push(displayPart(" ", SymbolDisplayPartKind.space));
                     }
@@ -1480,11 +1480,10 @@ namespace ts {
             reportInaccessibleThisError: noop,
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
-            maximumApproximateLength, // Limit output to about 2000 characters
         };
 
         function writeIndent() {
-            if (length > maximumApproximateLength) return;
+            if (length > absoluteMaximumLength) return;
             if (lineStart) {
                 const indentString = getIndentString(indent);
                 if (indentString) {
@@ -1496,21 +1495,21 @@ namespace ts {
         }
 
         function writeKind(text: string, kind: SymbolDisplayPartKind) {
-            if (length > maximumApproximateLength) return;
+            if (length > absoluteMaximumLength) return;
             writeIndent();
             length += text.length;
             displayParts.push(displayPart(text, kind));
         }
 
         function writeSymbol(text: string, symbol: Symbol) {
-            if (length > maximumApproximateLength) return;
+            if (length > absoluteMaximumLength) return;
             writeIndent();
             length += text.length;
             displayParts.push(symbolPart(text, symbol));
         }
 
         function writeLine() {
-            if (length > maximumApproximateLength) return;
+            if (length > absoluteMaximumLength) return;
             length += 1;
             displayParts.push(lineBreakPart());
             lineStart = true;

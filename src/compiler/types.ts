@@ -5324,7 +5324,6 @@ namespace ts {
         reportInaccessibleUniqueSymbolError?(): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
-        maximumApproximateLength?: number;
     }
 
     export interface TextSpan {
