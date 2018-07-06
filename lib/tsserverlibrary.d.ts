@@ -3275,6 +3275,7 @@ declare namespace ts {
         aliasSymbol?: Symbol;
         aliasTypeArguments?: ReadonlyArray<Type>;
         wildcardInstantiation?: Type;
+        immediateBaseConstraint?: Type;
     }
     interface IntrinsicType extends Type {
         intrinsicName: string;
@@ -7450,6 +7451,8 @@ declare namespace ts {
         jsDocTypeExpression: JSDocTypeExpression;
         diagnostics: Diagnostic[];
     } | undefined;
+    /** @internal */
+    function isDeclarationFileName(fileName: string): boolean;
     interface PragmaContext {
         languageVersion: ScriptTarget;
         pragmas?: PragmaMap;
@@ -8822,6 +8825,16 @@ declare namespace ts {
         extendedDiagnostics?: boolean;
     }
     function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter, compilerOptions?: SourceMapOptions): SourceMapWriter;
+    interface SourceMapSection {
+        version: 3;
+        file: string;
+        sourceRoot?: string;
+        sources: string[];
+        names?: string[];
+        mappings: string;
+        sourcesContent?: (string | null)[];
+        sections?: undefined;
+    }
 }
 declare namespace ts {
     interface CommentWriter {
@@ -8985,10 +8998,14 @@ declare namespace ts {
      */
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
     function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigFileHost;
+    interface ResolveProjectReferencePathHost {
+        fileExists(fileName: string): boolean;
+    }
     /**
-     * Returns the target config filename of a project reference
+     * Returns the target config filename of a project reference.
+     * Note: The file might not exist.
      */
-    function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName;
+    function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
     /**
      * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
      * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
@@ -10044,6 +10061,8 @@ declare namespace ts {
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
+        /** @internal */
+        getSourceMapper(): SourceMapper;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -10914,6 +10933,8 @@ declare namespace ts {
     function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined;
     function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined;
     function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void;
+    function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined): boolean;
+    function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean;
 }
 declare namespace ts {
     function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean;
@@ -11321,6 +11342,14 @@ declare namespace ts.SignatureHelp {
         readonly argumentCount: number;
     }
     function getArgumentInfoForCompletions(node: Node, position: number, sourceFile: SourceFile): ArgumentInfoForCompletions | undefined;
+}
+declare namespace ts {
+    interface SourceMapper {
+        toLineColumnOffset(fileName: string, position: number): LineAndCharacter;
+        tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
+        clearCache(): void;
+    }
+    function getSourceMapper(getCanonicalFileName: GetCanonicalFileName, currentDirectory: string, log: (message: string) => void, host: LanguageServiceHost, getProgram: () => Program): SourceMapper;
 }
 declare namespace ts {
     function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[];
@@ -12324,6 +12353,7 @@ declare namespace ts.server.protocol {
         DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
         Implementation = "implementation",
         ImplementationFull = "implementation-full",
+        EmitOutput = "emit-output",
         Exit = "exit",
         Format = "format",
         Formatonkey = "formatonkey",
@@ -12646,6 +12676,17 @@ declare namespace ts.server.protocol {
     interface DefinitionRequest extends FileLocationRequest {
         command: CommandTypes.Definition;
     }
+    interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
+        readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+    interface DefinitionAndBoundSpanResponse extends Response {
+        readonly body: DefinitionInfoAndBoundSpan;
+    }
+    interface EmitOutputRequest extends FileRequest {
+    }
+    interface EmitOutputResponse extends Response {
+        readonly body: EmitOutput;
+    }
     interface TypeDefinitionRequest extends FileLocationRequest {
         command: CommandTypes.TypeDefinition;
     }
@@ -12743,6 +12784,13 @@ declare namespace ts.server.protocol {
     interface RenameRequest extends FileLocationRequest {
         command: CommandTypes.Rename;
         arguments: RenameRequestArgs;
+    }
+    interface RenameFullRequest extends FileLocationRequest {
+        readonly command: CommandTypes.RenameLocationsFull;
+        readonly arguments: RenameRequestArgs;
+    }
+    interface RenameFullResponse extends Response {
+        readonly body: ReadonlyArray<RenameLocation>;
     }
     interface RenameInfo {
         canRename: boolean;
@@ -13634,7 +13682,7 @@ declare namespace ts.server {
         getCompilerOptions(): CompilerOptions;
         getNewLine(): string;
         getProjectVersion(): string;
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference>;
         getScriptFileNames(): string[];
         private getOrCreateScriptInfoAndAttachToProject;
         getScriptKind(fileName: string): ScriptKind;
@@ -13666,6 +13714,7 @@ declare namespace ts.server {
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
         getAllProjectErrors(): ReadonlyArray<Diagnostic>;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
+        getSourceMapper(): SourceMapper;
         private shouldEmitFile;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
@@ -13748,7 +13797,7 @@ declare namespace ts.server {
         updateGraph(): boolean;
         getCachedDirectoryStructureHost(): CachedDirectoryStructureHost;
         getConfigFilePath(): NormalizedPath;
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference>;
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined): void;
         enablePlugins(): void;
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
@@ -14024,8 +14073,8 @@ declare namespace ts.server {
         getSymlinkedProjects(info: ScriptInfo): MultiMap<Project> | undefined;
         private watchClosedScriptInfo;
         private stopWatchingScriptInfo;
-        getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, hostToQueryFileExistsOn: DirectoryStructureHost | undefined): ScriptInfo | undefined;
-        getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined): ScriptInfo | undefined;
+        private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
+        private getOrCreateScriptInfoOpenedByClientForNormalizedPath;
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
             fileExists(path: string): boolean;
         }): ScriptInfo | undefined;
@@ -14040,6 +14089,11 @@ declare namespace ts.server {
         private removeRootOfInferredProjectIfNowPartOfOtherProject;
         private ensureProjectForOpenFiles;
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
+        getProjectForFileWithoutOpening(fileName: NormalizedPath): {
+            readonly scriptInfo: ScriptInfo;
+            readonly projects: ReadonlyArray<Project>;
+        } | undefined;
+        fileExists(fileName: NormalizedPath): boolean;
         private findExternalProjectContainingOpenScriptInfo;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         private telemetryOnOpenFile;
@@ -14137,11 +14191,14 @@ declare namespace ts.server {
         private convertToDiagnosticsWithLinePosition;
         private getDiagnosticsWorker;
         private getDefinition;
+        private mapDefinitionInfoLocations;
         private getDefinitionAndBoundSpan;
+        private getEmitOutput;
         private mapDefinitionInfo;
         private static mapToOriginalLocation;
         private toFileSpan;
         private getTypeDefinition;
+        private mapImplementationLocations;
         private getImplementation;
         private getOccurrences;
         private getSyntacticDiagnosticsSync;
@@ -14156,6 +14213,8 @@ declare namespace ts.server {
         private getProjects;
         private getDefaultProject;
         private getRenameLocations;
+        private static mapRenameInfo;
+        private toSpanGroups;
         private getReferences;
         private openClientFile;
         private getPosition;
@@ -14194,6 +14253,7 @@ declare namespace ts.server {
         private toLocationTextSpan;
         private getNavigationTree;
         private getNavigateToItems;
+        private getFullNavigateToItems;
         private getSupportedCodeFixes;
         private isLocation;
         private extractPositionAndRange;

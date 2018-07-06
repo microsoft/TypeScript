@@ -591,6 +591,12 @@ declare namespace ts.server.protocol {
     interface DefinitionRequest extends FileLocationRequest {
         command: CommandTypes.Definition;
     }
+    interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
+        readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+    interface DefinitionAndBoundSpanResponse extends Response {
+        readonly body: DefinitionInfoAndBoundSpan;
+    }
     /**
      * Go to type request; value of command field is
      * "typeDefinition". Return response giving the file locations that
