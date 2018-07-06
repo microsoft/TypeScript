@@ -5022,10 +5022,10 @@ namespace ts {
     }
 
     /**
-     * Gets the return type node for the node if provided via JSDoc's return tag.
+     * Gets the return type node for the node if provided via JSDoc return tag or type tag.
      *
      * @remarks `getJSDocReturnTag` just gets the whole JSDoc tag. This function
-     * gets the type from inside the braces.
+     * gets the type from inside the braces, after the fat arrow, etc.
      */
     export function getJSDocReturnType(node: Node): TypeNode | undefined {
         const returnTag = getJSDocReturnTag(node);
