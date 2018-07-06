@@ -6772,10 +6772,10 @@ declare namespace ts {
      */
     function getJSDocType(node: Node): TypeNode | undefined;
     /**
-     * Gets the return type node for the node if provided via JSDoc's return tag.
+     * Gets the return type node for the node if provided via JSDoc return tag or type tag.
      *
      * @remarks `getJSDocReturnTag` just gets the whole JSDoc tag. This function
-     * gets the type from inside the braces.
+     * gets the type from inside the braces, after the fat arrow, etc.
      */
     function getJSDocReturnType(node: Node): TypeNode | undefined;
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
@@ -7072,7 +7072,6 @@ declare namespace ts {
     function hasJSDocNodes(node: Node): node is HasJSDoc;
     /** True if has type node attached to it. */
     function hasType(node: Node): node is HasType;
-    function couldHaveType(node: Node): node is HasType;
     /** True if has initializer node attached to it. */
     function hasInitializer(node: Node): node is HasInitializer;
     /** True if has initializer node attached to it. */
