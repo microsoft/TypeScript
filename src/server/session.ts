@@ -1147,7 +1147,9 @@ namespace ts.server {
                 const refs: protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol =>
                     referencedSymbol.references.map(({ fileName, textSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
                         const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                        const lineText = scriptInfo.getSnapshot().getText(textSpan.start, textSpanEnd(textSpan));
+                        const start = scriptInfo.positionToLineOffset(textSpan.start);
+                        const lineSpan = scriptInfo.lineToTextSpan(start.line - 1);
+                        const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
                         return { ...toFileSpan(fileName, textSpan, scriptInfo), lineText, isWriteAccess, isDefinition };
                     }));
                 const result: protocol.ReferencesResponseBody = { refs, symbolName, symbolStartOffset, symbolDisplayString };
