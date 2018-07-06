@@ -51,7 +51,7 @@ namespace ts.codefix {
                     let newName = getNewNameIfConflict(synthName, allVarNames);
                     varNamesMap.set(String(getSymbolId(checker.createSymbol(SymbolFlags.BlockScopedVariable, getEscapedTextOfIdentifierOrLiteral(createIdentifier(synthName))))), newName);
                     allVarNames.push(synthName);
-                    synthNamesMap.set(node.text, synthName);
+                    synthNamesMap.set(node.text, newName);
                 }
                 if (symbol && !varNamesMap.get(String(getSymbolId(symbol)))) {
                     let newName = getNewNameIfConflict(node.text, allVarNames);
@@ -172,7 +172,7 @@ namespace ts.codefix {
         switch (func.kind) {
             case SyntaxKind.Identifier:
                 let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)]);
-                const nextDotThen = getNextDotThen(parent, checker);
+                const nextDotThen = getNextDotThen(parent.original as Expression, checker);
                 if (!nextDotThen || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
                     return createNodeArray([createReturn(synthCall)]);
                 }
@@ -210,7 +210,7 @@ namespace ts.codefix {
 
                 } else if (isArrowFunction(func)) {
                     //if there is another outer dot then, don't actually return
-                    const nextOutermostDotThen = getNextDotThen(outermostParent, checker);
+                    const nextOutermostDotThen = getNextDotThen(outermostParent.original as Expression, checker);
 
                     return nextOutermostDotThen ?
                         createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]) :
