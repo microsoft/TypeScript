@@ -19261,7 +19261,7 @@ namespace ts {
         }
 
         function typeHasProtectedAccessibleBase(target: Symbol, type: InterfaceType): boolean {
-            const baseTypes = getBaseTypes(type as InterfaceType);
+            const baseTypes = getBaseTypes(type);
             if (!length(baseTypes)) {
                 return false;
             }
