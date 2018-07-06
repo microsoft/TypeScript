@@ -5035,8 +5035,8 @@ namespace ts {
         const typeTag = getJSDocTypeTag(node);
         if (typeTag && typeTag.typeExpression) {
             const type = typeTag.typeExpression.type;
-            if (type.kind === SyntaxKind.TypeLiteral) {
-                const sig = find((type as TypeLiteralNode).members, isCallSignatureDeclaration);
+            if (isTypeLiteralNode(type)) {
+                const sig = find(type.members, isCallSignatureDeclaration);
                 return sig && sig.type;
             }
             if (isFunctionTypeNode(type)) {
