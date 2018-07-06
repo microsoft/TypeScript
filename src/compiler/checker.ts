@@ -2994,7 +2994,7 @@ namespace ts {
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
             if (writer.maximumApproximateLength === undefined) {
-                writer.maximumApproximateLength = 100;
+                writer.maximumApproximateLength = defaultMaximumTruncationLength;
             }
             const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0), writer);

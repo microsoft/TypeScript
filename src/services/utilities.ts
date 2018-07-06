@@ -1435,7 +1435,7 @@ namespace ts {
 
     const displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-        const maximumApproximateLength = 2000;
+        const maximumApproximateLength = defaultMaximumTruncationLength;
         let displayParts: SymbolDisplayPart[];
         let lineStart: boolean;
         let indent: number;
