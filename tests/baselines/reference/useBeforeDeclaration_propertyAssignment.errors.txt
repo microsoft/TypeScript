@@ -6,7 +6,7 @@ tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(2,27): error TS2
         public a =  { b: this.b };
                               ~
 !!! error TS2729: Property 'b' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:3:13: 'b' was declared here.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:3:13: 'b' is declared here.
         private b = 0;
     }
     
