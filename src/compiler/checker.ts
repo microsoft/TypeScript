@@ -19075,7 +19075,7 @@ namespace ts {
                         hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                             hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
                                 undefined;
-                    diagnostics.add(createDiagnosticForNode(node, <DiagnosticMessage> error, paramRange, argCount));
+                    diagnostics.add(createDiagnosticForNode(node, <DiagnosticMessage>error, paramRange, argCount));
                 }
                 else {
                     if (min < argCount && argCount < max) {
