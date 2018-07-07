@@ -22063,12 +22063,9 @@ namespace ts {
             const secondType = getAnnotatedType(second);
             if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
                 const typeNameSecondType = typeToString(secondType);
-
                 if(isGetAccessor(first)){
-
                     const diagnostic: Diagnostic = error(first, message, typeNameSecondType);
                     addRelatedInfo(diagnostic, createDiagnosticForNode(first, Diagnostics.The_respective_set_accessor_has_the_type_0, typeNameSecondType));
-
                 }
             }
         }
