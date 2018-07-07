@@ -146,7 +146,7 @@ namespace ts.sourcemaps {
     }
 
     /*@internal*/
-    export function decodeMappings(map: RawSourceMap): MappingsDecoder {
+    export function decodeMappings(map: Pick<RawSourceMap, "mappings" | "sources" | "names">): MappingsDecoder {
         const state: DecoderState = {
             encodedText: map.mappings,
             currentNameIndex: undefined,

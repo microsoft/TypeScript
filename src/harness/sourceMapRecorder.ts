@@ -19,11 +19,7 @@ namespace Harness.SourceMapRecorder {
             decodingIndex = 0;
             sourceMapMappings = sourceMapData.sourceMapMappings;
             mappings = ts.sourcemaps.decodeMappings({
-                version: 3,
-                file: sourceMapData.sourceMapFile,
                 sources: sourceMapData.sourceMapSources,
-                sourceRoot: sourceMapData.sourceMapSourceRoot,
-                sourcesContent: sourceMapData.sourceMapSourcesContent,
                 mappings: sourceMapData.sourceMapMappings,
                 names: sourceMapData.sourceMapNames
             });
