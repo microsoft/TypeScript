@@ -200,24 +200,32 @@ valueOf;// comment
 .// comment
 valueOf;// comment
 1/* comment */./* comment */valueOf;/* comment */
-//# sourceMappingURL=propertyAccess.js.map//// [elementAccess.js]
+//# sourceMappingURL=propertyAccess.js.map
+//// [elementAccess.js]
 obj["a"];obj["a"];obj["a"];obj["a"];obj// comment
 [// comment
 "a"// comment
 ];// comment
 obj/* comment */[/* comment */"a"/* comment */];/* comment */
-//# sourceMappingURL=elementAccess.js.map//// [update.js]
+//# sourceMappingURL=elementAccess.js.map
+//// [update.js]
 i+ +i;i+ +i;i+ +i;i+ +i;i+ ++i;i+ ++i;i+ ++i;i+ ++i;i+++i;i+++i;i+++i;i+++i;i+++i;i- -i;i- -i;i- -i;i- -i;i- --i;i- --i;i- --i;i- --i;i---i;i---i;i---i;i---i;i---i;
-//# sourceMappingURL=update.js.map//// [switch.js]
+//# sourceMappingURL=update.js.map
+//// [switch.js]
 switch(i){case 0:break;case 1:break;default:break}
-//# sourceMappingURL=switch.js.map//// [keywords.js]
+//# sourceMappingURL=switch.js.map
+//// [keywords.js]
 delete obj.a;delete(obj).a;delete[][0];void obj.a;void(obj).a;void[][0];typeof obj.a;typeof(obj).a;typeof[][0];function f1(){return typeof obj}async function*f2(){yield 1;yield obj;yield(obj);yield[];yield*[];yield*[];yield*[];yield;i;yield yield;yield typeof obj;yield void obj;yield delete obj.a;await 1;await obj;for await(const x of[]);return yield await obj}export class C{}export default function(){}
-//# sourceMappingURL=keywords.js.map//// [statements.js]
+//# sourceMappingURL=keywords.js.map
+//// [statements.js]
 obj;fn();function fn3(){obj;fn();function f(){}return;function g(){}}
-//# sourceMappingURL=statements.js.map//// [variables.js]
+//# sourceMappingURL=statements.js.map
+//// [variables.js]
 var a=0,b,{c}=obj,[d]=obj;let e=0,f,{g}=obj,[h]=obj;
-//# sourceMappingURL=variables.js.map//// [for.js]
+//# sourceMappingURL=variables.js.map
+//// [for.js]
 for(;;){}
-//# sourceMappingURL=for.js.map//// [embeddedStatement.js]
+//# sourceMappingURL=for.js.map
+//// [embeddedStatement.js]
 {while(true);}
 //# sourceMappingURL=embeddedStatement.js.map

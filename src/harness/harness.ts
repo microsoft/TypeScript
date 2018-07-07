@@ -1649,6 +1649,7 @@ namespace Harness {
 
                     let sourceMapCode = "";
                     result.maps.forEach(sourceMap => {
+                        if (sourceMapCode) sourceMapCode += "\r\n";
                         sourceMapCode += fileOutput(sourceMap, harnessSettings);
                     });
 
@@ -1676,6 +1677,9 @@ namespace Harness {
 
                 let jsCode = "";
                 result.js.forEach(file => {
+                    if (jsCode.length && jsCode.charCodeAt(jsCode.length - 1) !== ts.CharacterCodes.lineFeed) {
+                        jsCode += "\r\n";
+                    }
                     jsCode += fileOutput(file, harnessSettings);
                 });
 
