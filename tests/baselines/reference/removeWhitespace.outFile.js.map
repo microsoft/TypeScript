@@ -1,2 +1,2 @@
 //// [combined.js.map]
-{"version":3,"file":"combined.js","sourceRoot":"","sources":["tests/cases/conformance/removeWhitespace/a.ts","tests/cases/conformance/removeWhitespace/b.ts","tests/cases/conformance/removeWhitespace/c.ts","tests/cases/conformance/removeWhitespace/d.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,CAAG,CAAC,CCAT,IAAI,CAAC,CAAG,CAAC,CCAT,SCAA,aAAc,CAAC"}
+{"version":3,"file":"combined.js","sourceRoot":"","sources":["tests/cases/conformance/removeWhitespace/a.ts","tests/cases/conformance/removeWhitespace/b.ts","tests/cases/conformance/removeWhitespace/c.ts","tests/cases/conformance/removeWhitespace/d.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,CAAG,CAAC,CCAT,IAAI,CAAC,CAAG,CAAC,CCAT,MAAM,CAAC,ECAP,SAAS,CAAC,GAAI,CAAC"}

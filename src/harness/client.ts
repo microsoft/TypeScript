@@ -73,7 +73,7 @@ namespace ts.server {
             return { span: this.decodeSpan(codeEdit, fileName), newText: codeEdit.newText };
         }
 
-        private processRequest<T extends protocol.Request>(command: string, args?: T["arguments"]): T {
+        private processRequest<T extends protocol.Request>(command: string, args: T["arguments"]): T {
             const request: protocol.Request = {
                 seq: this.sequence,
                 type: "request",
@@ -224,9 +224,9 @@ namespace ts.server {
                 containerName: entry.containerName || "",
                 containerKind: entry.containerKind || ScriptElementKind.unknown,
                 kind: entry.kind,
-                kindModifiers: entry.kindModifiers!, // TODO: GH#18217
-                matchKind: entry.matchKind!, // TODO: GH#18217
-                isCaseSensitive: entry.isCaseSensitive!, // TODO: GH#18217
+                kindModifiers: entry.kindModifiers || "",
+                matchKind: entry.matchKind as keyof typeof PatternMatchKind,
+                isCaseSensitive: entry.isCaseSensitive,
                 fileName: entry.file,
                 textSpan: this.decodeSpan(entry),
             }));
@@ -278,9 +278,10 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
             const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+            const body = Debug.assertDefined(response.body); // TODO: GH#18217
 
             return {
-                definitions: response.body!.definitions.map(entry => ({ // TODO: GH#18217
+                definitions: body.definitions.map(entry => ({
                     containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: entry.file,
@@ -288,7 +289,7 @@ namespace ts.server {
                     kind: ScriptElementKind.unknown,
                     name: ""
                 })),
-                textSpan: this.decodeSpan(response.body!.textSpan, request.arguments.file)
+                textSpan: this.decodeSpan(body.textSpan, request.arguments.file)
             };
         }
 
@@ -341,8 +342,10 @@ namespace ts.server {
             }));
         }
 
-        getEmitOutput(_fileName: string): EmitOutput {
-            return notImplemented();
+        getEmitOutput(file: string): EmitOutput {
+            const request = this.processRequest<protocol.EmitOutputRequest>(protocol.CommandTypes.EmitOutput, { file });
+            const response = this.processResponse<protocol.EmitOutputResponse>(request);
+            return response.body;
         }
 
         getSyntacticDiagnostics(file: string): DiagnosticWithLocation[] {
@@ -714,6 +717,10 @@ namespace ts.server {
 
         cleanupSemanticCache(): void {
             throw new Error("cleanupSemanticCache is not available through the server layer.");
+        }
+
+        getSourceMapper(): never {
+            return notImplemented();
         }
 
         dispose(): void {

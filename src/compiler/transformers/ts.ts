@@ -61,7 +61,8 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
-        let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
+        let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
+        let currentNameScope: ClassDeclaration | undefined;
         let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
 
         /**
@@ -132,7 +133,8 @@ namespace ts {
          */
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
-            const savedCurrentScope = currentScope;
+            const savedCurrentScope = currentLexicalScope;
+            const savedCurrentNameScope = currentNameScope;
             const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
 
             // Handle state changes before visiting a node.
@@ -141,11 +143,12 @@ namespace ts {
             const visited = f(node);
 
             // Restore state
-            if (currentScope !== savedCurrentScope) {
+            if (currentLexicalScope !== savedCurrentScope) {
                 currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
             }
 
-            currentScope = savedCurrentScope;
+            currentLexicalScope = savedCurrentScope;
+            currentNameScope = savedCurrentNameScope;
             return visited;
         }
 
@@ -160,7 +163,8 @@ namespace ts {
                 case SyntaxKind.CaseBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.Block:
-                    currentScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
+                    currentLexicalScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
+                    currentNameScope = undefined;
                     currentScopeFirstDeclarationsOfName = undefined;
                     break;
 
@@ -179,6 +183,10 @@ namespace ts {
                         // however, class declaration parsing allows for undefined names, so syntactically invalid
                         // programs may also have an undefined name.
                         Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasModifier(node, ModifierFlags.Default));
+                    }
+                    if (isClassDeclaration(node)) {
+                        // XXX: should probably also cover interfaces and type aliases that can have type variables?
+                        currentNameScope = node;
                     }
 
                     break;
@@ -630,7 +638,7 @@ namespace ts {
 
             // Write any pending expressions from elided or moved computed property names
             if (some(pendingExpressions)) {
-                statements.push(createStatement(inlineExpressions(pendingExpressions!)));
+                statements.push(createExpressionStatement(inlineExpressions(pendingExpressions!)));
             }
             pendingExpressions = savedPendingExpressions;
 
@@ -1061,7 +1069,7 @@ namespace ts {
                 //  super(...arguments);
                 //
                 statements.push(
-                    createStatement(
+                    createExpressionStatement(
                         createCall(
                             createSuper(),
                             /*typeArguments*/ undefined,
@@ -1167,7 +1175,7 @@ namespace ts {
             return startOnNewLine(
                 setEmitFlags(
                     setTextRange(
-                        createStatement(
+                        createExpressionStatement(
                             createAssignment(
                                 setTextRange(
                                     createPropertyAccess(
@@ -1234,7 +1242,7 @@ namespace ts {
          */
         function addInitializedPropertyStatements(statements: Statement[], properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const statement = createStatement(transformInitializedProperty(property, receiver));
+                const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 statements.push(statement);
@@ -1588,7 +1596,7 @@ namespace ts {
         function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration) {
             const expression = generateConstructorDecorationExpression(node);
             if (expression) {
-                statements.push(setOriginalNode(createStatement(expression), node));
+                statements.push(setOriginalNode(createExpressionStatement(expression), node));
             }
         }
 
@@ -1971,21 +1979,19 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
-            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentScope);
+            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentNameScope || currentLexicalScope);
             switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
-                    const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
+                    const serialized = serializeEntityNameAsExpressionFallback(node.typeName);
                     const temp = createTempVariable(hoistVariableDeclaration);
-                    return createLogicalOr(
-                        createLogicalAnd(
-                            createTypeCheck(createAssignment(temp, serialized), "function"),
-                            temp
-                        ),
+                    return createConditional(
+                        createTypeCheck(createAssignment(temp, serialized), "function"),
+                        temp,
                         createIdentifier("Object")
                     );
 
                 case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                    return serializeEntityNameAsExpression(node.typeName, /*useFallback*/ false);
+                    return serializeEntityNameAsExpression(node.typeName);
 
                 case TypeReferenceSerializationKind.VoidNullableOrNeverType:
                     return createVoidZero();
@@ -2020,14 +2026,46 @@ namespace ts {
             }
         }
 
+        function createCheckedValue(left: Expression, right: Expression) {
+            return createLogicalAnd(
+                createStrictInequality(createTypeOf(left), createLiteral("undefined")),
+                right
+            );
+        }
+
+        /**
+         * Serializes an entity name which may not exist at runtime, but whose access shouldn't throw
+         *
+         * @param node The entity name to serialize.
+         */
+        function serializeEntityNameAsExpressionFallback(node: EntityName): BinaryExpression {
+            if (node.kind === SyntaxKind.Identifier) {
+                // A -> typeof A !== undefined && A
+                const copied = serializeEntityNameAsExpression(node);
+                return createCheckedValue(copied, copied);
+            }
+            if (node.left.kind === SyntaxKind.Identifier) {
+                // A.B -> typeof A !== undefined && A.B
+                return createCheckedValue(serializeEntityNameAsExpression(node.left), serializeEntityNameAsExpression(node));
+            }
+            // A.B.C -> typeof A !== undefined && (_a = A.B) !== void 0 && _a.C
+            const left = serializeEntityNameAsExpressionFallback(node.left);
+            const temp = createTempVariable(hoistVariableDeclaration);
+            return createLogicalAnd(
+                    createLogicalAnd(
+                    left.left,
+                    createStrictInequality(createAssignment(temp, left.right), createVoidZero())
+                ),
+                createPropertyAccess(temp, node.right)
+            );
+        }
+
         /**
          * Serializes an entity name as an expression for decorator type metadata.
          *
          * @param node The entity name to serialize.
-         * @param useFallback A value indicating whether to use logical operators to test for the
-         *                    entity name at runtime.
          */
-        function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): SerializedEntityNameAsExpression {
+        function serializeEntityNameAsExpression(node: EntityName): SerializedEntityNameAsExpression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
@@ -2035,21 +2073,12 @@ namespace ts {
                     const name = getMutableClone(node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
-                    name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
-                    if (useFallback) {
-                        return createLogicalAnd(
-                            createStrictInequality(
-                                createTypeOf(name),
-                                createLiteral("undefined")
-                            ),
-                            name
-                        );
-                    }
+                    name.parent = getParseTreeNode(currentLexicalScope); // ensure the parent is set to a parse tree node.
 
                     return name;
 
                 case SyntaxKind.QualifiedName:
-                    return serializeQualifiedNameAsExpression(node, useFallback);
+                    return serializeQualifiedNameAsExpression(node);
             }
         }
 
@@ -2060,26 +2089,8 @@ namespace ts {
          * @param useFallback A value indicating whether to use logical operators to test for the
          *                    qualified name at runtime.
          */
-        function serializeQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean): PropertyAccessExpression {
-            let left: SerializedEntityNameAsExpression;
-            if (node.left.kind === SyntaxKind.Identifier) {
-                left = serializeEntityNameAsExpression(node.left, useFallback);
-            }
-            else if (useFallback) {
-                const temp = createTempVariable(hoistVariableDeclaration);
-                left = createLogicalAnd(
-                    createAssignment(
-                        temp,
-                        serializeEntityNameAsExpression(node.left, /*useFallback*/ true)
-                    ),
-                    temp
-                );
-            }
-            else {
-                left = serializeEntityNameAsExpression(node.left, /*useFallback*/ false);
-            }
-
-            return createPropertyAccess(left, node.right);
+        function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityNameAsExpression {
+            return createPropertyAccess(serializeEntityNameAsExpression(node.left), node.right);
         }
 
         /**
@@ -2473,7 +2484,7 @@ namespace ts {
                 }
 
                 return setTextRange(
-                    createStatement(
+                    createExpressionStatement(
                         inlineExpressions(
                             map(variables, transformInitializedVariable)
                         )
@@ -2594,7 +2605,7 @@ namespace ts {
          * @param node The enum declaration node.
          */
         function shouldEmitEnumDeclaration(node: EnumDeclaration) {
-            return !isConst(node)
+            return !isEnumConst(node)
                 || compilerOptions.preserveConstEnums
                 || compilerOptions.isolatedModules;
         }
@@ -2622,7 +2633,7 @@ namespace ts {
             // enum body.
             if (addVarForEnumOrModuleDeclaration(statements, node)) {
                 // We should still emit the comments if we are emitting a system module.
-                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
                     emitFlags |= EmitFlags.NoLeadingComments;
                 }
             }
@@ -2661,7 +2672,7 @@ namespace ts {
             //      x[x["y"] = 0] = "y";
             //      ...
             //  })(x || (x = {}));
-            const enumStatement = createStatement(
+            const enumStatement = createExpressionStatement(
                 createCall(
                     createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -2738,7 +2749,7 @@ namespace ts {
                     name
                 );
             return setTextRange(
-                createStatement(
+                createExpressionStatement(
                     setTextRange(
                         outerAssignment,
                         member
@@ -2835,7 +2846,7 @@ namespace ts {
                     createVariableDeclaration(
                         getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                     )
-                ], currentScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
+                ], currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
             );
 
             setOriginalNode(statement, node);
@@ -2911,7 +2922,7 @@ namespace ts {
             // module body.
             if (addVarForEnumOrModuleDeclaration(statements, node)) {
                 // We should still emit the comments if we are emitting a system module.
-                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
                     emitFlags |= EmitFlags.NoLeadingComments;
                 }
             }
@@ -2949,7 +2960,7 @@ namespace ts {
             //  (function (x_1) {
             //      x_1.y = ...;
             //  })(x || (x = {}));
-            const moduleStatement = createStatement(
+            const moduleStatement = createExpressionStatement(
                 createCall(
                     createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -3301,7 +3312,7 @@ namespace ts {
          * Creates a statement for the provided expression. This is used in calls to `map`.
          */
         function expressionToStatement(expression: Expression) {
-            return createStatement(expression);
+            return createExpressionStatement(expression);
         }
 
         function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
@@ -3311,14 +3322,14 @@ namespace ts {
             );
             setSourceMapRange(expression, createRange(node.name ? node.name.pos : node.pos, node.end));
 
-            const statement = createStatement(expression);
+            const statement = createExpressionStatement(expression);
             setSourceMapRange(statement, createRange(-1, node.end));
             statements.push(statement);
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
             return setTextRange(
-                createStatement(
+                createExpressionStatement(
                     createAssignment(
                         getNamespaceMemberName(currentNamespaceContainerName, exportName, /*allowComments*/ false, /*allowSourceMaps*/ true),
                         exportValue

@@ -3,6 +3,7 @@ const path = require("path");
 const Vinyl = require("./vinyl");
 const convertMap = require("convert-source-map");
 const applySourceMap = require("vinyl-sourcemaps-apply");
+const through2 = require("through2");
 
 /**
  * @param {Vinyl} input
@@ -22,7 +23,7 @@ function replaceContents(input, contents, sourceMap) {
             const newSourceMapConverter = convertMap.fromSource(stringContents);
             if (newSourceMapConverter) {
                 sourceMap = /**@type {RawSourceMap}*/(newSourceMapConverter.toObject());
-                output.contents = new Buffer(convertMap.removeComments(stringContents), "utf8");
+                output.contents = new Buffer(convertMap.removeMapFileComments(stringContents), "utf8");
             }
         }
         if (sourceMap) {
@@ -41,6 +42,17 @@ function replaceContents(input, contents, sourceMap) {
     return output;
 }
 exports.replaceContents = replaceContents;
+
+function removeSourceMaps() {
+    return through2.obj((/**@type {Vinyl}*/file, _, cb) => {
+        if (file.sourceMap && file.isBuffer()) {
+            file.contents = Buffer.from(convertMap.removeMapFileComments(file.contents.toString("utf8")), "utf8");
+            file.sourceMap = undefined;
+        }
+        cb(null, file);
+    });
+}
+exports.removeSourceMaps = removeSourceMaps;
 
 /**
  * @param {string | undefined} cwd

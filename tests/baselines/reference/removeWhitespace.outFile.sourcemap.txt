@@ -54,9 +54,15 @@ sourceFile:tests/cases/conformance/removeWhitespace/c.ts
 -------------------------------------------------------------------
 >>>let a=1;let b=2;class C{}function d(){}
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^
+3 >                      ^
+4 >                       ^^^^^^^^^^^^->
 1->
+2 >                class 
+3 >                      C
 1->Emitted(1, 17) Source(1, 1) + SourceIndex(2)
+2 >Emitted(1, 23) Source(1, 7) + SourceIndex(2)
+3 >Emitted(1, 24) Source(1, 8) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:combined.js (1, 26)
@@ -64,13 +70,19 @@ sourceFile:tests/cases/conformance/removeWhitespace/d.ts
 -------------------------------------------------------------------
 >>>let a=1;let b=2;class C{}function d(){}
 1->^^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                         ^^^^^^^^^^^^^
-3 >                                      ^
+2 >                         ^^^^^^^^^
+3 >                                  ^
+4 >                                   ^^^
+5 >                                      ^
 1->
-2 >                         function d() {
-3 >                                      }
+2 >                         function 
+3 >                                  d
+4 >                                   () {
+5 >                                      }
 1->Emitted(1, 26) Source(1, 1) + SourceIndex(3)
-2 >Emitted(1, 39) Source(1, 15) + SourceIndex(3)
-3 >Emitted(1, 40) Source(1, 16) + SourceIndex(3)
+2 >Emitted(1, 35) Source(1, 10) + SourceIndex(3)
+3 >Emitted(1, 36) Source(1, 11) + SourceIndex(3)
+4 >Emitted(1, 39) Source(1, 15) + SourceIndex(3)
+5 >Emitted(1, 40) Source(1, 16) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=combined.js.map

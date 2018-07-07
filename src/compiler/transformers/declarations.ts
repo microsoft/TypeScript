@@ -11,11 +11,12 @@ namespace ts {
 
     const declarationEmitNodeBuilderFlags =
         NodeBuilderFlags.MultilineObjectLiterals |
-        TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
+        NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
         NodeBuilderFlags.UseTypeOfFunction |
         NodeBuilderFlags.UseStructuralFallback |
         NodeBuilderFlags.AllowEmptyTuple |
-        NodeBuilderFlags.GenerateNamesForShadowedTypeParams;
+        NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
+        NodeBuilderFlags.NoTruncation;
 
     /**
      * Transforms a ts file into a .d.ts file
@@ -66,7 +67,13 @@ namespace ts {
             }
         }
 
-        function trackReferencedAmbientModule(node: ModuleDeclaration) {
+        function trackReferencedAmbientModule(node: ModuleDeclaration, symbol: Symbol) {
+            // If it is visible via `// <reference types="..."/>`, then we should just use that
+            const directives = resolver.getTypeReferenceDirectivesForSymbol(symbol, SymbolFlags.All);
+            if (length(directives)) {
+                return recordTypeReferenceDirectivesIfNecessary(directives);
+            }
+            // Otherwise we should emit a path-based reference
             const container = getSourceFileOfNode(node);
             refs.set("" + getOriginalNodeId(container), container);
         }

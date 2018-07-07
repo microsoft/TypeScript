@@ -105,7 +105,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
                 .join(os.EOL);
             fs.writeFile(file, failed, "utf8", done);
         }
-        else if (!keepFailed) {
+        else if (!keepFailed && fs.existsSync(file)) {
             fs.unlink(file, done);
         }
         else {

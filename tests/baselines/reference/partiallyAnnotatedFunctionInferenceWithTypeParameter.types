@@ -119,12 +119,12 @@ testRest((t1, t2: D, t3) => {})
 >t3 : D
 
 testRest((t2: D, ...t3) => {})
->testRest((t2: D, ...t3) => {}) : any
+>testRest((t2: D, ...t3) => {}) : D
 >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
->(t2: D, ...t3) => {} : (t2: D, ...t3: any[]) => void
+>(t2: D, ...t3) => {} : (t2: D, t1: D, ...ts: D[]) => void
 >t2 : D
 >D : D
->t3 : any[]
+>t3 : [D, ...D[]]
 
 testRest((t2, ...t3: D[]) => {})
 >testRest((t2, ...t3: D[]) => {}) : C

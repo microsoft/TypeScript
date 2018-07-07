@@ -574,7 +574,7 @@ namespace ts {
                     return pipelineEmitWithoutComments;
 
                 case PipelinePhase.SourceMaps:
-                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
+                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile) {
                         return pipelineEmitWithSourceMap;
                     }
                     // falls through
@@ -607,7 +607,7 @@ namespace ts {
         }
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
-            Debug.assert(hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName);
+            Debug.assert(hint !== EmitHint.SourceFile);
             Debug.assertDefined(onEmitSourceMapOfNode)(hint, node, pipelineEmitWithHint);
         }
 
@@ -2023,7 +2023,7 @@ namespace ts {
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
-            writeKeyword(isLet(node) ? "let" : isConst(node) ? "const" : "var");
+            writeKeyword(isLet(node) ? "let" : isVarConst(node) ? "const" : "var");
             writeSpace();
             emitList(node, node.declarations, ListFormat.VariableDeclarationList);
         }
@@ -2490,7 +2490,7 @@ namespace ts {
 
         function emitJsxTagName(node: JsxTagNameExpression) {
             if (node.kind === SyntaxKind.Identifier) {
-                emitExpression(<Identifier>node);
+                emitExpression(node);
             }
             else {
                 emit(node);

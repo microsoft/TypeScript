@@ -63,10 +63,6 @@ namespace utils {
         return indentation;
     }
 
-    export function toUtf8(text: string): string {
-        return new Buffer(text).toString("utf8");
-    }
-
     export function getByteOrderMarkLength(text: string): number {
         if (text.length >= 1) {
             const ch0 = text.charCodeAt(0);

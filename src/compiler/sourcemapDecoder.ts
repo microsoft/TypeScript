@@ -190,7 +190,7 @@ namespace ts.sourcemaps {
         };
     }
 
-    export function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
+    function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
         const decoder = decodeMappings(map);
         const positions = arrayFrom(decoder, processPosition);
         if (decoder.error) {

@@ -27,6 +27,7 @@ const exec = require("./scripts/build/exec");
 const browserify = require("./scripts/build/browserify");
 const debounce = require("./scripts/build/debounce");
 const prepend = require("./scripts/build/prepend");
+const { removeSourceMaps } = require("./scripts/build/sourcemaps");
 const { CancelSource, CancelError } = require("./scripts/build/cancellation");
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
@@ -136,7 +137,7 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
     // NOTE: flatten services so that we can properly strip @internal
     project.flatten(servicesProject, typescriptServicesProject, {
         compilerOptions: {
-            "removeComments": true,
+            "removeComments": false,
             "stripInternal": true,
             "declarationMap": false,
             "outFile": "typescriptServices.js"
@@ -151,6 +152,7 @@ gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", 
         js: files => files
             .pipe(prepend.file(copyright)),
         dts: files => files
+            .pipe(removeSourceMaps())
             .pipe(prepend.file(copyright))
             .pipe(convertConstEnums())
     }),
@@ -244,7 +246,7 @@ gulp.task(tsserverlibraryJs, /*help*/ false, useCompilerDeps.concat([tsserverlib
         js: files => files
             .pipe(prepend.file(copyright)),
         dts: files => files
-            .pipe(through2.obj((file, _, cb) => { file.sourceMap = undefined; cb(null, file); }))
+            .pipe(removeSourceMaps())
             .pipe(prepend.file(copyright))
             .pipe(convertConstEnums())
             .pipe(append("\nexport = ts;\nexport as namespace ts;")),

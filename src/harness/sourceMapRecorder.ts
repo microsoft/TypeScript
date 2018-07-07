@@ -312,7 +312,8 @@ namespace Harness.SourceMapRecorder {
             }
 
             SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData, currentFile);
-            for (const decodedSourceMapping of sourceMapData.sourceMapDecodedMappings) {
+            const mapper = ts.sourcemaps.decodeMappings({ mappings: sourceMapData.sourceMapMappings, sources: sourceMapData.sourceMapSources });
+            for (let { value: decodedSourceMapping, done } = mapper.next(); !done; { value: decodedSourceMapping, done } = mapper.next()) {
                 const currentSourceFile = program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex])!;
                 if (currentSourceFile !== prevSourceFile) {
                     SourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.text);

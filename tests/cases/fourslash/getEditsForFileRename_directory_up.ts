@@ -18,15 +18,15 @@
 ////import old2 from "../old/file";
 ////export default 0;
 
-// @Filename: /newDir/new/index.ts
+// @Filename: /src/old/index.ts
 ////import a from "../../a";
 ////import a2 from "../b";
 ////import a3 from "../foo/c";
 ////import f from "./file";
 ////export default 0;
 
-// @Filename: /newDir/new/file.ts
-////
+// @Filename: /src/old/file.ts
+////export default 0;
 
 // @Filename: /tsconfig.json
 ////{ "files": ["a.ts", "src/b.ts", "src/foo/c.ts", "src/old/index.ts", "src/old/file.ts"] }
@@ -53,7 +53,7 @@ import old from "../../newDir/new";
 import old2 from "../../newDir/new/file";
 export default 0;`,
 
-        "/newDir/new/index.ts":
+        "/src/old/index.ts":
 `import a from "../../a";
 import a2 from "../../src/b";
 import a3 from "../../src/foo/c";

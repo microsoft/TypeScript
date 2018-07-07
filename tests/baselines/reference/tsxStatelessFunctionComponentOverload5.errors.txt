@@ -8,12 +8,9 @@ tests/cases/conformance/jsx/file.tsx(51,13): error TS2322: Type '{ onClick: (k: 
   Property '"data-format"' is missing in type '{ onClick: (k: MouseEvent<any>) => void; to: string; }'.
 tests/cases/conformance/jsx/file.tsx(53,13): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
   Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
-tests/cases/conformance/jsx/file.tsx(54,51): error TS2326: Types of property 'children' are incompatible.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(55,68): error TS2326: Types of property 'className' are incompatible.
-  Type 'true' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(56,24): error TS2326: Types of property 'data-format' are incompatible.
-  Type 'true' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(54,51): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(55,68): error TS2322: Type 'true' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type 'true' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
@@ -86,14 +83,14 @@ tests/cases/conformance/jsx/file.tsx(56,24): error TS2326: Types of property 'da
 !!! error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
 !!! error TS2322:   Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
     const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
-                                                      ~~~~~~~~~~~~~
-!!! error TS2326: Types of property 'children' are incompatible.
-!!! error TS2326:   Type 'number' is not assignable to type 'string'.
+                                                      ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & HyphenProps'
     const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
                                                                        ~~~~~~~~~
-!!! error TS2326: Types of property 'className' are incompatible.
-!!! error TS2326:   Type 'true' is not assignable to type 'string'.
+!!! error TS2322: Type 'true' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & HyphenProps'
     const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
                            ~~~~~~~~~~~
-!!! error TS2326: Types of property 'data-format' are incompatible.
-!!! error TS2326:   Type 'true' is not assignable to type 'string'.
+!!! error TS2322: Type 'true' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:17:5: The expected type comes from property 'data-format' which is declared here on type 'IntrinsicAttributes & HyphenProps'

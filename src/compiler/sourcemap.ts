@@ -131,7 +131,6 @@ namespace ts {
                 sourceMapNames: [],
                 sourceMapMappings: "",
                 sourceMapSourcesContent: writerOptions.inlineSources ? [] : undefined,
-                sourceMapDecodedMappings: []
             };
 
             // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
@@ -500,7 +499,8 @@ namespace ts {
             // First, decode the old component sourcemap
             const sourceIndexToNewSourceIndexMap: number[] = [];
             let nameIndexToNewNameIndexMap: number[] | undefined;
-            sourcemaps.calculateDecodedMappings(map, (raw): void => {
+            const mappingIterator = sourcemaps.decodeMappings(map);
+            for (let { value: raw, done } = mappingIterator.next(); !done; { value: raw, done } = mappingIterator.next()) {
                 // Then reencode all the updated mappings into the overall map
                 let newSourceIndex: number | undefined;
                 let newSourceLine: number | undefined;
@@ -533,7 +533,7 @@ namespace ts {
                 const newGeneratedLine = raw.emittedLine + generatedLine;
                 const newGeneratedCharacter = raw.emittedLine === 0 ? raw.emittedColumn + generatedCharacter : raw.emittedColumn;
                 addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
-            });
+            }
             exit();
         }
 
@@ -558,15 +558,6 @@ namespace ts {
             Debug.assert(pendingSourceIndex >= 0, "lastRecordedSourceIndex was negative");
             Debug.assert(pendingSourceLine >= 0, "lastRecordedSourceLine was negative");
             Debug.assert(pendingSourceCharacter >= 0, "lastRecordedSourceCharacter was negative");
-
-            sourceMapData.sourceMapDecodedMappings.push({
-                emittedLine: pendingGeneratedLine,
-                emittedColumn: pendingGeneratedCharacter,
-                sourceIndex: pendingSourceIndex,
-                sourceLine: pendingSourceLine,
-                sourceColumn: pendingSourceCharacter,
-                nameIndex: hasPendingName ? pendingNameIndex : undefined
-            });
 
             // Line/Comma delimiters
             if (generatedLine < pendingGeneratedLine) {
@@ -682,7 +673,6 @@ namespace ts {
 
         return undefined;
     }
-
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     function base64FormatEncode(inValue: number) {
