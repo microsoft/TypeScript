@@ -5293,11 +5293,11 @@ namespace ts {
     export interface RawSourceMap {
         version: 3;
         file: string;
-        sourceRoot?: string;
+        sourceRoot?: string | null;
         sources: string[];
-        sourcesContent?: (string | null)[];
+        sourcesContent?: (string | null)[] | null;
         mappings: string;
-        names?: string[];
+        names?: string[] | null;
     }
 
     /**

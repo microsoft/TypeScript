@@ -461,7 +461,7 @@ namespace ts {
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
 
             for (const prepend of bundle.prepends) {
-                writeSignificantLine();
+                writeLine();
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
             }
 
@@ -2613,7 +2613,7 @@ namespace ts {
             //       generated line. Until we can rework the source map support in the test
             //       harness, ensure each source file is on a new line, even when using a
             //       whitespace-removing writer.
-            writeSignificantLine();
+            writeLine();
             const statements = node.statements;
             if (emitBodyWithDetachedComments) {
                 // Emit detached comment if there are no prologue directives or if the first node is synthesized.
@@ -3109,12 +3109,6 @@ namespace ts {
 
         function writeProperty(s: string) {
             writer.writeProperty(s);
-        }
-
-        function writeSignificantLine() {
-            // writer.flush();
-            // if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
-            writeLine();
         }
 
         function writeLine() {

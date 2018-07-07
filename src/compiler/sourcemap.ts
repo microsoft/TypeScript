@@ -655,12 +655,12 @@ namespace ts {
             && typeof x.file === "string"
             && typeof x.mappings === "string"
             && isArray(x.sources) && every(x.sources, isString)
-            && (x.sourceRoot === undefined || typeof x.sourceRoot === "string")
-            && (x.sourcesContent === undefined || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
-            && (x.names === undefined || isArray(x.names) && every(x.names, isString));
+            && (x.sourceRoot === undefined || x.sourceRoot === null || typeof x.sourceRoot === "string")
+            && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
+            && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
     }
 
-    function tryParseRawSourceMap(text: string) {
+    export function tryParseRawSourceMap(text: string) {
         try {
             const parsed = JSON.parse(text);
             if (isRawSourceMap(parsed)) {
@@ -673,6 +673,7 @@ namespace ts {
 
         return undefined;
     }
+
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     function base64FormatEncode(inValue: number) {

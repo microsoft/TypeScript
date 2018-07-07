@@ -30,16 +30,6 @@ namespace ts {
 
 /* @internal */
 namespace ts.sourcemaps {
-    export interface SourceMapData {
-        version?: number;
-        file?: string;
-        sourceRoot?: string;
-        sources: string[];
-        sourcesContent?: (string | null)[];
-        names?: string[];
-        mappings: string;
-    }
-
     export interface SourceMappableLocation {
         fileName: string;
         position: number;
@@ -59,7 +49,7 @@ namespace ts.sourcemaps {
         log(text: string): void;
     }
 
-    export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
+    export function decode(host: SourceMapDecodeHost, mapPath: string, map: RawSourceMap, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
         const currentDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot || currentDirectory;
         let decodedMappings: ProcessedSourceMapPosition[];
@@ -156,7 +146,7 @@ namespace ts.sourcemaps {
     }
 
     /*@internal*/
-    export function decodeMappings(map: SourceMapData): MappingsDecoder {
+    export function decodeMappings(map: RawSourceMap): MappingsDecoder {
         const state: DecoderState = {
             encodedText: map.mappings,
             currentNameIndex: undefined,
@@ -190,7 +180,7 @@ namespace ts.sourcemaps {
         };
     }
 
-    function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
+    function calculateDecodedMappings<T>(map: RawSourceMap, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
         const decoder = decodeMappings(map);
         const positions = arrayFrom(decoder, processPosition);
         if (decoder.error) {
