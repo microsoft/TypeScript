@@ -9042,9 +9042,9 @@ export function Test2() {
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
                 refs: [
-                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnA"),
-                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", { index: 1 }),
-                    makeReferenceItem(aTs, /*isDefinition*/ true, "fnA"),
+                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnA", "import { fnA, instanceA } from \"../a/bin/a\";"),
+                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", "export function fnUser() { fnA(); fnB(); instanceA; }", { index: 1 }),
+                    makeReferenceItem(aTs, /*isDefinition*/ true, "fnA", "export function fnA() {}"),
                 ],
                 symbolName: "fnA",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
@@ -9118,9 +9118,9 @@ export function Test2() {
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
                 refs: [
-                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnB"),
-                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnB", { index: 1 }),
-                    makeReferenceItem(bDts, /*isDefinition*/ true, "fnB"),
+                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnB", "import { fnB } from \"../b/bin/b\";"),
+                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnB", "export function fnUser() { fnA(); fnB(); instanceA; }", { index: 1 }),
+                    makeReferenceItem(bDts, /*isDefinition*/ true, "fnB", "export declare function fnB(): void;"),
                 ],
                 symbolName: "fnB",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnB()").offset,
@@ -9196,12 +9196,12 @@ export function Test2() {
         });
     });
 
-    function makeReferenceItem(file: File, isDefinition: boolean, text: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
+    function makeReferenceItem(file: File, isDefinition: boolean, text: string, lineText: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanFromSubstring(file, text, options),
             isDefinition,
             isWriteAccess: isDefinition,
-            lineText: text,
+            lineText,
         };
     }
 
