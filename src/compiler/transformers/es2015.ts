@@ -1647,7 +1647,8 @@ namespace ts {
             setEmitFlags(target, EmitFlags.NoComments | EmitFlags.NoTrailingSourceMap);
             setSourceMapRange(target, firstAccessor.name);
 
-            const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
+            // TODO: GH#9950 get rid of this type assertion and handle private names
+            const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName) as Exclude<PropertyName, PrivateName>);
             setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoLeadingSourceMap);
             setSourceMapRange(propertyName, firstAccessor.name);
 

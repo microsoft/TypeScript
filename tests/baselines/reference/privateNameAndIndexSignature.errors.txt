@@ -1,0 +1,13 @@
+tests/cases/conformance/classes/members/privateNames/privateNameAndIndexSignature.ts(4,14): error TS2339: Property '#f' does not exist on type 'A'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameAndIndexSignature.ts (1 errors) ====
+    class A {
+        [k: string]: any;
+        constructor(message: string) {
+            this.#f = 3                 // Error Property '#f' does not exist on type 'A'.
+                 ~~
+!!! error TS2339: Property '#f' does not exist on type 'A'.
+        }
+    }
+    

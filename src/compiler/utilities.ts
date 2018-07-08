@@ -853,6 +853,7 @@ namespace ts {
     export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateName:
                 return name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
@@ -873,7 +874,15 @@ namespace ts {
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
-                return entityNameToString(name.expression) + "." + entityNameToString(name.name);
+                if (isIdentifier(name.name)) {
+                    return entityNameToString(name.expression) + "." + entityNameToString(name.name);
+                }
+                else if (isPrivateName(name.name)) {
+                    return getTextOfNode(name);
+                }
+                else {
+                    throw Debug.assertNever(name.name);
+                }
             default:
                 throw Debug.assertNever(name);
         }
@@ -2118,7 +2127,7 @@ namespace ts {
      * throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
      */
     /* @internal */
-    export function getElementOrPropertyAccessArgumentExpressionOrName(node: AccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
+    export function getElementOrPropertyAccessArgumentExpressionOrName(node: AccessExpression): Identifier | PrivateName | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
         if (isPropertyAccessExpression(node)) {
             return node.name;
         }
@@ -2912,6 +2921,7 @@ namespace ts {
     export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
         switch (name.kind) {
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateName:
                 return name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
@@ -2930,10 +2940,12 @@ namespace ts {
         }
     }
 
-    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+    export type PropertyNameLiteral = Identifier | PrivateName | StringLiteralLike | NumericLiteral;
     export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
         switch (node.kind) {
             case SyntaxKind.Identifier:
+            // TODO: should this be here?
+            case SyntaxKind.PrivateName:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.NumericLiteral:
@@ -2943,11 +2955,11 @@ namespace ts {
         }
     }
     export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
-        return node.kind === SyntaxKind.Identifier ? idText(node) : node.text;
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateName ? idText(node) : node.text;
     }
 
     export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-        return node.kind === SyntaxKind.Identifier ? node.escapedText : escapeLeadingUnderscores(node.text);
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateName ? node.escapedText : escapeLeadingUnderscores(node.text);
     }
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
@@ -3735,7 +3747,7 @@ namespace ts {
     }
 
     export function isThisIdentifier(node: Node | undefined): boolean {
-        return !!node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
+        return !!node && isIdentifier(node) && identifierIsThisKeyword(node);
     }
 
     export function identifierIsThisKeyword(id: Identifier): boolean {
@@ -5288,8 +5300,8 @@ namespace ts {
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
     }
 
-    export function idText(identifier: Identifier): string {
-        return unescapeLeadingUnderscores(identifier.escapedText);
+    export function idText(identifierOrPrivateName: Identifier | PrivateName): string {
+        return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
     }
     export function symbolName(symbol: Symbol): string {
         return unescapeLeadingUnderscores(symbol.escapedName);
@@ -5300,7 +5312,7 @@ namespace ts {
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
      * will be merged with)
      */
-    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | undefined {
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | PrivateName | undefined {
         const hostNode = declaration.parent.parent;
         if (!hostNode) {
             return undefined;
@@ -5359,7 +5371,7 @@ namespace ts {
         return false;
     }
 
-    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateName | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
 
@@ -5684,6 +5696,10 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier;
     }
 
+    export function isIdentifierOrPrivateName(node: Node): node is Identifier | PrivateName {
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateName;
+    }
+
     // Names
 
     export function isQualifiedName(node: Node): node is QualifiedName {
@@ -5692,6 +5708,10 @@ namespace ts {
 
     export function isComputedPropertyName(node: Node): node is ComputedPropertyName {
         return node.kind === SyntaxKind.ComputedPropertyName;
+    }
+
+    export function isPrivateName(node: Node): node is PrivateName {
+        return node.kind === SyntaxKind.PrivateName;
     }
 
     // Signature elements
