@@ -679,7 +679,7 @@ namespace ts {
         let current: Node = sourceFile;
         outer: while (true) {
             // find the child that contains 'position'
-            for (const child of current.getChildren()) {
+            for (const child of current.getChildren(sourceFile)) {
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, /*includeJsDoc*/ true);
                 if (start > position) {
                     // If this child begins after position, then all subsequent children will as well.
