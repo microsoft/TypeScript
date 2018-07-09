@@ -286,12 +286,12 @@ namespace ts.server {
             : deduplicate(outputs, areEqual);
     }
 
-    function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, getFileName: (value: T) => string) {
+    function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, areEqual: (a: T, b: T) => boolean) {
         const outputs: T[] = [];
         projectService.forEachProject(project => {
             if (project.isOrphan() || !project.languageServiceEnabled) return;
             const theseOutputs = action(project);
-            outputs.push(...theseOutputs.filter(output => !outputs.some(o => getFileName(o) === getFileName(output))));
+            outputs.push(...theseOutputs.filter(output => !outputs.some(o => areEqual(o, output))));
         });
         return outputs;
     }
@@ -1759,7 +1759,10 @@ namespace ts.server {
             const newPath = toNormalizedPath(args.newFilePath);
             const formatOptions = this.getHostFormatOptions();
             const preferences = this.getHostPreferences();
-            const changes = combineProjectOutputFromEveryProject(this.projectService, project => project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences), edit => edit.fileName);
+            const changes = combineProjectOutputFromEveryProject(
+                this.projectService,
+                project => project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences),
+                (a, b) => a.fileName === b.fileName);
             return simplifiedResult ? changes.map(c => this.mapTextChangeToCodeEditUsingScriptInfo(c)) : changes;
         }
 
