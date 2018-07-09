@@ -21102,7 +21102,7 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
-                    const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+                    const special = isBinaryExpression(left.parent) ? getSpecialPropertyAssignmentKind(left.parent) : SpecialPropertyAssignmentKind.None;
                     checkSpecialAssignment(special, right);
                     if (isJSSpecialPropertyAssignment(special)) {
                         return leftType;

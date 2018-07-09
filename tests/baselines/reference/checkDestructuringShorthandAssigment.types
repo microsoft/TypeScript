@@ -1,0 +1,17 @@
+=== tests/cases/compiler/bug25434.js ===
+// should not crash while checking
+function Test({ b = '' } = {}) {}
+>Test : ({ b }?: { [x: string]: any; }) => void
+>b : string
+>'' : ""
+>{} : { b?: string; }
+
+Test(({ b = '5' } = {}));
+>Test(({ b = '5' } = {})) : void
+>Test : ({ b }?: { [x: string]: any; }) => void
+>({ b = '5' } = {}) : { b?: any; }
+>{ b = '5' } = {} : { b?: any; }
+>{ b = '5' } : { [x: string]: any; b?: any; }
+>b : any
+>{} : { b?: any; }
+
