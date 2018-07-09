@@ -10367,9 +10367,9 @@ namespace ts {
                                 }
                             }
 
-                            if (!issuedElaboration && (length(targetProp && targetProp.declarations) || length(target.symbol && target.symbol.declarations))) {
+                            if (!issuedElaboration && (targetProp && length(targetProp.declarations) || target.symbol && length(target.symbol.declarations))) {
                                 addRelatedInfo(reportedDiag, createDiagnosticForNode(
-                                    targetProp ? targetProp.declarations[0] : target.symbol.declarations[0],
+                                    targetProp && length(targetProp.declarations) ? targetProp.declarations[0] : target.symbol.declarations[0],
                                     Diagnostics.The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1,
                                     propertyName && !(nameType.flags & TypeFlags.UniqueESSymbol) ? unescapeLeadingUnderscores(propertyName) : typeToString(nameType),
                                     typeToString(target)
