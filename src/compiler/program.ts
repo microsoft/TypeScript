@@ -2329,7 +2329,7 @@ namespace ts {
                     if (!sourceFile.isDeclarationFile) {
                         const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, rootDirectory));
                             allFilesBelongToPath = false;
                         }
                     }
