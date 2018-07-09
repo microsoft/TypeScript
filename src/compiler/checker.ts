@@ -1059,6 +1059,7 @@ namespace ts {
             // 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
             // or if usage is in a type context:
             // 1. inside a type query (typeof in type position)
+            // 2. inside a jsdoc comment
             if (usage.parent.kind === SyntaxKind.ExportSpecifier || (usage.parent.kind === SyntaxKind.ExportAssignment && (usage.parent as ExportAssignment).isExportEquals)) {
                 // export specifiers do not use the variable, they only make it available for use
                 return true;
@@ -1069,7 +1070,7 @@ namespace ts {
             }
 
             const container = getEnclosingBlockScopeContainer(declaration);
-            return isInTypeQuery(usage) || isUsedInFunctionOrInstanceProperty(usage, declaration, container);
+            return !!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isUsedInFunctionOrInstanceProperty(usage, declaration, container);
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
