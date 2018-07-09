@@ -35,6 +35,10 @@ namespace ts {
          */
         seenAffectedFiles: Map<true> | undefined;
         /**
+         * Files which have semantic diagnostics from old state
+         */
+        semanticDiagnosticsFromOldState: Map<true> | undefined;
+        /**
          * program corresponding to this state
          */
         program: Program;
@@ -96,6 +100,10 @@ namespace ts {
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
                     state.semanticDiagnosticsPerFile!.set(sourceFilePath, diagnostics);
+                    if (!state.semanticDiagnosticsFromOldState) {
+                        state.semanticDiagnosticsFromOldState = createMap<true>();
+                    }
+                    state.semanticDiagnosticsFromOldState.set(sourceFilePath, true);
                 }
             }
         });
@@ -120,17 +128,16 @@ namespace ts {
         while (true) {
             const { affectedFiles } = state;
             if (affectedFiles) {
-                const { seenAffectedFiles, semanticDiagnosticsPerFile } = state;
-                let affectedFilesIndex = state.affectedFilesIndex!; // TODO: GH#18217
+                const seenAffectedFiles = state.seenAffectedFiles!;
+                let affectedFilesIndex = state.affectedFilesIndex!;
                 while (affectedFilesIndex < affectedFiles.length) {
                     const affectedFile = affectedFiles[affectedFilesIndex];
-                    if (!seenAffectedFiles!.has(affectedFile.path)) {
+                    if (!seenAffectedFiles.has(affectedFile.path)) {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
-                        semanticDiagnosticsPerFile!.delete(affectedFile.path);
                         return affectedFile;
                     }
-                    seenAffectedFiles!.set(affectedFile.path, true);
+                    seenAffectedFiles.set(affectedFile.path, true);
                     affectedFilesIndex++;
                 }
 
@@ -162,10 +169,58 @@ namespace ts {
             state.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures || createMap();
             state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures);
             state.currentChangedFilePath = nextKey.value as Path;
-            state.semanticDiagnosticsPerFile!.delete(nextKey.value as Path);
+            cleanSemanticDiagnosticsCacheWithChangedFile(state);
             state.affectedFilesIndex = 0;
             state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
         }
+    }
+
+    /**
+     * Remove the cached semantic diagnostics from old state for changed file, affected files and files referencing affected file(directly or indirectly)
+     */
+    function cleanSemanticDiagnosticsCacheWithChangedFile(state: BuilderProgramState) {
+        // If everything is clean then this map will not be present and we dont need to do anything
+        if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.size) {
+            return;
+        }
+
+        // If the change to the file was internal no need to go through affected files super set
+        if (state.affectedFiles!.length === 1) {
+            Debug.assert(state.affectedFiles![0].path === state.currentChangedFilePath!);
+            removeSemanticDiagnosticsCachedFromOldState(state, state.currentChangedFilePath!);
+            return;
+        }
+
+        // At this point the change was not internal to file, discard errors from super set of affected files
+        if (!state.referencedMap || // non module emit
+            find(state.affectedFiles!, affectedFile => !isExternalModule(affectedFile) && !BuilderState.containsOnlyAmbientModules(affectedFile))) { // global file
+            clearMap(state.semanticDiagnosticsFromOldState, (_value, path) => state.semanticDiagnosticsPerFile!.delete(path));
+            return;
+        }
+
+        // Start with the paths this file was referenced by affected files
+        const queue = mapDefined(state.affectedFiles, f => removeSemanticDiagnosticsCachedFromOldState(state, f.path) ? f.path : undefined);
+        while (queue.length > 0) {
+            const currentPath = queue.pop()!;
+            // Add referenced by paths if semantic diagnostics from old cache are present
+            state.referencedMap.forEach((referencesInFile, filePath) => {
+                if (referencesInFile.has(currentPath) && removeSemanticDiagnosticsCachedFromOldState(state, filePath as Path)) {
+                    queue.push(filePath as Path);
+                }
+            });
+        }
+    }
+
+    /**
+     * Remove old cached semantic diagnostics from state
+     */
+    function removeSemanticDiagnosticsCachedFromOldState(state: BuilderProgramState, path: Path) {
+        if (state.semanticDiagnosticsFromOldState!.has(path)) {
+            state.semanticDiagnosticsFromOldState!.delete(path);
+            state.semanticDiagnosticsPerFile!.delete(path);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -205,6 +260,7 @@ namespace ts {
         // Diagnostics werent cached, get them from program, and cache the result
         const diagnostics = state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
         state.semanticDiagnosticsPerFile!.set(path, diagnostics);
+        if (state.semanticDiagnosticsFromOldState) state.semanticDiagnosticsFromOldState.delete(path);
         return diagnostics;
     }
 

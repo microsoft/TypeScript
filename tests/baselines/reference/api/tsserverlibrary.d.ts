@@ -9074,6 +9074,17 @@ declare namespace ts.BuilderState {
      * Get all the dependencies of the sourceFile
      */
     function getAllDependencies(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile): ReadonlyArray<string>;
+    /**
+     * For script files that contains only ambient external modules, although they are not actually external module files,
+     * they can only be consumed via importing elements from them. Regular script files cannot consume them. Therefore,
+     * there are no point to rebuild all script files if these special files have changed. However, if any statement
+     * in the file is not ambient external module, we treat it as a regular script file.
+     */
+    function containsOnlyAmbientModules(sourceFile: SourceFile): boolean;
+    /**
+     * Gets all files of the program excluding the default library file
+     */
+    function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): ReadonlyArray<SourceFile>;
 }
 declare namespace ts {
     /**
@@ -9109,6 +9120,10 @@ declare namespace ts {
          * Already seen affected files
          */
         seenAffectedFiles: Map<true> | undefined;
+        /**
+         * Files which have semantic diagnostics from old state
+         */
+        semanticDiagnosticsFromOldState: Map<true> | undefined;
         /**
          * program corresponding to this state
          */
