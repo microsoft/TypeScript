@@ -191,8 +191,8 @@ namespace ts.OutliningElementsCollector {
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
-            const textSpan = createTextSpanFromBounds(node.openingElement.getStart(), node.closingElement.getEnd());
-            const tagName = node.openingElement.tagName.getText();
+            const textSpan = createTextSpanFromBounds(node.openingElement.getStart(sourceFile), node.closingElement.getEnd());
+            const tagName = node.openingElement.tagName.getText(sourceFile);
             const bannerText = "<" + tagName + ">...</" + tagName + ">";
             return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
         }
@@ -202,7 +202,7 @@ namespace ts.OutliningElementsCollector {
                 return undefined;
             }
 
-            return createOutliningSpanFromBounds(node.getStart(), node.getEnd(), OutliningSpanKind.Code);
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
