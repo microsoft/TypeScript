@@ -583,7 +583,14 @@ namespace ts {
                 directoryExists,
                 createDirectory(directoryName: string) {
                     if (!nodeSystem.directoryExists(directoryName)) {
-                        _fs.mkdirSync(directoryName);
+                        try {
+                            _fs.mkdirSync(directoryName);
+                        }
+                        catch (e) {
+                            if (e.code !== "EEXIST") {
+                                throw e;
+                            }
+                        }
                     }
                 },
                 getExecutingFilePath() {
