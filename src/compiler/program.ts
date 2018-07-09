@@ -2500,7 +2500,7 @@ namespace ts {
                 }
             }
 
-            if (options.declarationMap && !options.declaration) {
+            if (options.declarationMap && !getEmitDeclarations(options)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMap", "declaration");
             }
 
