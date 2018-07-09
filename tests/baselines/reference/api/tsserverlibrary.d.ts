@@ -11215,10 +11215,10 @@ declare namespace ts.FindAllReferences.Core {
     function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void;
 }
 declare namespace ts {
-    function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): ReadonlyArray<FileTextChanges>;
+    function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences, sourceMapper: SourceMapper): ReadonlyArray<FileTextChanges>;
     /** If 'path' refers to an old directory, returns path in the new directory. */
     type PathUpdater = (path: string) => string | undefined;
-    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater;
+    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater;
 }
 declare namespace ts.GoToDefinition {
     function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] | undefined;
@@ -14253,6 +14253,8 @@ declare namespace ts.server {
         private mapCodeFixAction;
         private mapTextChangesToCodeEdits;
         private mapTextChangeToCodeEdit;
+        private mapTextChangeToCodeEditUsingScriptInfo;
+        private normalizePath;
         private convertTextChangeToCodeEdit;
         private getBraceMatching;
         private getDiagnosticsForProject;
