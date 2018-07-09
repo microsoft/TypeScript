@@ -19046,47 +19046,40 @@ namespace ts {
                 diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
             }
             else if (args) {
-                const availableArgumentCounts: number[] = [];
-                forEach(signatures, (sig: Signature) => {
-                    const maxArgs = sig.parameters.length;
-                    let argc = sig.minArgumentCount;
-                    do {
-                        pushIfUnique(availableArgumentCounts, argc);
-                        argc++;
-                    } while (argc <= maxArgs);
-                });
+                let min = Number.POSITIVE_INFINITY;
+                let max = Number.NEGATIVE_INFINITY;
+                let belowArgCount = Number.NEGATIVE_INFINITY;
+                let aboveArgCount = Number.POSITIVE_INFINITY;
 
-                const availableArgumentCountsAscending = sort(availableArgumentCounts, (a: number, b: number) => a - b);
-                const min = first(availableArgumentCountsAscending);
-                const max = last(availableArgumentCountsAscending);
+                let argCount = args.length;
+                for (const sig of signatures) {
+                    const minCount = getMinArgumentCount(sig);
+                    const maxCount = getParameterCount(sig);
+                    if (minCount < argCount && minCount > belowArgCount) belowArgCount = minCount;
+                    if (argCount < maxCount && maxCount < aboveArgCount) aboveArgCount = maxCount;
+                    min = Math.min(min, minCount);
+                    max = Math.max(max, maxCount);
+                }
+
+                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
+                if (argCount <= max && hasSpreadArgument) argCount--;
 
                 const hasRestParameter = some(signatures, (sig: Signature) => sig.hasRestParameter);
-                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
                 const paramRange: string | number = hasRestParameter ?
                     min :
                     min < max ?
                         min + "-" + max :
                         min;
-                let argCount = args.length;
-                if (argCount <= max && hasSpreadArgument) argCount--;
-
                 if (hasRestParameter || hasSpreadArgument) {
                     const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                        hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                            hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
-                                undefined;
-                    diagnostics.add(createDiagnosticForNode(node, <DiagnosticMessage>error, paramRange, argCount));
+                        hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 : Diagnostics.Expected_0_arguments_but_got_1_or_more;
+                    diagnostics.add(createDiagnosticForNode(node, error, paramRange, argCount));
+                }
+                else if (min < argCount && argCount < max) {
+                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_arguments_or_at_least_2_arguments, argCount, belowArgCount, aboveArgCount));
                 }
                 else {
-                    if (min < argCount && argCount < max) {
-                        const maxBelowArgCount = lastOrUndefined(filter(availableArgumentCountsAscending, c => c < argCount));
-                        const minAboveArgCount = firstOrUndefined(filter(availableArgumentCountsAscending, c => c > argCount));
-
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, argCount, maxBelowArgCount, minAboveArgCount));
-                    }
-                    else {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount));
-                    }
+                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount));
                 }
             }
             else if (fallbackError) {

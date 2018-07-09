@@ -1,4 +1,4 @@
-tests/cases/conformance/types/rest/genericRestParameters1.ts(22,1): error TS2557: Expected at least 0 arguments, but got 2 or more.
+tests/cases/conformance/types/rest/genericRestParameters1.ts(22,1): error TS2557: Expected at least 3 arguments, but got 1 or more.
 tests/cases/conformance/types/rest/genericRestParameters1.ts(31,1): error TS2556: Expected 3 arguments, but got 1 or more.
 
 
@@ -26,7 +26,7 @@ tests/cases/conformance/types/rest/genericRestParameters1.ts(31,1): error TS2556
     f1(ns[0], ns[1], true);
     f1(...ns, true);  // Error, tuple spread only expanded when last
     ~~~~~~~~~~~~~~~
-!!! error TS2557: Expected at least 0 arguments, but got 2 or more.
+!!! error TS2557: Expected at least 3 arguments, but got 1 or more.
     
     f2(42, "hello", true);
     f2(t3[0], t3[1], t3[2]);
