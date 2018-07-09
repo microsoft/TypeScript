@@ -121,7 +121,7 @@ namespace ts.codefix {
             return parseCallback(node.expression, checker, outermostParent, synthNamesMap, prevArgName);
         }
 
-        
+
         const argNameRes = getArgName(res, checker, synthNamesMap);
         const callbackBody = getCallbackBody(res, prevArgName, argNameRes, node, checker, outermostParent, synthNamesMap);
 
@@ -167,7 +167,7 @@ namespace ts.codefix {
 
     function getCallbackBody(func: Node, prevArgName: string | undefined, argName: string, parent: CallExpression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<string>, isRej = false): NodeArray<Statement> {
         if (!prevArgName && argName) {
-                    prevArgName = argName;
+            prevArgName = argName;
         }
 
         switch (func.kind) {
@@ -190,23 +190,8 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
 
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    let innerCbBody: Statement[] = [];
-                    let innerRetStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(func.body);
-                    for (const stmt of innerRetStmts) {
-                        forEachChild(stmt, function visit(node: Node) {
-                            if (isCallExpression(node)) {
-                                let temp = parseCallback(node, checker, node, synthNamesMap, prevArgName);
-                                innerCbBody = innerCbBody.concat(temp);
-                                if (innerCbBody.length > 0) {
-                                    return;
-                                }
-                            }
-                            else if (!isFunctionLike(node)) {
-                                forEachChild(node, visit);
-                            }
-                        });
-                    }
-
+                    let innerRetStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(func.body as Node);
+                    let innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, prevArgName);
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
@@ -215,15 +200,40 @@ namespace ts.codefix {
 
                 } else if (isArrowFunction(func)) {
                     //if there is another outer dot then, don't actually return
+
+                    let innerCbBody = getInnerCallbackBody(checker, [createReturn(func.body as Expression)], synthNamesMap, prevArgName);
+                    if (innerCbBody.length > 0) {
+                        return createNodeArray(innerCbBody);
+                    }
+
                     const nextOutermostDotThen = getNextDotThen(outermostParent.original as Expression, checker);
 
                     return nextOutermostDotThen ?
                         createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName!, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]) :
-                        createNodeArray([createReturn(func.body as Expression)])
+                        createNodeArray([createReturn(func.body as Expression)]);
                 }
                 break;
         }
         return createNodeArray([]);
+    }
+
+    function getInnerCallbackBody(checker: TypeChecker, innerRetStmts: ReturnStatement[], synthNamesMap: Map<string>, prevArgName?: string) {
+        let innerCbBody: Statement[] = [];
+        for (const stmt of innerRetStmts) {
+            forEachChild(stmt, function visit(node: Node) {
+                if (isCallExpression(node)) {
+                    let temp = parseCallback(node, checker, node, synthNamesMap, prevArgName);
+                    innerCbBody = innerCbBody.concat(temp);
+                    if (innerCbBody.length > 0) {
+                        return;
+                    }
+                }
+                else if (!isFunctionLike(node)) {
+                    forEachChild(node, visit);
+                }
+            });
+        }
+        return innerCbBody;
     }
 
     function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
@@ -254,7 +264,7 @@ namespace ts.codefix {
             name = (<Identifier>funcNode.arguments[0]).text;
         }
         else if (isIdentifier(funcNode)) {
-           name = synthNamesMap.get(funcNode.text);
+            name = synthNamesMap.get(funcNode.text);
         }
 
         if (name === undefined || name === "_") {
