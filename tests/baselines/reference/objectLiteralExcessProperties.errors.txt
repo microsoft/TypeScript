@@ -19,10 +19,8 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(23,29): error TS2322: Type
   Object literal may only specify known properties, and 'couleur' does not exist in type 'Cover | Cover[]'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(25,27): error TS2322: Type '{ forewarned: string; }' is not assignable to type 'Book | Book[]'.
   Object literal may only specify known properties, and 'forewarned' does not exist in type 'Book | Book[]'.
-tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type '{ 0: { colour: string; }; }' is not assignable to type 'Indexed'.
-  Property '0' is incompatible with index signature.
-    Type '{ colour: string; }' is not assignable to type 'Cover'.
-      Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
+tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type '{ colour: string; }' is not assignable to type 'Cover'.
+  Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
 
 
 ==== tests/cases/compiler/objectLiteralExcessProperties.ts (10 errors) ====
@@ -90,8 +88,7 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type
     
     var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
                               ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ 0: { colour: string; }; }' is not assignable to type 'Indexed'.
-!!! error TS2322:   Property '0' is incompatible with index signature.
-!!! error TS2322:     Type '{ colour: string; }' is not assignable to type 'Cover'.
-!!! error TS2322:       Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
+!!! error TS2322: Type '{ colour: string; }' is not assignable to type 'Cover'.
+!!! error TS2322:   Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
+!!! related TS6501 tests/cases/compiler/objectLiteralExcessProperties.ts:28:5: The expected type comes from this index signature.
     

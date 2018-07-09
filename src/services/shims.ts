@@ -102,7 +102,7 @@ namespace ts {
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
 
         /**
-         * Read arbitary text files on disk, i.e. when resolution procedure needs the content of 'package.json' to determine location of bundled typings for node modules
+         * Read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json' to determine location of bundled typings for node modules
          */
         readFile(fileName: string): string | undefined;
         realpath?(path: string): string;
@@ -158,7 +158,7 @@ namespace ts {
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
 
-        getSignatureHelpItems(fileName: string, position: number): string;
+        getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -769,10 +769,10 @@ namespace ts {
 
         /// SIGNATUREHELP
 
-        public getSignatureHelpItems(fileName: string, position: number): string {
+        public getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string {
             return this.forwardJSONCall(
                 `getSignatureHelpItems('${fileName}', ${position})`,
-                () => this.languageService.getSignatureHelpItems(fileName, position)
+                () => this.languageService.getSignatureHelpItems(fileName, position, options)
             );
         }
 

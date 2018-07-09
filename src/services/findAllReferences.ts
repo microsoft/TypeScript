@@ -83,8 +83,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): ReferenceEntry[] | undefined {
-        const node = getTouchingPropertyName(sourceFile, position);
+    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number, options: Options | undefined): ReferenceEntry[] | undefined {
         return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), toReferenceEntry);
     }
 
@@ -499,7 +498,7 @@ namespace ts.FindAllReferences.Core {
             return this.importTracker(exportSymbol, exportInfo, !!this.options.isForRename);
         }
 
-        /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
+        /** @param allSearchSymbols set of additional symbols for use by `includes`. */
         createSearch(location: Node | undefined, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             // Note: getLocalSymbolForExportDefault handles `export default class C {}`, but not `export default C` or `export { C as default }`.
@@ -750,6 +749,25 @@ namespace ts.FindAllReferences.Core {
                 || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol) {
                 const res = cb(token);
                 if (res) return res;
+            }
+        }
+    }
+
+    export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (call: CallExpression) => void): void {
+        if (!signature.name || !isIdentifier(signature.name)) return;
+
+        const symbol = Debug.assertDefined(checker.getSymbolAtLocation(signature.name));
+
+        for (const sourceFile of sourceFiles) {
+            for (const name of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
+                if (!isIdentifier(name) || name === signature.name || name.escapedText !== signature.name.escapedText) continue;
+                const called = climbPastPropertyAccess(name);
+                const call = called.parent;
+                if (!isCallExpression(call) || call.expression !== called) continue;
+                const referenceSymbol = checker.getSymbolAtLocation(name);
+                if (referenceSymbol && checker.getRootSymbols(referenceSymbol).some(s => s === symbol)) {
+                    cb(call);
+                }
             }
         }
     }
@@ -1005,7 +1023,7 @@ namespace ts.FindAllReferences.Core {
 
     function getReferenceForShorthandProperty({ flags, valueDeclaration }: Symbol, search: Search, state: State): void {
         const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration)!;
-        const name = getNameOfDeclaration(valueDeclaration);
+        const name = valueDeclaration && getNameOfDeclaration(valueDeclaration);
         /*
          * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
          * has two meanings: property name and property value. Therefore when we do findAllReference at the position where

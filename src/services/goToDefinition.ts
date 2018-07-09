@@ -28,7 +28,8 @@ namespace ts.GoToDefinition {
         }
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
-        if (calledDeclaration) {
+        // Don't go to the component constructor definition for a JSX element, just go to the component definition.
+        if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorDeclaration(calledDeclaration))) {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
@@ -271,7 +272,7 @@ namespace ts.GoToDefinition {
     }
 
     export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
-        return find(refs, ref => ref.pos <= pos && pos <= ref.end);
+        return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
     function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {

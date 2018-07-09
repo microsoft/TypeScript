@@ -7,7 +7,6 @@ tests/cases/conformance/jsx/inline/index.tsx(21,22): error TS2322: Type '{ child
     Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
       Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
-tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
   Property '__domBrand' is missing in type 'MyClass'.
 tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
 tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
@@ -77,7 +76,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
     
     export default <h></h>
     
-==== tests/cases/conformance/jsx/inline/index.tsx (7 errors) ====
+==== tests/cases/conformance/jsx/inline/index.tsx (6 errors) ====
     /** @jsx dom */
     import { dom } from "./renderer"
     import prerendered, {MySFC, MyClass, tree} from "./component";
@@ -110,8 +109,6 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
 !!! error TS2322:   Types of property 'children' are incompatible.
 !!! error TS2322:     Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
 !!! error TS2322:       Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
-                                           ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
                                            ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
 !!! error TS2605:   Property '__domBrand' is missing in type 'MyClass'.

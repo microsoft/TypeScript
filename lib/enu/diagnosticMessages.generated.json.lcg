@@ -363,6 +363,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";A_required_element_cannot_follow_an_optional_element_1257" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[A required element cannot follow an optional element.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";A_required_parameter_cannot_follow_an_optional_parameter_1016" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A required parameter cannot follow an optional parameter.]]></Val>
@@ -390,6 +396,18 @@
             <Item ItemId=";A_rest_element_must_be_last_in_a_destructuring_pattern_2462" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A rest element must be last in a destructuring pattern.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";A_rest_element_must_be_last_in_a_tuple_type_1256" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[A rest element must be last in a tuple type.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";A_rest_element_type_must_be_an_array_type_2574" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[A rest element type must be an array type.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -495,12 +513,6 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";A_tuple_type_element_list_cannot_be_empty_1122" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[A tuple type element list cannot be empty.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
             <Item ItemId=";A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Con_17007" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.]]></Val>
@@ -603,6 +615,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Add_all_missing_imports_95064" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add all missing imports]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Add_all_missing_members_95022" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add all missing members]]></Val>
@@ -654,6 +672,12 @@
             <Item ItemId=";Add_initializers_to_all_uninitialized_properties_95027" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Add_missing_enum_member_0_95063" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add missing enum member '{0}']]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1683,6 +1707,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Conflicts_are_in_this_file_6201" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Conflicts are in this file.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type_7013" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.]]></Val>
@@ -1743,6 +1773,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Convert_default_export_to_named_export_95061" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Convert default export to named export]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Convert_function_0_to_class_95002" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Convert function '{0}' to class]]></Val>
@@ -1752,6 +1788,12 @@
             <Item ItemId=";Convert_function_to_an_ES2015_class_95001" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Convert function to an ES2015 class]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Convert_named_export_to_default_export_95062" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Convert named export to default export]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1866,6 +1908,12 @@
             <Item ItemId=";Default_export_of_the_module_has_or_is_using_private_name_0_4082" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0_6200" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Definitions of the following identifiers conflict with those in another file: {0}]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2805,6 +2853,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_S_7040" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Ignore this error message]]></Val>
@@ -3405,9 +3459,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_1340" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0_1340" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here.]]></Val>
+                <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here. Did you mean 'typeof import('{0}')'?]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4203,6 +4257,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Property_0_is_incompatible_with_rest_element_type_2573" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Property '{0}' is incompatible with rest element type.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Property_0_is_missing_in_type_1_2324" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Property '{0}' is missing in type '{1}'.]]></Val>
@@ -4254,6 +4314,12 @@
             <Item ItemId=";Property_0_is_used_before_being_assigned_2565" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Property '{0}' is used before being assigned.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Property_0_is_used_before_its_initialization_2729" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Property '{0}' is used before its initialization.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4590,6 +4656,12 @@
             <Item ItemId=";Rest_parameter_0_implicitly_has_an_any_type_7019" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Rest_signatures_are_incompatible_2572" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Rest signatures are incompatible.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -5109,6 +5181,18 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1_6500" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[The expected type comes from property '{0}' which is declared here on type '{1}']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";The_expected_type_comes_from_this_index_signature_6501" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[The expected type comes from this index signature.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context_2714" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[The expression of an export assignment must be an identifier or qualified name in an ambient context.]]></Val>
@@ -5352,6 +5436,12 @@
             <Item ItemId=";The_with_statement_is_not_supported_All_symbols_in_a_with_block_will_have_type_any_2410" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -5616,6 +5706,12 @@
             <Item ItemId=";Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member_1320" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Type_of_computed_property_s_value_is_0_which_is_not_assignable_to_type_1_2418" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Type of computed property's value is '{0}', which is not assignable to type '{1}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -6177,6 +6273,18 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";_0_was_also_declared_here_6203" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['{0}' was also declared here.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";_0_was_declared_here_2728" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['{0}' was declared here.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";_0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type_7010" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['{0}', which lacks return-type annotation, implicitly has an '{1}' return type.]]></Val>
@@ -6186,6 +6294,12 @@
             <Item ItemId=";abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration_1242" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['abstract' modifier can only appear on a class, method, or property declaration.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";and_here_6204" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[and here.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>

@@ -78,7 +78,9 @@ interface Array<T> {}`
     }
 
     export interface SymLink {
+        /** Location of the symlink. */
         path: string;
+        /** Relative path to the real file. */
         symLink: string;
     }
 
@@ -613,6 +615,13 @@ interface Array<T> {}`
                     this.invokeRecursiveDirectoryWatcher(baseFolder.fullPath, fileOrDirectory.fullPath);
                 }
             }
+        }
+
+        removeFile(filePath: string) {
+            const path = this.toFullPath(filePath);
+            const currentEntry = this.fs.get(path) as FsFile;
+            Debug.assert(isFsFile(currentEntry));
+            this.removeFileOrFolder(currentEntry, returnFalse);
         }
 
         removeFolder(folderPath: string, recursive?: boolean) {

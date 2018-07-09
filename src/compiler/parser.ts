@@ -2090,8 +2090,18 @@ namespace ts {
             return result;
         }
 
-        function createMissingList<T extends Node>(): NodeArray<T> {
-            return createNodeArray<T>([], getNodePos());
+        interface MissingList<T extends Node> extends NodeArray<T> {
+            isMissingList: true;
+        }
+
+        function createMissingList<T extends Node>(): MissingList<T> {
+            const list = createNodeArray<T>([], getNodePos()) as MissingList<T>;
+            list.isMissingList = true;
+            return list;
+        }
+
+        function isMissingList(arr: NodeArray<Node>): boolean {
+            return !!(arr as MissingList<Node>).isMissingList;
         }
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): NodeArray<T> {
@@ -2260,8 +2270,7 @@ namespace ts {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType: {
                     const { parameters, type } = node as FunctionOrConstructorTypeNode;
-                    // parameters.pos === parameters.end only if we used parseMissingList, else should contain at least `()`
-                    return parameters.pos === parameters.end || typeHasArrowFunctionBlockingParseError(type);
+                    return isMissingList(parameters) || typeHasArrowFunctionBlockingParseError(type);
                 }
                 case SyntaxKind.ParenthesizedType:
                     return typeHasArrowFunctionBlockingParseError((node as ParenthesizedTypeNode).type);
@@ -4314,9 +4323,9 @@ namespace ts {
             // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
             // We only want to consider "this" as a primaryExpression
             let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
-                parseTokenNode<PrimaryExpression>() : parseIdentifierName();
+                parseTokenNode<ThisExpression>() : parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
-                const propertyAccess: PropertyAccessExpression = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                const propertyAccess: JsxTagNamePropertyAccess = <JsxTagNamePropertyAccess>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                 propertyAccess.expression = expression;
                 propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
                 expression = finishNode(propertyAccess);
@@ -7646,7 +7655,8 @@ namespace ts {
         }
     }
 
-    function isDeclarationFileName(fileName: string): boolean {
+    /** @internal */
+    export function isDeclarationFileName(fileName: string): boolean {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
@@ -7886,7 +7896,7 @@ namespace ts {
         }
 
         if (lhs.kind === SyntaxKind.Identifier) {
-            return (<Identifier>lhs).escapedText === (<Identifier>rhs).escapedText;
+            return lhs.escapedText === (<Identifier>rhs).escapedText;
         }
 
         if (lhs.kind === SyntaxKind.ThisKeyword) {

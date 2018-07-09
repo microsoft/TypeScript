@@ -12,11 +12,17 @@ sourceFile:tests/cases/compiler/a.ts
 >>>    export class Foo {
 1 >^^^^
 2 >    ^^^^^^
-3 >          ^^^^^^^^^^^->
+3 >          ^^^^^^^
+4 >                 ^^^
+5 >                    ^->
 1 >
 2 >    export
+3 >           class 
+4 >                 Foo
 1 >Emitted(2, 5) Source(1, 1) + SourceIndex(0)
 2 >Emitted(2, 11) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 18) Source(1, 14) + SourceIndex(0)
+4 >Emitted(2, 21) Source(1, 17) + SourceIndex(0)
 ---
 >>>        doThing(x: {
 1->^^^^^^^^
@@ -24,7 +30,7 @@ sourceFile:tests/cases/compiler/a.ts
 3 >               ^
 4 >                ^^^
 5 >                   ^^^^->
-1-> class Foo {
+1-> {
   >    
 2 >        doThing
 3 >               (

@@ -144,7 +144,7 @@ namespace ts {
         function visitVariableStatementInAsyncBody(node: VariableStatement) {
             if (isVariableDeclarationListWithCollidingName(node.declarationList)) {
                 const expression = visitVariableDeclarationListWithCollidingNames(node.declarationList, /*hasReceiver*/ false);
-                return expression ? createStatement(expression) : undefined;
+                return expression ? createExpressionStatement(expression) : undefined;
             }
             return visitEachChild(node, visitor, context);
         }

@@ -147,7 +147,7 @@ namespace ts {
             const updated = updateSourceFileNode(node,
                 setTextRange(
                     createNodeArray([
-                        createStatement(
+                        createExpressionStatement(
                             createCall(
                                 define,
                                 /*typeArguments*/ undefined,
@@ -240,7 +240,7 @@ namespace ts {
                                                 createIdentifier("v"),
                                                 createIdentifier("undefined")
                                             ),
-                                            createStatement(
+                                            createExpressionStatement(
                                                 createAssignment(
                                                     createPropertyAccess(createIdentifier("module"), "exports"),
                                                     createIdentifier("v")
@@ -256,7 +256,7 @@ namespace ts {
                                         createPropertyAccess(createIdentifier("define"), "amd")
                                     ),
                                     createBlock([
-                                        createStatement(
+                                        createExpressionStatement(
                                             createCall(
                                                 createIdentifier("define"),
                                                 /*typeArguments*/ undefined,
@@ -299,7 +299,7 @@ namespace ts {
                 node,
                 setTextRange(
                     createNodeArray([
-                        createStatement(
+                        createExpressionStatement(
                             createCall(
                                 umdHeader,
                                 /*typeArguments*/ undefined,
@@ -396,7 +396,7 @@ namespace ts {
             if (expr === name) {
                 return undefined;
             }
-            return createStatement(createAssignment(name, expr));
+            return createExpressionStatement(createAssignment(name, expr));
         }
 
         /**
@@ -460,7 +460,7 @@ namespace ts {
                         statements.push(statement);
                     }
                     else {
-                        const statement = createStatement(
+                        const statement = createExpressionStatement(
                             createAssignment(
                                 createPropertyAccess(
                                     createIdentifier("module"),
@@ -652,7 +652,7 @@ namespace ts {
                 createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
             ];
             const body = createBlock([
-                createStatement(
+                createExpressionStatement(
                     createCall(
                         createIdentifier("require"),
                         /*typeArguments*/ undefined,
@@ -767,7 +767,7 @@ namespace ts {
             if (moduleKind !== ModuleKind.AMD) {
                 if (!node.importClause) {
                     // import "mod";
-                    return setTextRange(createStatement(createRequireCall(node)), node);
+                    return setTextRange(createExpressionStatement(createRequireCall(node)), node);
                 }
                 else {
                     const variables: VariableDeclaration[] = [];
@@ -881,7 +881,7 @@ namespace ts {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
                         setTextRange(
-                            createStatement(
+                            createExpressionStatement(
                                 createExportExpression(
                                     node.name,
                                     createRequireCall(node)
@@ -916,7 +916,7 @@ namespace ts {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
                         setTextRange(
-                            createStatement(
+                            createExpressionStatement(
                                 createExportExpression(getExportName(node), getLocalName(node))
                             ),
                             node
@@ -978,7 +978,7 @@ namespace ts {
                     );
                     statements.push(
                         setTextRange(
-                            createStatement(
+                            createExpressionStatement(
                                 createExportExpression(getExportName(specifier), exportedValue)
                             ),
                             specifier
@@ -991,7 +991,7 @@ namespace ts {
             else {
                 // export * from "mod";
                 return setTextRange(
-                    createStatement(
+                    createExpressionStatement(
                         createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
                     ),
                     node
@@ -1140,7 +1140,7 @@ namespace ts {
                 }
 
                 if (expressions) {
-                    statements = append(statements, setTextRange(createStatement(inlineExpressions(expressions)), node));
+                    statements = append(statements, setTextRange(createExpressionStatement(inlineExpressions(expressions)), node));
                 }
             }
             else {
@@ -1429,7 +1429,7 @@ namespace ts {
         function createUnderscoreUnderscoreESModule() {
             let statement: Statement;
             if (languageVersion === ScriptTarget.ES3) {
-                statement = createStatement(
+                statement = createExpressionStatement(
                     createExportExpression(
                         createIdentifier("__esModule"),
                         createLiteral(/*value*/ true)
@@ -1437,7 +1437,7 @@ namespace ts {
                 );
             }
             else {
-                statement = createStatement(
+                statement = createExpressionStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("Object"), "defineProperty"),
                         /*typeArguments*/ undefined,
@@ -1464,7 +1464,7 @@ namespace ts {
          * @param allowComments An optional value indicating whether to emit comments for the statement.
          */
         function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean) {
-            const statement = setTextRange(createStatement(createExportExpression(name, value)), location);
+            const statement = setTextRange(createExpressionStatement(createExportExpression(name, value)), location);
             startOnNewLine(statement);
             if (!allowComments) {
                 setEmitFlags(statement, EmitFlags.NoComments);

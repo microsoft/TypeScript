@@ -329,16 +329,17 @@ namespace ts {
         return context;
     }
 
-    function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost) {
+    /* @internal */
+    export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset) {
         const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
         const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
         let output = "";
-        output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
+        output += color(relativeFileName, ForegroundColorEscapeSequences.Cyan);
         output += ":";
-        output += formatColorAndReset(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
+        output += color(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
         output += ":";
-        output += formatColorAndReset(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
+        output += color(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
         return output;
     }
 
@@ -1248,6 +1249,7 @@ namespace ts {
                     return host.fileExists(f);
                 },
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
+                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             };
         }
 
@@ -2342,7 +2344,7 @@ namespace ts {
             const refPath = resolveProjectReferencePath(host, ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
-            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile;
+            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
             if (sourceFile === undefined) {
                 return undefined;
             }
@@ -2821,10 +2823,14 @@ namespace ts {
         };
     }
 
+    export interface ResolveProjectReferencePathHost {
+        fileExists(fileName: string): boolean;
+    }
     /**
-     * Returns the target config filename of a project reference
+     * Returns the target config filename of a project reference.
+     * Note: The file might not exist.
      */
-    export function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName {
+    export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName {
         if (!host.fileExists(ref.path)) {
             return combinePaths(ref.path, "tsconfig.json") as ResolvedConfigFileName;
         }

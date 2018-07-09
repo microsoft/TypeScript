@@ -10,24 +10,29 @@ sourceFile:a.ts
 -------------------------------------------------------------------
 >>>export declare class Foo {
 1 >
-2 >^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^
+3 >                     ^^^
 1 >
+2 >export class 
+3 >                     Foo
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 22) Source(1, 14) + SourceIndex(0)
+3 >Emitted(1, 25) Source(1, 17) + SourceIndex(0)
 ---
 >>>    doThing(x: {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^
 3 >           ^
 4 >            ^
 5 >             ^^
 6 >               ^^^^->
-1->export class Foo {
+1 > {
   >    
 2 >    doThing
 3 >           (
 4 >            x
 5 >             : 
-1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
 3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
 4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
