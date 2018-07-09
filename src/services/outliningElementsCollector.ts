@@ -183,6 +183,26 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
+            case SyntaxKind.JsxElement:
+                return spanForJSXElement(<JsxElement>n);
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+        }
+
+        function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
+            const textSpan = createTextSpanFromBounds(node.openingElement.getStart(sourceFile), node.closingElement.getEnd());
+            const tagName = node.openingElement.tagName.getText(sourceFile);
+            const bannerText = "<" + tagName + ">...</" + tagName + ">";
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
+        }
+
+        function spanForJSXAttributes(node: JsxAttributes): OutliningSpan | undefined {
+            if (node.properties.length === 0) {
+                return undefined;
+            }
+
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
