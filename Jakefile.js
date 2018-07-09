@@ -10,6 +10,8 @@ const ts = require("./lib/typescript");
 const del = require("del");
 const getDirSize = require("./scripts/build/getDirSize");
 const { base64VLQFormatEncode } = require("./scripts/build/sourcemaps");
+const needsUpdate = require("./scripts/build/needsUpdate");
+const { flatten } = require("./scripts/build/project");
 
 // add node_modules to path so we don't need global modules, prefer the modules by adding them first
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
@@ -65,10 +67,14 @@ Paths.typesMapOutput = "built/local/typesMap.json";
 Paths.typescriptFile = "built/local/typescript.js";
 Paths.servicesFile = "built/local/typescriptServices.js";
 Paths.servicesDefinitionFile = "built/local/typescriptServices.d.ts";
+Paths.servicesOutFile = "built/local/typescriptServices.out.js";
+Paths.servicesDefinitionOutFile = "built/local/typescriptServices.out.d.ts";
 Paths.typescriptDefinitionFile = "built/local/typescript.d.ts";
 Paths.typescriptStandaloneDefinitionFile = "built/local/typescript_standalone.d.ts";
 Paths.tsserverLibraryFile = "built/local/tsserverlibrary.js";
 Paths.tsserverLibraryDefinitionFile = "built/local/tsserverlibrary.d.ts";
+Paths.tsserverLibraryOutFile = "built/local/tsserverlibrary.out.js";
+Paths.tsserverLibraryDefinitionOutFile = "built/local/tsserverlibrary.out.d.ts";
 Paths.baselines = {};
 Paths.baselines.local = "tests/baselines/local";
 Paths.baselines.localTest262 = "tests/baselines/test262/local";
@@ -103,7 +109,9 @@ const ConfigFileFor = {
     runjs: "src/testRunner",
     lint: "scripts/tslint",
     scripts: "scripts",
-    all: "src"
+    all: "src",
+    typescriptServices: "built/local/typescriptServices.tsconfig.json",
+    tsserverLibrary: "built/local/tsserverlibrary.tsconfig.json",
 };
 
 const ExpectedLKGFiles = [
@@ -126,13 +134,18 @@ desc("Builds the full compiler and services");
 task(TaskNames.local, [
     TaskNames.buildFoldStart,
     TaskNames.coreBuild,
+    Paths.servicesDefinitionFile,
+    Paths.typescriptFile,
+    Paths.typescriptDefinitionFile,
+    Paths.typescriptStandaloneDefinitionFile,
+    Paths.tsserverLibraryDefinitionFile,
     TaskNames.localize,
     TaskNames.buildFoldEnd
 ]);
 
 task("default", [TaskNames.local]);
 
-const RunTestsPrereqs = [TaskNames.lib, Paths.servicesDefinitionFile, Paths.tsserverLibraryDefinitionFile];
+const RunTestsPrereqs = [TaskNames.lib, Paths.servicesDefinitionFile, Paths.typescriptDefinitionFile, Paths.tsserverLibraryDefinitionFile];
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task(TaskNames.runtestsParallel, RunTestsPrereqs, function () {
     tsbuild([ConfigFileFor.runjs], true, () => {
@@ -174,6 +187,9 @@ task(TaskNames.lkg, [
     TaskNames.release,
     TaskNames.local,
     Paths.servicesDefinitionFile,
+    Paths.typescriptFile,
+    Paths.typescriptDefinitionFile,
+    Paths.typescriptStandaloneDefinitionFile,
     Paths.tsserverLibraryDefinitionFile,
     Paths.releaseCompiler,
     ...libraryTargets
@@ -335,108 +351,146 @@ file(Paths.diagnosticInformationMap, [Paths.diagnosticMessagesJson], function ()
     });
 }, { async: true });
 
+file(ConfigFileFor.tsserverLibrary, [], function () {
+    flatten("src/tsserver/tsconfig.json", ConfigFileFor.tsserverLibrary, {
+        exclude: ["src/tsserver/server.ts"],
+        compilerOptions: {
+            "removeComments": false,
+            "stripInternal": true,
+            "declarationMap": false,
+            "outFile": "tsserverlibrary.out.js"
+        }
+    })
+});
+
+// tsserverlibrary.js
 // tsserverlibrary.d.ts
-file(Paths.tsserverLibraryDefinitionFile, [TaskNames.coreBuild], function() {
-    const files = [];
-    recur(`src/tsserver/tsconfig.json`);
+file(Paths.tsserverLibraryFile, [TaskNames.coreBuild, ConfigFileFor.tsserverLibrary], function() {
+    tsbuild(ConfigFileFor.tsserverLibrary, false, () => {
+        if (needsUpdate([Paths.tsserverLibraryOutFile, Paths.tsserverLibraryDefinitionOutFile], [Paths.tsserverLibraryFile, Paths.tsserverLibraryDefinitionFile])) {
+            const copyright = readFileSync(Paths.copyright);
 
-    const config = {
-        extends: "../../src/tsserver/tsconfig.json",
+            let libraryDefinitionContent = readFileSync(Paths.tsserverLibraryDefinitionOutFile);
+            libraryDefinitionContent = copyright + removeConstModifierFromEnumDeclarations(libraryDefinitionContent);
+            libraryDefinitionContent += "\nexport = ts;\nexport as namespace ts;";
+            fs.writeFileSync(Paths.tsserverLibraryDefinitionFile, libraryDefinitionContent, "utf8");
+
+            let libraryContent = readFileSync(Paths.tsserverLibraryOutFile);
+            libraryContent = copyright + libraryContent;
+            fs.writeFileSync(Paths.tsserverLibraryFile, libraryContent, "utf8");
+
+            // adjust source map for tsserverlibrary.js
+            let libraryMapContent = readFileSync(Paths.tsserverLibraryOutFile + ".map");
+            const map = JSON.parse(libraryMapContent);
+            const lineStarts = /**@type {*}*/(ts).computeLineStarts(copyright);
+            let prependMappings = "";
+            for (let i = 1; i < lineStarts.length; i++) {
+                prependMappings += ";";
+            }
+
+            const offset = copyright.length - lineStarts[lineStarts.length - 1];
+            if (offset > 0) {
+                prependMappings += base64VLQFormatEncode(offset) + ",";
+            }
+
+            const outputMap = {
+                version: map.version,
+                file: map.file,
+                sources: map.sources,
+                sourceRoot: map.sourceRoot,
+                mappings: prependMappings + map.mappings,
+                names: map.names,
+                sourcesContent: map.sourcesContent
+            };
+
+            libraryMapContent = JSON.stringify(outputMap);
+            fs.writeFileSync(Paths.tsserverLibraryFile + ".map", libraryMapContent);
+        }
+        complete();
+    });
+}, { async: true });
+task(Paths.tsserverLibraryDefinitionFile, [Paths.tsserverLibraryFile]);
+
+file(ConfigFileFor.typescriptServices, [], function () {
+    flatten("src/services/tsconfig.json", ConfigFileFor.typescriptServices, {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
             "declarationMap": false,
-            "outFile": "tsserverlibrary.js"
-        },
-        files
-    };
-
-    const configFilePath = `built/local/tsserverlibrary.tsconfig.json`;
-    fs.writeFileSync(configFilePath, JSON.stringify(config, undefined, 2));
-
-    const previousTime = getModifiedTime(Paths.tsserverLibraryFile);
-    tsbuild(configFilePath, false, () => {
-        if (previousTime !== getModifiedTime(Paths.tsserverLibraryFile)) {
-            prependCopyright(Paths.tsserverLibraryFile, Paths.tsserverLibraryFile, /*fixSourceMaps*/ true);
-            prependCopyright(Paths.tsserverLibraryDefinitionFile, Paths.tsserverLibraryDefinitionFile, /*fixSourceMaps*/ false);
-            const libraryDefinitionContent = readFileSync(Paths.tsserverLibraryDefinitionFile);
-            const libraryDefinitionContentWithoutConstEnums = removeConstModifierFromEnumDeclarations(libraryDefinitionContent);
-            fs.writeFileSync(Paths.tsserverLibraryDefinitionFile, libraryDefinitionContentWithoutConstEnums + "\nexport = ts;\nexport as namespace ts;");
+            "outFile": "typescriptServices.out.js"
         }
-        complete();
     });
+});
 
-    function recur(configPath) {
-        const cfgFile = readJson(configPath);
-        if (cfgFile.references) {
-            for (const ref of cfgFile.references) {
-                recur(path.join(path.dirname(configPath), ref.path, "tsconfig.json"));
-            }
-        }
-        for (const file of cfgFile.files) {
-            // don't include server.ts
-            if (configPath === "src/tsserver/tsconfig.json" && file === "server.ts") continue;
-            files.push(path.join(`../../`, path.dirname(configPath), file));
-        }
-    }
-}, { async: true });
+// typescriptServices.js
+// typescriptServices.d.ts
+file(Paths.servicesFile, [TaskNames.coreBuild, ConfigFileFor.typescriptServices], function() {
+    tsbuild(ConfigFileFor.typescriptServices, false, () => {
+        if (needsUpdate([Paths.servicesOutFile, Paths.servicesDefinitionOutFile], [Paths.servicesFile, Paths.servicesDefinitionFile])) {
+            const copyright = readFileSync(Paths.copyright);
 
-// typescriptservices.d.ts
-file(Paths.servicesDefinitionFile, [TaskNames.coreBuild], function() {
-    // Generate a config file
-    const files = [];
-    recur(`src/services/tsconfig.json`);
+            let servicesDefinitionContent = readFileSync(Paths.servicesDefinitionOutFile);
+            servicesDefinitionContent = copyright + removeConstModifierFromEnumDeclarations(servicesDefinitionContent);
+            fs.writeFileSync(Paths.servicesDefinitionFile, servicesDefinitionContent, "utf8");
 
-    const config = {
-        extends: "../../src/tsconfig-base",
-        compilerOptions: {
-            "removeComments": false,
-            "stripInternal": true,
-            "declarationMap": false,
-            "outFile": "typescriptServices.js"
-        },
-        files
-    };
+            let servicesContent = readFileSync(Paths.servicesOutFile);
+            servicesContent = copyright + servicesContent;
+            fs.writeFileSync(Paths.servicesFile, servicesContent, "utf8");
 
-    const configFilePath = `built/local/typescriptServices.tsconfig.json`;
-    fs.writeFileSync(configFilePath, JSON.stringify(config, undefined, 2));
-
-    const previousTime = getModifiedTime(Paths.servicesDefinitionFile);
-    tsbuild(configFilePath, false, () => {
-        if (previousTime !== getModifiedTime(Paths.servicesDefinitionFile)) {
-            prependCopyright(Paths.servicesFile, Paths.servicesFile, /*fixSourceMaps*/ true);
-            prependCopyright(Paths.servicesDefinitionFile, Paths.servicesDefinitionFile, /*fixSourceMaps*/ false);
-
-            const servicesDefinitionContent = readFileSync(Paths.servicesDefinitionFile);
-            const servicesDefinitionContentWithoutConstEnums = removeConstModifierFromEnumDeclarations(servicesDefinitionContent);
-            fs.writeFileSync(Paths.servicesDefinitionFile, servicesDefinitionContentWithoutConstEnums);
-
-            // Also build typescript.js, typescript.js.map, and typescript.d.ts
-            jake.cpR(Paths.servicesFile, Paths.typescriptFile);
-            if (fs.existsSync(Paths.servicesFile + ".map")) {
-                jake.cpR(Paths.servicesFile + ".map", Paths.typescriptFile + ".map");
+            // adjust source map for typescriptServices.js
+            let servicesMapContent = readFileSync(Paths.servicesOutFile + ".map");
+            const map = JSON.parse(servicesMapContent);
+            const lineStarts = /**@type {*}*/(ts).computeLineStarts(copyright);
+            let prependMappings = "";
+            for (let i = 1; i < lineStarts.length; i++) {
+                prependMappings += ";";
             }
 
-            fs.writeFileSync(Paths.typescriptDefinitionFile, servicesDefinitionContentWithoutConstEnums + "\r\nexport = ts;", { encoding: "utf-8" });
-            // And typescript_standalone.d.ts
-            fs.writeFileSync(Paths.typescriptStandaloneDefinitionFile, servicesDefinitionContentWithoutConstEnums.replace(/declare (namespace|module) ts(\..+)? \{/g, 'declare module "typescript" {'), { encoding: "utf-8"});
+            const offset = copyright.length - lineStarts[lineStarts.length - 1];
+            if (offset > 0) {
+                prependMappings += base64VLQFormatEncode(offset) + ",";
+            }
+
+            const outputMap = {
+                version: map.version,
+                file: map.file,
+                sources: map.sources,
+                sourceRoot: map.sourceRoot,
+                mappings: prependMappings + map.mappings,
+                names: map.names,
+                sourcesContent: map.sourcesContent
+            };
+
+            servicesMapContent = JSON.stringify(outputMap);
+            fs.writeFileSync(Paths.servicesFile + ".map", servicesMapContent);
         }
 
         complete();
     });
-
-    function recur(configPath) {
-        const cfgFile = readJson(configPath);
-        if (cfgFile.references) {
-            for (const ref of cfgFile.references) {
-                recur(path.join(path.dirname(configPath), ref.path, "tsconfig.json"));
-            }
-        }
-        for (const file of cfgFile.files) {
-            files.push(path.join(`../../`, path.dirname(configPath), file));
-        }
-    }
 }, { async: true });
+task(Paths.servicesDefinitionFile, [Paths.servicesFile]);
+
+// typescript.js
+// typescript.d.ts
+file(Paths.typescriptFile, [Paths.servicesFile], function() {
+    if (needsUpdate([Paths.servicesFile, Paths.servicesDefinitionFile], [Paths.typescriptFile, Paths.typescriptDefinitionFile])) {
+        jake.cpR(Paths.servicesFile, Paths.typescriptFile);
+        if (fs.existsSync(Paths.servicesFile + ".map")) {
+            jake.cpR(Paths.servicesFile + ".map", Paths.typescriptFile + ".map");
+        }
+        const content = readFileSync(Paths.servicesDefinitionFile);
+        fs.writeFileSync(Paths.typescriptDefinitionFile, content + "\r\nexport = ts;", { encoding: "utf-8" });
+    }
+});
+task(Paths.typescriptDefinitionFile, [Paths.typescriptFile]);
+
+// typescript_standalone.d.ts
+file(Paths.typescriptStandaloneDefinitionFile, [Paths.servicesDefinitionFile], function() {
+    if (needsUpdate(Paths.servicesDefinitionFile, Paths.typescriptStandaloneDefinitionFile)) {
+        const content = readFileSync(Paths.servicesDefinitionFile);
+        fs.writeFileSync(Paths.typescriptStandaloneDefinitionFile, content.replace(/declare (namespace|module) ts(\..+)? \{/g, 'declare module "typescript" {'), { encoding: "utf-8"});
+    }
+});
 
 function getLibraryTargets() {
     /** @type {{ libs: string[], paths?: Record<string, string>, sources?: Record<string, string[]> }} */
@@ -811,50 +865,4 @@ function getDiffTool() {
  */
 function removeConstModifierFromEnumDeclarations(text) {
     return text.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
-}
-
-function prependCopyright(src, dest, fixSourceMaps) {
-    const copyright = readFileSync(Paths.copyright);
-    const content = readFileSync(src);
-    const contentWithCopyright = copyright + content;
-    fs.writeFileSync(dest, contentWithCopyright);
-    if (fixSourceMaps) {
-        try {
-            const mapContent = readFileSync(src + ".map");
-            const map = JSON.parse(mapContent);
-            const lineStarts = /**@type {*}*/(ts).computeLineStarts(copyright);
-            let prependMappings = "";
-            for (let i = 1; i < lineStarts.length; i++) {
-                prependMappings += ";";
-            }
-            const offset = copyright.length - lineStarts[lineStarts.length - 1];
-            if (offset > 0) {
-                prependMappings += base64VLQFormatEncode(offset) + ",";
-            }
-            const outputLibraryMap = {
-                version: map.version,
-                file: map.file,
-                sources: map.sources,
-                sourceRoot: map.sourceRoot,
-                mappings: prependMappings + map.mappings,
-                names: map.names,
-                sourcesContent: map.sourcesContent
-            };
-            const outputLibraryMapContent = JSON.stringify(outputLibraryMap);
-            fs.writeFileSync(dest + ".map", outputLibraryMapContent);
-        }
-        catch (e) {
-            // ignore
-        }
-    }
-}
-
-function getModifiedTime(file) {
-    try {
-        const stats = fs.statSync(file);
-        return stats.mtimeMs;
-    }
-    catch (e) {
-        return undefined;
-    }
 }

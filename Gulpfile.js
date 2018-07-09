@@ -12,7 +12,6 @@ const sourcemaps = require("gulp-sourcemaps");
 const del = require("del");
 const fold = require("travis-fold");
 const rename = require("gulp-rename");
-const through2 = require("through2");
 const mkdirp = require("./scripts/build/mkdirp");
 const gulp = require("./scripts/build/gulp");
 const getDirSize = require("./scripts/build/getDirSize");
@@ -140,7 +139,7 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
             "removeComments": false,
             "stripInternal": true,
             "declarationMap": false,
-            "outFile": "typescriptServices.js"
+            "outFile": "typescriptServices.out.js" // must align with same task in jakefile. We fix this name below.
         }
     });
 });
@@ -150,11 +149,13 @@ const typescriptServicesDts = "built/local/typescriptServices.d.ts";
 gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], () =>
     project.compile(typescriptServicesProject, {
         js: files => files
-            .pipe(prepend.file(copyright)),
+            .pipe(prepend.file(copyright))
+            .pipe(rename("typescriptServices.js")),
         dts: files => files
             .pipe(removeSourceMaps())
             .pipe(prepend.file(copyright))
             .pipe(convertConstEnums())
+            .pipe(rename("typescriptServices.d.ts"))
     }),
     { aliases: [typescriptServicesDts] });
 
@@ -234,7 +235,7 @@ gulp.task(tsserverlibraryProject, /*help*/ false, () => {
             "removeComments": false,
             "stripInternal": true,
             "declarationMap": false,
-            "outFile": "tsserverlibrary.js"
+            "outFile": "tsserverlibrary.out.js" // must align with same task in jakefile. We fix this name below.
         }
     });
 });
@@ -244,12 +245,14 @@ const tsserverlibraryDts = "built/local/tsserverlibrary.d.ts";
 gulp.task(tsserverlibraryJs, /*help*/ false, useCompilerDeps.concat([tsserverlibraryProject]), () =>
     project.compile(tsserverlibraryProject, {
         js: files => files
-            .pipe(prepend.file(copyright)),
+            .pipe(prepend.file(copyright))
+            .pipe(rename("tsserverlibrary.js")),
         dts: files => files
             .pipe(removeSourceMaps())
             .pipe(prepend.file(copyright))
             .pipe(convertConstEnums())
-            .pipe(append("\nexport = ts;\nexport as namespace ts;")),
+            .pipe(append("\nexport = ts;\nexport as namespace ts;"))
+            .pipe(rename("tsserverlibrary.d.ts")),
         typescript: useCompiler
     }), { aliases: [tsserverlibraryDts] });
 
