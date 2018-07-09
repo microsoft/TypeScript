@@ -9194,6 +9194,22 @@ export function Test2() {
             });
 
         });
+
+        it("getEditsForFileRename", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, protocol.CommandTypes.GetEditsForFileRename, {
+                oldFilePath: aTs.path,
+                newFilePath: "/a/aNew.ts",
+            });
+            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+                {
+                    fileName: userTs.path,
+                    textChanges: [
+                        { ...protocolTextSpanFromSubstring(userTs.content, "../a/bin/a"), newText: "../a/bin/aNew" },
+                    ],
+                },
+            ]);
+        });
     });
 
     function makeReferenceItem(file: File, isDefinition: boolean, text: string, lineText: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
