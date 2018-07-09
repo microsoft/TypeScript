@@ -30,13 +30,11 @@ namespace ts.SignatureHelp {
         }
 
         // Only need to be careful if the user typed a character and signature help wasn't showing.
-        const shouldCarefullyCheckContext = !!triggerReason && triggerReason.kind === "characterTyped";
+        const onlyUseSyntacticOwners = !!triggerReason && triggerReason.kind === "characterTyped";
 
         // Bail out quickly in the middle of a string or comment, don't provide signature help unless the user explicitly requested it.
-        if (shouldCarefullyCheckContext) {
-            if (isInString(sourceFile, position, startingToken) || isInComment(sourceFile, position)) {
-                return undefined;
-            }
+        if (onlyUseSyntacticOwners && (isInString(sourceFile, position, startingToken) || isInComment(sourceFile, position))) {
+            return undefined;
         }
 
         const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile);
@@ -45,7 +43,7 @@ namespace ts.SignatureHelp {
         cancellationToken.throwIfCancellationRequested();
 
         // Extra syntactic and semantic filtering of signature help
-        const candidateInfo = getCandidateInfo(argumentInfo, typeChecker, sourceFile, startingToken, shouldCarefullyCheckContext);
+        const candidateInfo = getCandidateInfo(argumentInfo, typeChecker, sourceFile, startingToken, onlyUseSyntacticOwners);
         cancellationToken.throwIfCancellationRequested();
 
         if (!candidateInfo) {
@@ -66,35 +64,9 @@ namespace ts.SignatureHelp {
 
         const { invocation } = argumentInfo;
         if (invocation.kind === InvocationKind.Call) {
-            if (onlyUseSyntacticOwners) {
-                if (isCallOrNewExpression(invocation.node)) {
-                    const invocationChildren = invocation.node.getChildren(sourceFile);
-                    switch (startingToken.kind) {
-                        case SyntaxKind.OpenParenToken:
-                            if (!contains(invocationChildren, startingToken)) {
-                                return undefined;
-                            }
-                            break;
-                        case SyntaxKind.CommaToken:
-                            const containingList = findContainingList(startingToken);
-                            if (!containingList || !contains(invocationChildren, findContainingList(startingToken))) {
-                                return undefined;
-                            }
-                            break;
-                        case SyntaxKind.LessThanToken:
-                            if (!lessThanFollowsCalledExpression(startingToken, sourceFile, invocation.node.expression)) {
-                                return undefined;
-                            }
-                            break;
-                        default:
-                            return undefined;
-                    }
-                }
-                else {
-                    return undefined;
-                }
+            if (onlyUseSyntacticOwners && !isSyntacticOwner(startingToken, invocation.node, sourceFile)) {
+                return undefined;
             }
-
             const candidates: Signature[] = [];
             const resolvedSignature = checker.getResolvedSignature(invocation.node, candidates, argumentInfo.argumentCount)!; // TODO: GH#18217
             return candidates.length === 0 ? undefined : { candidates, resolvedSignature };
@@ -110,6 +82,23 @@ namespace ts.SignatureHelp {
         }
         else {
             Debug.assertNever(invocation);
+        }
+    }
+
+    function isSyntacticOwner(startingToken: Node, node: CallLikeExpression, sourceFile: SourceFile): boolean {
+        if (!isCallOrNewExpression(node)) return false;
+        const invocationChildren = node.getChildren(sourceFile);
+        switch (startingToken.kind) {
+            case SyntaxKind.OpenParenToken:
+                return contains(invocationChildren, startingToken);
+            case SyntaxKind.CommaToken: {
+                const containingList = findContainingList(startingToken);
+                return !!containingList && contains(invocationChildren, containingList);
+            }
+            case SyntaxKind.LessThanToken:
+                return lessThanFollowsCalledExpression(startingToken, sourceFile, node.expression);
+            default:
+                return false;
         }
     }
 
