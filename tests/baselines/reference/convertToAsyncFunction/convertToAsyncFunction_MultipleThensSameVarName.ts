@@ -13,9 +13,9 @@ function res2(result){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f():Promise<boolean> {
-    let result_1 = await fetch('https://typescriptlang.org');
-    let result = await res(result_1);
-    return res2(result);
+    let result = await fetch('https://typescriptlang.org');
+    let result_1 = await res(result);
+    return res2(result_1);
 }
 function res(result){
     return result.ok;
