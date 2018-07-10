@@ -2549,7 +2549,7 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
                 }
                 // Any emit other than common js is error
-                else if (options.module !== undefined && options.module !== ModuleKind.CommonJS) {
+                else if (getEmitModuleKind(options) !== ModuleKind.CommonJS) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs, "resolveJsonModule", "module");
                 }
             }
