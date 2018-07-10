@@ -4,7 +4,7 @@ const os = require("os");
 
 /** @type {CommandLineOptions} */
 module.exports = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "fix", "failed", "keepFailed"],
+    boolean: ["debug", "dirty", "inspect", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         "b": "browser",
@@ -33,17 +33,21 @@ module.exports = minimist(process.argv.slice(2), {
         fix: process.env.fix || process.env.f,
         workers: process.env.workerCount || os.cpus().length,
         failed: false,
-        keepFailed: false
+        keepFailed: false,
+        lkg: false,
+        dirty: false
     }
 });
 
 /**
  * @typedef TypedOptions
  * @property {boolean} debug
+ * @property {boolean} dirty
  * @property {boolean} inspect
  * @property {boolean} light
  * @property {boolean} colors
  * @property {boolean} lint
+ * @property {boolean} lkg
  * @property {boolean} soft
  * @property {boolean} fix
  * @property {string} browser
@@ -56,7 +60,7 @@ module.exports = minimist(process.argv.slice(2), {
  * @property {string|number} timeout
  * @property {boolean} failed
  * @property {boolean} keepFailed
- * 
+ *
  * @typedef {import("minimist").ParsedArgs & TypedOptions} CommandLineOptions
  */
 void 0;
