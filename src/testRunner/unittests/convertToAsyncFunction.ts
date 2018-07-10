@@ -434,9 +434,17 @@ function [#|f|]() {
         return Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
                 return fetch("https://github.com");
               }).then(res => res.toString())]);
-            });
-          }
-    );
+    });
+}
+`
+);
+ _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen2", `
+function [#|f|]() {
+    return Promise.resolve().then(function () {
+        return Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+                return fetch("https://github.com");
+              })]).then(res => res.toString());
+    });
 }
 `
 );
