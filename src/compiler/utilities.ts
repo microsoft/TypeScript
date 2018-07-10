@@ -8108,4 +8108,10 @@ namespace ts {
     }
 
     export type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
+
+    export function sliceAfter<T>(arr: ReadonlyArray<T>, value: T): ReadonlyArray<T> {
+        const index = arr.indexOf(value);
+        Debug.assert(index !== -1);
+        return arr.slice(index);
+    }
 }
