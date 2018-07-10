@@ -19076,7 +19076,7 @@ namespace ts {
                     diagnostics.add(createDiagnosticForNode(node, error, paramRange, argCount));
                 }
                 else if (min < argCount && argCount < max) {
-                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_arguments_or_at_least_2_arguments, argCount, belowArgCount, aboveArgCount));
+                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_at_least_2_arguments, argCount, belowArgCount, aboveArgCount));
                 }
                 else {
                     diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount));
