@@ -30,9 +30,9 @@ namespace ts.codefix {
                         changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
                     }
                 }
-                else if (!isFunctionLike(node)) {
+               // else if (!isFunctionLike(node)) {
                     forEachChild(node, visit);
-                }
+                //}
             });
         }
     }
