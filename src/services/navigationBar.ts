@@ -188,7 +188,7 @@ namespace ts.NavigationBar {
                 // Handle default import case e.g.:
                 //    import d from "mod";
                 if (importClause.name) {
-                    addLeafNode(importClause);
+                    addLeafNode(importClause.name);
                 }
 
                 // Handle named bindings in imports e.g.:
@@ -277,7 +277,7 @@ namespace ts.NavigationBar {
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
                     case SpecialPropertyAssignmentKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
-                        break;
+                        return;
                     case SpecialPropertyAssignmentKind.ThisProperty:
                     case SpecialPropertyAssignmentKind.Property:
                     case SpecialPropertyAssignmentKind.None:

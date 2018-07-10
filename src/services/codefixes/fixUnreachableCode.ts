@@ -5,15 +5,15 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length));
             return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unreachable_code, fixId, Diagnostics.Remove_all_unreachable_code)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length)),
     });
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number, length: number): void {
+        const token = getTokenAtPosition(sourceFile, start);
         const statement = findAncestor(token, isStatement)!;
         Debug.assert(statement.getStart(sourceFile) === token.getStart(sourceFile));
 
@@ -32,47 +32,26 @@ namespace ts.codefix {
                 // falls through
             case SyntaxKind.WhileStatement:
             case SyntaxKind.ForStatement:
-                changes.deleteNode(sourceFile, container);
+                changes.delete(sourceFile, container);
                 break;
             default:
                 if (isBlock(statement.parent)) {
-                    split(sliceAfter(statement.parent.statements, statement), shouldRemove, (start, end) => changes.deleteNodeRange(sourceFile, start, end));
+                    const end = start + length;
+                    const lastStatement = Debug.assertDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end));
+                    changes.deleteNodeRange(sourceFile, statement, lastStatement);
                 }
                 else {
-                    changes.deleteNode(sourceFile, statement);
+                    changes.delete(sourceFile, statement);
                 }
         }
     }
 
-    function shouldRemove(s: Statement): boolean {
-        // Don't remove statements that can validly be used before they appear.
-        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
-            // `var x;` may declare a variable used above
-            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
-    }
-
-    function isPurelyTypeDeclaration(s: Statement): boolean {
-        switch (s.kind) {
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                return true;
-            case SyntaxKind.ModuleDeclaration:
-                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
-            case SyntaxKind.EnumDeclaration:
-                return hasModifier(s, ModifierFlags.Const);
-            default:
-                return false;
+    function lastWhere<T>(a: ReadonlyArray<T>, pred: (value: T) => boolean): T | undefined {
+        let last: T | undefined;
+        for (const value of a) {
+            if (!pred(value)) break;
+            last = value;
         }
-    }
-
-    function sliceAfter<T>(arr: ReadonlyArray<T>, value: T): ReadonlyArray<T> {
-        const index = arr.indexOf(value);
-        Debug.assert(index !== -1);
-        return arr.slice(index);
-    }
-
-    // Calls 'cb' with the start and end of each range where 'pred' is true.
-    function split<T>(arr: ReadonlyArray<T>, pred: (t: T) => boolean, cb: (start: T, end: T) => void): void {
-        getRangesWhere(arr, pred, (start, afterEnd) => cb(arr[start], arr[afterEnd - 1]));
+        return last;
     }
 }

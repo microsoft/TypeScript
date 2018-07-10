@@ -7,9 +7,9 @@
 ////var x= '?';
 ////
 ////function overload1(f: typeof overload): boolean;
-////function overload1(x: any, b = (function overload() { return false })): boolean {
+////[|function overload1(x: any, b = (function overload() { return false })): boolean {
 ////    throw overload;
-////}
+////}|]
 
 ////function overload2(a: string): boolean;
 ////function overload2(b: boolean): boolean;
@@ -20,10 +20,26 @@
 ////}
 ////
 ////function overload2(f: typeof overload): boolean;
-////function overload2(x: any, b = (function overload() { return false })): boolean {
+////[|function overload2(x: any, b = (function overload() { return false })): boolean {
 ////    throw overload;
-////}
+////}|]
 
-verify.navigationItemsListCount(1, "overload1", "exact");
-verify.navigationItemsListCount(1, "overload2", "exact");
-verify.navigationItemsListCount(2, "overload", "prefix");
+const [r0, r1] = test.ranges();
+const overload1: FourSlashInterface.ExpectedNavigateToItem =
+    { name: "overload1", kind: "function", range: r0 };
+const overload2: FourSlashInterface.ExpectedNavigateToItem =
+    { name: "overload2", kind: "function", range: r1 };
+verify.navigateTo(
+    {
+        pattern: "overload1",
+        expected: [overload1],
+    },
+    {
+        pattern: "overload2",
+        expected: [overload2],
+    },
+    {
+        pattern: "overload",
+        expected: [{ ...overload1, matchKind: "prefix" }, { ...overload2, matchKind: "prefix" }],
+    }
+);

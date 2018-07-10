@@ -63,7 +63,7 @@ namespace ts.OutliningElementsCollector {
             const currentLineStart = lineStarts[i];
             const lineEnd = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
-            const result = lineText.match(/^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/);
+            const result = isRegionDelimiter(lineText);
             if (!result || isInComment(sourceFile, currentLineStart)) {
                 continue;
             }
@@ -83,16 +83,30 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
+    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+    function isRegionDelimiter(lineText: string) {
+        return regionDelimiterRegExp.exec(lineText);
+    }
+
     function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         const comments = getLeadingCommentRangesOfNode(n, sourceFile);
         if (!comments) return;
         let firstSingleLineCommentStart = -1;
         let lastSingleLineCommentEnd = -1;
         let singleLineCommentCount = 0;
+        const sourceText = sourceFile.getFullText();
         for (const { kind, pos, end } of comments) {
             cancellationToken.throwIfCancellationRequested();
             switch (kind) {
                 case SyntaxKind.SingleLineCommentTrivia:
+                    // never fold region delimiters into single-line comment regions
+                    const commentText = sourceText.slice(pos, end);
+                    if (isRegionDelimiter(commentText)) {
+                        combineAndAddMultipleSingleLineComments();
+                        singleLineCommentCount = 0;
+                        break;
+                    }
+
                     // For single line comments, combine consecutive ones (2 or more) into
                     // a single span from the start of the first till the end of the last
                     if (singleLineCommentCount === 0) {
@@ -169,6 +183,26 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
+            case SyntaxKind.JsxElement:
+                return spanForJSXElement(<JsxElement>n);
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+        }
+
+        function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
+            const textSpan = createTextSpanFromBounds(node.openingElement.getStart(sourceFile), node.closingElement.getEnd());
+            const tagName = node.openingElement.tagName.getText(sourceFile);
+            const bannerText = "<" + tagName + ">...</" + tagName + ">";
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
+        }
+
+        function spanForJSXAttributes(node: JsxAttributes): OutliningSpan | undefined {
+            if (node.properties.length === 0) {
+                return undefined;
+            }
+
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {

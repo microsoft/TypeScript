@@ -1,0 +1,22 @@
+tests/cases/compiler/usage.ts(2,8): error TS2304: Cannot find name 'decorate'.
+tests/cases/compiler/usage.ts(2,31): error TS2694: Namespace 'A.B.C.D' has no exported member 'E'.
+
+
+==== tests/cases/compiler/types.d.ts (0 errors) ====
+    declare namespace A {
+        export namespace B {
+            export namespace C {
+                export namespace D {
+                }
+            }
+        }
+    }
+==== tests/cases/compiler/usage.ts (2 errors) ====
+    class Foo {
+        f(@decorate user: A.B.C.D.E): void {}
+           ~~~~~~~~
+!!! error TS2304: Cannot find name 'decorate'.
+                                  ~
+!!! error TS2694: Namespace 'A.B.C.D' has no exported member 'E'.
+    }
+    

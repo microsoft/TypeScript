@@ -14,7 +14,7 @@ function sum<T extends { [P in T]: number }, K extends keyof T>(n: number, v: T,
 >K : K
 
     n += v[k];
->n += v[k] : number
+>n += v[k] : any
 >n : number
 >v[k] : T[K]
 >v : T

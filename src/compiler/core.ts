@@ -531,7 +531,7 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U> {
+    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => ReadonlyArray<U> | Iterator<U> | undefined): Iterator<U> {
         const first = iter.next();
         if (first.done) {
             return emptyIterator;
@@ -1029,23 +1029,6 @@ namespace ts {
         return array.slice().sort(comparer);
     }
 
-    export function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined {
-        const x = iter.next();
-        if (x.done) {
-            return undefined;
-        }
-        let best = x.value;
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) {
-                return best;
-            }
-            if (isBetter(value, best)) {
-                best = value;
-            }
-        }
-    }
-
     export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
         let i = 0;
         return { next: () => {
@@ -1435,7 +1418,9 @@ namespace ts {
         return typeof text === "string";
     }
 
-    export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
+    export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
+    export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
+    export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {
         return value !== undefined && test(value) ? value : undefined;
     }
 
@@ -2087,10 +2072,9 @@ namespace ts {
         return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
-    export function tryRemovePrefix(str: string, prefix: string): string | undefined {
-        return startsWith(str, prefix) ? str.substring(prefix.length) : undefined;
+    export function tryRemovePrefix(str: string, prefix: string, getCanonicalFileName: GetCanonicalFileName = identity): string | undefined {
+        return startsWith(getCanonicalFileName(str), getCanonicalFileName(prefix)) ? str.substring(prefix.length) : undefined;
     }
-
 
     function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
         return candidate.length >= prefix.length + suffix.length &&

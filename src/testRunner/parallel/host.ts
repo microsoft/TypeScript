@@ -16,6 +16,11 @@ namespace Harness.Parallel.Host {
         const { fork } = require("child_process") as typeof import("child_process");
         const { statSync } = require("fs") as typeof import("fs");
 
+        // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
+        // tslint:disable-next-line:variable-name
+        const FailedTestReporter = require(path.resolve(__dirname, "../../scripts/failed-tests")) as typeof import("../../../scripts/failed-tests");
+
+        const perfdataFileNameFragment = ".parallelperf";
         const perfData = readSavedPerfData(configOption);
         const newTasks: Task[] = [];
         let tasks: Task[] = [];
@@ -54,7 +59,7 @@ namespace Harness.Parallel.Host {
         interface Worker {
             process: import("child_process").ChildProcess;
             accumulatedOutput: string;
-            currentTasks?: {file: string}[];
+            currentTasks?: { file: string }[];
             timer?: any;
         }
 
@@ -115,7 +120,7 @@ namespace Harness.Parallel.Host {
             update(index: number, percentComplete: number, color: string, title: string | undefined, titleColor?: string) {
                 percentComplete = minMax(percentComplete, 0, 1);
 
-                const progressBar = this._progressBars[index] || (this._progressBars[index] = { });
+                const progressBar = this._progressBars[index] || (this._progressBars[index] = {});
                 const width = this._options.width;
                 const n = Math.floor(width * percentComplete);
                 const i = width - n;
@@ -171,13 +176,11 @@ namespace Harness.Parallel.Host {
             }
         }
 
-        const perfdataFileNameFragment = ".parallelperf";
-
         function perfdataFileName(target?: string) {
             return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
         }
 
-        function readSavedPerfData(target?: string): {[testHash: string]: number} | undefined {
+        function readSavedPerfData(target?: string): { [testHash: string]: number } | undefined {
             const perfDataContents = IO.readFile(perfdataFileName(target));
             if (perfDataContents) {
                 return JSON.parse(perfDataContents);
@@ -189,7 +192,7 @@ namespace Harness.Parallel.Host {
             return `tsrunner-${runner}://${test}`;
         }
 
-        function startDelayed(perfData: {[testHash: string]: number} | undefined, totalCost: number) {
+        function startDelayed(perfData: { [testHash: string]: number } | undefined, totalCost: number) {
             console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
             console.log("Discovering runner-based tests...");
             const discoverStart = +(new Date());
@@ -247,7 +250,7 @@ namespace Harness.Parallel.Host {
             const progressUpdateInterval = 1 / progressBars._options.width;
             let nextProgress = progressUpdateInterval;
 
-            const newPerfData: {[testHash: string]: number} = {};
+            const newPerfData: { [testHash: string]: number } = {};
 
             const workers: Worker[] = [];
             let closedWorkers = 0;
@@ -531,10 +534,26 @@ namespace Harness.Parallel.Host {
                 patchStats(consoleReporter.stats);
 
                 let xunitReporter: import("mocha").reporters.XUnit | undefined;
-                if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.CI === "true") {
-                    xunitReporter = new Mocha.reporters.XUnit(replayRunner, { reporterOptions: { suiteName: "Tests", output: "./TEST-results.xml" } });
-                    patchStats(xunitReporter.stats);
-                    xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
+                let failedTestReporter: import("../../../scripts/failed-tests") | undefined;
+                if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
+                    if (process.env.CI === "true") {
+                        xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
+                            reporterOptions: {
+                                suiteName: "Tests",
+                                output: "./TEST-results.xml"
+                            }
+                        });
+                        patchStats(xunitReporter.stats);
+                        xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
+                    }
+                    else {
+                        failedTestReporter = new FailedTestReporter(replayRunner, {
+                            reporterOptions: {
+                                file: path.resolve(".failed-tests"),
+                                keepFailed
+                            }
+                        });
+                    }
                 }
 
                 const savedUseColors = Base.useColors;
@@ -550,6 +569,9 @@ namespace Harness.Parallel.Host {
 
                 if (xunitReporter) {
                     xunitReporter.done(errorResults.length, failures => process.exit(failures));
+                }
+                else if (failedTestReporter) {
+                    failedTestReporter.done(errorResults.length, failures => process.exit(failures));
                 }
                 else {
                     process.exit(errorResults.length);

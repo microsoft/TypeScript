@@ -314,7 +314,7 @@ for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB
 
 for (let [numberA3, ...robotAInfo] of robots) {
 >numberA3 : number
->robotAInfo : (string | number)[]
+>robotAInfo : string[]
 >robots : [number, string, string][]
 
     console.log(numberA3);
@@ -326,7 +326,7 @@ for (let [numberA3, ...robotAInfo] of robots) {
 }
 for (let [numberA3, ...robotAInfo] of getRobots()) {
 >numberA3 : number
->robotAInfo : (string | number)[]
+>robotAInfo : string[]
 >getRobots() : [number, string, string][]
 >getRobots : () => [number, string, string][]
 
@@ -339,7 +339,7 @@ for (let [numberA3, ...robotAInfo] of getRobots()) {
 }
 for (let [numberA3, ...robotAInfo] of [robotA, robotB]) {
 >numberA3 : number
->robotAInfo : (string | number)[]
+>robotAInfo : string[]
 >[robotA, robotB] : [number, string, string][]
 >robotA : [number, string, string]
 >robotB : [number, string, string]

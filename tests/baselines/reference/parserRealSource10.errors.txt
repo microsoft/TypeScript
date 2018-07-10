@@ -475,6 +475,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error 
         export var tokenTable = new TokenInfo[];
                                     ~~~~~~~~~
 !!! error TS2449: Class 'TokenInfo' used before its declaration.
+!!! related TS2728 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts:175:18: 'TokenInfo' is declared here.
                                               
 !!! error TS1011: An element access expression should take an argument.
         export var nodeTypeTable = new string[];

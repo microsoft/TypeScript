@@ -194,10 +194,10 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier;
-    /* @internal */ export function getGeneratedNameForNode(node: Node, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
-    export function getGeneratedNameForNode(node: Node, flags?: GeneratedIdentifierFlags): Identifier {
-        const name = createIdentifier(isIdentifier(node) ? idText(node) : "");
+    export function getGeneratedNameForNode(node: Node | undefined): Identifier;
+    /* @internal */ export function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
+    export function getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier {
+        const name = createIdentifier(node && isIdentifier(node) ? idText(node) : "");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node | flags!;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
@@ -272,10 +272,9 @@ namespace ts {
     }
 
     function parenthesizeForComputedName(expression: Expression): Expression {
-        return (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken) ||
-            expression.kind === SyntaxKind.CommaListExpression ?
-            createParen(expression) :
-            expression;
+        return isCommaSequence(expression)
+            ? createParen(expression)
+            : expression;
     }
 
     export function createComputedPropertyName(expression: Expression) {
@@ -745,9 +744,33 @@ namespace ts {
         return node;
     }
 
-    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
+    export function updateTupleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
         return node.elementTypes !== elementTypes
             ? updateNode(createTupleTypeNode(elementTypes), node)
+            : node;
+    }
+
+    export function createOptionalTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.OptionalType) as OptionalTypeNode;
+        node.type = parenthesizeArrayTypeMember(type);
+        return node;
+    }
+
+    export function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
+        return node.type !== type
+            ? updateNode(createOptionalTypeNode(type), node)
+            : node;
+    }
+
+    export function createRestTypeNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.RestType) as RestTypeNode;
+        node.type = type;
+        return node;
+    }
+
+    export function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
+        return node.type !== type
+            ? updateNode(createRestTypeNode(type), node)
             : node;
     }
 
@@ -1146,7 +1169,7 @@ namespace ts {
         return node;
     }
 
-    /* @deprecated */ export function updateArrowFunction(
+    /** @deprecated */ export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
@@ -1295,7 +1318,7 @@ namespace ts {
         return node;
     }
 
-    /* @deprecated */ export function updateConditional(
+    /** @deprecated */ export function updateConditional(
         node: ConditionalExpression,
         condition: Expression,
         whenTrue: Expression,
@@ -1507,13 +1530,6 @@ namespace ts {
         return block;
     }
 
-    /* @internal */
-    export function createExpressionStatement(expression: Expression): ExpressionStatement {
-        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
-        node.expression = expression;
-        return node;
-    }
-
     export function updateBlock(node: Block, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createBlock(statements, node.multiLine), node)
@@ -1539,15 +1555,22 @@ namespace ts {
         return <EmptyStatement>createSynthesizedNode(SyntaxKind.EmptyStatement);
     }
 
-    export function createStatement(expression: Expression) {
-        return createExpressionStatement(parenthesizeExpressionForExpressionStatement(expression));
+    export function createExpressionStatement(expression: Expression): ExpressionStatement {
+        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
+        node.expression = parenthesizeExpressionForExpressionStatement(expression);
+        return node;
     }
 
-    export function updateStatement(node: ExpressionStatement, expression: Expression) {
+    export function updateExpressionStatement(node: ExpressionStatement, expression: Expression) {
         return node.expression !== expression
-            ? updateNode(createStatement(expression), node)
+            ? updateNode(createExpressionStatement(expression), node)
             : node;
     }
+
+    /** @deprecated Use `createExpressionStatement` instead.  */
+    export const createStatement = createExpressionStatement;
+    /** @deprecated Use `updateExpressionStatement` instead.  */
+    export const updateStatement = updateExpressionStatement;
 
     export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = <IfStatement>createSynthesizedNode(SyntaxKind.IfStatement);
@@ -4142,8 +4165,7 @@ namespace ts {
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
         const emittedExpression = skipPartiallyEmittedExpressions(e);
-        return emittedExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>emittedExpression).operatorToken.kind === SyntaxKind.CommaToken ||
-            emittedExpression.kind === SyntaxKind.CommaListExpression
+        return isCommaSequence(emittedExpression)
             ? createParen(e)
             : e;
     }
@@ -4161,12 +4183,15 @@ namespace ts {
      */
     export function parenthesizeDefaultExpression(e: Expression) {
         const check = skipPartiallyEmittedExpressions(e);
-        return (check.kind === SyntaxKind.ClassExpression ||
-            check.kind === SyntaxKind.FunctionExpression ||
-            check.kind === SyntaxKind.CommaListExpression ||
-            isBinaryExpression(check) && check.operatorToken.kind === SyntaxKind.CommaToken)
-            ? createParen(e)
-            : e;
+        let needsParens = isCommaSequence(check);
+        if (!needsParens) {
+            switch (getLeftmostExpression(check, /*stopAtCallExpression*/ false).kind) {
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                    needsParens = true;
+            }
+        }
+        return needsParens ? createParen(e) : e;
     }
 
     /**
@@ -4330,19 +4355,17 @@ namespace ts {
                 case SyntaxKind.ConditionalExpression:
                     node = (<ConditionalExpression>node).condition;
                     continue;
-
                 case SyntaxKind.CallExpression:
                     if (stopAtCallExpressions) {
                         return node;
                     }
                     // falls through
+                case SyntaxKind.AsExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
-                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
-                    continue;
-
+                case SyntaxKind.NonNullExpression:
                 case SyntaxKind.PartiallyEmittedExpression:
-                    node = (<PartiallyEmittedExpression>node).expression;
+                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression>node).expression;
                     continue;
             }
 
@@ -4352,11 +4375,16 @@ namespace ts {
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
             return setTextRange(createParen(body), body);
         }
 
         return body;
+    }
+
+    export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
+        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.CommaToken ||
+            node.kind === SyntaxKind.CommaListExpression;
     }
 
     export const enum OuterExpressionKinds {

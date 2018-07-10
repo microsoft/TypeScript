@@ -44,5 +44,5 @@ var [a4] = [undefined], {b4} = { b4: null }, c4 = undefined, d4 = null; // error
 var [a5 = undefined] = []; // error
 >a5 : any
 >undefined : undefined
->[] : [undefined]
+>[] : [undefined?]
 
