@@ -6915,7 +6915,7 @@ namespace ts {
     }
 
     export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
-        return !!(options.declaration && options.declarationMap);
+        return !!(getEmitDeclarations(options) && options.declarationMap);
     }
 
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
