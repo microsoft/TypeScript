@@ -22,7 +22,7 @@ tests/cases/compiler/a.js(19,1): error TS7028: Unused label.
         function bar2() {
         }
         var x = 10; // error
-        ~~~
+        ~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     }
     

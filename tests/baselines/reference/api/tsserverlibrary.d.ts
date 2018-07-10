@@ -7399,6 +7399,7 @@ declare namespace ts {
     type Mutable<T extends object> = {
         -readonly [K in keyof T]: T[K];
     };
+    function sliceAfter<T>(arr: ReadonlyArray<T>, value: T): ReadonlyArray<T>;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
