@@ -8486,7 +8486,7 @@ new C();`
             });
         });
 
-        it("when watching directories for failed lookup locations in amd resolution", () => {
+        describe("when watching directories for failed lookup locations in amd resolution", () => {
             const projectRoot = "/user/username/projects/project";
             const nodeFile: File = {
                 path: `${projectRoot}/src/typings/node.d.ts`,
@@ -8530,19 +8530,35 @@ export const x = 10;`
                     }
                 })
             };
-            const files = [nodeFile, electronFile, srcFile, moduleFile, configFile, libFile];
-            const host = createServerHost(files);
-            const service = createProjectService(host);
-            service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, projectRoot);
-            checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
-            checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
-            checkWatchedDirectoriesDetailed(host, [`${projectRoot}`], 1,  /*recursive*/ false); // failed lookup for fs
-            const expectedWatchedDirectories = createMap<number>();
-            expectedWatchedDirectories.set(`${projectRoot}/src`, 2); // Wild card and failed lookup
-            expectedWatchedDirectories.set(`${projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
-            expectedWatchedDirectories.set(`${projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
-            expectedWatchedDirectories.set(`${projectRoot}/src/typings`, 1); // typeroot directory
-            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
+
+            function verifyModuleResolution(useNodeFile: boolean) {
+                const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
+                const host = createServerHost(files);
+                const service = createProjectService(host);
+                service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, projectRoot);
+                checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
+                checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
+                if (useNodeFile) {
+                    checkWatchedDirectories(host, emptyArray,  /*recursive*/ false); // since fs resolves to ambient module, shouldnt watch failed lookup
+                }
+                else {
+                    checkWatchedDirectoriesDetailed(host, [`${projectRoot}`], 1,  /*recursive*/ false); // failed lookup for fs
+                }
+                const expectedWatchedDirectories = createMap<number>();
+                expectedWatchedDirectories.set(`${projectRoot}/src`, 2); // Wild card and failed lookup
+                expectedWatchedDirectories.set(`${projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
+                expectedWatchedDirectories.set(`${projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
+                expectedWatchedDirectories.set(`${projectRoot}/src/typings`, 1); // typeroot directory
+                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
+            }
+
+            it("when resolves to ambient module", () => {
+                verifyModuleResolution(/*useNodeFile*/ true);
+            });
+
+            it("when resolution fails", () => {
+                verifyModuleResolution(/*useNodeFile*/ false);
+            });
         });
     });
 
