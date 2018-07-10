@@ -1059,6 +1059,7 @@ namespace ts {
             // 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
             // or if usage is in a type context:
             // 1. inside a type query (typeof in type position)
+            // 2. inside a jsdoc comment
             if (usage.parent.kind === SyntaxKind.ExportSpecifier || (usage.parent.kind === SyntaxKind.ExportAssignment && (usage.parent as ExportAssignment).isExportEquals)) {
                 // export specifiers do not use the variable, they only make it available for use
                 return true;
@@ -1069,7 +1070,7 @@ namespace ts {
             }
 
             const container = getEnclosingBlockScopeContainer(declaration);
-            return isInTypeQuery(usage) || isUsedInFunctionOrInstanceProperty(usage, declaration, container);
+            return !!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isUsedInFunctionOrInstanceProperty(usage, declaration, container);
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
@@ -19409,6 +19410,38 @@ namespace ts {
             return resolveErrorCall(node);
         }
 
+        function typeHasProtectedAccessibleBase(target: Symbol, type: InterfaceType): boolean {
+            const baseTypes = getBaseTypes(type);
+            if (!length(baseTypes)) {
+                return false;
+            }
+            const firstBase = baseTypes[0];
+            if (firstBase.flags & TypeFlags.Intersection) {
+                const types = (firstBase as IntersectionType).types;
+                const mixinCount = countWhere(types, isMixinConstructorType);
+                let i = 0;
+                for (const intersectionMember of (firstBase as IntersectionType).types) {
+                    i++;
+                    // We want to ignore mixin ctors
+                    if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(intersectionMember)) {
+                        if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                            if (intersectionMember.symbol === target) {
+                                return true;
+                            }
+                            if (typeHasProtectedAccessibleBase(target, intersectionMember as InterfaceType)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+            if (firstBase.symbol === target) {
+                return true;
+            }
+            return typeHasProtectedAccessibleBase(target, firstBase as InterfaceType);
+        }
+
         function isConstructorAccessible(node: NewExpression, signature: Signature) {
             if (!signature || !signature.declaration) {
                 return true;
@@ -19428,16 +19461,10 @@ namespace ts {
             // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
             if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                 const containingClass = getContainingClass(node);
-                if (containingClass) {
+                if (containingClass && modifiers & ModifierFlags.Protected) {
                     const containingType = getTypeOfNode(containingClass);
-                    let baseTypes = getBaseTypes(containingType as InterfaceType);
-                    while (baseTypes.length) {
-                        const baseType = baseTypes[0];
-                        if (modifiers & ModifierFlags.Protected &&
-                            baseType.symbol === declaration.parent.symbol) {
-                            return true;
-                        }
-                        baseTypes = getBaseTypes(baseType as InterfaceType);
+                    if (typeHasProtectedAccessibleBase(declaration.parent.symbol, containingType as InterfaceType)) {
+                        return true;
                     }
                 }
                 if (modifiers & ModifierFlags.Private) {
@@ -21170,7 +21197,7 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
-                    const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+                    const special = isBinaryExpression(left.parent) ? getSpecialPropertyAssignmentKind(left.parent) : SpecialPropertyAssignmentKind.None;
                     checkSpecialAssignment(special, right);
                     if (isJSSpecialPropertyAssignment(special)) {
                         return leftType;

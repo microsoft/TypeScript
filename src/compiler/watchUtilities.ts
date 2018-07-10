@@ -398,7 +398,7 @@ namespace ts {
             case WatchLogLevel.TriggerOnly:
                 return createFileWatcherWithTriggerLogging;
             case WatchLogLevel.Verbose:
-                return createFileWatcherWithLogging;
+                return addWatch === <any>watchDirectory ? createDirectoryWatcherWithLogging : createFileWatcherWithLogging;
         }
     }
 
@@ -409,6 +409,25 @@ namespace ts {
             close: () => {
                 log(`${watchCaption}:: Close:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
                 watcher.close();
+            }
+        };
+    }
+
+    function createDirectoryWatcherWithLogging<H, T, U, V, X, Y>(host: H, file: string, cb: WatchCallback<U, V>, flags: T, passThrough: V | undefined, detailInfo1: X | undefined, detailInfo2: Y | undefined, addWatch: AddWatch<H, T, U, undefined>, log: (s: string) => void, watchCaption: string, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined): FileWatcher {
+        const watchInfo = `${watchCaption}:: Added:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+        log(watchInfo);
+        const start = timestamp();
+        const watcher = createFileWatcherWithTriggerLogging(host, file, cb, flags, passThrough, detailInfo1, detailInfo2, addWatch, log, watchCaption, getDetailWatchInfo);
+        const elapsed = timestamp() - start;
+        log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
+        return {
+            close: () => {
+                const watchInfo = `${watchCaption}:: Close:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+                log(watchInfo);
+                const start = timestamp();
+                watcher.close();
+                const elapsed = timestamp() - start;
+                log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
             }
         };
     }

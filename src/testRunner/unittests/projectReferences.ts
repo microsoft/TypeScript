@@ -285,4 +285,23 @@ namespace ts {
         });
     });
 
+    describe("errors when a file in a composite project occurs outside the root", () => {
+        it("Errors when a file is outside the rootdir", () => {
+            const spec: TestSpecification = {
+                "/alpha": {
+                    files: { "/alpha/src/a.ts": "import * from '../../beta/b'", "/beta/b.ts": "export { }" },
+                    options: {
+                        declaration: true,
+                        outDir: "bin"
+                    },
+                    references: []
+                }
+            };
+            testProjectReferences(spec, "/alpha/tsconfig.json", (program) => {
+                assertHasError("Issues an error about the rootDir", program.getOptionsDiagnostics(), Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
+                assertHasError("Issues an error about the fileList", program.getOptionsDiagnostics(), Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+            });
+        });
+    });
+
 }
