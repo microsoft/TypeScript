@@ -155,7 +155,7 @@ namespace Harness.LanguageService {
             this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
             this.vfs.renameSync(oldPath, newPath);
 
-            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()));
+            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()), /*sourceMapper*/ undefined);
             this.scriptInfos.forEach((scriptInfo, key) => {
                 const newFileName = updater(key);
                 if (newFileName !== undefined) {

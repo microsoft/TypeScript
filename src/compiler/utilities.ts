@@ -7273,7 +7273,7 @@ namespace ts {
     }
 
     export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
-        return !!(options.declaration && options.declarationMap);
+        return !!(getEmitDeclarations(options) && options.declarationMap);
     }
 
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
@@ -8442,4 +8442,10 @@ namespace ts {
     }
 
     export type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
+
+    export function sliceAfter<T>(arr: ReadonlyArray<T>, value: T): ReadonlyArray<T> {
+        const index = arr.indexOf(value);
+        Debug.assert(index !== -1);
+        return arr.slice(index);
+    }
 }
