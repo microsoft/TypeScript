@@ -1,10 +1,18 @@
 /* @internal */
 namespace ts {
-    export function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): ReadonlyArray<FileTextChanges> {
+    export function getEditsForFileRename(
+        program: Program,
+        oldFileOrDirPath: string,
+        newFileOrDirPath: string,
+        host: LanguageServiceHost,
+        formatContext: formatting.FormatContext,
+        preferences: UserPreferences,
+        sourceMapper: SourceMapper,
+    ): ReadonlyArray<FileTextChanges> {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName);
-        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName);
+        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
+        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
             updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
@@ -14,13 +22,27 @@ namespace ts {
     /** If 'path' refers to an old directory, returns path in the new directory. */
     type PathUpdater = (path: string) => string | undefined;
     // exported for tests
-    export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
+    export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            if (getCanonicalFileName(path) === canonicalOldPath) return newFileOrDirPath;
-            const suffix = tryRemoveDirectoryPrefix(path, canonicalOldPath, getCanonicalFileName);
-            return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
+            const originalPath = sourceMapper && sourceMapper.tryGetOriginalLocation({ fileName: path, position: 0 });
+            const updatedPath = getUpdatedPath(originalPath ? originalPath.fileName : path);
+            return originalPath
+                ? updatedPath === undefined ? undefined : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
+                : updatedPath;
         };
+
+        function getUpdatedPath(pathToUpdate: string): string | undefined {
+            if (getCanonicalFileName(pathToUpdate) === canonicalOldPath) return newFileOrDirPath;
+            const suffix = tryRemoveDirectoryPrefix(pathToUpdate, canonicalOldPath, getCanonicalFileName);
+            return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
+        }
+    }
+
+    // Relative path from a0 to b0 should be same as relative path from a1 to b1. Returns b1.
+    function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, getCanonicalFileName: GetCanonicalFileName): string {
+        const rel = getRelativePathFromFile(a0, b0, getCanonicalFileName);
+        return combinePathsSafe(getDirectoryPath(a1), rel);
     }
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {

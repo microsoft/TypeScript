@@ -328,6 +328,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                     baseTypeLinks = new TypeLink[];
                                         ~~~~~~~~
 !!! error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
+!!! related TS2728 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts:21:21: 'typeLink' is declared here.
                                                  
 !!! error TS1011: An element access expression should take an argument.
                 }
@@ -337,6 +338,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                     var typeLink = new TypeLink();
                                        ~~~~~~~~
 !!! error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
+!!! related TS2728 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts:21:21: 'typeLink' is declared here.
                     typeLink.ast = name;
                     baseTypeLinks[baseTypeLinks.length] = typeLink;
                 }

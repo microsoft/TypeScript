@@ -679,7 +679,7 @@ namespace ts {
         let current: Node = sourceFile;
         outer: while (true) {
             // find the child that contains 'position'
-            for (const child of current.getChildren()) {
+            for (const child of current.getChildren(sourceFile)) {
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, /*includeJsDoc*/ true);
                 if (start > position) {
                     // If this child begins after position, then all subsequent children will as well.
@@ -1184,8 +1184,7 @@ namespace ts {
 
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
-        Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
-        return moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
+        return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
@@ -1417,6 +1416,13 @@ namespace ts {
             changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
         }
     }
+
+    export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined): boolean {
+        return !!a && !!b && a.start === b.start && a.length === b.length;
+    }
+    export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
+        return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
+    }
 }
 
 // Display-part writer helpers
@@ -1428,14 +1434,25 @@ namespace ts {
 
     const displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
+        const absoluteMaximumLength = defaultMaximumTruncationLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
         let displayParts: SymbolDisplayPart[];
         let lineStart: boolean;
         let indent: number;
+        let length: number;
 
         resetWriter();
         const unknownWrite = (text: string) => writeKind(text, SymbolDisplayPartKind.text);
         return {
-            displayParts: () => displayParts,
+            displayParts: () => {
+                const finalText = displayParts.length && displayParts[displayParts.length - 1].text;
+                if (length > absoluteMaximumLength && finalText && finalText !== "...") {
+                    if (!isWhiteSpaceLike(finalText.charCodeAt(finalText.length - 1))) {
+                        displayParts.push(displayPart(" ", SymbolDisplayPartKind.space));
+                    }
+                    displayParts.push(displayPart("...", SymbolDisplayPartKind.punctuation));
+                }
+                return displayParts;
+            },
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
             writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
             writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
@@ -1465,9 +1482,11 @@ namespace ts {
         };
 
         function writeIndent() {
+            if (length > absoluteMaximumLength) return;
             if (lineStart) {
                 const indentString = getIndentString(indent);
                 if (indentString) {
+                    length += indentString.length;
                     displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
                 }
                 lineStart = false;
@@ -1475,16 +1494,22 @@ namespace ts {
         }
 
         function writeKind(text: string, kind: SymbolDisplayPartKind) {
+            if (length > absoluteMaximumLength) return;
             writeIndent();
+            length += text.length;
             displayParts.push(displayPart(text, kind));
         }
 
         function writeSymbol(text: string, symbol: Symbol) {
+            if (length > absoluteMaximumLength) return;
             writeIndent();
+            length += text.length;
             displayParts.push(symbolPart(text, symbol));
         }
 
         function writeLine() {
+            if (length > absoluteMaximumLength) return;
+            length += 1;
             displayParts.push(lineBreakPart());
             lineStart = true;
         }
@@ -1493,6 +1518,7 @@ namespace ts {
             displayParts = [];
             lineStart = true;
             indent = 0;
+            length = 0;
         }
     }
 

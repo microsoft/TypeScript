@@ -78,7 +78,9 @@ interface Array<T> {}`
     }
 
     export interface SymLink {
+        /** Location of the symlink. */
         path: string;
+        /** Relative path to the real file. */
         symLink: string;
     }
 

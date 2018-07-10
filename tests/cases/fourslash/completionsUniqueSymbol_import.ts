@@ -1,12 +1,17 @@
 /// <reference path="fourslash.ts" />
 
-// @Filename: /a.ts
+// @noLib: true
+
+// @Filename: /globals.d.ts
 ////declare const Symbol: () => symbol;
+
+// @Filename: /a.ts
 ////const privateSym = Symbol();
 ////export const publicSym = Symbol();
 ////export interface I {
 ////    [privateSym]: number;
 ////    [publicSym]: number;
+////    [defaultPublicSym]: number;
 ////    n: number;
 ////}
 ////export const i: I;
@@ -17,10 +22,21 @@
 
 verify.completions({
     marker: "",
-    // TODO: GH#25095 Should include `publicSym`
-    exact: "n",
+    exact: [
+        "n",
+        { name: "publicSym", insertText: "[publicSym]", replacementSpan: test.ranges()[0], hasAction: true },
+    ],
     preferences: {
         includeInsertTextCompletions: true,
         includeCompletionsForModuleExports: true,
     },
+});
+
+verify.applyCodeActionFromCompletion("", {
+    name: "publicSym",
+    source: "/a",
+    description: `Add 'publicSym' to existing import declaration from "./a"`,
+    newFileContent:
+`import { i, publicSym } from "./a";
+i.;`
 });

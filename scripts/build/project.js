@@ -210,6 +210,27 @@ function flatten(projectSpec, flattenedProjectSpec, options = {}) {
 exports.flatten = flatten;
 
 /**
+ * Returns a Promise that resolves when all pending build tasks have completed
+ */
+function wait() {
+    return new Promise(resolve => {
+        if (compilationGulp.allDone()) {
+            resolve();
+        }
+        else {
+            const onDone = () => {
+                compilationGulp.removeListener("onDone", onDone);
+                compilationGulp.removeListener("err", onDone);
+                resolve();
+            };
+            compilationGulp.on("stop", onDone);
+            compilationGulp.on("err", onDone);
+        }
+    });
+}
+exports.wait = wait;
+
+/**
  * Resolve a TypeScript specifier into a fully-qualified module specifier and any requisite dependencies.
  * @param {string} typescript An unresolved module specifier to a TypeScript version.
  * @param {ResolvedPathOptions} paths Paths used to resolve `typescript`.

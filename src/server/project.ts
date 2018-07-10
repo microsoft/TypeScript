@@ -271,8 +271,8 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
-            return undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference> {
+            return emptyArray;
         }
 
         getScriptFileNames() {
@@ -459,6 +459,11 @@ namespace ts.server {
                 this.updateGraph();
             }
             return this.languageService;
+        }
+
+        /** @internal */
+        getSourceMapper(): SourceMapper {
+            return this.getLanguageService().getSourceMapper();
         }
 
         private shouldEmitFile(scriptInfo: ScriptInfo) {
@@ -1351,8 +1356,8 @@ namespace ts.server {
             return asNormalizedPath(this.getProjectName());
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
-            return this.projectReferences;
+        getProjectReferences(): ReadonlyArray<ProjectReference> {
+            return this.projectReferences || emptyArray;
         }
 
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {

@@ -2,29 +2,30 @@
 
 ////function f() {
 ////    return f();
-////    [|return|] 1;
+////    [|return 1;|]
 ////    function f() {}
-////    return 2;
+////    [|return 2;|]
 ////    type T = number;
 ////    interface I {}
 ////    const enum E {}
-////    enum E {}
+////    [|enum E {}|]
 ////    namespace N { export type T = number; }
-////    namespace N { export const x: T = 0; }
+////    [|namespace N { export const x: T = 0; }|]
 ////    var x: I;
-////    var y: T = 0;
-////    E; N; x; y;
+////    [|var y: T = 0;
+////    E; N; x; y;|]
 ////}
 
-verify.getSuggestionDiagnostics([{
+verify.getSuggestionDiagnostics(test.ranges().map((range): FourSlashInterface.Diagnostic => ({
     message: "Unreachable code detected.",
     code: 7027,
     reportsUnnecessary: true,
-}]);
+    range,
+})));
 
-verify.codeFix({
-    description: "Remove unreachable code",
-    index: 0,
+verify.codeFixAll({
+    fixId: "fixUnreachableCode",
+    fixAllDescription: "Remove all unreachable code",
     newFileContent:
 `function f() {
     return f();

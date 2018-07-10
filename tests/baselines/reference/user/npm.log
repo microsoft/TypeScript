@@ -911,7 +911,6 @@ node_modules/npm/test/common-tap.js(10,3): error TS2322: Type '(...args: any[]) 
   Property '__promisify__' is missing in type '(...args: any[]) => void'.
 node_modules/npm/test/common-tap.js(175,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(181,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
-node_modules/npm/test/common-tap.js(192,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(4,19): error TS2307: Cannot find module '../../lib/npm.js'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(5,22): error TS2307: Cannot find module '../common-tap.js'.
