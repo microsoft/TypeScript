@@ -1463,12 +1463,14 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Gets all symbols for one property. Does not get symbols for every property. */
-    function getPropertySymbolsFromContextualType(node: ObjectLiteralElement, checker: TypeChecker): ReadonlyArray<Symbol> {
+    function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker): ReadonlyArray<Symbol> {
         const contextualType = checker.getContextualType(<ObjectLiteralExpression>node.parent);
-        const name = getNameFromPropertyName(node.name!);
-        const symbol = contextualType && name && contextualType.getProperty(name);
+        if (!contextualType) return emptyArray;
+        const name = getNameFromPropertyName(node.name);
+        if (!name) return emptyArray;
+        const symbol = contextualType.getProperty(name);
         return symbol ? [symbol] :
-            contextualType && contextualType.isUnion() ? mapDefined(contextualType.types, t => t.getProperty(name!)) : emptyArray; // TODO: GH#18217
+            contextualType.isUnion() ? mapDefined(contextualType.types, t => t.getProperty(name)) : emptyArray;
     }
 
     /**
