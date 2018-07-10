@@ -234,7 +234,8 @@ namespace ts.FindAllReferences.Core {
     export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): SymbolAndEntries[] | undefined {
         if (isSourceFile(node)) {
             const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
-            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+            const moduleSymbol = reference && program.getTypeChecker().getMergedSymbol(reference.file.symbol);
+            return moduleSymbol && getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
         }
 
         if (!options.implementations) {
@@ -498,7 +499,7 @@ namespace ts.FindAllReferences.Core {
             return this.importTracker(exportSymbol, exportInfo, !!this.options.isForRename);
         }
 
-        /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
+        /** @param allSearchSymbols set of additional symbols for use by `includes`. */
         createSearch(location: Node | undefined, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             // Note: getLocalSymbolForExportDefault handles `export default class C {}`, but not `export default C` or `export { C as default }`.
@@ -703,7 +704,7 @@ namespace ts.FindAllReferences.Core {
           - But if the parent has `export as namespace`, the symbol is globally visible through that namespace.
         */
         const exposedByParent = parent && !(symbol.flags & SymbolFlags.TypeParameter);
-        if (exposedByParent && !((parent!.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent!) && !parent!.globalExports)) {
+        if (exposedByParent && !(isExternalModuleSymbol(parent!) && !parent!.globalExports)) {
             return undefined;
         }
 

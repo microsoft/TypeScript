@@ -38,3 +38,14 @@ foo(a);
 >foo : Symbol(foo, Decl(errorElaboration.ts, 8, 1))
 >a : Symbol(a, Decl(errorElaboration.ts, 10, 3))
 
+// Repro for #25498
+
+function test(): {[A in "foo"]: A} {
+>test : Symbol(test, Decl(errorElaboration.ts, 11, 7))
+>A : Symbol(A, Decl(errorElaboration.ts, 15, 19))
+>A : Symbol(A, Decl(errorElaboration.ts, 15, 19))
+
+  return {foo: "bar"};
+>foo : Symbol(foo, Decl(errorElaboration.ts, 16, 10))
+}
+

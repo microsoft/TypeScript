@@ -78,7 +78,9 @@ interface Array<T> {}`
     }
 
     export interface SymLink {
+        /** Location of the symlink. */
         path: string;
+        /** Relative path to the real file. */
         symLink: string;
     }
 
@@ -350,9 +352,9 @@ interface Array<T> {}`
             if (tscWatchDirectory === Tsc_WatchDirectory.WatchFile) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                     directoryExists: path => this.directoryExists(path),
                     getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                    filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory,
                     realpath: s => this.realpath(s)
                 });
@@ -360,9 +362,9 @@ interface Array<T> {}`
             else if (tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchDirectory(directory, fileName => cb(fileName), /*recursive*/ false);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                     directoryExists: path => this.directoryExists(path),
                     getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                    filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory,
                     realpath: s => this.realpath(s)
                 });
@@ -371,9 +373,9 @@ interface Array<T> {}`
                 const watchFile = createDynamicPriorityPollingWatchFile(this);
                 const watchDirectory: HostWatchDirectory = (directory, cb) => watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                     directoryExists: path => this.directoryExists(path),
                     getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                    filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory,
                     realpath: s => this.realpath(s)
                 });

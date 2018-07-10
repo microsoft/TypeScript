@@ -971,7 +971,7 @@
         "category": "Error",
         "code": 1339
     },
-    "Module '{0}' does not refer to a type, but is used as a type here.": {
+    "Module '{0}' does not refer to a type, but is used as a type here. Did you mean 'typeof import('{0}')'?": {
         "category": "Error",
         "code": 1340
     },
@@ -1451,6 +1451,10 @@
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
+    },
+    "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 2418
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -2397,8 +2401,8 @@
         "category": "Error",
         "code": 2727
     },
-    "'{0}' was declared here.": {
-        "category": "Error",
+    "'{0}' is declared here.": {
+        "category": "Message",
         "code": 2728
     },
     "Property '{0}' is used before its initialization.": {
@@ -2859,6 +2863,10 @@
     "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
         "category": "Error",
         "code": 5070
+    },
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+        "category": "Error",
+        "code": 5071
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -3754,6 +3762,15 @@
         "code": 6371
     },
 
+    "The expected type comes from property '{0}' which is declared here on type '{1}'": {
+        "category": "Message",
+        "code": 6500
+    },
+    "The expected type comes from this index signature.": {
+        "category": "Message",
+        "code": 6501
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3873,7 +3890,7 @@
         "code": 7037
     },
     "Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.": {
-        "category": "Error",
+        "category": "Message",
         "code": 7038
     },
     "Mapped object type implicitly has an 'any' template type.": {
@@ -4474,5 +4491,9 @@
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
+    },
+    "Add all missing imports": {
+        "category": "Message",
+        "code": 95064
     }
 }

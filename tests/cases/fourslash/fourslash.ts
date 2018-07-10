@@ -271,6 +271,7 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
+        getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[]): void;
@@ -553,7 +554,6 @@ declare namespace FourSlashInterface {
         overloadsCount?: number;
         docComment?: string;
         text?: string;
-        name?: string;
         parameterName?: string;
         parameterSpan?: string;
         parameterDocComment?: string;

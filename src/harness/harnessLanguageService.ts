@@ -155,7 +155,7 @@ namespace Harness.LanguageService {
             this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
             this.vfs.renameSync(oldPath, newPath);
 
-            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()));
+            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()), /*sourceMapper*/ undefined);
             this.scriptInfos.forEach((scriptInfo, key) => {
                 const newFileName = updater(key);
                 if (newFileName !== undefined) {
@@ -560,6 +560,9 @@ namespace Harness.LanguageService {
         getSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
+        getSourceMapper(): never {
+            return ts.notImplemented();
+        }
         dispose(): void { this.shim.dispose({}); }
     }
 
@@ -707,7 +710,9 @@ namespace Harness.LanguageService {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory() { return ts.notImplemented(); }
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include, depth);
+        }
 
         watchFile(): ts.FileWatcher {
             return { close: ts.noop };
