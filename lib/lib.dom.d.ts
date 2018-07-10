@@ -8804,13 +8804,13 @@ interface IDBCursor {
      * Delete the record pointed at by the cursor with a new value.
      * If successful, request's result will be undefined.
      */
-    delete(): IDBRequest;
+    delete(): IDBRequest<void>;
     /**
      * Updated the record pointed at by the cursor with a new value.
      * Throws a "DataError" DOMException if the effective object store uses in-line keys and the key would have changed.
      * If successful, request's result will be the record's key.
      */
-    update(value: any): IDBRequest;
+    update(value: any): IDBRequest<IDBValidKey>;
 }
 
 declare var IDBCursor: {
@@ -8936,40 +8936,40 @@ interface IDBIndex {
      * If successful, request's result will be the
      * count.
      */
-    count(key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Retrieves the value of the first record matching the
      * given key or key range in query.
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
-    get(key: IDBValidKey | IDBKeyRange): IDBRequest;
+    get(key: IDBValidKey | IDBKeyRange): IDBRequest<IDBValue>;
     /**
      * Retrieves the values of the records matching the given key or key range in query (up to count if given).
      * If successful, request's result will be an Array of the values.
      */
-    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the given key or key range in query (up to count if given).
      * If successful, request's result will be an Array of the keys.
      */
-    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the
      * given key or key range in query.
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
-    getKey(key: IDBValidKey | IDBKeyRange): IDBRequest;
+    getKey(key: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     /**
      * Opens a cursor over the records matching query,
      * ordered by direction. If query is null, all records in index are matched.
      * If successful, request's result will be an IDBCursorWithValue, or null if there were no matching records.
      */
-    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
+    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in index are matched.
      * If successful, request's result will be an IDBCursor, or null if there were no matching records.
      */
-    openKeyCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
+    openKeyCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
 }
 
 declare var IDBIndex: {
@@ -9048,19 +9048,19 @@ interface IDBObjectStore {
      * Returns the associated transaction.
      */
     readonly transaction: IDBTransaction;
-    add(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    add(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest<any>;
     /**
      * Deletes all records in store.
      * If successful, request's result will
      * be undefined.
      */
-    clear(): IDBRequest;
+    clear(): IDBRequest<undefined>;
     /**
      * Retrieves the number of records matching the
      * given key or key range in query.
      * If successful, request's result will be the count.
      */
-    count(key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be
      * satisfied with the data already in store the upgrade
@@ -9075,7 +9075,7 @@ interface IDBObjectStore {
      * If successful, request's result will
      * be undefined.
      */
-    delete(key: IDBValidKey | IDBKeyRange): IDBRequest;
+    delete(key: IDBValidKey | IDBKeyRange): IDBRequest<undefined>;
     /**
      * Deletes the index in store with the given name.
      * Throws an "InvalidStateError" DOMException if not called within an upgrade
@@ -9087,41 +9087,41 @@ interface IDBObjectStore {
      * given key or key range in query.
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
-    get(query: IDBValidKey | IDBKeyRange): IDBRequest;
+    get(query: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
     /**
      * Retrieves the values of the records matching the
      * given key or key range in query (up to count if given).
      * If successful, request's result will
      * be an Array of the values.
      */
-    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the
      * given key or key range in query (up to count if given).
      * If successful, request's result will
      * be an Array of the keys.
      */
-    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the
      * given key or key range in query.
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
-    getKey(query: IDBValidKey | IDBKeyRange): IDBRequest;
+    getKey(query: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     index(name: string): IDBIndex;
     /**
      * Opens a cursor over the records matching query,
      * ordered by direction. If query is null, all records in store are matched.
      * If successful, request's result will be an IDBCursorWithValue pointing at the first matching record, or null if there were no matching records.
      */
-    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
+    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in store are matched.
      * If successful, request's result will be an IDBCursor pointing at the first matching record, or
      * null if there were no matching records.
      */
-    openKeyCursor(query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
-    put(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    openKeyCursor(query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
+    put(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest<any>;
 }
 
 declare var IDBObjectStore: {
@@ -9134,7 +9134,7 @@ interface IDBOpenDBRequestEventMap extends IDBRequestEventMap {
     "upgradeneeded": IDBVersionChangeEvent;
 }
 
-interface IDBOpenDBRequest extends IDBRequest {
+interface IDBOpenDBRequest extends IDBRequest<IDBDatabase> {
     onblocked: ((this: IDBOpenDBRequest, ev: Event) => any) | null;
     onupgradeneeded: ((this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any) | null;
     addEventListener<K extends keyof IDBOpenDBRequestEventMap>(type: K, listener: (this: IDBOpenDBRequest, ev: IDBOpenDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9153,14 +9153,14 @@ interface IDBRequestEventMap {
     "success": Event;
 }
 
-interface IDBRequest extends EventTarget {
+interface IDBRequest<T> extends EventTarget {
     /**
      * When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws
      * a "InvalidStateError" DOMException if the request is still pending.
      */
     readonly error: DOMException | null;
-    onerror: ((this: IDBRequest, ev: Event) => any) | null;
-    onsuccess: ((this: IDBRequest, ev: Event) => any) | null;
+    onerror: ((this: IDBRequest<T>, ev: Event) => any) | null;
+    onsuccess: ((this: IDBRequest<T>, ev: Event) => any) | null;
     /**
      * Returns "pending" until a request is complete,
      * then returns "done".
@@ -9171,7 +9171,7 @@ interface IDBRequest extends EventTarget {
      * or undefined if the request failed. Throws a
      * "InvalidStateError" DOMException if the request is still pending.
      */
-    readonly result: any;
+    readonly result: T;
     /**
      * Returns the IDBObjectStore, IDBIndex, or IDBCursor the request was made against, or null if is was an open
      * request.
@@ -9182,15 +9182,15 @@ interface IDBRequest extends EventTarget {
      * If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise.
      */
     readonly transaction: IDBTransaction | null;
-    addEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest, ev: IDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest<T>, ev: IDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest, ev: IDBRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest<T>, ev: IDBRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var IDBRequest: {
-    prototype: IDBRequest;
-    new(): IDBRequest;
+    prototype: IDBRequest<any>;
+    new(): IDBRequest<any>;
 };
 
 interface IDBTransactionEventMap {
