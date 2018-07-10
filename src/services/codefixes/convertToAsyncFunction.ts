@@ -21,19 +21,28 @@ namespace ts.codefix {
         let synthNamesMap: Map<string> = new MapCtr();
         const funcToConvertRenamed = renameCollidingVarNames(funcToConvert, checker, varNamesMap, synthNamesMap);
 
-        const retStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed);
+        const retStmts: Node[] = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed, checker);
         for (const stmt of retStmts) {
-            forEachChild(stmt, function visit(node: Node) {
-                if (isCallExpression(node)) {
-                    const newNodes = parseCallback(node, checker, node, synthNamesMap);
-                    if (newNodes.length > 0) {
-                        changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
+            if (isCallExpression(stmt)) {
+                const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap);
+                if (newNodes.length > 0) {
+                    changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
+                }
+
+            }
+            else {
+                forEachChild(stmt, function visit(node: Node) {
+                    if (isCallExpression(node)) {
+                        const newNodes = parseCallback(node, checker, node, synthNamesMap);
+                        if (newNodes.length > 0) {
+                            changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
+                        }
                     }
-                }
-                else if (!isFunctionLike(node)) {
-                    forEachChild(node, visit);
-                }
-            });
+                    else if (!isFunctionLike(node)) {
+                        forEachChild(node, visit);
+                    }
+                });
+            }
         }
     }
 
@@ -159,9 +168,13 @@ namespace ts.codefix {
     }
 
     function parsePromiseCall(node: CallExpression, checker: TypeChecker, prevArgName?: string): Statement[] {
-        if (prevArgName && getNextDotThen(node.original!.parent as Expression, checker) && isPropertyAccessExpression(node.original!.parent)) {
+        let nextDotThen = getNextDotThen(node.original!.parent as Expression, checker);
+        if (prevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent)) {
             const varDecl = createVariableDeclaration(prevArgName, /*type*/ undefined, createAwait(node));
             return [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))]
+        }
+        else if (!prevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent)) {
+            return [createStatement(createAwait(node))];
         }
 
         return [createReturn(node)];
@@ -205,14 +218,14 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
 
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    let innerRetStmts: ReturnStatement[] = getReturnStatementsWithPromiseCallbacks(func.body as Node);
+                    let innerRetStmts: Node[] = getReturnStatementsWithPromiseCallbacks(func.body as Node, checker);
                     let innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, prevArgName);
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
 
                     const nextOutermostDotThen = getNextDotThen(parent.original!.parent as Expression, checker);
-                    return nextOutermostDotThen ? removeReturns(func.body.statements, prevArgName!) : func.body.statements 
+                    return nextOutermostDotThen ? removeReturns(func.body.statements, prevArgName!) : func.body.statements
 
                 } else if (isArrowFunction(func)) {
                     //if there is another outer dot then, don't actually return
@@ -237,10 +250,10 @@ namespace ts.codefix {
         let ret: Statement[] = [];
         for (let stmt of stmts) {
             if (isReturnStatement(stmt)) {
-                if (stmt.expression){
+                if (stmt.expression) {
                     ret.push(createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, stmt.expression)], NodeFlags.Let))));
                 }
-            } 
+            }
             else {
                 ret.push(stmt);
             }
@@ -249,7 +262,7 @@ namespace ts.codefix {
         return createNodeArray(ret);
     }
 
-    function getInnerCallbackBody(checker: TypeChecker, innerRetStmts: ReturnStatement[], synthNamesMap: Map<string>, prevArgName?: string) {
+    function getInnerCallbackBody(checker: TypeChecker, innerRetStmts: Node[], synthNamesMap: Map<string>, prevArgName?: string) {
         let innerCbBody: Statement[] = [];
         for (const stmt of innerRetStmts) {
             forEachChild(stmt, function visit(node: Node) {
