@@ -117,6 +117,7 @@ namespace ts.Completions {
             // For example:
             //     var x = <div> </ /*1*/
             // The completion list at "1" will contain "div>" with type any
+            // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
             const tagName = location.parent.parent.openingElement.tagName;
             const hasClosingAngleBracket = !!findChildOfKind(location.parent, SyntaxKind.GreaterThanToken, sourceFile);
             const entry: CompletionEntry = {
