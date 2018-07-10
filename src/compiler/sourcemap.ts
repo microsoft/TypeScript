@@ -376,17 +376,13 @@ namespace ts {
         let nameToNameIndexMap: Map<number> | undefined;
 
         // Last recorded and encoded mappings
-        let generatedLine = 0;
-        let generatedCharacter = 0;
-        let sourceIndex = 0;
-        let sourceLine = 0;
-        let sourceCharacter = 0;
-        let nameIndex = 0;
-
-        let hasPending = false;
-        let hasPendingSource = false;
-        let hasPendingName = false;
-        let hasMapping = false;
+        let lastGeneratedLine = 0;
+        let lastGeneratedCharacter = 0;
+        let lastSourceIndex = 0;
+        let lastSourceLine = 0;
+        let lastSourceCharacter = 0;
+        let lastNameIndex = 0;
+        let hasLast = false;
 
         let pendingGeneratedLine = 0;
         let pendingGeneratedCharacter = 0;
@@ -394,6 +390,9 @@ namespace ts {
         let pendingSourceLine = 0;
         let pendingSourceCharacter = 0;
         let pendingNameIndex = 0;
+        let hasPending = false;
+        let hasPendingSource = false;
+        let hasPendingName = false;
 
         return {
             addSource,
@@ -467,12 +466,16 @@ namespace ts {
         }
 
         function addMapping(generatedLine: number, generatedCharacter: number, sourceIndex?: number, sourceLine?: number, sourceCharacter?: number, nameIndex?: number) {
+            Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
+            Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
+            Debug.assert(sourceIndex === undefined || sourceIndex >= 0, "sourceIndex cannot be negative");
+            Debug.assert(sourceLine === undefined || sourceLine >= 0, "sourceLine cannot be negative");
+            Debug.assert(sourceCharacter === undefined || sourceCharacter >= 0, "sourceCharacter cannot be negative");
             enter();
             // If this location wasn't recorded or the location in source is going backwards, record the mapping
             if (isNewGeneratedPosition(generatedLine, generatedCharacter) ||
                 isBacktrackingSourcePosition(sourceIndex, sourceLine, sourceCharacter)) {
                 commitPendingMapping();
-                Debug.assert(generatedLine >= pendingGeneratedLine, "Cannot backtrack generated lines.");
                 pendingGeneratedLine = generatedLine;
                 pendingGeneratedCharacter = generatedCharacter;
                 hasPendingSource = false;
@@ -481,7 +484,6 @@ namespace ts {
             }
 
             if (sourceIndex !== undefined && sourceLine !== undefined && sourceCharacter !== undefined) {
-                Debug.assert(sourceIndex !== -1, "No source was set for this mapping.");
                 pendingSourceIndex = sourceIndex;
                 pendingSourceLine = sourceLine;
                 pendingSourceCharacter = sourceCharacter;
@@ -495,6 +497,8 @@ namespace ts {
         }
 
         function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string) {
+            Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
+            Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
             enter();
             // First, decode the old component sourcemap
             const sourceIndexToNewSourceIndexMap: number[] = [];
@@ -538,13 +542,13 @@ namespace ts {
         }
 
         function shouldCommitMapping() {
-            return !hasMapping
-                || generatedLine !== pendingGeneratedLine
-                || generatedCharacter !== pendingGeneratedCharacter
-                || sourceIndex !== pendingSourceIndex
-                || sourceLine !== pendingSourceLine
-                || sourceCharacter !== pendingSourceCharacter
-                || nameIndex !== pendingNameIndex;
+            return !hasLast
+                || lastGeneratedLine !== pendingGeneratedLine
+                || lastGeneratedCharacter !== pendingGeneratedCharacter
+                || lastSourceIndex !== pendingSourceIndex
+                || lastSourceLine !== pendingSourceLine
+                || lastSourceCharacter !== pendingSourceCharacter
+                || lastNameIndex !== pendingNameIndex;
         }
 
         // Encoding for sourcemap span
@@ -554,54 +558,50 @@ namespace ts {
             }
 
             enter();
-            Debug.assert(pendingGeneratedCharacter >= 0, "lastRecordedGeneratedCharacter was negative");
-            Debug.assert(pendingSourceIndex >= 0, "lastRecordedSourceIndex was negative");
-            Debug.assert(pendingSourceLine >= 0, "lastRecordedSourceLine was negative");
-            Debug.assert(pendingSourceCharacter >= 0, "lastRecordedSourceCharacter was negative");
 
             // Line/Comma delimiters
-            if (generatedLine < pendingGeneratedLine) {
+            if (lastGeneratedLine < pendingGeneratedLine) {
                 // Emit line delimiters
                 do {
                     sourceMapData.sourceMapMappings += ";";
-                    generatedLine++;
-                    generatedCharacter = 0;
+                    lastGeneratedLine++;
+                    lastGeneratedCharacter = 0;
                 }
-                while (generatedLine < pendingGeneratedLine);
+                while (lastGeneratedLine < pendingGeneratedLine);
             }
             else {
-                Debug.assertEqual(generatedLine, pendingGeneratedLine, "generatedLine cannot backtrack");
+                Debug.assertEqual(lastGeneratedLine, pendingGeneratedLine, "generatedLine cannot backtrack");
                 // Emit comma to separate the entry
-                if (hasMapping) {
+                if (hasLast) {
                     sourceMapData.sourceMapMappings += ",";
                 }
             }
 
             // 1. Relative generated character
-            sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingGeneratedCharacter - generatedCharacter);
-            generatedCharacter = pendingGeneratedCharacter;
+            sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingGeneratedCharacter - lastGeneratedCharacter);
+            lastGeneratedCharacter = pendingGeneratedCharacter;
 
             if (hasPendingSource) {
                 // 2. Relative sourceIndex
-                sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingSourceIndex - sourceIndex);
-                sourceIndex = pendingSourceIndex;
+                sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingSourceIndex - lastSourceIndex);
+                lastSourceIndex = pendingSourceIndex;
 
                 // 3. Relative source line
-                sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingSourceLine - sourceLine);
-                sourceLine = pendingSourceLine;
+                sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingSourceLine - lastSourceLine);
+                lastSourceLine = pendingSourceLine;
 
                 // 4. Relative source character
-                sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingSourceCharacter - sourceCharacter);
-                sourceCharacter = pendingSourceCharacter;
+                sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingSourceCharacter - lastSourceCharacter);
+                lastSourceCharacter = pendingSourceCharacter;
 
                 if (hasPendingName) {
                     // 5. Relative nameIndex
-                    sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingNameIndex - nameIndex);
-                    nameIndex = pendingNameIndex;
+                    sourceMapData.sourceMapMappings += base64VLQFormatEncode(pendingNameIndex - lastNameIndex);
+                    lastNameIndex = pendingNameIndex;
                 }
             }
 
-            hasMapping = true;
+            hasLast = true;
             exit();
         }
 
