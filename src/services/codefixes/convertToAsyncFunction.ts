@@ -49,14 +49,27 @@ namespace ts.codefix {
                 let newName = getNewNameIfConflict(node.text, allVarNames);
 
                 if (symbol && type && type.getCallSignatures().length > 0 && type.getCallSignatures()[0].parameters.length > 0) {
+                    // first, add the actual function name
+                    if (allVarNames.filter(elem => elem === node.text).length > 0) {
+                        // we have a conflict with the function name, but function names take precedence over variable names
+                        varNamesMap.forEach((value: string, key: string) => {
+                            if (value === node.text) {
+                                varNamesMap.set(key, getNewNameIfConflict(node.text, allVarNames));
+                                return;
+                            }
+                        });
+                    }
+
+                    varNamesMap.set(String(getSymbolId(symbol)), node.text);
+                    allVarNames.push(node.text);
+
+                    // next, add the new variable for the declaration
                     let synthName = type.getCallSignatures()[0].parameters[0].name;
-                    //let newParamName = getNewNameIfConflict(synthName, allVarNames);
                     varNamesMap.set(String(getSymbolId(checker.createSymbol(SymbolFlags.BlockScopedVariable, getEscapedTextOfIdentifierOrLiteral(createIdentifier(synthName))))), synthName);
                     allVarNames.push(synthName);
-                    synthNamesMap.set(newName, synthName);
+                    synthNamesMap.set(node.text, synthName);
                 }
-
-                if (symbol && !varNamesMap.get(String(getSymbolId(symbol)))) {
+                else if (symbol && !varNamesMap.get(String(getSymbolId(symbol)))) {
                     varNamesMap.set(String(getSymbolId(symbol)), newName);
                     allVarNames.push(node.text);
                 }
