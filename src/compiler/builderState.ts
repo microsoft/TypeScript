@@ -296,7 +296,7 @@ namespace ts.BuilderState {
      * there are no point to rebuild all script files if these special files have changed. However, if any statement
      * in the file is not ambient external module, we treat it as a regular script file.
      */
-    function containsOnlyAmbientModules(sourceFile: SourceFile) {
+    export function containsOnlyAmbientModules(sourceFile: SourceFile) {
         for (const statement of sourceFile.statements) {
             if (!isModuleWithStringLiteralName(statement)) {
                 return false;
@@ -308,7 +308,7 @@ namespace ts.BuilderState {
     /**
      * Gets all files of the program excluding the default library file
      */
-    function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): ReadonlyArray<SourceFile> {
+    export function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): ReadonlyArray<SourceFile> {
         // Use cached result
         if (state.allFilesExcludingDefaultLibraryFile) {
             return state.allFilesExcludingDefaultLibraryFile;
@@ -376,7 +376,6 @@ namespace ts.BuilderState {
             }
         }
 
-        // Return array of values that needs emit
         // Return array of values that needs emit
         return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
     }
