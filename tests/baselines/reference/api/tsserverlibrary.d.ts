@@ -6094,14 +6094,9 @@ declare namespace ts {
     function nodeIsMissing(node: Node | undefined): boolean;
     function nodeIsPresent(node: Node | undefined): boolean;
     /**
-     * Appends a range of value to begin of an array, returning the array.
-     *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
-     * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
-     * appended. If an element of `from` is `undefined`, that element is not appended.
+     * Prepends statements to an array taking care of prologue directives.
      */
-    function prependStatements<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined;
+    function prependStatements<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[];
     /**
      * Determine if the given comment is a triple-slash
      *
