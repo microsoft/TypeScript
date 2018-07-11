@@ -7566,9 +7566,24 @@ namespace ts {
                 const setter = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration), SyntaxKind.SetAccessor);
                 return getAnnotatedAccessorType(setter);
             }
-
+            const typeFromTag = getReturnTypeOfTypeTag(declaration);
+            if (typeFromTag) {
+                return typeFromTag;
+            }
             if (nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
                 return anyType;
+            }
+        }
+
+        function getReturnTypeOfTypeTag(node: Node) {
+            if (isInJavaScriptFile(node)) {
+                const typeTag = getJSDocTypeTag(node);
+                if (typeTag && typeTag.typeExpression) {
+                    const signatures = getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call);
+                    if (signatures.length === 1) {
+                        return getReturnTypeOfSignature(signatures[0]);
+                    }
+                }
             }
         }
 
@@ -20521,15 +20536,20 @@ namespace ts {
             return type;
         }
 
+        function getReturnOrPromisedType(node: ArrowFunction | FunctionExpression | FunctionDeclaration | MethodDeclaration | MethodSignature, functionFlags: FunctionFlags) {
+            const returnTypeNode = getEffectiveReturnTypeNode(node);
+            return returnTypeNode &&
+                ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
+                 checkAsyncFunctionReturnType(node) : // Async function
+                 getTypeFromTypeNode(returnTypeNode)) || // AsyncGenerator function, Generator function, or normal function
+                getReturnTypeOfTypeTag(node); // type from JSDoc @type tag
+        }
+
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             const functionFlags = getFunctionFlags(node);
-            const returnTypeNode = getEffectiveReturnTypeNode(node);
-            const returnOrPromisedType = returnTypeNode &&
-                ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
-                    checkAsyncFunctionReturnType(node) : // Async function
-                    getTypeFromTypeNode(returnTypeNode)); // AsyncGenerator function, Generator function, or normal function
+            const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
 
             if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
                 // return is not necessary in the body of generators
@@ -20537,7 +20557,7 @@ namespace ts {
             }
 
             if (node.body) {
-                if (!returnTypeNode) {
+                if (!getEffectiveReturnTypeNode(node)) {
                     // There are some checks that are only performed in getReturnTypeFromBody, that may produce errors
                     // we need. An example is the noImplicitAny errors resulting from widening the return expression
                     // of a function. Because checking of function expression bodies is deferred, there was never an
@@ -23484,15 +23504,12 @@ namespace ts {
             const body = node.kind === SyntaxKind.MethodSignature ? undefined : node.body;
             checkSourceElement(body);
 
-            const returnTypeNode = getEffectiveReturnTypeNode(node);
             if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
-                const returnOrPromisedType = returnTypeNode && (functionFlags & FunctionFlags.Async
-                    ? checkAsyncFunctionReturnType(node) // Async function
-                    : getTypeFromTypeNode(returnTypeNode)); // normal function
+                const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
 
-            if (produceDiagnostics && !returnTypeNode) {
+            if (produceDiagnostics && !getEffectiveReturnTypeNode(node)) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
                 if (noImplicitAny && nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
@@ -24767,7 +24784,7 @@ namespace ts {
                         error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                     }
                 }
-                else if (getEffectiveReturnTypeNode(func) || isGetAccessorWithAnnotatedSetAccessor(func)) {
+                else if (getEffectiveReturnTypeNode(func) || isGetAccessorWithAnnotatedSetAccessor(func) || getReturnTypeOfTypeTag(func)) {
                     if (functionFlags & FunctionFlags.Async) { // Async function
                         const promisedType = getPromisedTypeOfPromise(returnType);
                         const awaitedType = checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
