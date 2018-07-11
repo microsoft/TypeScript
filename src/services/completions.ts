@@ -1098,7 +1098,7 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
-                addTypeProperties(typeChecker.getTypeAtLocation(node)!);
+                addTypeProperties(typeChecker.getTypeAtLocation(node));
             }
         }
 

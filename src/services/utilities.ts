@@ -925,7 +925,7 @@ namespace ts {
     }
 
     export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): ReadonlyArray<Signature> {
-        const type = checker.getTypeAtLocation(called)!; // TODO: GH#18217
+        const type = checker.getTypeAtLocation(called);
         const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
         return signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount);
     }
