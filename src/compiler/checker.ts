@@ -2281,9 +2281,15 @@ namespace ts {
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
         function resolveESModuleSymbol(moduleSymbol: Symbol | undefined, referencingLocation: Node, dontResolveAlias: boolean): Symbol | undefined {
             const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
+
             if (!dontResolveAlias && symbol) {
                 if (!(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) && !getDeclarationOfKind(symbol, SyntaxKind.SourceFile)) {
-                    error(referencingLocation, Diagnostics.ECMAScript_imports_can_only_reference_an_export_declaration_with_the_esModuleInterop_flag_enabled_and_by_using_default_imports);
+                    const compilerOptionName = moduleKind >= ModuleKind.ES2015
+                        ? "allowSyntheticDefaultImports"
+                        : "esModuleInterop";
+
+                    error(referencingLocation, Diagnostics.When_writing_ECMAScript_imports_callable_export_style_modules_can_only_be_imported_by_turning_on_the_0_flag_and_using_a_default_import, compilerOptionName);
+
                     return symbol;
                 }
 

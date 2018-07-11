@@ -1744,7 +1744,7 @@
         "category": "Error",
         "code": 2496
     },
-    "ECMAScript imports can only reference an 'export =' declaration with the 'esModuleInterop' flag enabled and by using default imports.": {
+    "When writing ECMAScript imports, callable 'export ='-style modules can only be imported by turning on the '{0}' flag and using a default import.": {
         "category": "Error",
         "code": 2497
     },
