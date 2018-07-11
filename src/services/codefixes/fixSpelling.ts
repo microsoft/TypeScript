@@ -43,7 +43,7 @@ namespace ts.codefix {
             const importDeclaration = findAncestor(node, isImportDeclaration)!;
             const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
             if (resolvedSourceFile && resolvedSourceFile.symbol) {
-                suggestion = checker.getSuggestionForNonexistentModule(node as Identifier, resolvedSourceFile.symbol);
+                suggestion = checker.getSuggestionForNonexistentExport(node as Identifier, resolvedSourceFile.symbol);
             }
         }
         else {
