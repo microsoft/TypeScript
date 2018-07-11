@@ -1,5 +1,4 @@
 namespace ts.server {
-    /*@internal*/
     export interface ScriptInfoVersion {
         svc: number;
         text: number;

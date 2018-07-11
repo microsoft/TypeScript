@@ -304,7 +304,7 @@ namespace ts {
 
         const outputs: string[] = [];
         outputs.push(getOutputJavaScriptFileName(inputFileName, configFile));
-        if (configFile.options.declaration && !fileExtensionIs(inputFileName, Extension.Json)) {
+        if (getEmitDeclarations(configFile.options) && !fileExtensionIs(inputFileName, Extension.Json)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile);
             outputs.push(dts);
             if (configFile.options.declarationMap) {
@@ -320,7 +320,7 @@ namespace ts {
         }
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
-        if (project.options.declaration) {
+        if (getEmitDeclarations(project.options)) {
             const dts = changeExtension(project.options.outFile, Extension.Dts);
             outputs.push(dts);
             if (project.options.declarationMap) {
@@ -769,7 +769,10 @@ namespace ts {
             const program = createProgram(programOptions);
 
             // Don't emit anything in the presence of syntactic errors or options diagnostics
-            const syntaxDiagnostics = [...program.getOptionsDiagnostics(), ...program.getSyntacticDiagnostics()];
+            const syntaxDiagnostics = [
+                ...program.getOptionsDiagnostics(),
+                ...program.getConfigFileParsingDiagnostics(),
+                ...program.getSyntacticDiagnostics()];
             if (syntaxDiagnostics.length) {
                 resultFlags |= BuildResultFlags.SyntaxErrors;
                 for (const diag of syntaxDiagnostics) {
@@ -780,7 +783,7 @@ namespace ts {
             }
 
             // Don't emit .d.ts if there are decl file errors
-            if (program.getCompilerOptions().declaration) {
+            if (getEmitDeclarations(program.getCompilerOptions())) {
                 const declDiagnostics = program.getDeclarationDiagnostics();
                 if (declDiagnostics.length) {
                     resultFlags |= BuildResultFlags.DeclarationEmitErrors;

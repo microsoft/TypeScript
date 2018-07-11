@@ -6,7 +6,6 @@
     "strict": false,
     "sourceMap": true,
     "declarationMap": true,
-    "declaration": true,
     "outFile": "./bin/first-output.js"
   },
   "files": [

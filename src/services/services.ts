@@ -1537,7 +1537,8 @@ namespace ts {
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] | undefined {
-            Debug.assert(filesToSearch.some(f => normalizePath(f) === fileName));
+            const normalizedFileName = normalizePath(fileName);
+            Debug.assert(filesToSearch.some(f => normalizePath(f) === normalizedFileName));
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
@@ -1812,7 +1813,7 @@ namespace ts {
         }
 
         function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): ReadonlyArray<FileTextChanges> {
-            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences);
+            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences, sourceMapper);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -1883,9 +1884,14 @@ namespace ts {
             if (!token) return undefined;
             const element = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent) ? token.parent.parent
                 : isJsxText(token) ? token.parent : undefined;
-            if (element && !tagNamesAreEquivalent(element.openingElement.tagName, element.closingElement.tagName)) {
+            if (element && isUnclosedTag(element)) {
                 return { newText: `</${element.openingElement.tagName.getText(sourceFile)}>` };
             }
+        }
+
+        function isUnclosedTag({ openingElement, closingElement, parent }: JsxElement): boolean {
+            return !tagNamesAreEquivalent(openingElement.tagName, closingElement.tagName) ||
+                isJsxElement(parent) && tagNamesAreEquivalent(openingElement.tagName, parent.openingElement.tagName) && isUnclosedTag(parent);
         }
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {
@@ -2180,21 +2186,23 @@ namespace ts {
      * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
      */
     /* @internal */
-    export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement | undefined {
+    export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent as ObjectLiteralElementWithName : undefined;
                 }
             // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                    node.parent.name === node ? node.parent : undefined;
+                    node.parent.name === node ? node.parent as ObjectLiteralElementWithName : undefined;
         }
         return undefined;
     }
+    /* @internal */
+    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName };
 
     /* @internal */
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
