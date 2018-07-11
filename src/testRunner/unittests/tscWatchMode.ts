@@ -1304,11 +1304,14 @@ export class B
             const watch = createWatchOfConfigFile("tsconfig.json", host);
             checkProgramActualFiles(watch(), [aFile.path, bFile.path, cFile.path, libFile.path]);
             checkOutputErrorsInitial(host, emptyArray);
+            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
             host.writeFile(cFile.path, cFile.content.replace("d", "d2"));
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, [
                 getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("d"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "d", "C")
             ]);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
         });
     });
 

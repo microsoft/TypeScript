@@ -31,6 +31,10 @@ namespace ts {
          */
         currentAffectedFilesSignatures: Map<string> | undefined;
         /**
+         * Newly computed visible to outside referencedSet
+         */
+        currentAffectedFilesExportedModulesMap: BuilderState.ComputingExportedModulesMap | undefined;
+        /**
          * Already seen affected files
          */
         seenAffectedFiles: Map<true> | undefined;
@@ -128,6 +132,8 @@ namespace ts {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
                         semanticDiagnosticsPerFile!.delete(affectedFile.path);
+                        // Remove semantic diagnostics for files that are affected by using exports of this module
+                        BuilderState.getFilesAffectedByExportedModule(state, affectedFile.path, state.currentAffectedFilesExportedModulesMap).forEach(path => semanticDiagnosticsPerFile!.delete(path));
                         return affectedFile;
                     }
                     seenAffectedFiles!.set(affectedFile.path, true);
@@ -140,6 +146,7 @@ namespace ts {
                 // Commit the changes in file signature
                 BuilderState.updateSignaturesFromCache(state, state.currentAffectedFilesSignatures!);
                 state.currentAffectedFilesSignatures!.clear();
+                BuilderState.updateExportedFilesMapFromCache(state, state.currentAffectedFilesExportedModulesMap);
                 state.affectedFiles = undefined;
             }
 
@@ -160,7 +167,10 @@ namespace ts {
 
             // Get next batch of affected files
             state.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures || createMap();
-            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures);
+            if (state.exportedModulesMap) {
+                state.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap || createMap<BuilderState.ReferencedSet | false>();
+            }
+            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value as Path;
             state.semanticDiagnosticsPerFile!.delete(nextKey.value as Path);
             state.affectedFilesIndex = 0;
