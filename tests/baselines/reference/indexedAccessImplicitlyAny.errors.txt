@@ -8,6 +8,7 @@ tests/cases/compiler/indexedAccessImplicitlyAny.ts(4,3): error TS2551: Property 
     i.foo;
       ~~~
 !!! error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?
+!!! related TS2728 tests/cases/compiler/indexedAccessImplicitlyAny.ts:1:15: 'foof' is declared here.
     i["foo"];
       ~~~~~
 !!! error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?

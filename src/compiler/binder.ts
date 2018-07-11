@@ -1218,7 +1218,7 @@ namespace ts {
             bind(node.statement);
             popActiveLabel();
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
-                errorOrSuggestionOnFirstToken(unusedLabelIsError(options), node, Diagnostics.Unused_label);
+                errorOrSuggestionOnNode(unusedLabelIsError(options), node.label, Diagnostics.Unused_label);
             }
             if (!node.statement || node.statement.kind !== SyntaxKind.DoStatement) {
                 // do statement sets current flow inside bindDoStatement
@@ -1925,9 +1925,16 @@ namespace ts {
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function errorOrSuggestionOnFirstToken(isError: boolean, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
-            const span = getSpanOfTokenAtPosition(file, node.pos);
-            const diag = createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2);
+        function errorOrSuggestionOnNode(isError: boolean, node: Node, message: DiagnosticMessage): void {
+            errorOrSuggestionOnRange(isError, node, node, message);
+        }
+
+        function errorOrSuggestionOnRange(isError: boolean, startNode: Node, endNode: Node, message: DiagnosticMessage): void {
+            addErrorOrSuggestionDiagnostic(isError, { pos: getTokenPosOfNode(startNode, file), end: endNode.end }, message);
+        }
+
+        function addErrorOrSuggestionDiagnostic(isError: boolean, range: TextRange, message: DiagnosticMessage): void {
+            const diag = createFileDiagnostic(file, range.pos, range.end - range.pos, message);
             if (isError) {
                 file.bindDiagnostics.push(diag);
             }
@@ -2799,11 +2806,43 @@ namespace ts {
                                 node.declarationList.declarations.some(d => !!d.initializer)
                             );
 
-                        errorOrSuggestionOnFirstToken(isError, node, Diagnostics.Unreachable_code_detected);
+                        eachUnreachableRange(node, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
                     }
                 }
             }
             return true;
+        }
+    }
+
+    function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void): void {
+        if (isStatement(node) && isExecutableStatement(node) && isBlock(node.parent)) {
+            const { statements } = node.parent;
+            const slice = sliceAfter(statements, node);
+            getRangesWhere(slice, isExecutableStatement, (start, afterEnd) => cb(slice[start], slice[afterEnd - 1]));
+        }
+        else {
+            cb(node, node);
+        }
+    }
+    // As opposed to a pure declaration like an `interface`
+    function isExecutableStatement(s: Statement): boolean {
+        // Don't remove statements that can validly be used before they appear.
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+            // `var x;` may declare a variable used above
+            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
+    }
+
+    function isPurelyTypeDeclaration(s: Statement): boolean {
+        switch (s.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            case SyntaxKind.EnumDeclaration:
+                return hasModifier(s, ModifierFlags.Const);
+            default:
+                return false;
         }
     }
 

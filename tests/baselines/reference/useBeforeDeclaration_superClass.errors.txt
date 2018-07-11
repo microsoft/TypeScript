@@ -29,7 +29,7 @@ tests/cases/compiler/useBeforeDeclaration_superClass.ts(25,18): error TS2729: Pr
         old_x = this.x;
                      ~
 !!! error TS2729: Property 'x' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_superClass.ts:26:5: 'x' was declared here.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_superClass.ts:26:5: 'x' is declared here.
         x = 1;
     }
     

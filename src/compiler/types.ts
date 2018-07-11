@@ -2994,9 +2994,9 @@ namespace ts {
          */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
-        getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
-        getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
-        getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
+        /* @internal */ getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
+        /* @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
+        /* @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
 
