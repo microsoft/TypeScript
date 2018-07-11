@@ -97,7 +97,7 @@ namespace ts {
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -426,7 +426,7 @@ namespace ts {
 
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {

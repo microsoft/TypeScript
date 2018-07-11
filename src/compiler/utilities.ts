@@ -401,9 +401,9 @@ namespace ts {
     }
 
     /**
-     * Prepends statements to an array taking care of prologue directives.
+     * Prepends statements to an array while taking care of prologue directives.
      */
-    export function prependStatements<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+    export function addStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
         if (from === undefined || from.length === 0) return to;
         let statementIndex = 0;
         // skip all prologue directives to insert at the correct position
