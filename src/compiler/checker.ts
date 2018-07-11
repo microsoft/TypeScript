@@ -7575,16 +7575,10 @@ namespace ts {
             }
         }
 
-        function getReturnTypeOfTypeTag(node: Node) {
-            if (isInJavaScriptFile(node)) {
-                const typeTag = getJSDocTypeTag(node);
-                if (typeTag && typeTag.typeExpression) {
-                    const signatures = getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call);
-                    if (signatures.length === 1) {
-                        return getReturnTypeOfSignature(signatures[0]);
-                    }
-                }
-            }
+        function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
+            const typeTag = isInJavaScriptFile(node) ? getJSDocTypeTag(node) : undefined;
+            const signatures = typeTag && typeTag.typeExpression  && getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call);
+            return signatures && signatures.length === 1 ? getReturnTypeOfSignature(signatures[0]) : undefined;
         }
 
         function containsArgumentsReference(declaration: SignatureDeclaration): boolean {
@@ -20536,11 +20530,11 @@ namespace ts {
             return type;
         }
 
-        function getReturnOrPromisedType(node: ArrowFunction | FunctionExpression | FunctionDeclaration | MethodDeclaration | MethodSignature, functionFlags: FunctionFlags) {
+        function getReturnOrPromisedType(node: FunctionLikeDeclaration | MethodSignature, functionFlags: FunctionFlags) {
             const returnTypeNode = getEffectiveReturnTypeNode(node);
             return returnTypeNode &&
                 ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
-                 checkAsyncFunctionReturnType(node) : // Async function
+                 checkAsyncFunctionReturnType(node, returnTypeNode) : // Async function
                  getTypeFromTypeNode(returnTypeNode)) || // AsyncGenerator function, Generator function, or normal function
                 getReturnTypeOfTypeTag(node); // type from JSDoc @type tag
         }
@@ -22009,7 +22003,7 @@ namespace ts {
                         }
                     }
                     else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
-                        checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
+                        checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node, returnTypeNode);
                     }
                 }
                 if (node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.JSDocFunctionType) {
@@ -23069,7 +23063,7 @@ namespace ts {
          *
          * @param node The signature to check
          */
-        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature): Type {
+        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature, returnTypeNode: TypeNode): Type {
             // As part of our emit for an async function, we will need to emit the entity name of
             // the return type annotation as an expression. To meet the necessary runtime semantics
             // for __awaiter, we must also check that the type of the declaration (e.g. the static
@@ -23094,7 +23088,6 @@ namespace ts {
             //      then<U>(...): Promise<U>;
             //  }
             //
-            const returnTypeNode = getEffectiveReturnTypeNode(node)!; // TODO: GH#18217
             const returnType = getTypeFromTypeNode(returnTypeNode);
 
             if (languageVersion >= ScriptTarget.ES2015) {
