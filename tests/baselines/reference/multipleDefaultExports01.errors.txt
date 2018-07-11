@@ -1,19 +1,24 @@
 tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
 tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
 tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/conformance/es6/modules/m1.ts (3 errors) ====
+==== tests/cases/conformance/es6/modules/m1.ts (4 errors) ====
     export default class foo {
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2730 tests/cases/conformance/es6/modules/m1.ts:1:22: This export conflicts with the first.
+!!! related TS2730 tests/cases/conformance/es6/modules/m1.ts:5:25: The first export default is here.
     
     }
     
     export default function bar() {
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2731 tests/cases/conformance/es6/modules/m1.ts:1:22: Another export default is here.
+                            ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2731 tests/cases/conformance/es6/modules/m1.ts:10:16: Another export default is here.
     
     }
     
@@ -21,7 +26,7 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
     export default x;
                    ~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2730 tests/cases/conformance/es6/modules/m1.ts:10:16: This export conflicts with the first.
+!!! related TS2730 tests/cases/conformance/es6/modules/m1.ts:5:25: The first export default is here.
     
 ==== tests/cases/conformance/es6/modules/m2.ts (0 errors) ====
     import Entity from "./m1"

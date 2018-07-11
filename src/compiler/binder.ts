@@ -410,13 +410,22 @@ namespace ts {
                             }
                         }
 
-                        forEach(symbol.declarations, declaration => {
-                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(declaration) || declaration, message, getDisplayName(declaration)));
-                        });
                         const declarationName = getNameOfDeclaration(node) || node;
-                        const diag = createDiagnosticForNode(declarationName, message, getDisplayName(node))
+                        const relatedInformation: DiagnosticRelatedInformation[] = [];
+                        forEach(symbol.declarations, (declaration, index) => {
+                            const decl = getNameOfDeclaration(declaration) || declaration;
+                            const diag = createDiagnosticForNode(decl, message, getDisplayName(declaration));
+                            file.bindDiagnostics.push(
+                                multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag
+                            );
+                            if (multipleDefaultExports) {
+                                relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here));
+                            }
+                        });
+                        
+                        const diag = createDiagnosticForNode(declarationName, message, getDisplayName(node));
                         file.bindDiagnostics.push(
-                            multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, Diagnostics.This_export_conflicts_with_the_first)) : diag
+                            multipleDefaultExports ? addRelatedInfo(diag, ...relatedInformation) : diag
                         );
 
                         symbol = createSymbol(SymbolFlags.None, name);
