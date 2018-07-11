@@ -917,11 +917,25 @@ namespace ts {
         }
     }
 
+    export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
+        const info = getPossibleTypeArgumentsInfo(token, sourceFile);
+        return info !== undefined && (isPartOfTypeNode(info.called) ||
+            getPossibleGenericSignatures(info.called, info.nTypeArguments, checker).length !== 0 ||
+            isPossiblyTypeArgumentPosition(info.called, sourceFile, checker));
+    }
+
+    export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): ReadonlyArray<Signature> {
+        const type = checker.getTypeAtLocation(called)!; // TODO: GH#18217
+        const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
+        return signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount);
+    }
+
     export interface PossibleTypeArgumentInfo {
         readonly called: Identifier;
         readonly nTypeArguments: number;
     }
-    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
+    // Get info for an expression like `f <` that may be the start of type arguments.
+    export function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         let token: Node | undefined = tokenIn;
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
