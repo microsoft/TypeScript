@@ -2417,12 +2417,12 @@ namespace ts {
             // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
             // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
             function visit(symbol: Symbol | undefined): SymbolTable | undefined {
-                if (!(symbol && symbol.flags & SymbolFlags.HasExports && pushIfUnique(visitedSymbols, symbol))) {
+                if (!(symbol && symbol.exports && pushIfUnique(visitedSymbols, symbol))) {
                     return;
                 }
-                const symbols = cloneMap(symbol.exports!);
+                const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
-                const exportStars = symbol.exports!.get(InternalSymbolName.ExportStar);
+                const exportStars = symbol.exports.get(InternalSymbolName.ExportStar);
                 if (exportStars) {
                     const nestedSymbols = createSymbolTable();
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
@@ -9381,11 +9381,9 @@ namespace ts {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
                 }
-                const argumentType = getTypeFromTypeNode(node.argument);
                 const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
                 // TODO: Future work: support unions/generics/whatever via a deferred import-type
-                const moduleName = (argumentType as StringLiteralType).value;
-                const innerModuleSymbol = resolveExternalModule(node, moduleName, Diagnostics.Cannot_find_module_0, node, /*isForAugmentation*/ false);
+                const innerModuleSymbol = resolveExternalModuleName(node, node.argument.literal);
                 if (!innerModuleSymbol) {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
@@ -9417,7 +9415,7 @@ namespace ts {
                             ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here
                             : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0;
 
-                        error(node, errorMessage, moduleName);
+                        error(node, errorMessage, node.argument.literal.text);
 
                         links.resolvedSymbol = unknownSymbol;
                         links.resolvedType = errorType;
@@ -17408,7 +17406,7 @@ namespace ts {
          */
         function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
+                const resolved = resolveStructuredTypeMembers(targetType as ObjectType);
                 if (resolved.stringIndexInfo ||
                     resolved.numberIndexInfo && isNumericLiteralName(name) ||
                     getPropertyOfObjectType(targetType, name) ||
@@ -17418,11 +17416,15 @@ namespace ts {
                 }
             }
             else if (targetType.flags & TypeFlags.UnionOrIntersection) {
-                for (const t of (<UnionOrIntersectionType>targetType).types) {
+                for (const t of (targetType as UnionOrIntersectionType).types) {
                     if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                         return true;
                     }
                 }
+            }
+            else if (targetType.flags & TypeFlags.Conditional) {
+                return isKnownProperty((targetType as ConditionalType).root.trueType, name, isComparingJsxAttributes) ||
+                    isKnownProperty((targetType as ConditionalType).root.falseType, name, isComparingJsxAttributes);
             }
             return false;
         }

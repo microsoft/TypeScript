@@ -529,7 +529,7 @@ namespace ts {
                     createVariableStatement(/*modifiers*/ undefined,
                         createVariableDeclarationList(taggedTemplateStringDeclarations)));
             }
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
@@ -837,7 +837,7 @@ namespace ts {
             setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
 
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             const block = createBlock(setTextRange(createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
             setEmitFlags(block, EmitFlags.NoComments);
@@ -980,7 +980,7 @@ namespace ts {
                 );
             }
 
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             if (constructor) {
                 prependCaptureNewTargetIfNeeded(statements, constructor, /*copyOnWrite*/ false);
@@ -1892,7 +1892,7 @@ namespace ts {
             }
 
             const lexicalEnvironment = context.endLexicalEnvironment();
-            prependStatements(statements, lexicalEnvironment);
+            addStatementsAfterPrologue(statements, lexicalEnvironment);
             prependCaptureNewTargetIfNeeded(statements, node, /*copyOnWrite*/ false);
 
             // If we added any final generated statements, this must be a multi-line block
@@ -2707,7 +2707,7 @@ namespace ts {
                 if (loopOutParameters.length) {
                     copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
                 }
-                prependStatements(statements, lexicalEnvironment);
+                addStatementsAfterPrologue(statements, lexicalEnvironment);
                 loopBody = createBlock(statements, /*multiline*/ true);
             }
 

@@ -3439,9 +3439,6 @@ namespace ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasExports = Class | Enum | Module | Variable,
-        HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
-
         BlockScoped = BlockScopedVariable | Class | Enum,
 
         PropertyOrAccessor = Property | Accessor,
