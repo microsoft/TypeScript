@@ -2624,6 +2624,14 @@ namespace ts {
         /* @internal */ pragmas: PragmaMap;
         /* @internal */ localJsxNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
+
+        /*@internal*/ getExportedModulesFromDeclarationEmit?(): ExportedModulesFromDeclarationEmit;
+    }
+
+    /*@internal*/
+    export interface ExportedModulesFromDeclarationEmit {
+        exportedModuleSpecifiers: ReadonlyArray<StringLiteralLike>;
+        exportedModuleSymbolsUsingImportTypeNodes: ReadonlyArray<Symbol>;
     }
 
     export interface Bundle extends Node {
@@ -2866,6 +2874,7 @@ namespace ts {
         diagnostics: ReadonlyArray<Diagnostic>;
         emittedFiles?: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps?: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
+        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     /* @internal */
@@ -5324,6 +5333,7 @@ namespace ts {
         reportInaccessibleUniqueSymbolError?(): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
+        trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }
 
     export interface TextSpan {

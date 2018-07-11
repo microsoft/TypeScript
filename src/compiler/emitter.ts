@@ -113,6 +113,7 @@ namespace ts {
 
         let bundleInfo: BundleInfo = createDefaultBundleInfo();
         let emitSkipped = false;
+        let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
         // Emit each output file
         performance.mark("beforePrint");
@@ -125,6 +126,7 @@ namespace ts {
             diagnostics: emitterDiagnostics.getDiagnostics(),
             emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList,
+            exportedModulesFromDeclarationEmit
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
@@ -222,6 +224,11 @@ namespace ts {
             if (!declBlocked || emitOnlyDtsFiles) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
                 printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
+                if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
+                    const sourceFile = declarationTransform.transformed[0] as SourceFile;
+                    exportedModulesFromDeclarationEmit = sourceFile.getExportedModulesFromDeclarationEmit &&
+                        sourceFile.getExportedModulesFromDeclarationEmit();
+                }
             }
             declarationTransform.dispose();
         }
