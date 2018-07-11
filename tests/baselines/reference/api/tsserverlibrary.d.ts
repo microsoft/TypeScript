@@ -6094,9 +6094,9 @@ declare namespace ts {
     function nodeIsMissing(node: Node | undefined): boolean;
     function nodeIsPresent(node: Node | undefined): boolean;
     /**
-     * Prepends statements to an array taking care of prologue directives.
+     * Prepends statements to an array while taking care of prologue directives.
      */
-    function prependStatements<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[];
+    function addStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[];
     /**
      * Determine if the given comment is a triple-slash
      *
