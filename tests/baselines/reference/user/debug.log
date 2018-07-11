@@ -17,11 +17,11 @@ node_modules/debug/src/debug.js(46,13): error TS2407: The right-hand side of a '
 node_modules/debug/src/debug.js(47,57): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/debug/src/debug.js(51,18): error TS2339: Property 'colors' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
 node_modules/debug/src/debug.js(51,50): error TS2339: Property 'colors' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
-node_modules/debug/src/debug.js(75,10): error TS2339: Property 'diff' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
-node_modules/debug/src/debug.js(76,10): error TS2339: Property 'prev' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
-node_modules/debug/src/debug.js(77,10): error TS2339: Property 'curr' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
+node_modules/debug/src/debug.js(75,10): error TS2339: Property 'diff' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; destroy: () => boolean; }'.
+node_modules/debug/src/debug.js(76,10): error TS2339: Property 'prev' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; destroy: () => boolean; }'.
+node_modules/debug/src/debug.js(77,10): error TS2339: Property 'curr' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; destroy: () => boolean; }'.
 node_modules/debug/src/debug.js(112,13): error TS2551: Property 'formatArgs' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'. Did you mean 'formatters'?
-node_modules/debug/src/debug.js(114,23): error TS2339: Property 'log' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; des...'.
+node_modules/debug/src/debug.js(114,23): error TS2339: Property 'log' does not exist on type '{ (...args: any[]): void; namespace: string; enabled: boolean; useColors: any; color: number; destroy: () => boolean; }'.
 node_modules/debug/src/debug.js(114,38): error TS2339: Property 'log' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
 node_modules/debug/src/debug.js(120,29): error TS2339: Property 'useColors' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
 node_modules/debug/src/debug.js(125,37): error TS2339: Property 'init' does not exist on type 'typeof import("/debug/node_modules/debug/src/debug")'.
