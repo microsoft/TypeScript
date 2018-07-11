@@ -19061,22 +19061,20 @@ namespace ts {
                     max = Math.max(max, maxCount);
                 }
 
+                const hasRestParameter = some(signatures, hasEffectiveRestParameter);
+                const paramRange = hasRestParameter ? min :
+                    min < max ? min + "-" + max :
+                    min;
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
                 if (argCount <= max && hasSpreadArgument) argCount--;
 
-                const hasRestParameter = some(signatures, (sig: Signature) => sig.hasRestParameter);
-                const paramRange: string | number = hasRestParameter ?
-                    min :
-                    min < max ?
-                        min + "-" + max :
-                        min;
                 if (hasRestParameter || hasSpreadArgument) {
                     const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
                         hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 : Diagnostics.Expected_0_arguments_but_got_1_or_more;
                     diagnostics.add(createDiagnosticForNode(node, error, paramRange, argCount));
                 }
                 else if (min < argCount && argCount < max) {
-                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_at_least_2_arguments, argCount, belowArgCount, aboveArgCount));
+                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount));
                 }
                 else {
                     diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount));
