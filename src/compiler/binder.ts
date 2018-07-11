@@ -225,11 +225,11 @@ namespace ts {
             node.symbol = symbol;
             symbol.declarations = append(symbol.declarations, node);
 
-            if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
+            if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) && !symbol.exports) {
                 symbol.exports = createSymbolTable();
             }
 
-            if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
+            if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && !symbol.members) {
                 symbol.members = createSymbolTable();
             }
 
