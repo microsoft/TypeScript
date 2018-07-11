@@ -8893,7 +8893,7 @@ declare namespace ts.server {
         private mapCodeFixAction;
         private mapTextChangesToCodeEdits;
         private mapTextChangeToCodeEdit;
-        private mapTextChangeToCodeEditUsingScriptInfo;
+        private mapTextChangeToCodeEditUsingScriptInfoOrConfigFile;
         private normalizePath;
         private convertTextChangeToCodeEdit;
         private getBraceMatching;

@@ -1774,6 +1774,16 @@ namespace ts.server {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
         }
 
+        /* @internal */
+        getScriptInfoOrConfig(uncheckedFileName: string): ScriptInfoOrConfig | undefined {
+            const path = toNormalizedPath(uncheckedFileName);
+            const info = this.getScriptInfoForNormalizedPath(path);
+            if (info) return { kind: ScriptInfoOrConfigKind.ScriptInfo, info };
+            const configProject = this.configuredProjects.get(uncheckedFileName);
+            const config = configProject && configProject.getCompilerOptions().configFile;
+            return config && { kind: ScriptInfoOrConfigKind.Config, config };
+        }
+
         /**
          * Returns the projects that contain script info through SymLink
          * Note that this does not return projects in info.containingProjects
@@ -2542,4 +2552,11 @@ namespace ts.server {
             return false;
         }
     }
+
+    /* @internal */
+    export const enum ScriptInfoOrConfigKind { ScriptInfo, Config }
+    /* @internal */
+    export type ScriptInfoOrConfig =
+        | { readonly kind: ScriptInfoOrConfigKind.ScriptInfo, readonly info: ScriptInfo }
+        | { readonly kind: ScriptInfoOrConfigKind.Config, readonly config: TsConfigSourceFile };
 }
