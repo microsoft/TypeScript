@@ -18832,7 +18832,7 @@ namespace ts {
                 node.kind === SyntaxKind.SetAccessor) {
                 // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
                 // for the type of the member.
-                const propertyType = getTypeOfNode(node)!; // TODO: GH#18217
+                const propertyType = getTypeOfNode(node);
                 return createTypedPropertyDescriptorType(propertyType);
             }
 
@@ -21847,7 +21847,7 @@ namespace ts {
                     else {
                         const leadingError = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
                         checkTypeAssignableTo(typePredicate.type,
-                            getTypeOfNode(parent.parameters[typePredicate.parameterIndex])!, // TODO: GH#18217
+                            getTypeOfNode(parent.parameters[typePredicate.parameterIndex]),
                             node.type,
                             /*headMessage*/ undefined,
                             leadingError);
@@ -23179,7 +23179,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    const methodType = getTypeOfNode(node.parent)!; // TODO: GH#18217
+                    const methodType = getTypeOfNode(node.parent);
                     const descriptorType = createTypedPropertyDescriptorType(methodType);
                     expectedReturnType = getUnionType([descriptorType, voidType]);
                     break;
@@ -27118,7 +27118,7 @@ namespace ts {
                 resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
         }
 
-        function getTypeOfNode(node: Node): Type | undefined {
+        function getTypeOfNode(node: Node): Type {
             if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return errorType;
@@ -27157,7 +27157,7 @@ namespace ts {
 
             if (isTypeDeclarationName(node)) {
                 const symbol = getSymbolAtLocation(node);
-                return symbol && getDeclaredTypeOfSymbol(symbol);
+                return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
             }
 
             if (isDeclaration(node)) {
@@ -27168,11 +27168,11 @@ namespace ts {
 
             if (isDeclarationNameOrImportPropertyName(node)) {
                 const symbol = getSymbolAtLocation(node);
-                return symbol && getTypeOfSymbol(symbol);
+                return symbol ? getTypeOfSymbol(symbol) : errorType;
             }
 
             if (isBindingPattern(node)) {
-                return getTypeForVariableLikeDeclaration(node.parent, /*includeOptionality*/ true);
+                return getTypeForVariableLikeDeclaration(node.parent, /*includeOptionality*/ true) || errorType;
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
