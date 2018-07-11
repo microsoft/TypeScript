@@ -9381,11 +9381,9 @@ namespace ts {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
                 }
-                const argumentType = getTypeFromTypeNode(node.argument);
                 const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
                 // TODO: Future work: support unions/generics/whatever via a deferred import-type
-                const moduleName = (argumentType as StringLiteralType).value;
-                const innerModuleSymbol = resolveExternalModule(node, moduleName, Diagnostics.Cannot_find_module_0, node, /*isForAugmentation*/ false);
+                const innerModuleSymbol = resolveExternalModuleName(node, node.argument.literal);
                 if (!innerModuleSymbol) {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
@@ -9417,7 +9415,7 @@ namespace ts {
                             ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here
                             : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0;
 
-                        error(node, errorMessage, moduleName);
+                        error(node, errorMessage, node.argument.literal.text);
 
                         links.resolvedSymbol = unknownSymbol;
                         links.resolvedType = errorType;

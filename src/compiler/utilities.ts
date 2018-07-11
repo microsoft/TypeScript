@@ -912,9 +912,7 @@ namespace ts {
     }
 
     export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
-        return n.kind === SyntaxKind.ImportType &&
-            (n as ImportTypeNode).argument.kind === SyntaxKind.LiteralType &&
-            isStringLiteral(((n as ImportTypeNode).argument as LiteralTypeNode).literal);
+        return isImportTypeNode(n) && isLiteralTypeNode(n.argument) && isStringLiteral(n.argument.literal);
     }
 
     export function isPrologueDirective(node: Node): node is PrologueDirective {

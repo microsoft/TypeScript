@@ -184,7 +184,7 @@ declare namespace FourSlashInterface {
             index?: number,
             preferences?: UserPreferences,
         });
-        codeFixAvailable(options?: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
+        codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -602,6 +602,12 @@ declare namespace FourSlashInterface {
          * Character that was responsible for triggering signature help.
          */
         triggerCharacter?: string,
+    }
+
+    export interface VerifyCodeFixAvailableOptions {
+        readonly description: string;
+        readonly actions?: ReadonlyArray<{ readonly type: string, readonly data: {} }>;
+        readonly commands?: ReadonlyArray<{}?;
     }
 
     interface VerifyNavigateToOptions {
