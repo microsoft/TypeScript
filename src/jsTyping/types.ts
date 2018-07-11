@@ -1,4 +1,3 @@
-/* @internal */
 declare namespace ts.server {
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";

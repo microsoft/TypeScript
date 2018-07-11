@@ -171,8 +171,8 @@ namespace ts {
                 }
                 const t = getTypeOfSymbol(symbol);
                 visitType(t); // Should handle members on classes and such
-                if (symbol.flags & SymbolFlags.HasExports) {
-                    symbol.exports!.forEach(visitSymbol);
+                if (symbol.exports) {
+                    symbol.exports.forEach(visitSymbol);
                 }
                 forEach(symbol.declarations, d => {
                     // Type queries are too far resolved when we just visit the symbol's type

@@ -2864,6 +2864,10 @@
         "category": "Error",
         "code": 5070
     },
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+        "category": "Error",
+        "code": 5071
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

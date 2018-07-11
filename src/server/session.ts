@@ -1837,7 +1837,7 @@ namespace ts.server {
         }
 
         private mapTextChangeToCodeEdit(project: Project, change: FileTextChanges): protocol.FileCodeEdits {
-            return mapTextChangesToCodeEdits(change, project.getSourceFileOrConfigFile(this.normalizePath(change.fileName)));
+            return mapTextChangesToCodeEditsForFile(change, project.getSourceFileOrConfigFile(this.normalizePath(change.fileName)));
         }
 
         private mapTextChangeToCodeEditUsingScriptInfo(change: FileTextChanges): protocol.FileCodeEdits {
@@ -2357,8 +2357,8 @@ namespace ts.server {
         return { file: fileName, start: scriptInfo.positionToLineOffset(textSpan.start), end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)) };
     }
 
-    function mapTextChangesToCodeEdits(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
-        Debug.assert(!!textChanges.isNewFile === !sourceFile);
+    function mapTextChangesToCodeEditsForFile(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
+        Debug.assert(!!textChanges.isNewFile === !sourceFile, "Expected isNewFile for (only) new files", () => JSON.stringify({ isNewFile: textChanges.isNewFile, hasSourceFile: !!sourceFile }));
         if (sourceFile) {
             return {
                 fileName: textChanges.fileName,

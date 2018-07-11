@@ -2417,12 +2417,12 @@ namespace ts {
             // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
             // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
             function visit(symbol: Symbol | undefined): SymbolTable | undefined {
-                if (!(symbol && symbol.flags & SymbolFlags.HasExports && pushIfUnique(visitedSymbols, symbol))) {
+                if (!(symbol && symbol.exports && pushIfUnique(visitedSymbols, symbol))) {
                     return;
                 }
-                const symbols = cloneMap(symbol.exports!);
+                const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
-                const exportStars = symbol.exports!.get(InternalSymbolName.ExportStar);
+                const exportStars = symbol.exports.get(InternalSymbolName.ExportStar);
                 if (exportStars) {
                     const nestedSymbols = createSymbolTable();
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
@@ -7702,9 +7702,13 @@ namespace ts {
             return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
         }
 
-        function getRestTypeOfSignature(signature: Signature) {
+        function getRestTypeOfSignature(signature: Signature): Type {
+            return tryGetRestTypeOfSignature(signature) || anyType;
+        }
+
+        function tryGetRestTypeOfSignature(signature: Signature): Type | undefined {
             const type = getTypeOfRestParameter(signature);
-            return type && getIndexTypeOfType(type, IndexKind.Number) || anyType;
+            return type && getIndexTypeOfType(type, IndexKind.Number);
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean): Signature {
@@ -19069,38 +19073,7 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNode(node, fallbackError));
             }
 
-            // No signature was applicable. We have already reported the errors for the invalid signature.
-            // If this is a type resolution session, e.g. Language Service, try to get better information than anySignature.
-            // Pick the longest signature. This way we can get a contextual type for cases like:
-            //     declare function f(a: { xa: number; xb: number; }, b: number);
-            //     f({ |
-            // Also, use explicitly-supplied type arguments if they are provided, so we can get a contextual signature in cases like:
-            //     declare function f<T>(k: keyof T);
-            //     f<Foo>("
-            if (!produceDiagnostics) {
-                Debug.assert(candidates.length > 0); // Else would have exited above.
-                const bestIndex = getLongestCandidateIndex(candidates, apparentArgumentCount === undefined ? args!.length : apparentArgumentCount);
-                const candidate = candidates[bestIndex];
-
-                const { typeParameters } = candidate;
-                if (typeParameters && callLikeExpressionMayHaveTypeArguments(node) && node.typeArguments) {
-                    const typeArguments = node.typeArguments.map(getTypeOfNode) as Type[]; // TODO: GH#18217
-                    while (typeArguments.length > typeParameters.length) {
-                        typeArguments.pop();
-                    }
-                    while (typeArguments.length < typeParameters.length) {
-                        typeArguments.push(getDefaultTypeArgumentType(isInJavaScriptFile(node)));
-                    }
-
-                    const instantiated = createSignatureInstantiation(candidate, typeArguments);
-                    candidates[bestIndex] = instantiated;
-                    return instantiated;
-                }
-
-                return candidate;
-            }
-
-            return resolveErrorCall(node);
+            return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
@@ -19169,6 +19142,97 @@ namespace ts {
 
                 return undefined;
             }
+        }
+
+        // No signature was applicable. We have already reported the errors for the invalid signature.
+        // If this is a type resolution session, e.g. Language Service, try to get better information than anySignature.
+        function getCandidateForOverloadFailure(
+            node: CallLikeExpression,
+            candidates: Signature[],
+            args: ReadonlyArray<Expression>,
+            hasCandidatesOutArray: boolean,
+        ): Signature {
+            Debug.assert(candidates.length > 0); // Else should not have called this.
+            // Normally we will combine overloads. Skip this if they have type parameters since that's hard to combine.
+            // Don't do this if there is a `candidatesOutArray`,
+            // because then we want the chosen best candidate to be one of the overloads, not a combination.
+            return hasCandidatesOutArray || candidates.length === 1 || candidates.some(c => !!c.typeParameters)
+                ? pickLongestCandidateSignature(node, candidates, args)
+                : createUnionOfSignaturesForOverloadFailure(candidates);
+        }
+
+        function createUnionOfSignaturesForOverloadFailure(candidates: ReadonlyArray<Signature>): Signature {
+            const thisParameters = mapDefined(candidates, c => c.thisParameter);
+            let thisParameter: Symbol | undefined;
+            if (thisParameters.length) {
+                thisParameter = createCombinedSymbolFromTypes(thisParameters, thisParameters.map(getTypeOfParameter));
+            }
+            const { min: minArgumentCount, max: maxNonRestParam } = minAndMax(candidates, getNumNonRestParameters);
+            const parameters: Symbol[] = [];
+            for (let i = 0; i < maxNonRestParam; i++) {
+                const symbols = mapDefined(candidates, ({ parameters, hasRestParameter }) => hasRestParameter ?
+                    i < parameters.length - 1 ? parameters[i] : last(parameters) :
+                    i < parameters.length ? parameters[i] : undefined);
+                Debug.assert(symbols.length !== 0);
+                parameters.push(createCombinedSymbolFromTypes(symbols, mapDefined(candidates, candidate => tryGetTypeAtPosition(candidate, i))));
+            }
+            const restParameterSymbols = mapDefined(candidates, c => c.hasRestParameter ? last(c.parameters) : undefined);
+            const hasRestParameter = restParameterSymbols.length !== 0;
+            if (hasRestParameter) {
+                const type = createArrayType(getUnionType(mapDefined(candidates, tryGetRestTypeOfSignature), UnionReduction.Subtype));
+                parameters.push(createCombinedSymbolForOverloadFailure(restParameterSymbols, type));
+            }
+            return createSignature(
+                candidates[0].declaration,
+                /*typeParameters*/ undefined, // Before calling this we tested for `!candidates.some(c => !!c.typeParameters)`.
+                thisParameter,
+                parameters,
+                /*resolvedReturnType*/ getIntersectionType(candidates.map(getReturnTypeOfSignature)),
+                /*typePredicate*/ undefined,
+                minArgumentCount,
+                hasRestParameter,
+                /*hasLiteralTypes*/ candidates.some(c => c.hasLiteralTypes));
+        }
+
+        function getNumNonRestParameters(signature: Signature): number {
+            const numParams = signature.parameters.length;
+            return signature.hasRestParameter ? numParams - 1 : numParams;
+        }
+
+        function createCombinedSymbolFromTypes(sources: ReadonlyArray<Symbol>, types: Type[]): Symbol {
+            return createCombinedSymbolForOverloadFailure(sources, getUnionType(types, UnionReduction.Subtype));
+        }
+
+        function createCombinedSymbolForOverloadFailure(sources: ReadonlyArray<Symbol>, type: Type): Symbol {
+            // This function is currently only used for erroneous overloads, so it's good enough to just use the first source.
+            return createSymbolWithType(first(sources), type);
+        }
+
+        function pickLongestCandidateSignature(node: CallLikeExpression, candidates: Signature[], args: ReadonlyArray<Expression>): Signature {
+            // Pick the longest signature. This way we can get a contextual type for cases like:
+            //     declare function f(a: { xa: number; xb: number; }, b: number);
+            //     f({ |
+            // Also, use explicitly-supplied type arguments if they are provided, so we can get a contextual signature in cases like:
+            //     declare function f<T>(k: keyof T);
+            //     f<Foo>("
+            const bestIndex = getLongestCandidateIndex(candidates, apparentArgumentCount === undefined ? args.length : apparentArgumentCount);
+            const candidate = candidates[bestIndex];
+            const { typeParameters } = candidate;
+            if (!typeParameters) {
+                return candidate;
+            }
+
+            const typeArgumentNodes: ReadonlyArray<TypeNode> = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments || emptyArray : emptyArray;
+            const typeArguments = typeArgumentNodes.map(n => getTypeOfNode(n) || anyType);
+            while (typeArguments.length > typeParameters.length) {
+                typeArguments.pop();
+            }
+            while (typeArguments.length < typeParameters.length) {
+                typeArguments.push(getConstraintFromTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isInJavaScriptFile(node)));
+            }
+            const instantiated = createSignatureInstantiation(candidate, typeArguments);
+            candidates[bestIndex] = instantiated;
+            return instantiated;
         }
 
         function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
@@ -19955,6 +20019,10 @@ namespace ts {
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
+            return tryGetTypeAtPosition(signature, pos) || anyType;
+        }
+
+        function tryGetTypeAtPosition(signature: Signature, pos: number): Type | undefined {
             const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (pos < paramCount) {
                 return getTypeOfParameter(signature.parameters[pos]);
@@ -19970,9 +20038,9 @@ namespace ts {
                         return tupleRestType;
                     }
                 }
-                return getIndexTypeOfType(restType, IndexKind.Number) || anyType;
+                return getIndexTypeOfType(restType, IndexKind.Number);
             }
-            return anyType;
+            return undefined;
         }
 
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
