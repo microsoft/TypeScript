@@ -401,21 +401,18 @@ namespace ts {
     }
 
     /**
-     * Appends a range of value to begin of an array, returning the array.
-     *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
-     * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
-     * appended. If an element of `from` is `undefined`, that element is not appended.
+     * Prepends statements to an array while taking care of prologue directives.
      */
-    export function prependStatements<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
+    export function addStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
         if (from === undefined || from.length === 0) return to;
-        if (to === undefined) return from.slice();
-        const prologue = to.length && isPrologueDirective(to[0]) && to.shift();
-        to.unshift(...from);
-        if (prologue) {
-            to.unshift(prologue);
+        let statementIndex = 0;
+        // skip all prologue directives to insert at the correct position
+        for (; statementIndex < to.length; ++statementIndex) {
+            if (!isPrologueDirective(to[statementIndex])) {
+                break;
+            }
         }
+        to.splice(statementIndex, 0, ...from);
         return to;
     }
 
