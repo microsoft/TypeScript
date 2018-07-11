@@ -1404,15 +1404,21 @@ sourceFile:typeResolution.ts
 ---
 >>>                        function QQ() {
 1->^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                        ^^^^^^^^^
+3 >                                 ^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->constructor() {
   >                    
+2 >                        function 
+3 >                                 QQ
 1->Emitted(75, 25) Source(50, 21) + SourceIndex(0)
+2 >Emitted(75, 34) Source(50, 30) + SourceIndex(0)
+3 >Emitted(75, 36) Source(50, 32) + SourceIndex(0)
 ---
 >>>                            /* Sampling of stuff from AisIn1_1_1 */
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->function QQ() {
+1->() {
   >                        
 2 >                            /* Sampling of stuff from AisIn1_1_1 */
 1->Emitted(76, 29) Source(51, 25) + SourceIndex(0)
@@ -1727,10 +1733,16 @@ sourceFile:typeResolution.ts
 ---
 >>>                    function AA() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^->
+2 >                    ^^^^^^^^^
+3 >                             ^^
+4 >                               ^->
 1->constructor() {
   >                
+2 >                    function 
+3 >                             AA
 1->Emitted(93, 21) Source(64, 17) + SourceIndex(0)
+2 >Emitted(93, 30) Source(64, 26) + SourceIndex(0)
+3 >Emitted(93, 32) Source(64, 28) + SourceIndex(0)
 ---
 >>>                        var a2;
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1738,7 +1750,7 @@ sourceFile:typeResolution.ts
 3 >                            ^^
 4 >                              ^
 5 >                               ^^^^^^^^^^->
-1->function AA() {
+1->() {
   >                    
 2 >                        var 
 3 >                            a2: SubSubModule1.ClassA

@@ -531,7 +531,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edgi
 for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = robotA, i = 0 : 0
 >[numberA3, ...robotAInfo] = robotA : [number, string, string]
->[numberA3, ...robotAInfo] : (string | number)[]
+>[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
 >...robotAInfo : string | number
 >robotAInfo : (string | number)[]
@@ -555,7 +555,7 @@ for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = getRobot(), i = 0 : 0
 >[numberA3, ...robotAInfo] = getRobot() : [number, string, string]
->[numberA3, ...robotAInfo] : (string | number)[]
+>[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
 >...robotAInfo : string | number
 >robotAInfo : (string | number)[]
@@ -580,7 +580,7 @@ for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0 : 0
 >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : [number, string, string]
->[numberA3, ...robotAInfo] : (string | number)[]
+>[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
 >...robotAInfo : string | number
 >robotAInfo : (string | number)[]

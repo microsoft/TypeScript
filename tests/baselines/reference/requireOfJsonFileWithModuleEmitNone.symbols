@@ -1,0 +1,4 @@
+=== tests/cases/compiler/file1.ts ===
+import * as b from './b.json';
+>b : Symbol(b, Decl(file1.ts, 0, 6))
+

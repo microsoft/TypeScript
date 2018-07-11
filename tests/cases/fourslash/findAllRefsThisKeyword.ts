@@ -25,7 +25,7 @@
 ////x.[|this|];
 
 const [global, f0, f1, g0, g1, x, y, constructor, method, propDef, propUse] = test.ranges();
-verify.referencesOf(global, [global]);
+verify.singleReferenceGroup("this", [global]);
 verify.referenceGroups(f0, [{ definition: "(parameter) this: any", ranges: [f0, f1] }]);
 verify.referenceGroups(f1, [{ definition: "this: any", ranges: [f0, f1] }]);
 verify.referenceGroups(g0, [{ definition: "(parameter) this: any", ranges: [g0, g1] }]);

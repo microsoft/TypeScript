@@ -7,6 +7,7 @@ namespace ts {
         fileExists(path: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
 
+        // TODO: GH#18217 Optional methods are frequently used as non-optional
         directoryExists?(path: string): boolean;
         getDirectories?(path: string): string[];
         readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
@@ -63,7 +64,7 @@ namespace ts {
         }
 
         function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
-            return cachedReadDirectoryResult.get(rootDirPath);
+            return cachedReadDirectoryResult.get(ensureTrailingDirectorySeparator(rootDirPath));
         }
 
         function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
@@ -76,11 +77,11 @@ namespace ts {
 
         function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
             const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
-                directories: host.getDirectories(rootDir) || []
+                files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
+                directories: host.getDirectories!(rootDir) || []
             };
 
-            cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
+            cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
             return resultFromHost;
         }
 
@@ -90,6 +91,7 @@ namespace ts {
          * The host request is done under try catch block to avoid caching incorrect result
          */
         function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
+            rootDirPath = ensureTrailingDirectorySeparator(rootDirPath);
             const cachedResult = getCachedFileSystemEntries(rootDirPath);
             if (cachedResult) {
                 return cachedResult;
@@ -100,7 +102,7 @@ namespace ts {
             }
             catch (_e) {
                 // If there is exception to read directories, dont cache the result and direct the calls to host
-                Debug.assert(!cachedReadDirectoryResult.has(rootDirPath));
+                Debug.assert(!cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(rootDirPath)));
                 return undefined;
             }
         }
@@ -130,7 +132,7 @@ namespace ts {
             if (result) {
                 updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
             }
-            return host.writeFile(fileName, data, writeByteOrderMark);
+            return host.writeFile!(fileName, data, writeByteOrderMark);
         }
 
         function fileExists(fileName: string): boolean {
@@ -142,7 +144,7 @@ namespace ts {
 
         function directoryExists(dirPath: string): boolean {
             const path = toPath(dirPath);
-            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
+            return cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(path)) || host.directoryExists!(dirPath);
         }
 
         function createDirectory(dirPath: string) {
@@ -152,7 +154,7 @@ namespace ts {
             if (result) {
                 updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
             }
-            host.createDirectory(dirPath);
+            host.createDirectory!(dirPath);
         }
 
         function getDirectories(rootDir: string): string[] {
@@ -161,7 +163,7 @@ namespace ts {
             if (result) {
                 return result.directories.slice();
             }
-            return host.getDirectories(rootDir);
+            return host.getDirectories!(rootDir);
         }
 
         function readDirectory(rootDir: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
@@ -170,12 +172,12 @@ namespace ts {
             if (result) {
                 return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries);
             }
-            return host.readDirectory(rootDir, extensions, excludes, includes, depth);
+            return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
-            function getFileSystemEntries(dir: string) {
+            function getFileSystemEntries(dir: string): FileSystemEntries {
                 const path = toPath(dir);
                 if (path === rootDirPath) {
-                    return result;
+                    return result!;
                 }
                 return tryReadDirectory(dir, path) || emptyFileSystemEntries;
             }
@@ -352,11 +354,11 @@ namespace ts {
         watchDirectory: WatchDirectory<X, Y>;
     }
 
-    export function getWatchFactory<X = undefined, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
+    export function getWatchFactory<X, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
         return getWatchFactoryWith(watchLogLevel, log, getDetailWatchInfo, watchFile, watchDirectory);
     }
 
-    function getWatchFactoryWith<X = undefined, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined,
+    function getWatchFactoryWith<X, Y = undefined>(watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined,
         watchFile: (host: WatchFileHost, file: string, callback: FileWatcherCallback, watchPriority: PollingInterval) => FileWatcher,
         watchDirectory: (host: WatchDirectoryHost, directory: string, callback: DirectoryWatcherCallback, flags: WatchDirectoryFlags) => FileWatcher): WatchFactory<X, Y> {
         const createFileWatcher: CreateFileWatcher<WatchFileHost, PollingInterval, FileWatcherEventKind, undefined, X, Y> = getCreateFileWatcher(watchLogLevel, watchFile);
@@ -386,7 +388,7 @@ namespace ts {
 
     type WatchCallback<T, U> = (fileName: string, cbOptional?: T, passThrough?: U) => void;
     type AddWatch<H, T, U, V> = (host: H, file: string, cb: WatchCallback<U, V>, flags: T, passThrough?: V, detailInfo1?: undefined, detailInfo2?: undefined) => FileWatcher;
-    export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y) => string;
+    export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y | undefined) => string;
 
     type CreateFileWatcher<H, T, U, V, X, Y> = (host: H, file: string, cb: WatchCallback<U, V>, flags: T, passThrough: V | undefined, detailInfo1: X | undefined, detailInfo2: Y | undefined, addWatch: AddWatch<H, T, U, V>, log: (s: string) => void, watchCaption: string, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) => FileWatcher;
     function getCreateFileWatcher<H, T, U, V, X, Y>(watchLogLevel: WatchLogLevel, addWatch: AddWatch<H, T, U, V>): CreateFileWatcher<H, T, U, V, X, Y> {
@@ -396,7 +398,7 @@ namespace ts {
             case WatchLogLevel.TriggerOnly:
                 return createFileWatcherWithTriggerLogging;
             case WatchLogLevel.Verbose:
-                return createFileWatcherWithLogging;
+                return addWatch === <any>watchDirectory ? createDirectoryWatcherWithLogging : createFileWatcherWithLogging;
         }
     }
 
@@ -407,6 +409,25 @@ namespace ts {
             close: () => {
                 log(`${watchCaption}:: Close:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
                 watcher.close();
+            }
+        };
+    }
+
+    function createDirectoryWatcherWithLogging<H, T, U, V, X, Y>(host: H, file: string, cb: WatchCallback<U, V>, flags: T, passThrough: V | undefined, detailInfo1: X | undefined, detailInfo2: Y | undefined, addWatch: AddWatch<H, T, U, undefined>, log: (s: string) => void, watchCaption: string, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined): FileWatcher {
+        const watchInfo = `${watchCaption}:: Added:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+        log(watchInfo);
+        const start = timestamp();
+        const watcher = createFileWatcherWithTriggerLogging(host, file, cb, flags, passThrough, detailInfo1, detailInfo2, addWatch, log, watchCaption, getDetailWatchInfo);
+        const elapsed = timestamp() - start;
+        log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
+        return {
+            close: () => {
+                const watchInfo = `${watchCaption}:: Close:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+                log(watchInfo);
+                const start = timestamp();
+                watcher.close();
+                const elapsed = timestamp() - start;
+                log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
             }
         };
     }
@@ -422,8 +443,8 @@ namespace ts {
         }, flags);
     }
 
-    function getWatchInfo<T, X, Y>(file: string, flags: T, detailInfo1: X | undefined, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
-        return `WatchInfo: ${file} ${flags} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : ""}`;
+    function getWatchInfo<T, X, Y>(file: string, flags: T, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
+        return `WatchInfo: ${file} ${flags} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo1}`;
     }
 
     export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {

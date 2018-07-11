@@ -1,330 +1,115 @@
 /* @internal */
-namespace ts.sourcemaps {
-    export interface SourceMapData {
-        version?: number;
-        file?: string;
-        sourceRoot?: string;
-        sources: string[];
-        sourcesContent?: string[];
-        names?: string[];
-        mappings: string;
-    }
-
-    export interface SourceMappableLocation {
-        fileName: string;
-        position: number;
-    }
+namespace ts {
+    // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
+    const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\s*$/;
+    const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
+    const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
 
     export interface SourceMapper {
-        getOriginalPosition(input: SourceMappableLocation): SourceMappableLocation;
-        getGeneratedPosition(input: SourceMappableLocation): SourceMappableLocation;
+        toLineColumnOffset(fileName: string, position: number): LineAndCharacter;
+        tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
+        clearCache(): void;
     }
 
-    export const identitySourceMapper = { getOriginalPosition: identity, getGeneratedPosition: identity };
+    export function getSourceMapper(
+        getCanonicalFileName: GetCanonicalFileName,
+        currentDirectory: string,
+        log: (message: string) => void,
+        host: LanguageServiceHost,
+        getProgram: () => Program,
+    ): SourceMapper {
+        let sourcemappedFileCache: SourceFileLikeCache;
+        return { tryGetOriginalLocation, toLineColumnOffset, clearCache };
 
-    export interface SourceMapDecodeHost {
-        readFile(path: string): string;
-        fileExists(path: string): boolean;
-        getCanonicalFileName(path: string): string;
-        log(text: string): void;
-    }
-
-    export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
-        const currentDirectory = getDirectoryPath(mapPath);
-        const sourceRoot = map.sourceRoot || currentDirectory;
-        let decodedMappings: ProcessedSourceMapPosition[];
-        let generatedOrderedMappings: ProcessedSourceMapPosition[];
-        let sourceOrderedMappings: ProcessedSourceMapPosition[];
-
-        return {
-            getOriginalPosition,
-            getGeneratedPosition
-        };
-
-        function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = getGeneratedOrderedMappings();
-            if (!length(maps)) return loc;
-            let targetIndex = binarySearch(maps, { sourcePath: loc.fileName, sourcePosition: loc.position }, identity, compareProcessedPositionSourcePositions);
-            if (targetIndex < 0 && maps.length > 0) {
-                // if no exact match, closest is 2's compliment of result
-                targetIndex = ~targetIndex;
+        function scanForSourcemapURL(fileName: string) {
+            const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            if (!mappedFile) {
+                return;
             }
-            if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot) !== 0) {
-                return loc;
-            }
-            return { fileName: toPath(map.file, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
-        }
-
-        function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = getSourceOrderedMappings();
-            if (!length(maps)) return loc;
-            let targetIndex = binarySearch(maps, { emittedPosition: loc.position }, identity, compareProcessedPositionEmittedPositions);
-            if (targetIndex < 0 && maps.length > 0) {
-                // if no exact match, closest is 2's compliment of result
-                targetIndex = ~targetIndex;
-            }
-            return { fileName: toPath(maps[targetIndex].sourcePath, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest pos
-        }
-
-        function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
-            // Lookup file in program, if provided
-            const file: SourceFileLike = program && program.getSourceFile(fileName);
-            if (!file) {
-                // Otherwise check the cache (which may hit disk)
-                const path = toPath(fileName, location, host.getCanonicalFileName);
-                return fallbackCache.get(path);
-            }
-            return file;
-        }
-
-        function getPositionOfLineAndCharacterUsingName(fileName: string, directory: string, line: number, character: number) {
-            const file = getSourceFileLike(fileName, directory);
-            if (!file) {
-                return -1;
-            }
-            return getPositionOfLineAndCharacter(file, line, character);
-        }
-
-        function getDecodedMappings() {
-            return decodedMappings || (decodedMappings = calculateDecodedMappings());
-        }
-
-        function getSourceOrderedMappings() {
-            return sourceOrderedMappings || (sourceOrderedMappings = getDecodedMappings().slice().sort(compareProcessedPositionSourcePositions));
-        }
-
-        function getGeneratedOrderedMappings() {
-            return generatedOrderedMappings || (generatedOrderedMappings = getDecodedMappings().slice().sort(compareProcessedPositionEmittedPositions));
-        }
-
-        function calculateDecodedMappings(): ProcessedSourceMapPosition[] {
-            const state: DecoderState<ProcessedSourceMapPosition> = {
-                encodedText: map.mappings,
-                currentNameIndex: undefined,
-                sourceMapNamesLength: map.names ? map.names.length : undefined,
-                currentEmittedColumn: 0,
-                currentEmittedLine: 0,
-                currentSourceColumn: 0,
-                currentSourceLine: 0,
-                currentSourceIndex: 0,
-                positions: [],
-                decodingIndex: 0,
-                processPosition,
-            };
-            while (!hasCompletedDecoding(state)) {
-                decodeSinglePosition(state);
-                if (state.error) {
-                    host.log(`Encountered error while decoding sourcemap found at ${mapPath}: ${state.error}`);
-                    return [];
+            const starts = getLineStarts(mappedFile);
+            for (let index = starts.length - 1; index >= 0; index--) {
+                const lineText = mappedFile.text.substring(starts[index], starts[index + 1]);
+                const comment = sourceMapCommentRegExp.exec(lineText);
+                if (comment) {
+                    return comment[1];
+                }
+                // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
+                else if (!lineText.match(whitespaceOrMapCommentRegExp)) {
+                    break;
                 }
             }
-            return state.positions;
         }
 
-        function compareProcessedPositionSourcePositions(a: ProcessedSourceMapPosition, b: ProcessedSourceMapPosition) {
-            return comparePaths(a.sourcePath, b.sourcePath, sourceRoot) ||
-                compareValues(a.sourcePosition, b.sourcePosition);
+        function convertDocumentToSourceMapper(file: { sourceMapper?: sourcemaps.SourceMapper }, contents: string, mapFileName: string) {
+            let maps: sourcemaps.SourceMapData | undefined;
+            try {
+                maps = JSON.parse(contents);
+            }
+            catch {
+                // swallow error
+            }
+            if (!maps || !maps.sources || !maps.file || !maps.mappings) {
+                // obviously invalid map
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            return file.sourceMapper = sourcemaps.decode({
+                readFile: s => host.readFile!(s), // TODO: GH#18217
+                fileExists: s => host.fileExists!(s), // TODO: GH#18217
+                getCanonicalFileName,
+                log,
+            }, mapFileName, maps, getProgram(), sourcemappedFileCache);
         }
 
-        function compareProcessedPositionEmittedPositions(a: ProcessedSourceMapPosition, b: ProcessedSourceMapPosition) {
-            return compareValues(a.emittedPosition, b.emittedPosition);
-        }
-
-        function processPosition(position: RawSourceMapPosition): ProcessedSourceMapPosition {
-            const sourcePath = map.sources[position.sourceIndex];
-            return {
-                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, position.emittedLine, position.emittedColumn),
-                sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, position.sourceLine, position.sourceColumn),
-                sourcePath,
-                // TODO: Consider using `name` field to remap the expected identifier to scan for renames to handle another tool renaming oout output
-                // name: position.nameIndex ? map.names[position.nameIndex] : undefined
-            };
-        }
-    }
-
-    interface ProcessedSourceMapPosition {
-        emittedPosition: number;
-        sourcePosition: number;
-        sourcePath: string;
-    }
-
-    interface RawSourceMapPosition {
-        emittedLine: number;
-        emittedColumn: number;
-        sourceLine: number;
-        sourceColumn: number;
-        sourceIndex: number;
-        nameIndex?: number;
-    }
-
-    interface DecoderState<T> {
-        decodingIndex: number;
-        currentEmittedLine: number;
-        currentEmittedColumn: number;
-        currentSourceLine: number;
-        currentSourceColumn: number;
-        currentSourceIndex: number;
-        currentNameIndex: number;
-        encodedText: string;
-        sourceMapNamesLength?: number;
-        error?: string;
-        positions: T[];
-        processPosition: (position: RawSourceMapPosition) => T;
-    }
-
-    function hasCompletedDecoding(state: DecoderState<any>) {
-        return state.decodingIndex === state.encodedText.length;
-    }
-
-    function decodeSinglePosition<T>(state: DecoderState<T>): void {
-        while (state.decodingIndex < state.encodedText.length) {
-            const char = state.encodedText.charCodeAt(state.decodingIndex);
-            if (char === CharacterCodes.semicolon) {
-                // New line
-                state.currentEmittedLine++;
-                state.currentEmittedColumn = 0;
-                state.decodingIndex++;
-                continue;
+        function getSourceMapper(fileName: string, file: SourceFileLike): sourcemaps.SourceMapper {
+            if (!host.readFile || !host.fileExists) {
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
             }
-
-            if (char === CharacterCodes.comma) {
-                // Next entry is on same line - no action needed
-                state.decodingIndex++;
-                continue;
+            if (file.sourceMapper) {
+                return file.sourceMapper;
             }
-
-            // Read the current position
-            // 1. Column offset from prev read jsColumn
-            state.currentEmittedColumn += base64VLQFormatDecode();
-            // Incorrect emittedColumn dont support this map
-            if (createErrorIfCondition(state.currentEmittedColumn < 0, "Invalid emittedColumn found")) {
-                return;
-            }
-            // Dont support reading mappings that dont have information about original source and its line numbers
-            if (createErrorIfCondition(isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: No entries after emitted column")) {
-                return;
-            }
-
-            // 2. Relative sourceIndex
-            state.currentSourceIndex += base64VLQFormatDecode();
-            // Incorrect sourceIndex dont support this map
-            if (createErrorIfCondition(state.currentSourceIndex < 0, "Invalid sourceIndex found")) {
-                return;
-            }
-            // Dont support reading mappings that dont have information about original source position
-            if (createErrorIfCondition(isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: No entries after sourceIndex")) {
-                return;
-            }
-
-            // 3. Relative sourceLine 0 based
-            state.currentSourceLine += base64VLQFormatDecode();
-            // Incorrect sourceLine dont support this map
-            if (createErrorIfCondition(state.currentSourceLine < 0, "Invalid sourceLine found")) {
-                return;
-            }
-            // Dont support reading mappings that dont have information about original source and its line numbers
-            if (createErrorIfCondition(isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: No entries after emitted Line")) {
-                return;
-            }
-
-            // 4. Relative sourceColumn 0 based
-            state.currentSourceColumn += base64VLQFormatDecode();
-            // Incorrect sourceColumn dont support this map
-            if (createErrorIfCondition(state.currentSourceColumn < 0, "Invalid sourceLine found")) {
-                return;
-            }
-            // 5. Check if there is name:
-            if (!isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex)) {
-                if (state.currentNameIndex === undefined) {
-                    state.currentNameIndex = 0;
+            let mapFileName = scanForSourcemapURL(fileName);
+            if (mapFileName) {
+                const match = base64UrlRegExp.exec(mapFileName);
+                if (match) {
+                    if (match[1]) {
+                        const base64Object = match[1];
+                        return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
+                    }
+                    // Not a data URL we can parse, skip it
+                    mapFileName = undefined;
                 }
-                state.currentNameIndex += base64VLQFormatDecode();
-                // Incorrect nameIndex dont support this map
-                // TODO: If we start using `name`s, issue errors when they aren't correct in the sourcemap
-                // if (createErrorIfCondition(state.currentNameIndex < 0 || state.currentNameIndex >= state.sourceMapNamesLength, "Invalid name index for the source map entry")) {
-                //    return;
-                // }
             }
-            // Dont support reading mappings that dont have information about original source and its line numbers
-            if (createErrorIfCondition(!isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: There are more entries after " + (state.currentNameIndex === undefined ? "sourceColumn" : "nameIndex"))) {
-                return;
+            const possibleMapLocations: string[] = [];
+            if (mapFileName) {
+                possibleMapLocations.push(mapFileName);
             }
-
-            // Entry should be complete
-            capturePosition();
-            return;
-        }
-
-        createErrorIfCondition(/*condition*/ true, "No encoded entry found");
-        return;
-
-        function capturePosition() {
-            state.positions.push(state.processPosition({
-                emittedColumn: state.currentEmittedColumn,
-                emittedLine: state.currentEmittedLine,
-                sourceColumn: state.currentSourceColumn,
-                sourceIndex: state.currentSourceIndex,
-                sourceLine: state.currentSourceLine,
-                nameIndex: state.currentNameIndex
-            }));
-        }
-
-        function createErrorIfCondition(condition: boolean, errormsg: string) {
-            if (state.error) {
-                // An error was already reported
-                return true;
-            }
-
-            if (condition) {
-                state.error = errormsg;
-            }
-
-            return condition;
-        }
-
-        function base64VLQFormatDecode() {
-            let moreDigits = true;
-            let shiftCount = 0;
-            let value = 0;
-
-            for (; moreDigits; state.decodingIndex++) {
-                if (createErrorIfCondition(state.decodingIndex >= state.encodedText.length, "Error in decoding base64VLQFormatDecode, past the mapping string")) {
-                    return;
+            possibleMapLocations.push(fileName + ".map");
+            for (const location of possibleMapLocations) {
+                const mapPath = toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
+                if (host.fileExists(mapPath)) {
+                    return convertDocumentToSourceMapper(file, host.readFile(mapPath)!, mapPath); // TODO: GH#18217
                 }
-
-                // 6 digit number
-                const currentByte = base64FormatDecode(state.encodedText.charAt(state.decodingIndex));
-
-                // If msb is set, we still have more bits to continue
-                moreDigits = (currentByte & 32) !== 0;
-
-                // least significant 5 bits are the next msbs in the final value.
-                value = value | ((currentByte & 31) << shiftCount);
-                shiftCount += 5;
             }
-
-            // Least significant bit if 1 represents negative and rest of the msb is actual absolute value
-            if ((value & 1) === 0) {
-                // + number
-                value = value >> 1;
-            }
-            else {
-                // - number
-                value = value >> 1;
-                value = -value;
-            }
-
-            return value;
+            return file.sourceMapper = sourcemaps.identitySourceMapper;
         }
-    }
 
-    function base64FormatDecode(char: string) {
-        return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(char);
-    }
+        function tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
+            if (!isDeclarationFileName(info.fileName)) return undefined;
 
-    function isSourceMappingSegmentEnd(encodedText: string, pos: number) {
-        return (pos === encodedText.length ||
-            encodedText.charCodeAt(pos) === CharacterCodes.comma ||
-            encodedText.charCodeAt(pos) === CharacterCodes.semicolon);
+            const file = getProgram().getSourceFile(info.fileName) || sourcemappedFileCache.get(toPath(info.fileName, currentDirectory, getCanonicalFileName));
+            if (!file) return undefined;
+            const newLoc = getSourceMapper(info.fileName, file).getOriginalPosition(info);
+            return newLoc === info ? undefined : tryGetOriginalLocation(newLoc) || newLoc;
+        }
+
+        function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const file = getProgram().getSourceFile(path) || sourcemappedFileCache.get(path)!; // TODO: GH#18217
+            return file.getLineAndCharacterOfPosition(position);
+        }
+
+        function clearCache(): void {
+            sourcemappedFileCache = createSourceFileLikeCache(host);
+        }
     }
 }

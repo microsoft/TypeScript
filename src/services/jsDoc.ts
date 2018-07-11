@@ -1,47 +1,83 @@
 /* @internal */
 namespace ts.JsDoc {
     const jsDocTagNames = [
+        "abstract",
+        "access",
+        "alias",
+        "argument",
+        "async",
         "augments",
         "author",
-        "argument",
         "borrows",
+        "callback",
         "class",
+        "classDesc",
         "constant",
         "constructor",
         "constructs",
+        "copyright",
         "default",
         "deprecated",
         "description",
+        "emits",
+        "enum",
         "event",
         "example",
+        "exports",
         "extends",
+        "external",
         "field",
+        "file",
         "fileOverview",
+        "fires",
         "function",
+        "generator",
+        "global",
+        "hideConstructor",
+        "host",
         "ignore",
+        "implements",
         "inheritDoc",
         "inner",
+        "instance",
+        "interface",
+        "kind",
         "lends",
-        "link",
+        "license",
+        "listens",
+        "member",
         "memberOf",
         "method",
+        "mixes",
+        "module",
         "name",
         "namespace",
+        "override",
+        "package",
         "param",
         "private",
-        "prop",
         "property",
+        "protected",
         "public",
+        "readonly",
         "requires",
         "returns",
         "see",
         "since",
         "static",
+        "summary",
         "template",
+        "this",
         "throws",
+        "todo",
+        "tutorial",
         "type",
         "typedef",
-        "version"
+        "var",
+        "variation",
+        "version",
+        "virtual",
+        "yields"
     ];
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
@@ -68,10 +104,12 @@ namespace ts.JsDoc {
 
     function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
         switch (declaration.kind) {
+            case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return [declaration as JSDocPropertyTag];
+            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocTypedefTag:
-                return [(declaration as JSDocTypedefTag).parent];
+                return [(declaration as JSDocTypedefTag), (declaration as JSDocTypedefTag).parent];
             default:
                 return getJSDocCommentsAndTags(declaration);
         }
@@ -96,8 +134,9 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocTemplateTag:
                 return withList((tag as JSDocTemplateTag).typeParameters);
             case SyntaxKind.JSDocTypeTag:
-                return withNode((tag as JSDocTypeTag).typeExpression);
+                return withNode((tag as JSDocTypeTag).typeExpression!);
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
@@ -124,7 +163,7 @@ namespace ts.JsDoc {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    function forEachUnique<T, U>(array: ReadonlyArray<T>, callback: (element: T, index: number) => U): U {
+    function forEachUnique<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U): U | undefined {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 if (array.indexOf(array[i]) === i) {
@@ -187,7 +226,7 @@ namespace ts.JsDoc {
             if (!isIdentifier(param.name)) return undefined;
 
             const name = param.name.text;
-            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name)
+            if (jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
             }
@@ -238,8 +277,8 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-        const tokenStart = tokenAtPos.getStart();
+        const tokenAtPos = getTokenAtPosition(sourceFile, position);
+        const tokenStart = tokenAtPos.getStart(sourceFile);
         if (!tokenAtPos || tokenStart < position) {
             return undefined;
         }
@@ -249,7 +288,7 @@ namespace ts.JsDoc {
             return undefined;
         }
         const { commentOwner, parameters } = commentOwnerInfo;
-        if (commentOwner.getStart() < position) {
+        if (commentOwner.getStart(sourceFile) < position) {
             return undefined;
         }
 
@@ -259,24 +298,7 @@ namespace ts.JsDoc {
             return { newText: singleLineResult, caretOffset: 3 };
         }
 
-        const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
-        const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
-
-        // replace non-whitespace characters in prefix with spaces.
-        const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).replace(/\S/i, () => " ");
-        const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
-
-        let docParams = "";
-        for (let i = 0; i < parameters.length; i++) {
-            const currentName = parameters[i].name;
-            const paramName = currentName.kind === SyntaxKind.Identifier ? currentName.escapedText : "param" + i;
-            if (isJavaScriptFile) {
-                docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
-            }
-            else {
-                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
-            }
-        }
+        const indentationStr = getIndentationStringAtPosition(sourceFile, position);
 
         // A doc comment consists of the following
         // * The opening comment line
@@ -285,15 +307,30 @@ namespace ts.JsDoc {
         // * TODO: other tags.
         // * the closing comment line
         // * if the caret was directly in front of the object, then we add an extra line and indentation.
-        const preamble = "/**" + newLine +
-            indentationStr + " * ";
+        const preamble = "/**" + newLine + indentationStr + " * ";
         const result =
             preamble + newLine +
-            docParams +
+            parameterDocComments(parameters, hasJavaScriptFileExtension(sourceFile.fileName), indentationStr, newLine) +
             indentationStr + " */" +
             (tokenStart === position ? newLine + indentationStr : "");
 
         return { newText: result, caretOffset: preamble.length };
+    }
+
+    function getIndentationStringAtPosition(sourceFile: SourceFile, position: number): string {
+        const { text } = sourceFile;
+        const lineStart = getLineStartPositionForPosition(position, sourceFile);
+        let pos = lineStart;
+        for (; pos <= position && isWhiteSpaceSingleLine(text.charCodeAt(pos)); pos++);
+        return text.slice(lineStart, pos);
+    }
+
+    function parameterDocComments(parameters: ReadonlyArray<ParameterDeclaration>, isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
+        return parameters.map(({ name, dotDotDotToken }, i) => {
+            const paramName = name.kind === SyntaxKind.Identifier ? name.text : "param" + i;
+            const type = isJavaScriptFile ? (dotDotDotToken ? "{...any} " : "{any} ") : "";
+            return `${indentationStr} * @param ${type}${paramName}${newLine}`;
+        }).join("");
     }
 
     interface CommentOwnerInfo {
@@ -304,6 +341,7 @@ namespace ts.JsDoc {
         for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
             switch (commentOwner.kind) {
                 case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.MethodSignature:
@@ -322,7 +360,7 @@ namespace ts.JsDoc {
                     const varStatement = <VariableStatement>commentOwner;
                     const varDeclarations = varStatement.declarationList.declarations;
                     const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
-                        ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
+                        ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer!)
                         : undefined;
                     return { commentOwner, parameters };
                 }
@@ -365,13 +403,10 @@ namespace ts.JsDoc {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 return (<FunctionExpression>rightHandSide).parameters;
-            case SyntaxKind.ClassExpression:
-                for (const member of (<ClassExpression>rightHandSide).members) {
-                    if (member.kind === SyntaxKind.Constructor) {
-                        return (<ConstructorDeclaration>member).parameters;
-                    }
-                }
-                break;
+            case SyntaxKind.ClassExpression: {
+                const ctr = find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
+                return ctr ? ctr.parameters : emptyArray;
+            }
         }
 
         return emptyArray;

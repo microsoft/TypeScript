@@ -9,6 +9,7 @@ tests/cases/compiler/indirectSelfReferenceGeneric.ts(2,7): error TS2506: 'b' is 
 !!! error TS2506: 'a' is referenced directly or indirectly in its own base expression.
                        ~
 !!! error TS2449: Class 'b' used before its declaration.
+!!! related TS2728 tests/cases/compiler/indirectSelfReferenceGeneric.ts:2:7: 'b' is declared here.
     class b<T> extends a<T> { }
           ~
 !!! error TS2506: 'b' is referenced directly or indirectly in its own base expression.

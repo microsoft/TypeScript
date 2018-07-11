@@ -3,6 +3,4 @@
 //@Filename: file.tsx
 //// var x1 = <div><//**/
 
-goTo.marker();
-verify.completionListCount(1);
-verify.completionListContains('div');
+verify.completions({ marker: "", exact: "div>" });

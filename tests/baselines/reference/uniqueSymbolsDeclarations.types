@@ -402,8 +402,8 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 
 // type argument inference
 const promiseForConstCall = Promise.resolve(constCall);
->promiseForConstCall : Promise<symbol>
->Promise.resolve(constCall) : Promise<symbol>
+>promiseForConstCall : Promise<unique symbol>
+>Promise.resolve(constCall) : Promise<unique symbol>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
@@ -454,19 +454,19 @@ declare function g(x: typeof N.s): void;
 
 // argument inference
 f(s);
->f(s) : symbol
+>f(s) : unique symbol
 >f : <T>(x: T) => T
 >s : unique symbol
 
 f(N.s);
->f(N.s) : symbol
+>f(N.s) : unique symbol
 >f : <T>(x: T) => T
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 
 f(N["s"]);
->f(N["s"]) : symbol
+>f(N["s"]) : unique symbol
 >f : <T>(x: T) => T
 >N["s"] : unique symbol
 >N : typeof N
@@ -699,19 +699,19 @@ g(N["s"]);
 
 // falsy expressions
 s || "";
->s || "" : unique symbol | ""
+>s || "" : "" | unique symbol
 >s : unique symbol
 >"" : ""
 
 N.s || "";
->N.s || "" : unique symbol | ""
+>N.s || "" : "" | unique symbol
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 >"" : ""
 
 N["s"] || "";
->N["s"] || "" : unique symbol | ""
+>N["s"] || "" : "" | unique symbol
 >N["s"] : unique symbol
 >N : typeof N
 >"s" : "s"

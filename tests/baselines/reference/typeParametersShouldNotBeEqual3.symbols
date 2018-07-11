@@ -2,9 +2,9 @@
 function ff<T extends Object, U extends Object>(x: T, y: U) {
 >ff : Symbol(ff, Decl(typeParametersShouldNotBeEqual3.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersShouldNotBeEqual3.ts, 0, 12))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(typeParametersShouldNotBeEqual3.ts, 0, 29))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeParametersShouldNotBeEqual3.ts, 0, 48))
 >T : Symbol(T, Decl(typeParametersShouldNotBeEqual3.ts, 0, 12))
 >y : Symbol(y, Decl(typeParametersShouldNotBeEqual3.ts, 0, 53))
@@ -12,7 +12,7 @@ function ff<T extends Object, U extends Object>(x: T, y: U) {
 
     var z: Object;
 >z : Symbol(z, Decl(typeParametersShouldNotBeEqual3.ts, 1, 7))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x = x;  // Ok
 >x : Symbol(x, Decl(typeParametersShouldNotBeEqual3.ts, 0, 48))

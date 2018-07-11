@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/bug25101.js ===
+/**
+ * @template T
+ * @extends {Set<T>} Should prefer this Set<T>, not the Set in the heritage clause
+ */
+class My extends Set {}
+>My : My<T>
+>Set : Set<T>
+

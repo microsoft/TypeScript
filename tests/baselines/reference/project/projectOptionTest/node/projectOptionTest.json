@@ -5,7 +5,7 @@
     "declaration": true,
     "project": "Test",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "Test/a.ts"
     ],
     "emittedFiles": [

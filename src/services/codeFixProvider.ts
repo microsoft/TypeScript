@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts {
     export interface CodeFixRegistration {
-        errorCodes: number[];
+        errorCodes: ReadonlyArray<number>;
         getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
-        fixIds?: string[];
+        fixIds?: ReadonlyArray<string>;
         getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
     }
 
@@ -27,7 +27,7 @@ namespace ts {
         const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
         const fixIdToRegistration = createMap<CodeFixRegistration>();
 
-        type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+        export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
         function diagnosticToString(diag: DiagnosticAndArguments): string {
             return isArray(diag)
                 ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as ReadonlyArray<string>)
@@ -71,7 +71,7 @@ namespace ts {
             return fixIdToRegistration.get(cast(context.fixId, isString))!.getAllCodeActions!(context);
         }
 
-        function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
+        export function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
             return { changes, commands };
         }
 
@@ -79,17 +79,20 @@ namespace ts {
             return { fileName, textChanges };
         }
 
-        export function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: Diagnostic, commands: Push<CodeActionCommand>) => void): CombinedCodeActions {
+        export function codeFixAll(
+            context: CodeFixAllContext,
+            errorCodes: number[],
+            use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void,
+        ): CombinedCodeActions {
             const commands: CodeActionCommand[] = [];
-            const changes = textChanges.ChangeTracker.with(context, t =>
-                eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
+            const changes = textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        function eachDiagnostic({ program, sourceFile }: CodeFixAllContext, errorCodes: number[], cb: (diag: Diagnostic) => void): void {
-            for (const diag of program.getSemanticDiagnostics(sourceFile).concat(computeSuggestionDiagnostics(sourceFile, program))) {
+        export function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: ReadonlyArray<number>, cb: (diag: DiagnosticWithLocation) => void): void {
+            for (const diag of program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken))) {
                 if (contains(errorCodes, diag.code)) {
-                    cb(diag);
+                    cb(diag as DiagnosticWithLocation);
                 }
             }
         }

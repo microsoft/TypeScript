@@ -3,6 +3,7 @@
 // TODO: Maybe we could transform this to `export function f() {}`.
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////function f() {}

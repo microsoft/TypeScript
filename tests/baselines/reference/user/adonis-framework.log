@@ -36,7 +36,7 @@ node_modules/adonis-framework/src/Env/index.js(56,15): error TS2304: Cannot find
 node_modules/adonis-framework/src/Env/index.js(80,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Event/index.js(128,5): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
-  Property 'flatMap' is missing in type '() => {}[]'.
+  Property 'push' is missing in type '() => {}[]'.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
 node_modules/adonis-framework/src/Event/index.js(188,17): error TS2304: Cannot find name 'Spread'.
 node_modules/adonis-framework/src/Event/index.js(207,24): error TS2304: Cannot find name 'Sring'.
@@ -150,7 +150,7 @@ node_modules/adonis-framework/src/Session/SessionManager.js(69,49): error TS2339
 node_modules/adonis-framework/src/Session/SessionManager.js(71,76): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/Store.js(28,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/Store.js(80,13): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Session/index.js(11,2): error TS1003: Identifier expected.
+node_modules/adonis-framework/src/Session/index.js(10,14): error TS2304: Cannot find name 'SessionDriver'.
 node_modules/adonis-framework/src/Session/index.js(11,11): error TS2304: Cannot find name 'Class'.
 node_modules/adonis-framework/src/Session/index.js(46,15): error TS2304: Cannot find name 'SessionDriver'.
 node_modules/adonis-framework/src/Session/index.js(48,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

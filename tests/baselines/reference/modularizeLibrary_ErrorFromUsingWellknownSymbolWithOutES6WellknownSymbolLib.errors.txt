@@ -1,5 +1,5 @@
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.ts(7,1): error TS2322: Type 'false' is not assignable to type 'string'.
-tests/cases/compiler/modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.ts(7,3): error TS2304: Cannot find name 'Symbol'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.ts(7,3): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/compiler/modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.ts (2 errors) ====
@@ -13,4 +13,4 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6We
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'false' is not assignable to type 'string'.
       ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
