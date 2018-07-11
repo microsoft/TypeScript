@@ -2,6 +2,10 @@ tests/cases/conformance/salsa/a.js(4,17): error TS2339: Property 'toFixed' does 
   Property 'toFixed' does not exist on type 'string'.
 tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
   Property 'toFixed' does not exist on type 'string'.
+tests/cases/conformance/salsa/mod1.js(2,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
+tests/cases/conformance/salsa/mod1.js(4,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
+tests/cases/conformance/salsa/mod1.js(5,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
+tests/cases/conformance/salsa/mod1.js(10,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
 
 
 ==== tests/cases/conformance/salsa/a.js (2 errors) ====
@@ -21,16 +25,24 @@ tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does 
 ==== tests/cases/conformance/salsa/requires.d.ts (0 errors) ====
     declare var module: { exports: any };
     declare function require(name: string): any;
-==== tests/cases/conformance/salsa/mod1.js (0 errors) ====
+==== tests/cases/conformance/salsa/mod1.js (4 errors) ====
     /// <reference path='./requires.d.ts' />
     module.exports.bothBefore = 'string'
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'bothBefore'.
     A.justExport = 4
     A.bothBefore = 2
+    ~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'bothBefore'.
     A.bothAfter = 3
+    ~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'bothAfter'.
     module.exports = A
     function A() {
         this.p = 1
     }
     module.exports.bothAfter = 'string'
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'bothAfter'.
     module.exports.justProperty = 'string'
     

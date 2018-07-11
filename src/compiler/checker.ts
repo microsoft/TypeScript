@@ -2421,7 +2421,7 @@ namespace ts {
                 }
                 const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
-                const exportStars = symbol.exports!.get(InternalSymbolName.ExportStar);
+                const exportStars = symbol.exports.get(InternalSymbolName.ExportStar);
                 if (exportStars) {
                     const nestedSymbols = createSymbolTable();
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
