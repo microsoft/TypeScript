@@ -17406,7 +17406,7 @@ namespace ts {
          */
         function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
+                const resolved = resolveStructuredTypeMembers(targetType as ObjectType);
                 if (resolved.stringIndexInfo ||
                     resolved.numberIndexInfo && isNumericLiteralName(name) ||
                     getPropertyOfObjectType(targetType, name) ||
@@ -17416,11 +17416,15 @@ namespace ts {
                 }
             }
             else if (targetType.flags & TypeFlags.UnionOrIntersection) {
-                for (const t of (<UnionOrIntersectionType>targetType).types) {
+                for (const t of (targetType as UnionOrIntersectionType).types) {
                     if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                         return true;
                     }
                 }
+            }
+            else if (targetType.flags & TypeFlags.Conditional) {
+                return isKnownProperty((targetType as ConditionalType).root.trueType, name, isComparingJsxAttributes) ||
+                    isKnownProperty((targetType as ConditionalType).root.falseType, name, isComparingJsxAttributes);
             }
             return false;
         }
