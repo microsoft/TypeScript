@@ -19066,11 +19066,14 @@ namespace ts {
                     min < max ? min + "-" + max :
                     min;
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-                if (argCount <= max && hasSpreadArgument) argCount--;
+                if (argCount <= max && hasSpreadArgument) {
+                    argCount--;
+                }
 
                 if (hasRestParameter || hasSpreadArgument) {
                     const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                        hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 : Diagnostics.Expected_0_arguments_but_got_1_or_more;
+                        hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                        Diagnostics.Expected_0_arguments_but_got_1_or_more;
                     diagnostics.add(createDiagnosticForNode(node, error, paramRange, argCount));
                 }
                 else if (min < argCount && argCount < max) {
