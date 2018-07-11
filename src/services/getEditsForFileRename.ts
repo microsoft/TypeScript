@@ -151,7 +151,7 @@ namespace ts {
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
-                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
+                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, host)
                         : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
@@ -192,18 +192,18 @@ namespace ts {
             const resolved = host.resolveModuleNames
                 ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
                 : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
-            return getSourceFileToImportFromResolved(resolved, oldToNew, program);
+            return getSourceFileToImportFromResolved(resolved, oldToNew, host);
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, program: Program): ToImport | undefined {
+    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
         return resolved && (
-            (resolved.resolvedModule && getIfInProgram(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfInProgram));
+            (resolved.resolvedModule && getIfExists(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfExists));
 
-        function getIfInProgram(oldLocation: string): ToImport | undefined {
+        function getIfExists(oldLocation: string): ToImport | undefined {
             const newLocation = oldToNew(oldLocation);
 
-            return program.getSourceFile(oldLocation) || newLocation !== undefined && program.getSourceFile(newLocation)
+            return host.fileExists!(oldLocation) || newLocation !== undefined && host.fileExists!(newLocation) // TODO: GH#18217
                 ? newLocation !== undefined ? { newFileName: newLocation, updated: true } : { newFileName: oldLocation, updated: false }
                 : undefined;
         }

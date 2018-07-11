@@ -8722,6 +8722,31 @@ export const x = 10;`
                 },
             ]);
         });
+
+        it("works with file moved to inferred project", () => {
+            const aTs: File = { path: "/a.ts", content: 'import {} from "./b";' };
+            const cTs: File = { path: "/c.ts", content: "export {};" };
+            const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./a.ts", "./b.ts"] }) };
+
+            const host = createServerHost([aTs, cTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs, cTs], session);
+
+            const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, CommandNames.GetEditsForFileRename, {
+                oldFilePath: "/b.ts",
+                newFilePath: cTs.path,
+            });
+            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+                {
+                    fileName: "/tsconfig.json",
+                    textChanges: [{ ...protocolTextSpanFromSubstring(tsconfig.content, "./b.ts"), "newText": "c.ts" }],
+                },
+                {
+                    fileName: "/a.ts",
+                    textChanges: [{ ...protocolTextSpanFromSubstring(aTs.content, "./b"), newText: "./c" }],
+                },
+            ]);
+        });
     });
 
     describe("tsserverProjectSystem document registry in project service", () => {
