@@ -12840,6 +12840,8 @@ namespace ts {
             return links.switchTypes;
         }
 
+        // Get the types from all cases in a switch on `typeof`. An
+        // `undefined` element denotes an explicit `default` clause.
         function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement): (string | undefined)[] {
             const witnesses: (string | undefined)[] = [];
             for (const clause of switchStatement.caseBlock.clauses) {
@@ -13584,6 +13586,7 @@ namespace ts {
                     // that we don't have to worry about undefined
                     // in the witness array.
                     const witnesses = <string[]>switchWitnesses.filter(witness => witness !== undefined);
+                    // The adjust clause start and end after removing the `default` statement.
                     const fixedClauseStart = defaultCaseLocation < clauseStart ? clauseStart - 1 : clauseStart;
                     const fixedClauseEnd = defaultCaseLocation < clauseEnd ? clauseEnd - 1 : clauseEnd;
                     clauseWitnesses = witnesses.slice(fixedClauseStart, fixedClauseEnd);
@@ -13593,26 +13596,34 @@ namespace ts {
                     clauseWitnesses = <string[]>switchWitnesses.slice(clauseStart, clauseEnd);
                     switchFacts = getFactsFromTypeofSwitch(clauseStart, clauseEnd, <string[]>switchWitnesses, hasDefaultClause);
                 }
-                // The implied type is the raw type suggested by a
-                // value being caught in this clause.
-                // - If there is a default the implied type is not used.
-                // - Otherwise, take the union of the types in the
-                // clause. We narrow the union using facts to remove
-                // types that appear multiple types and are
-                // unreachable.
-                // Example:
-                //
-                // switch (typeof x) {
-                //     case 'number':
-                //     case 'string': break;
-                //     default: break;
-                //     case 'number':
-                //     case 'boolean': break
-                // }
-                //
-                // The implied type of the first clause number | string.
-                // The implied type of the second clause is never, but this does not get used because it includes a default case.
-                // The implied type of the third clause is boolean (number has already be caught).
+                /*
+                  The implied type is the raw type suggested by a
+                  value being caught in this clause.
+
+                  When the clause contains a default case we ignore
+                  the implied type and try to narrow using any facts
+                  we can learn: see `switchFacts`.
+
+                  Example:
+                  switch (typeof x) {
+                      case 'number':
+                      case 'string': break;
+                      default: break;
+                      case 'number':
+                      case 'boolean': break
+                  }
+
+                  In the first clause (case `number` and `string`) the
+                  implied type is number | string.
+
+                  In the default clause we de not compute an implied type.
+
+                  In the third clause (case `number` and `boolean`)
+                  the naive implied type is number | boolean, however
+                  we use the type facts to narrow the implied type to
+                  boolean. We know that number cannot be selected
+                  because it is caught in the first clause.
+                */
                 if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
                     let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
                     if (impliedType.flags & TypeFlags.Union) {
