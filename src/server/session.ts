@@ -2390,7 +2390,7 @@ namespace ts.server {
     }
 
     function positionToLineOffset(info: ScriptInfoOrConfig, position: number): protocol.Location {
-        return info.kind === ScriptInfoOrConfigKind.ScriptInfo ? info.info.positionToLineOffset(position) : locationFromLineAndCharacter(info.config.getLineAndCharacterOfPosition(position));
+        return isConfigFile(info) ? locationFromLineAndCharacter(info.getLineAndCharacterOfPosition(position)) : info.positionToLineOffset(position);
     }
 
     function locationFromLineAndCharacter(lc: LineAndCharacter): protocol.Location {

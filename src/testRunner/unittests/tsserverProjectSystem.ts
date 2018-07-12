@@ -8739,7 +8739,7 @@ export const x = 10;`
             assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
                 {
                     fileName: "/tsconfig.json",
-                    textChanges: [{ ...protocolTextSpanFromSubstring(tsconfig.content, "./b.ts"), "newText": "c.ts" }],
+                    textChanges: [{ ...protocolTextSpanFromSubstring(tsconfig.content, "./b.ts"), newText: "c.ts" }],
                 },
                 {
                     fileName: "/a.ts",

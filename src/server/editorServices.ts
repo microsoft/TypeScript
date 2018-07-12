@@ -1778,10 +1778,9 @@ namespace ts.server {
         getScriptInfoOrConfig(uncheckedFileName: string): ScriptInfoOrConfig | undefined {
             const path = toNormalizedPath(uncheckedFileName);
             const info = this.getScriptInfoForNormalizedPath(path);
-            if (info) return { kind: ScriptInfoOrConfigKind.ScriptInfo, info };
+            if (info) return info;
             const configProject = this.configuredProjects.get(uncheckedFileName);
-            const config = configProject && configProject.getCompilerOptions().configFile;
-            return config && { kind: ScriptInfoOrConfigKind.Config, config };
+            return configProject && configProject.getCompilerOptions().configFile;
         }
 
         /**
@@ -2554,9 +2553,9 @@ namespace ts.server {
     }
 
     /* @internal */
-    export const enum ScriptInfoOrConfigKind { ScriptInfo, Config }
+    export type ScriptInfoOrConfig = ScriptInfo | TsConfigSourceFile;
     /* @internal */
-    export type ScriptInfoOrConfig =
-        | { readonly kind: ScriptInfoOrConfigKind.ScriptInfo, readonly info: ScriptInfo }
-        | { readonly kind: ScriptInfoOrConfigKind.Config, readonly config: TsConfigSourceFile };
+    export function isConfigFile(config: ScriptInfoOrConfig): config is TsConfigSourceFile {
+        return (config as TsConfigSourceFile).kind !== undefined;
+    }
 }
