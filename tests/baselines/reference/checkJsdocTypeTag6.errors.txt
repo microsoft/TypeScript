@@ -1,0 +1,20 @@
+tests/cases/conformance/jsdoc/test.js(1,5): error TS8030: The type of a function declaration must be callable.
+tests/cases/conformance/jsdoc/test.js(7,5): error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
+  Property 'prop' is missing in type '(prop: any) => void'.
+
+
+==== tests/cases/conformance/jsdoc/test.js (2 errors) ====
+    /** @type {number} */
+        ~~~~~~~~~~~~~~
+!!! error TS8030: The type of a function declaration must be callable.
+    function f() {
+        return 1
+    }
+    
+    /** @type {{ prop: string }} */
+    var g = function (prop) {
+        ~
+!!! error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
+!!! error TS2322:   Property 'prop' is missing in type '(prop: any) => void'.
+    }
+    
