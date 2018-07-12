@@ -1160,6 +1160,10 @@ namespace ts {
         return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
     }
 
+    export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
+        return createTextRange(node.getStart(sourceFile), node.end);
+    }
+
     export function createTextSpanFromRange(range: TextRange): TextSpan {
         return createTextSpanFromBounds(range.pos, range.end);
     }
