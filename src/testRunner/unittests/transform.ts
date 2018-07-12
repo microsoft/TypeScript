@@ -326,6 +326,39 @@ export {exportedSeparately};
                         }
                     }
         });
-    });
+
+        // https://github.com/Microsoft/TypeScript/issues/17594
+        testBaseline("transformAddCommentToImport", () => {
+            return transpileModule(`
+// Previous comment on import.
+import {Value} from 'somewhere';
+import * as X from 'somewhere';
+// Previous comment on export.
+export { /* specifier comment */ X, Y} from 'somewhere';
+export * from 'somewhere';
+export {Value};
+`, {
+                        transformers: {
+                            before: [addSyntheticComment],
+                        },
+                        compilerOptions: {
+                            target: ScriptTarget.ES5,
+                            newLine: NewLineKind.CarriageReturnLineFeed,
+                        }
+                    }).outputText;
+
+                    function addSyntheticComment(context: TransformationContext) {
+                        return (sourceFile: SourceFile): SourceFile => {
+                            return visitNode(sourceFile, rootTransform, isSourceFile);
+                        };
+                        function rootTransform<T extends Node>(node: T): VisitResult<T> {
+                            if (isImportDeclaration(node) || isExportDeclaration(node) || isImportSpecifier(node) || isExportSpecifier(node)) {
+                                setEmitFlags(node, EmitFlags.NoLeadingComments);
+                                setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: `comment!`, pos: -1, end: -1, hasTrailingNewLine: true }]);
+                            }
+                            return visitEachChild(node, rootTransform, context);
+                        }
+                    }
+        });    });
 }
 
