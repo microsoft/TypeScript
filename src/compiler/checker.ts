@@ -4682,13 +4682,7 @@ namespace ts {
                     }
                 }
                 // Use contextual parameter type if one is available
-                let type: Type | undefined;
-                if (declaration.symbol.escapedName === "this") {
-                    type = getContextualThisParameterType(func);
-                }
-                else {
-                    type = getContextuallyTypedParameterType(declaration);
-                }
+                const type = declaration.symbol.escapedName === "this" ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
                     return addOptionality(type, isOptional);
                 }
@@ -16209,7 +16203,7 @@ namespace ts {
 
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
-        function getContextualCallSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature | undefined {
+        function getContextualCallSignature(type: Type, node: SignatureDeclaration): Signature | undefined {
             const signatures = getSignaturesOfType(type, SignatureKind.Call);
             if (signatures.length === 1) {
                 const signature = signatures[0];
@@ -16220,7 +16214,7 @@ namespace ts {
         }
 
         /** If the contextual signature has fewer parameters than the function expression, do not use it */
-        function isAritySmaller(signature: Signature, target: FunctionExpression | ArrowFunction | MethodDeclaration) {
+        function isAritySmaller(signature: Signature, target: SignatureDeclaration) {
             let targetParameterCount = 0;
             for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
                 const param = target.parameters[targetParameterCount];
@@ -23533,12 +23527,13 @@ namespace ts {
                     // yielded values. The only way to trigger these errors is to try checking its return type.
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
-                // A js function declaration can have a @type tag instead of a return type node, but that type must have a call signature
-                if (isInJavaScriptFile(node)) {
-                    const typeTag = getJSDocTypeTag(node);
-                    if (typeTag && typeTag.typeExpression && !getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call).length) {
-                        error(typeTag, Diagnostics.The_type_of_a_function_declaration_must_be_callable);
-                    }
+            }
+
+            // A js function declaration can have a @type tag instead of a return type node, but that type must have a call signature
+            if (isInJavaScriptFile(node)) {
+                const typeTag = getJSDocTypeTag(node);
+                if (typeTag && typeTag.typeExpression && !getContextualCallSignature(getTypeFromTypeNode(typeTag.typeExpression), node)) {
+                    error(typeTag, Diagnostics.The_type_of_a_function_declaration_must_match_the_function_s_signature);
                 }
             }
         }
