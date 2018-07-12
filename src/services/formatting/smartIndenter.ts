@@ -351,7 +351,8 @@ namespace ts.formatting {
                             getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, end);
                     }
                     case SyntaxKind.ClassDeclaration:
-                        return getListIfStartEndIsInListRange((<ClassDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return getListIfStartEndIsInListRange((<ClassDeclaration | TypeAliasDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression: {
                         const start = node.getStart(sourceFile);
