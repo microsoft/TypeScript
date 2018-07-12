@@ -296,6 +296,36 @@ namespace ts {
                 }
             }
         });
+
+        // https://github.com/Microsoft/TypeScript/issues/17594
+        testBaseline("transformAddCommentToExportedVar", () => {
+            return transpileModule(`export const exportedDirectly = 1;
+const exportedSeparately = 2;
+export {exportedSeparately};
+`, {
+                        transformers: {
+                            before: [addSyntheticComment],
+                        },
+                        compilerOptions: {
+                            target: ScriptTarget.ES5,
+                            newLine: NewLineKind.CarriageReturnLineFeed,
+                        }
+                    }).outputText;
+
+                    function addSyntheticComment(context: TransformationContext) {
+                        return (sourceFile: SourceFile): SourceFile => {
+                            return visitNode(sourceFile, rootTransform, isSourceFile);
+                        };
+                        function rootTransform<T extends Node>(node: T): VisitResult<T> {
+                            if (isVariableStatement(node)) {
+                                setEmitFlags(node, EmitFlags.NoLeadingComments);
+                                setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "* @type {number} ", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                                return node;
+                            }
+                            return visitEachChild(node, rootTransform, context);
+                        }
+                    }
+        });
     });
 }
 
