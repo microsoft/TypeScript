@@ -321,44 +321,6 @@ namespace ts.BuilderState {
     }
 
     /**
-     * Gets the files affected by exported module
-     */
-    export function getFilesAffectedByExportedModule(state: BuilderState, path: Path, exportedModulesMapCache?: ComputingExportedModulesMap): ReadonlyArray<Path> {
-        if (!state.exportedModulesMap) {
-            return emptyArray;
-        }
-
-        Debug.assert(!!exportedModulesMapCache);
-        let affectedFiles: Map<true> | undefined;
-        // Go through exported modules from cache first
-        exportedModulesMapCache!.forEach((exportedModules, exportedFromPath) => {
-            // If exported modules has path, all files referencing file exported from are affected
-            if (exportedModules && exportedModules.has(path)) {
-                addFilesReferencing(exportedFromPath as Path);
-            }
-        });
-        state.exportedModulesMap.forEach((exportedModules, exportedFromPath) => {
-            // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-            if (!exportedModulesMapCache!.has(exportedFromPath) && exportedModules.has(path)) {
-                addFilesReferencing(exportedFromPath as Path);
-            }
-        });
-
-        return affectedFiles ? arrayFrom(affectedFiles.keys()) as Path[] : emptyArray;
-
-        function addFilesReferencing(referencingFilePath: Path) {
-            state.referencedMap!.forEach((referencesInFile, filePath) => {
-                if (referencesInFile.has(referencingFilePath)) {
-                    if (!affectedFiles) {
-                        affectedFiles = createMap<true>();
-                    }
-                    affectedFiles.set(filePath, true);
-                }
-            });
-        }
-    }
-
-    /**
      * Get all the dependencies of the sourceFile
      */
     export function getAllDependencies(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile): ReadonlyArray<string> {
