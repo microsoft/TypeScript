@@ -3615,6 +3615,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments_2575" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2_2515" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.]]></Val>
@@ -3828,6 +3834,12 @@
             <Item ItemId=";Option_project_cannot_be_mixed_with_source_files_on_a_command_line_5042" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Option 'project' cannot be mixed with source files on a command line.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs_5071" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -5409,6 +5421,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";The_type_of_a_function_declaration_must_be_callable_8030" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[The type of a function declaration must be callable.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value__2547" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.]]></Val>
@@ -6141,6 +6159,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";_0_is_declared_here_2728" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['{0}' is declared here.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
@@ -6276,12 +6300,6 @@
             <Item ItemId=";_0_was_also_declared_here_6203" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['{0}' was also declared here.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
-            <Item ItemId=";_0_was_declared_here_2728" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA['{0}' was declared here.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
