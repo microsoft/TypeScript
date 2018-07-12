@@ -75,6 +75,12 @@ class TypeWriterWalker {
         const sourceText = ts.getSourceTextOfNodeFromSourceFile(this.currentSourceFile, node);
 
         if (!isSymbolWalk) {
+            // Don't try to get the type of something that's already a type.
+            // Exception for `T` in `type T = something` because that may evaluate to some interesting type.
+            if (ts.isPartOfTypeNode(node) || ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) && !(ts.isTypeAlias(node.parent) && node.parent.name === node)) {
+                return undefined;
+            }
+
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
             const type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);

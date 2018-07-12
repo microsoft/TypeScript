@@ -3,8 +3,6 @@ module A {
 >A : typeof A
 
     export interface B {
->B : B
-
         name: string;
 >name : string
 
@@ -17,7 +15,6 @@ module A {
 
         export function createB(): B {
 >createB : () => B
->B : B
 
             return null;
 >null : null
@@ -28,7 +25,6 @@ module A {
 var x: A.B = A.B.createB();
 >x : A.B
 >A : any
->B : A.B
 >A.B.createB() : A.B
 >A.B.createB : () => A.B
 >A.B : typeof A.B

@@ -1,11 +1,9 @@
 === tests/cases/compiler/destructuringWithGenericParameter.ts ===
 class GenericClass<T> {
 >GenericClass : GenericClass<T>
->T : T
 
     payload: T;
 >payload : T
->T : T
 }
 
 var genericObject = new GenericClass<{ greeting: string }>();
@@ -16,13 +14,9 @@ var genericObject = new GenericClass<{ greeting: string }>();
 
 function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
 >genericFunction : <T>(object: GenericClass<T>, callback: (payload: T) => void) => void
->T : T
 >object : GenericClass<T>
->GenericClass : GenericClass<T>
->T : T
 >callback : (payload: T) => void
 >payload : T
->T : T
 
     callback(object.payload);
 >callback(object.payload) : void

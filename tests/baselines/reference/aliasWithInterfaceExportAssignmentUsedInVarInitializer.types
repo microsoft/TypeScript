@@ -10,8 +10,6 @@ var d = b.q3;
 
 === tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts ===
 interface c {
->c : c
-
     q3: number;
 >q3 : number
 }

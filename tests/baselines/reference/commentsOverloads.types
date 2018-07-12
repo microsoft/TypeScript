@@ -105,8 +105,6 @@ f4(10);
 >10 : 10
 
 interface i1 {
->i1 : i1
-
     /**this signature 1*/
     (/**param a*/ a: number): number;
 >a : number
@@ -176,11 +174,8 @@ interface i1 {
 }
 var i1_i: i1;
 >i1_i : i1
->i1 : i1
 
 interface i2 {
->i2 : i2
-
     new (a: string);
 >a : string
 
@@ -197,11 +192,8 @@ interface i2 {
 }
 var i2_i: i2;
 >i2_i : i2
->i2 : i2
 
 interface i3 {
->i3 : i3
-
     /** new 1*/
     new (a: string);
 >a : string
@@ -219,11 +211,8 @@ interface i3 {
 }
 var i3_i: i3;
 >i3_i : i3
->i3 : i3
 
 interface i4 {
->i4 : i4
-
     new (a: string);
 >a : string
 

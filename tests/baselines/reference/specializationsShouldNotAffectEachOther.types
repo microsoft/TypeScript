@@ -1,14 +1,11 @@
 === tests/cases/compiler/specializationsShouldNotAffectEachOther.ts ===
 interface Series  {
->Series : Series
-
     data: string[];
 >data : string[]
 }
 
 var series: Series;
 >series : Series
->Series : Series
 
 
 function foo() {

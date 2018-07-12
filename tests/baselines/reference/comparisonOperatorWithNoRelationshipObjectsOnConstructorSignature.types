@@ -24,83 +24,58 @@ class C {
 var a1: { fn(): Base };
 >a1 : { fn(): Base; }
 >fn : () => Base
->Base : Base
 
 var b1: { new (): Base };
 >b1 : new () => Base
->Base : Base
 
 var a2: { new (a: number, b: string): Base };
 >a2 : new (a: number, b: string) => Base
 >a : number
 >b : string
->Base : Base
 
 var b2: { new (a: string): Base };
 >b2 : new (a: string) => Base
 >a : string
->Base : Base
 
 var a3: { new (a: Base, b: string): Base };
 >a3 : new (a: Base, b: string) => Base
 >a : Base
->Base : Base
 >b : string
->Base : Base
 
 var b3: { new (a: Derived, b: Base): Base };
 >b3 : new (a: Derived, b: Base) => Base
 >a : Derived
->Derived : Derived
 >b : Base
->Base : Base
->Base : Base
 
 var a4: { new (): Base };
 >a4 : new () => Base
->Base : Base
 
 var b4: { new (): C };
 >b4 : new () => C
->C : C
 
 var a5: { new (a?: Base): Base };
 >a5 : new (a?: Base) => Base
 >a : Base
->Base : Base
->Base : Base
 
 var b5: { new (a?: C): Base };
 >b5 : new (a?: C) => Base
 >a : C
->C : C
->Base : Base
 
 var a6: { new (...a: Base[]): Base };
 >a6 : new (...a: Base[]) => Base
 >a : Base[]
->Base : Base
->Base : Base
 
 var b6: { new (...a: C[]): Base };
 >b6 : new (...a: C[]) => Base
 >a : C[]
->C : C
->Base : Base
 
 var a7: { new <T>(t: T): T };
 >a7 : new <T>(t: T) => T
->T : T
 >t : T
->T : T
->T : T
 
 var b7: { new <T>(t: T[]): T };
 >b7 : new <T>(t: T[]) => T
->T : T
 >t : T[]
->T : T
->T : T
 
 // operator <
 var r1a1 = a1 < b1;

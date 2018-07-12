@@ -5,10 +5,7 @@ function f1() {
     // Type parameters are in scope in parameters and return types
     function f<T>(x: T): T {
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         return undefined;
 >undefined : undefined
@@ -22,12 +19,8 @@ function f2() {
     function f(x: T): T {
 >f : (x: any) => any
 >x : any
->T : No type information available!
->T : No type information available!
 
         interface T { }
->T : T
-
         return undefined;
 >undefined : undefined
     }
@@ -39,11 +32,8 @@ function f3() {
     // Type parameters and top-level local types are in same declaration space
     function f<T>() {
 >f : <T>() => any
->T : T
 
         interface T { }
->T : T
-
         return undefined;
 >undefined : undefined
     }
@@ -54,12 +44,10 @@ function f4() {
 
     // Local types are block scoped
     interface T { x: number }
->T : T
 >x : number
 
     let v: T;
 >v : T
->T : T
 
     v.x = 10;
 >v.x = 10 : 10
@@ -72,12 +60,10 @@ function f4() {
 >true : true
 
         interface T { x: string }
->T : T
 >x : string
 
         let v: T;
 >v : T
->T : T
 
         v.x = "hello";
 >v.x = "hello" : "hello"

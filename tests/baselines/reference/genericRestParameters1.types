@@ -175,10 +175,7 @@ f2(...ns, true);  // Error, tuple spread only expanded when last
 
 declare function f10<T extends unknown[]>(...args: T): T;
 >f10 : <T extends unknown[]>(...args: T) => T
->T : T
 >args : T
->T : T
->T : T
 
 const x10 = f10(42, "hello", true);  // [number, string, boolean]
 >x10 : [number, string, boolean]
@@ -250,12 +247,8 @@ const x18 = f10(...ns, true);  // (string | number | boolean)[]
 
 function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >g10 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
->U : U
->V : V
 >u : U
->U : U
 >v : V
->V : V
 
     let x1 = f10(...u);  // U
 >x1 : U
@@ -291,10 +284,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 
 declare function f11<T extends (string | number | boolean)[]>(...args: T): T;
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->T : T
 >args : T
->T : T
->T : T
 
 const z10 = f11(42, "hello", true);  // [42, "hello", true]
 >z10 : [42, "hello", true]
@@ -366,12 +356,8 @@ const z18 = f11(...ns, true);  // (string | number | true)[]
 
 function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >g11 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
->U : U
->V : V
 >u : U
->U : U
 >v : V
->V : V
 
     let x1 = f11(...u);  // U
 >x1 : U
@@ -407,14 +393,9 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 
 function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
->T : T
->U : U
 >f : (...args: T) => U
 >args : T
->T : T
->U : U
 >args : T
->T : T
 
     return f(...args);
 >f(...args) : U
@@ -425,14 +406,9 @@ function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
 
 function callr<T extends unknown[], U>(args: T, f: (...args: T) => U) {
 >callr : <T extends unknown[], U>(args: T, f: (...args: T) => U) => U
->T : T
->U : U
 >args : T
->T : T
 >f : (...args: T) => U
 >args : T
->T : T
->U : U
 
     return f(...args);
 >f(...args) : U
@@ -448,14 +424,8 @@ declare function f15(a: string, b: number): string | number;
 
 declare function f16<A, B>(a: A, b: B): A | B;
 >f16 : <A, B>(a: A, b: B) => A | B
->A : A
->B : B
 >a : A
->A : A
 >b : B
->B : B
->A : A
->B : B
 
 let x20 = call((x, y) => x + y, 10, 20);  // number
 >x20 : number
@@ -535,22 +505,14 @@ let x32 = callr(sn, f16);  // string | number
 
 function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
->T : T
->U : U
->V : V
 >f : (x: T, ...rest: U) => V
 >x : T
->T : T
 >rest : U
->U : U
->V : V
 >x : T
->T : T
 
     return (...rest: U) => f(x, ...rest);
 >(...rest: U) => f(x, ...rest) : (...rest: U) => V
 >rest : U
->U : U
 >f(x, ...rest) : V
 >f : (x: T, ...rest: U) => V
 >x : T
@@ -682,15 +644,9 @@ g23();
 
 declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
 >f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
->T : T
->U : U
 >x : T
->T : T
 >x : T
->T : T
 >args : U
->U : U
->U : U
 
 const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: number) => number]
 >c30 : [(x: number) => string, (x: number) => number]
@@ -710,70 +666,47 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 
 type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
 >Parameters : Parameters<T>
->T : T
->Function : Function
->T : T
 >args : U
->U : U
 >args : U
->U : U
->U : U
 
 type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
 >T01 : [number, string, boolean]
->Parameters : Parameters<T>
 >x : number
 >y : string
 >z : boolean
 
 type T02 = Parameters<(...args: [number, string, boolean]) => void>;
 >T02 : [number, string, boolean]
->Parameters : Parameters<T>
 >args : [number, string, boolean]
 
 type T03 = Parameters<new (x: number, y: string, z: boolean) => void>;
 >T03 : [number, string, boolean]
->Parameters : Parameters<T>
 >x : number
 >y : string
 >z : boolean
 
 type T04 = Parameters<new (...args: [number, string, boolean]) => void>;
 >T04 : [number, string, boolean]
->Parameters : Parameters<T>
 >args : [number, string, boolean]
 
 type T05<T> = Parameters<(...args: T[]) => void>;
 >T05 : T[]
->T : T
->Parameters : Parameters<T>
 >args : T[]
->T : T
 
 type T06<T> = Parameters<new (...args: []) => void>;
 >T06 : []
->T : T
->Parameters : Parameters<T>
 >args : []
 
 type T07<T extends any[]> = Parameters<(...args: T) => void>;
 >T07 : T
->T : T
->Parameters : Parameters<T>
 >args : T
->T : T
 
 type T08<T extends any[]> = Parameters<new (...args: T) => void>;
 >T08 : T
->T : T
->Parameters : Parameters<T>
 >args : T
->T : T
 
 type T09 = Parameters<Function>;
 >T09 : any[]
->Parameters : Parameters<T>
->Function : Function
 
 type Record1 = {
 >Record1 : Record1
@@ -793,28 +726,15 @@ type Record1 = {
 
 type EventType<T> = {
 >EventType : EventType<T>
->T : T
 
   emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 
 >emit : <K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]) => void
->K : K
->T : T
->T : T
 >e : K
->K : K
 >payload : T[K] extends any[] ? T[K] : [T[K]]
->T : T
->K : K
->T : T
->K : K
->T : T
->K : K
 }
 
 declare var events: EventType<Record1>;
 >events : EventType<Record1>
->EventType : EventType<T>
->Record1 : Record1
 
 events.emit('move', 10, 'left');
 >events.emit('move', 10, 'left') : void

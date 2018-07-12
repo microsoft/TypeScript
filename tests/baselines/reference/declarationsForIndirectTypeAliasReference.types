@@ -10,22 +10,14 @@ export {
 };
 
 interface Hash<T> {
->Hash : Hash<T>
->T : T
-
     [key: string]: T;
 >key : string
->T : T
 }
 
 type StringHash = Hash<string>;
 >StringHash : Hash<string>
->Hash : Hash<T>
 
 interface StringHash2 extends Hash<string> {}
->StringHash2 : StringHash2
->Hash : Hash<T>
-
 === tests/cases/compiler/a.ts ===
 import {StringHash, StringHash2} from "./b";
 >StringHash : any
@@ -38,7 +30,6 @@ export {
 
 const MAP: StringHash = {
 >MAP : import("tests/cases/compiler/b").Hash<string>
->StringHash : import("tests/cases/compiler/b").Hash<string>
 >{    a: "a"} : { a: string; }
 
     a: "a"
@@ -49,7 +40,6 @@ const MAP: StringHash = {
 
 const MAP2: StringHash2 = {
 >MAP2 : StringHash2
->StringHash2 : StringHash2
 >{    a: "a"} : { a: string; }
 
     a: "a"

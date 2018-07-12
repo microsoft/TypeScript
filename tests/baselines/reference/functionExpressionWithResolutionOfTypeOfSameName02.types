@@ -1,6 +1,5 @@
 === tests/cases/compiler/functionExpressionWithResolutionOfTypeOfSameName02.ts ===
 interface Foo {
->Foo : Foo
 }
 
 var x = function Foo() {
@@ -10,5 +9,4 @@ var x = function Foo() {
 
     var x: Foo;
 >x : Foo
->Foo : Foo
 }

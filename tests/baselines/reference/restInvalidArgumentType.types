@@ -6,41 +6,27 @@ enum E { v1, v2 };
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {
 >f : <T extends { b: string; }>(p1: T, p2: T[]) => void
->T : T
 >b : string
 >p1 : T
->T : T
 >p2 : T[]
->T : T
 
     var t: T;
 >t : T
->T : T
 
     var i: T["b"];
 >i : T["b"]
->T : T
 
     var k: keyof T;
 >k : keyof T
->T : T
 
     var mapped_generic: {[P in keyof T]: T[P]};
 >mapped_generic : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 
     var mapped: {[P in "b"]: T[P]};
 >mapped : { b: T["b"]; }
->P : P
->T : T
->P : P
 
     var union_generic: T | { a: number };
 >union_generic : T | { a: number; }
->T : T
 >a : number
 
     var union_primitive: { a: number } | number;
@@ -49,7 +35,6 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var intersection_generic: T & { a: number };
 >intersection_generic : T & { a: number; }
->T : T
 >a : number
 
     var intersection_primitive: { a: number } & string;
@@ -70,7 +55,6 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var e: E;
 >e : E
->E : E
 
     var u: undefined;
 >u : undefined

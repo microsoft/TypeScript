@@ -14,17 +14,11 @@ class C2 {
 }
 
 interface A extends C {
->A : A
->C : C
-
     y: string;
 >y : string
 }
 
 interface A extends C2 {
->A : A
->C2 : C2
-
     z: string;
 >z : string
 }
@@ -32,7 +26,6 @@ interface A extends C2 {
 class D extends C implements A { // error
 >D : D
 >C : C
->A : A
 
     private w: number;
 >w : number
@@ -47,7 +40,6 @@ class D extends C implements A { // error
 class E extends C2 implements A { // error
 >E : E
 >C2 : C2
->A : A
 
     w: number;
 >w : number
@@ -61,7 +53,6 @@ class E extends C2 implements A { // error
 
 var a: A;
 >a : A
->A : A
 
 var r = a.x; // error
 >r : number

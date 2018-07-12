@@ -2,7 +2,6 @@
 export function f(x: any): x is number {
 >f : (x: any) => x is number
 >x : any
->x : any
 
     return typeof x === "number";
 >typeof x === "number" : boolean

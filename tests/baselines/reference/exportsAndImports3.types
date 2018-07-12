@@ -10,7 +10,6 @@ export class C {
 >C : C
 }
 export interface I {
->I : I
 }
 export enum E {
 >E : E
@@ -35,10 +34,7 @@ export module M {
 >x : any
 }
 export module N {
->N : any
-
     export interface I {
->I : I
     }
 }
 export type T = number;

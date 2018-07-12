@@ -1,135 +1,99 @@
 === tests/cases/compiler/missingTypeArguments1.ts ===
 interface I<T> { }
->I : I<T>
->T : T
-
 class Y<T> {}
 >Y : Y<T>
->T : T
 
 class X<T> {
 >X : X<T>
->T : T
 
     p1: () => X;
 >p1 : () => any
->X : X<T>
 }
 var a: X<number>;
 >a : X<number>
->X : X<T>
 
 class X2<T> {
 >X2 : X2<T>
->T : T
 
     p2: { [idx: number]: X2 } 
 >p2 : { [idx: number]: any; }
 >idx : number
->X2 : X2<T>
 }
 var a2: X2<number>;
 >a2 : X2<number>
->X2 : X2<T>
 
 class X3<T> {
 >X3 : X3<T>
->T : T
 
     p3: X3[]
 >p3 : any[]
->X3 : X3<T>
 }
 var a3: X3<number>;
 >a3 : X3<number>
->X3 : X3<T>
 
 class X4<T> {
 >X4 : X4<T>
->T : T
 
     p4: I<X4>
 >p4 : I<any>
->I : I<T>
->X4 : X4<T>
 }
 var a4: X4<number>;
 >a4 : X4<number>
->X4 : X4<T>
 
 class X5<T> {
 >X5 : X5<T>
->T : T
 
     p5: X5
 >p5 : any
->X5 : X5<T>
 }
 var a5: X5<number>;
 >a5 : X5<number>
->X5 : X5<T>
 
 class X6<T> {
 >X6 : X6<T>
->T : T
 
     p6: () => Y;
 >p6 : () => any
->Y : Y<T>
 }
 var a6: X6<number>;
 >a6 : X6<number>
->X6 : X6<T>
 
 class X7<T> {
 >X7 : X7<T>
->T : T
 
     p7: { [idx: number]: Y } 
 >p7 : { [idx: number]: any; }
 >idx : number
->Y : Y<T>
 }
 var a7: X7<number>;
 >a7 : X7<number>
->X7 : X7<T>
 
 class X8<T> {
 >X8 : X8<T>
->T : T
 
     p8: Y[]
 >p8 : any[]
->Y : Y<T>
 }
 var a8: X8<number>;
 >a8 : X8<number>
->X8 : X8<T>
 
 class X9<T> {
 >X9 : X9<T>
->T : T
 
     p9: I<Y>
 >p9 : I<any>
->I : I<T>
->Y : Y<T>
 }
 var a9: X9<number>;
 >a9 : X9<number>
->X9 : X9<T>
 
 class X10<T> {
 >X10 : X10<T>
->T : T
 
     pa: Y
 >pa : any
->Y : Y<T>
 }
 var a10: X10<number>;
 >a10 : X10<number>
->X10 : X10<T>
 
  
 

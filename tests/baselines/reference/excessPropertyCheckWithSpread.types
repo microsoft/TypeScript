@@ -5,14 +5,11 @@ declare function f({ a: number }): void
 >number : any
 
 interface I {
->I : I
-
     readonly n: number;
 >n : number
 }
 declare let i: I;
 >i : I
->I : I
 
 f({ a: 1, ...i });
 >f({ a: 1, ...i }) : void
@@ -23,24 +20,18 @@ f({ a: 1, ...i });
 >i : I
 
 interface R {
->R : R
-
     opt?: number
 >opt : number
 }
 interface L {
->L : L
-
     opt: string
 >opt : string
 }
 declare let l: L;
 >l : L
->L : L
 
 declare let r: R;
 >r : R
->R : R
 
 f({ a: 1, ...l, ...r });
 >f({ a: 1, ...l, ...r }) : void

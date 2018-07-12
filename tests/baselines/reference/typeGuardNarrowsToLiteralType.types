@@ -2,7 +2,6 @@
 declare function isFoo(value: string) : value is "foo";
 >isFoo : (value: string) => value is "foo"
 >value : string
->value : any
 
 declare function doThis(value: "foo"): void;
 >doThis : (value: "foo") => void

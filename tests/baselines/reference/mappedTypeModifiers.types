@@ -24,157 +24,85 @@ var v00: "a" | "b";
 
 var v00: keyof T;
 >v00 : "a" | "b"
->T : T
 
 var v00: keyof TP;
 >v00 : "a" | "b"
->TP : TP
 
 var v00: keyof TR;
 >v00 : "a" | "b"
->TR : TR
 
 var v00: keyof TPR;
 >v00 : "a" | "b"
->TPR : TPR
 
 var v01: T;
 >v01 : T
->T : T
 
 var v01: { [P in keyof T]: T[P] };
 >v01 : T
->P : P
->T : T
->T : T
->P : P
 
 var v01: Pick<T, keyof T>;
 >v01 : T
->Pick : Pick<T, K>
->T : T
->T : T
 
 var v01: Pick<Pick<T, keyof T>, keyof T>;
 >v01 : T
->Pick : Pick<T, K>
->Pick : Pick<T, K>
->T : T
->T : T
->T : T
 
 var v02: TP;
 >v02 : TP
->TP : TP
 
 var v02: { [P in keyof T]?: T[P] };
 >v02 : TP
->P : P
->T : T
->T : T
->P : P
 
 var v02: Partial<T>;
 >v02 : TP
->Partial : Partial<T>
->T : T
 
 var v02: { [P in keyof TP]: TP[P] }
 >v02 : TP
->P : P
->TP : TP
->TP : TP
->P : P
 
 var v02: Pick<TP, keyof TP>;
 >v02 : TP
->Pick : Pick<T, K>
->TP : TP
->TP : TP
 
 var v03: TR;
 >v03 : TR
->TR : TR
 
 var v03: { readonly [P in keyof T]: T[P] };
 >v03 : TR
->P : P
->T : T
->T : T
->P : P
 
 var v03: Readonly<T>;
 >v03 : TR
->Readonly : Readonly<T>
->T : T
 
 var v03: { [P in keyof TR]: TR[P] }
 >v03 : TR
->P : P
->TR : TR
->TR : TR
->P : P
 
 var v03: Pick<TR, keyof TR>;
 >v03 : TR
->Pick : Pick<T, K>
->TR : TR
->TR : TR
 
 var v04: TPR;
 >v04 : TPR
->TPR : TPR
 
 var v04: { readonly [P in keyof T]?: T[P] };
 >v04 : TPR
->P : P
->T : T
->T : T
->P : P
 
 var v04: Partial<TR>;
 >v04 : TPR
->Partial : Partial<T>
->TR : TR
 
 var v04: Readonly<TP>;
 >v04 : TPR
->Readonly : Readonly<T>
->TP : TP
 
 var v04: Partial<Readonly<T>>;
 >v04 : TPR
->Partial : Partial<T>
->Readonly : Readonly<T>
->T : T
 
 var v04: Readonly<Partial<T>>;
 >v04 : TPR
->Readonly : Readonly<T>
->Partial : Partial<T>
->T : T
 
 var v04: { [P in keyof TPR]: TPR[P] }
 >v04 : TPR
->P : P
->TPR : TPR
->TPR : TPR
->P : P
 
 var v04: Pick<TPR, keyof T>;
 >v04 : TPR
->Pick : Pick<T, K>
->TPR : TPR
->T : T
 
 type Boxified<T> = { [P in keyof T]: { x: T[P] } };
 >Boxified : Boxified<T>
->T : T
->P : P
->T : T
 >x : T[P]
->T : T
->P : P
 
 type B = { a: { x: number }, b: { x: string } };
 >B : B
@@ -209,148 +137,81 @@ var b00: "a" | "b";
 
 var b00: keyof B;
 >b00 : "a" | "b"
->B : B
 
 var b00: keyof BP;
 >b00 : "a" | "b"
->BP : BP
 
 var b00: keyof BR;
 >b00 : "a" | "b"
->BR : BR
 
 var b00: keyof BPR;
 >b00 : "a" | "b"
->BPR : BPR
 
 var b01: B;
 >b01 : B
->B : B
 
 var b01: { [P in keyof B]: B[P] };
 >b01 : B
->P : P
->B : B
->B : B
->P : P
 
 var b01: Pick<B, keyof B>;
 >b01 : B
->Pick : Pick<T, K>
->B : B
->B : B
 
 var b01: Pick<Pick<B, keyof B>, keyof B>;
 >b01 : B
->Pick : Pick<T, K>
->Pick : Pick<T, K>
->B : B
->B : B
->B : B
 
 var b02: BP;
 >b02 : BP
->BP : BP
 
 var b02: { [P in keyof B]?: B[P] };
 >b02 : BP
->P : P
->B : B
->B : B
->P : P
 
 var b02: Partial<B>;
 >b02 : BP
->Partial : Partial<T>
->B : B
 
 var b02: { [P in keyof BP]: BP[P] }
 >b02 : BP
->P : P
->BP : BP
->BP : BP
->P : P
 
 var b02: Pick<BP, keyof BP>;
 >b02 : BP
->Pick : Pick<T, K>
->BP : BP
->BP : BP
 
 var b03: BR;
 >b03 : BR
->BR : BR
 
 var b03: { readonly [P in keyof B]: B[P] };
 >b03 : BR
->P : P
->B : B
->B : B
->P : P
 
 var b03: Readonly<B>;
 >b03 : BR
->Readonly : Readonly<T>
->B : B
 
 var b03: { [P in keyof BR]: BR[P] }
 >b03 : BR
->P : P
->BR : BR
->BR : BR
->P : P
 
 var b03: Pick<BR, keyof BR>;
 >b03 : BR
->Pick : Pick<T, K>
->BR : BR
->BR : BR
 
 var b04: BPR;
 >b04 : BPR
->BPR : BPR
 
 var b04: { readonly [P in keyof B]?: B[P] };
 >b04 : BPR
->P : P
->B : B
->B : B
->P : P
 
 var b04: Partial<BR>;
 >b04 : BPR
->Partial : Partial<T>
->BR : BR
 
 var b04: Readonly<BP>;
 >b04 : BPR
->Readonly : Readonly<T>
->BP : BP
 
 var b04: Partial<Readonly<B>>;
 >b04 : BPR
->Partial : Partial<T>
->Readonly : Readonly<T>
->B : B
 
 var b04: Readonly<Partial<B>>;
 >b04 : BPR
->Readonly : Readonly<T>
->Partial : Partial<T>
->B : B
 
 var b04: { [P in keyof BPR]: BPR[P] }
 >b04 : BPR
->P : P
->BPR : BPR
->BPR : BPR
->P : P
 
 var b04: Pick<BPR, keyof BPR>;
 >b04 : BPR
->Pick : Pick<T, K>
->BPR : BPR
->BPR : BPR
 
 type Foo = { prop: number, [x: string]: number };
 >Foo : Foo
@@ -360,8 +221,6 @@ type Foo = { prop: number, [x: string]: number };
 function f1(x: Partial<Foo>) {
 >f1 : (x: Partial<Foo>) => void
 >x : Partial<Foo>
->Partial : Partial<T>
->Foo : Foo
 
     x.prop; // ok
 >x.prop : number | undefined
@@ -383,8 +242,6 @@ function f1(x: Partial<Foo>) {
 function f2(x: Readonly<Foo>) {
 >f2 : (x: Readonly<Foo>) => void
 >x : Readonly<Foo>
->Readonly : Readonly<T>
->Foo : Foo
 
     x.prop; // ok
 >x.prop : number
@@ -403,8 +260,6 @@ function f2(x: Readonly<Foo>) {
 function f3(x: Boxified<Foo>) {
 >f3 : (x: Boxified<Foo>) => void
 >x : Boxified<Foo>
->Boxified : Boxified<T>
->Foo : Foo
 
     x.prop; // ok
 >x.prop : { x: number; }
@@ -425,10 +280,6 @@ function f3(x: Boxified<Foo>) {
 function f4(x: { [P in keyof Foo]: Foo[P] }) {
 >f4 : (x: { [x: string]: number; prop: number; }) => void
 >x : { [x: string]: number; prop: number; }
->P : P
->Foo : Foo
->Foo : Foo
->P : P
 
     x.prop; // ok
 >x.prop : number

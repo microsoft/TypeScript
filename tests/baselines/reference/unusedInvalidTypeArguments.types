@@ -10,8 +10,6 @@ type U = number;
 
 export type Z = U<N>;
 >Z : any
->U : number
->N : number
 
 === /classReference.ts ===
 type N = number;
@@ -24,18 +22,13 @@ class C { }
 export class D extends C<N> {}
 >D : D
 >C : typeof C
->N : number
 
 === /interface.ts ===
 import { Foo } from "unknown";
 >Foo : any
 
 export interface I<T> { x: Foo<T>; }
->I : I<T>
->T : T
 >x : any
->Foo : any
->T : T
 
 === /call.ts ===
 import { foo } from "unknown";
@@ -47,7 +40,6 @@ type T = number;
 foo<T>();
 >foo<T>() : any
 >foo : any
->T : number
 
 === /new.ts ===
 import { Foo } from "unkown";
@@ -59,7 +51,6 @@ type T = number;
 new Foo<T>();
 >new Foo<T>() : any
 >Foo : any
->T : number
 
 === /callAny.ts ===
 declare var g: any;
@@ -71,12 +62,10 @@ type U = number;
 g<U>();
 >g<U>() : any
 >g : any
->U : number
 
 g<InvalidReference>(); // Should get error for type argument
 >g<InvalidReference>() : any
 >g : any
->InvalidReference : No type information available!
 
 === /super.ts ===
 import { A, B } from "unknown";
@@ -89,7 +78,6 @@ type T = number;
 export class C extends A<B> {
 >C : C
 >A : any
->B : any
 
     m() {
 >m : () => void
@@ -99,7 +87,6 @@ export class C extends A<B> {
 >super.m : any
 >super : any
 >m : any
->T : number
 >1 : 1
 
         super.m<InvalidReference>(); // Should get error for type argument
@@ -107,7 +94,6 @@ export class C extends A<B> {
 >super.m : any
 >super : any
 >m : any
->InvalidReference : No type information available!
     }
 }
 

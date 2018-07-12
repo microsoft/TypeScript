@@ -18,12 +18,10 @@ class MyClass {
     db: database.db;
 >db : database.db
 >database : any
->db : database.db
 
     constructor(db: database.db) { // no collision
 >db : database.db
 >database : any
->db : database.db
 
         this.db = db;
 >this.db = db : database.db

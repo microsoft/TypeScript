@@ -19,19 +19,15 @@ module m1 {
 
         private C3_v1_private: C1_public;
 >C3_v1_private : C1_public
->C1_public : C1_public
 
         public C3_v2_public: C1_public;
 >C3_v2_public : C1_public
->C1_public : C1_public
 
         private C3_v3_private: C2_private;
 >C3_v3_private : C2_private
->C2_private : C2_private
 
         public C3_v4_public: C2_private; // error
 >C3_v4_public : C2_private
->C2_private : C2_private
 
         private C3_v11_private = new C1_public();
 >C3_v11_private : C1_public
@@ -55,25 +51,21 @@ module m1 {
 
         private C3_v21_private: C1_public = new C1_public();
 >C3_v21_private : C1_public
->C1_public : C1_public
 >new C1_public() : C1_public
 >C1_public : typeof C1_public
 
         public C3_v22_public: C1_public = new C1_public();
 >C3_v22_public : C1_public
->C1_public : C1_public
 >new C1_public() : C1_public
 >C1_public : typeof C1_public
 
         private C3_v23_private: C2_private = new C2_private();
 >C3_v23_private : C2_private
->C2_private : C2_private
 >new C2_private() : C2_private
 >C2_private : typeof C2_private
 
         public C3_v24_public: C2_private = new C2_private(); // error
 >C3_v24_public : C2_private
->C2_private : C2_private
 >new C2_private() : C2_private
 >C2_private : typeof C2_private
     }
@@ -83,19 +75,15 @@ module m1 {
 
         private C4_v1_private: C1_public;
 >C4_v1_private : C1_public
->C1_public : C1_public
 
         public C4_v2_public: C1_public;
 >C4_v2_public : C1_public
->C1_public : C1_public
 
         private C4_v3_private: C2_private;
 >C4_v3_private : C2_private
->C2_private : C2_private
 
         public C4_v4_public: C2_private;
 >C4_v4_public : C2_private
->C2_private : C2_private
 
         private C4_v11_private = new C1_public();
 >C4_v11_private : C1_public
@@ -119,44 +107,36 @@ module m1 {
 
         private C4_v21_private: C1_public = new C1_public();
 >C4_v21_private : C1_public
->C1_public : C1_public
 >new C1_public() : C1_public
 >C1_public : typeof C1_public
 
         public C4_v22_public: C1_public = new C1_public();
 >C4_v22_public : C1_public
->C1_public : C1_public
 >new C1_public() : C1_public
 >C1_public : typeof C1_public
 
         private C4_v23_private: C2_private = new C2_private();
 >C4_v23_private : C2_private
->C2_private : C2_private
 >new C2_private() : C2_private
 >C2_private : typeof C2_private
 
         public C4_v24_public: C2_private = new C2_private();
 >C4_v24_public : C2_private
->C2_private : C2_private
 >new C2_private() : C2_private
 >C2_private : typeof C2_private
     }
 
     var m1_v1_private: C1_public;
 >m1_v1_private : C1_public
->C1_public : C1_public
 
     export var m1_v2_public: C1_public;
 >m1_v2_public : C1_public
->C1_public : C1_public
 
     var m1_v3_private: C2_private;
 >m1_v3_private : C2_private
->C2_private : C2_private
 
     export var m1_v4_public: C2_private; // error
 >m1_v4_public : C2_private
->C2_private : C2_private
 
     var m1_v11_private = new C1_public();
 >m1_v11_private : C1_public
@@ -180,25 +160,21 @@ module m1 {
 
     var m1_v21_private: C1_public = new C1_public();
 >m1_v21_private : C1_public
->C1_public : C1_public
 >new C1_public() : C1_public
 >C1_public : typeof C1_public
 
     export var m1_v22_public: C1_public = new C1_public();
 >m1_v22_public : C1_public
->C1_public : C1_public
 >new C1_public() : C1_public
 >C1_public : typeof C1_public
 
     var m1_v23_private: C2_private = new C2_private();
 >m1_v23_private : C2_private
->C2_private : C2_private
 >new C2_private() : C2_private
 >C2_private : typeof C2_private
 
     export var m1_v24_public: C2_private = new C2_private(); // error
 >m1_v24_public : C2_private
->C2_private : C2_private
 >new C2_private() : C2_private
 >C2_private : typeof C2_private
 }
@@ -216,11 +192,9 @@ class glo_C3_public {
 
     private glo_C3_v1_private: glo_C1_public;
 >glo_C3_v1_private : glo_C1_public
->glo_C1_public : glo_C1_public
 
     public glo_C3_v2_public: glo_C1_public;
 >glo_C3_v2_public : glo_C1_public
->glo_C1_public : glo_C1_public
 
     private glo_C3_v11_private = new glo_C1_public();
 >glo_C3_v11_private : glo_C1_public
@@ -234,13 +208,11 @@ class glo_C3_public {
 
     private glo_C3_v21_private: glo_C1_public = new glo_C1_public();
 >glo_C3_v21_private : glo_C1_public
->glo_C1_public : glo_C1_public
 >new glo_C1_public() : glo_C1_public
 >glo_C1_public : typeof glo_C1_public
 
     public glo_C3_v22_public: glo_C1_public = new glo_C1_public();
 >glo_C3_v22_public : glo_C1_public
->glo_C1_public : glo_C1_public
 >new glo_C1_public() : glo_C1_public
 >glo_C1_public : typeof glo_C1_public
 }
@@ -248,7 +220,6 @@ class glo_C3_public {
 
 var glo_v2_public: glo_C1_public;
 >glo_v2_public : glo_C1_public
->glo_C1_public : glo_C1_public
 
 var glo_v12_public = new glo_C1_public();
 >glo_v12_public : glo_C1_public
@@ -257,7 +228,6 @@ var glo_v12_public = new glo_C1_public();
 
 var glo_v22_public: glo_C1_public = new glo_C1_public();
 >glo_v22_public : glo_C1_public
->glo_C1_public : glo_C1_public
 >new glo_C1_public() : glo_C1_public
 >glo_C1_public : typeof glo_C1_public
 

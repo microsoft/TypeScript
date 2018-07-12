@@ -2,13 +2,8 @@
 var f = function <T, S extends T>(x: T, y: S): void {
 >f : <T, S extends T>(x: T, y: S) => void
 >function <T, S extends T>(x: T, y: S): void {    x = y} : <T, S extends T>(x: T, y: S) => void
->T : T
->S : S
->T : T
 >x : T
->T : T
 >y : S
->S : S
 
     x = y
 >x = y : S
@@ -19,12 +14,8 @@ var f = function <T, S extends T>(x: T, y: S): void {
 var g = function <T, S>(x: T, y: S): void { }
 >g : <T, S>(x: T, y: S) => void
 >function <T, S>(x: T, y: S): void { } : <T, S>(x: T, y: S) => void
->T : T
->S : S
 >x : T
->T : T
 >y : S
->S : S
 
 g = f
 >g = f : <T, S extends T>(x: T, y: S) => void

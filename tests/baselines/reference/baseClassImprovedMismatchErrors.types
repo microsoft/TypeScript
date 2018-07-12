@@ -4,7 +4,6 @@ class Base {
 
     n: Base | string;
 >n : string | Base
->Base : Base
 
     fn() {
 >fn : () => number
@@ -19,7 +18,6 @@ class Derived extends Base {
 
     n: Derived | string;
 >n : string | Derived
->Derived : Derived
 
     fn() {
 >fn : () => string | number
@@ -31,11 +29,9 @@ class Derived extends Base {
 }
 class DerivedInterface implements Base {
 >DerivedInterface : DerivedInterface
->Base : Base
 
     n: DerivedInterface | string;
 >n : string | DerivedInterface
->DerivedInterface : DerivedInterface
 
     fn() {
 >fn : () => string | number

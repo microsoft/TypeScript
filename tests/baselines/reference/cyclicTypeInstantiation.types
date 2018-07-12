@@ -1,14 +1,12 @@
 === tests/cases/compiler/cyclicTypeInstantiation.ts ===
 function foo<T>() {
 >foo : <T>() => { a: T; b: any; }
->T : T
 
     var x: {
 >x : { a: T; b: any; }
 
         a: T;
 >a : T
->T : T
 
         b: typeof x;
 >b : { a: T; b: any; }
@@ -21,14 +19,12 @@ function foo<T>() {
 
 function bar<T>() {
 >bar : <T>() => { a: T; b: any; }
->T : T
 
     var x: {
 >x : { a: T; b: any; }
 
         a: T;
 >a : T
->T : T
 
         b: typeof x;
 >b : { a: T; b: any; }

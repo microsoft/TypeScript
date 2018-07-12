@@ -1,94 +1,34 @@
 === tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts ===
 class C<U extends T, T extends U> { }
 >C : C<U, T>
->U : U
->T : T
->T : T
->U : U
 
 class C2<T extends U, U extends V, V extends T> { }
 >C2 : C2<T, U, V>
->T : T
->U : U
->U : U
->V : V
->V : V
->T : T
 
 interface I<U extends T, T extends U> { }
->I : I<U, T>
->U : U
->T : T
->T : T
->U : U
-
 interface I2<T extends U, U extends V, V extends T> { }
->I2 : I2<T, U, V>
->T : T
->U : U
->U : U
->V : V
->V : V
->T : T
 
 function f<U extends T, T extends U>() { }
 >f : <U extends T, T extends U>() => void
->U : U
->T : T
->T : T
->U : U
 
 function f2<T extends U, U extends V, V extends T>() { }
 >f2 : <T extends U, U extends V, V extends T>() => void
->T : T
->U : U
->U : U
->V : V
->V : V
->T : T
 
 var a: {
 >a : { <U extends T, T extends U>(): void; <T extends U, U extends V, V extends T>(): void; }
 
     <U extends T, T extends U>(): void;
->U : U
->T : T
->T : T
->U : U
-
     <T extends U, U extends V, V extends T>(): void;
->T : T
->U : U
->U : U
->V : V
->V : V
->T : T
 }
 
 var b = <U extends T, T extends U>() => { }
 >b : <U extends T, T extends U>() => void
 ><U extends T, T extends U>() => { } : <U extends T, T extends U>() => void
->U : U
->T : T
->T : T
->U : U
 
 var b2 = <T extends U, U extends V, V extends T>() => { }
 >b2 : <T extends U, U extends V, V extends T>() => void
 ><T extends U, U extends V, V extends T>() => { } : <T extends U, U extends V, V extends T>() => void
->T : T
->U : U
->U : U
->V : V
->V : V
->T : T
 
 class D<U extends T, T extends V, V extends T> { }
 >D : D<U, T, V>
->U : U
->T : T
->T : T
->V : V
->V : V
->T : T
 

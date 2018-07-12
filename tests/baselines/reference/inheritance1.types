@@ -6,9 +6,6 @@ class Control {
 >state : any
 }
 interface SelectableControl extends Control {
->SelectableControl : SelectableControl
->Control : Control
-
     select(): void;
 >select : () => void
 }
@@ -16,7 +13,6 @@ interface SelectableControl extends Control {
 class Button extends Control implements SelectableControl {
 >Button : Button
 >Control : Control
->SelectableControl : SelectableControl
 
     select() { }
 >select : () => void
@@ -31,7 +27,6 @@ class TextBox extends Control {
 class ImageBase extends Control implements SelectableControl{
 >ImageBase : ImageBase
 >Control : Control
->SelectableControl : SelectableControl
 }
 class Image1 extends Control {
 >Image1 : Image1
@@ -39,7 +34,6 @@ class Image1 extends Control {
 }
 class Locations implements SelectableControl {
 >Locations : Locations
->SelectableControl : SelectableControl
 
     select() { }
 >select : () => void
@@ -52,15 +46,12 @@ class Locations1 {
 }
 var sc: SelectableControl;
 >sc : SelectableControl
->SelectableControl : SelectableControl
 
 var c: Control;
 >c : Control
->Control : Control
 
 var b: Button;
 >b : Button
->Button : Button
 
 sc = b;
 >sc = b : Button
@@ -84,7 +75,6 @@ b = c;
 
 var t: TextBox;
 >t : TextBox
->TextBox : TextBox
 
 sc = t;
 >sc = t : TextBox
@@ -108,7 +98,6 @@ t = c;
 
 var i: ImageBase;
 >i : ImageBase
->ImageBase : ImageBase
 
 sc = i;
 >sc = i : ImageBase
@@ -132,7 +121,6 @@ i = c;
 
 var i1: Image1;
 >i1 : Image1
->Image1 : Image1
 
 sc = i1;
 >sc = i1 : Image1
@@ -156,7 +144,6 @@ i1 = c;
 
 var l: Locations;
 >l : Locations
->Locations : Locations
 
 sc = l;
 >sc = l : Locations
@@ -180,7 +167,6 @@ l = c;
 
 var l1: Locations1;
 >l1 : Locations1
->Locations1 : Locations1
 
 sc = l1;
 >sc = l1 : Locations1

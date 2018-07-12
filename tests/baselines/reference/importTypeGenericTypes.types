@@ -1,8 +1,5 @@
 === tests/cases/conformance/types/import/foo.ts ===
 interface Point<T> {
->Point : Point<T>
->T : T
-
     x: number;
 >x : number
 
@@ -11,19 +8,13 @@ interface Point<T> {
 
     data: T;
 >data : T
->T : T
 }
 export = Point;
 >Point : Point<T>
 
 === tests/cases/conformance/types/import/foo2.ts ===
 namespace Bar {
->Bar : typeof Bar
-
     export interface I<T> {
->I : I<T>
->T : T
-
         a: string;
 >a : string
 
@@ -32,17 +23,11 @@ namespace Bar {
 
         data: T;
 >data : T
->T : T
     }
 }
 
 export namespace Baz {
->Baz : any
-
     export interface J<T> {
->J : J<T>
->T : T
-
         a: number;
 >a : number
 
@@ -51,25 +36,19 @@ export namespace Baz {
 
         data: T;
 >data : T
->T : T
     }
 }
 
 class Bar<T> {
 >Bar : Bar<T>
->T : T
 
     item: Bar.I<T>;
 >item : Bar.I<T>
 >Bar : any
->I : Bar.I<T>
->T : T
 
     constructor(input: Baz.J<T>) {}
 >input : Baz.J<T>
 >Baz : any
->J : Baz.J<T>
->T : T
 }
 export { Bar }
 >Bar : typeof Bar
@@ -91,7 +70,6 @@ export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
 export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
 >y : import("tests/cases/conformance/types/import/foo2").Bar.I<{ x: number; }>
 >Bar : any
->I : import("tests/cases/conformance/types/import/foo2").Bar.I<T>
 >x : number
 >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
 >a : string
@@ -105,7 +83,6 @@ export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12}
 
 export class Bar2<T> {
 >Bar2 : Bar2<T>
->T : T
 
     item: {a: string, b: number, c: object, data: T};
 >item : { a: string; b: number; c: object; data: T; }
@@ -113,7 +90,6 @@ export class Bar2<T> {
 >b : number
 >c : object
 >data : T
->T : T
 
     constructor(input?: any) {}
 >input : any

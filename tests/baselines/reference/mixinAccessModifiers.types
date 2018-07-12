@@ -78,8 +78,6 @@ class Public2 {
 function f1(x: Private & Private2) {
 >f1 : (x: Private & Private2) => void
 >x : Private & Private2
->Private : Private
->Private2 : Private2
 
 	x.p;  // Error, private constituent makes property inaccessible
 >x.p : string
@@ -90,8 +88,6 @@ function f1(x: Private & Private2) {
 function f2(x: Private & Protected) {
 >f2 : (x: Private & Protected) => void
 >x : Private & Protected
->Private : Private
->Protected : Protected
 
 	x.p;  // Error, private constituent makes property inaccessible
 >x.p : string
@@ -102,8 +98,6 @@ function f2(x: Private & Protected) {
 function f3(x: Private & Public) {
 >f3 : (x: Private & Public) => void
 >x : Private & Public
->Private : Private
->Public : Public
 
 	x.p;  // Error, private constituent makes property inaccessible
 >x.p : string
@@ -114,8 +108,6 @@ function f3(x: Private & Public) {
 function f4(x: Protected & Protected2) {
 >f4 : (x: Protected & Protected2) => void
 >x : Protected & Protected2
->Protected : Protected
->Protected2 : Protected2
 
 	x.p;  // Error, protected when all constituents are protected
 >x.p : string
@@ -126,8 +118,6 @@ function f4(x: Protected & Protected2) {
 function f5(x: Protected & Public) {
 >f5 : (x: Protected & Public) => void
 >x : Protected & Public
->Protected : Protected
->Public : Public
 
 	x.p;  // Ok, public if any constituent is public
 >x.p : string
@@ -138,8 +128,6 @@ function f5(x: Protected & Public) {
 function f6(x: Public & Public2) {
 >f6 : (x: Public & Public2) => void
 >x : Public & Public2
->Public : Public
->Public2 : Public2
 
 	x.p;  // Ok, public if any constituent is public
 >x.p : string
@@ -149,14 +137,8 @@ function f6(x: Public & Public2) {
 
 declare function Mix<T, U>(c1: T, c2: U): T & U;
 >Mix : <T, U>(c1: T, c2: U) => T & U
->T : T
->U : U
 >c1 : T
->T : T
 >c2 : U
->U : U
->T : T
->U : U
 
 // Can't derive from type with inaccessible properties
 
@@ -191,11 +173,8 @@ class C4 extends Mix(Protected, Protected2) {
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
 >c4 : C4
->C4 : C4
 >c5 : C5
->C5 : C5
 >c6 : C6
->C6 : C6
 
 		c4.p;
 >c4.p : string
@@ -242,11 +221,8 @@ class C5 extends Mix(Protected, Public) {
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
 >c4 : C4
->C4 : C4
 >c5 : C5
->C5 : C5
 >c6 : C6
->C6 : C6
 
 		c4.p;  // Error, not in class deriving from Protected2
 >c4.p : string
@@ -293,11 +269,8 @@ class C6 extends Mix(Public, Public2) {
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
 >c4 : C4
->C4 : C4
 >c5 : C5
->C5 : C5
 >c6 : C6
->C6 : C6
 
 		c4.p;  // Error, not in class deriving from Protected2
 >c4.p : string

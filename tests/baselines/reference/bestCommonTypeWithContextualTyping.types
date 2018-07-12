@@ -1,7 +1,5 @@
 === tests/cases/compiler/bestCommonTypeWithContextualTyping.ts ===
 interface Contextual {
->Contextual : Contextual
-
     dummy;
 >dummy : any
 
@@ -10,8 +8,6 @@ interface Contextual {
 }
 
 interface Ellement {
->Ellement : Ellement
-
     dummy;
 >dummy : any
 
@@ -21,28 +17,24 @@ interface Ellement {
 
 var e: Ellement;
 >e : Ellement
->Ellement : Ellement
 
 // All of these should pass. Neither type is a supertype of the other, but the RHS should
 // always use Ellement in these examples (not Contextual). Because Ellement is assignable
 // to Contextual, no errors.
 var arr: Contextual[] = [e]; // Ellement[]
 >arr : Contextual[]
->Contextual : Contextual
 >[e] : Ellement[]
 >e : Ellement
 
 var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: Ellement }
 >obj : { [s: string]: Contextual; }
 >s : string
->Contextual : Contextual
 >{ s: e } : { s: Ellement; }
 >s : Ellement
 >e : Ellement
 
 var conditional: Contextual = null ? e : e; // Ellement
 >conditional : Contextual
->Contextual : Contextual
 >null ? e : e : Ellement
 >null : null
 >e : Ellement
@@ -50,7 +42,6 @@ var conditional: Contextual = null ? e : e; // Ellement
 
 var contextualOr: Contextual = e || e; // Ellement
 >contextualOr : Contextual
->Contextual : Contextual
 >e || e : Ellement
 >e : Ellement
 >e : Ellement

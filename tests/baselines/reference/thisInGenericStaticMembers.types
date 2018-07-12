@@ -6,11 +6,8 @@ class A {
 
     static one<T>(source:T, value: number): T {
 >one : <T>(source: T, value: number) => T
->T : T
 >source : T
->T : T
 >value : number
->T : T
 
         return source;
 >source : T
@@ -18,17 +15,13 @@ class A {
 
     static two<T>(source: T): T {
 >two : <T>(source: T) => T
->T : T
 >source : T
->T : T
->T : T
 
         return this.one<T>(source, 42);
 >this.one<T>(source, 42) : T
 >this.one : <T>(source: T, value: number) => T
 >this : typeof A
 >one : <T>(source: T, value: number) => T
->T : T
 >source : T
 >42 : 42
     }
@@ -40,9 +33,7 @@ class B {
     static one(source: B, value: number): B {
 >one : (source: B, value: number) => B
 >source : B
->B : B
 >value : number
->B : B
 
         return source;
 >source : B
@@ -51,8 +42,6 @@ class B {
     static two(source: B): B {
 >two : (source: B) => B
 >source : B
->B : B
->B : B
 
         return this.one(source, 42);
 >this.one(source, 42) : B

@@ -2,6 +2,5 @@
 function f(p: A) => p;
 >f : (p: any) => any
 >p : any
->A : No type information available!
 >p : any
 
