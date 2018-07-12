@@ -44,38 +44,38 @@ ns.x
 class Thing {
 >Thing : Symbol(Thing, Decl(test.js, 17, 4))
 
-  constructor() {
-    /** @type {DoneStatus} */
-      this.s = {
->this.s : Symbol(Thing.s, Decl(test.js, 22, 17), Decl(test.js, 30, 10))
+    constructor() {
+        /** @type {DoneStatus} */
+        this.s = {
+>this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 >this : Symbol(Thing, Decl(test.js, 17, 4))
->s : Symbol(Thing.s, Decl(test.js, 22, 17), Decl(test.js, 30, 10))
+>s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 
-          status: 'done',
->status : Symbol(status, Decl(test.js, 24, 16))
+            status: 'done',
+>status : Symbol(status, Decl(test.js, 24, 18))
 
-          m(n) { }
->m : Symbol(m, Decl(test.js, 25, 25))
->n : Symbol(n, Decl(test.js, 26, 12))
-      }
-  }
+            m(n) { }
+>m : Symbol(m, Decl(test.js, 25, 27))
+>n : Symbol(n, Decl(test.js, 26, 14))
+        }
+    }
 
-  fail() {
->fail : Symbol(Thing.fail, Decl(test.js, 28, 3))
+    fail() {
+>fail : Symbol(Thing.fail, Decl(test.js, 28, 5))
 
-      this.s = {
->this.s : Symbol(Thing.s, Decl(test.js, 22, 17), Decl(test.js, 30, 10))
+        this.s = {
+>this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 >this : Symbol(Thing, Decl(test.js, 17, 4))
->s : Symbol(Thing.s, Decl(test.js, 22, 17), Decl(test.js, 30, 10))
+>s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 
-          status: 'done',
->status : Symbol(status, Decl(test.js, 31, 16))
+            status: 'done',
+>status : Symbol(status, Decl(test.js, 31, 18))
 
-          m(n) { }
->m : Symbol(m, Decl(test.js, 32, 25))
->n : Symbol(n, Decl(test.js, 33, 12))
-      }
-  }
+            m(n) { }
+>m : Symbol(m, Decl(test.js, 32, 27))
+>n : Symbol(n, Decl(test.js, 33, 14))
+        }
+    }
 }
 
 // exports-property assignment

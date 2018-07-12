@@ -51,44 +51,44 @@ ns.x
 class Thing {
 >Thing : Thing
 
-  constructor() {
-    /** @type {DoneStatus} */
-      this.s = {
->this.s = {          status: 'done',          m(n) { }      } : { status: "done"; m(n: number): void; }
+    constructor() {
+        /** @type {DoneStatus} */
+        this.s = {
+>this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 >this.s : { status: "done"; m(n: number): void; }
 >this : this
 >s : { status: "done"; m(n: number): void; }
->{          status: 'done',          m(n) { }      } : { status: "done"; m(n: number): void; }
+>{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 
-          status: 'done',
+            status: 'done',
 >status : "done"
 >'done' : "done"
 
-          m(n) { }
+            m(n) { }
 >m : (n: number) => void
 >n : number
-      }
-  }
+        }
+    }
 
-  fail() {
+    fail() {
 >fail : () => void
 
-      this.s = {
->this.s = {          status: 'done',          m(n) { }      } : { status: "done"; m(n: number): void; }
+        this.s = {
+>this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 >this.s : { status: "done"; m(n: number): void; }
 >this : this
 >s : { status: "done"; m(n: number): void; }
->{          status: 'done',          m(n) { }      } : { status: "done"; m(n: number): void; }
+>{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 
-          status: 'done',
+            status: 'done',
 >status : "done"
 >'done' : "done"
 
-          m(n) { }
+            m(n) { }
 >m : (n: number) => void
 >n : number
-      }
-  }
+        }
+    }
 }
 
 // exports-property assignment
@@ -173,9 +173,9 @@ function F() {
 /** @type {DoneStatus} */
 F.prototype = {
 >F.prototype = {    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
->F.prototype : { [x: string]: any; }
+>F.prototype : any
 >F : typeof F
->prototype : { [x: string]: any; }
+>prototype : any
 >{    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
 
     status: "done",

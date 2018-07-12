@@ -1,9 +1,11 @@
 tests/cases/conformance/salsa/mod.js(5,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 tests/cases/conformance/salsa/test.js(52,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
+tests/cases/conformance/salsa/test.js(68,1): error TS2502: 'prototype' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/salsa/test.js(70,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
+tests/cases/conformance/salsa/test.js(70,7): error TS7022: 'n' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 
 
-==== tests/cases/conformance/salsa/test.js (2 errors) ====
+==== tests/cases/conformance/salsa/test.js (4 errors) ====
     /** @typedef {{
         status: 'done'
         m(n: number): void
@@ -26,20 +28,20 @@ tests/cases/conformance/salsa/test.js(70,7): error TS7006: Parameter 'n' implici
     
     // this-property assignment
     class Thing {
-      constructor() {
-        /** @type {DoneStatus} */
-          this.s = {
-              status: 'done',
-              m(n) { }
-          }
-      }
+        constructor() {
+            /** @type {DoneStatus} */
+            this.s = {
+                status: 'done',
+                m(n) { }
+            }
+        }
     
-      fail() {
-          this.s = {
-              status: 'done',
-              m(n) { }
-          }
-      }
+        fail() {
+            this.s = {
+                status: 'done',
+                m(n) { }
+            }
+        }
     }
     
     // exports-property assignment
@@ -74,10 +76,14 @@ tests/cases/conformance/salsa/test.js(70,7): error TS7006: Parameter 'n' implici
     }
     /** @type {DoneStatus} */
     F.prototype = {
+    ~~~~~~~~~~~
+!!! error TS2502: 'prototype' is referenced directly or indirectly in its own type annotation.
         status: "done",
         m(n) { }
           ~
 !!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+          ~
+!!! error TS7022: 'n' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     }
     
 ==== tests/cases/conformance/salsa/mod.js (1 errors) ====

@@ -25,20 +25,20 @@ ns.x
 
 // this-property assignment
 class Thing {
-  constructor() {
-    /** @type {DoneStatus} */
-      this.s = {
-          status: 'done',
-          m(n) { }
-      }
-  }
+    constructor() {
+        /** @type {DoneStatus} */
+        this.s = {
+            status: 'done',
+            m(n) { }
+        }
+    }
 
-  fail() {
-      this.s = {
-          status: 'done',
-          m(n) { }
-      }
-  }
+    fail() {
+        this.s = {
+            status: 'done',
+            m(n) { }
+        }
+    }
 }
 
 // exports-property assignment
