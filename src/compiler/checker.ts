@@ -23515,6 +23515,13 @@ namespace ts {
                     // yielded values. The only way to trigger these errors is to try checking its return type.
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
+                // A js function declaration can have a @type tag instead of a return type node, but this must have a call signature
+                if (isInJavaScriptFile(node)) {
+                    const typeTag = getJSDocTypeTag(node);
+                    if (typeTag && typeTag.typeExpression && !getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call).length) {
+                        error(typeTag, Diagnostics.The_type_of_a_function_declaration_must_be_callable);
+                    }
+                }
             }
         }
 
