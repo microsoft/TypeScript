@@ -158,11 +158,13 @@ namespace ts {
 
             function hasCallback(returnChild: Node) {
                 let symbol = checker.getSymbolAtLocation(returnChild);
-                if (isCallExpression(returnChild) && isPropertyAccessExpression(returnChild.expression) &&
-                    (returnChild.expression.name.text === "then" || returnChild.expression.name.text === "catch")) {
+
+                if (isCallback(returnChild)) {
                     retStmts.push(child as ReturnStatement);
                 }
-                else if (isIdentifier(returnChild)) {
+                else if (isIdentifier(returnChild) && isReturnStatement(child) 
+                && child.expression && isIdentifier(child.expression)) {
+                    retStmts.push(child);
                     forEachChild(node, findCallbackUses);
                 }
                 else if (!isFunctionLike(returnChild)) {
@@ -171,9 +173,11 @@ namespace ts {
 
                 function findCallbackUses(identUse: Node) {
 
-                    if (isVariableDeclaration(identUse) && identUse.initializer && isCallback(identUse.initializer)){
-                        if (symbol === checker.getSymbolAtLocation(identUse.name)){
-                            retStmts.push(identUse.initializer);
+                    // TODO -> fix for multiple length variable decl lists
+                    if (isVariableDeclarationList(identUse) && identUse.declarations.length == 1 &&
+                        identUse.declarations[0].initializer && isCallback(identUse.declarations[0].initializer!)){
+                        if (symbol === checker.getSymbolAtLocation(identUse.declarations[0].name)){
+                            retStmts.push(identUse);
                         }
                     }
                     else if (isCallback(identUse)) {
