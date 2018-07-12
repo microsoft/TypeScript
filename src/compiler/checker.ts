@@ -18200,7 +18200,6 @@ namespace ts {
 
         function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
             let argCount: number; // Apparent number of arguments we will have in this call
-            let typeArguments: NodeArray<TypeNode> | undefined; // Type arguments (undefined if none)
             let callIsIncomplete = false; // In incomplete call we want to be lenient when we have too few arguments
             let spreadArgIndex = -1;
 
@@ -18213,7 +18212,6 @@ namespace ts {
                 // Even if the call is incomplete, we'll have a missing expression as our last argument,
                 // so we can say the count is just the arg list length
                 argCount = args.length;
-                typeArguments = node.typeArguments;
 
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
                     // If a tagged template expression lacks a tail literal, the call is incomplete.
@@ -18231,7 +18229,6 @@ namespace ts {
                 }
             }
             else if (node.kind === SyntaxKind.Decorator) {
-                typeArguments = undefined;
                 argCount = getEffectiveArgumentCount(node, /*args*/ undefined!, signature);
             }
             else {
@@ -18246,12 +18243,7 @@ namespace ts {
                 // If we are missing the close parenthesis, the call is incomplete.
                 callIsIncomplete = node.arguments.end === node.end;
 
-                typeArguments = node.typeArguments;
                 spreadArgIndex = getSpreadArgumentIndex(args);
-            }
-
-            if (!hasCorrectTypeArgumentArity(signature, typeArguments)) {
-                return false;
             }
 
             // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
@@ -18903,6 +18895,29 @@ namespace ts {
             }
         }
 
+        function getArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, args: ReadonlyArray<Expression>) {
+            let min = Number.POSITIVE_INFINITY;
+            let max = Number.NEGATIVE_INFINITY;
+            for (const sig of signatures) {
+                min = Math.min(min, getMinArgumentCount(sig));
+                max = Math.max(max, getParameterCount(sig));
+            }
+            const hasRestParameter = some(signatures, hasEffectiveRestParameter);
+            const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
+            const paramCount = hasRestParameter ? min :
+                min < max ? min + "-" + max :
+                min;
+            let argCount = args.length;
+            if (argCount <= max && hasSpreadArgument) {
+                argCount--;
+            }
+            const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
+                hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
+                Diagnostics.Expected_0_arguments_but_got_1;
+            return createDiagnosticForNode(node, error, paramCount, argCount);
+        }
+
         function getTypeArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, typeArguments: NodeArray<TypeNode>) {
             let min = Infinity;
             let max = -Infinity;
@@ -18993,6 +19008,7 @@ namespace ts {
             //     foo<number>(0);
             //
             let candidateForArgumentError: Signature | undefined;
+            let candidateForArgumentArityError: Signature | undefined;
             let candidateForTypeArgumentError: Signature | undefined;
             let result: Signature | undefined;
 
@@ -19037,6 +19053,9 @@ namespace ts {
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
                 checkApplicableSignature(node, args!, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
+            else if (candidateForArgumentArityError) {
+                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args!));
+            }
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression).typeArguments!, /*reportErrors*/ true, fallbackError);
             }
@@ -19044,26 +19063,7 @@ namespace ts {
                 diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
             }
             else if (args) {
-                let min = Number.POSITIVE_INFINITY;
-                let max = Number.NEGATIVE_INFINITY;
-                for (const sig of signatures) {
-                    min = Math.min(min, getMinArgumentCount(sig));
-                    max = Math.max(max, getParameterCount(sig));
-                }
-                const hasRestParameter = some(signatures, hasEffectiveRestParameter);
-                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-                const paramCount = hasRestParameter ? min :
-                    min < max ? min + "-" + max :
-                    min;
-                let argCount = args.length;
-                if (argCount <= max && hasSpreadArgument) {
-                    argCount--;
-                }
-                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                    hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
-                    Diagnostics.Expected_0_arguments_but_got_1;
-                diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
+                diagnostics.add(getArgumentArityError(node, signatures, args));
             }
             else if (fallbackError) {
                 diagnostics.add(createDiagnosticForNode(node, fallbackError));
@@ -19104,11 +19104,12 @@ namespace ts {
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
+                candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
 
                 if (isSingleNonGenericCandidate) {
                     const candidate = candidates[0];
-                    if (!hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
+                    if (typeArguments || !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
                         return undefined;
                     }
                     if (!checkApplicableSignature(node, args!, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
@@ -19120,7 +19121,7 @@ namespace ts {
 
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                     const originalCandidate = candidates[candidateIndex];
-                    if (!hasCorrectArity(node, args!, originalCandidate, signatureHelpTrailingComma)) {
+                    if (!hasCorrectTypeArgumentArity(originalCandidate, typeArguments) || !hasCorrectArity(node, args!, originalCandidate, signatureHelpTrailingComma)) {
                         continue;
                     }
 
@@ -19148,6 +19149,12 @@ namespace ts {
                             }
                             const isJavascript = isInJavaScriptFile(candidate.declaration);
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
+                            // If the original signature has a rest type parameter, instantiation may produce a
+                            // signature with different arity and we need to perform another arity check.
+                            if (getRestTypeParameter(originalCandidate) && !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
+                                candidateForArgumentArityError = candidate;
+                                break;
+                            }
                         }
                         if (!checkApplicableSignature(node, args!, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             candidateForArgumentError = candidate;
