@@ -3,21 +3,32 @@
 // @allowJs: true
 
 // @Filename: /a.js
-/////** @template T */
+/////** @template T Parameter doc comment */
 ////function f() {}
 ////
 /////**
 //// * Doc
-//// * @template T
+//// * @template T Comment
 //// */
 ////function g() {}
 ////
 /////**
 //// * Doc
-//// * @template T
-//// * @template U
+//// * @template T Comment
+//// * @template U Comment
 //// */
 ////function h() {}
+////
+/////** @template T Comment @return {void} */
+////function i() {}
+////
+/////**
+////Doc
+////@template T comment
+////@template U comment
+////@param {number} x
+////*/
+////function j(x) { return x; }
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
@@ -28,11 +39,25 @@ function f() {}
 
 /**
  * Doc
+ * Comment
  */
 function g() {}
 
 /**
  * Doc
+ * Comment
+ * Comment
  */
-function h() {}`,
+function h() {}
+
+/** Comment @return {void} */
+function i() {}
+
+/**
+Doc
+comment
+comment
+@param {number} x
+*/
+function j(x) { return x; }`,
 });

@@ -1056,10 +1056,7 @@ namespace ts.textChanges {
                     const typeParam = node as TypeParameterDeclaration;
                     switch (typeParam.parent.kind) {
                         case SyntaxKind.JSDocTemplateTag:
-                            const range = getRangeToDeleteJsDocTag(typeParam.parent, sourceFile);
-                            if (range) {
-                                changes.deleteRange(sourceFile, range);
-                            }
+                            changes.deleteRange(sourceFile, getRangeToDeleteJsDocTag(typeParam.parent, sourceFile));
                             break;
                         case SyntaxKind.InferType:
                             // TODO: GH#25594
@@ -1181,32 +1178,10 @@ namespace ts.textChanges {
             }
         }
 
-        function getRangeToDeleteJsDocTag(node: JSDocTag, sourceFile: SourceFile): TextRange | undefined {
-            const { text } = sourceFile;
+        function getRangeToDeleteJsDocTag(node: JSDocTag, sourceFile: SourceFile): TextRange {
             const { parent } = node;
-            if (parent.kind === SyntaxKind.JSDocComment && parent.comment === undefined && parent.tags!.length === 1) {
-                return createTextRangeFromNode(parent, sourceFile);
-            }
-
-            let pos = node.getStart(sourceFile);
-            Debug.assert(text.charCodeAt(pos) === CharacterCodes.at);
-            pos--;
-            while (isWhiteSpaceSingleLine(text.charCodeAt(pos))) pos--;
-
-            // If the line doesn't begin with `*`, give up.
-            if (text.charCodeAt(pos) !== CharacterCodes.asterisk) return undefined;
-
-            let { end } = node;
-            // Tag end *might* be at the end of the line, but might be at the next tag.
-            // So back up if necessary, then proceed to beginning of next tag.
-            while (text.charCodeAt(end - 1) === CharacterCodes.space) end--;
-            while (isLineBreak(text.charCodeAt(end - 1))) end--;
-
-            while (!isLineBreak(text.charCodeAt(end))) end++;
-            while (isLineBreak(text.charCodeAt(end))) end++;
-            while (isWhiteSpaceSingleLine(text.charCodeAt(end))) end++;
-
-            return text.charCodeAt(end) === CharacterCodes.asterisk ? { pos, end } : undefined;
+            const toDelete = parent.kind === SyntaxKind.JSDocComment && parent.comment === undefined && parent.tags!.length === 1 ? parent : node;
+            return createTextRangeFromNode(toDelete, sourceFile);
         }
     }
 
