@@ -2417,12 +2417,12 @@ namespace ts {
             // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
             // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
             function visit(symbol: Symbol | undefined): SymbolTable | undefined {
-                if (!(symbol && symbol.flags & SymbolFlags.HasExports && pushIfUnique(visitedSymbols, symbol))) {
+                if (!(symbol && symbol.exports && pushIfUnique(visitedSymbols, symbol))) {
                     return;
                 }
-                const symbols = cloneMap(symbol.exports!);
+                const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
-                const exportStars = symbol.exports!.get(InternalSymbolName.ExportStar);
+                const exportStars = symbol.exports.get(InternalSymbolName.ExportStar);
                 if (exportStars) {
                     const nestedSymbols = createSymbolTable();
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
@@ -7566,10 +7566,19 @@ namespace ts {
                 const setter = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration), SyntaxKind.SetAccessor);
                 return getAnnotatedAccessorType(setter);
             }
-
+            const typeFromTag = getReturnTypeOfTypeTag(declaration);
+            if (typeFromTag) {
+                return typeFromTag;
+            }
             if (nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
                 return anyType;
             }
+        }
+
+        function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
+            const typeTag = isInJavaScriptFile(node) ? getJSDocTypeTag(node) : undefined;
+            const signatures = typeTag && typeTag.typeExpression && getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call);
+            return signatures && signatures.length === 1 ? getReturnTypeOfSignature(signatures[0]) : undefined;
         }
 
         function containsArgumentsReference(declaration: SignatureDeclaration): boolean {
@@ -7702,9 +7711,13 @@ namespace ts {
             return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
         }
 
-        function getRestTypeOfSignature(signature: Signature) {
+        function getRestTypeOfSignature(signature: Signature): Type {
+            return tryGetRestTypeOfSignature(signature) || anyType;
+        }
+
+        function tryGetRestTypeOfSignature(signature: Signature): Type | undefined {
             const type = getTypeOfRestParameter(signature);
-            return type && getIndexTypeOfType(type, IndexKind.Number) || anyType;
+            return type && getIndexTypeOfType(type, IndexKind.Number);
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean): Signature {
@@ -9377,11 +9390,9 @@ namespace ts {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
                 }
-                const argumentType = getTypeFromTypeNode(node.argument);
                 const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
                 // TODO: Future work: support unions/generics/whatever via a deferred import-type
-                const moduleName = (argumentType as StringLiteralType).value;
-                const innerModuleSymbol = resolveExternalModule(node, moduleName, Diagnostics.Cannot_find_module_0, node, /*isForAugmentation*/ false);
+                const innerModuleSymbol = resolveExternalModuleName(node, node.argument.literal);
                 if (!innerModuleSymbol) {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
@@ -9413,7 +9424,7 @@ namespace ts {
                             ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here
                             : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0;
 
-                        error(node, errorMessage, moduleName);
+                        error(node, errorMessage, node.argument.literal.text);
 
                         links.resolvedSymbol = unknownSymbol;
                         links.resolvedType = errorType;
@@ -17404,7 +17415,7 @@ namespace ts {
          */
         function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
+                const resolved = resolveStructuredTypeMembers(targetType as ObjectType);
                 if (resolved.stringIndexInfo ||
                     resolved.numberIndexInfo && isNumericLiteralName(name) ||
                     getPropertyOfObjectType(targetType, name) ||
@@ -17414,11 +17425,15 @@ namespace ts {
                 }
             }
             else if (targetType.flags & TypeFlags.UnionOrIntersection) {
-                for (const t of (<UnionOrIntersectionType>targetType).types) {
+                for (const t of (targetType as UnionOrIntersectionType).types) {
                     if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                         return true;
                     }
                 }
+            }
+            else if (targetType.flags & TypeFlags.Conditional) {
+                return isKnownProperty((targetType as ConditionalType).root.trueType, name, isComparingJsxAttributes) ||
+                    isKnownProperty((targetType as ConditionalType).root.falseType, name, isComparingJsxAttributes);
             }
             return false;
         }
@@ -18820,7 +18835,7 @@ namespace ts {
                 node.kind === SyntaxKind.SetAccessor) {
                 // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
                 // for the type of the member.
-                const propertyType = getTypeOfNode(node)!; // TODO: GH#18217
+                const propertyType = getTypeOfNode(node);
                 return createTypedPropertyDescriptorType(propertyType);
             }
 
@@ -18898,24 +18913,38 @@ namespace ts {
         function getArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, args: ReadonlyArray<Expression>) {
             let min = Number.POSITIVE_INFINITY;
             let max = Number.NEGATIVE_INFINITY;
+            let belowArgCount = Number.NEGATIVE_INFINITY;
+            let aboveArgCount = Number.POSITIVE_INFINITY;
+
+            let argCount = args.length;
             for (const sig of signatures) {
-                min = Math.min(min, getMinArgumentCount(sig));
-                max = Math.max(max, getParameterCount(sig));
+                const minCount = getMinArgumentCount(sig);
+                const maxCount = getParameterCount(sig);
+                if (minCount < argCount && minCount > belowArgCount) belowArgCount = minCount;
+                if (argCount < maxCount && maxCount < aboveArgCount) aboveArgCount = maxCount;
+                min = Math.min(min, minCount);
+                max = Math.max(max, maxCount);
             }
+
             const hasRestParameter = some(signatures, hasEffectiveRestParameter);
-            const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-            const paramCount = hasRestParameter ? min :
+            const paramRange = hasRestParameter ? min :
                 min < max ? min + "-" + max :
                 min;
-            let argCount = args.length;
+            const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
             if (argCount <= max && hasSpreadArgument) {
                 argCount--;
             }
-            const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
-                Diagnostics.Expected_0_arguments_but_got_1;
-            return createDiagnosticForNode(node, error, paramCount, argCount);
+
+            if (hasRestParameter || hasSpreadArgument) {
+                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
+                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                    Diagnostics.Expected_0_arguments_but_got_1_or_more;
+                return createDiagnosticForNode(node, error, paramRange, argCount);
+            }
+            if (min < argCount && argCount < max) {
+                return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
+            }
+            return createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
         }
 
         function getTypeArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, typeArguments: NodeArray<TypeNode>) {
@@ -19069,38 +19098,7 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNode(node, fallbackError));
             }
 
-            // No signature was applicable. We have already reported the errors for the invalid signature.
-            // If this is a type resolution session, e.g. Language Service, try to get better information than anySignature.
-            // Pick the longest signature. This way we can get a contextual type for cases like:
-            //     declare function f(a: { xa: number; xb: number; }, b: number);
-            //     f({ |
-            // Also, use explicitly-supplied type arguments if they are provided, so we can get a contextual signature in cases like:
-            //     declare function f<T>(k: keyof T);
-            //     f<Foo>("
-            if (!produceDiagnostics) {
-                Debug.assert(candidates.length > 0); // Else would have exited above.
-                const bestIndex = getLongestCandidateIndex(candidates, apparentArgumentCount === undefined ? args!.length : apparentArgumentCount);
-                const candidate = candidates[bestIndex];
-
-                const { typeParameters } = candidate;
-                if (typeParameters && callLikeExpressionMayHaveTypeArguments(node) && node.typeArguments) {
-                    const typeArguments = node.typeArguments.map(getTypeOfNode) as Type[]; // TODO: GH#18217
-                    while (typeArguments.length > typeParameters.length) {
-                        typeArguments.pop();
-                    }
-                    while (typeArguments.length < typeParameters.length) {
-                        typeArguments.push(getDefaultTypeArgumentType(isInJavaScriptFile(node)));
-                    }
-
-                    const instantiated = createSignatureInstantiation(candidate, typeArguments);
-                    candidates[bestIndex] = instantiated;
-                    return instantiated;
-                }
-
-                return candidate;
-            }
-
-            return resolveErrorCall(node);
+            return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
@@ -19176,6 +19174,97 @@ namespace ts {
 
                 return undefined;
             }
+        }
+
+        // No signature was applicable. We have already reported the errors for the invalid signature.
+        // If this is a type resolution session, e.g. Language Service, try to get better information than anySignature.
+        function getCandidateForOverloadFailure(
+            node: CallLikeExpression,
+            candidates: Signature[],
+            args: ReadonlyArray<Expression>,
+            hasCandidatesOutArray: boolean,
+        ): Signature {
+            Debug.assert(candidates.length > 0); // Else should not have called this.
+            // Normally we will combine overloads. Skip this if they have type parameters since that's hard to combine.
+            // Don't do this if there is a `candidatesOutArray`,
+            // because then we want the chosen best candidate to be one of the overloads, not a combination.
+            return hasCandidatesOutArray || candidates.length === 1 || candidates.some(c => !!c.typeParameters)
+                ? pickLongestCandidateSignature(node, candidates, args)
+                : createUnionOfSignaturesForOverloadFailure(candidates);
+        }
+
+        function createUnionOfSignaturesForOverloadFailure(candidates: ReadonlyArray<Signature>): Signature {
+            const thisParameters = mapDefined(candidates, c => c.thisParameter);
+            let thisParameter: Symbol | undefined;
+            if (thisParameters.length) {
+                thisParameter = createCombinedSymbolFromTypes(thisParameters, thisParameters.map(getTypeOfParameter));
+            }
+            const { min: minArgumentCount, max: maxNonRestParam } = minAndMax(candidates, getNumNonRestParameters);
+            const parameters: Symbol[] = [];
+            for (let i = 0; i < maxNonRestParam; i++) {
+                const symbols = mapDefined(candidates, ({ parameters, hasRestParameter }) => hasRestParameter ?
+                    i < parameters.length - 1 ? parameters[i] : last(parameters) :
+                    i < parameters.length ? parameters[i] : undefined);
+                Debug.assert(symbols.length !== 0);
+                parameters.push(createCombinedSymbolFromTypes(symbols, mapDefined(candidates, candidate => tryGetTypeAtPosition(candidate, i))));
+            }
+            const restParameterSymbols = mapDefined(candidates, c => c.hasRestParameter ? last(c.parameters) : undefined);
+            const hasRestParameter = restParameterSymbols.length !== 0;
+            if (hasRestParameter) {
+                const type = createArrayType(getUnionType(mapDefined(candidates, tryGetRestTypeOfSignature), UnionReduction.Subtype));
+                parameters.push(createCombinedSymbolForOverloadFailure(restParameterSymbols, type));
+            }
+            return createSignature(
+                candidates[0].declaration,
+                /*typeParameters*/ undefined, // Before calling this we tested for `!candidates.some(c => !!c.typeParameters)`.
+                thisParameter,
+                parameters,
+                /*resolvedReturnType*/ getIntersectionType(candidates.map(getReturnTypeOfSignature)),
+                /*typePredicate*/ undefined,
+                minArgumentCount,
+                hasRestParameter,
+                /*hasLiteralTypes*/ candidates.some(c => c.hasLiteralTypes));
+        }
+
+        function getNumNonRestParameters(signature: Signature): number {
+            const numParams = signature.parameters.length;
+            return signature.hasRestParameter ? numParams - 1 : numParams;
+        }
+
+        function createCombinedSymbolFromTypes(sources: ReadonlyArray<Symbol>, types: Type[]): Symbol {
+            return createCombinedSymbolForOverloadFailure(sources, getUnionType(types, UnionReduction.Subtype));
+        }
+
+        function createCombinedSymbolForOverloadFailure(sources: ReadonlyArray<Symbol>, type: Type): Symbol {
+            // This function is currently only used for erroneous overloads, so it's good enough to just use the first source.
+            return createSymbolWithType(first(sources), type);
+        }
+
+        function pickLongestCandidateSignature(node: CallLikeExpression, candidates: Signature[], args: ReadonlyArray<Expression>): Signature {
+            // Pick the longest signature. This way we can get a contextual type for cases like:
+            //     declare function f(a: { xa: number; xb: number; }, b: number);
+            //     f({ |
+            // Also, use explicitly-supplied type arguments if they are provided, so we can get a contextual signature in cases like:
+            //     declare function f<T>(k: keyof T);
+            //     f<Foo>("
+            const bestIndex = getLongestCandidateIndex(candidates, apparentArgumentCount === undefined ? args.length : apparentArgumentCount);
+            const candidate = candidates[bestIndex];
+            const { typeParameters } = candidate;
+            if (!typeParameters) {
+                return candidate;
+            }
+
+            const typeArgumentNodes: ReadonlyArray<TypeNode> = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments || emptyArray : emptyArray;
+            const typeArguments = typeArgumentNodes.map(n => getTypeOfNode(n) || anyType);
+            while (typeArguments.length > typeParameters.length) {
+                typeArguments.pop();
+            }
+            while (typeArguments.length < typeParameters.length) {
+                typeArguments.push(getConstraintFromTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isInJavaScriptFile(node)));
+            }
+            const instantiated = createSignatureInstantiation(candidate, typeArguments);
+            candidates[bestIndex] = instantiated;
+            return instantiated;
         }
 
         function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
@@ -19962,6 +20051,10 @@ namespace ts {
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
+            return tryGetTypeAtPosition(signature, pos) || anyType;
+        }
+
+        function tryGetTypeAtPosition(signature: Signature, pos: number): Type | undefined {
             const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (pos < paramCount) {
                 return getTypeOfParameter(signature.parameters[pos]);
@@ -19977,9 +20070,9 @@ namespace ts {
                         return tupleRestType;
                     }
                 }
-                return getIndexTypeOfType(restType, IndexKind.Number) || anyType;
+                return getIndexTypeOfType(restType, IndexKind.Number);
             }
-            return anyType;
+            return undefined;
         }
 
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
@@ -20460,15 +20553,20 @@ namespace ts {
             return type;
         }
 
+        function getReturnOrPromisedType(node: FunctionLikeDeclaration | MethodSignature, functionFlags: FunctionFlags) {
+            const returnTypeNode = getEffectiveReturnTypeNode(node);
+            return returnTypeNode &&
+                ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
+                 checkAsyncFunctionReturnType(node, returnTypeNode) : // Async function
+                 getTypeFromTypeNode(returnTypeNode)) || // AsyncGenerator function, Generator function, or normal function
+                getReturnTypeOfTypeTag(node); // type from JSDoc @type tag
+        }
+
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             const functionFlags = getFunctionFlags(node);
-            const returnTypeNode = getEffectiveReturnTypeNode(node);
-            const returnOrPromisedType = returnTypeNode &&
-                ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
-                    checkAsyncFunctionReturnType(node) : // Async function
-                    getTypeFromTypeNode(returnTypeNode)); // AsyncGenerator function, Generator function, or normal function
+            const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
 
             if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
                 // return is not necessary in the body of generators
@@ -20476,7 +20574,7 @@ namespace ts {
             }
 
             if (node.body) {
-                if (!returnTypeNode) {
+                if (!getEffectiveReturnTypeNode(node)) {
                     // There are some checks that are only performed in getReturnTypeFromBody, that may produce errors
                     // we need. An example is the noImplicitAny errors resulting from widening the return expression
                     // of a function. Because checking of function expression bodies is deferred, there was never an
@@ -21786,7 +21884,7 @@ namespace ts {
                     else {
                         const leadingError = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
                         checkTypeAssignableTo(typePredicate.type,
-                            getTypeOfNode(parent.parameters[typePredicate.parameterIndex])!, // TODO: GH#18217
+                            getTypeOfNode(parent.parameters[typePredicate.parameterIndex]),
                             node.type,
                             /*headMessage*/ undefined,
                             leadingError);
@@ -21928,7 +22026,7 @@ namespace ts {
                         }
                     }
                     else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
-                        checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
+                        checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node, returnTypeNode);
                     }
                 }
                 if (node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.JSDocFunctionType) {
@@ -22988,7 +23086,7 @@ namespace ts {
          *
          * @param node The signature to check
          */
-        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature): Type {
+        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature, returnTypeNode: TypeNode): Type {
             // As part of our emit for an async function, we will need to emit the entity name of
             // the return type annotation as an expression. To meet the necessary runtime semantics
             // for __awaiter, we must also check that the type of the declaration (e.g. the static
@@ -23013,7 +23111,6 @@ namespace ts {
             //      then<U>(...): Promise<U>;
             //  }
             //
-            const returnTypeNode = getEffectiveReturnTypeNode(node)!; // TODO: GH#18217
             const returnType = getTypeFromTypeNode(returnTypeNode);
 
             if (languageVersion >= ScriptTarget.ES2015) {
@@ -23118,7 +23215,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    const methodType = getTypeOfNode(node.parent)!; // TODO: GH#18217
+                    const methodType = getTypeOfNode(node.parent);
                     const descriptorType = createTypedPropertyDescriptorType(methodType);
                     expectedReturnType = getUnionType([descriptorType, voidType]);
                     break;
@@ -23423,15 +23520,12 @@ namespace ts {
             const body = node.kind === SyntaxKind.MethodSignature ? undefined : node.body;
             checkSourceElement(body);
 
-            const returnTypeNode = getEffectiveReturnTypeNode(node);
             if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
-                const returnOrPromisedType = returnTypeNode && (functionFlags & FunctionFlags.Async
-                    ? checkAsyncFunctionReturnType(node) // Async function
-                    : getTypeFromTypeNode(returnTypeNode)); // normal function
+                const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
 
-            if (produceDiagnostics && !returnTypeNode) {
+            if (produceDiagnostics && !getEffectiveReturnTypeNode(node)) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
                 if (noImplicitAny && nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
@@ -23443,6 +23537,13 @@ namespace ts {
                     // yielded values have no common supertype, or it can give an implicit any error if it has no
                     // yielded values. The only way to trigger these errors is to try checking its return type.
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                }
+                // A js function declaration can have a @type tag instead of a return type node, but that type must have a call signature
+                if (isInJavaScriptFile(node)) {
+                    const typeTag = getJSDocTypeTag(node);
+                    if (typeTag && typeTag.typeExpression && !getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call).length) {
+                        error(typeTag, Diagnostics.The_type_of_a_function_declaration_must_be_callable);
+                    }
                 }
             }
         }
@@ -24706,7 +24807,7 @@ namespace ts {
                         error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                     }
                 }
-                else if (getEffectiveReturnTypeNode(func) || isGetAccessorWithAnnotatedSetAccessor(func)) {
+                else if (getEffectiveReturnTypeNode(func) || isGetAccessorWithAnnotatedSetAccessor(func) || getReturnTypeOfTypeTag(func)) {
                     if (functionFlags & FunctionFlags.Async) { // Async function
                         const promisedType = getPromisedTypeOfPromise(returnType);
                         const awaitedType = checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
@@ -27057,7 +27158,7 @@ namespace ts {
                 resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
         }
 
-        function getTypeOfNode(node: Node): Type | undefined {
+        function getTypeOfNode(node: Node): Type {
             if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return errorType;
@@ -27096,7 +27197,7 @@ namespace ts {
 
             if (isTypeDeclarationName(node)) {
                 const symbol = getSymbolAtLocation(node);
-                return symbol && getDeclaredTypeOfSymbol(symbol);
+                return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
             }
 
             if (isDeclaration(node)) {
@@ -27107,11 +27208,11 @@ namespace ts {
 
             if (isDeclarationNameOrImportPropertyName(node)) {
                 const symbol = getSymbolAtLocation(node);
-                return symbol && getTypeOfSymbol(symbol);
+                return symbol ? getTypeOfSymbol(symbol) : errorType;
             }
 
             if (isBindingPattern(node)) {
-                return getTypeForVariableLikeDeclaration(node.parent, /*includeOptionality*/ true);
+                return getTypeForVariableLikeDeclaration(node.parent, /*includeOptionality*/ true) || errorType;
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
