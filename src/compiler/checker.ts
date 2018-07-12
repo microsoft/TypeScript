@@ -7577,7 +7577,7 @@ namespace ts {
 
         function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
             const typeTag = isInJavaScriptFile(node) ? getJSDocTypeTag(node) : undefined;
-            const signatures = typeTag && typeTag.typeExpression  && getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call);
+            const signatures = typeTag && typeTag.typeExpression && getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call);
             return signatures && signatures.length === 1 ? getReturnTypeOfSignature(signatures[0]) : undefined;
         }
 
@@ -23515,7 +23515,7 @@ namespace ts {
                     // yielded values. The only way to trigger these errors is to try checking its return type.
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
-                // A js function declaration can have a @type tag instead of a return type node, but this must have a call signature
+                // A js function declaration can have a @type tag instead of a return type node, but that type must have a call signature
                 if (isInJavaScriptFile(node)) {
                     const typeTag = getJSDocTypeTag(node);
                     if (typeTag && typeTag.typeExpression && !getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call).length) {
