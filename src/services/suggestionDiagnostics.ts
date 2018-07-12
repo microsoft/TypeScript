@@ -171,13 +171,15 @@ namespace ts {
                     forEachChild(returnChild, hasCallback);
                 }
 
+                let parent: Node;
+
                 function findCallbackUses(identUse: Node) {
 
                     // TODO -> fix for multiple length variable decl lists
                     if (isVariableDeclarationList(identUse) && identUse.declarations.length == 1 &&
                         identUse.declarations[0].initializer && isCallback(identUse.declarations[0].initializer!)){
                         if (symbol === checker.getSymbolAtLocation(identUse.declarations[0].name)){
-                            retStmts.push(identUse);
+                            retStmts.push(parent);
                         }
                     }
                     else if (isCallback(identUse)) {
@@ -186,6 +188,7 @@ namespace ts {
                         }
                     }
                     else {
+                        parent = identUse;
                         forEachChild(identUse, findCallbackUses);
                     }
                 }

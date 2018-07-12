@@ -27,22 +27,25 @@ namespace ts.codefix {
         for (const stmt of retStmts) {
             let varDeclName: string;
 
-            if (isVariableDeclarationList(stmt)) {
-                varDeclName = (<Identifier>stmt.declarations[0].name).text;
-            }
-
-            if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
-                retStmtName = stmt.expression.text;
-            }
-
             if (isCallExpression(stmt)) {
                 const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap);
                 if (newNodes.length > 0) {
                     changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
                 }
             }
+            else if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
+                        retStmtName = stmt.expression.text;
+            }
             else {
                 forEachChild(stmt, function visit(node: Node) {
+                    if (isVariableDeclarationList(node)) {
+                        varDeclName = (<Identifier>node.declarations[0].name).text;
+                    }
+
+                    if (isReturnStatement(node) && node.expression && isIdentifier(node.expression)) {
+                        retStmtName = node.expression.text;
+                    }
+
                     if (isCallExpression(node)) {
                         const newNodes = parseCallback(node, checker, node, synthNamesMap, retStmtName, varDeclName);
                         if (newNodes.length > 0) {
@@ -129,7 +132,7 @@ namespace ts.codefix {
         }
         else if (isCallExpression(node) && isCallback(node, "catch", checker)) {
             return parseCatch(node, checker, synthNamesMap, prevArgName, varDeclName);
-        } 
+        }
         else if (isPropertyAccessExpression(node)) {
             return parseCallback(node.expression, checker, outermostParent, synthNamesMap, prevArgName, varDeclName);
         }
@@ -241,7 +244,8 @@ namespace ts.codefix {
                 } else if (isArrowFunction(func)) {
                     //if there is another outer dot then, don't actually return
 
-                    let innerCbBody = getInnerCallbackBody(checker, [createReturn(func.body as Expression)], synthNamesMap, prevArgName, varDeclName);
+                    let innerRetStmts: Node[] = getReturnStatementsWithPromiseCallbacks(createReturn(func.body as Expression), checker);
+                    let innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, prevArgName, varDeclName);
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
