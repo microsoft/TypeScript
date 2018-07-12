@@ -103,9 +103,7 @@ namespace ts.SignatureHelp {
             if (onlyUseSyntacticOwners && !lessThanFollowsCalledExpression(startingToken, sourceFile, invocation.called)) {
                 return undefined;
             }
-            const type = checker.getTypeAtLocation(invocation.called)!; // TODO: GH#18217
-            const signatures = isNewExpression(invocation.called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
-            const candidates = signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= argumentInfo.argumentCount);
+            const candidates = getPossibleGenericSignatures(invocation.called, argumentInfo.argumentCount, checker);
             return candidates.length === 0 ? undefined : { candidates, resolvedSignature: first(candidates) };
         }
         else {
@@ -261,7 +259,7 @@ namespace ts.SignatureHelp {
             };
         }
         else {
-            const typeArgInfo = isPossiblyTypeArgumentPosition(node, sourceFile);
+            const typeArgInfo = getPossibleTypeArgumentsInfo(node, sourceFile);
             if (typeArgInfo) {
                 const { called, nTypeArguments } = typeArgInfo;
                 const invocation: Invocation = { kind: InvocationKind.TypeArgs, called };

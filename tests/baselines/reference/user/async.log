@@ -125,8 +125,8 @@ node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Funct
   Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2274,21): error TS2554: Expected 0 arguments, but got 2.
 node_modules/async/dist/async.js(2425,20): error TS1005: '}' expected.
-node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturat...' is not assignable to type 'NodeModule'.
-  Property 'exports' is missing in type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturat...'.
+node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; ... 10 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
+  Property 'exports' is missing in type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; ... 10 more ...; resume: () => void; }'.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Property 'push' is missing in type 'IArguments'.
@@ -160,7 +160,7 @@ node_modules/async/dist/async.js(3848,23): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,24): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,25): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(4059,20): error TS1005: '}' expected.
-node_modules/async/dist/async.js(4095,5): error TS2322: Type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturat...' is not assignable to type 'NodeModule'.
+node_modules/async/dist/async.js(4095,5): error TS2322: Type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; ... 10 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
 node_modules/async/dist/async.js(4117,20): error TS1005: '}' expected.
 node_modules/async/dist/async.js(4128,7): error TS2339: Property 'push' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(4133,11): error TS2339: Property 'started' does not exist on type 'NodeModule'.

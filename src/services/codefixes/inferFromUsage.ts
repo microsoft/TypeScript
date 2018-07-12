@@ -401,7 +401,7 @@ namespace ts.codefix {
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.GreaterThanEqualsToken:
-                    const operandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left)!;
+                    const operandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
                     if (operandType.flags & TypeFlags.EnumLike) {
                         addCandidateType(usageContext, operandType);
                     }
@@ -412,7 +412,7 @@ namespace ts.codefix {
 
                 case SyntaxKind.PlusEqualsToken:
                 case SyntaxKind.PlusToken:
-                    const otherOperandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left)!;
+                    const otherOperandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
                     if (otherOperandType.flags & TypeFlags.EnumLike) {
                         addCandidateType(usageContext, otherOperandType);
                     }
@@ -472,7 +472,7 @@ namespace ts.codefix {
 
             if (parent.arguments) {
                 for (const argument of parent.arguments) {
-                    callContext.argumentTypes.push(checker.getTypeAtLocation(argument)!);
+                    callContext.argumentTypes.push(checker.getTypeAtLocation(argument));
                 }
             }
 
@@ -501,7 +501,7 @@ namespace ts.codefix {
                 return;
             }
             else {
-                const indexType = checker.getTypeAtLocation(parent)!;
+                const indexType = checker.getTypeAtLocation(parent);
                 const indexUsageContext = {};
                 inferTypeFromContext(parent, checker, indexUsageContext);
                 if (indexType.flags & TypeFlags.NumberLike) {

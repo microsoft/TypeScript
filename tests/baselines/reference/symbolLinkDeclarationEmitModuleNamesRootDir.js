@@ -47,7 +47,7 @@ export declare const CONTROLLER_CLASS: BindingKey<import("@loopback/context/src/
 
 tests/cases/compiler/monorepo/core/dist/src/application.d.ts(1,29): error TS2307: Cannot find module '@loopback/context'.
 tests/cases/compiler/monorepo/core/dist/src/usage.d.ts(1,28): error TS2307: Cannot find module '@loopback/context'.
-tests/cases/compiler/monorepo/core/dist/src/usage.d.ts(2,51): error TS2307: Cannot find module '@loopback/context/src/value-promise'.
+tests/cases/compiler/monorepo/core/dist/src/usage.d.ts(2,58): error TS2307: Cannot find module '@loopback/context/src/value-promise'.
 
 
 ==== tests/cases/compiler/monorepo/core/tsconfig.json (0 errors) ====
@@ -82,6 +82,6 @@ tests/cases/compiler/monorepo/core/dist/src/usage.d.ts(2,51): error TS2307: Cann
                                ~~~~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module '@loopback/context'.
     export declare const CONTROLLER_CLASS: BindingKey<import("@loopback/context/src/value-promise").Constructor<any>>;
-                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module '@loopback/context/src/value-promise'.
     

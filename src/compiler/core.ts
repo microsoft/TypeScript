@@ -1866,6 +1866,9 @@ namespace ts {
             if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
                 const candidateNameLowerCase = candidateName.toLowerCase();
                 if (candidateNameLowerCase === nameLowerCase) {
+                    if (candidateName === name) {
+                        continue;
+                    }
                     return candidate;
                 }
                 if (justCheckExactMatches) {
