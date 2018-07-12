@@ -15791,11 +15791,11 @@ namespace ts {
                 case SpecialPropertyAssignmentKind.Property:
                 case SpecialPropertyAssignmentKind.ExportsProperty:
                 case SpecialPropertyAssignmentKind.Prototype:
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
                     return !binaryExpression.left.symbol || binaryExpression.left.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.left.symbol.valueDeclaration);
                 case SpecialPropertyAssignmentKind.ThisProperty:
-                case SpecialPropertyAssignmentKind.PrototypeProperty:
                 case SpecialPropertyAssignmentKind.ModuleExports:
                     return !binaryExpression.symbol || binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration);
                 default:
