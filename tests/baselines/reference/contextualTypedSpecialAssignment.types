@@ -173,9 +173,9 @@ function F() {
 /** @type {DoneStatus} */
 F.prototype = {
 >F.prototype = {    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
->F.prototype : any
+>F.prototype : { [x: string]: any; }
 >F : typeof F
->prototype : any
+>prototype : { [x: string]: any; }
 >{    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
 
     status: "done",
