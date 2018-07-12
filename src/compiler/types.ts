@@ -2936,7 +2936,7 @@ namespace ts {
          */
         getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
-        getTypeAtLocation(node: Node): Type | undefined;
+        getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
 
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
@@ -3438,9 +3438,6 @@ namespace ts {
         ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Alias,
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
-
-        HasExports = Class | Enum | Module | Variable,
-        HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
         BlockScoped = BlockScopedVariable | Class | Enum,
 

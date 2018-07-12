@@ -9,7 +9,7 @@ goTo.marker("1");
 
 edit.insert("(");
 verify.signatureHelp({
-    text: "bar<U>(x: U, y: U): U",
+    text: "bar(x: {}, y: {}): {}",
     triggerReason: {
         kind: "characterTyped",
         triggerCharacter: "(",

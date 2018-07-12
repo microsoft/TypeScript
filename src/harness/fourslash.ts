@@ -4767,7 +4767,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCompletionsOptions {
-        readonly marker?: ArrayOrSingle<string>;
+        readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
         readonly isNewIdentifierLocation?: boolean;
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;

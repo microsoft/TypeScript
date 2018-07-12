@@ -1476,8 +1476,8 @@ namespace ts {
         }
 
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(prependStatements(statements.slice(), declarations)), statements)
-            : prependStatements(statements, declarations);
+            ? setTextRange(createNodeArray(addStatementsAfterPrologue(statements.slice(), declarations)), statements)
+            : addStatementsAfterPrologue(statements, declarations);
     }
 
     /**

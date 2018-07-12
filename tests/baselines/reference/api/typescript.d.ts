@@ -1901,7 +1901,7 @@ declare namespace ts {
          */
         getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
-        getTypeAtLocation(node: Node): Type | undefined;
+        getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
@@ -2075,8 +2075,6 @@ declare namespace ts {
         AliasExcludes = 2097152,
         ModuleMember = 2623475,
         ExportHasLocal = 944,
-        HasExports = 1955,
-        HasMembers = 6240,
         BlockScoped = 418,
         PropertyOrAccessor = 98308,
         ClassMember = 106500

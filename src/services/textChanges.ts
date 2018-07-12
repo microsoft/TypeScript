@@ -1053,18 +1053,29 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.TypeParameter: {
-                    const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node.parent);
-                    if (typeParameters.length === 1) {
-                        const { pos, end } = cast(typeParameters, isNodeArray);
-                        const previousToken = getTokenAtPosition(sourceFile, pos - 1);
-                        const nextToken = getTokenAtPosition(sourceFile, end);
-                        Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
-                        Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
+                    const typeParam = node as TypeParameterDeclaration;
+                    switch (typeParam.parent.kind) {
+                        case SyntaxKind.JSDocTemplateTag:
+                            changes.deleteRange(sourceFile, getRangeToDeleteJsDocTag(typeParam.parent, sourceFile));
+                            break;
+                        case SyntaxKind.InferType:
+                            // TODO: GH#25594
+                            break;
+                        default: {
+                            const typeParameters = getEffectiveTypeParameterDeclarations(typeParam.parent);
+                            if (typeParameters.length === 1) {
+                                const { pos, end } = cast(typeParameters, isNodeArray);
+                                const previousToken = getTokenAtPosition(sourceFile, pos - 1);
+                                const nextToken = getTokenAtPosition(sourceFile, end);
+                                Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
+                                Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
 
-                        changes.deleteNodeRange(sourceFile, previousToken, nextToken);
-                    }
-                    else {
-                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                                changes.deleteNodeRange(sourceFile, previousToken, nextToken);
+                            }
+                            else {
+                                deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                            }
+                        }
                     }
                     break;
                 }
@@ -1165,6 +1176,12 @@ namespace ts.textChanges {
                 default:
                     Debug.assertNever(gp);
             }
+        }
+
+        function getRangeToDeleteJsDocTag(node: JSDocTag, sourceFile: SourceFile): TextRange {
+            const { parent } = node;
+            const toDelete = parent.kind === SyntaxKind.JSDocComment && parent.comment === undefined && parent.tags!.length === 1 ? parent : node;
+            return createTextRangeFromNode(toDelete, sourceFile);
         }
     }
 
