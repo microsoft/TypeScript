@@ -24,12 +24,12 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(21,83):
         class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-!!! related TS2728 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' was declared here.
+!!! related TS2728 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' is declared here.
         }
         export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-!!! related TS2728 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' was declared here.
+!!! related TS2728 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' is declared here.
         }
     }
     

@@ -1,0 +1,38 @@
+=== tests/cases/conformance/jsdoc/test.js ===
+// all 6 should error on return statement/expression
+/** @type {(x: number) => string} */
+function h(x) { return x }
+>h : Symbol(h, Decl(test.js, 0, 0))
+>x : Symbol(x, Decl(test.js, 2, 11))
+>x : Symbol(x, Decl(test.js, 2, 11))
+
+/** @type {(x: number) => string} */
+var f = x => x
+>f : Symbol(f, Decl(test.js, 4, 3))
+>x : Symbol(x, Decl(test.js, 4, 7))
+>x : Symbol(x, Decl(test.js, 4, 7))
+
+/** @type {(x: number) => string} */
+var g = function (x) { return x }
+>g : Symbol(g, Decl(test.js, 6, 3))
+>x : Symbol(x, Decl(test.js, 6, 18))
+>x : Symbol(x, Decl(test.js, 6, 18))
+
+/** @type {{ (x: number): string }} */
+function i(x) { return x }
+>i : Symbol(i, Decl(test.js, 6, 33))
+>x : Symbol(x, Decl(test.js, 9, 11))
+>x : Symbol(x, Decl(test.js, 9, 11))
+
+/** @type {{ (x: number): string }} */
+var j = x => x
+>j : Symbol(j, Decl(test.js, 11, 3))
+>x : Symbol(x, Decl(test.js, 11, 7))
+>x : Symbol(x, Decl(test.js, 11, 7))
+
+/** @type {{ (x: number): string }} */
+var k = function (x) { return x }
+>k : Symbol(k, Decl(test.js, 13, 3))
+>x : Symbol(x, Decl(test.js, 13, 18))
+>x : Symbol(x, Decl(test.js, 13, 18))
+

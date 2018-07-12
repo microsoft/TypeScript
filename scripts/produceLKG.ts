@@ -54,16 +54,17 @@ async function copyScriptOutputs() {
     await copyWithCopyright("cancellationToken.js");
     await copyWithCopyright("tsc.release.js", "tsc.js");
     await copyWithCopyright("tsserver.js");
-    await copyWithCopyright("typescript.js");
-    await copyWithCopyright("typescriptServices.js");
+    await copyFromBuiltLocal("tsserverlibrary.js"); // copyright added by build
+    await copyFromBuiltLocal("typescript.js"); // copyright added by build
+    await copyFromBuiltLocal("typescriptServices.js"); // copyright added by build
     await copyWithCopyright("typingsInstaller.js");
     await copyWithCopyright("watchGuard.js");
 }
 
 async function copyDeclarationOutputs() {
-    await copyWithCopyright("tsserverlibrary.d.ts");
-    await copyWithCopyright("typescript.d.ts");
-    await copyWithCopyright("typescriptServices.d.ts");
+    await copyFromBuiltLocal("tsserverlibrary.d.ts"); // copyright added by build
+    await copyFromBuiltLocal("typescript.d.ts"); // copyright added by build
+    await copyFromBuiltLocal("typescriptServices.d.ts"); // copyright added by build
 }
 
 async function writeGitAttributes() {

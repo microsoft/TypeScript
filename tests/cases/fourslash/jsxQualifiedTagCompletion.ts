@@ -6,10 +6,8 @@
 ////     export var Foo: any = null;
 //// }
 //// const j = <NS.Foo>Hello!/**/
-//// 
+////
 
 goTo.marker();
 edit.insert("</");
-verify.completionListContains("NS.Foo");
-verify.not.completionListContains("Foo");
-verify.completionListCount(1);
+verify.completions({ exact: "NS.Foo>" });

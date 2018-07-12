@@ -25,7 +25,7 @@ System.register(["angular2/core"], function (exports_1, context_1) {
                 var _a;
                 MyClass1 = __decorate([
                     fooexport,
-                    __metadata("design:paramtypes", [typeof (_a = (typeof ng !== "undefined" && ng).ElementRef) === "function" && _a || Object])
+                    __metadata("design:paramtypes", [typeof (_a = typeof ng !== "undefined" && ng.ElementRef) === "function" ? _a : Object])
                 ], MyClass1);
                 return MyClass1;
             }());

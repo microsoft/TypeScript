@@ -1982,18 +1982,16 @@ namespace ts {
             const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentNameScope || currentLexicalScope);
             switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
-                    const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
+                    const serialized = serializeEntityNameAsExpressionFallback(node.typeName);
                     const temp = createTempVariable(hoistVariableDeclaration);
-                    return createLogicalOr(
-                        createLogicalAnd(
-                            createTypeCheck(createAssignment(temp, serialized), "function"),
-                            temp
-                        ),
+                    return createConditional(
+                        createTypeCheck(createAssignment(temp, serialized), "function"),
+                        temp,
                         createIdentifier("Object")
                     );
 
                 case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                    return serializeEntityNameAsExpression(node.typeName, /*useFallback*/ false);
+                    return serializeEntityNameAsExpression(node.typeName);
 
                 case TypeReferenceSerializationKind.VoidNullableOrNeverType:
                     return createVoidZero();
@@ -2028,14 +2026,46 @@ namespace ts {
             }
         }
 
+        function createCheckedValue(left: Expression, right: Expression) {
+            return createLogicalAnd(
+                createStrictInequality(createTypeOf(left), createLiteral("undefined")),
+                right
+            );
+        }
+
+        /**
+         * Serializes an entity name which may not exist at runtime, but whose access shouldn't throw
+         *
+         * @param node The entity name to serialize.
+         */
+        function serializeEntityNameAsExpressionFallback(node: EntityName): BinaryExpression {
+            if (node.kind === SyntaxKind.Identifier) {
+                // A -> typeof A !== undefined && A
+                const copied = serializeEntityNameAsExpression(node);
+                return createCheckedValue(copied, copied);
+            }
+            if (node.left.kind === SyntaxKind.Identifier) {
+                // A.B -> typeof A !== undefined && A.B
+                return createCheckedValue(serializeEntityNameAsExpression(node.left), serializeEntityNameAsExpression(node));
+            }
+            // A.B.C -> typeof A !== undefined && (_a = A.B) !== void 0 && _a.C
+            const left = serializeEntityNameAsExpressionFallback(node.left);
+            const temp = createTempVariable(hoistVariableDeclaration);
+            return createLogicalAnd(
+                    createLogicalAnd(
+                    left.left,
+                    createStrictInequality(createAssignment(temp, left.right), createVoidZero())
+                ),
+                createPropertyAccess(temp, node.right)
+            );
+        }
+
         /**
          * Serializes an entity name as an expression for decorator type metadata.
          *
          * @param node The entity name to serialize.
-         * @param useFallback A value indicating whether to use logical operators to test for the
-         *                    entity name at runtime.
          */
-        function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): SerializedEntityNameAsExpression {
+        function serializeEntityNameAsExpression(node: EntityName): SerializedEntityNameAsExpression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
@@ -2044,20 +2074,11 @@ namespace ts {
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
                     name.parent = getParseTreeNode(currentLexicalScope); // ensure the parent is set to a parse tree node.
-                    if (useFallback) {
-                        return createLogicalAnd(
-                            createStrictInequality(
-                                createTypeOf(name),
-                                createLiteral("undefined")
-                            ),
-                            name
-                        );
-                    }
 
                     return name;
 
                 case SyntaxKind.QualifiedName:
-                    return serializeQualifiedNameAsExpression(node, useFallback);
+                    return serializeQualifiedNameAsExpression(node);
             }
         }
 
@@ -2068,26 +2089,8 @@ namespace ts {
          * @param useFallback A value indicating whether to use logical operators to test for the
          *                    qualified name at runtime.
          */
-        function serializeQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean): PropertyAccessExpression {
-            let left: SerializedEntityNameAsExpression;
-            if (node.left.kind === SyntaxKind.Identifier) {
-                left = serializeEntityNameAsExpression(node.left, useFallback);
-            }
-            else if (useFallback) {
-                const temp = createTempVariable(hoistVariableDeclaration);
-                left = createLogicalAnd(
-                    createAssignment(
-                        temp,
-                        serializeEntityNameAsExpression(node.left, /*useFallback*/ true)
-                    ),
-                    temp
-                );
-            }
-            else {
-                left = serializeEntityNameAsExpression(node.left, /*useFallback*/ false);
-            }
-
-            return createPropertyAccess(left, node.right);
+        function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityNameAsExpression {
+            return createPropertyAccess(serializeEntityNameAsExpression(node.left), node.right);
         }
 
         /**

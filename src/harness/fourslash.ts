@@ -1515,7 +1515,9 @@ Actual: ${stringify(fullActual)}`);
                 "argumentCount",
             ];
             for (const key in options) {
-                ts.Debug.assert(ts.contains(allKeys, key));
+                if (!ts.contains(allKeys, key)) {
+                    ts.Debug.fail("Unexpected key " + key);
+                }
             }
         }
 
@@ -3367,7 +3369,7 @@ Actual: ${stringify(fullActual)}`);
 
             this.languageServiceAdapterHost.renameFileOrDirectory(oldPath, newPath);
             this.languageService.cleanupSemanticCache();
-            const pathUpdater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+            const pathUpdater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false), /*sourceMapper*/ undefined);
             test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
         }
 
