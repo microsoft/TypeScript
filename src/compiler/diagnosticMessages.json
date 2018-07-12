@@ -4021,7 +4021,7 @@
         "category": "Error",
         "code": 8029
     },
-    "The type of a function declaration must be callable.": {
+    "The type of a function declaration must match the function's signature.": {
         "category": "Error",
         "code": 8030
     },
