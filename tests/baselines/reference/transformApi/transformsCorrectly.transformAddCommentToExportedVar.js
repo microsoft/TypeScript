@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/** @type {number} */
+/*comment*/
 exports.exportedDirectly = 1;
-/** @type {number} */
+/*comment*/
 var exportedSeparately = 2;
 exports.exportedSeparately = exportedSeparately;

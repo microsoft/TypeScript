@@ -268,33 +268,34 @@ namespace ts {
             return fs.readFileSync("/.src/index.d.ts").toString();
         }
 
+        function addSyntheticComment(nodeFilter: (node: Node) => boolean) {
+            return (context: TransformationContext) => {
+                return (sourceFile: SourceFile): SourceFile => {
+                    return visitNode(sourceFile, rootTransform, isSourceFile);
+                };
+                function rootTransform<T extends Node>(node: T): VisitResult<T> {
+                    if (nodeFilter(node)) {
+                        setEmitFlags(node, EmitFlags.NoLeadingComments);
+                        setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                    }
+                    return visitEachChild(node, rootTransform, context);
+                }
+            };
+        }
+
         // https://github.com/Microsoft/TypeScript/issues/24096
         testBaseline("transformAddCommentToArrowReturnValue", () => {
             return transpileModule(`const foo = () =>
     void 0
 `, {
                 transformers: {
-                    before: [addSyntheticComment],
+                    before: [addSyntheticComment(isVoidExpression)],
                 },
                 compilerOptions: {
                     target: ScriptTarget.ES5,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
-
-            function addSyntheticComment(context: TransformationContext) {
-                return (sourceFile: SourceFile): SourceFile => {
-                    return visitNode(sourceFile, rootTransform, isSourceFile);
-                };
-                function rootTransform<T extends Node>(node: T): VisitResult<T> {
-                    if (isVoidExpression(node)) {
-                        setEmitFlags(node, EmitFlags.NoLeadingComments);
-                        setSyntheticLeadingComments(node, [{ kind: SyntaxKind.SingleLineCommentTrivia, text: "// comment!", pos: -1, end: -1, hasTrailingNewLine: true }]);
-                        return node;
-                    }
-                    return visitEachChild(node, rootTransform, context);
-                }
-            }
         });
 
         // https://github.com/Microsoft/TypeScript/issues/17594
@@ -304,27 +305,13 @@ const exportedSeparately = 2;
 export {exportedSeparately};
 `, {
                         transformers: {
-                            before: [addSyntheticComment],
+                            before: [addSyntheticComment(isVariableStatement)],
                         },
                         compilerOptions: {
                             target: ScriptTarget.ES5,
                             newLine: NewLineKind.CarriageReturnLineFeed,
                         }
                     }).outputText;
-
-                    function addSyntheticComment(context: TransformationContext) {
-                        return (sourceFile: SourceFile): SourceFile => {
-                            return visitNode(sourceFile, rootTransform, isSourceFile);
-                        };
-                        function rootTransform<T extends Node>(node: T): VisitResult<T> {
-                            if (isVariableStatement(node)) {
-                                setEmitFlags(node, EmitFlags.NoLeadingComments);
-                                setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "* @type {number} ", pos: -1, end: -1, hasTrailingNewLine: true }]);
-                                return node;
-                            }
-                            return visitEachChild(node, rootTransform, context);
-                        }
-                    }
         });
 
         // https://github.com/Microsoft/TypeScript/issues/17594
@@ -339,26 +326,14 @@ export * from 'somewhere';
 export {Value};
 `, {
                         transformers: {
-                            before: [addSyntheticComment],
+                            before: [addSyntheticComment(n => isImportDeclaration(n) || isExportDeclaration(n) || isImportSpecifier(n) || isExportSpecifier(n))],
                         },
                         compilerOptions: {
                             target: ScriptTarget.ES5,
                             newLine: NewLineKind.CarriageReturnLineFeed,
                         }
                     }).outputText;
-
-                    function addSyntheticComment(context: TransformationContext) {
-                        return (sourceFile: SourceFile): SourceFile => {
-                            return visitNode(sourceFile, rootTransform, isSourceFile);
-                        };
-                        function rootTransform<T extends Node>(node: T): VisitResult<T> {
-                            if (isImportDeclaration(node) || isExportDeclaration(node) || isImportSpecifier(node) || isExportSpecifier(node)) {
-                                setEmitFlags(node, EmitFlags.NoLeadingComments);
-                                setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: `comment!`, pos: -1, end: -1, hasTrailingNewLine: true }]);
-                            }
-                            return visitEachChild(node, rootTransform, context);
-                        }
-                    }
-        });    });
+        });
+    });
 }
 
