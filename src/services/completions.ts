@@ -921,6 +921,9 @@ namespace ts.Completions {
                     case SyntaxKind.QualifiedName:
                         node = (parent as QualifiedName).left;
                         break;
+                    case SyntaxKind.ModuleDeclaration:
+                        node = (parent as ModuleDeclaration).name;
+                        break;
                     case SyntaxKind.ImportType:
                     case SyntaxKind.MetaProperty:
                         node = parent;
@@ -1062,6 +1065,8 @@ namespace ts.Completions {
             const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
             const allowTypeOrValue = isRhsOfImportDeclaration || (!isTypeLocation && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker));
             if (isEntityName(node) || isImportType) {
+                const isNamespaceName = isModuleDeclaration(node.parent);
+                if (isNamespaceName) isNewIdentifierLocation = true;
                 let symbol = typeChecker.getSymbolAtLocation(node);
                 if (symbol) {
                     symbol = skipAlias(symbol, typeChecker);
@@ -1071,13 +1076,17 @@ namespace ts.Completions {
                         const exportedSymbols = Debug.assertEachDefined(typeChecker.getExportsOfModule(symbol), "getExportsOfModule() should all be defined");
                         const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(isImportType ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
-                        const isValidAccess = allowTypeOrValue ?
-                            // Any kind is allowed when dotting off namespace in internal import equals declaration
-                            (symbol: Symbol) => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
-                            isTypeLocation ? isValidTypeAccess : isValidValueAccess;
-                        for (const symbol of exportedSymbols) {
-                            if (isValidAccess(symbol)) {
-                                symbols.push(symbol);
+                        const isValidAccess: (symbol: Symbol) => boolean =
+                            isNamespaceName
+                                // At `namespace N.M/**/`, don't include `M` as a completion.
+                                ? symbol => !!(symbol.flags & SymbolFlags.Namespace) && !symbol.declarations.some(d => d.parent === node.parent)
+                                : allowTypeOrValue ?
+                                    // Any kind is allowed when dotting off namespace in internal import equals declaration
+                                    symbol => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
+                                    isTypeLocation ? isValidTypeAccess : isValidValueAccess;
+                        for (const exportedSymbol of exportedSymbols) {
+                            if (isValidAccess(exportedSymbol)) {
+                                symbols.push(exportedSymbol);
                             }
                         }
 
@@ -1461,7 +1470,8 @@ namespace ts.Completions {
         function isNewIdentifierDefinitionLocation(previousToken: Node | undefined): boolean {
             if (previousToken) {
                 const containingNodeKind = previousToken.parent.kind;
-                switch (previousToken.kind) {
+                // Previous token may have been a keyword that was converted to an identifier.
+                switch (keywordForNode(previousToken)) {
                     case SyntaxKind.CommaToken:
                         return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
                             || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
@@ -1506,14 +1516,6 @@ namespace ts.Completions {
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
                         return containingNodeKind === SyntaxKind.PropertyDeclaration;         // class A{ public |
-                }
-
-                // Previous token may have been a keyword that was converted to an identifier.
-                switch (keywordForNode(previousToken)) {
-                    case SyntaxKind.PublicKeyword:
-                    case SyntaxKind.ProtectedKeyword:
-                    case SyntaxKind.PrivateKeyword:
-                        return true;
                 }
             }
 
