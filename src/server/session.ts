@@ -1837,11 +1837,7 @@ namespace ts.server {
         }
 
         private mapTextChangeToCodeEdit(change: FileTextChanges): protocol.FileCodeEdits {
-            return mapTextChangesToCodeEdits(change, this.projectService.getScriptInfoOrConfig(this.normalizePath(change.fileName)));
-        }
-
-        private normalizePath(fileName: string) {
-           return normalizedPathToPath(toNormalizedPath(fileName), this.host.getCurrentDirectory(), fileName => this.getCanonicalFileName(fileName));
+            return mapTextChangesToCodeEdits(change, this.projectService.getScriptInfoOrConfig(change.fileName));
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
