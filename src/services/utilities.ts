@@ -1627,21 +1627,21 @@ namespace ts {
      * and code fixes (because those are triggered by explicit user actions).
      */
     export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<string>, checker?: TypeChecker): T {
-        const clone = renameMap && checker && needsRenaming(node, checker) ? 
-                    node && createIdentifier(renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node!)!)))!) : 
+        const clone = renameMap && checker && needsRenaming(node, checker) ?
+                    node && createIdentifier(renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node!)!)))!) :
                     node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker);
 
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
         return clone as T;
     }
 
-    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker): boolean{
+    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker): boolean {
         return !!(node && isIdentifier(node!) && checker.getSymbolAtLocation(node!));
     }
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<string>, checker?: TypeChecker): T {
-        const visited = visitEachChild(node, function wrapper(node){
-                return getSynthesizedDeepClone(node, true, renameMap, checker);
+        const visited = visitEachChild(node, function wrapper(node) {
+                return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, checker);
             }, nullTransformationContext);
 
         if (visited === node) {
