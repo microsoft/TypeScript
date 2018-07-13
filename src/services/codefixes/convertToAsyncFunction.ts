@@ -8,7 +8,7 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file!, err.start, context.program.getTypeChecker())),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker())),
     });
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         // get the function declaration - returns a promise
@@ -17,59 +17,95 @@ namespace ts.codefix {
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);
 
-        let varNamesMap: Map<string> = new MapCtr();
-        let synthNamesMap: Map<string> = new MapCtr();
+        const varNamesMap: Map<string> = new MapCtr();
+        const synthNamesMap: Map<string> = new MapCtr();
         const funcToConvertRenamed = renameCollidingVarNames(funcToConvert, checker, varNamesMap, synthNamesMap);
 
         const retStmts: Node[] = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed, checker);
-        let retStmtName: string;
 
-        for (const stmt of retStmts) {
-            let varDeclName: string;
-
-            if (isCallExpression(stmt)) {
-                const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap);
-                if (newNodes.length > 0) {
-                    changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
+        const glued = glueTogetherCallbacks(retStmts);
+        const gluedCallback = glued[0];
+        let retStmtName = glued[1];
+        if (gluedCallback) {
+            const newNodes = parseCallback(gluedCallback, checker, gluedCallback, synthNamesMap, retStmtName, retStmtName);
+            if (newNodes.length > 0) {
+                changes.replaceNodeRangeWithNodes(sourceFile, retStmts[1].original!, retStmts[retStmts.length - 1].original!, newNodes);
+            }
+        }
+        else {
+            for (const stmt of retStmts) {
+                if (isCallExpression(stmt)) {
+                    const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, retStmtName, retStmtName);
+                    if (newNodes.length > 0) {
+                        changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
+                    }
                 }
-            }
-            else if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
-                        retStmtName = stmt.expression.text;
-            }
-            else {
-                forEachChild(stmt, function visit(node: Node) {
-                    if (isVariableDeclarationList(node)) {
-                        varDeclName = (<Identifier>node.declarations[0].name).text;
-                    }
+                else if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
+                    retStmtName = stmt.expression.text;
+                }
+                else {
+                    forEachChild(stmt, function visit(node: Node) {
 
-                    if (isReturnStatement(node) && node.expression && isIdentifier(node.expression)) {
-                        retStmtName = node.expression.text;
-                    }
-
-                    if (isCallExpression(node)) {
-                        const newNodes = parseCallback(node, checker, node, synthNamesMap, retStmtName, varDeclName);
-                        if (newNodes.length > 0) {
-                            changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
+                        if (isReturnStatement(node) && node.expression && isIdentifier(node.expression)) {
+                            retStmtName = node.expression.text;
                         }
-                    }
-                    else if (!isFunctionLike(node)) {
-                        forEachChild(node, visit);
-                    }
-                });
+
+                        if (isCallExpression(node)) {
+                            const newNodes = parseCallback(node, checker, node, synthNamesMap, retStmtName, retStmtName);
+                            if (newNodes.length > 0) {
+                                changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
+                            }
+                        }
+                        else if (!isFunctionLike(node)) {
+                            forEachChild(node, visit);
+                        }
+                    });
+                }
             }
         }
     }
 
+    function glueTogetherCallbacks(retStmts: Node[]): [CallExpression | undefined, string] {
+        retStmts = retStmts.slice(0);
+        const stmt = retStmts.pop();
+        if (!stmt) {
+            return [undefined, ""];
+        }
+
+        if (isExpressionStatement(stmt) && stmt.expression && isCallExpression(stmt.expression)
+            && stmt.expression.expression && isPropertyAccessExpression(stmt.expression.expression)) {
+            const callArgs: NodeArray<Expression> = stmt.expression.arguments;
+            const funcName: Identifier = stmt.expression.expression.name;
+            const [gluedExpr, retName] = glueTogetherCallbacks(retStmts);
+            if (gluedExpr) {
+                const propertyAccessExpr = createPropertyAccess(gluedExpr, funcName);
+                return [createCall(propertyAccessExpr, /*typeArguments*/ undefined, callArgs), retName];
+            }
+        }
+        // fix this for multiple declarations
+        else if (isVariableStatement(stmt) && stmt.declarationList.declarations.length > 0 && stmt.declarationList.declarations[0].initializer) {
+            return [glueTogetherCallbacks([stmt.declarationList.declarations[0].initializer!])[0], glueTogetherCallbacks(retStmts)[1]];
+        }
+        else if (isCallExpression(stmt)) {
+            return [stmt, glueTogetherCallbacks(retStmts)[1]];
+        }
+        else if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
+            return [undefined, stmt.expression.text];
+        }
+
+        return [undefined, ""];
+    }
+
+
     function renameCollidingVarNames(nodeToRename: Node, checker: TypeChecker, varNamesMap: Map<string>, synthNamesMap: Map<string>): Node {
-        let allVarNames: string[] = [];
+        const allVarNames: string[] = [];
 
         forEachChild(nodeToRename, function visit(node: Node) {
 
             if (isIdentifier(node)) {
-                let type = checker.getTypeAtLocation(node);
-                let symbol = checker.getSymbolAtLocation(node);
-
-                let newName = getNewNameIfConflict(node.text, allVarNames);
+                const type = checker.getTypeAtLocation(node);
+                const symbol = checker.getSymbolAtLocation(node);
+                const newName = getNewNameIfConflict(node.text, allVarNames);
 
                 if (symbol && type && type.getCallSignatures().length > 0 && type.getCallSignatures()[0].parameters.length > 0) {
                     // first, add the actual function name
@@ -87,8 +123,8 @@ namespace ts.codefix {
                     allVarNames.push(node.text);
 
                     // next, add the new variable for the declaration
-                    let synthName = type.getCallSignatures()[0].parameters[0].name;
-                    let newSynthName = getNewNameIfConflict(synthName, allVarNames);
+                    const synthName = type.getCallSignatures()[0].parameters[0].name;
+                    const newSynthName = getNewNameIfConflict(synthName, allVarNames);
                     varNamesMap.set(String(getSymbolId(checker.createSymbol(SymbolFlags.BlockScopedVariable, getEscapedTextOfIdentifierOrLiteral(createIdentifier(newSynthName))))), newSynthName);
                     allVarNames.push(newSynthName);
                     synthNamesMap.set(node.text, newSynthName);
@@ -102,7 +138,7 @@ namespace ts.codefix {
             forEachChild(node, visit);
         });
 
-        return getSynthesizedDeepClone(nodeToRename, true, varNamesMap, checker);
+        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, varNamesMap, checker);
     }
 
     function getNewNameIfConflict(name: string, allVarNames: string[]) {
@@ -169,7 +205,7 @@ namespace ts.codefix {
 
             const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, argNameRes, varDeclName).concat(callbackBody));
 
-            const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, checker, synthNamesMap, varDeclName, true);
+            const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, checker, synthNamesMap, varDeclName, /*isRej*/ true);
             const catchClause = createCatchClause(argNameRej, createBlock(callbackBody2));
 
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
@@ -182,10 +218,10 @@ namespace ts.codefix {
     }
 
     function parsePromiseCall(node: CallExpression, checker: TypeChecker, prevArgName?: string, varDeclName?: string): Statement[] {
-        let nextDotThen = getNextDotThen(node.original!.parent as Expression, checker);
+        const nextDotThen = getNextDotThen(node.original!.parent as Expression, checker);
         if (prevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent) || (prevArgName && varDeclName)) {
             const varDecl = createVariableDeclaration(prevArgName, /*type*/ undefined, createAwait(node));
-            return [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))]
+            return [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], NodeFlags.Let)))];
         }
         else if (!prevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent)) {
             return [createStatement(createAwait(node))];
@@ -212,6 +248,9 @@ namespace ts.codefix {
             prevArgName = argName;
         }
 
+        const outerParent = parent.original ? parent.original.parent : undefined;
+        const nextDotThen = getNextDotThen(outerParent as Expression, checker);
+
         switch (func.kind) {
             case SyntaxKind.Identifier:
                 if (!prevArgName || !argName) {
@@ -219,7 +258,6 @@ namespace ts.codefix {
                 }
 
                 let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [createIdentifier(argName)]);
-                const nextDotThen = getNextDotThen(parent.original!.parent as Expression, checker);
                 if (!nextDotThen || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
                     return createNodeArray([createReturn(synthCall)]);
                 }
@@ -232,28 +270,26 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
 
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    let innerRetStmts: Node[] = getReturnStatementsWithPromiseCallbacks(func.body as Node, checker);
-                    let innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, prevArgName, varDeclName);
+                    const innerRetStmts: Node[] = getReturnStatementsWithPromiseCallbacks(func.body as Node, checker);
+                    const innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, prevArgName, varDeclName);
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
 
-                    const nextOutermostDotThen = getNextDotThen(parent.original!.parent as Expression, checker);
-                    return nextOutermostDotThen ? removeReturns(func.body.statements, prevArgName!) : func.body.statements
+                    return nextDotThen ? removeReturns(func.body.statements, prevArgName!) : func.body.statements;
 
-                } else if (isArrowFunction(func)) {
-                    //if there is another outer dot then, don't actually return
+                }
+                else if (isArrowFunction(func)) {
+                    // if there is another outer dot then, don't actually return
 
-                    let innerRetStmts: Node[] = getReturnStatementsWithPromiseCallbacks(createReturn(func.body as Expression), checker);
-                    let innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, prevArgName, varDeclName);
+                    const innerRetStmts: Node[] = getReturnStatementsWithPromiseCallbacks(createReturn(func.body as Expression), checker);
+                    const innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, prevArgName, varDeclName);
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
 
-                    const nextOutermostDotThen = getNextDotThen(parent.original!.parent as Expression, checker);
-
-                    return nextOutermostDotThen || (prevArgName && varDeclName) ?
-                        createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName!, /*type*/ undefined, (func as ArrowFunction).body as Expression)], NodeFlags.Let)))]) :
+                    return nextDotThen || (prevArgName && varDeclName) ?
+                        createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName!, /*type*/ undefined, func.body as Expression)], NodeFlags.Let)))]) :
                         createNodeArray([createReturn(func.body as Expression)]);
                 }
                 break;
@@ -262,8 +298,8 @@ namespace ts.codefix {
     }
 
     function removeReturns(stmts: NodeArray<Statement>, prevArgName: string): NodeArray<Statement> {
-        let ret: Statement[] = [];
-        for (let stmt of stmts) {
+        const ret: Statement[] = [];
+        for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
                 if (stmt.expression) {
                     ret.push(createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, stmt.expression)], NodeFlags.Let))));
@@ -282,7 +318,7 @@ namespace ts.codefix {
         for (const stmt of innerRetStmts) {
             forEachChild(stmt, function visit(node: Node) {
                 if (isCallExpression(node)) {
-                    let temp = parseCallback(node, checker, node, synthNamesMap, prevArgName, varDeclName);
+                    const temp = parseCallback(node, checker, node, synthNamesMap, prevArgName, varDeclName);
                     innerCbBody = innerCbBody.concat(temp);
                     if (innerCbBody.length > 0) {
                         return;
@@ -297,7 +333,7 @@ namespace ts.codefix {
     }
 
     function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
-        // can probably get rid of this if statement 
+        // can probably get rid of this if statement
         if (node.expression.kind !== SyntaxKind.PropertyAccessExpression) {
             return false;
         }

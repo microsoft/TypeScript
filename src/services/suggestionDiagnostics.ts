@@ -70,7 +70,7 @@ namespace ts {
             }
 
             if (isFunctionLikeDeclaration(node) || isArrowFunction(node) || isMethodDeclaration(node)) {
-                addConvertToAsyncFunctionDiagnostics(node, checker, diags)
+                addConvertToAsyncFunctionDiagnostics(node, checker, diags);
             }
             node.forEachChild(check);
         }
@@ -157,12 +157,12 @@ namespace ts {
             }
 
             function hasCallback(returnChild: Node) {
-                let symbol = checker.getSymbolAtLocation(returnChild);
+                const symbol = checker.getSymbolAtLocation(returnChild);
 
                 if (isCallback(returnChild)) {
                     retStmts.push(child as ReturnStatement);
                 }
-                else if (isIdentifier(returnChild) && isReturnStatement(child) 
+                else if (isIdentifier(returnChild) && isReturnStatement(child)
                 && child.expression && isIdentifier(child.expression)) {
                     retStmts.push(child);
                     forEachChild(node, findCallbackUses);
@@ -176,21 +176,21 @@ namespace ts {
                 function findCallbackUses(identUse: Node) {
 
                     // TODO -> fix for multiple length variable decl lists
-                    if (isVariableDeclarationList(identUse) && identUse.declarations.length == 1 &&
-                        identUse.declarations[0].initializer && isCallback(identUse.declarations[0].initializer!)){
-                        if (symbol === checker.getSymbolAtLocation(identUse.declarations[0].name)){
+                    if (isVariableDeclarationList(identUse) && identUse.declarations.length === 1 &&
+                        identUse.declarations[0].initializer && (isCallExpression(identUse.declarations[0].initializer!))) {
+                        if (symbol === checker.getSymbolAtLocation(identUse.declarations[0].name)) {
                             retStmts.push(parent);
                         }
                     }
                     else if (isCallback(identUse)) {
-                        if (symbol === checker.getSymbolAtLocation((<CallExpression>identUse).expression)){
-                            retStmts.push(identUse as CallExpression);
+                        if (symbol === checker.getSymbolAtLocation((<PropertyAccessExpression>(<CallExpression>identUse).expression).expression)) {
+                            retStmts.push(parent as CallExpression);
                         }
                     }
                     else {
                         parent = identUse;
                         forEachChild(identUse, findCallbackUses);
-                    }
+                     }
                 }
             }
 
@@ -203,6 +203,5 @@ namespace ts {
     function isCallback(node: Node): boolean {
         return (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
             (node.expression.name.text === "then" || node.expression.name.text === "catch"));
-
     }
 }
