@@ -141,7 +141,7 @@ namespace ts {
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
             assert.isNotNull(diagnostic);
 
-            const actions = codefix.getFixes(context)
+            const actions = codefix.getFixes(context);
             const action = find(actions, action => action.description === description.message)!;
             assert.isNotNull(action);
 
@@ -415,7 +415,7 @@ function [#|f|]() {
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_VarReturn2", `
 function [#|f|]() {
-    let blob = fetch("https://typescriptlang.org")
+    let blob = fetch("https://typescriptlang.org");
     blob.then(resp => console.log(resp));
     return blob;
 }
@@ -453,6 +453,37 @@ function [#|f|]() {
 }
 `
   );
+
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn6", `
+function [#|f|]() {
+    var blob = fetch("https://typescriptlang.org");
+    return blob;
+}
+`
+);
+
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn7", `
+function [#|f|]() {
+    let blob = fetch("https://typescriptlang.org");
+    let blob2 = fetch("https://microsoft.com");
+    blob2.then(res => console.log("res:", res));
+    blob.then(resp => console.log(resp));
+    return blob;
+}
+`
+);
+
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn8", `
+function [#|f|]() {
+    let blob = fetch("https://typescriptlang.org");
+    if (!blob.ok){
+        return blob;
+    }
+    blob.then(resp => console.log(resp));
+    return blob;
+}
+`
+);
 
 _testConvertToAsyncFunction("convertToAsyncFunction_Param", `
 function [#|f|]() {
@@ -540,7 +571,7 @@ function [#|f|]() {
   function res(response){
       console.log(response);
   }
-` );
+`);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_Conditionals", `
 function [#|f|](){
