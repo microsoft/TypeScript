@@ -28515,11 +28515,49 @@ namespace ts {
             }
         }
 
+        function getNonSimpleParameters(parameters: ReadonlyArray<ParameterDeclaration>): ReadonlyArray<ParameterDeclaration> {
+            // ECMA-262 14.1.13
+            if (parameters.length === 0) return [];
+
+            const last = lastOrUndefined(parameters);
+            if (last && isRestParameter(last)) return [last];
+
+            return filter(parameters, parameter => {
+                // ECMA-262 13.3.3.4
+                return !!parameter.initializer || isBindingPattern(parameter.name);
+            });
+        }
+
+        function checkGrammarForUseStrictSimpleParameterList(node: FunctionLikeDeclaration): boolean {
+            if (languageVersion >= ScriptTarget.ES2016) {
+                const useStrictDirective = node.body && isBlock(node.body) && findUseStrictPrologue(node.body.statements);
+                if (useStrictDirective) {
+                    const nonSimpleParameters = getNonSimpleParameters(node.parameters);
+                    if (length(nonSimpleParameters)) {
+                        forEach(nonSimpleParameters, parameter => {
+                            addRelatedInfo(
+                                error(parameter, Diagnostics.This_parameter_is_not_allowed_with_use_strict_directive),
+                                createDiagnosticForNode(useStrictDirective, Diagnostics._0_is_here, "use strict directive")
+                            );
+                        });
+
+                        const diagnostics = nonSimpleParameters.map((parameter, index) => (
+                            index === 0 ? createDiagnosticForNode(parameter, Diagnostics._0_is_here, "parameter") : createDiagnosticForNode(parameter, Diagnostics.and_here)
+                        )) as [DiagnosticWithLocation, ...DiagnosticWithLocation[]];
+                        addRelatedInfo(error(useStrictDirective, Diagnostics.use_strict_directive_cannot_be_used_with_non_simple_parameter_list), ...diagnostics);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration | MethodSignature): boolean {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
             return checkGrammarDecoratorsAndModifiers(node) || checkGrammarTypeParameterList(node.typeParameters, file) ||
-                checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
+                checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file) ||
+                (isFunctionLikeDeclaration(node) && checkGrammarForUseStrictSimpleParameterList(node));
         }
 
         function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {

@@ -983,6 +983,18 @@
         "category": "Error",
         "code": 1343
     },
+    "This parameter is not allowed with 'use strict' directive.": {
+        "category": "Error",
+        "code": 1344
+    },
+    "'use strict' directive cannot be used with non simple parameter list.": {
+        "category": "Error",
+        "code": 1345
+    },
+    "{0} is here.": {
+        "category": "Error",
+        "code": 1346
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
