@@ -141,9 +141,10 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    export function getReturnStatementsWithPromiseCallbacks(node: Node, checker: TypeChecker): Node[] {
+    export function getReturnStatementsWithPromiseCallbacks(node: Node, checker: TypeChecker): [Node[], NodeFlags] {
 
         const retStmts: Node[] = [];
+        let varDeclFlags = NodeFlags.Let;
         forEachChild(node, visit);
 
         function visit(child: Node) {
@@ -174,13 +175,14 @@ namespace ts {
                 let parent: Node;
 
                 function findCallbackUses(identUse: Node) {
-
-                    // TODO -> fix for multiple length variable decl lists
-                    if (isVariableDeclarationList(identUse) && identUse.declarations.length === 1 &&
-                        identUse.declarations[0].initializer && (isCallExpression(identUse.declarations[0].initializer!))) {
-                        if (symbol === checker.getSymbolAtLocation(identUse.declarations[0].name)) {
-                            retStmts.push(parent);
+                    if (isVariableDeclarationList(identUse)){ 
+                        for (let varDecl of identUse.declarations) {
+                            if (varDecl.initializer && isCallExpression(varDecl.initializer) && 
+                                symbol === checker.getSymbolAtLocation(varDecl.name)){
+                                retStmts.push(parent);
+                            }
                         }
+                        varDeclFlags = identUse.flags;
                     }
                     else if (isCallback(identUse)) {
                         if (symbol === checker.getSymbolAtLocation((<PropertyAccessExpression>(<CallExpression>identUse).expression).expression)) {
@@ -190,14 +192,12 @@ namespace ts {
                     else {
                         parent = identUse;
                         forEachChild(identUse, findCallbackUses);
-                     }
+                    }
                 }
             }
-
             forEachChild(child, visit);
         }
-
-        return retStmts;
+        return [retStmts, varDeclFlags];
     }
 
     function isCallback(node: Node): boolean {
