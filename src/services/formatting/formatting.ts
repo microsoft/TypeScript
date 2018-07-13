@@ -975,7 +975,6 @@ namespace ts.formatting {
             // split comment in lines
             let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
-            let parts: TextRange[];
             if (startLine === endLine) {
                 if (!firstLineIsIndented) {
                     // treat as single line comment
@@ -983,19 +982,20 @@ namespace ts.formatting {
                 }
                 return;
             }
-            else {
-                parts = [];
-                let startPos = commentRange.pos;
-                for (let line = startLine; line < endLine; line++) {
-                    const endOfLine = getEndLinePosition(line, sourceFile);
-                    parts.push({ pos: startPos, end: endOfLine });
-                    startPos = getStartPositionOfLine(line + 1, sourceFile);
-                }
 
-                if (indentFinalLine) {
-                    parts.push({ pos: startPos, end: commentRange.end });
-                }
+            const parts: TextRange[] = [];
+            let startPos = commentRange.pos;
+            for (let line = startLine; line < endLine; line++) {
+                const endOfLine = getEndLinePosition(line, sourceFile);
+                parts.push({ pos: startPos, end: endOfLine });
+                startPos = getStartPositionOfLine(line + 1, sourceFile);
             }
+
+            if (indentFinalLine) {
+                parts.push({ pos: startPos, end: commentRange.end });
+            }
+
+            if (parts.length === 0) return;
 
             const startLinePos = getStartPositionOfLine(startLine, sourceFile);
 
