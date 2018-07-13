@@ -18,31 +18,33 @@ namespace ts.codefix {
         Debug.assert(statement.getStart(sourceFile) === token.getStart(sourceFile));
 
         const container = (isBlock(statement.parent) ? statement.parent : statement).parent;
-        switch (container.kind) {
-            case SyntaxKind.IfStatement:
-                if ((container as IfStatement).elseStatement) {
-                    if (isBlock(statement.parent)) {
-                        changes.deleteNodeRange(sourceFile, first(statement.parent.statements), last(statement.parent.statements));
+        if (!isBlock(statement.parent) || statement === first(statement.parent.statements)) {
+            switch (container.kind) {
+                case SyntaxKind.IfStatement:
+                    if ((container as IfStatement).elseStatement) {
+                        if (isBlock(statement.parent)) {
+                            break;
+                        }
+                        else {
+                            changes.replaceNode(sourceFile, statement, createBlock(emptyArray));
+                        }
+                        return;
                     }
-                    else {
-                        changes.replaceNode(sourceFile, statement, createBlock(emptyArray));
-                    }
-                    break;
-                }
-                // falls through
-            case SyntaxKind.WhileStatement:
-            case SyntaxKind.ForStatement:
-                changes.delete(sourceFile, container);
-                break;
-            default:
-                if (isBlock(statement.parent)) {
-                    const end = start + length;
-                    const lastStatement = Debug.assertDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end));
-                    changes.deleteNodeRange(sourceFile, statement, lastStatement);
-                }
-                else {
-                    changes.delete(sourceFile, statement);
-                }
+                    // falls through
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                    changes.delete(sourceFile, container);
+                    return;
+            }
+        }
+
+        if (isBlock(statement.parent)) {
+            const end = start + length;
+            const lastStatement = Debug.assertDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end));
+            changes.deleteNodeRange(sourceFile, statement, lastStatement);
+        }
+        else {
+            changes.delete(sourceFile, statement);
         }
     }
 
