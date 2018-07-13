@@ -1433,7 +1433,7 @@ namespace ts.server {
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file));
             });
             return simplifiedResult
-                ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(project, action)) }))
+                ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(action)) }))
                 : result;
         }
 
@@ -1735,7 +1735,7 @@ namespace ts.server {
                     const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename))!;
                     mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
                 }
-                return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(project, edits) };
+                return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(edits) };
             }
             else {
                 return result;
@@ -1747,7 +1747,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(scope.args);
             const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, this.getFormatOptions(file), this.getPreferences(file));
             if (simplifiedResult) {
-                return this.mapTextChangesToCodeEdits(project, changes);
+                return this.mapTextChangesToCodeEdits(changes);
             }
             else {
                 return changes;
@@ -1763,7 +1763,7 @@ namespace ts.server {
                 this.projectService,
                 project => project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences),
                 (a, b) => a.fileName === b.fileName);
-            return simplifiedResult ? changes.map(c => this.mapTextChangeToCodeEditUsingScriptInfoOrConfigFile(c)) : changes;
+            return simplifiedResult ? changes.map(c => this.mapTextChangeToCodeEdit(c)) : changes;
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> | undefined {
@@ -1776,7 +1776,7 @@ namespace ts.server {
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
 
             const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes!, this.getFormatOptions(file), this.getPreferences(file));
-            return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(project, codeAction)) : codeActions;
+            return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(codeAction)) : codeActions;
         }
 
         private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
@@ -1784,7 +1784,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(scope.args);
             const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, this.getFormatOptions(file), this.getPreferences(file));
             if (simplifiedResult) {
-                return { changes: this.mapTextChangesToCodeEdits(project, res.changes), commands: res.commands };
+                return { changes: this.mapTextChangesToCodeEdits(res.changes), commands: res.commands };
             }
             else {
                 return res;
@@ -1824,24 +1824,20 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(project: Project, { description, changes, commands }: CodeAction): protocol.CodeAction {
-            return { description, changes: this.mapTextChangesToCodeEdits(project, changes), commands };
+        private mapCodeAction({ description, changes, commands }: CodeAction): protocol.CodeAction {
+            return { description, changes: this.mapTextChangesToCodeEdits(changes), commands };
         }
 
-        private mapCodeFixAction(project: Project, { fixName, description, changes, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
-            return { fixName, description, changes: this.mapTextChangesToCodeEdits(project, changes), commands, fixId, fixAllDescription };
+        private mapCodeFixAction({ fixName, description, changes, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
+            return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
         }
 
-        private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
-            return textChanges.map(change => this.mapTextChangeToCodeEdit(project, change));
+        private mapTextChangesToCodeEdits(textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
+            return textChanges.map(change => this.mapTextChangeToCodeEdit(change));
         }
 
-        private mapTextChangeToCodeEdit(project: Project, change: FileTextChanges): protocol.FileCodeEdits {
-            return mapTextChangesToCodeEditsForFile(change, project.getSourceFileOrConfigFile(this.normalizePath(change.fileName)));
-        }
-
-        private mapTextChangeToCodeEditUsingScriptInfoOrConfigFile(change: FileTextChanges): protocol.FileCodeEdits {
-            return mapTextChangesToCodeEditsUsingScriptInfoOrConfig(change, this.projectService.getScriptInfoOrConfig(this.normalizePath(change.fileName)));
+        private mapTextChangeToCodeEdit(change: FileTextChanges): protocol.FileCodeEdits {
+            return mapTextChangesToCodeEdits(change, this.projectService.getScriptInfoOrConfig(this.normalizePath(change.fileName)));
         }
 
         private normalizePath(fileName: string) {
@@ -2357,35 +2353,14 @@ namespace ts.server {
         return { file: fileName, start: scriptInfo.positionToLineOffset(textSpan.start), end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)) };
     }
 
-    function mapTextChangesToCodeEditsForFile(textChanges: FileTextChanges, sourceFile: SourceFile | undefined): protocol.FileCodeEdits {
-        Debug.assert(!!textChanges.isNewFile === !sourceFile, "Expected isNewFile for (only) new files", () => JSON.stringify({ isNewFile: !!textChanges.isNewFile, hasSourceFile: !!sourceFile }));
-        if (sourceFile) {
-            return {
-                fileName: textChanges.fileName,
-                textChanges: textChanges.textChanges.map(textChange => convertTextChangeToCodeEdit(textChange, sourceFile)),
-            };
-        }
-        else {
-            return convertNewFileTextChangeToCodeEdit(textChanges);
-        }
-    }
-
-    function mapTextChangesToCodeEditsUsingScriptInfoOrConfig(textChanges: FileTextChanges, scriptInfo: ScriptInfoOrConfig | undefined): protocol.FileCodeEdits {
+    function mapTextChangesToCodeEdits(textChanges: FileTextChanges, scriptInfo: ScriptInfoOrConfig | undefined): protocol.FileCodeEdits {
         Debug.assert(!!textChanges.isNewFile === !scriptInfo, "Expected isNewFile for (only) new files", () => JSON.stringify({ isNewFile: !!textChanges.isNewFile, hasScriptInfo: !!scriptInfo }));
         return scriptInfo
-            ? { fileName: textChanges.fileName, textChanges: textChanges.textChanges.map(textChange => convertTextChangeToCodeEditUsingScriptInfoOrConfig(textChange, scriptInfo)) }
+            ? { fileName: textChanges.fileName, textChanges: textChanges.textChanges.map(textChange => convertTextChangeToCodeEdit(textChange, scriptInfo)) }
             : convertNewFileTextChangeToCodeEdit(textChanges);
     }
 
-    function convertTextChangeToCodeEdit(change: TextChange, sourceFile: SourceFile): protocol.CodeEdit {
-        return {
-            start: convertToLocation(sourceFile.getLineAndCharacterOfPosition(change.span.start)),
-            end: convertToLocation(sourceFile.getLineAndCharacterOfPosition(change.span.start + change.span.length)),
-            newText: change.newText ? change.newText : "",
-        };
-    }
-
-    function convertTextChangeToCodeEditUsingScriptInfoOrConfig(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {
+    function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {
         return { start: positionToLineOffset(scriptInfo, change.span.start), end: positionToLineOffset(scriptInfo, textSpanEnd(change.span)), newText: change.newText };
     }
 
