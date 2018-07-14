@@ -199,7 +199,7 @@ namespace ts.server {
 
         private write(s: string) {
             if (this.fd >= 0) {
-                const buf = Buffer.from ? Buffer.from(s) : new Buffer(s);
+                const buf = sys.bufferFrom!(s);
                 // tslint:disable-next-line no-null-keyword
                 fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
@@ -869,7 +869,7 @@ namespace ts.server {
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(Buffer.from ? Buffer.from(s, "utf8") : new Buffer(s, "utf8"));
+    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8"));
     sys.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
