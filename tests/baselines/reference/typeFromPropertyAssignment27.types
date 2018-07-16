@@ -10,9 +10,9 @@ function C() { this.p = 1; }
 
 C.prototype = { q: 2 };
 >C.prototype = { q: 2 } : { [x: string]: any; q: number; }
->C.prototype : { [x: string]: any; q: number; }
+>C.prototype : { [x: string]: any; }
 >C : typeof C
->prototype : { [x: string]: any; q: number; }
+>prototype : { [x: string]: any; }
 >{ q: 2 } : { [x: string]: any; q: number; }
 >q : number
 >2 : 2

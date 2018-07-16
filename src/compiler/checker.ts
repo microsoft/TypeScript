@@ -4714,10 +4714,6 @@ namespace ts {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
-                const tag = getJSDocTypeTag(specialDeclaration);
-                if (tag && tag.typeExpression) {
-                    return getTypeFromTypeNode(tag.typeExpression);
-                }
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
             const types: Type[] = [];
@@ -5085,7 +5081,7 @@ namespace ts {
         }
 
         function getJSInitializerType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init) && init.properties.length === 0) {
+            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init)) {
                 const exports = createSymbolTable();
                 while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
                     const s = getSymbolOfNode(decl);
@@ -15790,22 +15786,22 @@ namespace ts {
         }
 
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
-        // Don't do this for special property assignments unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
+        // Don't do this for special property assignments to avoid circularity.
         function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
             const kind = getSpecialPropertyAssignmentKind(binaryExpression);
             switch (kind) {
                 case SpecialPropertyAssignmentKind.None:
                     return true;
                 case SpecialPropertyAssignmentKind.Property:
-                case SpecialPropertyAssignmentKind.ExportsProperty:
-                case SpecialPropertyAssignmentKind.Prototype:
-                case SpecialPropertyAssignmentKind.PrototypeProperty:
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
-                    return !binaryExpression.left.symbol || binaryExpression.left.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.left.symbol.valueDeclaration);
-                case SpecialPropertyAssignmentKind.ThisProperty:
+                    return !binaryExpression.left.symbol;
+                case SpecialPropertyAssignmentKind.ExportsProperty:
                 case SpecialPropertyAssignmentKind.ModuleExports:
-                    return !binaryExpression.symbol || binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration);
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.Prototype:
+                    return false;
                 default:
                     return Debug.assertNever(kind);
             }
