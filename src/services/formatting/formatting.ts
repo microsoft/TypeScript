@@ -717,7 +717,6 @@ namespace ts.formatting {
                 Debug.assert(isNodeArray(nodes));
 
                 const listStartToken = getOpenTokenForList(parent, nodes);
-                const listEndToken = getCloseTokenForOpenToken(listStartToken);
 
                 let listDynamicIndentation = parentDynamicIndentation;
                 let startLine = parentStartLine;
@@ -752,17 +751,21 @@ namespace ts.formatting {
                     inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0);
                 }
 
-                if (listEndToken !== SyntaxKind.Unknown) {
-                    if (formattingScanner.isOnToken()) {
-                        const tokenInfo = formattingScanner.readTokenInfo(parent);
-                        // consume the list end token only if it is still belong to the parent
-                        // there might be the case when current token matches end token but does not considered as one
-                        // function (x: function) <--
-                        // without this check close paren will be interpreted as list end token for function expression which is wrong
-                        if (tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
-                            // consume list end token
-                            consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
-                        }
+                const listEndToken = getCloseTokenForOpenToken(listStartToken);
+                if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken()) {
+                    let tokenInfo = formattingScanner.readTokenInfo(parent);
+                    if (tokenInfo.token.kind === SyntaxKind.CommaToken && isCallLikeExpression(parent)) {
+                        formattingScanner.advance();
+                        tokenInfo = formattingScanner.readTokenInfo(parent);
+                    }
+
+                    // consume the list end token only if it is still belong to the parent
+                    // there might be the case when current token matches end token but does not considered as one
+                    // function (x: function) <--
+                    // without this check close paren will be interpreted as list end token for function expression which is wrong
+                    if (tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
+                        // consume list end token
+                        consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
                     }
                 }
             }
