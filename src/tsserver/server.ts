@@ -676,7 +676,7 @@ namespace ts.server {
             fs.stat(watchedFile.fileName, (err, stats) => {
                 if (err) {
                     if (err.code === "ENOENT") {
-                        if (watchedFile.mtime.getTime() !== 0) {
+                        if (watchedFile.mtime !== undefined && watchedFile.mtime.getTime() !== 0) {
                             watchedFile.mtime = missingFileModifiedTime;
                             watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Deleted);
                         }

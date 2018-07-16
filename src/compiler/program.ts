@@ -63,7 +63,7 @@ namespace ts {
     interface OutputFingerprint {
         hash: string;
         byteOrderMark: boolean;
-        mtime: Date;
+        mtime: Date | undefined;
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
@@ -128,6 +128,7 @@ namespace ts {
                 if (fingerprint &&
                     fingerprint.byteOrderMark === writeByteOrderMark &&
                     fingerprint.hash === hash &&
+                    fingerprint.mtime !== undefined &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;
                 }

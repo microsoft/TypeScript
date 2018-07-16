@@ -848,9 +848,14 @@ namespace ts {
             const outputs = getAllProjectOutputs(proj);
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
+
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file));
+                    const fileModifiedTime = compilerHost.getModifiedTime!(file);
+                    if (fileModifiedTime !== undefined) {
+                        priorNewestUpdateTime = newer(priorNewestUpdateTime, fileModifiedTime);
+                    }
                 }
+
                 compilerHost.setModifiedTime!(file, now);
             }
 
@@ -1058,7 +1063,7 @@ namespace ts {
             }
 
             const inputTime = host.getModifiedTime(inputFile);
-            if (inputTime > newestInputFileTime) {
+            if (inputTime !== undefined && inputTime > newestInputFileTime) {
                 newestInputFileName = inputFile;
                 newestInputFileTime = inputTime;
             }
@@ -1090,19 +1095,19 @@ namespace ts {
             }
 
             const outputTime = host.getModifiedTime(output);
-            if (outputTime < oldestOutputFileTime) {
+            if (outputTime !== undefined && outputTime < oldestOutputFileTime) {
                 oldestOutputFileTime = outputTime;
                 oldestOutputFileName = output;
             }
 
             // If an output is older than the newest input, we can stop checking
             // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (outputTime < newestInputFileTime) {
+            if (outputTime !== undefined && outputTime < newestInputFileTime) {
                 isOutOfDateWithInputs = true;
                 break;
             }
 
-            if (outputTime > newestOutputFileTime) {
+            if (outputTime !== undefined && outputTime > newestOutputFileTime) {
                 newestOutputFileTime = outputTime;
                 newestOutputFileName = output;
             }
@@ -1117,7 +1122,10 @@ namespace ts {
                     newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                 }
                 else {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime(output));
+                    const outputModifiedTime = host.getModifiedTime(output);
+                    if (outputModifiedTime !== undefined) {
+                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                    }
                 }
             }
         }
