@@ -1,6 +1,9 @@
 Exit Code: 1
 Standard output:
 node_modules/adonis-framework/lib/util.js(24,13): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/lib/util.js(29,6): error TS2339: Property 'existy' does not exist on type '{}'.
+node_modules/adonis-framework/lib/util.js(42,6): error TS2339: Property 'spread' does not exist on type '{}'.
+node_modules/adonis-framework/lib/util.js(57,6): error TS2339: Property 'isGenerator' does not exist on type '{}'.
 node_modules/adonis-framework/providers/ConfigProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/providers/EncryptionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/providers/EnvProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
@@ -63,12 +66,61 @@ node_modules/adonis-framework/src/Exceptions/index.js(205,12): error TS2554: Exp
 node_modules/adonis-framework/src/File/index.js(175,5): error TS2322: Type 'Promise<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean'.
   Type '""' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Hash/index.js(36,6): error TS2339: Property 'make' does not exist on type '{}'.
+node_modules/adonis-framework/src/Hash/index.js(62,6): error TS2339: Property 'verify' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(64,9): error TS2339: Property 'load' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(65,11): error TS2339: Property 'reset' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(81,11): error TS2339: Property 'setProjectDirectory' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(94,9): error TS2339: Property 'loadInFuture' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(103,9): error TS2339: Property 'reset' does not exist on type '{}'.
 node_modules/adonis-framework/src/Helpers/index.js(105,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(106,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(116,9): error TS2339: Property 'getProjectDirectories' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(127,9): error TS2339: Property 'setProjectDirectories' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(139,9): error TS2339: Property 'setProjectDirectory' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(150,9): error TS2339: Property 'basePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(162,9): error TS2339: Property 'appPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(164,18): error TS2339: Property '_makePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(176,9): error TS2339: Property 'publicPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(178,18): error TS2339: Property '_makePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(189,9): error TS2339: Property 'appNameSpace' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(205,9): error TS2339: Property 'makeNameSpace' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(206,32): error TS2339: Property 'appNameSpace' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(222,9): error TS2339: Property 'configPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(224,18): error TS2339: Property '_makePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(238,9): error TS2339: Property 'storagePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(240,18): error TS2339: Property '_makePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(254,9): error TS2339: Property 'resourcesPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(256,18): error TS2339: Property '_makePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(269,9): error TS2339: Property 'migrationsPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(271,18): error TS2339: Property 'databasePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(284,9): error TS2339: Property 'seedsPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(286,18): error TS2339: Property 'databasePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(299,9): error TS2339: Property 'factoriesPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(301,18): error TS2339: Property 'databasePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(314,9): error TS2339: Property 'databasePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(316,18): error TS2339: Property '_makePath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(329,9): error TS2339: Property 'isAceCommand' does not exist on type '{}'.
 node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object is possibly 'undefined'.
+node_modules/adonis-framework/src/Helpers/index.js(343,9): error TS2339: Property 'viewsPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(344,18): error TS2339: Property 'resourcesPath' does not exist on type '{}'.
+node_modules/adonis-framework/src/Helpers/index.js(359,9): error TS2339: Property '_makePath' does not exist on type '{}'.
 node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/Middleware/index.js(66,12): error TS2339: Property 'new' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(87,12): error TS2339: Property 'register' does not exist on type '{}'.
 node_modules/adonis-framework/src/Middleware/index.js(92,19): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/adonis-framework/src/Middleware/index.js(107,12): error TS2339: Property 'global' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(123,12): error TS2339: Property 'named' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(124,58): error TS2339: Property 'register' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(136,12): error TS2339: Property 'getGlobal' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(149,12): error TS2339: Property 'getNamed' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(164,12): error TS2339: Property 'fetchParams' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(186,12): error TS2339: Property 'formatNamedMiddleware' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(193,50): error TS2339: Property 'fetchParams' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(215,12): error TS2339: Property 'resolve' does not exist on type '{}'.
+node_modules/adonis-framework/src/Middleware/index.js(216,47): error TS2339: Property 'getGlobal' does not exist on type '{}'.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.
+node_modules/adonis-framework/src/Middleware/index.js(236,12): error TS2339: Property 'compose' does not exist on type '{}'.
 node_modules/adonis-framework/src/Request/index.js(64,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(66,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(95,14): error TS2304: Cannot find name 'Mixed'.
@@ -99,20 +151,76 @@ node_modules/adonis-framework/src/Response/index.js(95,16): error TS2304: Cannot
 node_modules/adonis-framework/src/Response/index.js(172,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(299,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(323,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/domains.js(23,9): error TS2339: Property 'add' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/domains.js(36,9): error TS2339: Property 'match' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/helpers.js(22,13): error TS2304: Cannot find name 'Any'.
+node_modules/adonis-framework/src/Route/helpers.js(27,14): error TS2339: Property 'construct' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(29,32): error TS2339: Property 'makeRoutePattern' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/helpers.js(34,3): error TS2322: Type 'string | string[]' is not assignable to type 'string'.
   Type 'string[]' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/helpers.js(42,13): error TS2304: Cannot find name 'Regex'.
+node_modules/adonis-framework/src/Route/helpers.js(46,14): error TS2339: Property 'makeRoutePattern' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/helpers.js(54,21): error TS8024: JSDoc '@param' tag has name 'url', but there is no parameter with that name.
+node_modules/adonis-framework/src/Route/helpers.js(60,14): error TS2339: Property 'returnMatchingRouteToUrl' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(63,36): error TS2339: Property 'makeRoutePattern' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(83,14): error TS2339: Property 'returnRouteArguments' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(103,14): error TS2339: Property 'compileRouteToUrl' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(116,14): error TS2339: Property 'appendMiddleware' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/helpers.js(131,21): error TS8024: JSDoc '@param' tag has name 'format', but there is no parameter with that name.
+node_modules/adonis-framework/src/Route/helpers.js(134,14): error TS2339: Property 'addFormats' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(140,36): error TS2339: Property 'makeRoutePattern' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(144,35): error TS2339: Property 'makeRoutePattern' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(157,14): error TS2339: Property 'prefixRoute' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(161,34): error TS2339: Property 'makeRoutePattern' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/helpers.js(174,14): error TS2339: Property 'addDomain' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/index.js(30,5): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Route/index.js(46,7): error TS2339: Property 'routes' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(57,7): error TS2339: Property 'new' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/index.js(58,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Route/index.js(79,7): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(100,7): error TS2339: Property 'get' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(101,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(117,7): error TS2339: Property 'on' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(118,9): error TS2339: Property 'get' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(133,7): error TS2339: Property 'render' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(134,23): error TS2339: Property '_lastRoute' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(156,7): error TS2339: Property 'post' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(157,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(176,7): error TS2339: Property 'put' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(177,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(196,7): error TS2339: Property 'patch' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(197,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(216,7): error TS2339: Property 'delete' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(217,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(236,7): error TS2339: Property 'options' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(237,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(257,7): error TS2339: Property 'match' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(259,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(278,7): error TS2339: Property 'any' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(280,8): error TS2339: Property 'route' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(296,7): error TS2339: Property 'as' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(297,25): error TS2339: Property '_lastRoute' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(311,7): error TS2339: Property '_lastRoute' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/index.js(321,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/index.js(321,20): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/adonis-framework/src/Route/index.js(330,7): error TS2339: Property 'middleware' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(332,11): error TS2339: Property '_lastRoute' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(341,7): error TS2339: Property 'middlewares' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(343,9): error TS2339: Property 'middleware' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/index.js(354,20): error TS2694: Namespace 'Route' has no exported member 'Group'.
+node_modules/adonis-framework/src/Route/index.js(362,7): error TS2339: Property 'group' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/index.js(368,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Route/index.js(388,7): error TS2339: Property 'resolve' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/index.js(396,10): error TS2554: Expected 2 arguments, but got 3.
 node_modules/adonis-framework/src/Route/index.js(407,20): error TS2694: Namespace 'Route' has no exported member 'resources'.
+node_modules/adonis-framework/src/Route/index.js(415,7): error TS2339: Property 'resource' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(418,7): error TS2339: Property 'resources' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(418,25): error TS2339: Property 'resource' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(434,7): error TS2339: Property 'url' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(462,7): error TS2339: Property 'getRoute' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(479,7): error TS2339: Property 'remove' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(499,7): error TS2339: Property 'formats' does not exist on type '{}'.
+node_modules/adonis-framework/src/Route/index.js(500,27): error TS2339: Property '_lastRoute' does not exist on type '{}'.
 node_modules/adonis-framework/src/Route/index.js(501,42): error TS2345: Argument of type 'boolean | undefined' is not assignable to parameter of type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Route/resource.js(92,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
@@ -128,6 +236,7 @@ node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Canno
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Server/helpers.js(17,29): error TS8024: JSDoc '@param' tag has name 'appNamespace', but there is no parameter with that name.
+node_modules/adonis-framework/src/Server/helpers.js(23,9): error TS2339: Property 'makeMiddlewareChain' does not exist on type '{}'.
 node_modules/adonis-framework/src/Server/index.js(17,21): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Server/index.js(54,21): error TS2554: Expected 4 arguments, but got 3.
 node_modules/adonis-framework/src/Server/index.js(137,25): error TS8024: JSDoc '@param' tag has name 'handlers', but there is no parameter with that name.
@@ -149,7 +258,13 @@ node_modules/adonis-framework/src/Session/SessionManager.js(69,22): error TS2339
 node_modules/adonis-framework/src/Session/SessionManager.js(69,49): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/SessionManager.js(71,76): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/Store.js(28,13): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Session/Store.js(37,7): error TS2339: Property 'guardPair' does not exist on type '{}'.
 node_modules/adonis-framework/src/Session/Store.js(80,13): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Session/Store.js(87,7): error TS2339: Property 'unGuardPair' does not exist on type '{}'.
+node_modules/adonis-framework/src/Session/Store.js(123,7): error TS2339: Property 'packValues' does not exist on type '{}'.
+node_modules/adonis-framework/src/Session/Store.js(125,24): error TS2339: Property 'guardPair' does not exist on type '{}'.
+node_modules/adonis-framework/src/Session/Store.js(140,7): error TS2339: Property 'unPackValues' does not exist on type '{}'.
+node_modules/adonis-framework/src/Session/Store.js(142,27): error TS2339: Property 'unGuardPair' does not exist on type '{}'.
 node_modules/adonis-framework/src/Session/index.js(10,14): error TS2304: Cannot find name 'SessionDriver'.
 node_modules/adonis-framework/src/Session/index.js(11,11): error TS2304: Cannot find name 'Class'.
 node_modules/adonis-framework/src/Session/index.js(46,15): error TS2304: Cannot find name 'SessionDriver'.
