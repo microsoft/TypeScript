@@ -92,7 +92,15 @@ namespace ts.codefix {
         else if (isCallExpression(stmt)) {
             const [gluedExpr, retName] = glueTogetherCallbacks(retStmts);
             if (gluedExpr) {
-                return [createCall(gluedExpr, undefined, stmt.arguments), retName];
+                let lhs;
+                if (stmt.expression && isPropertyAccessExpression(stmt.expression)) {
+                    lhs = createPropertyAccess(gluedExpr, stmt.expression.name);
+                } 
+                else {
+                    lhs = gluedExpr;
+                }
+
+                return [createCall(lhs, undefined, stmt.arguments), retName];
             }
             else {
                 return [stmt, retName]
