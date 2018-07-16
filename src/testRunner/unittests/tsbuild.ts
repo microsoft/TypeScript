@@ -233,6 +233,38 @@ namespace ts {
                 assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
             });
         });
+
+        describe("tsbuild - with resolveJsonModule option", () => {
+            const projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
+            const allExpectedOutputs = ["/src/tests/dist/src/index.js", "/src/tests/dist/src/index.d.ts", "/src/tests/dist/src/hello.json"];
+
+            function verifyProjectWithResolveJsonModule(configFile: string, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
+                const fs = projFs.shadow();
+                const host = new fakes.CompilerHost(fs);
+                const builder = createSolutionBuilder(host, buildHost, [configFile], { dry: false, force: false, verbose: false });
+                clearDiagnostics();
+                builder.buildAllProjects();
+                assertDiagnosticMessages(...expectedDiagnosticMessages);
+                if (!expectedDiagnosticMessages.length) {
+                    // Check for outputs. Not an exhaustive list
+                    for (const output of allExpectedOutputs) {
+                        assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                    }
+                }
+            }
+
+            it("with resolveJsonModule and include only", () => {
+                verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withInclude.json", Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+            });
+
+            it("with resolveJsonModule and files containing json file", () => {
+                verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withFiles.json");
+            });
+
+            it("with resolveJsonModule and include and files", () => {
+                verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withIncludeAndFiles.json");
+            });
+        });
     }
 
     export namespace OutFile {

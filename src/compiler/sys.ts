@@ -503,6 +503,7 @@ namespace ts {
         /*@internal*/ setBlocking?(): void;
         base64decode?(input: string): string;
         base64encode?(input: string): string;
+        /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
     }
 
     export interface FileWatcher {
@@ -558,7 +559,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    // TODO: this is used as if it's certainly defined in many places.
+    // TODO: GH#18217 this is used as if it's certainly defined in many places.
     export let sys: System = (() => {
         // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
         // byte order mark from the specified encoding. Using any other byte order mark does
@@ -675,18 +676,18 @@ namespace ts {
                         process.stdout._handle.setBlocking(true);
                     }
                 },
-                base64decode: Buffer.from ? input => {
-                    return Buffer.from!(input, "base64").toString("utf8");
-                } : input => {
-                    return new Buffer(input, "base64").toString("utf8");
-                },
-                base64encode: Buffer.from ? input => {
-                    return Buffer.from!(input).toString("base64");
-                } : input => {
-                    return new Buffer(input).toString("base64");
-                }
+                bufferFrom,
+                base64decode: input => bufferFrom(input, "base64").toString("utf8"),
+                base64encode: input => bufferFrom(input).toString("base64"),
             };
             return nodeSystem;
+
+            function bufferFrom(input: string, encoding?: string): Buffer {
+                // See https://github.com/Microsoft/TypeScript/issues/25652
+                return Buffer.from && (Buffer.from as Function) !== Int8Array.from
+                    ? Buffer.from(input, encoding)
+                    : new Buffer(input, encoding);
+            }
 
             function isFileSystemCaseSensitive(): boolean {
                 // win32\win64 are case insensitive platforms

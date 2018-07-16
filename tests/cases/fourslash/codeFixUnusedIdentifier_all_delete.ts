@@ -37,6 +37,10 @@
 ////for (let i = 0, j = 0; ;) {}
 ////for (const x of []) {}
 ////for (const y in {}) {}
+////
+////export type First<T, U> = T;
+////export interface ISecond<T, U> { u: U; }
+////export const cls = class<T, U> { u: U; };
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
@@ -70,5 +74,9 @@ takesCb((x, y) => { y; });
 }
 for (; ;) {}
 for (const {} of []) {}
-for (const {} in {}) {}`,
+for (const {} in {}) {}
+
+export type First<T> = T;
+export interface ISecond<U> { u: U; }
+export const cls = class<U> { u: U; };`,
 });

@@ -351,7 +351,10 @@ namespace ts.formatting {
                             getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, end);
                     }
                     case SyntaxKind.ClassDeclaration:
-                        return getListIfStartEndIsInListRange((<ClassDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return getListIfStartEndIsInListRange((<ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression: {
                         const start = node.getStart(sourceFile);
@@ -576,17 +579,10 @@ namespace ts.formatting {
         function isControlFlowEndingStatement(kind: SyntaxKind, parent: TextRangeWithKind): boolean {
             switch (kind) {
                 case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ThrowStatement: {
-                    if (parent.kind !== SyntaxKind.Block) {
-                        return true;
-                    }
-                    const grandParent = (parent as Node).parent;
-                    // In a function, we may want to write inner functions after this.
-                    return !(grandParent && grandParent.kind === SyntaxKind.FunctionExpression || grandParent.kind === SyntaxKind.FunctionDeclaration);
-                }
+                case SyntaxKind.ThrowStatement:
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
-                    return true;
+                    return parent.kind !== SyntaxKind.Block;
                 default:
                     return false;
             }

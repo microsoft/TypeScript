@@ -1,12 +1,13 @@
-tests/cases/conformance/jsdoc/test.js(1,5): error TS8030: The type of a function declaration must be callable.
+tests/cases/conformance/jsdoc/test.js(1,5): error TS8030: The type of a function declaration must match the function's signature.
 tests/cases/conformance/jsdoc/test.js(7,5): error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
   Property 'prop' is missing in type '(prop: any) => void'.
+tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a function declaration must match the function's signature.
 
 
-==== tests/cases/conformance/jsdoc/test.js (2 errors) ====
+==== tests/cases/conformance/jsdoc/test.js (3 errors) ====
     /** @type {number} */
         ~~~~~~~~~~~~~~
-!!! error TS8030: The type of a function declaration must be callable.
+!!! error TS8030: The type of a function declaration must match the function's signature.
     function f() {
         return 1
     }
@@ -17,4 +18,16 @@ tests/cases/conformance/jsdoc/test.js(7,5): error TS2322: Type '(prop: any) => v
 !!! error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
 !!! error TS2322:   Property 'prop' is missing in type '(prop: any) => void'.
     }
+    
+    /** @type {(a: number) => number} */
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8030: The type of a function declaration must match the function's signature.
+    function add1(a, b) { return a + b; }
+    
+    /** @type {(a: number, b: number) => number} */
+    function add2(a, b) { return a + b; }
+    
+    // TODO: Should be an error since signature doesn't match.
+    /** @type {(a: number, b: number, c: number) => number} */
+    function add3(a, b) { return a + b; }
     
