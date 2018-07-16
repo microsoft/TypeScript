@@ -172,24 +172,24 @@ function F() {
 }
 /** @type {DoneStatus} */
 F.prototype = {
->F.prototype = {    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
->F.prototype : { [x: string]: any; }
+>F.prototype = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>F.prototype : { status: "done"; m(n: number): void; }
 >F : typeof F
->prototype : { [x: string]: any; }
->{    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
+>prototype : { status: "done"; m(n: number): void; }
+>{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
->status : string
+>status : "done"
 >"done" : "done"
 
     m(n) { }
->m : (n: any) => void
->n : any
+>m : (n: number) => void
+>n : number
 }
 
 === tests/cases/conformance/salsa/mod.js ===
 // module.exports assignment
-/** @type {{ status: 'done' }} */
+/** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
 >module.exports = {    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
 >module.exports : any

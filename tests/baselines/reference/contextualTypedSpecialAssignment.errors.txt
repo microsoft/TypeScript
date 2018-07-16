@@ -1,9 +1,8 @@
 tests/cases/conformance/salsa/mod.js(5,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 tests/cases/conformance/salsa/test.js(52,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
-tests/cases/conformance/salsa/test.js(70,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/salsa/test.js (2 errors) ====
+==== tests/cases/conformance/salsa/test.js (1 errors) ====
     /** @typedef {{
         status: 'done'
         m(n: number): void
@@ -76,13 +75,11 @@ tests/cases/conformance/salsa/test.js(70,7): error TS7006: Parameter 'n' implici
     F.prototype = {
         status: "done",
         m(n) { }
-          ~
-!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
     }
     
 ==== tests/cases/conformance/salsa/mod.js (1 errors) ====
     // module.exports assignment
-    /** @type {{ status: 'done' }} */
+    /** @type {{ status: 'done', m(n: number): void }} */
     module.exports = {
         status: "done",
         m(n) { }
