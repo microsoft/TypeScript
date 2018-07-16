@@ -3526,6 +3526,7 @@ namespace ts {
         ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
         OptionalParameter = 1 << 12,        // Optional parameter
         RestParameter     = 1 << 13,        // Rest parameter
+        ModuleExports     = 1 << 14,        // Symbol for module.exports of a file
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 

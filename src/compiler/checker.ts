@@ -76,7 +76,6 @@ namespace ts {
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
-        const moduleSymbol = createSymbol(SymbolFlags.Property, "module" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -1412,6 +1411,14 @@ namespace ts {
                         return lastLocation.symbol;
                     }
                 }
+                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent) {
+                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
+                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
+                        const moduleSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "module" as __String, CheckFlags.ModuleExports);
+                        moduleSymbol.valueDeclaration = originalLocation;
+                        return moduleSymbol;
+                    }
+                }
 
                 if (!excludeGlobals) {
                     result = lookup(globals, name, meaning);
@@ -1421,10 +1428,6 @@ namespace ts {
                 if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent) {
                     if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
                         return requireSymbol;
-                    }
-                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
-                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
-                        return moduleSymbol;
                     }
                 }
             }
@@ -4984,8 +4987,14 @@ namespace ts {
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
                 // CommonsJS require and module both have type any.
-                if (symbol === requireSymbol || symbol === moduleSymbol) {
+                if (symbol === requireSymbol) {
                     return links.type = anyType;
+                }
+                if (getCheckFlags(symbol) & CheckFlags.ModuleExports) {
+                    const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration))
+                    const members = createSymbolTable();
+                    members.set("exports" as __String, fileSymbol);
+                    return links.type = createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
                 }
                 // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;
@@ -15010,6 +15019,7 @@ namespace ts {
             let flowContainer = getControlFlowContainer(node);
             const isOuterVariable = flowContainer !== declarationContainer;
             const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
+            const isModuleExports = getCheckFlags(symbol) & CheckFlags.ModuleExports;
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
@@ -15021,7 +15031,7 @@ namespace ts {
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
-            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget ||
+            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.AnyOrUnknown) !== 0 ||
                 isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
