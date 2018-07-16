@@ -63,7 +63,7 @@ namespace ts {
     interface OutputFingerprint {
         hash: string;
         byteOrderMark: boolean;
-        mtime: Date | undefined;
+        mtime: Date;
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
@@ -128,7 +128,6 @@ namespace ts {
                 if (fingerprint &&
                     fingerprint.byteOrderMark === writeByteOrderMark &&
                     fingerprint.hash === hash &&
-                    fingerprint.mtime !== undefined &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;
                 }
@@ -136,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const mtimeAfter = sys.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,

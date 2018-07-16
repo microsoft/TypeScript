@@ -843,12 +843,14 @@ namespace ts {
                 return buildHost.message(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
             }
 
-            if (context.options.verbose) buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+            if (context.options.verbose) {
+                buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+            }
+
             const now = new Date();
             const outputs = getAllProjectOutputs(proj);
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
-
                 if (isDeclarationFile(file)) {
                     const fileModifiedTime = compilerHost.getModifiedTime!(file);
                     if (fileModifiedTime !== undefined) {
@@ -1062,8 +1064,8 @@ namespace ts {
                 };
             }
 
-            const inputTime = host.getModifiedTime(inputFile);
-            if (inputTime !== undefined && inputTime > newestInputFileTime) {
+            const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
+            if (inputTime > newestInputFileTime) {
                 newestInputFileName = inputFile;
                 newestInputFileTime = inputTime;
             }
@@ -1094,20 +1096,20 @@ namespace ts {
                 break;
             }
 
-            const outputTime = host.getModifiedTime(output);
-            if (outputTime !== undefined && outputTime < oldestOutputFileTime) {
+            const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
+            if (outputTime < oldestOutputFileTime) {
                 oldestOutputFileTime = outputTime;
                 oldestOutputFileName = output;
             }
 
             // If an output is older than the newest input, we can stop checking
             // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (outputTime !== undefined && outputTime < newestInputFileTime) {
+            if (outputTime < newestInputFileTime) {
                 isOutOfDateWithInputs = true;
                 break;
             }
 
-            if (outputTime !== undefined && outputTime > newestOutputFileTime) {
+            if (outputTime > newestOutputFileTime) {
                 newestOutputFileTime = outputTime;
                 newestOutputFileName = output;
             }
@@ -1122,10 +1124,8 @@ namespace ts {
                     newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                 }
                 else {
-                    const outputModifiedTime = host.getModifiedTime(output);
-                    if (outputModifiedTime !== undefined) {
-                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
-                    }
+                    const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
                 }
             }
         }
