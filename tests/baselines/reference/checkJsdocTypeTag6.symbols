@@ -12,3 +12,28 @@ var g = function (prop) {
 >prop : Symbol(prop, Decl(test.js, 6, 18))
 }
 
+/** @type {(a: number) => number} */
+function add1(a, b) { return a + b; }
+>add1 : Symbol(add1, Decl(test.js, 7, 1))
+>a : Symbol(a, Decl(test.js, 10, 14))
+>b : Symbol(b, Decl(test.js, 10, 16))
+>a : Symbol(a, Decl(test.js, 10, 14))
+>b : Symbol(b, Decl(test.js, 10, 16))
+
+/** @type {(a: number, b: number) => number} */
+function add2(a, b) { return a + b; }
+>add2 : Symbol(add2, Decl(test.js, 10, 37))
+>a : Symbol(a, Decl(test.js, 13, 14))
+>b : Symbol(b, Decl(test.js, 13, 16))
+>a : Symbol(a, Decl(test.js, 13, 14))
+>b : Symbol(b, Decl(test.js, 13, 16))
+
+// TODO: Should be an error since signature doesn't match.
+/** @type {(a: number, b: number, c: number) => number} */
+function add3(a, b) { return a + b; }
+>add3 : Symbol(add3, Decl(test.js, 13, 37))
+>a : Symbol(a, Decl(test.js, 17, 14))
+>b : Symbol(b, Decl(test.js, 17, 16))
+>a : Symbol(a, Decl(test.js, 17, 14))
+>b : Symbol(b, Decl(test.js, 17, 16))
+

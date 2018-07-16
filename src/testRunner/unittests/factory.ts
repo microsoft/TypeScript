@@ -21,6 +21,7 @@ namespace ts {
                 const func = createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createBlock([]));
                 checkExpression(func);
                 checkExpression(createCall(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
+                checkExpression(createTaggedTemplate(func, createNoSubstitutionTemplateLiteral("")));
 
                 checkExpression(createBinary(createLiteral("a"), SyntaxKind.CommaToken, createLiteral("b")));
                 checkExpression(createCommaList([createLiteral("a"), createLiteral("b")]));

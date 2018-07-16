@@ -592,6 +592,7 @@ namespace ts {
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensionsWithJsonIfResolveJsonModule = options.resolveJsonModule ? [...supportedExtensions, Extension.Json] : undefined;
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createMap<boolean>();
@@ -1925,7 +1926,7 @@ namespace ts {
             refFile?: SourceFile): SourceFile | undefined {
 
             if (hasExtension(fileName)) {
-                if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
+                if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule || supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
                     if (fail) fail(Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
                     return undefined;
                 }

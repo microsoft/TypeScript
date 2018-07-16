@@ -488,6 +488,7 @@ namespace ts {
         }
 
         if (watch) {
+            builder.buildAllProjects();
             builder.startWatching();
             return undefined;
         }

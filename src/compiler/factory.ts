@@ -4355,6 +4355,11 @@ namespace ts {
                 case SyntaxKind.ConditionalExpression:
                     node = (<ConditionalExpression>node).condition;
                     continue;
+
+                case SyntaxKind.TaggedTemplateExpression:
+                    node = (<TaggedTemplateExpression>node).tag;
+                    continue;
+
                 case SyntaxKind.CallExpression:
                     if (stopAtCallExpressions) {
                         return node;

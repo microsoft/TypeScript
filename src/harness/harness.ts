@@ -66,11 +66,8 @@ namespace Utils {
 
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
-    // Thanks to browserify, Buffer is always available nowadays
-    const Buffer: typeof global.Buffer = require("buffer").Buffer;
-
     export function encodeString(s: string): string {
-        return Buffer.from(s).toString("utf8");
+        return ts.sys.bufferFrom!(s).toString("utf8");
     }
 
     export function byteLength(s: string, encoding?: string): number {
