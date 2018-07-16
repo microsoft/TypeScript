@@ -77,7 +77,7 @@ F.prototype = {
 
 // @Filename: mod.js
 // module.exports assignment
-/** @type {{ status: 'done', m(n: number): void }} */
+/** @type {{ status: 'done' }} */
 module.exports = {
     status: "done",
     m(n) { }

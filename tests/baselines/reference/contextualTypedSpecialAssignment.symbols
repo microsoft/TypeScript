@@ -158,7 +158,7 @@ F.prototype = {
 
 === tests/cases/conformance/salsa/mod.js ===
 // module.exports assignment
-/** @type {{ status: 'done', m(n: number): void }} */
+/** @type {{ status: 'done' }} */
 module.exports = {
 >module : Symbol(export=, Decl(mod.js, 0, 0))
 >exports : Symbol(export=, Decl(mod.js, 0, 0))

@@ -4714,10 +4714,6 @@ namespace ts {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
-                const tag = getJSDocTypeTag(specialDeclaration);
-                if (tag && tag.typeExpression) {
-                    return getTypeFromTypeNode(tag.typeExpression);
-                }
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
             const types: Type[] = [];
@@ -5085,7 +5081,7 @@ namespace ts {
         }
 
         function getJSInitializerType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init) && init.properties.length === 0) {
+            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init)) {
                 const exports = createSymbolTable();
                 while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
                     const s = getSymbolOfNode(decl);
