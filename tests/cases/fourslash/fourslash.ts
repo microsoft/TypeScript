@@ -201,7 +201,7 @@ declare namespace FourSlashInterface {
         caretAtMarker(markerName?: string): void;
         completions(...options: {
             readonly marker?: ArrayOrSingle<string | Marker>,
-            readonly isNewIdentifierLocation?: boolean;
+            readonly isNewIdentifierLocation?: boolean | "arrow-head";
             readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
             readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
             readonly excludes?: ArrayOrSingle<string | { name: string, source: string }>;

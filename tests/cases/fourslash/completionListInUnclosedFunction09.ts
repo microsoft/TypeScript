@@ -6,4 +6,4 @@
 ////}
 
 // Note: "v" questionable since we're in its initializer
-verify.completions({ marker: "1", includes: ["foo", "x", "y", "z", "bar", "a", "b", "c", "v"], isNewIdentifierLocation: true });
+verify.completions({ marker: "1", includes: ["foo", "x", "y", "z", "bar", "a", "b", "c", "v"], isNewIdentifierLocation: "arrow-head" });

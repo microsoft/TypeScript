@@ -998,7 +998,7 @@ namespace ts.Completions {
 
         const semanticStart = timestamp();
         let completionKind = CompletionKind.None;
-        let isNewIdentifierLocation = false;
+        let isNewIdentifierLocation: IsNewIdentifierLocation = false;
         let keywordFilters = KeywordCompletionFilters.None;
         let symbols: Symbol[] = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
@@ -1458,29 +1458,47 @@ namespace ts.Completions {
             return false;
         }
 
-        function isNewIdentifierDefinitionLocation(previousToken: Node | undefined): boolean {
+        function isNewIdentifierDefinitionLocation(previousToken: Node | undefined): IsNewIdentifierLocation {
             if (previousToken) {
                 const containingNodeKind = previousToken.parent.kind;
                 switch (previousToken.kind) {
                     case SyntaxKind.CommaToken:
-                        return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
-                            || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
-                            || containingNodeKind === SyntaxKind.NewExpression                // new C(a, |
-                            || containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [a, |
-                            || containingNodeKind === SyntaxKind.BinaryExpression             // const x = (a, |
-                            || containingNodeKind === SyntaxKind.FunctionType;                // var x: (s: string, list|
+                        switch (containingNodeKind) {
+                            case SyntaxKind.CallExpression:                                  // func( a, |
+                            case SyntaxKind.NewExpression:                                   // new C(a, |
+                            case SyntaxKind.ArrayLiteralExpression:                          // [a, |
+                            case SyntaxKind.BinaryExpression:                                // const x = (a, |
+                                return "arrow-head";
+                            case SyntaxKind.Constructor:                                     // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
+                            case SyntaxKind.FunctionType:                                    // var x: (s: string, list|
+                                return true;
+                            default:
+                                return false;
+                        }
 
                     case SyntaxKind.OpenParenToken:
-                        return containingNodeKind === SyntaxKind.CallExpression               // func( |
-                            || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
-                            || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
-                            || containingNodeKind === SyntaxKind.ParenthesizedExpression      // const x = (a|
-                            || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
+                        switch (containingNodeKind) {
+                            case SyntaxKind.CallExpression:                                  // func( a, |
+                            case SyntaxKind.NewExpression:                                   // new C(a|
+                            case SyntaxKind.ParenthesizedExpression:                         // const x = (a|
+                            case SyntaxKind.ParenthesizedType:                               // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
+                                return "arrow-head";
+                            case SyntaxKind.Constructor:                                     // constructor( |
+                                return true;
+                            default:
+                                return false;
+                        }
 
                     case SyntaxKind.OpenBracketToken:
-                        return containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [ |
-                            || containingNodeKind === SyntaxKind.IndexSignature               // [ | : string ]
-                            || containingNodeKind === SyntaxKind.ComputedPropertyName;         // [ |    /* this can become an index signature */
+                        switch (containingNodeKind) {
+                            case SyntaxKind.ArrayLiteralExpression: // [ |
+                                return "arrow-head";
+                            case SyntaxKind.IndexSignature: // [ | : string ]
+                            case SyntaxKind.ComputedPropertyName: // [ |    /* this can become an index signature */
+                                return true;
+                            default:
+                                return false;
+                        }
 
                     case SyntaxKind.ModuleKeyword:                                            // module |
                     case SyntaxKind.NamespaceKeyword:                                         // namespace |
@@ -1493,19 +1511,19 @@ namespace ts.Completions {
                         return containingNodeKind === SyntaxKind.ClassDeclaration;            // class A{ |
 
                     case SyntaxKind.EqualsToken:
-                        return containingNodeKind === SyntaxKind.VariableDeclaration          // const x = a|
-                            || containingNodeKind === SyntaxKind.BinaryExpression;            // x = a|
+                        switch (containingNodeKind) {
+                            case SyntaxKind.VariableDeclaration:                              // const x = a|
+                            case SyntaxKind.BinaryExpression:                                 // x = a|
+                                return "arrow-head";
+                            default:
+                                return false;
+                        }
 
                     case SyntaxKind.TemplateHead:
-                        return containingNodeKind === SyntaxKind.TemplateExpression;          // `aa ${|
+                        return containingNodeKind === SyntaxKind.TemplateExpression ? "arrow-head" : false; // `aa ${|
 
                     case SyntaxKind.TemplateMiddle:
-                        return containingNodeKind === SyntaxKind.TemplateSpan;                // `aa ${10} dd ${|
-
-                    case SyntaxKind.PublicKeyword:
-                    case SyntaxKind.PrivateKeyword:
-                    case SyntaxKind.ProtectedKeyword:
-                        return containingNodeKind === SyntaxKind.PropertyDeclaration;         // class A{ public |
+                        return containingNodeKind === SyntaxKind.TemplateSpan ? "arrow-head" : false; // `aa ${10} dd ${|
                 }
 
                 // Previous token may have been a keyword that was converted to an identifier.

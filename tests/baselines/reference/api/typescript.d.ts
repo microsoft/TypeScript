@@ -5291,15 +5291,18 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
-        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
+        /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
-        /**
-         * true when the current location also allows for a new identifier
-         */
-        isNewIdentifierLocation: boolean;
+        isNewIdentifierLocation: IsNewIdentifierLocation;
         entries: CompletionEntry[];
     }
+    /**
+     * `true`: Likely a new identifier. (e.g. `class |` could be anything). But still provide completions in case it merges with something.
+     * `false`: Never a new identifier. (e.g. `{ x: 0 }.|` must be `x`, can't be anything else)
+     * `"arrow-head"`: Not a new identifier *unless* it starts an unparenthesized arrow function. (e.g. `x => x + 1`)
+     */
+    type IsNewIdentifierLocation = boolean | "arrow-head";
     interface CompletionEntry {
         name: string;
         kind: ScriptElementKind;

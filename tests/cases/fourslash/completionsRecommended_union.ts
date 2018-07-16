@@ -11,12 +11,12 @@ verify.completions(
     {
         marker: "a",
         includes: { name: "E", isRecommended: true },
-        isNewIdentifierLocation: true,
+        isNewIdentifierLocation: "arrow-head",
     },
     {
         marker: "b",
         // Arbitrarily chooses one to be recommended
         includes: [{ name: "E", isRecommended: true, }, { name: "E2" }],
-        isNewIdentifierLocation: true,
+        isNewIdentifierLocation: "arrow-head",
     },
 );

@@ -4763,12 +4763,12 @@ namespace FourSlashInterface {
     };
     export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
         triggerCharacter?: ts.CompletionsTriggerCharacter;
-        isNewIdentifierLocation?: boolean;
+        isNewIdentifierLocation?: ts.IsNewIdentifierLocation;
     }
 
     export interface VerifyCompletionsOptions {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
-        readonly isNewIdentifierLocation?: boolean;
+        readonly isNewIdentifierLocation?: ts.IsNewIdentifierLocation;
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string | { readonly name: string, readonly source: string }>;

@@ -1988,7 +1988,7 @@ namespace ts.server.protocol {
     export interface CompletionInfo {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
-        readonly isNewIdentifierLocation: boolean;
+        readonly isNewIdentifierLocation: boolean | "arrow-head";
         readonly entries: ReadonlyArray<CompletionEntry>;
     }
 
