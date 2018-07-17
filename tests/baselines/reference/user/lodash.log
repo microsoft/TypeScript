@@ -228,7 +228,7 @@ node_modules/lodash/core.js(3424,41): error TS2345: Argument of type 'Function' 
   Type 'Function' provides no match for the signature '(substring: string, ...args: any[]): string'.
 node_modules/lodash/core.js(3573,51): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/core.js(3590,63): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'push' is missing in type 'IArguments'.
+  Property 'pop' is missing in type 'IArguments'.
 node_modules/lodash/core.js(3830,14): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.
