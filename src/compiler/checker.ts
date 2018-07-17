@@ -19083,7 +19083,7 @@ namespace ts {
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression).typeArguments!, /*reportErrors*/ true, fallbackError);
             }
-            else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments!.length)) {
+            else if (typeArguments && every(signatures, sig => typeArguments!.length < getMinTypeArgumentCount(sig.typeParameters) || typeArguments!.length > length(sig.typeParameters))) {
                 diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
             }
             else if (args) {
