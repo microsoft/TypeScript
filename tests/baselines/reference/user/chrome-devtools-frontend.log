@@ -6439,7 +6439,7 @@ node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionTraceProvide
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionTraceProvider.js(31,32): error TS2339: Property 'stopTraceRecording' does not exist on type 'typeof extensionServer'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionView.js(50,18): error TS2339: Property 'src' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionView.js(74,22): error TS2352: Type 'Window' cannot be converted to type 'Window[]'.
-  Property 'push' is missing in type 'Window'.
+  Property 'pop' is missing in type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionView.js(75,74): error TS2339: Property 'contentWindow' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/extensions_test_runner/ExtensionsNetworkTestRunner.js(23,5): error TS2304: Cannot find name 'output'.
 node_modules/chrome-devtools-frontend/front_end/extensions_test_runner/ExtensionsNetworkTestRunner.js(27,3): error TS2304: Cannot find name 'webInspector'.
@@ -6786,7 +6786,7 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(314,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(759,27): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(918,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
-  Property 'push' is missing in type 'Uint32Array'.
+  Property 'pop' is missing in type 'Uint32Array'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(920,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1045,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1083,14): error TS2339: Property 'key' does not exist on type '(arg0: HeapSnapshotNode) => boolean'.
@@ -10875,7 +10875,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(20,41): erro
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(110,26): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(129,32): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
-    Property 'push' is missing in type 'TemplateStringsArray'.
+    Property 'pop' is missing in type 'TemplateStringsArray'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(134,32): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(139,30): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
