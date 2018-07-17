@@ -37,10 +37,10 @@ exports.Bar = class { }
 
 /** @typedef {number} Baz */
 module.exports = {
->module.exports = {    Baz: class { }} : { [x: string]: any; Baz: typeof Baz; }
->module.exports : any
->module : any
->exports : any
+>module.exports = {    Baz: class { }} : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module : { "tests/cases/conformance/jsdoc/mod1": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >{    Baz: class { }} : { [x: string]: any; Baz: typeof Baz; }
 
     Baz: class { }
@@ -65,10 +65,10 @@ exports.Quid = 2;
 
 /** @typedef {number} Quack */
 module.exports = {
->module.exports = {    Quack: 2} : { [x: string]: any; Quack: number; }
->module.exports : any
->module : any
->exports : any
+>module.exports = {    Quack: 2} : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module : { "tests/cases/conformance/jsdoc/mod1": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >{    Quack: 2} : { [x: string]: any; Quack: number; }
 
     Quack: 2

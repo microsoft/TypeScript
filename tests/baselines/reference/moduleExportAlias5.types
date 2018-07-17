@@ -5,12 +5,12 @@ const webpack = function (){
 >function (){} : { (): void; WebpackOptionsDefaulter: number; }
 }
 exports = module.exports = webpack;
->exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
+>exports = module.exports = webpack : typeof import("tests/cases/conformance/salsa/bug24754")
 >exports : typeof import("tests/cases/conformance/salsa/bug24754")
->module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
->module.exports : any
->module : any
->exports : any
+>module.exports = webpack : typeof import("tests/cases/conformance/salsa/bug24754")
+>module.exports : typeof import("tests/cases/conformance/salsa/bug24754")
+>module : { "tests/cases/conformance/salsa/bug24754": typeof import("tests/cases/conformance/salsa/bug24754"); }
+>exports : typeof import("tests/cases/conformance/salsa/bug24754")
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
 
 exports.version = 1001;

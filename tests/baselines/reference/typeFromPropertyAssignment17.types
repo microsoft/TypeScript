@@ -43,7 +43,7 @@ declare var module: any;
 === tests/cases/conformance/salsa/minimatch.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
->module.exports = minimatch : { (): void; M: typeof M; filter: () => void; }
+>module.exports = minimatch : typeof import("tests/cases/conformance/salsa/minimatch")
 >module.exports : typeof import("tests/cases/conformance/salsa/minimatch")
 >module : { "tests/cases/conformance/salsa/minimatch": typeof import("tests/cases/conformance/salsa/minimatch"); }
 >exports : typeof import("tests/cases/conformance/salsa/minimatch")

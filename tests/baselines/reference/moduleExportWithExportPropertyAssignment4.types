@@ -50,11 +50,11 @@ declare function require(name: string): any;
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"
->module.exports.bothBefore : any
->module.exports : any
->module : { exports: any; }
->exports : any
->bothBefore : any
+>module.exports.bothBefore : string | number
+>module.exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod1")
+>bothBefore : string | number
 >'string' : "string"
 
 A.justExport = 4
@@ -79,10 +79,10 @@ A.bothAfter = 3
 >3 : 3
 
 module.exports = A
->module.exports = A : typeof A
->module.exports : any
->module : { exports: any; }
->exports : any
+>module.exports = A : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod1")
 >A : typeof A
 
 function A() {
@@ -97,19 +97,19 @@ function A() {
 }
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter = 'string' : "string"
->module.exports.bothAfter : any
->module.exports : any
->module : { exports: any; }
->exports : any
->bothAfter : any
+>module.exports.bothAfter : string | number
+>module.exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod1")
+>bothAfter : string | number
 >'string' : "string"
 
 module.exports.justProperty = 'string'
 >module.exports.justProperty = 'string' : "string"
->module.exports.justProperty : any
->module.exports : any
->module : { exports: any; }
->exports : any
->justProperty : any
+>module.exports.justProperty : string
+>module.exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod1")
+>justProperty : string
 >'string' : "string"
 

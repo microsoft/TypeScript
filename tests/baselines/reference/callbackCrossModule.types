@@ -4,7 +4,7 @@
  * @return {any} I don't even know what this should return
  */
 module.exports = C
->module.exports = C : typeof C
+>module.exports = C : typeof import("tests/cases/conformance/jsdoc/mod1")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >module : { "tests/cases/conformance/jsdoc/mod1": typeof import("tests/cases/conformance/jsdoc/mod1"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod1")

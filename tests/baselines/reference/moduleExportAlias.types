@@ -206,8 +206,8 @@ multipleDeclarationAlias4.func8 = function () { };
 >function () { } : () => void
 
 var multipleDeclarationAlias5 = module.exports = exports = {};
->multipleDeclarationAlias5 : {}
->module.exports = exports = {} : {}
+>multipleDeclarationAlias5 : typeof import("tests/cases/conformance/salsa/b")
+>module.exports = exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -217,16 +217,16 @@ var multipleDeclarationAlias5 = module.exports = exports = {};
 
 multipleDeclarationAlias5.func9 = function () { };
 >multipleDeclarationAlias5.func9 = function () { } : () => void
->multipleDeclarationAlias5.func9 : any
->multipleDeclarationAlias5 : {}
->func9 : any
+>multipleDeclarationAlias5.func9 : () => void
+>multipleDeclarationAlias5 : typeof import("tests/cases/conformance/salsa/b")
+>func9 : () => void
 >function () { } : () => void
 
 var multipleDeclarationAlias6 = exports = module.exports = {};
->multipleDeclarationAlias6 : {}
->exports = module.exports = {} : {}
+>multipleDeclarationAlias6 : typeof import("tests/cases/conformance/salsa/b")
+>exports = module.exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >exports : typeof import("tests/cases/conformance/salsa/b")
->module.exports = {} : {}
+>module.exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -234,15 +234,15 @@ var multipleDeclarationAlias6 = exports = module.exports = {};
 
 multipleDeclarationAlias6.func10 = function () { };
 >multipleDeclarationAlias6.func10 = function () { } : () => void
->multipleDeclarationAlias6.func10 : any
->multipleDeclarationAlias6 : {}
->func10 : any
+>multipleDeclarationAlias6.func10 : () => void
+>multipleDeclarationAlias6 : typeof import("tests/cases/conformance/salsa/b")
+>func10 : () => void
 >function () { } : () => void
 
 exports = module.exports = someOtherVariable = {};
->exports = module.exports = someOtherVariable = {} : {}
+>exports = module.exports = someOtherVariable = {} : typeof import("tests/cases/conformance/salsa/b")
 >exports : typeof import("tests/cases/conformance/salsa/b")
->module.exports = someOtherVariable = {} : {}
+>module.exports = someOtherVariable = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -267,9 +267,9 @@ module.exports.func12 = function () { };
 >function () { } : () => void
 
 exports = module.exports = someOtherVariable = {};
->exports = module.exports = someOtherVariable = {} : {}
+>exports = module.exports = someOtherVariable = {} : typeof import("tests/cases/conformance/salsa/b")
 >exports : typeof import("tests/cases/conformance/salsa/b")
->module.exports = someOtherVariable = {} : {}
+>module.exports = someOtherVariable = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -294,9 +294,9 @@ module.exports.func12 = function () { };
 >function () { } : () => void
 
 exports = module.exports = {};
->exports = module.exports = {} : {}
+>exports = module.exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >exports : typeof import("tests/cases/conformance/salsa/b")
->module.exports = {} : {}
+>module.exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -319,9 +319,9 @@ module.exports.func14 = function () { };
 >function () { } : () => void
 
 exports = module.exports = {};
->exports = module.exports = {} : {}
+>exports = module.exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >exports : typeof import("tests/cases/conformance/salsa/b")
->module.exports = {} : {}
+>module.exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -344,7 +344,7 @@ module.exports.func16 = function () { };
 >function () { } : () => void
 
 module.exports = exports = {};
->module.exports = exports = {} : {}
+>module.exports = exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -369,7 +369,7 @@ module.exports.func18 = function () { };
 >function () { } : () => void
 
 module.exports = {};
->module.exports = {} : {}
+>module.exports = {} : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")

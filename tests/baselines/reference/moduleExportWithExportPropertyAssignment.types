@@ -28,20 +28,20 @@ declare function require(name: string): any;
 === tests/cases/conformance/salsa/mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports = function () { }
->module.exports = function () { } : () => void
->module.exports : any
->module : { exports: any; }
->exports : any
+>module.exports = function () { } : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod1")
 >function () { } : () => void
 
 /** @param {number} a */
 module.exports.f = function (a) { }
 >module.exports.f = function (a) { } : (a: number) => void
->module.exports.f : any
->module.exports : any
->module : { exports: any; }
->exports : any
->f : any
+>module.exports.f : (a: number) => void
+>module.exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod1")
+>f : (a: number) => void
 >function (a) { } : (a: number) => void
 >a : number
 

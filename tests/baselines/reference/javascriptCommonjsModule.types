@@ -7,7 +7,7 @@ class Bar extends Foo {}
 >Foo : Foo
 
 module.exports = Bar;
->module.exports = Bar : typeof Bar
+>module.exports = Bar : typeof import("tests/cases/compiler/index")
 >module.exports : typeof import("tests/cases/compiler/index")
 >module : { "tests/cases/compiler/index": typeof import("tests/cases/compiler/index"); }
 >exports : typeof import("tests/cases/compiler/index")

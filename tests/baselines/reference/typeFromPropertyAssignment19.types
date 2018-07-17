@@ -24,9 +24,9 @@ declare var module: any;
 === tests/cases/conformance/salsa/semver.js ===
 /// <reference path='./types.d.ts'/>
 exports = module.exports = C
->exports = module.exports = C : typeof C
+>exports = module.exports = C : typeof import("tests/cases/conformance/salsa/semver")
 >exports : typeof import("tests/cases/conformance/salsa/semver")
->module.exports = C : typeof C
+>module.exports = C : typeof import("tests/cases/conformance/salsa/semver")
 >module.exports : typeof import("tests/cases/conformance/salsa/semver")
 >module : { "tests/cases/conformance/salsa/semver": typeof import("tests/cases/conformance/salsa/semver"); }
 >exports : typeof import("tests/cases/conformance/salsa/semver")

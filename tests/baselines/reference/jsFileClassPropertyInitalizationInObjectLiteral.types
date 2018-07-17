@@ -1,6 +1,6 @@
 === tests/cases/compiler/foo.js ===
 module.exports = function () {
->module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { [x: string]: any; c: number; }
+>module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : typeof import("tests/cases/compiler/foo")
 >module.exports : typeof import("tests/cases/compiler/foo")
 >module : { "tests/cases/compiler/foo": typeof import("tests/cases/compiler/foo"); }
 >exports : typeof import("tests/cases/compiler/foo")

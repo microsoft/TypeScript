@@ -21332,8 +21332,9 @@ namespace ts {
 
             function isJSSpecialPropertyAssignment(special: SpecialPropertyAssignmentKind) {
                 switch (special) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
+                        return true;
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.Property:
                     case SpecialPropertyAssignmentKind.Prototype:
                     case SpecialPropertyAssignmentKind.PrototypeProperty:

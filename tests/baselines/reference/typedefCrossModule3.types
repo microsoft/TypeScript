@@ -12,7 +12,7 @@ ns.Foo = class {}
 >class {} : typeof Foo
 
 module.exports = ns;
->module.exports = ns : typeof ns
+>module.exports = ns : typeof import("tests/cases/conformance/jsdoc/mod2")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
 >module : { "tests/cases/conformance/jsdoc/mod2": typeof import("tests/cases/conformance/jsdoc/mod2"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod2")

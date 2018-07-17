@@ -193,7 +193,9 @@ var multipleDeclarationAlias5 = module.exports = exports = {};
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias5.func9 = function () { };
+>multipleDeclarationAlias5.func9 : Symbol(func9, Decl(b.js, 21, 62))
 >multipleDeclarationAlias5 : Symbol(multipleDeclarationAlias5, Decl(b.js, 21, 3))
+>func9 : Symbol(func9, Decl(b.js, 21, 62))
 
 var multipleDeclarationAlias6 = exports = module.exports = {};
 >multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
@@ -203,7 +205,9 @@ var multipleDeclarationAlias6 = exports = module.exports = {};
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias6.func10 = function () { };
+>multipleDeclarationAlias6.func10 : Symbol(func10, Decl(b.js, 24, 62))
 >multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
+>func10 : Symbol(func10, Decl(b.js, 24, 62))
 
 exports = module.exports = someOtherVariable = {};
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))

@@ -18,7 +18,7 @@ f(1, n => { })
  * @param {(t: T) => void} k
  */
 module.exports = function (x, k) { return k(x) }
->module.exports = function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
+>module.exports = function (x, k) { return k(x) } : typeof import("tests/cases/conformance/jsdoc/first")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/first")
 >module : { "tests/cases/conformance/jsdoc/first": typeof import("tests/cases/conformance/jsdoc/first"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/first")

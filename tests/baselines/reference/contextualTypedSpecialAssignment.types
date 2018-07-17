@@ -190,7 +190,7 @@ F.prototype = {
 // module.exports assignment
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
->module.exports = {    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
+>module.exports = {    status: "done",    m(n) { }} : typeof import("tests/cases/conformance/salsa/mod")
 >module.exports : typeof import("tests/cases/conformance/salsa/mod")
 >module : { "tests/cases/conformance/salsa/mod": typeof import("tests/cases/conformance/salsa/mod"); }
 >exports : typeof import("tests/cases/conformance/salsa/mod")

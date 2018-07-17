@@ -7,7 +7,7 @@ var wat = require('./bug24024')
 >'./bug24024' : "./bug24024"
 
 module.exports = class C {}
->module.exports = class C {} : typeof C
+>module.exports = class C {} : typeof import("tests/cases/conformance/salsa/bug24024")
 >module.exports : typeof import("tests/cases/conformance/salsa/bug24024")
 >module : { "tests/cases/conformance/salsa/bug24024": typeof import("tests/cases/conformance/salsa/bug24024"); }
 >exports : typeof import("tests/cases/conformance/salsa/bug24024")
