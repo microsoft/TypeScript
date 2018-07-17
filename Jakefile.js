@@ -817,7 +817,7 @@ function diagnosticsToString(diagnostics, pretty) {
  * Concatenate a list of sourceFiles to a destinationFile
  * @param {string} destinationFile
  * @param {string[]} sourceFiles
- * @param {string} extraContent
+ * @param {string=} extraContent
  */
 function concatenateFiles(destinationFile, sourceFiles, extraContent) {
     var temp = "temptemp";
