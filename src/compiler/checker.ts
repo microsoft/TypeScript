@@ -4991,7 +4991,7 @@ namespace ts {
                     return links.type = anyType;
                 }
                 if (getCheckFlags(symbol) & CheckFlags.ModuleExports) {
-                    const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration))
+                    const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
                     const members = createSymbolTable();
                     members.set("exports" as __String, fileSymbol);
                     return links.type = createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
