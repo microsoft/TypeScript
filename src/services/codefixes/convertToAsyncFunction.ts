@@ -32,44 +32,13 @@ namespace ts.codefix {
             let retStmtName = glued[1];
             if (gluedCallback) {
                 const newNodes = parseCallback(gluedCallback, checker, gluedCallback, synthNamesMap, lastDotThenMap, varDeclFlags, retStmtName);
-
-                let i = 1;
-                while (i < stmts.length && i < newNodes.length) {
-                    if (i === stmts.length - 1 && (i-1) < newNodes.length - 1) {
-                        changes.replaceNodeWithNodes(sourceFile, stmts[i], newNodes.slice(i-1));
-                    }
-                    else {
-                        changes.replaceNode(sourceFile, stmts[i], newNodes[i-1]);
-                    }
-
-                    i++;
-                }
-
-                /*
-                if (newNodes.length > 0) {
-                    changes.replaceNodeRangeWithNodes(sourceFile, retStmts[1].original!, retStmts[retStmts.length - 1].original!, newNodes);
-                }*/
+                replaceNodes(changes, sourceFile, stmts, newNodes);
             }
             else {
                 for (const stmt of stmts) {
                     if (isCallExpression(stmt)) {
                         const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, lastDotThenMap, varDeclFlags, retStmtName);
-                        let i = 0;
-                        while (i < stmts.length && i < newNodes.length) {
-                            if (i === stmts.length - 1 && (i-1) < newNodes.length - 1) {
-                                changes.replaceNodeWithNodes(sourceFile, stmts[i], newNodes.slice(i-1));
-                            }
-                            else {
-                                changes.replaceNode(sourceFile, stmts[i], newNodes[i-1]);
-                            }
-
-                            i++;
-                        }
-
-                        /*
-                        if (newNodes.length > 0) {
-                            changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
-                        }*/
+                        replaceNodes(changes, sourceFile, stmts, newNodes);
                     }
                     else if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
                         retStmtName = stmt.expression.text;
@@ -83,21 +52,7 @@ namespace ts.codefix {
 
                             if (isCallExpression(node)) {
                                 const newNodes = parseCallback(node, checker, node, synthNamesMap, lastDotThenMap, varDeclFlags, retStmtName);
-                                let i = 0;
-                                while (i < stmts.length && i < newNodes.length) {
-                                    if (i === stmts.length - 1 && (i-1) < newNodes.length - 1) {
-                                        changes.replaceNodeWithNodes(sourceFile, stmts[i], newNodes.slice(i-1));
-                                    }
-                                    else {
-                                        changes.replaceNode(sourceFile, stmts[i], newNodes[i-1]);
-                                    }
-
-                                    i++;
-                                }
-                                /*
-                                if (newNodes.length > 0) {
-                                    changes.replaceNodeWithNodes(sourceFile, stmt, newNodes);
-                                }*/
+                                replaceNodes(changes, sourceFile, stmts, newNodes);
                             }
                             else if (!isFunctionLike(node)) {
                                 forEachChild(node, visit);
@@ -107,19 +62,30 @@ namespace ts.codefix {
                 }
             }
         });
+    }
 
+    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes: Node[], newNodes: Node[]) {
+        let i = 1;
+        while (i < oldNodes.length && i < newNodes.length) {
+            if (i === oldNodes.length - 1 && i < newNodes.length - 1) {
+                changes.replaceNodeWithNodes(sourceFile, oldNodes[i], newNodes.slice(i));
+            }
+            else {
+                changes.replaceNode(sourceFile, oldNodes[i], newNodes[i]);
+            }
+            i++;
+        }
     }
 
     function seperateCallbacksByVariable(retStmts: Node[], checker: TypeChecker): Map<Node[]> {
-        retStmts = retStmts.slice(0);
         let returnMap: Map<Node[]> = new MapCtr();
         let promiseVars: Identifier[] = [];
 
-        for (let stmt of retStmts) {
-            let expr;
+        function getNameAndExpr(stmt: Node): [Node | undefined, Identifier | undefined] {
+            let expr: Node | undefined;
             let name: Identifier | undefined;
             if (isVariableStatement(stmt) && stmt.declarationList.declarations.length > 0) {
-                expr = stmt.declarationList.declarations[0];
+                expr = stmt; //fix this for a varDeclList
                 name = stmt.declarationList.declarations[0].name as Identifier;
             }
             else if (isAssignmentExpression(stmt)) {
@@ -137,8 +103,20 @@ namespace ts.codefix {
                     }
                 });
             }
-            else if (isExpressionStatement(stmt)) {
-                retStmts.push(stmt.expression);
+
+            return [expr, name];
+        }
+
+        for (let stmt of retStmts) {
+            let expr;
+            let name: Identifier | undefined;
+
+            if (isExpressionStatement(stmt)) {
+                expr = stmt;
+                name = getNameAndExpr(stmt.expression)[1];
+            } 
+            else {
+                [expr, name] = getNameAndExpr(stmt);
             }
 
             if (!expr) {
@@ -154,11 +132,25 @@ namespace ts.codefix {
                 }
             }
 
-            if (!added && name && (isCallExpression(expr) && returnsAPromise(expr, checker)) || 
-                (isVariableDeclaration(expr) && expr.initializer && isCallExpression(expr.initializer) && returnsAPromise(expr.initializer, checker))) {
+            if (!added && name) {
+                let callExpr: Node;
+                if (isVariableStatement(expr) && expr.declarationList.declarations.length === 1 && expr.declarationList.declarations[0].initializer) {
+                    callExpr = expr.declarationList.declarations[0].initializer!;
+                }
+                else if (isAssignmentExpression(expr) && isCallExpression(expr.right) && returnsAPromise(expr.right, checker)) {
+                    callExpr = expr.right;
+                }
+                else if (isExpressionStatement(expr)) {
+                    callExpr = expr.expression;
+                }
+                else {
+                    callExpr = expr;
+                }
 
-                promiseVars.push(name as Identifier);
-                addToMap(returnMap, (<Identifier>name).text, expr);
+                if (isCallExpression(callExpr) && returnsAPromise(callExpr, checker)) {
+                    promiseVars.push(name as Identifier);
+                    addToMap(returnMap, (<Identifier>name).text, expr);
+                }
             }
         }
 
@@ -167,6 +159,7 @@ namespace ts.codefix {
         }
         return returnMap;
     }
+
 
     function isUsedIn(variable: Identifier, expr: Node): boolean {
         let isUsed = false;
