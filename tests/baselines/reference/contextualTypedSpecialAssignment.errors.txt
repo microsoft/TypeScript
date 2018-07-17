@@ -1,8 +1,7 @@
 tests/cases/conformance/salsa/mod.js(5,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
-tests/cases/conformance/salsa/test.js(52,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/salsa/test.js (1 errors) ====
+==== tests/cases/conformance/salsa/test.js (0 errors) ====
     /** @typedef {{
         status: 'done'
         m(n: number): void
@@ -50,13 +49,10 @@ tests/cases/conformance/salsa/test.js(52,7): error TS7006: Parameter 'n' implici
     }
     exports.x
     
-    /** @type {DoneStatus} contextual typing is allowed, but module.exports.y: any.
-    Guess it doesn't check the type tag? */
+    /** @type {DoneStatus} */
     module.exports.y = {
         status: "done",
         m(n) { }
-          ~
-!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
     }
     module.exports.y
     

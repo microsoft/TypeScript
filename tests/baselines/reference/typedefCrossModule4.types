@@ -5,9 +5,9 @@ class Bar { }
 
 module.exports = { Foo: Bar };
 >module.exports = { Foo: Bar } : { [x: string]: any; Foo: typeof Bar; }
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof import("tests/cases/conformance/jsdoc/mod3")
+>module : { "tests/cases/conformance/jsdoc/mod3": typeof import("tests/cases/conformance/jsdoc/mod3"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/mod3")
 >{ Foo: Bar } : { [x: string]: any; Foo: typeof Bar; }
 >Foo : typeof Bar
 >Bar : typeof Bar
