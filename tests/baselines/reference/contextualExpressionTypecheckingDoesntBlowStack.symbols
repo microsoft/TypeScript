@@ -47,9 +47,9 @@ export default class Operation {
                 // Commenting out this line will fix the problem.
                 result = (result || []).concat(innerResult);
 >result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
->(result || []).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>(result || []).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
             }
         }

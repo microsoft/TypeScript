@@ -10,9 +10,9 @@ ijs = ijs.concat([[3, 4], [5, 6]]);
 >ijs = ijs.concat([[3, 4], [5, 6]]) : [number, number][]
 >ijs : [number, number][]
 >ijs.concat([[3, 4], [5, 6]]) : [number, number][]
->ijs.concat : { (...items: ConcatArray<[number, number]>[]): [number, number][]; <U>(...items: (ConcatArray<[number, number]> | ConcatArray<U>)[]): ([number, number] | U)[]; (...items: ([number, number] | ConcatArray<[number, number]>)[]): [number, number][]; }
+>ijs.concat : { <U>(...items: (ConcatArray<[number, number]> | ConcatArray<U>)[]): ([number, number] | U)[]; (...items: ([number, number] | ConcatArray<[number, number]>)[]): [number, number][]; }
 >ijs : [number, number][]
->concat : { (...items: ConcatArray<[number, number]>[]): [number, number][]; <U>(...items: (ConcatArray<[number, number]> | ConcatArray<U>)[]): ([number, number] | U)[]; (...items: ([number, number] | ConcatArray<[number, number]>)[]): [number, number][]; }
+>concat : { <U>(...items: (ConcatArray<[number, number]> | ConcatArray<U>)[]): ([number, number] | U)[]; (...items: ([number, number] | ConcatArray<[number, number]>)[]): [number, number][]; }
 >[[3, 4], [5, 6]] : [number, number][]
 >[3, 4] : [number, number]
 >3 : 3

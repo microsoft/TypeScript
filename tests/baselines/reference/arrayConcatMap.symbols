@@ -2,8 +2,8 @@
 var x = [].concat([{ a: 1 }], [{ a: 2 }])
 >x : Symbol(x, Decl(arrayConcatMap.ts, 0, 3))
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->[].concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>[].concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(arrayConcatMap.ts, 0, 20))
 >a : Symbol(a, Decl(arrayConcatMap.ts, 0, 32))
 

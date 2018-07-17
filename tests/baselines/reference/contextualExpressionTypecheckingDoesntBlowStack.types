@@ -76,12 +76,12 @@ export default class Operation {
 >result = (result || []).concat(innerResult) : IValidationError[]
 >result : IValidationError[] | null
 >(result || []).concat(innerResult) : IValidationError[]
->(result || []).concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; <U>(...items: (ConcatArray<IValidationError> | ConcatArray<U>)[]): (IValidationError | U)[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
+>(result || []).concat : { <U>(...items: (ConcatArray<IValidationError> | ConcatArray<U>)[]): (IValidationError | U)[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
 >(result || []) : IValidationError[]
 >result || [] : IValidationError[]
 >result : IValidationError[] | null
 >[] : never[]
->concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; <U>(...items: (ConcatArray<IValidationError> | ConcatArray<U>)[]): (IValidationError | U)[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
+>concat : { <U>(...items: (ConcatArray<IValidationError> | ConcatArray<U>)[]): (IValidationError | U)[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
 >innerResult : any
             }
         }
