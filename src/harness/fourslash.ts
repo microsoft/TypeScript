@@ -2307,6 +2307,14 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
+        public verifyFormatDocumentChangesNothing(): void {
+            const { fileName } = this.activeFile;
+            const before = this.getFileContent(fileName);
+            this.formatDocument();
+            const after = this.getFileContent(fileName);
+            this.assertObjectsEqual(after, before);
+        }
+
         public verifyTextAtCaretIs(text: string) {
             const actual = this.getFileContent(this.activeFile.fileName).substring(this.currentCaretPosition, this.currentCaretPosition + text.length);
             if (actual !== text) {
@@ -4204,6 +4212,10 @@ namespace FourSlashInterface {
 
         public currentFileContentIs(text: string) {
             this.state.verifyCurrentFileContent(text);
+        }
+
+        public formatDocumentChangesNothing(): void {
+            this.state.verifyFormatDocumentChangesNothing();
         }
 
         public goToDefinitionIs(endMarkers: ArrayOrSingle<string>) {

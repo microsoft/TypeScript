@@ -228,6 +228,7 @@ declare namespace FourSlashInterface {
         eval(expr: string, value: any): void;
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
+        formatDocumentChangesNothing(): void;
         /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
         goToDefinitionIs(endMarkers: ArrayOrSingle<string>): void;
         goToDefinitionName(name: string, containerName: string): void;
