@@ -911,8 +911,8 @@ namespace FourSlash {
         }
 
         private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
-            const { insertText, replacementSpan, hasAction, isRecommended, kind, text, documentation, sourceDisplay } = typeof expected === "string"
-                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, text: undefined, documentation: undefined, sourceDisplay: undefined }
+            const { insertText, replacementSpan, hasAction, isRecommended, kind, text, documentation, source, sourceDisplay } = typeof expected === "string"
+                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, text: undefined, documentation: undefined, source: undefined, sourceDisplay: undefined }
                 : expected;
 
             if (actual.insertText !== insertText) {
@@ -930,6 +930,7 @@ namespace FourSlash {
 
             assert.equal(actual.hasAction, hasAction);
             assert.equal(actual.isRecommended, isRecommended);
+            assert.equal(actual.source, source);
 
             if (text) {
                 const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source)!;
@@ -4752,6 +4753,7 @@ namespace FourSlashInterface {
 
     export type ExpectedCompletionEntry = string | {
         readonly name: string,
+        readonly source?: string, // when did this go away???
         readonly insertText?: string,
         readonly replacementSpan?: FourSlash.Range,
         readonly hasAction?: boolean, // If not specified, will assert that this is false.

@@ -149,14 +149,14 @@ namespace ts.codefix {
         symbolToken: Node | undefined,
         preferences: UserPreferences,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
-        const exportInfos = getAllReExportingModules(exportedSymbol, moduleSymbol, symbolName, sourceFile, checker, allSourceFiles);
+        const exportInfos = getAllReExportingModules(exportedSymbol, moduleSymbol, symbolName, sourceFile, program.getCompilerOptions(), checker, allSourceFiles);
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, host, preferences)).moduleSpecifier;
         const fix = first(getFixForImport(exportInfos, symbolName, symbolToken, program, sourceFile, host, preferences));
         return { moduleSpecifier, codeAction: codeActionForFix({ host, formatContext }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences)) };
     }
-    function getAllReExportingModules(exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, sourceFile: SourceFile, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
+    function getAllReExportingModules(exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, sourceFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
         const result: SymbolExportInfo[] = [];
         forEachExternalModule(checker, allSourceFiles, (moduleSymbol, moduleFile) => {
             // Don't import from a re-export when looking "up" like to `./index` or `../index`.
@@ -164,10 +164,14 @@ namespace ts.codefix {
                 return;
             }
 
+            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+            if (defaultInfo && defaultInfo.name === symbolName && skipAlias(defaultInfo.symbol, checker) === exportedSymbol) {
+                result.push({ moduleSymbol, importKind: defaultInfo.kind });
+            }
+
             for (const exported of checker.getExportsOfModule(moduleSymbol)) {
-                if ((exported.escapedName === InternalSymbolName.Default || exported.name === symbolName) && skipAlias(exported, checker) === exportedSymbol) {
-                    const isDefaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol) === exported;
-                    result.push({ moduleSymbol, importKind: isDefaultExport ? ImportKind.Default : ImportKind.Named });
+                if (exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
+                    result.push({ moduleSymbol, importKind: ImportKind.Named });
                 }
             }
         });
@@ -373,13 +377,9 @@ namespace ts.codefix {
         forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
-            // check the default export
-            const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
-            if (defaultExport) {
-                const info = getDefaultExportInfo(defaultExport, moduleSymbol, program);
-                if (info && info.name === symbolName && symbolHasMeaning(info.symbolForMeaning, currentTokenMeaning)) {
-                    addSymbol(moduleSymbol, defaultExport, ImportKind.Default);
-                }
+            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, program.getCompilerOptions());
+            if (defaultInfo && defaultInfo.name === symbolName && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
+                addSymbol(moduleSymbol, defaultInfo.symbol, defaultInfo.kind);
             }
 
             // check exports with the same name
@@ -391,9 +391,24 @@ namespace ts.codefix {
         return originalSymbolToExportInfos;
     }
 
-    function getDefaultExportInfo(defaultExport: Symbol, moduleSymbol: Symbol, program: Program): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
-        const checker = program.getTypeChecker();
+    function getDefaultLikeExportInfo(
+        moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions,
+    ): { readonly symbol: Symbol, readonly symbolForMeaning: Symbol, readonly name: string, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {
+        const exported = getDefaultLikeExportWorker(moduleSymbol, checker);
+        if (!exported) return undefined;
+        const { symbol, kind } = exported;
+        const info = getDefaultExportInfoWorker(symbol, moduleSymbol, checker, compilerOptions);
+        return info && { symbol, symbolForMeaning: info.symbolForMeaning, name: info.name, kind };
+    }
 
+    function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {
+        const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
+        if (defaultExport) return { symbol: defaultExport, kind: ImportKind.Default };
+        const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
+        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: ImportKind.Equals };
+    }
+
+    function getDefaultExportInfoWorker(defaultExport: Symbol, moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
         const localSymbol = getLocalSymbolForExportDefault(defaultExport);
         if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
 
@@ -402,10 +417,10 @@ namespace ts.codefix {
 
         if (defaultExport.flags & SymbolFlags.Alias) {
             const aliased = checker.getAliasedSymbol(defaultExport);
-            return getDefaultExportInfo(aliased, Debug.assertDefined(aliased.parent), program);
+            return getDefaultExportInfoWorker(aliased, Debug.assertDefined(aliased.parent), checker, compilerOptions);
         }
         else {
-            const moduleName = moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!);
+            const moduleName = moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target!); // TODO: GH#18217
             return moduleName === undefined ? undefined : { symbolForMeaning: defaultExport, name: moduleName };
         }
     }

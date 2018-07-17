@@ -1369,6 +1369,14 @@ namespace ts.Completions {
                     return;
                 }
 
+                if (resolvedModuleSymbol !== moduleSymbol &&
+                    // Don't add another completion for `export =` of a symbol that's already global.
+                    // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
+                    resolvedModuleSymbol.declarations.some(d => !!d.getSourceFile().externalModuleIndicator)) {
+                    symbols.push(resolvedModuleSymbol);
+                    symbolToOriginInfoMap[getSymbolId(resolvedModuleSymbol)] = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport: false };
+                }
+
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     // Don't add a completion for a re-export, only for the original.
                     // The actual import fix might end up coming from a re-export -- we don't compute that until getting completion details.
