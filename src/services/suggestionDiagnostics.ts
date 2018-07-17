@@ -141,10 +141,10 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    export function getReturnStatementsWithPromiseCallbacks(node: Node, checker: TypeChecker): [Node[], NodeFlags] {
-
+    export function getReturnStatementsWithPromiseCallbacks(node: Node, checker: TypeChecker): [Node[], NodeFlags, boolean] {
         const retStmts: Node[] = [];
         let varDeclFlags = NodeFlags.Let;
+        let hasFollowingRetStmt = false;
         forEachChild(node, visit);
 
         function visit(child: Node) {
@@ -165,6 +165,7 @@ namespace ts {
                 }
                 else if (isIdentifier(returnChild) && isReturnStatement(child)
                 && child.expression && isIdentifier(child.expression)) {
+                    hasFollowingRetStmt = true;
                     retStmts.push(child);
                     forEachChild(node, findCallbackUses);
                 }
@@ -197,7 +198,7 @@ namespace ts {
             }
             forEachChild(child, visit);
         }
-        return [retStmts, varDeclFlags];
+        return [retStmts, varDeclFlags, hasFollowingRetStmt];
     }
 
     function isCallback(node: Node): boolean {
