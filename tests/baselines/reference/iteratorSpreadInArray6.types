@@ -38,10 +38,10 @@ var array: number[] = [0, 1];
 >1 : 1
 
 array.concat([...new SymbolIterator]);
->array.concat([...new SymbolIterator]) : any
->array.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>array.concat([...new SymbolIterator]) : (number | symbol)[]
+>array.concat : { (...items: ConcatArray<number>[]): number[]; <U>(...items: (ConcatArray<number> | ConcatArray<U>)[]): (number | U)[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >array : number[]
->concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; <U>(...items: (ConcatArray<number> | ConcatArray<U>)[]): (number | U)[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >[...new SymbolIterator] : symbol[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

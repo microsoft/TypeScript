@@ -31,8 +31,8 @@ var array: symbol[];
 >array : Symbol(array, Decl(iteratorSpreadInArray7.ts, 13, 3))
 
 array.concat([...new SymbolIterator]);
->array.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>array.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(iteratorSpreadInArray7.ts, 13, 3))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray7.ts, 0, 0))
 

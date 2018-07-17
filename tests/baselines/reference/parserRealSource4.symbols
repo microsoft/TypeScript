@@ -373,13 +373,13 @@ module TypeScript {
 >getAllKeys : Symbol(DualStringHashTable.getAllKeys, Decl(parserRealSource4.ts, 120, 78))
 
             return this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys());
->this.primaryTable.getAllKeys().concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.primaryTable.getAllKeys().concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.primaryTable.getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
 >this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
 >this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
 >primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
 >getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.secondaryTable.getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
 >this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
 >this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))

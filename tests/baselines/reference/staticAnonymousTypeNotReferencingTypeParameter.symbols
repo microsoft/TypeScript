@@ -300,9 +300,9 @@ class ListWrapper {
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 40))
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 50))
->a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 40))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 50))
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }

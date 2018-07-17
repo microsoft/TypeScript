@@ -71,9 +71,9 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >list : Symbol(list, Decl(underscoreTest1_underscoreTests.ts, 13, 3))
 >a : Symbol(a, Decl(underscoreTest1_underscoreTests.ts, 14, 32))
 >b : Symbol(b, Decl(underscoreTest1_underscoreTests.ts, 14, 34))
->a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(underscoreTest1_underscoreTests.ts, 14, 32))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(underscoreTest1_underscoreTests.ts, 14, 34))
 
 var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);

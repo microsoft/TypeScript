@@ -24,9 +24,9 @@ function doStuff<T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1
 >T1 : Symbol(T1, Decl(arrayConcat3.ts, 2, 34))
 
     b.concat(a);
->b.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(arrayConcat3.ts, 2, 65))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(arrayConcat3.ts, 2, 49))
 }
 

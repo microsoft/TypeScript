@@ -124,9 +124,9 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >b : number[]
 >a.concat(b) : number[]
->a.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>a.concat : { (...items: ConcatArray<number>[]): number[]; <U>(...items: (ConcatArray<number> | ConcatArray<U>)[]): (number | U)[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >a : number[]
->concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; <U>(...items: (ConcatArray<number> | ConcatArray<U>)[]): (number | U)[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >b : number[]
 >[] : undefined[]
 
