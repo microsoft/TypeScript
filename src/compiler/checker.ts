@@ -22720,8 +22720,15 @@ namespace ts {
                             duplicateFunctionDeclaration = true;
                         }
                     }
-                    else if (previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
-                        reportImplementationExpectedError(previousDeclaration);
+                    else if (previousDeclaration && previousDeclaration.parent === node.parent) {
+                        if (previousDeclaration.end !== node.pos) {
+                            reportImplementationExpectedError(previousDeclaration);
+                        }
+                        else {
+                            if (hasModifier(node, ModifierFlags.Abstract) && (node as FunctionLikeDeclaration).asteriskToken) {
+                                error(current, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
+                            }
+                        }
                     }
 
                     if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
