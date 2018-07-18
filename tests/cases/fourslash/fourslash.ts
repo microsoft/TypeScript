@@ -336,9 +336,10 @@ declare namespace FourSlashInterface {
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
         getEditsForFileRename(options: {
-            oldPath: string;
-            newPath: string;
-            newFileContents: { [fileName: string]: string };
+            readonly oldPath: string;
+            readonly newPath: string;
+            readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };

@@ -3365,9 +3365,9 @@ Actual: ${stringify(fullActual)}`);
             this.cancellationToken.resetCancelled();
         }
 
-        public getEditsForFileRename({ oldPath, newPath, newFileContents }: FourSlashInterface.GetEditsForFileRenameOptions): void {
+        public getEditsForFileRename({ oldPath, newPath, newFileContents, preferences }: FourSlashInterface.GetEditsForFileRenameOptions): void {
             const test = (fileContents: { readonly [fileName: string]: string }, description: string): void => {
-                const changes = this.languageService.getEditsForFileRename(oldPath, newPath, this.formatCodeSettings, ts.emptyOptions);
+                const changes = this.languageService.getEditsForFileRename(oldPath, newPath, this.formatCodeSettings, preferences);
                 this.testNewFileContents(changes, fileContents, description);
             };
 
@@ -4890,6 +4890,7 @@ namespace FourSlashInterface {
         readonly oldPath: string;
         readonly newPath: string;
         readonly newFileContents: { readonly [fileName: string]: string };
+        readonly preferences?: ts.UserPreferences;
     }
 
     export interface MoveToNewFileOptions {
