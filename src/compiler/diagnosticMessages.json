@@ -4268,6 +4268,14 @@
         "category": "Message",
         "code": 90029
     },
+    "Replace 'infer {0}' with 'unknown'": {
+        "category": "Message",
+        "code": 90030
+    },
+    "Replace all unused 'infer' with 'unknown'": {
+        "category": "Message",
+        "code": 90031
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001

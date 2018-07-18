@@ -3,6 +3,7 @@ namespace ts.codefix {
     const fixName = "unusedIdentifier";
     const fixIdPrefix = "unusedIdentifier_prefix";
     const fixIdDelete = "unusedIdentifier_delete";
+    const fixIdInfer = "unusedIdentifier_infer";
     const errorCodes = [
         Diagnostics._0_is_declared_but_its_value_is_never_read.code,
         Diagnostics._0_is_declared_but_never_used.code,
@@ -45,11 +46,18 @@ namespace ts.codefix {
 
             const result: CodeFixAction[] = [];
 
-            const deletion = textChanges.ChangeTracker.with(context, t =>
-                tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, /*isFixAll*/ false));
-            if (deletion.length) {
-                const name = isComputedPropertyName(token.parent) ? token.parent : token;
-                result.push(createDeleteFix(deletion, [Diagnostics.Remove_declaration_for_Colon_0, name.getText(sourceFile)]));
+            if (token.kind === SyntaxKind.InferKeyword) {
+                const changes = textChanges.ChangeTracker.with(context, t => changeInferToUnknown(t, sourceFile, token));
+                const name = cast(token.parent, isInferTypeNode).typeParameter.name.text;
+                result.push(createCodeFixAction(fixName, changes, [Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, Diagnostics.Replace_all_unused_infer_with_unknown));
+            }
+            else {
+                const deletion = textChanges.ChangeTracker.with(context, t =>
+                    tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, /*isFixAll*/ false));
+                if (deletion.length) {
+                    const name = isComputedPropertyName(token.parent) ? token.parent : token;
+                    result.push(createDeleteFix(deletion, [Diagnostics.Remove_declaration_for_Colon_0, name.getText(sourceFile)]));
+                }
             }
 
             const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
@@ -59,7 +67,7 @@ namespace ts.codefix {
 
             return result;
         },
-        fixIds: [fixIdPrefix, fixIdDelete],
+        fixIds: [fixIdPrefix, fixIdDelete, fixIdInfer],
         getAllCodeActions: context => {
             const { sourceFile, program } = context;
             const checker = program.getTypeChecker();
@@ -68,11 +76,10 @@ namespace ts.codefix {
                 const token = getTokenAtPosition(sourceFile, diag.start);
                 switch (context.fixId) {
                     case fixIdPrefix:
-                        if (isIdentifier(token) && canPrefix(token)) {
-                            tryPrefixDeclaration(changes, diag.code, sourceFile, token);
-                        }
+                        tryPrefixDeclaration(changes, diag.code, sourceFile, token);
                         break;
                     case fixIdDelete: {
+                        if (token.kind === SyntaxKind.InferKeyword) break; // Can't delete
                         const importDecl = tryGetFullImport(token);
                         if (importDecl) {
                             changes.delete(sourceFile, importDecl);
@@ -89,12 +96,21 @@ namespace ts.codefix {
                         }
                         break;
                     }
+                    case fixIdInfer:
+                        if (token.kind === SyntaxKind.InferKeyword) {
+                            changeInferToUnknown(changes, sourceFile, token);
+                        }
+                        break;
                     default:
                         Debug.fail(JSON.stringify(context.fixId));
                 }
             });
         },
     });
+
+    function changeInferToUnknown(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
+        changes.replaceNode(sourceFile, token.parent, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
+    }
 
     function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticAndArguments): CodeFixAction {
         return createCodeFixAction(fixName, changes, diag, fixIdDelete, Diagnostics.Delete_all_unused_declarations);
@@ -132,7 +148,11 @@ namespace ts.codefix {
 
     function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
         // Don't offer to prefix a property.
-        if (errorCode !== Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code && isIdentifier(token) && canPrefix(token)) {
+        if (errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code) return;
+        if (token.kind === SyntaxKind.InferKeyword) {
+            token = cast(token.parent, isInferTypeNode).typeParameter.name;
+        }
+        if (isIdentifier(token) && canPrefix(token)) {
             changes.replaceNode(sourceFile, token, createIdentifier(`_${token.text}`));
         }
     }
@@ -140,6 +160,7 @@ namespace ts.codefix {
     function canPrefix(token: Identifier): boolean {
         switch (token.parent.kind) {
             case SyntaxKind.Parameter:
+            case SyntaxKind.TypeParameter:
                 return true;
             case SyntaxKind.VariableDeclaration: {
                 const varDecl = token.parent as VariableDeclaration;

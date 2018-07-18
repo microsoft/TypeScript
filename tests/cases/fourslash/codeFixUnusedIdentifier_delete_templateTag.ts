@@ -34,6 +34,7 @@ function first(p) { return p; }`,
 goTo.file("/second.js");
 verify.codeFix({
     description: "Remove declaration for: 'U'",
+    index: 0,
     newFileContent:
 `/**
  * Doc
