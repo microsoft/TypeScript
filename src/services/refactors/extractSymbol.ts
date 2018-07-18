@@ -1240,7 +1240,7 @@ namespace ts.refactor.extractSymbol {
             return scope.members;
         }
         else {
-            assertTypeIsNever(scope);
+            assertType<never>(scope);
         }
 
         return emptyArray;

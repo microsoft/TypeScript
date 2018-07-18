@@ -1263,7 +1263,7 @@ namespace ts {
                 // Don't report status on "solution" projects
                 break;
             default:
-                assertTypeIsNever(status);
+                assertType<never>(status);
         }
     }
 }

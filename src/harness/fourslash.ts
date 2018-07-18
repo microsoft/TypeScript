@@ -1496,8 +1496,8 @@ Actual: ${stringify(fullActual)}`);
             const actualTags = selectedItem.tags;
             assert.equal(actualTags.length, (options.tags || ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
             ts.zipWith((options.tags || ts.emptyArray), actualTags, (expectedTag, actualTag) => {
-                assert.equal(expectedTag.name, actualTag.name);
-                assert.equal(expectedTag.text, actualTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
+                assert.equal(actualTag.name, expectedTag.name);
+                assert.equal(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
             });
 
             const allKeys: ReadonlyArray<keyof FourSlashInterface.VerifySignatureHelpOptions> = [

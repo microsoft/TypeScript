@@ -3639,6 +3639,10 @@
         "category": "Message",
         "code": 6204
     },
+    "All type parameters are unused": {
+        "category": "Error",
+        "code": 6205
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4187,6 +4191,14 @@
     "Remove variable statement": {
         "category": "Message",
         "code": 90010
+    },
+    "Remove template tag": {
+        "category": "Message",
+        "code": 90011
+    },
+    "Remove type parameters": {
+        "category": "Message",
+        "code": 90012
     },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
