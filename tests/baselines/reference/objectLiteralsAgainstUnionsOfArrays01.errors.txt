@@ -1,0 +1,28 @@
+tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts(9,5): error TS2322: Type '{ bar: { prop: number; }; }[]' is not assignable to type 'Foo[]'.
+  Type '{ bar: { prop: number; }; }' is not assignable to type 'Foo'.
+    Types of property 'bar' are incompatible.
+      Type '{ prop: number; }' is not assignable to type 'Bar | Bar[]'.
+        Type '{ prop: number; }' is not assignable to type 'Bar[]'.
+          Property 'length' is missing in type '{ prop: number; }'.
+
+
+==== tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts (1 errors) ====
+    interface Foo {
+      bar: Bar | Bar[];
+    }
+    
+    interface Bar {
+      prop: string;
+    }
+    
+    let x: Foo[] = [
+        ~
+!!! error TS2322: Type '{ bar: { prop: number; }; }[]' is not assignable to type 'Foo[]'.
+!!! error TS2322:   Type '{ bar: { prop: number; }; }' is not assignable to type 'Foo'.
+!!! error TS2322:     Types of property 'bar' are incompatible.
+!!! error TS2322:       Type '{ prop: number; }' is not assignable to type 'Bar | Bar[]'.
+!!! error TS2322:         Type '{ prop: number; }' is not assignable to type 'Bar[]'.
+!!! error TS2322:           Property 'length' is missing in type '{ prop: number; }'.
+      { bar: { prop: 100 } }
+    ]
+    
