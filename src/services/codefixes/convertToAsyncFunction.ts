@@ -185,7 +185,7 @@ namespace ts.codefix {
     function isUsedIn(variables: string[], expr: Node): boolean {
         let isUsed = false;
         forEachChild(expr, function visit(node: Node) {
-            if (isIdentifier(node) && variables.filter(name => name === node.text)){
+            if (isIdentifier(node) && variables.filter(name => name === node.text).length > 0){
                 isUsed = true;
             }
             else {
