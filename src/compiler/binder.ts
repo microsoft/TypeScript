@@ -306,7 +306,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(getDeclarationName(node)!); // TODO: GH#18217
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.assertDefined(getDeclarationName(node)));
         }
 
         /**
@@ -383,9 +383,11 @@ namespace ts {
                         let message = symbol.flags & SymbolFlags.BlockScopedVariable
                             ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                             : Diagnostics.Duplicate_identifier_0;
+                        let messageNeedsName = true;
 
                         if (symbol.flags & SymbolFlags.Enum || includes & SymbolFlags.Enum) {
                             message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
+                            messageNeedsName = false;
                         }
 
                         if (symbol.declarations && symbol.declarations.length) {
@@ -394,6 +396,7 @@ namespace ts {
                             // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
                             if (isDefaultExport) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                messageNeedsName = false;
                             }
                             else {
                                 // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
@@ -403,14 +406,16 @@ namespace ts {
                                 if (symbol.declarations && symbol.declarations.length &&
                                     (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                                     message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                    messageNeedsName = false;
                                 }
                             }
                         }
 
-                        forEach(symbol.declarations, declaration => {
-                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(declaration) || declaration, message, getDisplayName(declaration)));
-                        });
-                        file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(node) || node, message, getDisplayName(node)));
+                        const addError = (decl: Declaration): void => {
+                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(decl) || decl, message, messageNeedsName ? getDisplayName(decl) : undefined));
+                        }
+                        forEach(symbol.declarations, addError);
+                        addError(node);
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }
