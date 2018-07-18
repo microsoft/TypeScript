@@ -413,7 +413,7 @@ namespace ts {
 
                         const addError = (decl: Declaration): void => {
                             file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(decl) || decl, message, messageNeedsName ? getDisplayName(decl) : undefined));
-                        }
+                        };
                         forEach(symbol.declarations, addError);
                         addError(node);
 
