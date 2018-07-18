@@ -406,14 +406,14 @@ function [#|innerPromise|](): Promise<string> {
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_VarReturn1", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_VarReturn01", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org").then(resp => console.log(resp));
     return blob;
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_VarReturn2", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_VarReturn02", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     blob.then(resp => console.log(resp));
@@ -421,7 +421,7 @@ function [#|f|]() {
 }
 `
         );
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn3", `
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn03", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org")
     let blob2 = blob.then(resp => console.log(resp));
@@ -434,7 +434,7 @@ function err (rej) {
 }
 `
   );
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn4", `
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn04", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org").then(res => console.log(res)), blob2 = fetch("https://microsoft.com").then(res => res.ok).catch(err);
     return blob;
@@ -445,7 +445,7 @@ function err (rej) {
 `
  );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn5", `
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn05", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org").then(res => console.log(res));
     blob.then(x => x);
@@ -454,7 +454,7 @@ function [#|f|]() {
 `
   );
 
-_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn6", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn06", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org");
     return blob;
@@ -462,7 +462,7 @@ function [#|f|]() {
 `
 );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn7", `
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn07", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     let blob2 = fetch("https://microsoft.com");
@@ -473,7 +473,7 @@ function [#|f|]() {
 `
 );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn8", `
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn08", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     if (!blob.ok){
@@ -485,8 +485,9 @@ function [#|f|]() {
 `
 );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn9", `
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn09", `
 function [#|f|]() {
+    let blob3;
     let blob = fetch("https://typescriptlang.org");
     let blob2 = fetch("https://microsoft.com");
     blob2.then(res => console.log("res:", res));
@@ -496,6 +497,29 @@ function [#|f|]() {
 }
 `
 );
+
+
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn10", `
+function [#|f|]() {
+    let blob3;
+    let blob = fetch("https://typescriptlang.org");
+    let blob2 = fetch("https://microsoft.com");
+    blob2.then(res => console.log("res:", res));
+    blob.then(resp => console.log(resp));
+    blob3 = blob2;
+    return blob;
+}
+`
+);
+
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn11", `
+function [#|f|]() {
+    let blob;
+    return blob;
+}
+`
+);
+
 
 
 _testConvertToAsyncFunction("convertToAsyncFunction_Param", `
