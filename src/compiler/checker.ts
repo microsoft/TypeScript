@@ -26724,12 +26724,13 @@ namespace ts {
                 return [];
             }
 
-            const symbols = createSymbolTable();
+            const symbols = createUnderscoreEscapedMap<number>();
+            const results: Symbol[] = [];
             let isStatic = false;
 
             populateSymbols();
 
-            return symbolsToArray(symbols);
+            return results;
 
             function populateSymbols() {
                 while (location) {
@@ -26784,18 +26785,26 @@ namespace ts {
             /**
              * Copy the given symbol into symbol tables if the symbol has the given meaning
              * and it doesn't already existed in the symbol table
-             * @param key a key for storing in symbol table; if undefined, use symbol.name
              * @param symbol the symbol to be added into symbol table
              * @param meaning meaning of symbol to filter by before adding to symbol table
              */
             function copySymbol(symbol: Symbol, meaning: SymbolFlags): void {
                 if (getCombinedLocalAndExportSymbolFlags(symbol) & meaning) {
                     const id = symbol.escapedName;
-                    // We will copy all symbol regardless of its reserved name because
-                    // symbolsToArray will check whether the key is a reserved name and
-                    // it will not copy symbol with reserved name to the array
+                    if (isReservedMemberName(id)) {
+                        return;
+                    }
+
                     if (!symbols.has(id)) {
-                        symbols.set(id, symbol);
+                        symbols.set(id, symbol.flags);
+                        results.push(symbol);
+                    }
+                    else {
+                        const targetFlag = symbols.get(id);
+                        if ((targetFlag & symbol.flags) !== symbol.flags) {
+                            symbols.set(id, targetFlag | symbol.flags);
+                            results.push(symbol);
+                        }
                     }
                 }
             }
