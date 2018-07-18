@@ -422,7 +422,7 @@ namespace ts {
                                 relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here));
                             }
                         });
-                        
+
                         const diag = createDiagnosticForNode(declarationName, message, getDisplayName(node));
                         file.bindDiagnostics.push(
                             multipleDefaultExports ? addRelatedInfo(diag, ...relatedInformation) : diag
