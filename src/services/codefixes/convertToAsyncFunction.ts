@@ -65,10 +65,17 @@ namespace ts.codefix {
     }
 
     function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes: Node[], newNodes: Node[]) {
-        let i = 1;
+        if (oldNodes.length > 0 && isReturnStatement(oldNodes[0]) && (<ReturnStatement>oldNodes[0]).expression && isIdentifier((<ReturnStatement>oldNodes[0]).expression!)) {
+            oldNodes = oldNodes.slice(1);
+        }
+
+        let i = 0;
         while (i < oldNodes.length && i < newNodes.length) {
             if (i === oldNodes.length - 1 && i < newNodes.length - 1) {
                 changes.replaceNodeWithNodes(sourceFile, oldNodes[i], newNodes.slice(i));
+            }
+            else if (i < oldNodes.length - 1 && i === newNodes.length - 1){
+                changes.replaceNodeRange(sourceFile, oldNodes[i], oldNodes[oldNodes.length - 1], newNodes[i]);
             }
             else {
                 changes.replaceNode(sourceFile, oldNodes[i], newNodes[i]);
@@ -79,17 +86,17 @@ namespace ts.codefix {
 
     function seperateCallbacksByVariable(retStmts: Node[], checker: TypeChecker): Map<Node[]> {
         let returnMap: Map<Node[]> = new MapCtr();
-        let promiseVars: Identifier[] = [];
+        let promiseVars: Map<string[]> = new MapCtr();
 
-        function getNameAndExpr(stmt: Node): [Node | undefined, Identifier | undefined] {
-            let expr: Node | undefined;
+        function getNameAndExpr(stmt: Node): [Node, Identifier | undefined] {
+            let expr: Node;
             let name: Identifier | undefined;
             if (isVariableStatement(stmt) && stmt.declarationList.declarations.length > 0) {
                 expr = stmt; //fix this for a varDeclList
                 name = stmt.declarationList.declarations[0].name as Identifier;
             }
             else if (isAssignmentExpression(stmt)) {
-                expr = stmt.right;
+                expr = stmt;
                 name = isIdentifier(stmt.left) ? stmt.left : undefined;
             }
             else if (isCallExpression(stmt)) {
@@ -103,12 +110,19 @@ namespace ts.codefix {
                     }
                 });
             }
+            else if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
+                expr = stmt;
+                name = stmt.expression;
+            }
+            else {
+                expr = stmt;
+            }
 
             return [expr, name];
         }
 
         for (let stmt of retStmts) {
-            let expr;
+            let expr: Node;
             let name: Identifier | undefined;
 
             if (isExpressionStatement(stmt)) {
@@ -124,13 +138,20 @@ namespace ts.codefix {
             }
 
             let added = false;
-            for (let varName of promiseVars) {
-                if (isUsedIn(varName, expr)) {
-                    addToMap(returnMap, varName.text, expr);
+            promiseVars.forEach((names: string[], varName: string) => {
+                if (isUsedIn(names.concat(varName), expr)) {
+                    addToMap(returnMap, varName, expr);
                     added = true;
-                    break;
+
+                    if (isVariableStatement(expr) || isAssignmentExpression(expr)) {
+                        let newName = getNameAndExpr(expr)[1];
+                        if (newName) {
+                            addToMap(promiseVars, varName, newName.text);
+                        }
+                    }
+                    return;
                 }
-            }
+            });
 
             if (!added && name) {
                 let callExpr: Node;
@@ -147,9 +168,9 @@ namespace ts.codefix {
                     callExpr = expr;
                 }
 
-                if (isCallExpression(callExpr) && returnsAPromise(callExpr, checker)) {
-                    promiseVars.push(name as Identifier);
-                    addToMap(returnMap, (<Identifier>name).text, expr);
+                if (isCallExpression(callExpr) && returnsAPromise(callExpr, checker) || isReturnStatement(callExpr)) {
+                    addToMap(promiseVars, name.text, undefined);
+                    addToMap(returnMap, name.text, expr);
                 }
             }
         }
@@ -161,10 +182,10 @@ namespace ts.codefix {
     }
 
 
-    function isUsedIn(variable: Identifier, expr: Node): boolean {
+    function isUsedIn(variables: string[], expr: Node): boolean {
         let isUsed = false;
         forEachChild(expr, function visit(node: Node) {
-            if (isIdentifier(node) && variable.text === node.text) {
+            if (isIdentifier(node) && variables.filter(name => name === node.text)){
                 isUsed = true;
             }
             else {
@@ -407,9 +428,6 @@ namespace ts.codefix {
     }
 
     function getCallbackBody(func: Node, prevArgName: string | undefined, argName: string, parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<string>, lastDotThenMap: Map<boolean>, hasFollowingReturn: boolean, isRej = false): NodeArray<Statement> {
-        if (!prevArgName && argName) {
-            prevArgName = argName;
-        }
 
         const nextDotThen = lastDotThenMap.get(String(getNodeId(parent)));
         switch (func.kind) {
@@ -449,10 +467,15 @@ namespace ts.codefix {
                         return createNodeArray(innerCbBody);
                     }
 
-                    return nextDotThen  || hasFollowingReturn ?
-                        createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName!, /*type*/ undefined, func.body as Expression)], varDeclFlags ? varDeclFlags : NodeFlags.Let)))]) :
-                        createNodeArray([createReturn(func.body as Expression)]);
-                }
+                    if (prevArgName) {
+                        return (nextDotThen || hasFollowingReturn) ?
+                         createNodeArray([createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([createVariableDeclaration(prevArgName!, /*type*/ undefined, func.body as Expression)], varDeclFlags ? varDeclFlags : NodeFlags.Let)))]) :
+                         createNodeArray([createReturn(func.body as Expression)]);
+                    }
+                    else {
+                        return createNodeArray([createStatement(func.body as Expression)]);
+                    }
+               }
                 break;
         }
         return createNodeArray([]);
