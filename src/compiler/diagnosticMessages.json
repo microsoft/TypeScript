@@ -983,6 +983,10 @@
         "category": "Error",
         "code": 1343
     },
+    "'A label is not allowed here.": {
+        "category": "Error",
+        "code": 1344
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
