@@ -485,6 +485,19 @@ function [#|f|]() {
 `
 );
 
+_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn9", `
+function [#|f|]() {
+    let blob = fetch("https://typescriptlang.org");
+    let blob2 = fetch("https://microsoft.com");
+    blob2.then(res => console.log("res:", res));
+    blob.then(resp => console.log(resp));
+    blob3 = blob2.catch(rej => rej.ok);
+    return blob;
+}
+`
+);
+
+
 _testConvertToAsyncFunction("convertToAsyncFunction_Param", `
 function [#|f|]() {
     my_print(fetch("https://typescriptlang.org").then(res => console.log(res)))
