@@ -2633,7 +2633,8 @@ namespace ts {
             // If needed, we should emit a variable declaration for the enum. If we emit
             // a leading variable declaration, we should not emit leading comments for the
             // enum body.
-            if (addVarForEnumOrModuleDeclaration(statements, node)) {
+            const varAdded = addVarForEnumOrModuleDeclaration(statements, node);
+            if (varAdded) {
                 // We should still emit the comments if we are emitting a system module.
                 if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
                     emitFlags |= EmitFlags.NoLeadingComments;
@@ -2691,8 +2692,13 @@ namespace ts {
             );
 
             setOriginalNode(enumStatement, node);
+            if (varAdded) {
+                // If a variable was added, synthetic comments are mitted on it, not on the moduleStatement.
+                setSyntheticLeadingComments(enumStatement, undefined);
+                setSyntheticTrailingComments(enumStatement, undefined);
+            }
             setTextRange(enumStatement, node);
-            setEmitFlags(enumStatement, emitFlags);
+            addEmitFlags(enumStatement, emitFlags);
             statements.push(enumStatement);
 
             // Add a DeclarationMarker for the enum to preserve trailing comments and mark
@@ -2882,7 +2888,7 @@ namespace ts {
                 //     })(m1 || (m1 = {})); // trailing comment module
                 //
                 setCommentRange(statement, node);
-                setEmitFlags(statement, EmitFlags.NoTrailingComments | EmitFlags.HasEndOfDeclarationMarker);
+                addEmitFlags(statement, EmitFlags.NoTrailingComments | EmitFlags.HasEndOfDeclarationMarker);
                 statements.push(statement);
                 return true;
             }
@@ -2922,7 +2928,8 @@ namespace ts {
             // If needed, we should emit a variable declaration for the module. If we emit
             // a leading variable declaration, we should not emit leading comments for the
             // module body.
-            if (addVarForEnumOrModuleDeclaration(statements, node)) {
+            const varAdded = addVarForEnumOrModuleDeclaration(statements, node);
+            if (varAdded) {
                 // We should still emit the comments if we are emitting a system module.
                 if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
                     emitFlags |= EmitFlags.NoLeadingComments;
@@ -2979,8 +2986,13 @@ namespace ts {
             );
 
             setOriginalNode(moduleStatement, node);
+            if (varAdded) {
+                // If a variable was added, synthetic comments are mitted on it, not on the moduleStatement.
+                setSyntheticLeadingComments(moduleStatement, undefined);
+                setSyntheticTrailingComments(moduleStatement, undefined);
+            }
             setTextRange(moduleStatement, node);
-            setEmitFlags(moduleStatement, emitFlags);
+            addEmitFlags(moduleStatement, emitFlags);
             statements.push(moduleStatement);
 
             // Add a DeclarationMarker for the namespace to preserve trailing comments and mark

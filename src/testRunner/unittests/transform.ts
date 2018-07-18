@@ -357,6 +357,27 @@ class Clazz {
                         }
                     }).outputText;
         });
+
+        testBaseline("transformAddCommentToNamespace", () => {
+            return transpileModule(`
+// namespace comment.
+namespace Foo {
+    export const x = 1;
+}
+// another comment.
+namespace Foo {
+    export const y = 1;
+}
+`, {
+                        transformers: {
+                            before: [addSyntheticComment(n => isModuleDeclaration(n))],
+                        },
+                        compilerOptions: {
+                            target: ScriptTarget.ES2015,
+                            newLine: NewLineKind.CarriageReturnLineFeed,
+                        }
+                    }).outputText;
+        });
     });
 }
 
