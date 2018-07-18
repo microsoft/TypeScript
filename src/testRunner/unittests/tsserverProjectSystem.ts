@@ -515,6 +515,10 @@ namespace ts.projectSystem {
         return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
     }
 
+    export function executeSessionRequestNoResponse<TRequest extends protocol.Request>(session: server.Session, command: TRequest["command"], args: TRequest["arguments"]): void {
+        session.executeCommand(makeSessionRequest(command, args));
+    }
+
     export function openFilesForSession(files: ReadonlyArray<File | { readonly file: File | string, readonly projectRootPath: string }>, session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
@@ -9251,6 +9255,50 @@ export function Test2() {
                     textChanges: [
                         { ...protocolTextSpanFromSubstring(userTs.content, "../a/bin/a"), newText: "../a/bin/aNew" },
                     ],
+                },
+            ]);
+        });
+    });
+
+    describe("Untitled files", () => {
+        it("Can convert positions to locations", () => {
+            const aTs: File = { path: "/proj/a.ts", content: "" };
+            const tsconfig: File = { path: "/proj/tsconfig.json", content: "{}" };
+            const session = createSession(createServerHost([aTs, tsconfig]));
+
+            openFilesForSession([aTs], session);
+
+            const untitledFile = "untitled:^Untitled-1";
+            executeSessionRequestNoResponse<protocol.OpenRequest>(session, protocol.CommandTypes.Open, {
+                file: untitledFile,
+                fileContent: "let foo = 1;\nfooo/**/",
+                scriptKindName: "TS",
+                projectRootPath: "/proj",
+            });
+
+            const response = executeSessionRequest<protocol.CodeFixRequest, protocol.CodeFixResponse>(session, protocol.CommandTypes.GetCodeFixes, {
+                file: untitledFile,
+                startLine: 2,
+                startOffset: 1,
+                endLine: 2,
+                endOffset: 5,
+                errorCodes: [Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
+            });
+            assert.deepEqual<ReadonlyArray<protocol.CodeFixAction> | undefined>(response, [
+                {
+                    description: "Change spelling to 'foo'",
+                    fixAllDescription: "Fix all detected spelling errors",
+                    fixId: "fixSpelling",
+                    fixName: "spelling",
+                    changes: [{
+                        fileName: untitledFile,
+                        textChanges: [{
+                            start: { line: 2, offset: 1 },
+                            end: { line: 2, offset: 5 },
+                            newText: "foo",
+                        }],
+                    }],
+                    commands: undefined,
                 },
             ]);
         });
