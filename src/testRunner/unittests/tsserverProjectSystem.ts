@@ -8688,7 +8688,7 @@ export const x = 10;`
             };
             const aTsconfig: File = {
                 path: "/a/tsconfig.json",
-                content: "{}",
+                content: JSON.stringify({ files: ["./old.ts", "./user.ts"] }),
             };
             const bUserTs: File = {
                 path: "/b/user.ts",
@@ -8703,12 +8703,15 @@ export const x = 10;`
             const session = createSession(host);
             openFilesForSession([aUserTs, bUserTs], session);
 
-            const renameRequest = makeSessionRequest<protocol.GetEditsForFileRenameRequestArgs>(CommandNames.GetEditsForFileRename, {
-                oldFilePath: "/a/old.ts",
+            const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, CommandNames.GetEditsForFileRename, {
+                oldFilePath: aOldTs.path,
                 newFilePath: "/a/new.ts",
             });
-            const response = session.executeCommand(renameRequest).response as protocol.GetEditsForFileRenameResponse["body"];
-            assert.deepEqual(response, [
+            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+                {
+                    fileName: aTsconfig.path,
+                    textChanges: [{ ...protocolTextSpanFromSubstring(aTsconfig.content, "./old.ts"), newText: "new.ts" }],
+                },
                 {
                     fileName: aUserTs.path,
                     textChanges: [{ ...protocolTextSpanFromSubstring(aUserTs.content, "./old"), newText: "./new" }],
@@ -8716,6 +8719,31 @@ export const x = 10;`
                 {
                     fileName: bUserTs.path,
                     textChanges: [{ ...protocolTextSpanFromSubstring(bUserTs.content, "../a/old"), newText: "../a/new" }],
+                },
+            ]);
+        });
+
+        it("works with file moved to inferred project", () => {
+            const aTs: File = { path: "/a.ts", content: 'import {} from "./b";' };
+            const cTs: File = { path: "/c.ts", content: "export {};" };
+            const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./a.ts", "./b.ts"] }) };
+
+            const host = createServerHost([aTs, cTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs, cTs], session);
+
+            const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, CommandNames.GetEditsForFileRename, {
+                oldFilePath: "/b.ts",
+                newFilePath: cTs.path,
+            });
+            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+                {
+                    fileName: "/tsconfig.json",
+                    textChanges: [{ ...protocolTextSpanFromSubstring(tsconfig.content, "./b.ts"), newText: "c.ts" }],
+                },
+                {
+                    fileName: "/a.ts",
+                    textChanges: [{ ...protocolTextSpanFromSubstring(aTs.content, "./b"), newText: "./c" }],
                 },
             ]);
         });

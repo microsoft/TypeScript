@@ -2056,6 +2056,10 @@
         "category": "Error",
         "code": 2574
     },
+    "No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.": {
+        "category": "Error",
+        "code": 2575
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -4024,6 +4028,10 @@
     "JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.": {
         "category": "Error",
         "code": 8029
+    },
+    "The type of a function declaration must match the function's signature.": {
+        "category": "Error",
+        "code": 8030
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",

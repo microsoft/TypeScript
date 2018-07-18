@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.0";
+    export const versionMajorMinor = "3.1";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -1866,6 +1866,9 @@ namespace ts {
             if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
                 const candidateNameLowerCase = candidateName.toLowerCase();
                 if (candidateNameLowerCase === nameLowerCase) {
+                    if (candidateName === name) {
+                        continue;
+                    }
                     return candidate;
                 }
                 if (justCheckExactMatches) {

@@ -148,7 +148,7 @@ namespace documents {
 
         public static fromUrl(url: string) {
             const match = SourceMap._dataURLRegExp.exec(url);
-            return match ? new SourceMap(/*mapFile*/ undefined, (Buffer.from ? Buffer.from(match[1], "base64") : new Buffer(match[1], "base64")).toString("utf8")) : undefined;
+            return match ? new SourceMap(/*mapFile*/ undefined, ts.sys.base64decode!(match[1])) : undefined;
         }
 
         public static fromSource(text: string): SourceMap | undefined {

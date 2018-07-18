@@ -77,7 +77,7 @@ namespace ts.codefix {
     }
 
     function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
-        const type = context.program.getTypeChecker().getTypeAtLocation(expr)!; // TODO: GH#18217
+        const type = context.program.getTypeChecker().getTypeAtLocation(expr);
         if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
             return [];
         }
