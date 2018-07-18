@@ -52,10 +52,11 @@ node_modules/uglify-js/lib/compress.js(6340,25): error TS2403: Subsequent variab
 node_modules/uglify-js/lib/compress.js(6368,19): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/minify.js(170,75): error TS2339: Property 'compress' does not exist on type 'Compressor'.
 node_modules/uglify-js/lib/mozilla-ast.js(566,18): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(481,22): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(774,23): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(1170,29): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(1452,58): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/uglify-js/lib/output.js(246,9): error TS2554: Expected 0 arguments, but got 2.
+node_modules/uglify-js/lib/output.js(475,22): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(775,23): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(1171,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(1453,58): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 node_modules/uglify-js/lib/parse.js(367,20): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 node_modules/uglify-js/lib/parse.js(449,32): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
