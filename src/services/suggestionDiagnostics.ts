@@ -141,9 +141,9 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    export function getReturnStatementsWithPromiseCallbacks(node: Node, checker: TypeChecker): [Node[], NodeFlags, boolean] {
+    export function getReturnStatementsWithPromiseCallbacks(node: Node, checker: TypeChecker): [Node[], Map<NodeFlags>, boolean] {
         const retStmts: Node[] = [];
-        let varDeclFlags = NodeFlags.Let;
+        let varDeclFlagsMap: Map<NodeFlags> = new MapCtr();
         let hasFollowingRetStmt = false;
         forEachChild(node, visit);
 
@@ -164,7 +164,7 @@ namespace ts {
                     retStmts.push(child as ReturnStatement);
                 }
                 else if (isIdentifier(returnChild) && isReturnStatement(child)
-                && child.expression && isIdentifier(child.expression)) {
+                    && child.expression && isIdentifier(child.expression)) {
                     hasFollowingRetStmt = true;
                     retStmts.push(child);
                     forEachChild(node, findCallbackUses);
@@ -176,19 +176,23 @@ namespace ts {
                 let parent: Node;
 
                 function findCallbackUses(identUse: Node) {
-                    if (isVariableDeclarationList(identUse)){ 
+                    if (isVariableDeclarationList(identUse)) {
                         for (let varDecl of identUse.declarations) {
-                            if (varDecl.initializer && isCallExpression(varDecl.initializer) && 
-                                symbol === checker.getSymbolAtLocation(varDecl.name)){
+                            if (varDecl.initializer && isCallExpression(varDecl.initializer) &&
+                                symbol === checker.getSymbolAtLocation(varDecl.name)) {
                                 retStmts.push(parent);
+                                varDeclFlagsMap.set(String(getNodeId(varDecl.initializer)), identUse.flags);
                             }
                         }
-                        varDeclFlags = identUse.flags;
                     }
                     else if (isCallback(identUse)) {
                         if (symbol === checker.getSymbolAtLocation((<PropertyAccessExpression>(<CallExpression>identUse).expression).expression)) {
                             retStmts.push(parent as CallExpression);
                         }
+                    }
+                    else if (isAssignmentExpression(identUse)) {
+                        retStmts.push(parent);
+                        varDeclFlagsMap.set(String(getNodeId(identUse.right)), NodeFlags.None)
                     }
                     else {
                         parent = identUse;
@@ -198,7 +202,7 @@ namespace ts {
             }
             forEachChild(child, visit);
         }
-        return [retStmts, varDeclFlags, hasFollowingRetStmt];
+        return [retStmts, varDeclFlagsMap, hasFollowingRetStmt];
     }
 
     function isCallback(node: Node): boolean {
