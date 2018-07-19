@@ -4,4 +4,4 @@
 // @strict: true
 // @Filename: paren.js
 /** @type {function((string), function((string)): string): string} */
-var x = s => s.toString()
+var x = (s, id) => id(s)
