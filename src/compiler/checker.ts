@@ -5237,6 +5237,9 @@ namespace ts {
 
                         const resolvedModule = resolveExternalModuleSymbol(symbol);
                         if (resolvedModule !== symbol) {
+                            if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                                return errorType;
+                            }
                             const original = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
                             // TODO: Maybe call this in resolveModuleFromTypeLiteral or whatever (the weird webpack example now works better than the alternative)
                             // (or boost the ability of getTypeOfSymbol [Property case] to recognise artificially augmented symbols, and then just always call getTypeOfSymbol)
@@ -5244,6 +5247,9 @@ namespace ts {
                             // TODO: This is probably not needed
                             if (t === errorType) {
                                 t = getTypeOfSymbol(resolvedModule);
+                            }
+                            if (!popTypeResolution()) {
+                                t = reportCircularityError(symbol);
                             }
                             links.type = t;
                             return links.type;
