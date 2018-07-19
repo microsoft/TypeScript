@@ -436,6 +436,51 @@ namespace ts {
             );
         });
 
+        it("Correctly detects implicitly enabled strictNullChecks ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        strict: true,
+                        strictPropertyInitialization: true
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        strict: true,
+                        strictPropertyInitialization: true
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Checks dependency of strict options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        strict: true,
+                        strictNullChecks: false,
+                        strictPropertyInitialization: true
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        strict: true,
+                        strictNullChecks: false,
+                        strictPropertyInitialization: true
+                    },
+                    errors: [{
+                        file: undefined,
+                        start: 0,
+                        length: 0,
+                        messageText: "Option 'strictPropertyInitialization' cannot be specified without specifying option 'strictNullChecks'.",
+                        code: Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1.code,
+                        category: Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1.category
+                    }]
+                }
+            );
+        });
+
         // jsconfig.json
         it("Convert correctly format jsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
