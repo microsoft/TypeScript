@@ -4771,12 +4771,15 @@ namespace ts {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
                     let type = aliased !== symbol ? getTypeOfSymbol(aliased) : getWidenedLiteralType(checkExpressionCached(expression.right));
 
-                    if (getObjectFlags(type) & ObjectFlags.Anonymous &&
+                    if (type.flags & TypeFlags.Object &&
                         special === SpecialPropertyAssignmentKind.ModuleExports &&
                         symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        const exportedType = resolveStructuredTypeMembers(type as AnonymousType);
+                        const exportedType = resolveStructuredTypeMembers(type as ObjectType);
                         const members = createSymbolTable();
                         copyEntries(exportedType.members, members);
+                        if (aliased !== symbol && !aliased.exports) {
+                            aliased.exports = createSymbolTable();
+                        }
                         (aliased !== symbol ? aliased : symbol).exports!.forEach((s, name) => {
                             if (members.has(name)) {
                                 const exportedMember = exportedType.members.get(name)!;
@@ -5234,7 +5237,7 @@ namespace ts {
 
                         const resolvedModule = resolveExternalModuleSymbol(symbol);
                         if (resolvedModule !== symbol) {
-                            const original = symbol.exports!.get(InternalSymbolName.ExportEquals)!;
+                            const original = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
                             // TODO: Maybe call this in resolveModuleFromTypeLiteral or whatever (the weird webpack example now works better than the alternative)
                             // (or boost the ability of getTypeOfSymbol [Property case] to recognise artificially augmented symbols, and then just always call getTypeOfSymbol)
                             let t = getWidenedTypeFromJSSpecialPropertyDeclarations(original, resolvedModule);

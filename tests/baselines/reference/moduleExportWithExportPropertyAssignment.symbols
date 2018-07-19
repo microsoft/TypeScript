@@ -31,7 +31,7 @@ module.exports = function () { }
 
 /** @param {number} a */
 module.exports.f = function (a) { }
->module.exports.f : Symbol(f)
+>module.exports.f : Symbol(f, Decl(mod1.js, 1, 32))
 >module.exports : Symbol(f, Decl(mod1.js, 1, 32))
 >module : Symbol(module)
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
