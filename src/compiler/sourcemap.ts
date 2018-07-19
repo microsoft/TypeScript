@@ -170,7 +170,7 @@ namespace ts {
                 if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) { // emitting single module file
                     // For modules or multiple emit files the mapRoot will have directory structure like the sources
                     // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFileOrBundle, host, sourceMapDir));
+                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFileOrBundle.fileName, host, sourceMapDir));
                 }
 
                 if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {

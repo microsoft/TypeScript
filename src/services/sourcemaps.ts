@@ -104,7 +104,8 @@ namespace ts {
         }
 
         function tryGetGeneratedLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
-            const declarationPath = getProgram().getDeclarationEmitPath(info.fileName);
+            const program = getProgram();
+            const declarationPath = getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
             const declarationFile = getFile(declarationPath);
             if (!declarationFile) return undefined;
