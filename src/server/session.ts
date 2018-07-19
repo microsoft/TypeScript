@@ -288,8 +288,7 @@ namespace ts.server {
 
     function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, areEqual: (a: T, b: T) => boolean) {
         const outputs: T[] = [];
-        projectService.forEachProject(project => {
-            if (project.isOrphan() || !project.languageServiceEnabled) return;
+        projectService.forEachEnabledProject(project => {
             const theseOutputs = action(project);
             outputs.push(...theseOutputs.filter(output => !outputs.some(o => areEqual(o, output))));
         });
@@ -402,7 +401,7 @@ namespace ts.server {
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (getDefinition) {
             const memGetDefinition = memoize(getDefinition);
-            projectService.forEachProject(project => {
+            projectService.forEachEnabledProject(project => {
                 if (!addToSeen(seenProjects, project.projectName)) return;
                 const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
                 if (definition) {
