@@ -64,14 +64,31 @@ namespace ts.codefix {
             }
         });
 
-        replaceNodes(changes, sourceFile, retStmts, allNewNodes);
+        replaceNodes(changes, sourceFile, removeUnglued(retStmts, checker), allNewNodes);
+    }
+
+    function removeUnglued(retStmts: Node[], checker: TypeChecker): Node[] {
+        let newRetStmts: Node[] = [];
+        for (let stmt of retStmts) {
+            let keepStmt = false;
+            forEachChild(stmt, function visit(node) {
+                if (isCallExpression(node) && (isCallback(node, "then", checker) || isCallback(node, "catch", checker) || returnsAPromise(node, checker))) {
+                    keepStmt = true;
+                }
+                else {
+                    forEachChild(node, visit);
+                }
+            });
+
+            if (keepStmt) {
+                newRetStmts.push(stmt);
+            }
+        }
+
+        return newRetStmts;
     }
 
     function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes: Node[], newNodes: Node[]) {
-        if (oldNodes.length > 0 && isReturnStatement(oldNodes[0]) && (<ReturnStatement>oldNodes[0]).expression && isIdentifier((<ReturnStatement>oldNodes[0]).expression!)) {
-            oldNodes = oldNodes.slice(1);
-        }
-
         let i = 0;
         while (i < oldNodes.length && i < newNodes.length) {
             if (i === oldNodes.length - 1 && i < newNodes.length - 1) {
@@ -142,7 +159,7 @@ namespace ts.codefix {
 
             let added = false;
             promiseVars.forEach((names: string[], varName: string) => {
-                if (isUsedIn(names.concat(varName), expr)) {
+                if (!added && isUsedIn(names.concat(varName), expr)) {
                     addToMap(returnMap, varName, expr);
                     added = true;
 
@@ -152,7 +169,6 @@ namespace ts.codefix {
                             addToMap(promiseVars, varName, newName.text);
                         }
                     }
-                    return;
                 }
             });
 
@@ -161,7 +177,7 @@ namespace ts.codefix {
                 if (isVariableStatement(expr) && expr.declarationList.declarations.length === 1 && expr.declarationList.declarations[0].initializer) {
                     callExpr = expr.declarationList.declarations[0].initializer!;
                 }
-                else if (isAssignmentExpression(expr) && isCallExpression(expr.right) && returnsAPromise(expr.right, checker)) {
+                else if (isAssignmentExpression(expr)) {
                     callExpr = expr.right;
                 }
                 else if (isExpressionStatement(expr)) {
@@ -211,7 +227,7 @@ namespace ts.codefix {
 
     function glueTogetherCallbacks(retStmts: Node[]): [CallExpression | undefined, Identifier | undefined] {
         retStmts = retStmts.slice(0);
-        const stmt = retStmts.pop();
+        let stmt = retStmts.pop();
         if (!stmt) {
             return [undefined, undefined];
         }
@@ -255,15 +271,42 @@ namespace ts.codefix {
 
             return [gluedExpr, retName];
         }
+        else if (isBinaryExpression(stmt) && stmt.operatorToken.kind === SyntaxKind.EqualsToken){
+            let [gluedExpr, retName] = glueTogetherCallbacks(retStmts.concat(stmt.right));
+            if (!retName && isIdentifier(stmt.left)) {
+                retName = stmt.left;
+            }
+            return [gluedExpr, retName];
+        }
         else if (isReturnStatement(stmt) && stmt.expression && isIdentifier(stmt.expression)) {
             return [undefined, stmt.expression];
         }
         else if (isExpression(stmt)) {
-            forEachChild(stmt, function visit(node: Node){
-                if (isIdentifier(node)) {
-                    return [undefined, node.text];
-                }
-            });
+            if (isVariableDeclaration(stmt)) {
+                stmt = stmt.initializer;
+            }
+            else if (isAssignmentExpression(stmt)) {
+                stmt = stmt.right;
+            }
+
+            if (!stmt) {
+                return [undefined, undefined];
+            }
+
+            let retName;
+            if (isIdentifier(stmt)) {
+                retName = stmt;
+            }
+            else {
+                forEachChild(stmt, function visit(node: Node) {
+                    if (isIdentifier(node)) {
+                        retName = node;
+                    }
+                });
+            }
+
+            let gluedExpr = glueTogetherCallbacks(retStmts);
+            return [gluedExpr[0], retName];
         }
 
         return [undefined, undefined];
