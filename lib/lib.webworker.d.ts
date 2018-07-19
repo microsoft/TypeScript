@@ -950,7 +950,7 @@ interface FileReader extends EventTarget {
     readAsArrayBuffer(blob: Blob): void;
     readAsBinaryString(blob: Blob): void;
     readAsDataURL(blob: Blob): void;
-    readAsText(blob: Blob, label?: string): void;
+    readAsText(blob: Blob, encoding?: string): void;
     readonly DONE: number;
     readonly EMPTY: number;
     readonly LOADING: number;
@@ -972,7 +972,7 @@ interface FileReaderSync {
     readAsArrayBuffer(blob: Blob): ArrayBuffer;
     readAsBinaryString(blob: Blob): string;
     readAsDataURL(blob: Blob): string;
-    readAsText(blob: Blob, label?: string): string;
+    readAsText(blob: Blob, encoding?: string): string;
 }
 
 declare var FileReaderSync: {
