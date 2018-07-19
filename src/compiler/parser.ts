@@ -5798,13 +5798,27 @@ namespace ts {
             }
 
             if (node.decorators || node.modifiers) {
-                // treat this as a property declaration with a missing name.
-                node.name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                const diagnosticMessage = getDiagnosticMessageForMissingNameWithToken(token());
+                node.name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, diagnosticMessage);
                 return parsePropertyDeclaration(<PropertyDeclaration>node);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
             return Debug.fail("Should not have attempted to parse class member declaration.");
+        }
+
+        function getDiagnosticMessageForMissingNameWithToken(token: SyntaxKind): DiagnosticMessage {
+            switch (token) {
+                // Trailing commas and semicolons are common user mistakes that deserve their own message.
+                case SyntaxKind.CommaToken:
+                    return Diagnostics.Comma_not_permitted_here;
+                case SyntaxKind.SemicolonToken:
+                    return Diagnostics.Semicolon_not_permitted_here;
+
+                // For all other cases, treat this as a property declaration with a missing name.
+                default:
+                    return Diagnostics.Declaration_expected;
+            }
         }
 
         function parseClassExpression(): ClassExpression {

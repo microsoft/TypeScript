@@ -443,9 +443,17 @@
         "category": "Error",
         "code": 1142
     },
+    "Comma not permitted here.": {
+        "category": "Error",
+        "code": 1143
+    },
     "'{' or ';' expected.": {
         "category": "Error",
         "code": 1144
+    },
+    "Semicolon not permitted here.": {
+        "category": "Error",
+        "code": 1145
     },
     "Declaration expected.": {
         "category": "Error",
