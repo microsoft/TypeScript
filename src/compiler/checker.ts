@@ -2413,7 +2413,7 @@ namespace ts {
         function getExportsOfModuleWorker(moduleSymbol: Symbol): SymbolTable {
             const visitedSymbols: Symbol[] = [];
 
-            // A module defined by an 'export=' consists on one export that needs to be resolved
+            // A module defined by an 'export=' consists of one export that needs to be resolved
             moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
 
             return visit(moduleSymbol) || emptySymbols;
@@ -4713,7 +4713,7 @@ namespace ts {
             return undefined;
         }
 
-        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol, aliased: Symbol) {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
@@ -4769,7 +4769,7 @@ namespace ts {
                 }
                 else if (!jsDocType && isBinaryExpression(expression)) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    let type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = aliased !== symbol ? getTypeOfSymbol(aliased) : getWidenedLiteralType(checkExpressionCached(expression.right));
 
                     if (getObjectFlags(type) & ObjectFlags.Anonymous &&
                         special === SpecialPropertyAssignmentKind.ModuleExports &&
@@ -4777,7 +4777,7 @@ namespace ts {
                         const exportedType = resolveStructuredTypeMembers(type as AnonymousType);
                         const members = createSymbolTable();
                         copyEntries(exportedType.members, members);
-                        symbol.exports!.forEach((s, name) => {
+                        (aliased !== symbol ? aliased : symbol).exports!.forEach((s, name) => {
                             if (members.has(name)) {
                                 const exportedMember = exportedType.members.get(name)!;
                                 const union = createSymbol(s.flags | exportedMember.flags, name);
@@ -5076,7 +5076,7 @@ namespace ts {
             else if (isBinaryExpression(decl) ||
                 isPropertyAccessExpression(decl) && isBinaryExpression(decl.parent)) {
                 return getJSInitializerType(decl, symbol, getAssignedJavascriptInitializer(isBinaryExpression(decl) ? decl.left : decl)) ||
-                    getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                    getWidenedTypeFromJSSpecialPropertyDeclarations(symbol, symbol);
             }
             else if (isParameter(decl)
                 || isPropertyDeclaration(decl)
@@ -5226,9 +5226,26 @@ namespace ts {
                 }
                 else if (symbol.valueDeclaration.kind === SyntaxKind.BinaryExpression ||
                          symbol.valueDeclaration.kind === SyntaxKind.PropertyAccessExpression && symbol.valueDeclaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                    links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol, symbol);
                 }
                 else {
+                    if (symbol.flags & SymbolFlags.ValueModule && symbol.valueDeclaration && isSourceFile(symbol.valueDeclaration) && symbol.valueDeclaration.commonJsModuleIndicator) {
+      // symbol.exports && symbol.exports.get(InternalSymbolName.ExportEquals) && symbol.exports.get(InternalSymbolName.ExportEquals)!.valueDeclaration && isBinaryExpression(symbol.exports.get(InternalSymbolName.ExportEquals)!.valueDeclaration)) {
+
+                        const resolvedModule = resolveExternalModuleSymbol(symbol);
+                        if (resolvedModule !== symbol) {
+                            const original = symbol.exports!.get(InternalSymbolName.ExportEquals)!;
+                            // TODO: Maybe call this in resolveModuleFromTypeLiteral or whatever (the weird webpack example now works better than the alternative)
+                            // (or boost the ability of getTypeOfSymbol [Property case] to recognise artificially augmented symbols, and then just always call getTypeOfSymbol)
+                            let t = getWidenedTypeFromJSSpecialPropertyDeclarations(original, resolvedModule);
+                            // TODO: This is probably not needed
+                            if (t === errorType) {
+                                t = getTypeOfSymbol(resolvedModule);
+                            }
+                            links.type = t;
+                            return links.type;
+                        }
+                    }
                     const type = createObjectType(ObjectFlags.Anonymous, symbol);
                     if (symbol.flags & SymbolFlags.Class) {
                         const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
@@ -19299,7 +19316,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
-                    forEach(node.arguments, checkExpresionNoReturn); // Still visit arguments so they get marked for visibility, etc
+                    forEach(node.arguments, checkExpressionNoReturn); // Still visit arguments so they get marked for visibility, etc
                     return anySignature;
                 }
                 if (superType !== errorType) {
@@ -21648,7 +21665,7 @@ namespace ts {
             return type;
         }
 
-        function checkExpresionNoReturn(node: Expression) {
+        function checkExpressionNoReturn(node: Expression) {
             checkExpression(node);
         }
 

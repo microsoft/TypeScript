@@ -40,10 +40,10 @@ declare var module: { exports: any };
 === tests/cases/conformance/jsdoc/mod1.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = class Chunk {
->module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("tests/cases/conformance/jsdoc/mod1")
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
->module : { "tests/cases/conformance/jsdoc/mod1": typeof import("tests/cases/conformance/jsdoc/mod1"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
+>module.exports : typeof Chunk
+>module : { "tests/cases/conformance/jsdoc/mod1": typeof Chunk; }
+>exports : typeof Chunk
 >class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
 >Chunk : typeof Chunk
 

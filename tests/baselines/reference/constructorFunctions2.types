@@ -69,9 +69,9 @@ function A() { this.id = 1; }
 >1 : 1
 
 module.exports = A;
->module.exports = A : typeof import("tests/cases/conformance/salsa/other")
->module.exports : typeof import("tests/cases/conformance/salsa/other")
->module : { "tests/cases/conformance/salsa/other": typeof import("tests/cases/conformance/salsa/other"); }
->exports : typeof import("tests/cases/conformance/salsa/other")
+>module.exports = A : typeof A
+>module.exports : typeof A
+>module : { "tests/cases/conformance/salsa/other": typeof A; }
+>exports : typeof A
 >A : typeof A
 

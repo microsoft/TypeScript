@@ -7,19 +7,19 @@ var wat = require('./bug24024')
 >'./bug24024' : "./bug24024"
 
 module.exports = class C {}
->module.exports = class C {} : typeof import("tests/cases/conformance/salsa/bug24024")
->module.exports : typeof import("tests/cases/conformance/salsa/bug24024")
->module : { "tests/cases/conformance/salsa/bug24024": typeof import("tests/cases/conformance/salsa/bug24024"); }
->exports : typeof import("tests/cases/conformance/salsa/bug24024")
+>module.exports = class C {} : typeof C
+>module.exports : typeof C
+>module : { "tests/cases/conformance/salsa/bug24024": typeof C; }
+>exports : typeof C
 >class C {} : typeof C
 >C : typeof C
 
 module.exports.D = class D { }
 >module.exports.D = class D { } : typeof D
 >module.exports.D : typeof D
->module.exports : typeof import("tests/cases/conformance/salsa/bug24024")
->module : { "tests/cases/conformance/salsa/bug24024": typeof import("tests/cases/conformance/salsa/bug24024"); }
->exports : typeof import("tests/cases/conformance/salsa/bug24024")
+>module.exports : typeof C
+>module : { "tests/cases/conformance/salsa/bug24024": typeof C; }
+>exports : typeof C
 >D : typeof D
 >class D { } : typeof D
 >D : typeof D

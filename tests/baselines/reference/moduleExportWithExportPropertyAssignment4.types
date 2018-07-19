@@ -51,9 +51,9 @@ declare function require(name: string): any;
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"
 >module.exports.bothBefore : string | number
->module.exports : typeof import("tests/cases/conformance/salsa/mod1")
->module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
->exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports : typeof A
+>module : { "tests/cases/conformance/salsa/mod1": typeof A; }
+>exports : typeof A
 >bothBefore : string | number
 >'string' : "string"
 
@@ -79,10 +79,10 @@ A.bothAfter = 3
 >3 : 3
 
 module.exports = A
->module.exports = A : typeof import("tests/cases/conformance/salsa/mod1")
->module.exports : typeof import("tests/cases/conformance/salsa/mod1")
->module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
->exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports = A : typeof A
+>module.exports : typeof A
+>module : { "tests/cases/conformance/salsa/mod1": typeof A; }
+>exports : typeof A
 >A : typeof A
 
 function A() {
@@ -98,18 +98,18 @@ function A() {
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter = 'string' : "string"
 >module.exports.bothAfter : string | number
->module.exports : typeof import("tests/cases/conformance/salsa/mod1")
->module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
->exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports : typeof A
+>module : { "tests/cases/conformance/salsa/mod1": typeof A; }
+>exports : typeof A
 >bothAfter : string | number
 >'string' : "string"
 
 module.exports.justProperty = 'string'
 >module.exports.justProperty = 'string' : "string"
 >module.exports.justProperty : string
->module.exports : typeof import("tests/cases/conformance/salsa/mod1")
->module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
->exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports : typeof A
+>module : { "tests/cases/conformance/salsa/mod1": typeof A; }
+>exports : typeof A
 >justProperty : string
 >'string' : "string"
 

@@ -9,10 +9,10 @@ declare var module: { exports: any};
 /** @typedef {{ type: "b", y: 1 }} B */
 /** @typedef {A | B} Both */
 module.exports = C
->module.exports = C : typeof import("tests/cases/conformance/jsdoc/mod1")
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
->module : { "tests/cases/conformance/jsdoc/mod1": typeof import("tests/cases/conformance/jsdoc/mod1"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module.exports = C : typeof C
+>module.exports : typeof C
+>module : { "tests/cases/conformance/jsdoc/mod1": typeof C; }
+>exports : typeof C
 >C : typeof C
 
 function C() {

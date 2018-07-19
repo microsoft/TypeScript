@@ -28,19 +28,19 @@ declare function require(name: string): any;
 === tests/cases/conformance/salsa/mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports = function () { }
->module.exports = function () { } : typeof import("tests/cases/conformance/salsa/mod1")
->module.exports : typeof import("tests/cases/conformance/salsa/mod1")
->module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
->exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports = function () { } : { (): void; f: (a: number) => void; }
+>module.exports : { (): void; f: (a: number) => void; }
+>module : { "tests/cases/conformance/salsa/mod1": { (): void; f: (a: number) => void; }; }
+>exports : { (): void; f: (a: number) => void; }
 >function () { } : () => void
 
 /** @param {number} a */
 module.exports.f = function (a) { }
 >module.exports.f = function (a) { } : (a: number) => void
 >module.exports.f : (a: number) => void
->module.exports : typeof import("tests/cases/conformance/salsa/mod1")
->module : { "tests/cases/conformance/salsa/mod1": typeof import("tests/cases/conformance/salsa/mod1"); }
->exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports : { (): void; f: (a: number) => void; }
+>module : { "tests/cases/conformance/salsa/mod1": { (): void; f: (a: number) => void; }; }
+>exports : { (): void; f: (a: number) => void; }
 >f : (a: number) => void
 >function (a) { } : (a: number) => void
 >a : number
