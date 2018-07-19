@@ -482,7 +482,7 @@ namespace ts.codefix {
     }
 
     function addNamespaceQualifier(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { namespacePrefix, symbolToken }: FixUseNamespaceImport): void {
-        changes.replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), symbolToken));
+        changes.replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), createIdentifier(symbolToken.text)));
     }
 
     interface ImportsCollection {
