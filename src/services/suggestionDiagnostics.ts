@@ -130,7 +130,7 @@ namespace ts {
         if (checker.isPromiseLikeType(returnType)) {
             // collect all the return statements
             // check that a property access expression exists in there and that it is a handler
-            const retStmts = getReturnStatementsWithPromiseCallbacks(node, checker);
+            const retStmts = getReturnStatementsWithPromiseCallbacks(node);
             if (retStmts.length > 0) {
                 diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
             }
@@ -141,7 +141,7 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    export function getReturnStatementsWithPromiseCallbacks(node: Node, checker: TypeChecker): [Node[], Map<NodeFlags>, boolean] {
+    export function getReturnStatementsWithPromiseCallbacks(node: Node): [Node[], Map<NodeFlags>, boolean] {
         const retStmts: Node[] = [];
         let varDeclFlagsMap: Map<NodeFlags> = new MapCtr();
         let hasFollowingRetStmt = false;
@@ -158,7 +158,7 @@ namespace ts {
             }
 
             function hasCallback(returnChild: Node) {
-                const symbol = checker.getSymbolAtLocation(returnChild);
+                //const symbol = checker.getSymbolAtLocation(returnChild);
 
                 if (isCallback(returnChild)) {
                     retStmts.push(child as ReturnStatement);
@@ -178,21 +178,33 @@ namespace ts {
                 function findCallbackUses(identUse: Node) {
                     if (isVariableDeclarationList(identUse)) {
                         for (let varDecl of identUse.declarations) {
-                            if (varDecl.initializer && isCallExpression(varDecl.initializer) &&
-                                symbol === checker.getSymbolAtLocation(varDecl.name)) {
+                            
+                            /*
+                            const maybeSymbol = checker.getSymbolAtLocation(varDecl.name);
+                            const varDeclSymbol = !maybeSymbol && varDecl.original ? checker.getSymbolAtLocation((<VariableDeclaration>varDecl.original)!.name) : maybeSymbol;*/
+                            if (varDecl.initializer && isCallExpression(varDecl.initializer) /*&&
+                        symbol === varDeclSymbol*/) {
                                 retStmts.push(parent);
-                                varDeclFlagsMap.set(String(getNodeId(varDecl.initializer)), identUse.flags);
+                                let flags = identUse.original ? identUse.original.flags : identUse.flags;
+                                varDeclFlagsMap.set((<Identifier>varDecl.name).text, flags);
                             }
                         }
                     }
                     else if (isCallback(identUse)) {
-                        if (symbol === checker.getSymbolAtLocation((<PropertyAccessExpression>(<CallExpression>identUse).expression).expression)) {
+                        /*
+                        const expr = (<PropertyAccessExpression>(<CallExpression>identUse).expression).expression;
+                        const maybeSymbol = checker.getSymbolAtLocation(expr);
+                        const varDeclSymbol = !maybeSymbol && expr.original ? checker.getSymbolAtLocation(expr.original) : maybeSymbol;
+                        if (symbol === varDeclSymbol) {*/
                             retStmts.push(parent as CallExpression);
-                        }
+                        //}
                     }
                     else if (isAssignmentExpression(identUse)) {
                         retStmts.push(parent);
-                        varDeclFlagsMap.set(String(getNodeId(identUse.right)), NodeFlags.None)
+                        /*
+                        const maybeSymbol = checker.getSymbolAtLocation(identUse.left);
+                        const varDeclSymbol = !maybeSymbol && identUse.left.original ? checker.getSymbolAtLocation(identUse.left.original) : maybeSymbol;*/
+                        varDeclFlagsMap.set((<Identifier>identUse.left).text, NodeFlags.None)
                     }
                     else {
                         parent = identUse;
