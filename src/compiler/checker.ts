@@ -8874,10 +8874,42 @@ namespace ts {
                 }
                 // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
-                const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
+                const lastNonfinalUnionIndex = findLastIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0, typeSet.length - 2);
+                let partialIntersectionStartIndex: number, unionIndex: number;
+                if (lastNonfinalUnionIndex === -1) {
+                    // typeSet[typeSet.length - 1] must be the only union.  Distribute it and we're done.
+                    partialIntersectionStartIndex = 0;
+                    unionIndex = typeSet.length - 1;
+                }
+                else {
+                    // `keyof` a large union of types results in an intersection of unions containing many unit types (GH#24223).
+                    // To help avoid an exponential blowup, distribute the last union over the later constituents of the
+                    // intersection and simplify the resulting union before distributing earlier unions.  (Exception: don't
+                    // distribute a union that is the last constituent of the intersection over the zero remaining constituents
+                    // because that would have no effect.)
+                    partialIntersectionStartIndex = lastNonfinalUnionIndex;
+                    unionIndex = lastNonfinalUnionIndex;
+                }
                 const unionType = <UnionType>typeSet[unionIndex];
-                return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
-                    UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                let relevantUnionMembers = unionType.types;
+                // As of 2018-07-19, discarding mismatching unit types here rather than letting it
+                // happen when we create the distributed union gives a 5x speedup on the test case
+                // for #23977.
+                if (includes & TypeFlags.Unit) {
+                    const unitTypeInIntersection = find(typeSet, t => (t.flags & TypeFlags.Unit) !== 0)!;
+                    relevantUnionMembers = filter(unionType.types, t => t === unitTypeInIntersection || (t.flags & TypeFlags.Unit) === 0);
+                }
+                const partialIntersectionMembers = typeSet.slice(partialIntersectionStartIndex);
+                const distributedMembers = map(relevantUnionMembers, t => getIntersectionType(replaceElement(partialIntersectionMembers, unionIndex - partialIntersectionStartIndex, t)));
+                if (partialIntersectionStartIndex === 0) {
+                    return getUnionType(distributedMembers, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                }
+                else {
+                    const distributedUnion = getUnionType(distributedMembers, UnionReduction.Literal);
+                    const newIntersectionMembers = typeSet.slice(0, partialIntersectionStartIndex + 1);
+                    newIntersectionMembers[partialIntersectionStartIndex] = distributedUnion;
+                    return getIntersectionType(newIntersectionMembers, aliasSymbol, aliasTypeArguments);
+                }
             }
             const id = getTypeListId(typeSet);
             let type = intersectionTypes.get(id);
