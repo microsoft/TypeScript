@@ -53,14 +53,14 @@ A.justExport = 4
 >justExport : Symbol(A.justExport, Decl(mod1.js, 1, 36))
 
 A.bothBefore = 2
->A.bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16))
+>A.bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16), Decl(mod1.js, 0, 0))
 >A : Symbol(A, Decl(mod1.js, 5, 18))
->bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16))
+>bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16), Decl(mod1.js, 0, 0))
 
 A.bothAfter = 3
->A.bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16))
+>A.bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
 >A : Symbol(A, Decl(mod1.js, 5, 18))
->bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16))
+>bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
 
 module.exports = A
 >module.exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))

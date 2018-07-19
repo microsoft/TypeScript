@@ -66,16 +66,16 @@ A.justExport = 4
 
 A.bothBefore = 2
 >A.bothBefore = 2 : 2
->A.bothBefore : number
+>A.bothBefore : string | number
 >A : typeof A
->bothBefore : number
+>bothBefore : string | number
 >2 : 2
 
 A.bothAfter = 3
 >A.bothAfter = 3 : 3
->A.bothAfter : number
+>A.bothAfter : string | number
 >A : typeof A
->bothAfter : number
+>bothAfter : string | number
 >3 : 3
 
 module.exports = A
