@@ -413,7 +413,7 @@ namespace ts.codefix {
         return checker.isPromiseLikeType(nodeType) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
     }
 
-    function parseCallback(node: Expression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
+    function parseCallback(node: Expression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
         if (!node) {
             return [];
         }
@@ -434,7 +434,7 @@ namespace ts.codefix {
         return [];
     }
 
-    function parseCatch(node: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
+    function parseCatch(node: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
         const func = getSynthesizedDeepClone(node.arguments[0]);
         const argName = getArgName(func, checker, synthNamesMap);
 
@@ -446,7 +446,7 @@ namespace ts.codefix {
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
 
-    function parseThen(node: CallExpression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
+    function parseThen(node: CallExpression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
         const [res, rej] = node.arguments;
 
         // TODO - what if this is a binding pattern and not an Identifier
@@ -474,19 +474,16 @@ namespace ts.codefix {
         return [];
     }
 
-    function getNodeFlags(node: Identifier, varDeclFlags?: Map<NodeFlags>): NodeFlags | undefined {
+    function getNodeFlags(node: Identifier, varDeclFlags?: Map<NodeFlags|undefined>): NodeFlags | undefined {
         if (varDeclFlags && varDeclFlags.has(node.text)) {
-            let flags = varDeclFlags.get(node.text)!;
-            if (flags & NodeFlags.Let || flags & NodeFlags.Const || flags & NodeFlags.None) {
-                return flags;
-            }
+            return varDeclFlags.get(node.text);
         }
         else {
             return NodeFlags.Let;
         }
     }
 
-    function parsePromiseCall(node: CallExpression, lastDotThenMap: Map<boolean>, prevArgName?: Identifier, varDeclFlags?: Map<NodeFlags>): Statement[] {
+    function parsePromiseCall(node: CallExpression, lastDotThenMap: Map<boolean>, prevArgName?: Identifier, varDeclFlags?: Map<NodeFlags|undefined>): Statement[] {
         const nextDotThen = lastDotThenMap.get(String(getNodeId(node)));
         if (prevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent) || (prevArgName && varDeclFlags)) {
             // is an assignment
@@ -505,7 +502,7 @@ namespace ts.codefix {
         return [createReturn(node)];
     }
 
-    function getCallbackBody(func: Node, prevArgName: Identifier | undefined, argName: Identifier, parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags>, hasFollowingReturn: boolean, isRej = false): NodeArray<Statement> {
+    function getCallbackBody(func: Node, prevArgName: Identifier | undefined, argName: Identifier, parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, isRej = false): NodeArray<Statement> {
 
         const nextDotThen = lastDotThenMap.get(String(getNodeId(parent)));
         switch (func.kind) {
@@ -574,7 +571,7 @@ namespace ts.codefix {
         return createNodeArray([]);
     }
 
-    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, varDeclFlags?: Map<NodeFlags>): NodeArray<Statement> {
+    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, varDeclFlags?: Map<NodeFlags|undefined>): NodeArray<Statement> {
         const ret: Statement[] = [];
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {

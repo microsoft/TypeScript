@@ -141,9 +141,9 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    export function getReturnStatementsWithPromiseCallbacks(node: Node): [Node[], Map<NodeFlags>, boolean] {
+    export function getReturnStatementsWithPromiseCallbacks(node: Node): [Node[], Map<NodeFlags|undefined>, boolean] {
         const retStmts: Node[] = [];
-        let varDeclFlagsMap: Map<NodeFlags> = new MapCtr();
+        let varDeclFlagsMap: Map<NodeFlags|undefined> = new MapCtr();
         let hasFollowingRetStmt = false;
         forEachChild(node, visit);
 
@@ -204,7 +204,7 @@ namespace ts {
                         /*
                         const maybeSymbol = checker.getSymbolAtLocation(identUse.left);
                         const varDeclSymbol = !maybeSymbol && identUse.left.original ? checker.getSymbolAtLocation(identUse.left.original) : maybeSymbol;*/
-                        varDeclFlagsMap.set((<Identifier>identUse.left).text, NodeFlags.None)
+                        varDeclFlagsMap.set((<Identifier>identUse.left).text, undefined)
                     }
                     else {
                         parent = identUse;
