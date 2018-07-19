@@ -506,6 +506,7 @@ function [#|f|]() {
     let blob2 = fetch("https://microsoft.com");
     blob2.then(res => console.log("res:", res));
     blob.then(resp => console.log(resp));
+    blob3 = fetch("test.com");
     blob3 = blob2;
     return blob;
 }
