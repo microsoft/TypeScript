@@ -89,11 +89,9 @@ namespace ts.moduleSpecifiers {
         }
 
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addJsExtension);
-        if (paths) {
-            const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-            if (fromPaths) {
-                return [fromPaths];
-            }
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+        if (fromPaths) {
+            return [fromPaths];
         }
 
         if (preferences.importModuleSpecifierPreference === "non-relative") {
@@ -106,36 +104,17 @@ namespace ts.moduleSpecifiers {
             return [relativePath];
         }
 
-        /*
-        Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
-
-        Suppose we have:
-            baseUrl = /base
-            sourceDirectory = /base/a/b
-            moduleFileName = /base/foo/bar
-        Then:
-            relativePath = ../../foo/bar
-            getRelativePathNParents(relativePath) = 2
-            pathFromSourceToBaseUrl = ../../
-            getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-            2 < 2 = false
-        In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
-
-        Suppose we have:
-            baseUrl = /base
-            sourceDirectory = /base/foo/a
-            moduleFileName = /base/foo/bar
-        Then:
-            relativePath = ../a
-            getRelativePathNParents(relativePath) = 1
-            pathFromSourceToBaseUrl = ../../
-            getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-            1 < 2 = true
-        In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
-        */
-        const pathFromSourceToBaseUrl = ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, baseUrl, getCanonicalFileName));
-        const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathNParents(pathFromSourceToBaseUrl);
+        // Prefer a relative import over a baseUrl import if it has fewer components.
+        const relativeFirst = countPathComponents(relativePath) < countPathComponents(importRelativeToBaseUrl);
         return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
+    }
+
+    function countPathComponents(path: string): number {
+        let count = 0;
+        for (let i = startsWith(path, "./") ? 2 : 0; i < path.length; i++) {
+            if (path.charCodeAt(i) === CharacterCodes.slash) count++;
+        }
+        return count;
     }
 
     function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
@@ -195,15 +174,6 @@ namespace ts.moduleSpecifiers {
             sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
                 res && res.resolvedFileName === importedFileName ? res.originalPath : undefined));
         return symlinks.length === 0 ? getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(importedFileName, host.getCurrentDirectory ? host.getCurrentDirectory() : ""), getCanonicalFileName, host) : symlinks;
-    }
-
-    function getRelativePathNParents(relativePath: string): number {
-        const components = getPathComponents(relativePath);
-        if (components[0] || components.length === 1) return 0;
-        for (let i = 1; i < components.length; i++) {
-            if (components[i] !== "..") return i - 1;
-        }
-        return components.length - 1;
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
