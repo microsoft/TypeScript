@@ -4767,7 +4767,8 @@ namespace ts {
                 }
                 else if (!jsDocType && isBinaryExpression(expression)) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    let type = aliased !== symbol ? getTypeOfSymbol(aliased) : getWidenedLiteralType(checkExpressionCached(expression.right));
+                    const isModuleExportsAlias = aliased !== symbol;
+                    let type = isModuleExportsAlias ? getTypeOfSymbol(aliased) : getWidenedLiteralType(checkExpressionCached(expression.right));
 
                     if (type.flags & TypeFlags.Object &&
                         special === SpecialPropertyAssignmentKind.ModuleExports &&
@@ -4775,10 +4776,10 @@ namespace ts {
                         const exportedType = resolveStructuredTypeMembers(type as ObjectType);
                         const members = createSymbolTable();
                         copyEntries(exportedType.members, members);
-                        if (aliased !== symbol && !aliased.exports) {
+                        if (!aliased.exports) {
                             aliased.exports = createSymbolTable();
                         }
-                        (aliased !== symbol ? aliased : symbol).exports!.forEach((s, name) => {
+                        (isModuleExportsAlias ? aliased : symbol).exports!.forEach((s, name) => {
                             if (members.has(name)) {
                                 const exportedMember = exportedType.members.get(name)!;
                                 const union = createSymbol(s.flags | exportedMember.flags, name);
