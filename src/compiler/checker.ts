@@ -5231,35 +5231,27 @@ namespace ts {
                 }
                 else {
                     if (symbol.flags & SymbolFlags.ValueModule && symbol.valueDeclaration && isSourceFile(symbol.valueDeclaration) && symbol.valueDeclaration.commonJsModuleIndicator) {
-      // symbol.exports && symbol.exports.get(InternalSymbolName.ExportEquals) && symbol.exports.get(InternalSymbolName.ExportEquals)!.valueDeclaration && isBinaryExpression(symbol.exports.get(InternalSymbolName.ExportEquals)!.valueDeclaration)) {
-
+                        if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                            return errorType;
+                        }
                         const resolvedModule = resolveExternalModuleSymbol(symbol);
                         if (resolvedModule !== symbol) {
-                            if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                                return errorType;
-                            }
                             const original = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
-                            // TODO: Maybe call this in resolveModuleFromTypeLiteral or whatever (the weird webpack example now works better than the alternative)
-                            // (or boost the ability of getTypeOfSymbol [Property case] to recognise artificially augmented symbols, and then just always call getTypeOfSymbol)
-                            let t = getWidenedTypeFromJSSpecialPropertyDeclarations(original, resolvedModule);
-                            // TODO: This is probably not needed
-                            if (t === errorType) {
-                                t = getTypeOfSymbol(resolvedModule);
-                            }
-                            if (!popTypeResolution()) {
-                                t = reportCircularityError(symbol);
-                            }
-                            links.type = t;
-                            return links.type;
+                            links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(original, resolvedModule);
+                        }
+                        if (!popTypeResolution()) {
+                            links.type = reportCircularityError(symbol);
                         }
                     }
-                    const type = createObjectType(ObjectFlags.Anonymous, symbol);
-                    if (symbol.flags & SymbolFlags.Class) {
-                        const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
-                        links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
-                    }
-                    else {
-                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
+                    if (!links.type) {
+                        const type = createObjectType(ObjectFlags.Anonymous, symbol);
+                        if (symbol.flags & SymbolFlags.Class) {
+                            const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
+                            links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
+                        }
+                        else {
+                            links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
+                        }
                     }
                 }
             }
