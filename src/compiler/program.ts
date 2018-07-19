@@ -2366,7 +2366,7 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+            if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
 
