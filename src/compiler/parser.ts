@@ -2967,6 +2967,8 @@ namespace ts {
                 case SyntaxKind.InferKeyword:
                 case SyntaxKind.ImportKeyword:
                     return true;
+                case SyntaxKind.FunctionKeyword:
+                    return !inStartOfParameter;
                 case SyntaxKind.MinusToken:
                     return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);
                 case SyntaxKind.OpenParenToken:
