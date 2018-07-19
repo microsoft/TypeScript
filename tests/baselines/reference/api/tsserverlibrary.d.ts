@@ -2481,6 +2481,7 @@ declare namespace ts {
         strictFunctionTypes?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
+        stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
