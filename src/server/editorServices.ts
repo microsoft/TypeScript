@@ -699,10 +699,19 @@ namespace ts.server {
         }
 
         /* @internal */
-        forEachProject(cb: (project: Project) => void) {
+        private forEachProject(cb: (project: Project) => void) {
             for (const p of this.inferredProjects) cb(p);
             this.configuredProjects.forEach(cb);
             this.externalProjects.forEach(cb);
+        }
+
+        /* @internal */
+        forEachEnabledProject(cb: (project: Project) => void) {
+            this.forEachProject(project => {
+                if (!project.isOrphan() && project.languageServiceEnabled) {
+                    cb(project);
+                }
+            });
         }
 
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined {
