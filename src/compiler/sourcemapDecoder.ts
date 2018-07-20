@@ -61,7 +61,7 @@ namespace ts.sourcemaps {
 
     export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
         const currentDirectory = getDirectoryPath(mapPath);
-        const sourceRoot = map.sourceRoot || currentDirectory;
+        const sourceRoot = map.sourceRoot ? toPath(map.sourceRoot, currentDirectory, p => host.getCanonicalFileName(p)) : currentDirectory;
         let decodedMappings: ProcessedSourceMapPosition[];
         let generatedOrderedMappings: ProcessedSourceMapPosition[];
         let sourceOrderedMappings: ProcessedSourceMapPosition[];
