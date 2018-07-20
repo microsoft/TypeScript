@@ -3398,6 +3398,7 @@ namespace ts {
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
         JSContainer             = 1 << 26,  // Contains Javascript special declarations
+        ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
 
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
@@ -3527,7 +3528,6 @@ namespace ts {
         ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
         OptionalParameter = 1 << 12,        // Optional parameter
         RestParameter     = 1 << 13,        // Rest parameter
-        ModuleExports     = 1 << 14,        // Symbol for module.exports of a file
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 

@@ -38,7 +38,7 @@ npmlog.on('hi') // both references should see EE.on
 module.exports.on('hi') // here too
 >module.exports.on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 >module.exports : Symbol("tests/cases/conformance/salsa/npmlog", Decl(npmlog.js, 0, 0))
->module : Symbol(module)
+>module : Symbol(module, Decl(npmlog.js, 4, 12), Decl(npmlog.js, 6, 15), Decl(npmlog.js, 9, 12), Decl(npmlog.js, 11, 8))
 >exports : Symbol("tests/cases/conformance/salsa/npmlog", Decl(npmlog.js, 0, 0))
 >on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 
@@ -50,7 +50,7 @@ npmlog.x = 1
 module.exports.y = 2
 >module.exports.y : Symbol(y, Decl(npmlog.js, 9, 12))
 >module.exports : Symbol(y, Decl(npmlog.js, 9, 12))
->module : Symbol(module)
+>module : Symbol(module, Decl(npmlog.js, 4, 12), Decl(npmlog.js, 6, 15), Decl(npmlog.js, 9, 12), Decl(npmlog.js, 11, 8))
 >exports : Symbol("tests/cases/conformance/salsa/npmlog", Decl(npmlog.js, 0, 0))
 >y : Symbol(y, Decl(npmlog.js, 9, 12))
 
@@ -62,7 +62,7 @@ npmlog.y
 module.exports.x
 >module.exports.x : Symbol(x, Decl(npmlog.js, 7, 23))
 >module.exports : Symbol("tests/cases/conformance/salsa/npmlog", Decl(npmlog.js, 0, 0))
->module : Symbol(module)
+>module : Symbol(module, Decl(npmlog.js, 4, 12), Decl(npmlog.js, 6, 15), Decl(npmlog.js, 9, 12), Decl(npmlog.js, 11, 8))
 >exports : Symbol("tests/cases/conformance/salsa/npmlog", Decl(npmlog.js, 0, 0))
 >x : Symbol(x, Decl(npmlog.js, 7, 23))
 

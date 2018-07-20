@@ -26,7 +26,7 @@ module.exports = axios;
 module.exports.default = axios;
 >module.exports.default : Symbol(default, Decl(axios.js, 8, 23))
 >module.exports : Symbol(default, Decl(axios.js, 8, 23))
->module : Symbol(module)
+>module : Symbol(module, Decl(axios.js, 7, 9), Decl(axios.js, 8, 23))
 >exports : Symbol("tests/cases/conformance/salsa/axios", Decl(axios.js, 0, 0))
 >default : Symbol(default, Decl(axios.js, 8, 23))
 >axios : Symbol(axios, Decl(axios.js, 5, 3))

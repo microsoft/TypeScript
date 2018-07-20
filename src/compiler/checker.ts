@@ -1411,14 +1411,6 @@ namespace ts {
                         return lastLocation.symbol;
                     }
                 }
-                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent) {
-                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
-                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
-                        const moduleSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "module" as __String, CheckFlags.ModuleExports);
-                        moduleSymbol.valueDeclaration = originalLocation;
-                        return moduleSymbol;
-                    }
-                }
 
                 if (!excludeGlobals) {
                     result = lookup(globals, name, meaning);
@@ -4711,7 +4703,7 @@ namespace ts {
             return undefined;
         }
 
-        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol, aliased: Symbol) {
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol, resolvedSymbol?: Symbol) {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
@@ -4767,8 +4759,7 @@ namespace ts {
                 }
                 else if (!jsDocType && isBinaryExpression(expression)) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    const isModuleExportsAlias = aliased !== symbol;
-                    let type = isModuleExportsAlias ? getTypeOfSymbol(aliased) : getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
 
                     if (type.flags & TypeFlags.Object &&
                         special === SpecialPropertyAssignmentKind.ModuleExports &&
@@ -4776,10 +4767,10 @@ namespace ts {
                         const exportedType = resolveStructuredTypeMembers(type as ObjectType);
                         const members = createSymbolTable();
                         copyEntries(exportedType.members, members);
-                        if (!aliased.exports) {
-                            aliased.exports = createSymbolTable();
+                        if (resolvedSymbol && !resolvedSymbol.exports) {
+                            resolvedSymbol.exports = createSymbolTable();
                         }
-                        (isModuleExportsAlias ? aliased : symbol).exports!.forEach((s, name) => {
+                        (resolvedSymbol || symbol).exports!.forEach((s, name) => {
                             if (members.has(name)) {
                                 const exportedMember = exportedType.members.get(name)!;
                                 const union = createSymbol(s.flags | exportedMember.flags, name);
@@ -4992,7 +4983,7 @@ namespace ts {
                 if (symbol === requireSymbol) {
                     return links.type = anyType;
                 }
-                if (getCheckFlags(symbol) & CheckFlags.ModuleExports) {
+                if (symbol.flags & SymbolFlags.ModuleExports) {
                     const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
                     const members = createSymbolTable();
                     members.set("exports" as __String, fileSymbol);
@@ -5078,7 +5069,7 @@ namespace ts {
             else if (isBinaryExpression(decl) ||
                 isPropertyAccessExpression(decl) && isBinaryExpression(decl.parent)) {
                 return getJSInitializerType(decl, symbol, getAssignedJavascriptInitializer(isBinaryExpression(decl) ? decl.left : decl)) ||
-                    getWidenedTypeFromJSSpecialPropertyDeclarations(symbol, symbol);
+                    getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
             }
             else if (isParameter(decl)
                 || isPropertyDeclaration(decl)
@@ -5228,7 +5219,7 @@ namespace ts {
                 }
                 else if (symbol.valueDeclaration.kind === SyntaxKind.BinaryExpression ||
                          symbol.valueDeclaration.kind === SyntaxKind.PropertyAccessExpression && symbol.valueDeclaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol, symbol);
+                    links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else {
                     if (symbol.flags & SymbolFlags.ValueModule && symbol.valueDeclaration && isSourceFile(symbol.valueDeclaration) && symbol.valueDeclaration.commonJsModuleIndicator) {
@@ -5237,8 +5228,8 @@ namespace ts {
                         }
                         const resolvedModule = resolveExternalModuleSymbol(symbol);
                         if (resolvedModule !== symbol) {
-                            const original = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
-                            links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(original, resolvedModule);
+                            const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
+                            links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
                         }
                         if (!popTypeResolution()) {
                             links.type = reportCircularityError(symbol);
@@ -15042,7 +15033,7 @@ namespace ts {
             let flowContainer = getControlFlowContainer(node);
             const isOuterVariable = flowContainer !== declarationContainer;
             const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
-            const isModuleExports = getCheckFlags(symbol) & CheckFlags.ModuleExports;
+            const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
@@ -19322,7 +19313,9 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
-                    forEach(node.arguments, checkExpressionNoReturn); // Still visit arguments so they get marked for visibility, etc
+                    for (const arg of node.arguments) {
+                        checkExpression(arg); // Still visit arguments so they get marked for visibility, etc
+                    }
                     return anySignature;
                 }
                 if (superType !== errorType) {
@@ -21669,10 +21662,6 @@ namespace ts {
             const type = getTypeOfExpression(node);
             node.contextualType = saveContextualType;
             return type;
-        }
-
-        function checkExpressionNoReturn(node: Expression) {
-            checkExpression(node);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When

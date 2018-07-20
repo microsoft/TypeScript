@@ -43,7 +43,7 @@ declare function require(name: string): any;
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore : Symbol(bothBefore)
 >module.exports : Symbol(A.bothBefore, Decl(mod1.js, 2, 16), Decl(mod1.js, 0, 0))
->module : Symbol(module)
+>module : Symbol(module, Decl(mod1.js, 0, 0), Decl(mod1.js, 4, 15), Decl(mod1.js, 8, 1), Decl(mod1.js, 9, 35))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
 >bothBefore : Symbol(A.bothBefore, Decl(mod1.js, 2, 16), Decl(mod1.js, 0, 0))
 
@@ -77,14 +77,14 @@ function A() {
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter : Symbol(bothAfter)
 >module.exports : Symbol(A.bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
->module : Symbol(module)
+>module : Symbol(module, Decl(mod1.js, 0, 0), Decl(mod1.js, 4, 15), Decl(mod1.js, 8, 1), Decl(mod1.js, 9, 35))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
 >bothAfter : Symbol(A.bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
 
 module.exports.justProperty = 'string'
 >module.exports.justProperty : Symbol(justProperty)
 >module.exports : Symbol(justProperty, Decl(mod1.js, 9, 35))
->module : Symbol(module)
+>module : Symbol(module, Decl(mod1.js, 0, 0), Decl(mod1.js, 4, 15), Decl(mod1.js, 8, 1), Decl(mod1.js, 9, 35))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
 >justProperty : Symbol(justProperty, Decl(mod1.js, 9, 35))
 

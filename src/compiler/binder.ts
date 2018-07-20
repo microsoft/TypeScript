@@ -2072,6 +2072,10 @@ namespace ts {
                     if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
                         bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
                     }
+                    if (isInJavaScriptFile(node) && isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression)) {
+                        declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
+                            SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
                 case SyntaxKind.BinaryExpression:
                     const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
