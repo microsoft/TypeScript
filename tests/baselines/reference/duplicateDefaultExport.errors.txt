@@ -1,0 +1,12 @@
+tests/cases/compiler/duplicateDefaultExport.ts(1,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/compiler/duplicateDefaultExport.ts(2,1): error TS2528: A module cannot have multiple default exports.
+
+
+==== tests/cases/compiler/duplicateDefaultExport.ts (2 errors) ====
+    export default 0;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    export default function() {}
+    ~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    

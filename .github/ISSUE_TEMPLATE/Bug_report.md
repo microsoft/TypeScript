@@ -16,10 +16,10 @@ Please fill in the *entire* template below.
 -->
 
 <!-- Please try to reproduce the issue with `typescript@next`. It may have already been fixed. -->
-**TypeScript Version:**  3.0.0-dev.201xxxxx
+**TypeScript Version:**  3.1.0-dev.201xxxxx
 
 <!-- Search terms you tried before logging this (so others can find this issue more easily) -->
-**Search Terms:** 
+**Search Terms:**
 
 **Code**
 
@@ -32,6 +32,6 @@ Please fill in the *entire* template below.
 
 **Actual behavior:**
 
-**Playground Link:** <!-- A link to a TypeScript Playground "Share" link which demonstrates this behavior --> 
+**Playground Link:** <!-- A link to a TypeScript Playground "Share" link which demonstrates this behavior -->
 
 **Related Issues:** <!-- Did you find other bugs that looked similar? -->
