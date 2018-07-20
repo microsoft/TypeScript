@@ -112,7 +112,7 @@ namespace ts.codefix {
             let expr: Node;
             let name: Identifier | undefined;
             if (isVariableStatement(stmt) && stmt.declarationList.declarations.length > 0) {
-                expr = stmt; //fix this for a varDeclList
+                expr = stmt; 
                 name = stmt.declarationList.declarations[0].name as Identifier;
             }
             else if (isAssignmentExpression(stmt)) {
@@ -141,6 +141,22 @@ namespace ts.codefix {
             return [expr, name];
         }
 
+        function seperateVarDecls(stmts: Node[]): Node[] {
+            let ret: Node[] = [];
+            for (let stmt of stmts) {
+                if (isVariableStatement(stmt) && stmt.declarationList.declarations.length > 1) {
+                    for (let varDecl of stmt.declarationList.declarations) {
+                        ret.push(createVariableStatement(undefined, createVariableDeclarationList([createVariableDeclaration(varDecl.name, undefined, varDecl.initializer)], stmt.flags)));
+                    }
+                }
+                else {
+                    ret.push(stmt);
+                }
+            }
+            return ret;
+        }
+
+        retStmts = seperateVarDecls(retStmts);
         for (let stmt of retStmts) {
             let expr: Node;
             let name: Identifier | undefined;
@@ -187,7 +203,7 @@ namespace ts.codefix {
                     callExpr = expr;
                 }
 
-                if (isCallExpression(callExpr) && returnsAPromise(callExpr, checker) || isReturnStatement(callExpr)) {
+                if (isCallExpression(callExpr) && returnsAPromise(callExpr, checker) || isReturnStatement(callExpr) || callExpr.flags & NodeFlags.Synthesized) {
                     addToMap(promiseVars, name.text, undefined);
                     addToMap(returnMap, name.text, expr);
                 }
@@ -507,7 +523,7 @@ namespace ts.codefix {
         const nextDotThen = lastDotThenMap.get(String(getNodeId(parent)));
         switch (func.kind) {
             case SyntaxKind.Identifier:
-                if (!prevArgName || !argName) {
+                if (!argName) {
                     break;
                 }
 
@@ -517,6 +533,10 @@ namespace ts.codefix {
                 }
 
                 synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [argName]);
+
+                if (!prevArgName) {
+                    break;
+                }
 
                 const nodeFlags = getNodeFlags(prevArgName, varDeclFlags);
                 if (varDeclFlags && varDeclFlags.has(prevArgName.text) && nodeFlags === undefined) {

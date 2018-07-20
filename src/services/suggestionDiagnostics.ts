@@ -177,6 +177,8 @@ namespace ts {
 
                 function findCallbackUses(identUse: Node) {
                     if (isVariableDeclarationList(identUse)) {
+
+                        let isCallback = false;
                         for (let varDecl of identUse.declarations) {
                             
                             /*
@@ -184,10 +186,14 @@ namespace ts {
                             const varDeclSymbol = !maybeSymbol && varDecl.original ? checker.getSymbolAtLocation((<VariableDeclaration>varDecl.original)!.name) : maybeSymbol;*/
                             if (varDecl.initializer && isCallExpression(varDecl.initializer) /*&&
                         symbol === varDeclSymbol*/) {
-                                retStmts.push(parent);
+                                isCallback = true;
                                 let flags = identUse.original ? identUse.original.flags : identUse.flags;
                                 varDeclFlagsMap.set((<Identifier>varDecl.name).text, flags);
                             }
+                        }
+
+                        if (isCallback) {
+                            retStmts.push(parent);
                         }
                     }
                     else if (isCallback(identUse)) {
