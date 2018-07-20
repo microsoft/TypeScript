@@ -135,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const mtimeAfter = sys.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
