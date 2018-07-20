@@ -2789,9 +2789,7 @@ namespace ts {
                     // report error on class declarations
                     node.kind === SyntaxKind.ClassDeclaration ||
                     // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
-                    (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
-                    // report error on regular enums and const enums if preserveConstEnums is set
-                    (isEnumDeclaration(node) && (!isEnumConst(node) || options.preserveConstEnums));
+                    (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node));
 
                 if (reportError) {
                     currentFlow = reportedUnreachableFlow;
@@ -2836,7 +2834,7 @@ namespace ts {
     // As opposed to a pure declaration like an `interface`
     function isExecutableStatement(s: Statement): boolean {
         // Don't remove statements that can validly be used before they appear.
-        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) && !isEnumDeclaration(s) &&
             // `var x;` may declare a variable used above
             !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
     }
