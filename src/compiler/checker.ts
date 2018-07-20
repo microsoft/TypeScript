@@ -10514,9 +10514,9 @@ namespace ts {
             }
 
             const sourceCount = getParameterCount(source);
-            const sourceRestTypeParameter = getRestTypeParameter(source);
-            const targetRestTypeParameter = sourceRestTypeParameter ? getRestTypeParameter(target) : undefined;
-            if (sourceRestTypeParameter && !(targetRestTypeParameter && sourceCount === targetCount)) {
+            const sourceGenericRestType = getGenericRestType(source);
+            const targetGenericRestType = sourceGenericRestType ? getGenericRestType(target) : undefined;
+            if (sourceGenericRestType && !(targetGenericRestType && sourceCount === targetCount)) {
                 return Ternary.False;
             }
 
@@ -10545,8 +10545,8 @@ namespace ts {
             const paramCount = Math.max(sourceCount, targetCount);
             const lastIndex = paramCount - 1;
             for (let i = 0; i < paramCount; i++) {
-                const sourceType = i === lastIndex && sourceRestTypeParameter || getTypeAtPosition(source, i);
-                const targetType = i === lastIndex && targetRestTypeParameter || getTypeAtPosition(target, i);
+                const sourceType = i === lastIndex && sourceGenericRestType || getTypeAtPosition(source, i);
+                const targetType = i === lastIndex && targetGenericRestType || getTypeAtPosition(target, i);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -12821,13 +12821,13 @@ namespace ts {
                 sourceHasRest ? targetCount :
                 targetHasRest ? sourceCount :
                 Math.min(sourceCount, targetCount);
-            const targetRestTypeVariable = getRestTypeParameter(target);
-            const paramCount = targetRestTypeVariable ? Math.min(targetCount - 1, maxCount) : maxCount;
+            const targetGenericRestType = getGenericRestType(target);
+            const paramCount = targetGenericRestType ? Math.min(targetCount - 1, maxCount) : maxCount;
             for (let i = 0; i < paramCount; i++) {
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
-            if (targetRestTypeVariable) {
-                callback(getRestTypeAtPosition(source, paramCount), targetRestTypeVariable);
+            if (targetGenericRestType) {
+                callback(getRestTypeAtPosition(source, paramCount), targetGenericRestType);
             }
         }
 
@@ -18398,8 +18398,8 @@ namespace ts {
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
             const effectiveArgCount = getEffectiveArgumentCount(node, args, signature);
-            const restTypeParameter = getRestTypeParameter(signature);
-            const argCount = restTypeParameter ? Math.min(getParameterCount(signature) - 1, effectiveArgCount) : effectiveArgCount;
+            const genericRestType = getGenericRestType(signature);
+            const argCount = genericRestType ? Math.min(getParameterCount(signature) - 1, effectiveArgCount) : effectiveArgCount;
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
@@ -18418,9 +18418,9 @@ namespace ts {
                 }
             }
 
-            if (restTypeParameter) {
-                const spreadType = getSpreadArgumentType(node, args, argCount, effectiveArgCount, restTypeParameter, context);
-                inferTypes(context.inferences, spreadType, restTypeParameter);
+            if (genericRestType) {
+                const spreadType = getSpreadArgumentType(node, args, argCount, effectiveArgCount, genericRestType, context);
+                inferTypes(context.inferences, spreadType, genericRestType);
             }
 
             // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
@@ -19170,9 +19170,9 @@ namespace ts {
                             }
                             const isJavascript = isInJavaScriptFile(candidate.declaration);
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
-                            // If the original signature has a rest type parameter, instantiation may produce a
+                            // If the original signature has a generic rest type, instantiation may produce a
                             // signature with different arity and we need to perform another arity check.
-                            if (getRestTypeParameter(originalCandidate) && !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
+                            if (getGenericRestType(originalCandidate) && !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
                                 candidateForArgumentArityError = candidate;
                                 break;
                             }
@@ -20104,9 +20104,9 @@ namespace ts {
             const paramCount = getParameterCount(source);
             const hasRest = hasEffectiveRestParameter(source);
             if (hasRest && pos === paramCount - 1) {
-                const restTypeVariable = getRestTypeParameter(source);
-                if (restTypeVariable) {
-                    return restTypeVariable;
+                const genericRestType = getGenericRestType(source);
+                if (genericRestType) {
+                    return genericRestType;
                 }
             }
             const start = hasRest ? Math.min(pos, paramCount - 1) : pos;
@@ -20156,11 +20156,11 @@ namespace ts {
             return signature.minArgumentCount;
         }
 
-        function getRestTypeParameter(signature: Signature) {
+        function getGenericRestType(signature: Signature) {
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-                if (restType.flags & TypeFlags.TypeParameter) {
-                    return <TypeParameter>restType;
+                if (restType.flags & TypeFlags.Instantiable) {
+                    return restType;
                 }
             }
             return undefined;

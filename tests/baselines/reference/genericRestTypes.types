@@ -1,0 +1,55 @@
+=== tests/cases/compiler/genericRestTypes.ts ===
+// Repro from #25793
+
+// Gets the parameters of a function type as a tuple
+type Parameters<T extends (...args: any[]) => any> = T extends (...args: infer U) => any ? U : never;
+>Parameters : Parameters<T>
+>T : T
+>args : any[]
+>T : T
+>args : U
+>U : U
+>U : U
+
+// Removes the first element from a tuple
+type Tail<T extends any[]> = ((...args: T) => any) extends ((head: any, ...tail: infer U) => any) ? U : never;
+>Tail : Tail<T>
+>T : T
+>args : T
+>T : T
+>head : any
+>tail : U
+>U : U
+>U : U
+
+type MyFunctionType = (foo: number, bar: string) => boolean;
+>MyFunctionType : MyFunctionType
+>foo : number
+>bar : string
+
+type Explicit = (...args: Tail<Parameters<MyFunctionType>>) => ReturnType<MyFunctionType>; // (bar: string) => boolean
+>Explicit : Explicit
+>args : [string]
+>Tail : Tail<T>
+>Parameters : Parameters<T>
+>MyFunctionType : MyFunctionType
+>ReturnType : ReturnType<T>
+>MyFunctionType : MyFunctionType
+
+type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
+>Bind1 : Bind1<T>
+>T : T
+>head : any
+>tail : any[]
+>args : Tail<Parameters<T>>
+>Tail : Tail<T>
+>Parameters : Parameters<T>
+>T : T
+>ReturnType : ReturnType<T>
+>T : T
+
+type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
+>Generic : Bind1<MyFunctionType>
+>Bind1 : Bind1<T>
+>MyFunctionType : MyFunctionType
+
