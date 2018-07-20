@@ -1448,32 +1448,15 @@ namespace ts {
             const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-                // Try getting just type at this position and show
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                        if (isLabelName(node)) {
-                            // Type here will be 'any', avoid displaying this.
-                            return undefined;
-                        }
-                        // falls through
-                    case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.QualifiedName:
-                    case SyntaxKind.ThisKeyword:
-                    case SyntaxKind.ThisType:
-                    case SyntaxKind.SuperKeyword:
-                        // For the identifiers/this/super etc get the type at position
-                        const type = typeChecker.getTypeAtLocation(node);
-                        return type && {
-                            kind: ScriptElementKind.unknown,
-                            kindModifiers: ScriptElementKindModifier.none,
-                            textSpan: createTextSpanFromNode(node, sourceFile),
-                            displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
-                            documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                            tags: type.symbol ? type.symbol.getJsDocTags() : undefined
-                        };
-                }
-
-                return undefined;
+                const type = shouldGetType(sourceFile, node, position) ? typeChecker.getTypeAtLocation(node) : undefined;
+                return type && {
+                    kind: ScriptElementKind.unknown,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    textSpan: createTextSpanFromNode(node, sourceFile),
+                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
+                    documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
+                    tags: type.symbol ? type.symbol.getJsDocTags() : undefined
+                };
             }
 
             const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
@@ -1487,6 +1470,23 @@ namespace ts {
                 documentation,
                 tags,
             };
+        }
+
+        function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return !isLabelName(node);
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.QualifiedName:
+                    // Don't return quickInfo if inside the comment in `a/**/.b`
+                    return !isInComment(sourceFile, position);
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
