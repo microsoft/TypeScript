@@ -4974,85 +4974,86 @@ namespace ts {
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
-            if (!links.type) {
-                // Handle prototype property
-                if (symbol.flags & SymbolFlags.Prototype) {
-                    return links.type = getTypeOfPrototypeProperty(symbol);
-                }
-                // CommonsJS require and module both have type any.
-                if (symbol === requireSymbol) {
-                    return links.type = anyType;
-                }
-                if (symbol.flags & SymbolFlags.ModuleExports) {
-                    const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
-                    const members = createSymbolTable();
-                    members.set("exports" as __String, fileSymbol);
-                    return links.type = createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
-                }
-                // Handle catch clause variables
-                const declaration = symbol.valueDeclaration;
-                if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-                    return links.type = anyType;
-                }
-                // Handle export default expressions
-                if (isSourceFile(declaration)) {
-                    const jsonSourceFile = cast(declaration, isJsonSourceFile);
-                    return links.type = jsonSourceFile.statements.length ? checkExpression(jsonSourceFile.statements[0].expression) : emptyObjectType;
-                }
-                if (declaration.kind === SyntaxKind.ExportAssignment) {
-                    return links.type = checkExpression((<ExportAssignment>declaration).expression);
-                }
-                // Handle variable, parameter or property
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return errorType;
-                }
-
-                let type = getJSSpecialType(symbol, declaration);
-                if (!type) {
-                    if (isJSDocPropertyLikeTag(declaration)
-                        || isPropertyAccessExpression(declaration)
-                        || isIdentifier(declaration)
-                        || isClassDeclaration(declaration)
-                        || isFunctionDeclaration(declaration)
-                        || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
-                        || isMethodSignature(declaration)) {
-                        // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
-                        if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                            return getTypeOfFuncClassEnumModule(symbol);
-                        }
-                        type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
-                    }
-                    else if (isPropertyAssignment(declaration)) {
-                        type = tryGetTypeFromEffectiveTypeNode(declaration) || checkPropertyAssignment(declaration);
-                    }
-                    else if (isJsxAttribute(declaration)) {
-                        type = tryGetTypeFromEffectiveTypeNode(declaration) || checkJsxAttribute(declaration);
-                    }
-                    else if (isShorthandPropertyAssignment(declaration)) {
-                        type = tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionForMutableLocation(declaration.name, CheckMode.Normal);
-                    }
-                    else if (isObjectLiteralMethod(declaration)) {
-                        type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
-                    }
-                    else if (isParameter(declaration)
-                             || isPropertyDeclaration(declaration)
-                             || isPropertySignature(declaration)
-                             || isVariableDeclaration(declaration)
-                             || isBindingElement(declaration)) {
-                        type = getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
-                    }
-                    else {
-                        return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
-                    }
-                }
-
-                if (!popTypeResolution()) {
-                    type = reportCircularityError(symbol);
-                }
-                links.type = type;
-            }
-            return links.type;
+            return links.type || (links.type = getTypeOfVariableOrParameterOrPropertyWorker(symbol));
         }
+
+        function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol) {
+            // Handle prototype property
+            if (symbol.flags & SymbolFlags.Prototype) {
+                return getTypeOfPrototypeProperty(symbol);
+            }
+            // CommonsJS require and module both have type any.
+            if (symbol === requireSymbol) {
+                return anyType;
+            }
+            if (symbol.flags & SymbolFlags.ModuleExports) {
+                const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
+                const members = createSymbolTable();
+                members.set("exports" as __String, fileSymbol);
+                return createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
+            }
+            // Handle catch clause variables
+            const declaration = symbol.valueDeclaration;
+            if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
+                return anyType;
+            }
+            // Handle export default expressions
+            if (isSourceFile(declaration)) {
+                const jsonSourceFile = cast(declaration, isJsonSourceFile);
+                return jsonSourceFile.statements.length ? checkExpression(jsonSourceFile.statements[0].expression) : emptyObjectType;
+            }
+            if (declaration.kind === SyntaxKind.ExportAssignment) {
+                return checkExpression((<ExportAssignment>declaration).expression);
+            }
+
+            // Handle variable, parameter or property
+            if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                return errorType;
+            }
+            let type = getJSSpecialType(symbol, declaration);
+            if (!type) {
+                if (isJSDocPropertyLikeTag(declaration)
+                    || isPropertyAccessExpression(declaration)
+                    || isIdentifier(declaration)
+                    || isClassDeclaration(declaration)
+                    || isFunctionDeclaration(declaration)
+                    || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
+                    || isMethodSignature(declaration)) {
+                    // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
+                    if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
+                        return getTypeOfFuncClassEnumModule(symbol);
+                    }
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
+                }
+                else if (isPropertyAssignment(declaration)) {
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkPropertyAssignment(declaration);
+                }
+                else if (isJsxAttribute(declaration)) {
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkJsxAttribute(declaration);
+                }
+                else if (isShorthandPropertyAssignment(declaration)) {
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionForMutableLocation(declaration.name, CheckMode.Normal);
+                }
+                else if (isObjectLiteralMethod(declaration)) {
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
+                }
+                else if (isParameter(declaration)
+                         || isPropertyDeclaration(declaration)
+                         || isPropertySignature(declaration)
+                         || isVariableDeclaration(declaration)
+                         || isBindingElement(declaration)) {
+                    type = getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
+                }
+                else {
+                    return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
+                }
+            }
+
+            if (!popTypeResolution()) {
+                type = reportCircularityError(symbol);
+            }
+            return type;
+       }
 
         function getJSSpecialType(symbol: Symbol, decl: Declaration): Type | undefined {
             if (!isInJavaScriptFile(decl)) {
@@ -5129,64 +5130,65 @@ namespace ts {
 
         function getTypeOfAccessors(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
-            if (!links.type) {
-                const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
-                const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
+            return links.type || (links.type = getTypeOfAccessorsWorker(symbol));
+        }
 
-                if (getter && isInJavaScriptFile(getter)) {
-                    const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
-                    if (jsDocType) {
-                        return links.type = jsDocType;
-                    }
+        function getTypeOfAccessorsWorker(symbol: Symbol): Type {
+            const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
+            const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
+
+            if (getter && isInJavaScriptFile(getter)) {
+                const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
+                if (jsDocType) {
+                    return jsDocType;
                 }
+            }
 
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return errorType;
-                }
+            if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                return errorType;
+            }
 
-                let type: Type;
+            let type: Type;
 
-                // First try to see if the user specified a return type on the get-accessor.
-                const getterReturnType = getAnnotatedAccessorType(getter);
-                if (getterReturnType) {
-                    type = getterReturnType;
+            // First try to see if the user specified a return type on the get-accessor.
+            const getterReturnType = getAnnotatedAccessorType(getter);
+            if (getterReturnType) {
+                type = getterReturnType;
+            }
+            else {
+                // If the user didn't specify a return type, try to use the set-accessor's parameter type.
+                const setterParameterType = getAnnotatedAccessorType(setter);
+                if (setterParameterType) {
+                    type = setterParameterType;
                 }
                 else {
-                    // If the user didn't specify a return type, try to use the set-accessor's parameter type.
-                    const setterParameterType = getAnnotatedAccessorType(setter);
-                    if (setterParameterType) {
-                        type = setterParameterType;
+                    // If there are no specified types, try to infer it from the body of the get accessor if it exists.
+                    if (getter && getter.body) {
+                        type = getReturnTypeFromBody(getter);
                     }
+                    // Otherwise, fall back to 'any'.
                     else {
-                        // If there are no specified types, try to infer it from the body of the get accessor if it exists.
-                        if (getter && getter.body) {
-                            type = getReturnTypeFromBody(getter);
-                        }
-                        // Otherwise, fall back to 'any'.
-                        else {
-                            if (noImplicitAny) {
-                                if (setter) {
-                                    error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
-                                }
-                                else {
-                                    Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
-                                    error(getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
-                                }
+                        if (noImplicitAny) {
+                            if (setter) {
+                                error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
                             }
-                            type = anyType;
+                            else {
+                                Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
+                                error(getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                            }
                         }
+                        type = anyType;
                     }
                 }
-                if (!popTypeResolution()) {
-                    type = anyType;
-                    if (noImplicitAny) {
-                        const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
-                        error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
-                    }
-                }
-                links.type = type;
             }
-            return links.type;
+            if (!popTypeResolution()) {
+                type = anyType;
+                if (noImplicitAny) {
+                    const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
+                    error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
+                }
+            }
+            return type;
         }
 
         function getBaseTypeVariableOfClass(symbol: Symbol) {
@@ -5196,6 +5198,7 @@ namespace ts {
 
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
+            const originalLinks = links;
             if (!links.type) {
                 const jsDeclaration = getDeclarationOfJSInitializer(symbol.valueDeclaration);
                 if (jsDeclaration) {
@@ -5214,48 +5217,46 @@ namespace ts {
                         }
                     }
                 }
-                if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
-                    links.type = anyType;
-                }
-                else if (symbol.valueDeclaration.kind === SyntaxKind.BinaryExpression ||
-                         symbol.valueDeclaration.kind === SyntaxKind.PropertyAccessExpression && symbol.valueDeclaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
-                }
-                else {
-                    if (symbol.flags & SymbolFlags.ValueModule && symbol.valueDeclaration && isSourceFile(symbol.valueDeclaration) && symbol.valueDeclaration.commonJsModuleIndicator) {
-                        if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                            return errorType;
-                        }
-                        const resolvedModule = resolveExternalModuleSymbol(symbol);
-                        if (resolvedModule !== symbol) {
-                            const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
-                            links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
-                        }
-                        if (!popTypeResolution()) {
-                            links.type = reportCircularityError(symbol);
-                        }
-                    }
-                    if (!links.type) {
-                        const type = createObjectType(ObjectFlags.Anonymous, symbol);
-                        if (symbol.flags & SymbolFlags.Class) {
-                            const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
-                            links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
-                        }
-                        else {
-                            links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
-                        }
-                    }
-                }
+                originalLinks.type = links.type = getTypeOfFuncClassEnumModuleWorker(symbol);
             }
             return links.type;
         }
 
+        function getTypeOfFuncClassEnumModuleWorker(symbol: Symbol): Type {
+            const declaration = symbol.valueDeclaration;
+            if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
+                return anyType;
+            }
+            else if (declaration.kind === SyntaxKind.BinaryExpression ||
+                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                return getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+            }
+            else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return errorType;
+                }
+                const resolvedModule = resolveExternalModuleSymbol(symbol);
+                if (resolvedModule !== symbol) {
+                    const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
+                    return getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
+                }
+                if (!popTypeResolution()) {
+                    return reportCircularityError(symbol);
+                }
+            }
+            const type = createObjectType(ObjectFlags.Anonymous, symbol);
+            if (symbol.flags & SymbolFlags.Class) {
+                const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
+                return baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
+            }
+            else {
+                return strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
+            }
+        }
+
         function getTypeOfEnumMember(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
-            if (!links.type) {
-                links.type = getDeclaredTypeOfEnumMember(symbol);
-            }
-            return links.type;
+            return links.type || (links.type = getDeclaredTypeOfEnumMember(symbol));
         }
 
         function getTypeOfAlias(symbol: Symbol): Type {
@@ -5284,7 +5285,7 @@ namespace ts {
                 }
                 else {
                     if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                        return errorType;
+                        return links.type = errorType;
                     }
                     symbolInstantiationDepth++;
                     let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper!);
