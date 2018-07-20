@@ -609,7 +609,7 @@ declare namespace FourSlashInterface {
     export interface VerifyCodeFixAvailableOptions {
         readonly description: string;
         readonly actions?: ReadonlyArray<{ readonly type: string, readonly data: {} }>;
-        readonly commands?: ReadonlyArray<{}?;
+        readonly commands?: ReadonlyArray<{}>;
     }
 
     interface VerifyNavigateToOptions {
