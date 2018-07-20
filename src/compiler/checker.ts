@@ -3890,7 +3890,8 @@ namespace ts {
                             contextFile,
                             context.tracker.moduleResolverHost,
                             context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
-                            { importModuleSpecifierPreference: "non-relative" }
+                            { importModuleSpecifierPreference: "non-relative" },
+                            host.redirectTargetsMap,
                         ))[0];
                         links.specifierCache = links.specifierCache || createMap();
                         links.specifierCache.set(contextFile.path, specifier);

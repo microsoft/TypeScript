@@ -2543,7 +2543,7 @@ namespace ts {
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.
          * (See `createRedirectSourceFile` in program.ts.)
-         * The redirect will have this set. The redirected-to source file will be in `redirectTargetsSet`.
+         * The redirect will have this set. The redirected-to source file will be in `redirectTargetsMap`.
          */
         /* @internal */ redirectInfo?: RedirectInfo;
 
@@ -2790,7 +2790,7 @@ namespace ts {
         /** Given a source file, get the name of the package it was imported from. */
         /* @internal */ sourceFileToPackageName: Map<string>;
         /** Set of all source files that some other source file redirects to. */
-        /* @internal */ redirectTargetsSet: Map<true>;
+        /* @internal */ redirectTargetsMap: MultiMap<string>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
 
@@ -2798,6 +2798,9 @@ namespace ts {
 
         getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
     }
+
+    /* @internal */
+    export type RedirectTargetsMap = ReadonlyMap<ReadonlyArray<string>>;
 
     export interface ResolvedProjectReference {
         commandLine: ParsedCommandLine;
@@ -2876,6 +2879,8 @@ namespace ts {
         getSourceFiles(): ReadonlyArray<SourceFile>;
         getSourceFile(fileName: string): SourceFile | undefined;
         getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
+
+        readonly redirectTargetsMap: RedirectTargetsMap;
     }
 
     export interface TypeChecker {
