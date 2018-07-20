@@ -5232,16 +5232,17 @@ namespace ts {
                 return getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
             }
             else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return errorType;
-                }
                 const resolvedModule = resolveExternalModuleSymbol(symbol);
                 if (resolvedModule !== symbol) {
+                    if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                        return errorType;
+                    }
                     const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
-                    return getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
-                }
-                if (!popTypeResolution()) {
-                    return reportCircularityError(symbol);
+                    const type = getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
+                    if (!popTypeResolution()) {
+                        return reportCircularityError(symbol);
+                    }
+                    return type;
                 }
             }
             const type = createObjectType(ObjectFlags.Anonymous, symbol);
