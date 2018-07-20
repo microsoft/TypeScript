@@ -41,11 +41,15 @@ exports.f = exports.g = function fg(n) {
 }
 /** @param {string} mom */
 module.exports.h = module.exports.i = function hi(mom) {
+>module.exports.h : Symbol(h, Decl(mod.js, 3, 1))
 >module.exports : Symbol(h, Decl(mod.js, 3, 1))
->module : Symbol(module)
+>module : Symbol(module, Decl(mod.js, 3, 1), Decl(mod.js, 5, 18))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod", Decl(mod.js, 0, 0))
 >h : Symbol(h, Decl(mod.js, 3, 1))
+>module.exports.i : Symbol(i, Decl(mod.js, 5, 18))
 >module.exports : Symbol(i, Decl(mod.js, 5, 18))
->module : Symbol(module)
+>module : Symbol(module, Decl(mod.js, 3, 1), Decl(mod.js, 5, 18))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod", Decl(mod.js, 0, 0))
 >i : Symbol(i, Decl(mod.js, 5, 18))
 >hi : Symbol(hi, Decl(mod.js, 5, 37))
 >mom : Symbol(mom, Decl(mod.js, 5, 50))

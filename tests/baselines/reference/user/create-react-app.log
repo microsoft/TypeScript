@@ -48,7 +48,6 @@ packages/react-dev-utils/__tests__/ignoredFiles.test.js(40,3): error TS2304: Can
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(46,5): error TS2304: Cannot find name 'expect'.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(49,3): error TS2304: Cannot find name 'it'.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(53,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/browsersHelper.js(9,30): error TS2307: Cannot find module 'browserslist'.
 packages/react-dev-utils/browsersHelper.js(13,23): error TS2307: Cannot find module 'pkg-up'.
 packages/react-dev-utils/browsersHelper.js(61,36): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 packages/react-dev-utils/browsersHelper.js(97,25): error TS2538: Type 'undefined' cannot be used as an index type.

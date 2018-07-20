@@ -1,39 +1,39 @@
 === tests/cases/conformance/salsa/mod.js ===
 module.exports.n = {};
->module.exports.n = {} : any
->module.exports.n : any
->module.exports : any
->module : any
->exports : any
->n : any
+>module.exports.n = {} : typeof n
+>module.exports.n : typeof n
+>module.exports : typeof import("tests/cases/conformance/salsa/mod")
+>module : { "tests/cases/conformance/salsa/mod": typeof import("tests/cases/conformance/salsa/mod"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>n : typeof n
 >{} : { [x: string]: any; }
 
 module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : typeof C
->module.exports.n.K : any
->module.exports.n : any
->module.exports : any
->module : any
->exports : any
->n : any
->K : any
+>module.exports.n.K : typeof C
+>module.exports.n : typeof n
+>module.exports : typeof import("tests/cases/conformance/salsa/mod")
+>module : { "tests/cases/conformance/salsa/mod": typeof import("tests/cases/conformance/salsa/mod"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>n : typeof n
+>K : typeof C
 >function C() {    this.x = 10;} : typeof C
 >C : typeof C
 
     this.x = 10;
 >this.x = 10 : 10
 >this.x : any
->this : any
+>this : typeof n
 >x : any
 >10 : 10
 }
 module.exports.Classic = class {
 >module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
->module.exports.Classic : any
->module.exports : any
->module : any
->exports : any
->Classic : any
+>module.exports.Classic : typeof Classic
+>module.exports : typeof import("tests/cases/conformance/salsa/mod")
+>module : { "tests/cases/conformance/salsa/mod": typeof import("tests/cases/conformance/salsa/mod"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>Classic : typeof Classic
 >class {    constructor() {        this.p = 1    }} : typeof Classic
 
     constructor() {

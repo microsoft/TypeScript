@@ -114,31 +114,30 @@ exports.x
 >exports : typeof import("tests/cases/conformance/salsa/test")
 >x : { status: "done"; m(n: number): void; }
 
-/** @type {DoneStatus} contextual typing is allowed, but module.exports.y: any.
-Guess it doesn't check the type tag? */
+/** @type {DoneStatus} */
 module.exports.y = {
->module.exports.y = {    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
->module.exports.y : any
->module.exports : any
->module : any
->exports : any
->y : any
->{    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
+>module.exports.y = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>module.exports.y : { status: "done"; m(n: number): void; }
+>module.exports : typeof import("tests/cases/conformance/salsa/test")
+>module : { "tests/cases/conformance/salsa/test": typeof import("tests/cases/conformance/salsa/test"); }
+>exports : typeof import("tests/cases/conformance/salsa/test")
+>y : { status: "done"; m(n: number): void; }
+>{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
->status : string
+>status : "done"
 >"done" : "done"
 
     m(n) { }
->m : (n: any) => void
->n : any
+>m : (n: number) => void
+>n : number
 }
 module.exports.y
->module.exports.y : any
->module.exports : any
->module : any
->exports : any
->y : any
+>module.exports.y : { status: "done"; m(n: number): void; }
+>module.exports : typeof import("tests/cases/conformance/salsa/test")
+>module : { "tests/cases/conformance/salsa/test": typeof import("tests/cases/conformance/salsa/test"); }
+>exports : typeof import("tests/cases/conformance/salsa/test")
+>y : { status: "done"; m(n: number): void; }
 
 // prototype-property assignment
 /** @type {DoneStatus} */
@@ -191,18 +190,18 @@ F.prototype = {
 // module.exports assignment
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
->module.exports = {    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
->module.exports : any
->module : any
->exports : any
->{    status: "done",    m(n) { }} : { status: string; m(n: any): void; }
+>module.exports = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>module.exports : { status: "done"; m(n: number): void; }
+>module : { "tests/cases/conformance/salsa/mod": { status: "done"; m(n: number): void; }; }
+>exports : { status: "done"; m(n: number): void; }
+>{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
->status : string
+>status : "done"
 >"done" : "done"
 
     m(n) { }
->m : (n: any) => void
->n : any
+>m : (n: number) => void
+>n : number
 }
 

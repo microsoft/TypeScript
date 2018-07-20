@@ -76,7 +76,6 @@ namespace ts {
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
-        const moduleSymbol = createSymbol(SymbolFlags.Property, "module" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -1422,10 +1421,6 @@ namespace ts {
                     if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
                         return requireSymbol;
                     }
-                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
-                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
-                        return moduleSymbol;
-                    }
                 }
             }
             if (!result) {
@@ -2410,7 +2405,7 @@ namespace ts {
         function getExportsOfModuleWorker(moduleSymbol: Symbol): SymbolTable {
             const visitedSymbols: Symbol[] = [];
 
-            // A module defined by an 'export=' consists on one export that needs to be resolved
+            // A module defined by an 'export=' consists of one export that needs to be resolved
             moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
 
             return visit(moduleSymbol) || emptySymbols;
@@ -2526,9 +2521,7 @@ namespace ts {
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol): Symbol;
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol | undefined): Symbol | undefined;
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol | undefined): Symbol | undefined {
-            return symbol && (symbol.flags & SymbolFlags.ExportValue) !== 0
-                ? getMergedSymbol(symbol.exportSymbol)
-                : symbol;
+            return getMergedSymbol(symbol && (symbol.flags & SymbolFlags.ExportValue) !== 0 ? symbol.exportSymbol : symbol);
         }
 
         function symbolIsValue(symbol: Symbol): boolean {
@@ -4710,7 +4703,7 @@ namespace ts {
             return undefined;
         }
 
-        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol, resolvedSymbol?: Symbol) {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
@@ -4766,15 +4759,18 @@ namespace ts {
                 }
                 else if (!jsDocType && isBinaryExpression(expression)) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    let type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
 
-                    if (getObjectFlags(type) & ObjectFlags.Anonymous &&
+                    if (type.flags & TypeFlags.Object &&
                         special === SpecialPropertyAssignmentKind.ModuleExports &&
                         symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        const exportedType = resolveStructuredTypeMembers(type as AnonymousType);
+                        const exportedType = resolveStructuredTypeMembers(type as ObjectType);
                         const members = createSymbolTable();
                         copyEntries(exportedType.members, members);
-                        symbol.exports!.forEach((s, name) => {
+                        if (resolvedSymbol && !resolvedSymbol.exports) {
+                            resolvedSymbol.exports = createSymbolTable();
+                        }
+                        (resolvedSymbol || symbol).exports!.forEach((s, name) => {
                             if (members.has(name)) {
                                 const exportedMember = exportedType.members.get(name)!;
                                 const union = createSymbol(s.flags | exportedMember.flags, name);
@@ -4984,8 +4980,14 @@ namespace ts {
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
                 // CommonsJS require and module both have type any.
-                if (symbol === requireSymbol || symbol === moduleSymbol) {
+                if (symbol === requireSymbol) {
                     return links.type = anyType;
+                }
+                if (symbol.flags & SymbolFlags.ModuleExports) {
+                    const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
+                    const members = createSymbolTable();
+                    members.set("exports" as __String, fileSymbol);
+                    return links.type = createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
                 }
                 // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;
@@ -5220,13 +5222,28 @@ namespace ts {
                     links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else {
-                    const type = createObjectType(ObjectFlags.Anonymous, symbol);
-                    if (symbol.flags & SymbolFlags.Class) {
-                        const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
-                        links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
+                    if (symbol.flags & SymbolFlags.ValueModule && symbol.valueDeclaration && isSourceFile(symbol.valueDeclaration) && symbol.valueDeclaration.commonJsModuleIndicator) {
+                        if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                            return errorType;
+                        }
+                        const resolvedModule = resolveExternalModuleSymbol(symbol);
+                        if (resolvedModule !== symbol) {
+                            const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
+                            links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
+                        }
+                        if (!popTypeResolution()) {
+                            links.type = reportCircularityError(symbol);
+                        }
                     }
-                    else {
-                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
+                    if (!links.type) {
+                        const type = createObjectType(ObjectFlags.Anonymous, symbol);
+                        if (symbol.flags & SymbolFlags.Class) {
+                            const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
+                            links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
+                        }
+                        else {
+                            links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
+                        }
                     }
                 }
             }
@@ -15016,6 +15033,7 @@ namespace ts {
             let flowContainer = getControlFlowContainer(node);
             const isOuterVariable = flowContainer !== declarationContainer;
             const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
+            const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
@@ -15027,7 +15045,7 @@ namespace ts {
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
-            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget ||
+            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.AnyOrUnknown) !== 0 ||
                 isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
@@ -19295,7 +19313,9 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
-                    forEach(node.arguments, checkExpresionNoReturn); // Still visit arguments so they get marked for visibility, etc
+                    for (const arg of node.arguments) {
+                        checkExpression(arg); // Still visit arguments so they get marked for visibility, etc
+                    }
                     return anySignature;
                 }
                 if (superType !== errorType) {
@@ -21328,8 +21348,9 @@ namespace ts {
 
             function isJSSpecialPropertyAssignment(special: SpecialPropertyAssignmentKind) {
                 switch (special) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
+                        return true;
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.Property:
                     case SpecialPropertyAssignmentKind.Prototype:
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
@@ -21641,10 +21662,6 @@ namespace ts {
             const type = getTypeOfExpression(node);
             node.contextualType = saveContextualType;
             return type;
-        }
-
-        function checkExpresionNoReturn(node: Expression) {
-            checkExpression(node);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
