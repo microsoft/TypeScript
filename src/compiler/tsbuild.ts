@@ -852,10 +852,7 @@ namespace ts {
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
                 if (isDeclarationFile(file)) {
-                    const fileModifiedTime = compilerHost.getModifiedTime!(file);
-                    if (fileModifiedTime !== undefined) {
-                        priorNewestUpdateTime = newer(priorNewestUpdateTime, fileModifiedTime);
-                    }
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file) || missingFileModifiedTime);
                 }
 
                 compilerHost.setModifiedTime!(file, now);
