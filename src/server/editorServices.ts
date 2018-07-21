@@ -1674,10 +1674,12 @@ namespace ts.server {
             if (!this.eventHandler || this.suppressDiagnosticEvents) {
                 return;
             }
+            const diagnostics = project.getLanguageService().getCompilerOptionsDiagnostics();
+            diagnostics.push(...project.getAllProjectErrors());
 
             this.eventHandler(<ConfigFileDiagEvent>{
                 eventName: ConfigFileDiagEvent,
-                data: { configFileName: project.getConfigFilePath(), diagnostics: project.getAllProjectErrors(), triggerFile }
+                data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile }
             });
         }
 

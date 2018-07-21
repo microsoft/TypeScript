@@ -176,6 +176,18 @@ namespace ts.projectSystem {
         return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, deferred: 0, ...nonZeroStats };
     }
 
+    export interface ConfigFileDiagnostic {
+        fileName: string | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string;
+        category: DiagnosticCategory;
+        code: number;
+        reportsUnnecessary?: {};
+        source?: string;
+        relatedInformation?: DiagnosticRelatedInformation[];
+    }
+
     export class TestServerEventManager {
         private events: server.ProjectServiceEvent[] = [];
         readonly session: TestSession;
@@ -216,10 +228,14 @@ namespace ts.projectSystem {
             this.events.forEach(event => assert.notEqual(event.eventName, eventName));
         }
 
-        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string) {
+        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string, errors: ReadonlyArray<ConfigFileDiagnostic>) {
             const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
             assert.equal(eventData.configFileName, configFileName);
             assert.equal(eventData.triggerFile, triggerFile);
+            const actual = eventData.diagnostics.map(({ file, messageText, ...rest }) => ({ fileName: file && file.fileName, messageText: isString(messageText) ? messageText : "", ...rest }));
+            if (errors) {
+                assert.deepEqual(actual, errors);
+            }
         }
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
@@ -4698,13 +4714,41 @@ namespace ts.projectSystem {
     });
 
     describe("tsserverProjectSystem Configure file diagnostics events", () => {
+        function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string): ConfigFileDiagnostic {
+            const d = Diagnostics.Unknown_compiler_option_0;
+            const start = configFile.content.indexOf(prop) - 1; // start at "prop"
+            return {
+                fileName: configFile.path,
+                start,
+                length: prop.length + 2,
+                messageText: formatStringFromArgs(d.message, [prop]),
+                category: d.category,
+                code: d.code,
+                reportsUnnecessary: undefined
+            };
+        }
+
+        function getFileNotFoundDiagnostic(configFile: File, relativeFileName: string): ConfigFileDiagnostic {
+            const findString = `{"path":"./${relativeFileName}"}`;
+            const d = Diagnostics.File_0_does_not_exist;
+            const start = configFile.content.indexOf(findString);
+            return {
+                fileName: configFile.path,
+                start,
+                length: findString.length,
+                messageText: formatStringFromArgs(d.message, [`${getDirectoryPath(configFile.path)}/${relativeFileName}`]),
+                category: d.category,
+                code: d.code,
+                reportsUnnecessary: undefined
+            };
+        }
 
         it("are generated when the config file has errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -4713,29 +4757,32 @@ namespace ts.projectSystem {
                     }
                 }`
             };
-            const serverEventManager = new TestServerEventManager([file, configFile]);
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "foo"),
+                getUnknownCompilerOptionDiagnostic(configFile, "allowJS")
+            ]);
         });
 
         it("are generated when the config file doesn't have errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {}
                 }`
             };
-            const serverEventManager = new TestServerEventManager([file, configFile]);
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
         });
 
         it("are generated when the config file changes", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
@@ -4746,37 +4793,40 @@ namespace ts.projectSystem {
                 }`
             };
 
-            const serverEventManager = new TestServerEventManager([file, configFile]);
+            const files = [file, libFile, configFile];
+            const serverEventManager = new TestServerEventManager(files);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
 
             configFile.content = `{
                 "compilerOptions": {
                     "haha": 123
                 }
             }`;
-            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.reloadFS(files);
             serverEventManager.host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "haha")
+            ]);
 
             configFile.content = `{
                 "compilerOptions": {}
             }`;
-            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.reloadFS(files);
             serverEventManager.host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, emptyArray);
         });
 
         it("are not generated when the config file does not include file opened and config file has errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const file2 = {
+            const file2: File = {
                 path: "/a/b/test.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -4792,11 +4842,11 @@ namespace ts.projectSystem {
         });
 
         it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -4805,21 +4855,21 @@ namespace ts.projectSystem {
                     }
                 }`
             };
-            const serverEventManager = new TestServerEventManager([file, configFile], /*suppressDiagnosticEvents*/ true);
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile], /*suppressDiagnosticEvents*/ true);
             openFilesForSession([file], serverEventManager.session);
             serverEventManager.hasZeroEvent("configFileDiag");
         });
 
         it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const file2 = {
+            const file2: File = {
                 path: "/a/b/test.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "files": ["app.ts"]
@@ -4829,6 +4879,27 @@ namespace ts.projectSystem {
             const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
             openFilesForSession([file2], serverEventManager.session);
             serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("contains the project reference errors", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const noSuchTsconfig = "no-such-tsconfig.json";
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "files": ["app.ts"],
+                    "references": [{"path":"./${noSuchTsconfig}"}]
+                }`
+            };
+
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
+                getFileNotFoundDiagnostic(configFile, noSuchTsconfig)
+            ]);
         });
     });
 
