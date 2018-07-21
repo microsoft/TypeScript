@@ -1287,6 +1287,14 @@ namespace ts {
         }
     }
 
+    export function getQuoteFromPreference(qp: QuotePreference): string {
+        switch (qp) {
+            case QuotePreference.Single: return "'";
+            case QuotePreference.Double: return '"';
+            default: return Debug.assertNever(qp);
+        }
+    }
+
     export function symbolNameNoDefault(symbol: Symbol): string | undefined {
         const escaped = symbolEscapedNameNoDefault(symbol);
         return escaped === undefined ? undefined : unescapeLeadingUnderscores(escaped);
