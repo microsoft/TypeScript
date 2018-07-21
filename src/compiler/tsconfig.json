@@ -51,6 +51,7 @@
         "resolutionCache.ts",
         "moduleSpecifiers.ts",
         "watch.ts",
-        "tsbuild.ts"
+        "tsbuild.ts",
+        "inspectValue.ts",
     ]
 }
