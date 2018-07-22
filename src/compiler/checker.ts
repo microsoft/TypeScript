@@ -4703,7 +4703,109 @@ namespace ts {
             return undefined;
         }
 
-        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol, resolvedSymbol?: Symbol) {
+        function getWidenedTypeFromJSPropertyDeclarations(symbol: Symbol, resolvedSymbol?: Symbol) {
+            // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
+            const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
+            if (specialDeclaration) {
+                const tag = getJSDocTypeTag(specialDeclaration);
+                if (tag && tag.typeExpression) {
+                    return getTypeFromTypeNode(tag.typeExpression);
+                }
+                return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
+            }
+            const types: Type[] = [];
+            let declaredType: Type | undefined;
+            for (const declaration of symbol.declarations) {
+                const expression = isBinaryExpression(declaration) ? declaration :
+                    isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
+                        undefined;
+
+                if (!expression) {
+                    return errorType;
+                }
+
+                // If there is a JSDoc type, use it (TODO: Should just do this in a loop before checking the initialisers)
+                const typeNode = getJSDocType(expression.parent);
+                if (typeNode) {
+                    const type = getWidenedType(getTypeFromTypeNode(typeNode));
+                    if (!declaredType) {
+                        declaredType = type;
+                    }
+                    else if (declaredType !== errorType && type !== errorType &&
+                             !isTypeIdenticalTo(declaredType, type) &&
+                             !(symbol.flags & SymbolFlags.JSContainer)) {
+                        errorNextVariableOrPropertyDeclarationMustHaveSameType(declaredType, declaration, type);
+                    }
+                }
+                // TODO: Maybe we should try harder in the case that expression is not a binary expression.
+                else if (!declaredType && isBinaryExpression(expression)) {
+                    // If we don't have an explicit JSDoc type, get the type from the expression.
+                    let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+                    const special = isPropertyAccessExpression(expression) ? getSpecialPropertyAccessKind(expression) : getSpecialPropertyAssignmentKind(expression);
+
+                    if (type.flags & TypeFlags.Object &&
+                        special === SpecialPropertyAssignmentKind.ModuleExports &&
+                        symbol.escapedName === InternalSymbolName.ExportEquals) {
+                        const exportedType = resolveStructuredTypeMembers(type as ObjectType);
+                        const members = createSymbolTable();
+                        copyEntries(exportedType.members, members);
+                        if (resolvedSymbol && !resolvedSymbol.exports) {
+                            resolvedSymbol.exports = createSymbolTable();
+                        }
+                        (resolvedSymbol || symbol).exports!.forEach((s, name) => {
+                            if (members.has(name)) {
+                                const exportedMember = exportedType.members.get(name)!;
+                                const union = createSymbol(s.flags | exportedMember.flags, name);
+                                union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                                members.set(name, union);
+                            }
+                            else {
+                                members.set(name, s);
+                            }
+                        });
+                        type = createAnonymousType(
+                            exportedType.symbol,
+                            members,
+                            exportedType.callSignatures,
+                            exportedType.constructSignatures,
+                            exportedType.stringIndexInfo,
+                            exportedType.numberIndexInfo);
+                    }
+                    let anyedType = type;
+                    if (isEmptyArrayLiteralType(type)) {
+                        anyedType = anyArrayType;
+                        if (noImplicitAny) {
+                            reportImplicitAnyError(expression, anyArrayType);
+                        }
+                    }
+                    types.push(anyedType);
+                }
+            }
+
+            const type = getWidenedType(declaredType || getUnionType(types, UnionReduction.Subtype));
+            if (filterType(type, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
+                if (noImplicitAny) {
+                    reportImplicitAnyError(symbol.valueDeclaration, anyType);
+                }
+                return anyType;
+            }
+            return type;
+        }
+
+        function getSpecial(declaration: Declaration) {
+            const expression = isBinaryExpression(declaration) ? declaration :
+                isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
+            undefined;
+            if (expression === undefined) {
+                return SpecialPropertyAssignmentKind.None;
+            }
+            return isPropertyAccessExpression(expression) ? getSpecialPropertyAccessKind(expression) : getSpecialPropertyAssignmentKind(expression as BinaryExpression);
+        }
+
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
+            if (!symbol.declarations.some(d => getSpecial(d) === SpecialPropertyAssignmentKind.ThisProperty)) {
+                return getWidenedTypeFromJSPropertyDeclarations(symbol, undefined);
+            }
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
@@ -4759,7 +4861,7 @@ namespace ts {
                 }
                 else if (!jsDocType && isBinaryExpression(expression)) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = getWidenedLiteralType(checkExpressionCached(expression.right));
 
                     if (type.flags & TypeFlags.Object &&
                         special === SpecialPropertyAssignmentKind.ModuleExports &&
@@ -4767,10 +4869,7 @@ namespace ts {
                         const exportedType = resolveStructuredTypeMembers(type as ObjectType);
                         const members = createSymbolTable();
                         copyEntries(exportedType.members, members);
-                        if (resolvedSymbol && !resolvedSymbol.exports) {
-                            resolvedSymbol.exports = createSymbolTable();
-                        }
-                        (resolvedSymbol || symbol).exports!.forEach((s, name) => {
+                        symbol.exports!.forEach((s, name) => {
                             if (members.has(name)) {
                                 const exportedMember = exportedType.members.get(name)!;
                                 const union = createSymbol(s.flags | exportedMember.flags, name);
@@ -4802,6 +4901,7 @@ namespace ts {
                     }
                 }
             }
+
             let type = jsDocType;
             if (!type) {
                 // use only the constructor types unless they were only assigned null | undefined (including widening variants)
@@ -5219,7 +5319,7 @@ namespace ts {
                 }
                 else if (symbol.valueDeclaration.kind === SyntaxKind.BinaryExpression ||
                          symbol.valueDeclaration.kind === SyntaxKind.PropertyAccessExpression && symbol.valueDeclaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                    links.type = getWidenedTypeFromJSPropertyDeclarations(symbol);
                 }
                 else {
                     if (symbol.flags & SymbolFlags.ValueModule && symbol.valueDeclaration && isSourceFile(symbol.valueDeclaration) && symbol.valueDeclaration.commonJsModuleIndicator) {
@@ -5229,7 +5329,7 @@ namespace ts {
                         const resolvedModule = resolveExternalModuleSymbol(symbol);
                         if (resolvedModule !== symbol) {
                             const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
-                            links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
+                            links.type = getWidenedTypeFromJSPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
                         }
                         if (!popTypeResolution()) {
                             links.type = reportCircularityError(symbol);
