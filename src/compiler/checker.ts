@@ -4713,18 +4713,14 @@ namespace ts {
                 }
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
-            const types: Type[] = [];
             let declaredType: Type | undefined;
             for (const declaration of symbol.declarations) {
                 const expression = isBinaryExpression(declaration) ? declaration :
                     isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
-                        undefined;
-
-                if (!expression) {
+                    undefined;
+                if (expression === undefined) {
                     return errorType;
                 }
-
-                // If there is a JSDoc type, use it (TODO: Should just do this in a loop before checking the initialisers)
                 const typeNode = getJSDocType(expression.parent);
                 if (typeNode) {
                     const type = getWidenedType(getTypeFromTypeNode(typeNode));
@@ -4737,52 +4733,60 @@ namespace ts {
                         errorNextVariableOrPropertyDeclarationMustHaveSameType(declaredType, declaration, type);
                     }
                 }
-                // TODO: Maybe we should try harder in the case that expression is not a binary expression.
-                else if (!declaredType && isBinaryExpression(expression)) {
-                    // If we don't have an explicit JSDoc type, get the type from the expression.
-                    let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
-                    const special = isPropertyAccessExpression(expression) ? getSpecialPropertyAccessKind(expression) : getSpecialPropertyAssignmentKind(expression);
+            }
+            if (!declaredType) {
+                const types: Type[] = [];
+                for (const declaration of symbol.declarations) {
+                    const expression = isBinaryExpression(declaration) ? declaration :
+                         isBinaryExpression(declaration.parent) ? declaration.parent : declaration;
+                    // TODO: Maybe we should try harder in the case that expression is not a binary expression.
+                    if (isBinaryExpression(expression)) {
+                        // If we don't have an explicit JSDoc type, get the type from the expression.
+                        let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+                        const special = isPropertyAccessExpression(expression) ? getSpecialPropertyAccessKind(expression) : getSpecialPropertyAssignmentKind(expression);
 
-                    if (type.flags & TypeFlags.Object &&
-                        special === SpecialPropertyAssignmentKind.ModuleExports &&
-                        symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        const exportedType = resolveStructuredTypeMembers(type as ObjectType);
-                        const members = createSymbolTable();
-                        copyEntries(exportedType.members, members);
-                        if (resolvedSymbol && !resolvedSymbol.exports) {
-                            resolvedSymbol.exports = createSymbolTable();
-                        }
-                        (resolvedSymbol || symbol).exports!.forEach((s, name) => {
-                            if (members.has(name)) {
-                                const exportedMember = exportedType.members.get(name)!;
-                                const union = createSymbol(s.flags | exportedMember.flags, name);
-                                union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
-                                members.set(name, union);
+                        if (type.flags & TypeFlags.Object &&
+                            special === SpecialPropertyAssignmentKind.ModuleExports &&
+                            symbol.escapedName === InternalSymbolName.ExportEquals) {
+                            const exportedType = resolveStructuredTypeMembers(type as ObjectType);
+                            const members = createSymbolTable();
+                            copyEntries(exportedType.members, members);
+                            if (resolvedSymbol && !resolvedSymbol.exports) {
+                                resolvedSymbol.exports = createSymbolTable();
                             }
-                            else {
-                                members.set(name, s);
-                            }
-                        });
-                        type = createAnonymousType(
-                            exportedType.symbol,
-                            members,
-                            exportedType.callSignatures,
-                            exportedType.constructSignatures,
-                            exportedType.stringIndexInfo,
-                            exportedType.numberIndexInfo);
-                    }
-                    let anyedType = type;
-                    if (isEmptyArrayLiteralType(type)) {
-                        anyedType = anyArrayType;
-                        if (noImplicitAny) {
-                            reportImplicitAnyError(expression, anyArrayType);
+                            (resolvedSymbol || symbol).exports!.forEach((s, name) => {
+                                if (members.has(name)) {
+                                    const exportedMember = exportedType.members.get(name)!;
+                                    const union = createSymbol(s.flags | exportedMember.flags, name);
+                                    union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                                    members.set(name, union);
+                                }
+                                else {
+                                    members.set(name, s);
+                                }
+                            });
+                            type = createAnonymousType(
+                                exportedType.symbol,
+                                members,
+                                exportedType.callSignatures,
+                                exportedType.constructSignatures,
+                                exportedType.stringIndexInfo,
+                                exportedType.numberIndexInfo);
                         }
+                        let anyedType = type;
+                        if (isEmptyArrayLiteralType(type)) {
+                            anyedType = anyArrayType;
+                            if (noImplicitAny) {
+                                reportImplicitAnyError(expression, anyArrayType);
+                            }
+                        }
+                        types.push(anyedType);
                     }
-                    types.push(anyedType);
                 }
+                declaredType = getUnionType(types, UnionReduction.Subtype);
             }
 
-            const type = getWidenedType(declaredType || getUnionType(types, UnionReduction.Subtype));
+            const type = getWidenedType(declaredType);
             if (filterType(type, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
                 if (noImplicitAny) {
                     reportImplicitAnyError(symbol.valueDeclaration, anyType);
@@ -4806,6 +4810,7 @@ namespace ts {
             if (!symbol.declarations.some(d => getSpecial(d) === SpecialPropertyAssignmentKind.ThisProperty)) {
                 return getWidenedTypeFromJSPropertyDeclarations(symbol, undefined);
             }
+            // TODO: This section shouldn't be needed for this-property assignments
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
