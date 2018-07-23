@@ -460,11 +460,11 @@ namespace ts.codefix {
 
         //TODO : create a variable declaration outside of the try block IF the prevArgName is referenced outside of the try block
         let varDecl;
-        if (prevArgName) {
+        if (prevArgName && lastDotThenMap.get(String(getNodeId(node)))) {
             varDecl = createVariableStatement(undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]))], NodeFlags.Let));
             varDeclFlags.set(prevArgName[0].text, undefined);
         }
-        const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, varDeclFlags, hasFollowingReturn));
+        const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, varDeclFlags, hasFollowingReturn, prevArgName));
 
         const callbackBody = getCallbackBody(func, prevArgName, argName, node, checker, synthNamesMap, lastDotThenMap, varDeclFlags, hasFollowingReturn);
         const catchClause = createCatchClause(argName[0].text, createBlock(callbackBody));
@@ -514,18 +514,19 @@ namespace ts.codefix {
 
     function parsePromiseCall(node: CallExpression, lastDotThenMap: Map<boolean>, prevArgName?: [Identifier, number], varDeclFlags?: Map<NodeFlags | undefined>): Statement[] {
         const nextDotThen = lastDotThenMap.get(String(getNodeId(node)));
-        if (prevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent) || (prevArgName && varDeclFlags)) {
+        const hasPrevArgName = prevArgName && prevArgName[0].text.length > 0;
+        if (hasPrevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent) || (hasPrevArgName && varDeclFlags)) {
             // is an assignment
-            const nodeFlags = getNodeFlags(prevArgName[0], varDeclFlags);
-            if ((varDeclFlags && varDeclFlags.has(prevArgName[0].text) && nodeFlags === undefined) ||
-                prevArgName[1] > 1) {
-                return [createStatement(createAssignment(prevArgName[0], createAwait(node)))];
+            const nodeFlags = getNodeFlags(prevArgName![0], varDeclFlags);
+            if ((varDeclFlags && varDeclFlags.has(prevArgName![0].text) && nodeFlags === undefined) ||
+                prevArgName![1] > 1) {
+                return [createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), createAwait(node)))];
             }
 
-            const varDecl = createVariableDeclaration(prevArgName[0], /*type*/ undefined, createAwait(node));
+            const varDecl = createVariableDeclaration(getSynthesizedDeepClone(prevArgName![0]), /*type*/ undefined, createAwait(node));
             return [createVariableStatement(/* modifiers */ undefined, (createVariableDeclarationList([varDecl], nodeFlags)))];
         }
-        else if (!prevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent)) {
+        else if (!hasPrevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent)) {
             return [createStatement(createAwait(node))];
         }
 
@@ -586,19 +587,21 @@ namespace ts.codefix {
                         return createNodeArray(innerCbBody);
                     }
 
-                    if (prevArgName && (nextDotThen || hasFollowingReturn)) {
 
-                        const nodeFlags = getNodeFlags(prevArgName[0], varDeclFlags);
-                        if ((varDeclFlags && varDeclFlags.has(prevArgName[0].text) && nodeFlags === undefined) ||
-                            prevArgName[1] > 1) {
-                            return createNodeArray([createStatement(createAssignment(prevArgName[0], func.body as Expression))]);
+                    const hasPrevArgName = prevArgName && prevArgName[0].text.length > 0;
+                    if (hasPrevArgName && (nextDotThen || hasFollowingReturn)) {
+
+                        const nodeFlags = getNodeFlags(prevArgName![0], varDeclFlags);
+                        if ((varDeclFlags && varDeclFlags.has(prevArgName![0].text) && nodeFlags === undefined) ||
+                            prevArgName![1] > 1) {
+                            return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), func.body as Expression))]);
                         }
 
-                        prevArgName[1] -= 1;
+                        prevArgName![1] -= 1;
                         return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
-                            (createVariableDeclarationList([createVariableDeclaration(prevArgName[0], /*type*/ undefined, func.body as Expression)], getNodeFlags(prevArgName[0], varDeclFlags))))]);
+                            (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName![0]), /*type*/ undefined, func.body as Expression)], getNodeFlags(prevArgName![0], varDeclFlags))))]);
                     }
-                    else if (prevArgName) {
+                    else if (hasPrevArgName) {
                         return createNodeArray([createReturn(func.body as Expression)]);
                     }
                     else {
