@@ -14,8 +14,8 @@ function res2(result){
 
 async function f():Promise<boolean> {
     let result = await fetch('https://typescriptlang.org');
-    let result_1 = await res(result);
-    return res2(result_1);
+    result = await res(result);
+    return res2(result);
 }
 function res(result){
     return result.ok;
