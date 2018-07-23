@@ -21857,6 +21857,9 @@ namespace ts {
                 if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature || func.kind === SyntaxKind.ConstructorType) {
                     error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
                 }
+                if (func.kind === SyntaxKind.ArrowFunction) {
+                    error(node, Diagnostics.An_arrow_function_cannot_have_a_this_parameter);
+                }
             }
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
