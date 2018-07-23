@@ -18,6 +18,7 @@ async function f(){
     let result;
     try {
         result = await fetch("https://typescriptlang.org");
+        result = await res(result);
     }
     catch (reject) {
         result = await rej(reject);
