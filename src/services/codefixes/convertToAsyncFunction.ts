@@ -25,7 +25,7 @@ namespace ts.codefix {
         const funcToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(funcToConvert, checker, varNamesMap, synthNamesMap, varDeclFlagsMap);
         findLastDotThens(funcToConvertRenamed, lastDotThenMap, checker);
 
-        const [retStmts, varDeclFlags, hasFollowingReturn] = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed, varDeclFlagsMap);
+        let [retStmts, varDeclFlags, hasFollowingReturn] = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed, varDeclFlagsMap);
 
         let allNewNodes: Node[] = [];
         const retStmtsMap: Map<Node[]> = seperateCallbacksByVariable(retStmts, checker);
@@ -344,22 +344,21 @@ namespace ts.codefix {
 
                 for (const arg of node.arguments) {
                     forEachChild(arg, function visit(argChild: Expression) {
-                        if (isCallExpression(argChild) && (returnsAPromise(argChild, checker) || isCallback(argChild, "then", checker))) {
+                        if (isCallExpression(argChild) && (returnsAPromise(argChild, checker) || isCallback(argChild, "then", checker) || isCallback(argChild, "catch", checker))) {
                             lastDotThen.set(String(getNodeId(argChild)), false);
                         }
                     });
                 }
 
-
                 forEachChild(node, function visit(child: Node) {
-                    if (isCallExpression(child) && (returnsAPromise(child, checker) || isCallback(child, "then", checker))) {
+                    if (isCallExpression(child) && (returnsAPromise(child, checker) || isCallback(child, "then", checker) || isCallback(child, "catch", checker))) {
                         if (!lastDotThen.get(String(getNodeId(child)))) {
                             lastDotThen.set(String(getNodeId(child)), true);
                         }
 
                         for (const arg of child.arguments) {
                             forEachChild(arg, function visit(argChild: Expression) {
-                                if (isCallExpression(argChild) && (returnsAPromise(argChild, checker) || isCallback(argChild, "then", checker))) {
+                                if (isCallExpression(argChild) && (returnsAPromise(argChild, checker) || isCallback(argChild, "then", checker) || isCallback(child, "catch", checker))) {
                                     lastDotThen.set(String(getNodeId(argChild)), true);
                                 }
                             });
@@ -543,7 +542,7 @@ namespace ts.codefix {
                 }
 
                 let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [argName[0]]);
-                if (!nextDotThen || (<PropertyAccessExpression>parent.expression).name.text === "catch" || isRej) {
+                if (!nextDotThen /*|| ((<PropertyAccessExpression>parent.expression).name.text === "catch" && !hasFollowingReturn)*/ || isRej) {
                     return createNodeArray([createReturn(synthCall)]);
                 }
 
@@ -556,12 +555,12 @@ namespace ts.codefix {
                 const nodeFlags = getNodeFlags(prevArgName[0], varDeclFlags);
                 if ((varDeclFlags && varDeclFlags.has(prevArgName[0].text) && nodeFlags === undefined) ||
                     prevArgName[1] > 1) {
-                    return createNodeArray([createStatement(createAssignment(prevArgName[0], createAwait(synthCall)))]);
+                    return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName[0]), createAwait(synthCall)))]);
                 }
 
                 prevArgName[1] -= 1;
                 return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
-                    (createVariableDeclarationList([createVariableDeclaration(prevArgName[0], /*type*/ undefined, (createAwait(synthCall)))], nodeFlags)))]);
+                    (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]), /*type*/ undefined, (createAwait(synthCall)))], nodeFlags)))]);
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
