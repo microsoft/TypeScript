@@ -458,7 +458,6 @@ namespace ts.codefix {
         const func = getSynthesizedDeepClone(node.arguments[0]);
         const argName = getArgName(func, checker, synthNamesMap);
 
-        //TODO : create a variable declaration outside of the try block IF the prevArgName is referenced outside of the try block
         let varDecl;
         if (prevArgName && lastDotThenMap.get(String(getNodeId(node)))) {
             varDecl = createVariableStatement(undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]))], NodeFlags.Let));
@@ -535,10 +534,12 @@ namespace ts.codefix {
 
     function getCallbackBody(func: Node, prevArgName: [Identifier, number] | undefined, argName: [Identifier, number], parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags | undefined>, hasFollowingReturn: ReturnStatement | undefined, isRej = false): NodeArray<Statement> {
 
+        const hasPrevArgName = prevArgName && prevArgName[0].text.length > 0;
+        const hasArgName = argName && argName[0].text.length > 0;
         const nextDotThen = lastDotThenMap.get(String(getNodeId(parent)));
         switch (func.kind) {
             case SyntaxKind.Identifier:
-                if (!argName) {
+                if (!hasArgName) {
                     break;
                 }
 
@@ -549,19 +550,19 @@ namespace ts.codefix {
 
                 synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [argName[0]]);
 
-                if (!prevArgName) {
+                if (!hasPrevArgName) {
                     break;
                 }
 
-                const nodeFlags = getNodeFlags(prevArgName[0], varDeclFlags);
-                if ((varDeclFlags && varDeclFlags.has(prevArgName[0].text) && nodeFlags === undefined) ||
-                    prevArgName[1] > 1) {
-                    return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName[0]), createAwait(synthCall)))]);
+                const nodeFlags = getNodeFlags(prevArgName![0], varDeclFlags);
+                if ((varDeclFlags && varDeclFlags.has(prevArgName![0].text) && nodeFlags === undefined) ||
+                    prevArgName![1] > 1) {
+                    return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), createAwait(synthCall)))]);
                 }
 
-                prevArgName[1] -= 1;
+                prevArgName![1] -= 1;
                 return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
-                    (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]), /*type*/ undefined, (createAwait(synthCall)))], nodeFlags)))]);
+                    (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName![0]), /*type*/ undefined, (createAwait(synthCall)))], nodeFlags)))]);
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
@@ -588,7 +589,6 @@ namespace ts.codefix {
                     }
 
 
-                    const hasPrevArgName = prevArgName && prevArgName[0].text.length > 0;
                     if (hasPrevArgName && (nextDotThen || hasFollowingReturn)) {
 
                         const nodeFlags = getNodeFlags(prevArgName![0], varDeclFlags);
