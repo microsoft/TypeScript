@@ -218,10 +218,7 @@ namespace ts.moduleSpecifiers {
             for (const patternText of paths[key]) {
                 const pattern = removeFileExtension(normalizePath(patternText));
                 const indexOfStar = pattern.indexOf("*");
-                if (indexOfStar === 0 && pattern.length === 1) {
-                    continue;
-                }
-                else if (indexOfStar !== -1) {
+                if (indexOfStar !== -1) {
                     const prefix = pattern.substr(0, indexOfStar);
                     const suffix = pattern.substr(indexOfStar + 1);
                     if (relativeToBaseUrl.length >= prefix.length + suffix.length &&
