@@ -36,6 +36,7 @@ namespace ts.codefix {
                 allNewNodes = allNewNodes.concat(newNodes);
             }
             else {
+                retStmtName = createIdentifier("empty");
                 for (const stmt of stmts) {
                     if (isCallExpression(stmt)) {
                         const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, lastDotThenMap, varDeclFlags, hasFollowingReturn, retStmtName);
@@ -429,7 +430,7 @@ namespace ts.codefix {
         return checker.isPromiseLikeType(nodeType) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
     }
 
-    function parseCallback(node: Expression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
+    function parseCallback(node: Expression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: ReturnStatement | undefined, prevArgName?: Identifier): Statement[] {
         if (!node) {
             return [];
         }
@@ -450,7 +451,7 @@ namespace ts.codefix {
         return [];
     }
 
-    function parseCatch(node: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
+    function parseCatch(node: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: ReturnStatement | undefined, prevArgName?: Identifier): Statement[] {
         const func = getSynthesizedDeepClone(node.arguments[0]);
         const argName = getArgName(func, checker, synthNamesMap);
 
@@ -462,7 +463,7 @@ namespace ts.codefix {
         return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined)];
     }
 
-    function parseThen(node: CallExpression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, prevArgName?: Identifier): Statement[] {
+    function parseThen(node: CallExpression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: ReturnStatement | undefined, prevArgName?: Identifier): Statement[] {
         const [res, rej] = node.arguments;
 
         // TODO - what if this is a binding pattern and not an Identifier
@@ -478,7 +479,7 @@ namespace ts.codefix {
 
             const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, varDeclFlags, hasFollowingReturn, argNameRes).concat(callbackBody));
 
-            const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, checker, synthNamesMap, lastDotThenMap, varDeclFlags, /*isRej*/ true);
+            const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, checker, synthNamesMap, lastDotThenMap, varDeclFlags, hasFollowingReturn, /*isRej*/ true);
             const catchClause = createCatchClause(argNameRej.text, createBlock(callbackBody2));
 
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
@@ -518,7 +519,7 @@ namespace ts.codefix {
         return [createReturn(node)];
     }
 
-    function getCallbackBody(func: Node, prevArgName: Identifier | undefined, argName: Identifier, parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: boolean, isRej = false): NodeArray<Statement> {
+    function getCallbackBody(func: Node, prevArgName: Identifier | undefined, argName: Identifier, parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, varDeclFlags: Map<NodeFlags|undefined>, hasFollowingReturn: ReturnStatement | undefined, isRej = false): NodeArray<Statement> {
 
         const nextDotThen = lastDotThenMap.get(String(getNodeId(parent)));
         switch (func.kind) {
@@ -551,13 +552,14 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
 
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    const [innerRetStmts, varDeclFlags] = getReturnStatementsWithPromiseCallbacks(func.body as Node);
+                    const retAppended = hasFollowingReturn ? createBlock(func.body.statements.concat(hasFollowingReturn)) : func.body;
+                    const [innerRetStmts, varDeclFlags] = getReturnStatementsWithPromiseCallbacks(retAppended as Node);
                     const innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, lastDotThenMap, hasFollowingReturn, prevArgName);
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
 
-                    return nextDotThen ? removeReturns(func.body.statements, prevArgName!, varDeclFlags) : func.body.statements;
+                    return (nextDotThen || hasFollowingReturn) ? removeReturns(func.body.statements, prevArgName!, varDeclFlags) : func.body.statements;
 
                 }
                 else if (isArrowFunction(func)) {
@@ -608,7 +610,7 @@ namespace ts.codefix {
         return createNodeArray(ret);
     }
 
-    function getInnerCallbackBody(checker: TypeChecker, innerRetStmts: Node[], synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, hasFollowingReturn: boolean, prevArgName?: Identifier) {
+    function getInnerCallbackBody(checker: TypeChecker, innerRetStmts: Node[], synthNamesMap: Map<Identifier>, lastDotThenMap: Map<boolean>, hasFollowingReturn: ReturnStatement | undefined, prevArgName?: Identifier) {
         let innerCbBody: Statement[] = [];
         for (const stmt of innerRetStmts) {
             forEachChild(stmt, function visit(node: Node) {
