@@ -130,7 +130,8 @@ namespace ts {
         if (checker.isPromiseLikeType(returnType)) {
             // collect all the return statements
             // check that a property access expression exists in there and that it is a handler
-            const retStmts = getReturnStatementsWithPromiseCallbacks(node);
+            let varDeclFlagsMap: Map<NodeFlags | undefined> = new MapCtr();
+            const retStmts = getReturnStatementsWithPromiseCallbacks(node, varDeclFlagsMap);
             if (retStmts.length > 0) {
                 diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
             }
@@ -141,10 +142,9 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    export function getReturnStatementsWithPromiseCallbacks(node: Node): [Node[], Map<NodeFlags|undefined>, boolean] {
+    export function getReturnStatementsWithPromiseCallbacks(node: Node, varDeclFlagsMap: Map<NodeFlags | undefined>): [Node[], Map<NodeFlags | undefined>, ReturnStatement | undefined] {
         const retStmts: Node[] = [];
-        let varDeclFlagsMap: Map<NodeFlags|undefined> = new MapCtr();
-        let hasFollowingRetStmt = false;
+        let hasFollowingRetStmt: ReturnStatement | undefined;
         forEachChild(node, visit);
 
         function visit(child: Node) {
@@ -165,7 +165,7 @@ namespace ts {
                 }
                 else if (isIdentifier(returnChild) && isReturnStatement(child)
                     && child.expression && isIdentifier(child.expression)) {
-                    hasFollowingRetStmt = true;
+                    hasFollowingRetStmt = child;
                     retStmts.push(child);
                     forEachChild(node, findCallbackUses);
                 }
@@ -179,15 +179,14 @@ namespace ts {
                     if (isVariableDeclarationList(identUse)) {
 
                         let isCallback = false;
-                        for (let varDecl of identUse.declarations) {
-                            
+                        for (const varDecl of identUse.declarations) {
                             /*
                             const maybeSymbol = checker.getSymbolAtLocation(varDecl.name);
                             const varDeclSymbol = !maybeSymbol && varDecl.original ? checker.getSymbolAtLocation((<VariableDeclaration>varDecl.original)!.name) : maybeSymbol;*/
                             if (varDecl.initializer && isCallExpression(varDecl.initializer) /*&&
                         symbol === varDeclSymbol*/) {
                                 isCallback = true;
-                                let flags = identUse.original ? identUse.original.flags : identUse.flags;
+                                const flags = identUse.original ? identUse.original.flags : identUse.flags;
                                 varDeclFlagsMap.set((<Identifier>varDecl.name).text, flags);
                             }
                         }
@@ -210,7 +209,7 @@ namespace ts {
                         /*
                         const maybeSymbol = checker.getSymbolAtLocation(identUse.left);
                         const varDeclSymbol = !maybeSymbol && identUse.left.original ? checker.getSymbolAtLocation(identUse.left.original) : maybeSymbol;*/
-                        varDeclFlagsMap.set((<Identifier>identUse.left).text, undefined)
+                        varDeclFlagsMap.set((<Identifier>identUse.left).text, undefined);
                     }
                     else {
                         parent = identUse;
@@ -218,6 +217,7 @@ namespace ts {
                     }
                 }
             }
+
             forEachChild(child, visit);
         }
         return [retStmts, varDeclFlagsMap, hasFollowingRetStmt];
