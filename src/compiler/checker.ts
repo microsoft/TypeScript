@@ -4703,12 +4703,6 @@ namespace ts {
             return undefined;
         }
 
-        const enum JSThisAssignmentLocation {
-            None = 0,
-            Constructor = 1 << 0,
-            Method = 1 << 1,
-        }
-
         function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol, resolvedSymbol?: Symbol) {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
@@ -4719,7 +4713,8 @@ namespace ts {
                 }
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
-            let definedIn = JSThisAssignmentLocation.None;
+            let definedInConstructor = false;
+            let definedInMethod = false;
             let jsdocType: Type | undefined;
             let types: Type[] | undefined;
             for (const declaration of symbol.declarations) {
@@ -4732,28 +4727,33 @@ namespace ts {
 
                 const special = isPropertyAccessExpression(expression) ? getSpecialPropertyAccessKind(expression) : getSpecialPropertyAssignmentKind(expression);
                 if (special === SpecialPropertyAssignmentKind.ThisProperty) {
-                    definedIn |= isDeclarationInConstructor(expression) ? JSThisAssignmentLocation.Constructor : JSThisAssignmentLocation.Method;
+                    if (isDeclarationInConstructor(expression)) {
+                        definedInConstructor = true;
+                    }
+                    else {
+                        definedInMethod = true;
+                    }
                 }
                 jsdocType = getJSDocTypeFromSpecialDeclarations(jsdocType, expression, symbol, declaration);
                 if (!jsdocType) {
-                    (types || (types = [])).push(getInitializerTypeFromSpecialDeclarations(symbol, resolvedSymbol, expression, special));
+                    (types || (types = [])).push(isBinaryExpression(expression) ? getInitializerTypeFromSpecialDeclarations(symbol, resolvedSymbol, expression, special) : neverType);
                 }
             }
             let type = jsdocType;
             if (!type) {
-                let constructorTypes = definedIn & JSThisAssignmentLocation.Constructor ? getConstructuredDefinedThisAssignmentTypes(types!, symbol.declarations) : undefined;
+                let constructorTypes = definedInConstructor ? getConstructorDefinedThisAssignmentTypes(types!, symbol.declarations) : undefined;
                 // use only the constructor types unless they were only assigned null | undefined (including widening variants)
-                if (definedIn & JSThisAssignmentLocation.Method) {
+                if (definedInMethod) {
                     const propType = getTypeOfSpecialPropertyOfBaseType(symbol);
                     if (propType) {
                         (constructorTypes || (constructorTypes = [])).push(propType);
-                        definedIn |= JSThisAssignmentLocation.Constructor;
+                        definedInConstructor = true;
                     }
                 }
                 const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types; // TODO: GH#18217
                 type = getUnionType(sourceTypes!, UnionReduction.Subtype);
             }
-            const widened = getWidenedType(addOptionality(type, definedIn === JSThisAssignmentLocation.Method));
+            const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
             if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
                 if (noImplicitAny) {
                     reportImplicitAnyError(symbol.valueDeclaration, anyType);
@@ -4763,16 +4763,14 @@ namespace ts {
             return widened;
         }
 
-        function getJSDocTypeFromSpecialDeclarations(declaredType: Type | undefined, expression: Expression, symbol: Symbol, declaration: Declaration) {
+        function getJSDocTypeFromSpecialDeclarations(declaredType: Type | undefined, expression: Expression, _symbol: Symbol, declaration: Declaration) {
             const typeNode = getJSDocType(expression.parent);
             if (typeNode) {
                 const type = getWidenedType(getTypeFromTypeNode(typeNode));
                 if (!declaredType) {
                     return type;
                 }
-                else if (declaredType !== errorType && type !== errorType &&
-                         !isTypeIdenticalTo(declaredType, type) &&
-                         !(symbol.flags & SymbolFlags.JSContainer)) {
+                else if (declaredType !== errorType && type !== errorType && !isTypeIdenticalTo(declaredType, type)) {
                     errorNextVariableOrPropertyDeclarationMustHaveSameType(declaredType, declaration, type);
                 }
             }
@@ -4782,7 +4780,7 @@ namespace ts {
         /** If we don't have an explicit JSDoc type, get the type from the initializer. */
         function getInitializerTypeFromSpecialDeclarations(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: Expression, special: SpecialPropertyAssignmentKind) {
             if (isBinaryExpression(expression)) {
-                let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+                const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
                 if (type.flags & TypeFlags.Object &&
                     special === SpecialPropertyAssignmentKind.ModuleExports &&
                     symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -4803,7 +4801,7 @@ namespace ts {
                             members.set(name, s);
                         }
                     });
-                    type = createAnonymousType(
+                    return createAnonymousType(
                         exportedType.symbol,
                         members,
                         exportedType.callSignatures,
@@ -4812,10 +4810,10 @@ namespace ts {
                         exportedType.numberIndexInfo);
                 }
                 if (isEmptyArrayLiteralType(type)) {
-                    type = anyArrayType;
                     if (noImplicitAny) {
                         reportImplicitAnyError(expression, anyArrayType);
                     }
+                    return anyArrayType;
                 }
                 return type;
             }
@@ -4831,18 +4829,14 @@ namespace ts {
                 (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent));
         }
 
-        function getConstructuredDefinedThisAssignmentTypes(types: Type[], declarations: Declaration[]): Type[] | undefined {
+        function getConstructorDefinedThisAssignmentTypes(types: Type[], declarations: Declaration[]): Type[] | undefined {
             Debug.assert(types.length === declarations.length);
-            const constructorTypes = []
-            for (let i = 0; i < types.length; i++) {
+            return types.filter((_, i) => {
                 const declaration = declarations[i];
                 const expression = isBinaryExpression(declaration) ? declaration :
-                    isBinaryExpression(declaration.parent) ? declaration.parent : declaration;
-                if (isBinaryExpression(expression) && isDeclarationInConstructor(expression)) {
-                    constructorTypes.push(types[i]);
-                }
-            }
-            return constructorTypes;
+                    isBinaryExpression(declaration.parent) ? declaration.parent : undefined;
+                return expression && isDeclarationInConstructor(expression);
+            });
         }
 
         /** check for definition in base class if any declaration is in a class */
