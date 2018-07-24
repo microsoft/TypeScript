@@ -395,25 +395,23 @@ function [#|finallyTest|](): Promise<void> {
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromise", `
 function [#|innerPromise|](): Promise<string> {
-    var blob = fetch("https://typescriptlang.org").then(resp => {
+    return fetch("https://typescriptlang.org").then(resp => {
         var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
-        retrun blob2;
+        return blob2;
     }).then(blob => {
         return blob.toString();   
     });
-
-    return blob;
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_VarReturn01", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn01", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org").then(resp => console.log(resp));
     return blob;
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_VarReturn02", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn02", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     blob.then(resp => console.log(resp));
@@ -421,7 +419,7 @@ function [#|f|]() {
 }
 `
         );
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn03", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn03", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org")
     let blob2 = blob.then(resp => console.log(resp));
@@ -434,7 +432,7 @@ function err (rej) {
 }
 `
   );
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn04", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn04", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org").then(res => console.log(res)), blob2 = fetch("https://microsoft.com").then(res => res.ok).catch(err);
     return blob;
@@ -445,7 +443,7 @@ function err (rej) {
 `
  );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn05", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn05", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org").then(res => console.log(res));
     blob.then(x => x);
@@ -462,7 +460,7 @@ function [#|f|]() {
 `
 );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn07", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn07", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     let blob2 = fetch("https://microsoft.com");
@@ -473,7 +471,7 @@ function [#|f|]() {
 `
 );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn08", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn08", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     if (!blob.ok){
@@ -485,7 +483,7 @@ function [#|f|]() {
 `
 );
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn09", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn09", `
 function [#|f|]() {
     let blob3;
     let blob = fetch("https://typescriptlang.org");
@@ -499,7 +497,7 @@ function [#|f|]() {
 );
 
 
-_testConvertToAsyncFunction("convertToAsyncFunction_VarReturn10", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn10", `
 function [#|f|]() {
     let blob3;
     let blob = fetch("https://typescriptlang.org");
@@ -532,10 +530,26 @@ function my_print (resp) {
         console.log(resp.buffer);
     }
 }
+
+
+`
+);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_MultipleReturns", `
+function [#|f|](): Promise<string> {
+    let x = fetch("https://microsoft.com").then(res => console.log("Microsoft:", res));
+    if (x.ok) {
+
+        return fetch("https://typescriptlang.org").then(res => console.log(res));
+    }
+    return x.then(resp => {
+        var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
+    });
+}
 `
         );
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_SeperateLines", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_SeperateLines", `
 function [#|f|](): Promise<string> {
     var blob = fetch("https://typescriptlang.org")
     blob.then(resp => {
@@ -553,13 +567,11 @@ function [#|f|](): Promise<string> {
 
         _testConvertToAsyncFunction("convertToAsyncFunction_InnerVarNameConflict", `
 function [#|f|](): Promise<string> {
-    var blob = fetch("https://typescriptlang.org").then(resp => {
+    return fetch("https://typescriptlang.org").then(resp => {
         var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
     }).then(blob => {
         return blob.toString();
     });
-
-    return blob;
 }
 `
         );
@@ -693,7 +705,7 @@ function [#|f|]() {
 `
         );
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_NestedFunction", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NestedFunction", `
 function [#|f|]() {
     function fn2(){
         function fn3(){
