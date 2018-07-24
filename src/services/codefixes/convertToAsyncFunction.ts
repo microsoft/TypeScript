@@ -187,7 +187,7 @@ namespace ts.codefix {
 
     function parseCatch(node: CallExpression, checker: TypeChecker, synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>, prevArgName?: [Identifier, number]): Statement[] {
         const func = getSynthesizedDeepClone(node.arguments[0]);
-        const argName = getArgName(func, checker, synthNamesMap);
+        const argName = getArgName(func, synthNamesMap);
 
         let varDecl;
         if (prevArgName && lastDotThenMap.get(String(getNodeId(node)))) {
@@ -210,12 +210,12 @@ namespace ts.codefix {
             return parseCallback(node.expression, checker, outermostParent, synthNamesMap, lastDotThenMap, prevArgName);
         }
 
-        const argNameRes = getArgName(res, checker, synthNamesMap);
+        const argNameRes = getArgName(res, synthNamesMap);
 
         const callbackBody = getCallbackBody(res, prevArgName, argNameRes, node, checker, synthNamesMap, lastDotThenMap);
 
         if (rej) {
-            const argNameRej = getArgName(rej, checker, synthNamesMap);
+            const argNameRej = getArgName(rej, synthNamesMap);
 
             const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, argNameRes).concat(callbackBody));
 
@@ -373,7 +373,6 @@ namespace ts.codefix {
     }
 
     function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
-        // can probably get rid of this if statement
         if (node.expression.kind !== SyntaxKind.PropertyAccessExpression) {
             return false;
         }
@@ -386,16 +385,11 @@ namespace ts.codefix {
         return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(nodeType);
     }
 
-    function getArgName(funcNode: Node, checker: TypeChecker, synthNamesMap: Map<[Identifier, number]>): [Identifier, number] {
+    function getArgName(funcNode: Node, synthNamesMap: Map<[Identifier, number]>): [Identifier, number] {
         let name: [Identifier, number] | undefined;
-        const funcNodeType = checker.getTypeAtLocation(funcNode);
 
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
             name = [funcNode.parameters[0].name as Identifier, 1];
-        }
-        else if (funcNodeType && funcNodeType.getCallSignatures().length > 0 && funcNodeType.getCallSignatures()[0].parameters.length > 0) {
-            name = [createIdentifier(funcNodeType.getCallSignatures()[0].parameters[0].name), 1];
-            // TODO : maybe get rid of this
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
             name = [funcNode.arguments[0] as Identifier, 1];
