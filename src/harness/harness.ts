@@ -1220,7 +1220,9 @@ namespace Harness {
                 fs.apply(symlinks);
             }
             const host = new fakes.CompilerHost(fs, options);
-            return compiler.compileFiles(host, programFileNames, options);
+            const result = compiler.compileFiles(host, programFileNames, options);
+            result.symlinks = symlinks;
+            return result;
         }
 
         export interface DeclarationCompilationContext {
@@ -1261,7 +1263,7 @@ namespace Harness {
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
-                if (vpath.isDeclaration(file.unitName)) {
+                if (vpath.isDeclaration(file.unitName) || vpath.isJson(file.unitName)) {
                     dtsFiles.push(file);
                 }
                 else if (vpath.isTypeScript(file.unitName)) {
@@ -1302,12 +1304,12 @@ namespace Harness {
             }
         }
 
-        export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined) {
+        export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined, symlinks: vfs.FileSet | undefined) {
             if (!context) {
                 return;
             }
             const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
-            const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory);
+            const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, symlinks);
             return { declInputFiles, declOtherFiles, declResult: output };
         }
 
@@ -1686,7 +1688,7 @@ namespace Harness {
                 const declFileContext = prepareDeclarationCompilationContext(
                     toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined
                 );
-                const declFileCompilationResult = compileDeclarationFiles(declFileContext);
+                const declFileCompilationResult = compileDeclarationFiles(declFileContext, result.symlinks);
 
                 if (declFileCompilationResult && declFileCompilationResult.declResult.diagnostics.length) {
                     jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
@@ -1890,6 +1892,7 @@ namespace Harness {
             for (const line of lines) {
                 let testMetaData: RegExpExecArray | null;
                 const linkMetaData = linkRegex.exec(line);
+                linkRegex.lastIndex = 0;
                 if (linkMetaData) {
                     if (!symlinks) symlinks = {};
                     symlinks[linkMetaData[2].trim()] = new vfs.Symlink(linkMetaData[1].trim());
