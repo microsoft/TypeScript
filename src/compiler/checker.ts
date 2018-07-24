@@ -4713,97 +4713,35 @@ namespace ts {
                 }
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
-            const types: Type[] = [];
-            let constructorTypes: Type[] | undefined;
             let definedInConstructor = false;
             let definedInMethod = false;
-            let jsDocType: Type | undefined;
+            let jsdocType: Type | undefined;
+            let types: Type[] | undefined;
             for (const declaration of symbol.declarations) {
-                let declarationInConstructor = false;
                 const expression = isBinaryExpression(declaration) ? declaration :
                     isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
                         undefined;
-
                 if (!expression) {
                     return errorType;
                 }
 
                 const special = isPropertyAccessExpression(expression) ? getSpecialPropertyAccessKind(expression) : getSpecialPropertyAssignmentKind(expression);
                 if (special === SpecialPropertyAssignmentKind.ThisProperty) {
-                    const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
-                    // Properties defined in a constructor (or base constructor, or javascript constructor function) don't get undefined added.
-                    // Function expressions that are assigned to the prototype count as methods.
-                    declarationInConstructor = thisContainer.kind === SyntaxKind.Constructor ||
-                        thisContainer.kind === SyntaxKind.FunctionDeclaration ||
-                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent));
-                    if (declarationInConstructor) {
+                    if (isDeclarationInConstructor(expression)) {
                         definedInConstructor = true;
                     }
                     else {
                         definedInMethod = true;
                     }
                 }
-
-                // If there is a JSDoc type, use it
-                const type = getTypeForDeclarationFromJSDocComment(expression.parent);
-                if (type) {
-                    const declarationType = getWidenedType(type);
-                    if (!jsDocType) {
-                        jsDocType = declarationType;
-                    }
-                    else if (jsDocType !== errorType && declarationType !== errorType &&
-                             !isTypeIdenticalTo(jsDocType, declarationType) &&
-                             !(symbol.flags & SymbolFlags.JSContainer)) {
-                        errorNextVariableOrPropertyDeclarationMustHaveSameType(jsDocType, declaration, declarationType);
-                    }
-                }
-                else if (!jsDocType && isBinaryExpression(expression)) {
-                    // If we don't have an explicit JSDoc type, get the type from the expression.
-                    let type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
-
-                    if (type.flags & TypeFlags.Object &&
-                        special === SpecialPropertyAssignmentKind.ModuleExports &&
-                        symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        const exportedType = resolveStructuredTypeMembers(type as ObjectType);
-                        const members = createSymbolTable();
-                        copyEntries(exportedType.members, members);
-                        if (resolvedSymbol && !resolvedSymbol.exports) {
-                            resolvedSymbol.exports = createSymbolTable();
-                        }
-                        (resolvedSymbol || symbol).exports!.forEach((s, name) => {
-                            if (members.has(name)) {
-                                const exportedMember = exportedType.members.get(name)!;
-                                const union = createSymbol(s.flags | exportedMember.flags, name);
-                                union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
-                                members.set(name, union);
-                            }
-                            else {
-                                members.set(name, s);
-                            }
-                        });
-                        type = createAnonymousType(
-                            exportedType.symbol,
-                            members,
-                            exportedType.callSignatures,
-                            exportedType.constructSignatures,
-                            exportedType.stringIndexInfo,
-                            exportedType.numberIndexInfo);
-                    }
-                    let anyedType = type;
-                    if (isEmptyArrayLiteralType(type)) {
-                        anyedType = anyArrayType;
-                        if (noImplicitAny) {
-                            reportImplicitAnyError(expression, anyArrayType);
-                        }
-                    }
-                    types.push(anyedType);
-                    if (declarationInConstructor) {
-                        (constructorTypes || (constructorTypes = [])).push(anyedType);
-                    }
+                jsdocType = getJSDocTypeFromSpecialDeclarations(jsdocType, expression, symbol, declaration);
+                if (!jsdocType) {
+                    (types || (types = [])).push(isBinaryExpression(expression) ? getInitializerTypeFromSpecialDeclarations(symbol, resolvedSymbol, expression, special) : neverType);
                 }
             }
-            let type = jsDocType;
+            let type = jsdocType;
             if (!type) {
+                let constructorTypes = definedInConstructor ? getConstructorDefinedThisAssignmentTypes(types!, symbol.declarations) : undefined;
                 // use only the constructor types unless they were only assigned null | undefined (including widening variants)
                 if (definedInMethod) {
                     const propType = getTypeOfSpecialPropertyOfBaseType(symbol);
@@ -4812,8 +4750,8 @@ namespace ts {
                         definedInConstructor = true;
                     }
                 }
-                const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes! : types; // TODO: GH#18217
-                type = getUnionType(sourceTypes, UnionReduction.Subtype);
+                const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types; // TODO: GH#18217
+                type = getUnionType(sourceTypes!, UnionReduction.Subtype);
             }
             const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
             if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
@@ -4823,6 +4761,82 @@ namespace ts {
                 return anyType;
             }
             return widened;
+        }
+
+        function getJSDocTypeFromSpecialDeclarations(declaredType: Type | undefined, expression: Expression, _symbol: Symbol, declaration: Declaration) {
+            const typeNode = getJSDocType(expression.parent);
+            if (typeNode) {
+                const type = getWidenedType(getTypeFromTypeNode(typeNode));
+                if (!declaredType) {
+                    return type;
+                }
+                else if (declaredType !== errorType && type !== errorType && !isTypeIdenticalTo(declaredType, type)) {
+                    errorNextVariableOrPropertyDeclarationMustHaveSameType(declaredType, declaration, type);
+                }
+            }
+            return declaredType;
+        }
+
+        /** If we don't have an explicit JSDoc type, get the type from the initializer. */
+        function getInitializerTypeFromSpecialDeclarations(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: Expression, special: SpecialPropertyAssignmentKind) {
+            if (isBinaryExpression(expression)) {
+                const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+                if (type.flags & TypeFlags.Object &&
+                    special === SpecialPropertyAssignmentKind.ModuleExports &&
+                    symbol.escapedName === InternalSymbolName.ExportEquals) {
+                    const exportedType = resolveStructuredTypeMembers(type as ObjectType);
+                    const members = createSymbolTable();
+                    copyEntries(exportedType.members, members);
+                    if (resolvedSymbol && !resolvedSymbol.exports) {
+                        resolvedSymbol.exports = createSymbolTable();
+                    }
+                    (resolvedSymbol || symbol).exports!.forEach((s, name) => {
+                        if (members.has(name)) {
+                            const exportedMember = exportedType.members.get(name)!;
+                            const union = createSymbol(s.flags | exportedMember.flags, name);
+                            union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                            members.set(name, union);
+                        }
+                        else {
+                            members.set(name, s);
+                        }
+                    });
+                    return createAnonymousType(
+                        exportedType.symbol,
+                        members,
+                        exportedType.callSignatures,
+                        exportedType.constructSignatures,
+                        exportedType.stringIndexInfo,
+                        exportedType.numberIndexInfo);
+                }
+                if (isEmptyArrayLiteralType(type)) {
+                    if (noImplicitAny) {
+                        reportImplicitAnyError(expression, anyArrayType);
+                    }
+                    return anyArrayType;
+                }
+                return type;
+            }
+            return neverType;
+        }
+
+        function isDeclarationInConstructor(expression: Expression) {
+            const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
+            // Properties defined in a constructor (or base constructor, or javascript constructor function) don't get undefined added.
+            // Function expressions that are assigned to the prototype count as methods.
+            return thisContainer.kind === SyntaxKind.Constructor ||
+                thisContainer.kind === SyntaxKind.FunctionDeclaration ||
+                (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent));
+        }
+
+        function getConstructorDefinedThisAssignmentTypes(types: Type[], declarations: Declaration[]): Type[] | undefined {
+            Debug.assert(types.length === declarations.length);
+            return types.filter((_, i) => {
+                const declaration = declarations[i];
+                const expression = isBinaryExpression(declaration) ? declaration :
+                    isBinaryExpression(declaration.parent) ? declaration.parent : undefined;
+                return expression && isDeclarationInConstructor(expression);
+            });
         }
 
         /** check for definition in base class if any declaration is in a class */
