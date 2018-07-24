@@ -3708,7 +3708,7 @@ namespace ts {
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
-            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {
+            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
             }
@@ -4356,28 +4356,23 @@ namespace ts {
                     return i;
                 }
             }
-
             return -1;
         }
 
         function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
-            if (propertyName === TypeSystemPropertyName.Type) {
-                return !!getSymbolLinks(<Symbol>target).type;
+            switch (propertyName) {
+                case TypeSystemPropertyName.Type:
+                    return !!getSymbolLinks(<Symbol>target).type;
+                case TypeSystemPropertyName.DeclaredType:
+                    return !!getSymbolLinks(<Symbol>target).declaredType;
+                case TypeSystemPropertyName.ResolvedBaseConstructorType:
+                    return !!(<InterfaceType>target).resolvedBaseConstructorType;
+                case TypeSystemPropertyName.ResolvedReturnType:
+                    return !!(<Signature>target).resolvedReturnType;
+                case TypeSystemPropertyName.ImmediateBaseConstraint:
+                    const bc = (<Type>target).immediateBaseConstraint;
+                    return !!bc && bc !== circularConstraintType;
             }
-            if (propertyName === TypeSystemPropertyName.DeclaredType) {
-                return !!getSymbolLinks(<Symbol>target).declaredType;
-            }
-            if (propertyName === TypeSystemPropertyName.ResolvedBaseConstructorType) {
-                return !!(<InterfaceType>target).resolvedBaseConstructorType;
-            }
-            if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
-                return !!(<Signature>target).resolvedReturnType;
-            }
-            if (propertyName === TypeSystemPropertyName.ImmediateBaseConstraint) {
-                const bc = (<Type>target).immediateBaseConstraint;
-                return !!bc && bc !== circularConstraintType;
-            }
-
             return Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
         }
 
@@ -9166,7 +9161,7 @@ namespace ts {
                 return type.simplified = substituteIndexedMappedType(objectType, type);
             }
             if (objectType.flags & TypeFlags.TypeParameter) {
-                const constraint = getConstraintFromTypeParameter(objectType as TypeParameter);
+                const constraint = getConstraintOfTypeParameter(objectType as TypeParameter);
                 if (constraint && isGenericMappedType(constraint)) {
                     return type.simplified = substituteIndexedMappedType(constraint, type);
                 }
@@ -12113,7 +12108,7 @@ namespace ts {
         }
 
         function isUnconstrainedTypeParameter(type: Type) {
-            return type.flags & TypeFlags.TypeParameter && !getConstraintFromTypeParameter(<TypeParameter>type);
+            return type.flags & TypeFlags.TypeParameter && !getConstraintOfTypeParameter(<TypeParameter>type);
         }
 
         function isTypeReferenceWithGenericArguments(type: Type): boolean {
@@ -17642,7 +17637,7 @@ namespace ts {
                 }
 
                 const thisType = getTypeFromTypeNode(thisParameter.type);
-                enclosingClass = ((thisType.flags & TypeFlags.TypeParameter) ? getConstraintFromTypeParameter(<TypeParameter>thisType) : thisType) as InterfaceType;
+                enclosingClass = ((thisType.flags & TypeFlags.TypeParameter) ? getConstraintOfTypeParameter(<TypeParameter>thisType) : thisType) as InterfaceType;
             }
             // No further restrictions for static properties
             if (flags & ModifierFlags.Static) {
@@ -19283,7 +19278,7 @@ namespace ts {
                 typeArguments.pop();
             }
             while (typeArguments.length < typeParameters.length) {
-                typeArguments.push(getConstraintFromTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isInJavaScriptFile(node)));
+                typeArguments.push(getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isInJavaScriptFile(node)));
             }
             const instantiated = createSignatureInstantiation(candidate, typeArguments);
             candidates[bestIndex] = instantiated;
@@ -25185,7 +25180,7 @@ namespace ts {
                     // If the type parameter node does not have an identical constraint as the resolved
                     // type parameter at this position, we report an error.
                     const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
-                    const targetConstraint = getConstraintFromTypeParameter(target);
+                    const targetConstraint = getConstraintOfTypeParameter(target);
                     if (sourceConstraint) {
                         // relax check if later interface augmentation has no constraint
                         if (!targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
