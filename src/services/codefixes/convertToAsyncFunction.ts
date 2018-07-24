@@ -191,7 +191,7 @@ namespace ts.codefix {
 
         let varDecl;
         if (prevArgName && lastDotThenMap.get(String(getNodeId(node)))) {
-            varDecl = createVariableStatement(undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]))], NodeFlags.Let));
+            varDecl = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]))], NodeFlags.Let));
         }
         const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, prevArgName));
 
@@ -219,7 +219,7 @@ namespace ts.codefix {
 
             const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, argNameRes).concat(callbackBody));
 
-            //TODO : create a variable declaration outside of the try block IF the prevArgName is referenced outside of the try block
+            // TODO : create a variable declaration outside of the try block IF the prevArgName is referenced outside of the try block
             const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, checker, synthNamesMap, lastDotThenMap);
             const catchClause = createCatchClause(argNameRej[0].text, createBlock(callbackBody2));
 
@@ -250,8 +250,8 @@ namespace ts.codefix {
                 return [createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), createAwait(node)))];
             }
 
-            const varDecl = createVariableDeclaration(getSynthesizedDeepClone(prevArgName![0]), undefined, createAwait(node));
-            return [createVariableStatement(undefined, (createVariableDeclarationList([varDecl], /*nodeFlags*/ NodeFlags.Let)))];
+            const varDecl = createVariableDeclaration(getSynthesizedDeepClone(prevArgName![0]), /*type*/ undefined, createAwait(node));
+            return [createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([varDecl], /*nodeFlags*/ NodeFlags.Let)))];
         }
         else if (!hasPrevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent)) {
             return [createStatement(createAwait(node))];
