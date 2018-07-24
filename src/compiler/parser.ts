@@ -3537,8 +3537,9 @@ namespace ts {
                 }
 
                 // If we had "(" followed by something that's not an identifier,
-                // then this definitely doesn't look like a lambda.
-                if (!isIdentifier()) {
+                // then this definitely doesn't look like a lambda.  "this" is not
+                // valid, but we want to parse it and then give a semantic error.
+                if (!isIdentifier() && second !== SyntaxKind.ThisKeyword) {
                     return Tristate.False;
                 }
 
