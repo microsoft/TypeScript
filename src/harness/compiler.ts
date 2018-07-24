@@ -53,6 +53,7 @@ namespace compiler {
         public readonly js: ReadonlyMap<string, documents.TextDocument>;
         public readonly dts: ReadonlyMap<string, documents.TextDocument>;
         public readonly maps: ReadonlyMap<string, documents.TextDocument>;
+        public symlinks?: vfs.FileSet; // Location to store original symlinks so they may be used in both original and declaration file compilations
 
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
