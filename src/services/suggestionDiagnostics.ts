@@ -130,8 +130,7 @@ namespace ts {
         if (checker.isPromiseLikeType(returnType)) {
             // collect all the return statements
             // check that a property access expression exists in there and that it is a handler
-            let varDeclFlagsMap: Map<NodeFlags | undefined> = new MapCtr();
-            const retStmts = getReturnStatementsWithPromiseCallbacks(node, varDeclFlagsMap);
+            const retStmts = getReturnStatementsWithPromiseCallbacks(node);
             if (retStmts.length > 0) {
                 diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
             }
@@ -142,9 +141,8 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    export function getReturnStatementsWithPromiseCallbacks(node: Node, varDeclFlagsMap: Map<NodeFlags | undefined>): [Node[], Map<NodeFlags | undefined>, ReturnStatement | undefined] {
+    export function getReturnStatementsWithPromiseCallbacks(node: Node): Node[] {
         const retStmts: Node[] = [];
-        let hasFollowingRetStmt: ReturnStatement | undefined;
         forEachChild(node, visit);
 
         function visit(child: Node) {
@@ -154,73 +152,18 @@ namespace ts {
             }
 
             if (isReturnStatement(child)) {
-                forEachChild(child, hasCallback);
+               forEachChild(child, hasCallback);
             }
 
             function hasCallback(returnChild: Node) {
-                //const symbol = checker.getSymbolAtLocation(returnChild);
-
                 if (isCallback(returnChild)) {
                     retStmts.push(child as ReturnStatement);
-                }
-                else if (isIdentifier(returnChild) && isReturnStatement(child)
-                    && child.expression && isIdentifier(child.expression)) {
-                    hasFollowingRetStmt = child;
-                    retStmts.push(child);
-                    forEachChild(node, findCallbackUses);
-                }
-                else if (!isFunctionLike(returnChild)) {
-                    forEachChild(returnChild, hasCallback);
-                }
-
-                let parent: Node;
-
-                function findCallbackUses(identUse: Node) {
-                    if (isVariableDeclarationList(identUse)) {
-
-                        let isCallback = false;
-                        for (const varDecl of identUse.declarations) {
-                            /*
-                            const maybeSymbol = checker.getSymbolAtLocation(varDecl.name);
-                            const varDeclSymbol = !maybeSymbol && varDecl.original ? checker.getSymbolAtLocation((<VariableDeclaration>varDecl.original)!.name) : maybeSymbol;*/
-                            if (varDecl.initializer && isCallExpression(varDecl.initializer) /*&&
-                        symbol === varDeclSymbol*/) {
-                                isCallback = true;
-                                const flags = identUse.original ? identUse.original.flags : identUse.flags;
-                                varDeclFlagsMap.set((<Identifier>varDecl.name).text, flags);
-                            }
-                        }
-
-                        if (isCallback) {
-                            retStmts.push(parent);
-                        }
-                    }
-                    else if (isCallback(identUse)) {
-                        /*
-                        const expr = (<PropertyAccessExpression>(<CallExpression>identUse).expression).expression;
-                        const maybeSymbol = checker.getSymbolAtLocation(expr);
-                        const varDeclSymbol = !maybeSymbol && expr.original ? checker.getSymbolAtLocation(expr.original) : maybeSymbol;
-                        if (symbol === varDeclSymbol) {*/
-                            retStmts.push(parent as CallExpression);
-                        //}
-                    }
-                    else if (isAssignmentExpression(identUse)) {
-                        retStmts.push(parent);
-                        /*
-                        const maybeSymbol = checker.getSymbolAtLocation(identUse.left);
-                        const varDeclSymbol = !maybeSymbol && identUse.left.original ? checker.getSymbolAtLocation(identUse.left.original) : maybeSymbol;*/
-                        varDeclFlagsMap.set((<Identifier>identUse.left).text, undefined);
-                    }
-                    else {
-                        parent = identUse;
-                        forEachChild(identUse, findCallbackUses);
-                    }
                 }
             }
 
             forEachChild(child, visit);
         }
-        return [retStmts, varDeclFlagsMap, hasFollowingRetStmt];
+        return retStmts;
     }
 
     function isCallback(node: Node): boolean {
