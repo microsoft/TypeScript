@@ -4676,7 +4676,7 @@ namespace ts {
                     }
                 }
                 // Use contextual parameter type if one is available
-                const type = declaration.symbol.escapedName === "this" ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
+                const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
                     return addOptionality(type, isOptional);
                 }
@@ -7507,7 +7507,7 @@ namespace ts {
                         const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, undefined, undefined, /*isUse*/ false);
                         paramSymbol = resolvedSymbol!;
                     }
-                    if (i === 0 && paramSymbol.escapedName === "this") {
+                    if (i === 0 && paramSymbol.escapedName === InternalSymbolName.This) {
                         hasThisParameter = true;
                         thisParameter = param.symbol;
                     }
@@ -15345,7 +15345,7 @@ namespace ts {
                 const jsDocFunctionType = <JSDocFunctionType>jsdocType;
                 if (jsDocFunctionType.parameters.length > 0 &&
                     jsDocFunctionType.parameters[0].name &&
-                    (jsDocFunctionType.parameters[0].name as Identifier).escapedText === "this") {
+                    (jsDocFunctionType.parameters[0].name as Identifier).escapedText === InternalSymbolName.This) {
                     return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type!);
                 }
             }
@@ -26766,6 +26766,7 @@ namespace ts {
 
             populateSymbols();
 
+            symbols.delete(InternalSymbolName.This); // Not a symbol, a keyword
             return symbolsToArray(symbols);
 
             function populateSymbols() {

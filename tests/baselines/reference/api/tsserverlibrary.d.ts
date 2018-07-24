@@ -2106,7 +2106,8 @@ declare namespace ts {
         Computed = "__computed",
         Resolving = "__resolving__",
         ExportEquals = "export=",
-        Default = "default"
+        Default = "default",
+        This = "this"
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.

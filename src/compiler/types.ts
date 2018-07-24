@@ -3559,6 +3559,7 @@ namespace ts {
         Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
+        This = "this",
     }
 
     /**
