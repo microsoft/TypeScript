@@ -2693,7 +2693,7 @@ namespace ts {
 
             setOriginalNode(enumStatement, node);
             if (varAdded) {
-                // If a variable was added, synthetic comments are mitted on it, not on the moduleStatement.
+                // If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
                 setSyntheticLeadingComments(enumStatement, undefined);
                 setSyntheticTrailingComments(enumStatement, undefined);
             }
@@ -2987,7 +2987,7 @@ namespace ts {
 
             setOriginalNode(moduleStatement, node);
             if (varAdded) {
-                // If a variable was added, synthetic comments are mitted on it, not on the moduleStatement.
+                // If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
                 setSyntheticLeadingComments(moduleStatement, undefined);
                 setSyntheticTrailingComments(moduleStatement, undefined);
             }
