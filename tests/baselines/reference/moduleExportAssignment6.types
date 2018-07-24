@@ -50,7 +50,7 @@ function exec() {
 }
 
 function tricky() {
->tricky : () => () => any
+>tricky : () => () => number[]
 
     // (a trickier variant of what webpack does)
     const module = new C(12);
@@ -60,12 +60,12 @@ function tricky() {
 >12 : 12
 
     return () => {
->() => {        return module.exports;    } : () => any
+>() => {        return module.exports;    } : () => number[]
 
         return module.exports;
->module.exports : any
->module : any
->exports : any
+>module.exports : number[]
+>module : C
+>exports : number[]
     }
 }
 

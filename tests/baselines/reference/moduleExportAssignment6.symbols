@@ -53,7 +53,9 @@ function tricky() {
 
     return () => {
         return module.exports;
->module : Symbol(module, Decl(webpackLibNormalModule.js, 20, 14))
+>module.exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
+>module : Symbol(module, Decl(webpackLibNormalModule.js, 18, 9))
+>exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
     }
 }
 

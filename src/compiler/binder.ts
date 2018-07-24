@@ -2073,6 +2073,7 @@ namespace ts {
                         bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
                     }
                     if (isInJavaScriptFile(node) &&
+                        file.commonJsModuleIndicator &&
                         isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
                         !lookupSymbolForNameWorker(container, "module" as __String)) {
                         declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
