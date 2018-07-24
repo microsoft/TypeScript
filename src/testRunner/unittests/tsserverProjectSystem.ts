@@ -9084,19 +9084,33 @@ export function Test2() {
             ]);
         });
 
+        const referenceATs = (aTs: File): protocol.ReferencesResponseItem => makeReferenceItem(aTs, /*isDefinition*/ true, "fnA", "export function fnA() {}");
+        const referencesUserTs = (userTs: File): ReadonlyArray<protocol.ReferencesResponseItem> => [
+            makeReferenceItem(userTs, /*isDefinition*/ true, "fnA", "import { fnA, instanceA } from \"../a/bin/a\";"),
+            makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", "export function fnUser() { fnA(); fnB(); instanceA; }", { index: 1 }),
+        ];
+
         it("findAllReferences", () => {
             const { session, aTs, userTs } = makeSampleProjects();
 
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
-                refs: [
-                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnA", "import { fnA, instanceA } from \"../a/bin/a\";"),
-                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", "export function fnUser() { fnA(); fnB(); instanceA; }", { index: 1 }),
-                    makeReferenceItem(aTs, /*isDefinition*/ true, "fnA", "export function fnA() {}"),
-                ],
+                refs: [...referencesUserTs(userTs), referenceATs(aTs)],
                 symbolName: "fnA",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
                 symbolDisplayString: "(alias) fnA(): void\nimport fnA",
+            });
+        });
+
+        it("findAllReferences -- starting at definition", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
+            const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(aTs, "fnA"));
+            assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
+                refs: [referenceATs(aTs), ...referencesUserTs(userTs)],
+                symbolName: "fnA",
+                symbolStartOffset: protocolLocationFromSubstring(aTs.content, "fnA").offset,
+                symbolDisplayString: "function fnA(): void",
             });
         });
 
@@ -9176,6 +9190,18 @@ export function Test2() {
             });
         });
 
+        const renameATs = (aTs: File): protocol.SpanGroup => ({
+            file: aTs.path,
+            locs: [protocolTextSpanFromSubstring(aTs.content, "fnA")],
+        });
+        const renameUserTs = (userTs: File): protocol.SpanGroup => ({
+            file: userTs.path,
+            locs: [
+                protocolTextSpanFromSubstring(userTs.content, "fnA"),
+                protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+            ],
+        });
+
         it("renameLocations", () => {
             const { session, aTs, userTs } = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnA()"));
@@ -9188,19 +9214,24 @@ export function Test2() {
                     kindModifiers: ScriptElementKindModifier.none,
                     localizedErrorMessage: undefined,
                 },
-                locs: [
-                    {
-                        file: userTs.path,
-                        locs: [
-                            protocolTextSpanFromSubstring(userTs.content, "fnA"),
-                            protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
-                        ],
-                    },
-                    {
-                        file: aTs.path,
-                        locs: [protocolTextSpanFromSubstring(aTs.content, "fnA")],
-                    }
-                ],
+                locs: [renameUserTs(userTs), renameATs(aTs)],
+            });
+        });
+
+        it("renameLocations -- starting at definition", () => {
+            const { session, aTs, userTs } = makeSampleProjects();
+            openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "fnA"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    displayName: "fnA",
+                    fullDisplayName: '"/a/a".fnA',
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: ScriptElementKindModifier.exportedModifier,
+                    localizedErrorMessage: undefined,
+                },
+                locs: [renameATs(aTs), renameUserTs(userTs)],
             });
         });
 
