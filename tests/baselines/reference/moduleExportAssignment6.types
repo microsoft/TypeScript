@@ -49,3 +49,23 @@ function exec() {
 >exports : number[]
 }
 
+function tricky() {
+>tricky : () => () => any
+
+    // (a trickier variant of what webpack does)
+    const module = new C(12);
+>module : C
+>new C(12) : C
+>C : typeof C
+>12 : 12
+
+    return () => {
+>() => {        return module.exports;    } : () => any
+
+        return module.exports;
+>module.exports : any
+>module : any
+>exports : any
+    }
+}
+

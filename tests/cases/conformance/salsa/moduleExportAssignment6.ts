@@ -17,3 +17,11 @@ function exec() {
     const module = new C(12);
     return module.exports; // should be fine because `module` is defined locally
 }
+
+function tricky() {
+    // (a trickier variant of what webpack does)
+    const module = new C(12);
+    return () => {
+        return module.exports;
+    }
+}

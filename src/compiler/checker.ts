@@ -4985,9 +4985,11 @@ namespace ts {
                 }
                 if (symbol.flags & SymbolFlags.ModuleExports) {
                     const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
-                    const members = createSymbolTable();
-                    members.set("exports" as __String, fileSymbol);
-                    return links.type = createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
+                    if (fileSymbol) {
+                        const members = createSymbolTable();
+                        members.set("exports" as __String, fileSymbol);
+                        return links.type = createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
+                    }
                 }
                 // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;

@@ -43,3 +43,17 @@ function exec() {
 >exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
 }
 
+function tricky() {
+>tricky : Symbol(tricky, Decl(webpackLibNormalModule.js, 14, 1))
+
+    // (a trickier variant of what webpack does)
+    const module = new C(12);
+>module : Symbol(module, Decl(webpackLibNormalModule.js, 18, 9))
+>C : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+
+    return () => {
+        return module.exports;
+>module : Symbol(module, Decl(webpackLibNormalModule.js, 20, 14))
+    }
+}
+
