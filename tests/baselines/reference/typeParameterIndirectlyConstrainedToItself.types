@@ -92,3 +92,16 @@ class D<U extends T, T extends V, V extends T> { }
 >V : V
 >T : T
 
+// Repro from #25740
+
+type Foo<T> = [T] extends [number] ? {} : {};
+>Foo : Foo<T>
+>T : T
+>T : T
+
+function foo<S extends Foo<S>>() {}
+>foo : <S>() => void
+>S : S
+>Foo : Foo<T>
+>S : S
+
