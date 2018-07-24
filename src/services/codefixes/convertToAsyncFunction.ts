@@ -220,7 +220,7 @@ namespace ts.codefix {
             const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, argNameRes).concat(callbackBody));
 
             //TODO : create a variable declaration outside of the try block IF the prevArgName is referenced outside of the try block
-            const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, checker, synthNamesMap, lastDotThenMap, /*isRej*/ true);
+            const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, checker, synthNamesMap, lastDotThenMap);
             const catchClause = createCatchClause(argNameRej[0].text, createBlock(callbackBody2));
 
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
@@ -261,7 +261,7 @@ namespace ts.codefix {
     }
 
     function getCallbackBody(func: Node, prevArgName: [Identifier, number] | undefined, argName: [Identifier, number], parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<[Identifier, number]>,
-        lastDotThenMap: Map<boolean>, isRej = false): NodeArray<Statement> {
+        lastDotThenMap: Map<boolean>): NodeArray<Statement> {
 
         const hasPrevArgName = prevArgName && prevArgName[0].text.length > 0;
         const hasArgName = argName && argName[0].text.length > 0;
@@ -273,7 +273,7 @@ namespace ts.codefix {
                 }
 
                 let synthCall = createCall(func as Identifier, /*typeArguments*/ undefined, [argName[0]]);
-                if (!nextDotThen || isRej) {
+                if (!nextDotThen) {
                     return createNodeArray([createReturn(synthCall)]);
                 }
 
