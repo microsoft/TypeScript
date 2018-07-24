@@ -98,11 +98,11 @@ namespace ts.sourcemaps {
 
         function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
             // Lookup file in program, if provided
-            const file = program && program.getSourceFile(fileName);
             const path = toPath(fileName, location, host.getCanonicalFileName);
-            if (!file || file.path !== path) {
+            const file = program && program.getSourceFile(path);
+            if (!file) {
                 // Otherwise check the cache (which may hit disk)
-                return program && program.getSourceFile(path) || fallbackCache.get(path);
+                return fallbackCache.get(path);
             }
             return file;
         }
