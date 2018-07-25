@@ -26,16 +26,15 @@ namespace ts.codefix {
 
         let retStmts = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed);
         let allNewNodes: Node[] = [];
-        let retStmtNameArg: [Identifier, number] = [createIdentifier("empty"), 1];
         for (const stmt of retStmts) {
             if (isCallExpression(stmt)) {
-                const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, lastDotThenMap, retStmtNameArg);
+                const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, lastDotThenMap);
                 allNewNodes = allNewNodes.concat(newNodes);
             }
             else {
                 forEachChild(stmt, function visit(node: Node) {
                     if (isCallExpression(node)) {
-                        const newNodes = parseCallback(node, checker, node, synthNamesMap, lastDotThenMap, retStmtNameArg);
+                        const newNodes = parseCallback(node, checker, node, synthNamesMap, lastDotThenMap);
                         allNewNodes = allNewNodes.concat(newNodes);
                     }
                     else if (!isFunctionLike(node)) {
@@ -260,8 +259,7 @@ namespace ts.codefix {
         return [createReturn(node)];
     }
 
-    function getCallbackBody(func: Node, prevArgName: [Identifier, number] | undefined, argName: [Identifier, number], parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<[Identifier, number]>,
-        lastDotThenMap: Map<boolean>): NodeArray<Statement> {
+    function getCallbackBody(func: Node, prevArgName: [Identifier, number] | undefined, argName: [Identifier, number], parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>): NodeArray<Statement> {
 
         const hasPrevArgName = prevArgName && prevArgName[0].text.length > 0;
         const hasArgName = argName && argName[0].text.length > 0;
@@ -324,11 +322,8 @@ namespace ts.codefix {
                         return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
                             (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName![0]), /*type*/ undefined, func.body as Expression)], NodeFlags.Let)))]);
                     }
-                    else if (hasPrevArgName) {
-                        return createNodeArray([createReturn(func.body as Expression)]);
-                    }
                     else {
-                        return createNodeArray([createStatement(func.body as Expression)]);
+                        return createNodeArray([createReturn(func.body as Expression)]);
                     }
                 }
                 break;
