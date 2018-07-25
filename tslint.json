@@ -93,7 +93,6 @@
         // TODO
         "arrow-parens": false, // [true, "ban-single-arg-parens"]
         "arrow-return-shorthand": false,
-        "ban-types": false,
         "forin": false,
         "member-access": false, // [true, "no-public"]
         "no-conditional-assignment": false,
