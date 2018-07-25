@@ -10241,7 +10241,10 @@ namespace ts {
                     return true;
                 }
             }
+            return hasContextSensitiveReturnExpression(node);
+        }
 
+        function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
             // TODO(anhans): A block should be context-sensitive if it has a context-sensitive return value.
             const body = node.body!;
             return body.kind === SyntaxKind.Block ? false : isContextSensitive(body);
@@ -20543,6 +20546,12 @@ namespace ts {
 
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
+                // Skip parameters, return signature with return type that retains noncontextual parts so inferences can still be drawn in an early stage
+                if (!getEffectiveReturnTypeNode(node) && hasContextSensitiveReturnExpression(node)) {
+                    const returnType = getReturnTypeFromBody(node, checkMode);
+                    const singleReturnSignature = createSignature(undefined, undefined, undefined, emptyArray, returnType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+                    return createAnonymousType(node.symbol, emptySymbols, [singleReturnSignature], emptyArray, undefined, undefined);
+                }
                 return anyFunctionType;
             }
 
