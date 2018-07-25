@@ -2230,30 +2230,6 @@ namespace ts {
         return discriminatedPropertySymbols;
     }
 
-    /* @internal */
-    export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
-        if (name && type) {
-            const result: Symbol[] = [];
-            const symbol = type.getProperty(name);
-            if (type.flags & TypeFlags.Union) {
-                forEach((<UnionType>type).types, t => {
-                    const symbol = t.getProperty(name);
-                    if (symbol) {
-                        result.push(symbol);
-                    }
-                });
-                return result;
-            }
-
-            if (symbol) {
-                result.push(symbol);
-                return result;
-            }
-        }
-        return undefined;
-    }
-
     function isArgumentOfElementAccessExpression(node: Node) {
         return node &&
             node.parent &&
