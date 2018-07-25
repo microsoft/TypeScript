@@ -4,7 +4,7 @@
 function foo<T extends Function>(x: T): T { return x; }
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
 >T : Symbol(T, Decl(functionConstraintSatisfaction.ts, 2, 13))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 2, 33))
 >T : Symbol(T, Decl(functionConstraintSatisfaction.ts, 2, 13))
 >T : Symbol(T, Decl(functionConstraintSatisfaction.ts, 2, 13))
@@ -39,7 +39,7 @@ var c: { (): string; (x): string };
 var r = foo(new Function());
 >r : Symbol(r, Decl(functionConstraintSatisfaction.ts, 17, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r1 = foo((x) => x);
 >r1 : Symbol(r1, Decl(functionConstraintSatisfaction.ts, 18, 3))
@@ -154,7 +154,7 @@ var r11 = foo(<U extends Date>(x: U) => x);
 >r11 : Symbol(r11, Decl(functionConstraintSatisfaction.ts, 42, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 42, 15))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 42, 31))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 42, 15))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 42, 31))
@@ -192,7 +192,7 @@ var r16 = foo(c2);
 
 interface F2 extends Function { foo: string; }
 >F2 : Symbol(F2, Decl(functionConstraintSatisfaction.ts, 47, 18))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(F2.foo, Decl(functionConstraintSatisfaction.ts, 49, 31))
 
 var f2: F2;

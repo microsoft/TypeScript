@@ -10,5 +10,6 @@
         "types": ["node"],
         "lib": ["esnext", "dom"],
     },
-    "include": ["node_modules/lodash"]
+    "include": ["node_modules/lodash"],
+    "exclude": ["node_modules/lodash/lodash.js"]
 }

@@ -10,7 +10,7 @@
 
 var a0: [any, any, any] = [];                             // Error
 >a0 : [any, any, any]
->[] : undefined[]
+>[] : []
 
 var a1: [boolean, string, number] = ["string", 1, true];  // Error
 >a1 : [boolean, string, number]

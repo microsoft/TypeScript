@@ -188,13 +188,13 @@ function f51<T, K extends keyof T>(k: K, s: string) {
     const x2 = k as string;
 }
 
-function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
 }
 
-function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
@@ -317,6 +317,20 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
     x2.length;
     x3.length;
     x4.length;
+}
+
+function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {};
+    a = x;
+    a = y;
+    a = z;
+}
+
+function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {} | null | undefined;
+    a = x;
+    a = y;
+    a = z;
 }
 
 // Repros from #12011
@@ -554,7 +568,7 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 new AnotherSampleClass({});
 
 // Positive repro from #17166
-function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
     for (let key in t) {
         key = k // ok, K ==> keyof T
         t[key] = tk; // ok, T[K] ==> T[keyof T]
@@ -566,12 +580,85 @@ type Predicates<TaggedRecord> = {
   [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T]
 }
 
+// Repros from #23592
+
+type Example<T extends { [K in keyof T]: { prop: any } }> = { [K in keyof T]: T[K]["prop"] };
+type Result = Example<{ a: { prop: string }; b: { prop: number } }>;
+
+type Helper2<T> = { [K in keyof T]: Extract<T[K], { prop: any }> };
+type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
+type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
+
+// Repro from #23618
+
+type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
+enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+
+type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
+}
+
+type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
+}
+
+// Repro from #21368
+
+interface I {
+    foo: string;
+}
+
+declare function take<T>(p: T): void;
+
+function fn<T extends I, K extends keyof T>(o: T, k: K) {
+    take<{} | null | undefined>(o[k]);
+    take<any>(o[k]);
+}
+
+// Repro from #23133
+
+class Unbounded<T> {
+    foo(x: T[keyof T]) {
+        let y: {} | undefined | null = x;
+    }
+}
+
+// Repro from #23940
+
+interface I7 {
+    x: any;
+}
+type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+
+// Repro from #21770
+
+type Dict<T extends string> = { [key in T]: number };
+type DictDict<V extends string, T extends string> = { [key in V]: Dict<T> };
+
+function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+    return dd[k1][k2];
+}
+
+function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+    const d: Dict<T> = dd[k1];
+    return d[k2];
+}
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -803,6 +890,18 @@ function f90(x1, x2, x3, x4) {
     x3.length;
     x4.length;
 }
+function f91(x, y, z) {
+    var a;
+    a = x;
+    a = y;
+    a = z;
+}
+function f92(x, y, z) {
+    var a;
+    a = x;
+    a = y;
+    a = z;
+}
 // Repros from #12011
 var Base = /** @class */ (function () {
     function Base() {
@@ -948,6 +1047,37 @@ function f3(t, k, tk) {
         t[key] = tk; // ok, T[K] ==> T[keyof T]
     }
 }
+var Flag;
+(function (Flag) {
+    Flag["FLAG_1"] = "flag_1";
+    Flag["FLAG_2"] = "flag_2";
+})(Flag || (Flag = {}));
+function getFlagsFromSimpleRecord(record, flags) {
+    return record[flags[0]];
+}
+function getFlagsFromDynamicRecord(record, flags) {
+    return record[flags[0]];
+}
+function fn(o, k) {
+    take(o[k]);
+    take(o[k]);
+}
+// Repro from #23133
+var Unbounded = /** @class */ (function () {
+    function Unbounded() {
+    }
+    Unbounded.prototype.foo = function (x) {
+        var y = x;
+    };
+    return Unbounded;
+}());
+function ff1(dd, k1, k2) {
+    return dd[k1][k2];
+}
+function ff2(dd, k1, k2) {
+    var d = dd[k1];
+    return d[k2];
+}
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1048,8 +1178,8 @@ declare function f50<T>(k: keyof T, s: string): void;
 declare function f51<T, K extends keyof T>(k: K, s: string): void;
 declare function f52<T>(obj: {
     [x: string]: boolean;
-}, k: keyof T, s: string, n: number): void;
-declare function f53<T, K extends keyof T>(obj: {
+}, k: Exclude<keyof T, symbol>, s: string, n: number): void;
+declare function f53<T, K extends Exclude<keyof T, symbol>>(obj: {
     [x: string]: boolean;
 }, k: K, s: string, n: number): void;
 declare function f54<T>(obj: T, key: keyof T): void;
@@ -1088,6 +1218,8 @@ declare type S2 = {
     b: string;
 };
 declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]): void;
+declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
+declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare class Base {
     get<K extends keyof this>(prop: K): this[K];
     set<K extends keyof this>(prop: K, value: this[K]): void;
@@ -1208,7 +1340,76 @@ declare class AnotherSampleClass<T> extends SampleClass<T & Foo> {
     constructor(props: T);
     brokenMethod(): void;
 }
-declare function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void;
+declare function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void;
 declare type Predicates<TaggedRecord> = {
     [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T];
 };
+declare type Example<T extends {
+    [K in keyof T]: {
+        prop: any;
+    };
+}> = {
+    [K in keyof T]: T[K]["prop"];
+};
+declare type Result = Example<{
+    a: {
+        prop: string;
+    };
+    b: {
+        prop: number;
+    };
+}>;
+declare type Helper2<T> = {
+    [K in keyof T]: Extract<T[K], {
+        prop: any;
+    }>;
+};
+declare type Example2<T> = {
+    [K in keyof Helper2<T>]: Helper2<T>[K]["prop"];
+};
+declare type Result2 = Example2<{
+    1: {
+        prop: string;
+    };
+    2: {
+        prop: number;
+    };
+}>;
+declare type DBBoolTable<K extends string> = {
+    [k in K]: 0 | 1;
+};
+declare enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+declare type SimpleDBRecord<Flag extends string> = {
+    staticField: number;
+} & DBBoolTable<Flag>;
+declare function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]): SimpleDBRecord<Flag>[Flag];
+declare type DynamicDBRecord<Flag extends string> = ({
+    dynamicField: number;
+} | {
+    dynamicField: string;
+}) & DBBoolTable<Flag>;
+declare function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]): DynamicDBRecord<Flag>[Flag];
+interface I {
+    foo: string;
+}
+declare function take<T>(p: T): void;
+declare function fn<T extends I, K extends keyof T>(o: T, k: K): void;
+declare class Unbounded<T> {
+    foo(x: T[keyof T]): void;
+}
+interface I7 {
+    x: any;
+}
+declare type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+declare type Dict<T extends string> = {
+    [key in T]: number;
+};
+declare type DictDict<V extends string, T extends string> = {
+    [key in V]: Dict<T>;
+};
+declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;

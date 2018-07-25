@@ -1,3 +1,5 @@
+/// <reference path="fourslash.ts"/>
+
 ////import *{} from 'foo';
 
 verify.navigationTree({

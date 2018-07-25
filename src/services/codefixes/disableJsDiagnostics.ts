@@ -1,5 +1,6 @@
 /* @internal */
 namespace ts.codefix {
+    const fixName = "disableJsDiagnostics";
     const fixId = "disableJsDiagnostics";
     const errorCodes = mapDefined(Object.keys(Diagnostics) as ReadonlyArray<keyof typeof Diagnostics>, key => {
         const diag = Diagnostics[key];
@@ -18,6 +19,7 @@ namespace ts.codefix {
             const fixes: CodeFixAction[] = [
                 // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
                 createCodeFixActionNoFixId(
+                    fixName,
                     [createFileTextChanges(sourceFile.fileName, [
                         createTextChange(sourceFile.checkJsDirective
                             ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
@@ -27,7 +29,7 @@ namespace ts.codefix {
             ];
 
             if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {
-                fixes.unshift(createCodeFixAction(textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
+                fixes.unshift(createCodeFixAction(fixName, textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
             }
 
             return fixes;
@@ -36,8 +38,8 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenLines = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                if (textChanges.isValidLocationToAddComment(diag.file!, diag.start!)) {
-                    makeChange(changes, diag.file!, diag.start!, seenLines);
+                if (textChanges.isValidLocationToAddComment(diag.file, diag.start)) {
+                    makeChange(changes, diag.file, diag.start, seenLines);
                 }
             });
         },

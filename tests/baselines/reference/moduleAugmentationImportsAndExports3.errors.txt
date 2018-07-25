@@ -1,9 +1,7 @@
 tests/cases/compiler/f3.ts(11,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 tests/cases/compiler/f3.ts(11,21): error TS2307: Cannot find module './f2'.
 tests/cases/compiler/f3.ts(12,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-tests/cases/compiler/f3.ts(12,16): error TS4000: Import declaration 'I' is using private name 'N'.
 tests/cases/compiler/f3.ts(13,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-tests/cases/compiler/f3.ts(13,16): error TS4000: Import declaration 'C' is using private name 'N'.
 
 
 ==== tests/cases/compiler/f1.ts (0 errors) ====
@@ -14,7 +12,7 @@ tests/cases/compiler/f3.ts(13,16): error TS4000: Import declaration 'C' is using
         n: number;
     }
     
-==== tests/cases/compiler/f3.ts (6 errors) ====
+==== tests/cases/compiler/f3.ts (4 errors) ====
     import {A} from "./f1";
     
     A.prototype.foo = function () { return undefined; }
@@ -33,13 +31,9 @@ tests/cases/compiler/f3.ts(13,16): error TS4000: Import declaration 'C' is using
         import I = N.Ifc;
         ~~~~~~
 !!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-                   ~
-!!! error TS4000: Import declaration 'I' is using private name 'N'.
         import C = N.Cls;
         ~~~~~~
 !!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-                   ~
-!!! error TS4000: Import declaration 'C' is using private name 'N'.
         interface A {
             foo(): B;
             bar(): I;

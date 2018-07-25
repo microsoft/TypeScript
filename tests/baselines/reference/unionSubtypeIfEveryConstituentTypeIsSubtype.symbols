@@ -73,7 +73,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 33, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     foo: string | number;
 >foo : Symbol(I5.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 33, 22))
@@ -89,7 +89,7 @@ interface I6 {
 
     [x: string]: RegExp;
 >x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 40, 5))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: string | number;
 >foo : Symbol(I6.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 40, 24))
@@ -314,7 +314,7 @@ interface I19 {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 132, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: string | number;
 >foo : Symbol(I19.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 132, 24))

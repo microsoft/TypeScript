@@ -83,17 +83,23 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 ---
 >>>function foo1(_a) {
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^->
 1 >
   >
   >
-2 >function foo1(
-3 >              { name: nameA }: Robot
+2 >function 
+3 >         foo1
+4 >             (
+5 >              { name: nameA }: Robot
 1 >Emitted(3, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(3, 15) Source(11, 15) + SourceIndex(0)
-3 >Emitted(3, 17) Source(11, 37) + SourceIndex(0)
+2 >Emitted(3, 10) Source(11, 10) + SourceIndex(0)
+3 >Emitted(3, 14) Source(11, 14) + SourceIndex(0)
+4 >Emitted(3, 15) Source(11, 15) + SourceIndex(0)
+5 >Emitted(3, 17) Source(11, 37) + SourceIndex(0)
 ---
 >>>    var nameA = _a.name;
 1->^^^^^^^^
@@ -143,16 +149,22 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 ---
 >>>function foo2(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >function foo2(
-3 >              { name: nameB, skill: skillB }: Robot
+2 >function 
+3 >         foo2
+4 >             (
+5 >              { name: nameB, skill: skillB }: Robot
 1->Emitted(7, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(7, 15) Source(14, 15) + SourceIndex(0)
-3 >Emitted(7, 17) Source(14, 52) + SourceIndex(0)
+2 >Emitted(7, 10) Source(14, 10) + SourceIndex(0)
+3 >Emitted(7, 14) Source(14, 14) + SourceIndex(0)
+4 >Emitted(7, 15) Source(14, 15) + SourceIndex(0)
+5 >Emitted(7, 17) Source(14, 52) + SourceIndex(0)
 ---
 >>>    var nameB = _a.name, skillB = _a.skill;
 1->^^^^^^^^
@@ -207,16 +219,22 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 ---
 >>>function foo3(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^->
 1->
   >
-2 >function foo3(
-3 >              { name }: Robot
+2 >function 
+3 >         foo3
+4 >             (
+5 >              { name }: Robot
 1->Emitted(11, 1) Source(17, 1) + SourceIndex(0)
-2 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
-3 >Emitted(11, 17) Source(17, 30) + SourceIndex(0)
+2 >Emitted(11, 10) Source(17, 10) + SourceIndex(0)
+3 >Emitted(11, 14) Source(17, 14) + SourceIndex(0)
+4 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
+5 >Emitted(11, 17) Source(17, 30) + SourceIndex(0)
 ---
 >>>    var name = _a.name;
 1->^^^^^^^^

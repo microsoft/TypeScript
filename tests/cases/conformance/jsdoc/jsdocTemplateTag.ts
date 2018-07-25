@@ -1,6 +1,7 @@
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
+// @lib: dom,esnext
 // @Filename: forgot.js
 /**
  * @param {T} a
@@ -20,3 +21,8 @@ function g(a) {
     return () => a
 }
 let s = g('hi')()
+
+/**
+ * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
+ */
+Element.prototype.animate = function(keyframes) {};

@@ -1,23 +1,23 @@
 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(2,12): error TS2448: Block-scoped variable 'a' used before its declaration.
 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(5,12): error TS2448: Block-scoped variable 'a' used before its declaration.
-tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(5,35): error TS7027: Unreachable code detected.
 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(8,7): error TS2448: Block-scoped variable 'b' used before its declaration.
 
 
-==== tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts (4 errors) ====
+==== tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts (3 errors) ====
     // 1:
     for (let {[a]: a} of [{ }]) continue;
                ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts:2:16: 'a' is declared here.
     
     // 2:
     for (let {[a]: a} = { }; false; ) continue;
                ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
-                                      ~~~~~~~~
-!!! error TS7027: Unreachable code detected.
+!!! related TS2728 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts:5:16: 'a' is declared here.
     
     // 3:
     let {[b]: b} = { };
           ~
 !!! error TS2448: Block-scoped variable 'b' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts:8:11: 'b' is declared here.

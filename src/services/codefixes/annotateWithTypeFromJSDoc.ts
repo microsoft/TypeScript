@@ -8,17 +8,17 @@ namespace ts.codefix {
             const decl = getDeclaration(context.sourceFile, context.span.start);
             if (!decl) return;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, decl));
-            return [createCodeFixAction(changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const decl = getDeclaration(diag.file!, diag.start!);
-            if (decl) doChange(changes, diag.file!, decl);
+            const decl = getDeclaration(diag.file, diag.start);
+            if (decl) doChange(changes, diag.file, decl);
         }),
     });
 
     function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | undefined {
-        const name = getTokenAtPosition(file, pos, /*includeJsDocComment*/ false);
+        const name = getTokenAtPosition(file, pos);
         // For an arrow function with no name, 'name' lands on the first parameter.
         return tryCast(isParameter(name.parent) ? name.parent.parent : name.parent, parameterShouldGetTypeFromJSDoc);
     }
@@ -43,7 +43,7 @@ namespace ts.codefix {
         if (isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)))) {
             if (!decl.typeParameters) {
                 const typeParameters = getJSDocTypeParameterDeclarations(decl);
-                if (typeParameters) changes.insertTypeParameters(sourceFile, decl, typeParameters);
+                if (typeParameters.length) changes.insertTypeParameters(sourceFile, decl, typeParameters);
             }
             const needParens = isArrowFunction(decl) && !findChildOfKind(decl, SyntaxKind.OpenParenToken, sourceFile);
             if (needParens) changes.insertNodeBefore(sourceFile, first(decl.parameters), createToken(SyntaxKind.OpenParenToken));
@@ -73,7 +73,7 @@ namespace ts.codefix {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-    function transformJSDocType(node: TypeNode): TypeNode | undefined {
+    function transformJSDocType(node: TypeNode): TypeNode {
         switch (node.kind) {
             case SyntaxKind.JSDocAllType:
             case SyntaxKind.JSDocUnknownType:
@@ -91,7 +91,7 @@ namespace ts.codefix {
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
             default:
-                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined);
+                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined!); // TODO: GH#18217
                 setEmitFlags(visited, EmitFlags.SingleLine);
                 return visited;
         }
@@ -115,7 +115,7 @@ namespace ts.codefix {
 
     function transformJSDocParameter(node: ParameterDeclaration) {
         const index = node.parent.parameters.indexOf(node);
-        const isRest = node.type.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1;
+        const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1; // TODO: GH#18217
         const name = node.name || (isRest ? "rest" : "arg" + index);
         const dotdotdot = isRest ? createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
         return createParameter(node.decorators, node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
@@ -158,11 +158,11 @@ namespace ts.codefix {
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
-            node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
+            node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
             /*questionToken*/ undefined,
-            createTypeReferenceNode(node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
+            createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
             /*initializer*/ undefined);
-        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments[1])]);
+        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments![1])]);
         setEmitFlags(indexSignature, EmitFlags.SingleLine);
         return indexSignature;
     }

@@ -15,6 +15,7 @@
     
 
 goTo.marker("1");
+verify.completionListContains("async", "async", /*documentation*/ undefined, "keyword");
 verify.not.completionListContains("public", "public", /*documentation*/ undefined, "keyword");
 verify.not.completionListContains("private", "private", /*documentation*/ undefined, "keyword");
 verify.not.completionListContains("protected", "protected", /*documentation*/ undefined, "keyword");
@@ -26,6 +27,7 @@ verify.not.completionListContains("get", "get", /*documentation*/ undefined, "ke
 verify.not.completionListContains("set", "set", /*documentation*/ undefined, "keyword");
 
 goTo.marker("2");
+verify.completionListContains("async", "async", /*documentation*/ undefined, "keyword");
 verify.not.completionListContains("public", "public", /*documentation*/ undefined, "keyword");
 verify.not.completionListContains("private", "private", /*documentation*/ undefined, "keyword");
 verify.not.completionListContains("protected", "protected", /*documentation*/ undefined, "keyword");
@@ -41,3 +43,4 @@ verify.completionListContainsClassElementKeywords();
 
 goTo.marker("4");
 verify.completionListContainsClassElementKeywords();
+

@@ -4,6 +4,7 @@
         "allowJs": true,
         "checkJs": true,
         "lib": ["esnext", "dom"],
+        "target": "esnext",
         "types": []
     },
     "include": [

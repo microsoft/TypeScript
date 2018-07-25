@@ -29,9 +29,9 @@ class Foo<T> {
 >xs : Symbol(xs, Decl(genericClassWithStaticsUsingTypeArguments.ts, 12, 13))
 
         return xs.reverse();
->xs.reverse : Symbol(Array.reverse, Decl(lib.d.ts, --, --))
+>xs.reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
 >xs : Symbol(xs, Decl(genericClassWithStaticsUsingTypeArguments.ts, 12, 13))
->reverse : Symbol(Array.reverse, Decl(lib.d.ts, --, --))
+>reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
     }
 }
 

@@ -4,11 +4,5 @@
 ////new/*1*/ Foo
 ////new /*2*/Foo(/*3*/)
 
-goTo.marker('1');
-verify.not.signatureHelpPresent();
-
-goTo.marker('2');
-verify.not.signatureHelpPresent();
-
-goTo.marker('3');
-verify.signatureHelpPresent();
+verify.noSignatureHelp("1", "2");
+verify.signatureHelp({ marker: "3", text: "Foo(): Foo" });

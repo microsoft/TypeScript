@@ -10,4 +10,4 @@
 
 goTo.marker("1");
 edit.insert("super(");
-verify.currentSignatureHelpIs("B(x: string): B");
+verify.signatureHelp({ text: "B(x: string): B" });

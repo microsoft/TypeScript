@@ -1,0 +1,23 @@
+=== tests/cases/conformance/salsa/a.js ===
+// #24131
+const a = {};
+>a : typeof a
+>{} : { [x: string]: any; }
+
+a.d = function() {};
+>a.d = function() {} : { (): void; prototype: { [x: string]: any; }; }
+>a.d : { (): void; prototype: { [x: string]: any; }; }
+>a : typeof a
+>d : { (): void; prototype: { [x: string]: any; }; }
+>function() {} : { (): void; prototype: { [x: string]: any; }; }
+
+=== tests/cases/conformance/salsa/b.js ===
+a.d.prototype = {};
+>a.d.prototype = {} : { [x: string]: any; }
+>a.d.prototype : { [x: string]: any; }
+>a.d : { (): void; prototype: { [x: string]: any; }; }
+>a : typeof a
+>d : { (): void; prototype: { [x: string]: any; }; }
+>prototype : { [x: string]: any; }
+>{} : { [x: string]: any; }
+

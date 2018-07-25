@@ -29,16 +29,16 @@ interface AmericanAddress extends Address {
 }
 
 type Properties = CanadianAddress | AmericanAddress;
->Properties : CanadianAddress | AmericanAddress
+>Properties : Properties
 >CanadianAddress : CanadianAddress
 >AmericanAddress : AmericanAddress
 
 export class AddressComp extends React.Component<Properties, void> {
 >AddressComp : AddressComp
->React.Component : React.Component<CanadianAddress | AmericanAddress, void>
+>React.Component : React.Component<Properties, void>
 >React : typeof React
 >Component : typeof React.Component
->Properties : CanadianAddress | AmericanAddress
+>Properties : Properties
 
   public render() {
 >render : () => any

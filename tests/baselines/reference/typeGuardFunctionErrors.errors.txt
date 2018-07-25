@@ -8,7 +8,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(21,33)
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(29,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(30,5): error TS1131: Property or signature expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(30,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(31,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(33,38): error TS1225: Cannot find parameter 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(37,51): error TS2677: A type predicate's type must be assignable to its parameter's type.
@@ -71,7 +70,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,45
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (57 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (56 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
@@ -122,8 +121,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         return true;
         ~~~~~~
 !!! error TS1131: Property or signature expected.
-        ~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     ~
 !!! error TS1128: Declaration or statement expected.
@@ -169,6 +166,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB;
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // Parameter index and argument index for the type guard target is not matching.
@@ -176,6 +174,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB; // Error
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // No type guard in if statement
@@ -183,6 +182,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB;
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // Type predicate type is not assignable

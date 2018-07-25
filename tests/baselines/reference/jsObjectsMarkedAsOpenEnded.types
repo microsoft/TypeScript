@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/a.js ===
 var variable = {};
 >variable : { [x: string]: any; a: number; }
->{} : { [x: string]: any; a: number; }
+>{} : { [x: string]: any; }
 
 variable.a = 0;
 >variable.a = 0 : 0

@@ -1,5 +1,3 @@
-/// <reference path="rules.ts" />
-
 /* @internal */
 namespace ts.formatting {
     export function getFormatContext(options: FormatCodeSettings): FormatContext {

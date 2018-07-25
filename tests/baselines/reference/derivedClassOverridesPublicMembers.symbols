@@ -192,7 +192,7 @@ class Base2 {
 
     [i: string]: Object;
 >i : Symbol(i, Decl(derivedClassOverridesPublicMembers.ts, 48, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     [i: number]: typeof x;
 >i : Symbol(i, Decl(derivedClassOverridesPublicMembers.ts, 49, 5))
