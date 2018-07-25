@@ -4102,11 +4102,6 @@
         "category": "Suggestion",
         "code": 80006
     },
-
-    "This may be converted to an async function.": {
-        "category": "Suggestion",
-        "code": 80006
-    },
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
