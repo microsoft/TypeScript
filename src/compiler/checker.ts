@@ -249,7 +249,7 @@ namespace ts {
                 getTypeOfSymbol,
                 getResolvedSymbol,
                 getIndexTypeOfStructuredType,
-                getConstraintFromTypeParameter,
+                getConstraintOfTypeParameter,
                 getFirstIdentifier,
             ),
             getAmbientModules,
@@ -3708,7 +3708,7 @@ namespace ts {
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
-            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {
+            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
             }
@@ -4356,29 +4356,23 @@ namespace ts {
                     return i;
                 }
             }
-
             return -1;
         }
 
         function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
-            if (propertyName === TypeSystemPropertyName.Type) {
-                return !!getSymbolLinks(<Symbol>target).type;
+            switch (propertyName) {
+                case TypeSystemPropertyName.Type:
+                    return !!getSymbolLinks(<Symbol>target).type;
+                case TypeSystemPropertyName.DeclaredType:
+                    return !!getSymbolLinks(<Symbol>target).declaredType;
+                case TypeSystemPropertyName.ResolvedBaseConstructorType:
+                    return !!(<InterfaceType>target).resolvedBaseConstructorType;
+                case TypeSystemPropertyName.ResolvedReturnType:
+                    return !!(<Signature>target).resolvedReturnType;
+                case TypeSystemPropertyName.ImmediateBaseConstraint:
+                    return !!(<Type>target).immediateBaseConstraint;
             }
-            if (propertyName === TypeSystemPropertyName.DeclaredType) {
-                return !!getSymbolLinks(<Symbol>target).declaredType;
-            }
-            if (propertyName === TypeSystemPropertyName.ResolvedBaseConstructorType) {
-                return !!(<InterfaceType>target).resolvedBaseConstructorType;
-            }
-            if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
-                return !!(<Signature>target).resolvedReturnType;
-            }
-            if (propertyName === TypeSystemPropertyName.ImmediateBaseConstraint) {
-                const bc = (<Type>target).immediateBaseConstraint;
-                return !!bc && bc !== circularConstraintType;
-            }
-
-            return Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
+            return Debug.assertNever(propertyName);
         }
 
         // Pop an entry from the type resolution stack and return its associated result value. The result value will
@@ -6971,21 +6965,12 @@ namespace ts {
             return undefined;
         }
 
-        function getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type: Type) {
+        function getBaseConstraintOfType(type: Type): Type | undefined {
             if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
-                if (constraint !== noConstraintType && constraint !== circularConstraintType) {
-                    return constraint;
-                }
+                return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
             }
-        }
-
-        function getBaseConstraintOfType(type: Type): Type | undefined {
-            const constraint = getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type);
-            if (!constraint && type.flags & TypeFlags.Index) {
-                return keyofConstraintType;
-            }
-            return constraint;
+            return type.flags & TypeFlags.Index ? keyofConstraintType : undefined;
         }
 
         /**
@@ -7006,30 +6991,26 @@ namespace ts {
          * circularly references the type variable.
          */
         function getResolvedBaseConstraint(type: InstantiableType | UnionOrIntersectionType): Type {
-            let circular: boolean | undefined;
-            if (!type.resolvedBaseConstraint) {
-                const constraint = getBaseConstraint(type);
-                type.resolvedBaseConstraint = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
+            return type.resolvedBaseConstraint ||
+                (type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), type));
+
+            function getImmediateBaseConstraint(t: Type): Type {
+                if (!t.immediateBaseConstraint) {
+                    if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
+                        return circularConstraintType;
+                    }
+                    let result = computeBaseConstraint(getSimplifiedType(t));
+                    if (!popTypeResolution()) {
+                        result = circularConstraintType;
+                    }
+                    t.immediateBaseConstraint = result || noConstraintType;
+                }
+                return t.immediateBaseConstraint;
             }
-            return type.resolvedBaseConstraint;
 
             function getBaseConstraint(t: Type): Type | undefined {
-                if (t.immediateBaseConstraint) {
-                    return t.immediateBaseConstraint === noConstraintType ? undefined : t.immediateBaseConstraint;
-                }
-                if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
-                    circular = true;
-                    t.immediateBaseConstraint = circularConstraintType;
-                    return undefined;
-                }
-                const result = computeBaseConstraint(getSimplifiedType(t));
-                if (!popTypeResolution()) {
-                    circular = true;
-                    t.immediateBaseConstraint = circularConstraintType;
-                    return undefined;
-                }
-                t.immediateBaseConstraint = !result ? noConstraintType : result;
-                return result;
+                const c = getImmediateBaseConstraint(t);
+                return c !== noConstraintType && c !== circularConstraintType ? c : undefined;
             }
 
             function computeBaseConstraint(t: Type): Type | undefined {
@@ -7912,6 +7893,7 @@ namespace ts {
             return inferences && getIntersectionType(inferences);
         }
 
+        /** This is a worker function. Use getConstraintOfTypeParameter which guards against circular constraints. */
         function getConstraintFromTypeParameter(typeParameter: TypeParameter): Type | undefined {
             if (!typeParameter.constraint) {
                 if (typeParameter.target) {
@@ -9180,7 +9162,7 @@ namespace ts {
                 return type.simplified = substituteIndexedMappedType(objectType, type);
             }
             if (objectType.flags & TypeFlags.TypeParameter) {
-                const constraint = getConstraintFromTypeParameter(objectType as TypeParameter);
+                const constraint = getConstraintOfTypeParameter(objectType as TypeParameter);
                 if (constraint && isGenericMappedType(constraint)) {
                     return type.simplified = substituteIndexedMappedType(constraint, type);
                 }
@@ -12127,7 +12109,7 @@ namespace ts {
         }
 
         function isUnconstrainedTypeParameter(type: Type) {
-            return type.flags & TypeFlags.TypeParameter && !getConstraintFromTypeParameter(<TypeParameter>type);
+            return type.flags & TypeFlags.TypeParameter && !getConstraintOfTypeParameter(<TypeParameter>type);
         }
 
         function isTypeReferenceWithGenericArguments(type: Type): boolean {
@@ -17656,7 +17638,7 @@ namespace ts {
                 }
 
                 const thisType = getTypeFromTypeNode(thisParameter.type);
-                enclosingClass = ((thisType.flags & TypeFlags.TypeParameter) ? getConstraintFromTypeParameter(<TypeParameter>thisType) : thisType) as InterfaceType;
+                enclosingClass = ((thisType.flags & TypeFlags.TypeParameter) ? getConstraintOfTypeParameter(<TypeParameter>thisType) : thisType) as InterfaceType;
             }
             // No further restrictions for static properties
             if (flags & ModifierFlags.Static) {
@@ -19297,7 +19279,7 @@ namespace ts {
                 typeArguments.pop();
             }
             while (typeArguments.length < typeParameters.length) {
-                typeArguments.push(getConstraintFromTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isInJavaScriptFile(node)));
+                typeArguments.push(getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isInJavaScriptFile(node)));
             }
             const instantiated = createSignatureInstantiation(candidate, typeArguments);
             candidates[bestIndex] = instantiated;
@@ -25202,7 +25184,7 @@ namespace ts {
                     // If the type parameter node does not have an identical constraint as the resolved
                     // type parameter at this position, we report an error.
                     const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
-                    const targetConstraint = getConstraintFromTypeParameter(target);
+                    const targetConstraint = getConstraintOfTypeParameter(target);
                     if (sourceConstraint) {
                         // relax check if later interface augmentation has no constraint
                         if (!targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
