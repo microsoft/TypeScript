@@ -136,15 +136,8 @@ namespace ts.GoToDefinition {
 
         const symbol = typeChecker.getSymbolAtLocation(node);
         const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, node);
-        if (!type) {
-            return undefined;
-        }
-
-        if (type.isUnion() && !(type.flags & TypeFlags.Enum)) {
-            return flatMap(type.types, t => t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
-        }
-
-        return type.symbol && getDefinitionFromSymbol(typeChecker, type.symbol, node);
+        return type && flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
+            t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
     }
 
     export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
@@ -230,7 +223,7 @@ namespace ts.GoToDefinition {
         }
 
         function getCallSignatureDefinition(): DefinitionInfo[] | undefined {
-            return isCallExpressionTarget(node) || isNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
+            return isCallOrNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
                 ? getSignatureDefinition(symbol.declarations, /*selectConstructors*/ false)
                 : undefined;
         }
