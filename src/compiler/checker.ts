@@ -20132,10 +20132,7 @@ namespace ts {
                     if (pos - paramCount < getLengthOfTupleType(restType)) {
                         return restType.typeArguments![pos - paramCount];
                     }
-                    const tupleRestType = getRestTypeOfTupleType(restType);
-                    if (tupleRestType) {
-                        return tupleRestType;
-                    }
+                    return getRestTypeOfTupleType(restType);
                 }
                 return getIndexTypeOfType(restType, IndexKind.Number);
             }
