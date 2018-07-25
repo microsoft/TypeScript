@@ -25,17 +25,17 @@ namespace ts.codefix {
         findLastDotThens(funcToConvertRenamed, lastDotThenMap, checker);
 
         let retStmts = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed);
-        let allNewNodes: Node[] = [];
+        let allNewNodes: Map<Node[]> = new MapCtr();
         for (const stmt of retStmts) {
             if (isCallExpression(stmt)) {
                 const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, lastDotThenMap);
-                allNewNodes = allNewNodes.concat(newNodes);
+                allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
             }
             else {
                 forEachChild(stmt, function visit(node: Node) {
                     if (isCallExpression(node)) {
                         const newNodes = parseCallback(node, checker, node, synthNamesMap, lastDotThenMap);
-                        allNewNodes = allNewNodes.concat(newNodes);
+                        allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
                     }
                     else if (!isFunctionLike(node)) {
                         forEachChild(node, visit);
@@ -47,21 +47,15 @@ namespace ts.codefix {
         replaceNodes(changes, sourceFile, retStmts, allNewNodes);
     }
 
-    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes: Node[], newNodes: Node[]) {
-
-        let i = 0;
-        while (i < oldNodes.length && i < newNodes.length) {
-            if (i === oldNodes.length - 1 && i < newNodes.length - 1) {
-                changes.replaceNodeWithNodes(sourceFile, oldNodes[i], newNodes.slice(i));
+    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes_: Node[],  allNewNodes: Map<Node[]>) {
+        let oldNodes = oldNodes_.slice();
+        allNewNodes.forEach((value: Node[], key: string) => {
+            for (let stmt of oldNodes) {
+                if (String(getNodeId(stmt)) === key) {
+                    changes.replaceNodeWithNodes(sourceFile, stmt, value);
+                }
             }
-            else if (i < oldNodes.length - 1 && i === newNodes.length - 1) {
-                changes.replaceNodeRange(sourceFile, oldNodes[i], oldNodes[oldNodes.length - 1], newNodes[i]);
-            }
-            else {
-                changes.replaceNode(sourceFile, oldNodes[i], newNodes[i]);
-            }
-            i++;
-        }
+        });
     }
 
     function findLastDotThens(func: FunctionLikeDeclaration, lastDotThen: Map<boolean>, checker: TypeChecker) {
