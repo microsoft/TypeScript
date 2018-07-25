@@ -109,22 +109,14 @@ namespace ts.codefix {
                 const symbol = checker.getSymbolAtLocation(node);
                 const newName = getNewNameIfConflict(node, allVarNames);
 
+                // if the identifier refers to a function
                 if (symbol && type && type.getCallSignatures().length > 0 && type.getCallSignatures()[0].parameters.length > 0) {
-                    // first, add the actual function name
-                    if (allVarNames.filter(elem => elem.text === node.text).length > 0) {
-                        // we have a conflict with the function name, but function names take precedence over variable names
-                        varNamesMap.forEach((value: string, key: string) => {
-                            if (value === node.text) {
-                                varNamesMap.set(key, getNewNameIfConflict(node, allVarNames).text);
-                                return;
-                            }
-                        });
-                    }
-
+                    // add the function name
                     varNamesMap.set(String(getSymbolId(symbol)), node.text);
                     allVarNames.push(node);
+                    
 
-                    // next, add the new variable for the declaration
+                    // next, add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                     const synthName = createIdentifier(type.getCallSignatures()[0].parameters[0].name);
                     varNamesMap.set(String(getSymbolId(checker.createSymbol(SymbolFlags.BlockScopedVariable, getEscapedTextOfIdentifierOrLiteral(synthName)))), synthName.text);
                     allVarNames.push(synthName);
@@ -136,8 +128,9 @@ namespace ts.codefix {
                     allVarNames.push(node);
                 }
             }
-
-            forEachChild(node, visit);
+            else {
+                forEachChild(node, visit);
+            }
         });
 
         return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, varNamesMap, checker);
