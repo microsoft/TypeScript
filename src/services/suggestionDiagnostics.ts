@@ -69,7 +69,7 @@ namespace ts {
                 }
             }
 
-            if (isFunctionLikeDeclaration(node) || isArrowFunction(node) || isMethodDeclaration(node)) {
+            if (isFunctionLikeDeclaration(node)) {
                 addConvertToAsyncFunctionDiagnostics(node, checker, diags);
             }
             node.forEachChild(check);
@@ -113,13 +113,9 @@ namespace ts {
         }
     }
 
-    function addConvertToAsyncFunctionDiagnostics(node: Node, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
-        if (isAsyncFunction(node)) {
+    function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
+        if (isAsyncFunction(node) || !node.body) {
             return;
-        }
-
-        if (isFunctionLikeDeclaration(node) && !node.body) {
-            return; // break on ambient functions
         }
 
         const returnType = checker.getTypeAtLocation(node);
@@ -142,7 +138,7 @@ namespace ts {
     }
 
     export function getReturnStatementsWithPromiseCallbacks(node: Node): Node[] {
-        const retStmts: Node[] = [];
+        const returnStatements: Node[] = [];
         forEachChild(node, visit);
 
         function visit(child: Node) {
@@ -157,13 +153,13 @@ namespace ts {
 
             function hasCallback(returnChild: Node) {
                 if (isCallback(returnChild)) {
-                    retStmts.push(child as ReturnStatement);
+                    returnStatements.push(child as ReturnStatement);
                 }
             }
 
             forEachChild(child, visit);
         }
-        return retStmts;
+        return returnStatements;
     }
 
     function isCallback(node: Node): boolean {
