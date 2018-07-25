@@ -142,6 +142,16 @@ namespace ts {
         return undefined;
     }
 
+    export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefined | "quit"): T | undefined {
+        while (true) {
+            const res = callback(node);
+            if (res === "quit") return undefined;
+            if (res !== undefined) return res;
+            if (isSourceFile(node)) return undefined;
+            node = node.parent;
+        }
+    }
+
     /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
