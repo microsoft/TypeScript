@@ -69,11 +69,9 @@ namespace ts.GoToDefinition {
         if (isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent) &&
             (node === (parent.propertyName || parent.name))) {
             const type = typeChecker.getTypeAtLocation(parent.parent);
-            if (type) {
-                const propSymbols = getPropertySymbolsFromType(type, node);
-                if (propSymbols) {
-                    return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
-                }
+            const propSymbols = getPropertySymbolsFromType(type, node);
+            if (propSymbols) {
+                return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
             }
         }
 
@@ -87,9 +85,12 @@ namespace ts.GoToDefinition {
         //      function Foo(arg: Props) {}
         //      Foo( { pr/*1*/op1: 10, prop2: true })
         const element = getContainingObjectLiteralElement(node);
-        if (element && typeChecker.getContextualType(element.parent as Expression)) {
-            return flatMap(getPropertySymbolsFromContextualType(typeChecker, element), propertySymbol =>
-                getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+        if (element) {
+            const contextualType = element && typeChecker.getContextualType(element.parent);
+            if (contextualType) {
+                return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
+                    getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            }
         }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
