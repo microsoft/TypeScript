@@ -149,6 +149,8 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
+        protected isInitialLoadPending: () => boolean = returnFalse;
+
         /*@internal*/
         dirty = false;
 
@@ -1033,7 +1035,10 @@ namespace ts.server {
 
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
-            updateProjectIfDirty(this);
+            // Update the graph only if initial configured project load is not pending
+            if (!this.isInitialLoadPending()) {
+                updateProjectIfDirty(this);
+            }
 
             const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
@@ -1320,6 +1325,8 @@ namespace ts.server {
         /*@internal*/
         projectOptions?: ProjectOptions | true;
 
+        protected isInitialLoadPending: () => boolean = returnTrue;
+
         /*@internal*/
         constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
@@ -1343,6 +1350,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
             let result: boolean;

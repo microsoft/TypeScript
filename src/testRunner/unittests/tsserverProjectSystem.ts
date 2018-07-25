@@ -2976,10 +2976,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1, externalProjects: 0, inferredProjects: 0 });
 
             const configProject = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(configProject, [libFile.path, configFile.path]);
-
-            const diagnostics = configProject.getAllProjectErrors();
-            assert.equal(diagnostics[0].code, Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+            checkProjectActualFiles(configProject, []); // Since no files opened from this project, its not loaded
 
             host.reloadFS([libFile, site]);
             host.checkTimeoutQueueLengthAndRun(1);

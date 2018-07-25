@@ -8198,6 +8198,7 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
+        protected isInitialLoadPending: () => boolean;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
@@ -8318,6 +8319,7 @@ declare namespace ts.server {
         private externalProjectRefCount;
         private projectErrors;
         private projectReferences;
+        protected isInitialLoadPending: () => boolean;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
