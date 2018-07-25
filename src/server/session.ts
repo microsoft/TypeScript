@@ -1465,13 +1465,24 @@ namespace ts.server {
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): ReadonlyArray<protocol.CompileOnSaveAffectedFileListSingleProject> {
-            const info = this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file);
+            let info: ScriptInfo | undefined;
+            let project: Project | undefined;
+            if (args.projectFileName) {
+                // Do not update all projects if we are looking for specific project to compile on save
+                project = this.projectService.findProject(args.projectFileName)!;
+                if (project.dirty) project.updateGraph();
+                info = this.projectService.getScriptInfo(args.file);
+            }
+            else {
+                info = this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file);
+            }
+
             if (!info) {
                 return emptyArray;
             }
 
             // if specified a project, we only return affected file list in this project
-            const projects = args.projectFileName ? [this.projectService.findProject(args.projectFileName)!] : info.containingProjects;
+            const projects = args.projectFileName ? [project!] : info.containingProjects;
             const symLinkedProjects = !args.projectFileName && this.projectService.getSymlinkedProjects(info);
             return combineProjectOutput(
                 info,
