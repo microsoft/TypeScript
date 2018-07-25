@@ -4379,7 +4379,7 @@ namespace ts {
                 case TypeSystemPropertyName.ImmediateBaseConstraint:
                     return !!(<Type>target).immediateBaseConstraint;
             }
-            return Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
+            return Debug.assertNever(propertyName);
         }
 
         // Pop an entry from the type resolution stack and return its associated result value. The result value will
@@ -7858,6 +7858,7 @@ namespace ts {
             return inferences && getIntersectionType(inferences);
         }
 
+        /** This is a worker function. Use getConstraintOfTypeParameter which guards against circular constraints. */
         function getConstraintFromTypeParameter(typeParameter: TypeParameter): Type | undefined {
             if (!typeParameter.constraint) {
                 if (typeParameter.target) {
