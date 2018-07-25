@@ -15,7 +15,7 @@
 // @Filename: f1.ts
 //// export class C {[|
 ////     |]x: number;
-////     static y: string;
+////     y: string;
 //// }
 
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
@@ -28,7 +28,6 @@ verify.rangeIs(`
     m2(c: C): any {
         throw new Error("Method not implemented.");
     }
-    y: { [x: string]: any; };
     m1(): any {
         throw new Error("Method not implemented.");
     }
