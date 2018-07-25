@@ -29,13 +29,17 @@ namespace ts.codefix {
         for (const stmt of retStmts) {
             if (isCallExpression(stmt)) {
                 const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, lastDotThenMap);
-                allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
+                if (newNodes.length) {
+                    allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
+                }
             }
             else {
                 forEachChild(stmt, function visit(node: Node) {
                     if (isCallExpression(node)) {
                         const newNodes = parseCallback(node, checker, node, synthNamesMap, lastDotThenMap);
-                        allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
+                        if (newNodes.length) {
+                            allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
+                        }
                     }
                     else if (!isFunctionLike(node)) {
                         forEachChild(node, visit);
@@ -47,7 +51,7 @@ namespace ts.codefix {
         replaceNodes(changes, sourceFile, retStmts, allNewNodes);
     }
 
-    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes_: Node[],  allNewNodes: Map<Node[]>) {
+    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes_: Node[], allNewNodes: Map<Node[]>) {
         let oldNodes = oldNodes_.slice();
         allNewNodes.forEach((value: Node[], key: string) => {
             for (let stmt of oldNodes) {
@@ -110,18 +114,14 @@ namespace ts.codefix {
                 const newName = getNewNameIfConflict(node, allVarNames);
 
                 // if the identifier refers to a function
-                if (symbol && type && type.getCallSignatures().length > 0 && type.getCallSignatures()[0].parameters.length > 0) {
-                    // add the function name
-                    varNamesMap.set(String(getSymbolId(symbol)), node.text);
-                    allVarNames.push(node);
-                    
-
-                    // next, add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
-                    const synthName = createIdentifier(type.getCallSignatures()[0].parameters[0].name);
-                    varNamesMap.set(String(getSymbolId(checker.createSymbol(SymbolFlags.BlockScopedVariable, getEscapedTextOfIdentifierOrLiteral(synthName)))), synthName.text);
-                    allVarNames.push(synthName);
-                    synthNamesMap.set(node.text, [synthName, allVarNames.filter(elem => elem.text === synthName.text).length]);
-
+                if (symbol && type && type.getCallSignatures().length > 0) {
+                    if (type.getCallSignatures()[0].parameters.length) {
+                        // add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
+                        const synthName = createIdentifier(type.getCallSignatures()[0].parameters[0].name);
+                        varNamesMap.set(String(getSymbolId(checker.createSymbol(SymbolFlags.BlockScopedVariable, getEscapedTextOfIdentifierOrLiteral(synthName)))), synthName.text);
+                        allVarNames.push(synthName);
+                        synthNamesMap.set(node.text, [synthName, allVarNames.filter(elem => elem.text === synthName.text).length]);
+                    }
                 }
                 else if (symbol && !varNamesMap.get(String(getSymbolId(symbol)))) {
                     varNamesMap.set(String(getSymbolId(symbol)), newName.text);
@@ -178,6 +178,7 @@ namespace ts.codefix {
         let varDecl;
         if (prevArgName && lastDotThenMap.get(String(getNodeId(node)))) {
             varDecl = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]))], NodeFlags.Let));
+            prevArgName[1] += 2;
         }
         const tryBlock = createBlock(parseCallback(node.expression, checker, node, synthNamesMap, lastDotThenMap, prevArgName));
 
