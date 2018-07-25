@@ -1,6 +1,3 @@
-/// <reference path="types.ts" />
-/// <reference path="shared.ts" />
-
 namespace ts.server {
     export enum LogLevel {
         terse,
@@ -20,7 +17,7 @@ namespace ts.server {
         startGroup(): void;
         endGroup(): void;
         msg(s: string, type?: Msg): void;
-        getLogFileName(): string;
+        getLogFileName(): string | undefined;
     }
 
     // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
@@ -99,7 +96,7 @@ namespace ts.server {
     }
 
     export interface NormalizedPathMap<T> {
-        get(path: NormalizedPath): T;
+        get(path: NormalizedPath): T | undefined;
         set(path: NormalizedPath, value: T): void;
         contains(path: NormalizedPath): boolean;
         remove(path: NormalizedPath): void;
@@ -131,6 +128,8 @@ namespace ts.server {
         configHasFilesProperty: boolean;
         configHasIncludeProperty: boolean;
         configHasExcludeProperty: boolean;
+
+        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         /**
          * these fields can be present in the project file
          */
@@ -151,7 +150,7 @@ namespace ts.server {
     }
 
     export function createSortedArray<T>(): SortedArray<T> {
-        return [] as SortedArray<T>;
+        return [] as any as SortedArray<T>; // TODO: GH#19873
     }
 }
 
@@ -161,7 +160,7 @@ namespace ts.server {
         private readonly pendingTimeouts: Map<any> = createMap<any>();
         private readonly logger?: Logger | undefined;
         constructor(private readonly host: ServerHost, logger: Logger) {
-            this.logger = logger.hasLevel(LogLevel.verbose) && logger;
+            this.logger = logger.hasLevel(LogLevel.verbose) ? logger : undefined;
         }
 
         /**
@@ -209,11 +208,11 @@ namespace ts.server {
             self.timerId = undefined;
 
             const log = self.logger.hasLevel(LogLevel.requestTime);
-            const before = log && self.host.getMemoryUsage();
+            const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
-            self.host.gc();
+            self.host.gc!(); // TODO: GH#18217
             if (log) {
-                const after = self.host.getMemoryUsage();
+                const after = self.host.getMemoryUsage!(); // TODO: GH#18217
                 self.logger.perftrc(`GC::before ${before}, after ${after}`);
             }
         }

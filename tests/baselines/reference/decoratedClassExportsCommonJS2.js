@@ -13,10 +13,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Testing123_1;
 let Testing123 = Testing123_1 = class Testing123 {
 };
 Testing123 = Testing123_1 = __decorate([
     Something({ v: () => Testing123_1 })
 ], Testing123);
 exports.Testing123 = Testing123;
-var Testing123_1;

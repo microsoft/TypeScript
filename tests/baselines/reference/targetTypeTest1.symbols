@@ -62,9 +62,9 @@ Point.origin = new Point(0, 0);
 // this inferred as Point because of obj.prop assignment
 // dx, dy, and return type inferred using target typing
 Point.prototype.add = function(dx, dy) {
->Point.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>Point.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >dx : Symbol(dx, Decl(targetTypeTest1.ts, 30, 31))
 >dy : Symbol(dy, Decl(targetTypeTest1.ts, 30, 34))
 
@@ -82,9 +82,9 @@ var f : number = 5;
 // this in function add inferred to be type of object literal (i.e. Point)
 // dx, dy, and return type of add inferred using target typing
 Point.prototype = {
->Point.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>Point.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     x: 0,
 >x : Symbol(x, Decl(targetTypeTest1.ts, 39, 19))
@@ -147,9 +147,9 @@ function C(a,b) {
 }
 
 C.prototype = 
->C.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(targetTypeTest1.ts, 57, 1))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
 	{	a:0,
 >a : Symbol(a, Decl(targetTypeTest1.ts, 65, 2))

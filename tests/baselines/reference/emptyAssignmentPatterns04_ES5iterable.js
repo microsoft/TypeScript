@@ -22,11 +22,11 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var _a;
 var a;
 var x, y, z, a1, a2, a3;
 (x = a.x, y = a.y, z = a.z);
 (_a = __read(a, 3), a1 = _a[0], a2 = _a[1], a3 = _a[2]);
-var _a;
 
 
 //// [emptyAssignmentPatterns04_ES5iterable.d.ts]

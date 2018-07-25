@@ -13,10 +13,13 @@
 ////import * as g from "global"; // Global imports skipped
 ////import { a } from "./a.js";
 ////import { a as a2 } from "./a"; // Ignored, only the first relative import is considered
-////[|b;|]
+////b;
 
 goTo.file("/c.ts");
 verify.importFixAtPosition([
-`import { b } from "./b.js";
+`import * as g from "global"; // Global imports skipped
+import { a } from "./a.js";
+import { a as a2 } from "./a"; // Ignored, only the first relative import is considered
+import { b } from "./b.js";
 b;`,
 ]);

@@ -50,7 +50,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 27, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     foo: any;
 >foo : Symbol(I5.foo, Decl(anyAssignableToEveryType2.ts, 27, 22))
@@ -62,7 +62,7 @@ interface I6 {
 
     [x: string]: RegExp;
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 33, 5))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: any;
 >foo : Symbol(I6.foo, Decl(anyAssignableToEveryType2.ts, 33, 24))
@@ -255,7 +255,7 @@ interface I19 {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 120, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: any;
 >foo : Symbol(I19.foo, Decl(anyAssignableToEveryType2.ts, 120, 24))

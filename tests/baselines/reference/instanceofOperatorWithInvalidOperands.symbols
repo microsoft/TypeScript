@@ -83,7 +83,7 @@ var o1: {};
 
 var o2: Object;
 >o2 : Symbol(o2, Decl(instanceofOperatorWithInvalidOperands.ts, 30, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var o3: C;
 >o3 : Symbol(o3, Decl(instanceofOperatorWithInvalidOperands.ts, 31, 3))

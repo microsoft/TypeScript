@@ -1,3 +1,4 @@
+// @lib: es2015
 // @strict: true
 // @target: es2015
 

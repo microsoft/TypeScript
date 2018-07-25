@@ -16,10 +16,9 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtending
     
     interface I2 extends Foo { // error
         a: {
-        ~~~~
-            toString: () => {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'a' of type '{ toString: () => {}; }' is not assignable to string index type 'Object'.
+            toString: () => {
                 return 1;
                 ~~~~~~
 !!! error TS1131: Property or signature expected.

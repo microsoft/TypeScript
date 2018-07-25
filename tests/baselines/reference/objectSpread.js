@@ -122,13 +122,16 @@ let spreadNonPrimitive = { ...<object>{}};
 
 
 //// [objectSpread.js]
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 var o = { a: 1, b: 'no' };
 var o2 = { b: 'yes', c: true };
@@ -197,6 +200,7 @@ var changeTypeBefore = __assign({ a: 'wrong type?' }, o);
 var changeTypeBoth = __assign({}, o, swap);
 // optional
 function container(definiteBoolean, definiteString, optionalString, optionalNumber) {
+    var _a, _b, _c;
     var optionalUnionStops = __assign({}, definiteBoolean, definiteString, optionalNumber);
     var optionalUnionDuplicates = __assign({}, definiteBoolean, definiteString, optionalString, optionalNumber);
     var allOptional = __assign({}, optionalString, optionalNumber);
@@ -204,7 +208,6 @@ function container(definiteBoolean, definiteString, optionalString, optionalNumb
     var computedFirst = __assign((_a = {}, _a['before everything'] = 12, _a), o, { b: 'yes' });
     var computedMiddle = __assign({}, o, (_b = {}, _b['in the middle'] = 13, _b.b = 'maybe?', _b), o2);
     var computedAfter = __assign({}, o, (_c = { b: 'yeah' }, _c['at the end'] = 14, _c));
-    var _a, _b, _c;
 }
 // shortcut syntax
 var a = 12;

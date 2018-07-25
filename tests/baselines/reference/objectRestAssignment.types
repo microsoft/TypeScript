@@ -59,9 +59,9 @@ var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
 ({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit);
 >({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit) : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
 >{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
->{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } : { ke: string; ko: string; a: { ka: string; x: string; }[]; b: { ki: string; ku: string; z: string; }; }
->a : { ka: string; x: string; }[]
->[{ ...nested2 }, ...y] : { ka: string; x: string; }[]
+>{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } : { ke: string; ko: string; a: [{ ka: string; x: string; }, ...{ ka: string; x: string; }[]]; b: { ki: string; ku: string; z: string; }; }
+>a : [{ ka: string; x: string; }, ...{ ka: string; x: string; }[]]
+>[{ ...nested2 }, ...y] : [{ ka: string; x: string; }, ...{ ka: string; x: string; }[]]
 >{ ...nested2 } : { ka: string; x: string; }
 >nested2 : { ka: string; x: string; }
 >...y : { ka: string; x: string; }

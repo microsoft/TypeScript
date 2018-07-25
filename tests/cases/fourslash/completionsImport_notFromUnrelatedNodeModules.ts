@@ -8,5 +8,4 @@
 // @Filename: /src/b.ts
 ////fo/**/;
 
-goTo.marker("");
-verify.not.completionListContains({ name: "foo", source: "/unrelated/node_modules/@types/foo/index" }, undefined, undefined, undefined, undefined, undefined, { includeExternalModuleExports: true });
+verify.completions({ marker: "", excludes: "foo", preferences: {  includeCompletionsForModuleExports: true } });

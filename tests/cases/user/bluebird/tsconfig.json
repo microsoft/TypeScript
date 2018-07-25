@@ -10,5 +10,5 @@
         "types": ["node"],
         "lib": ["esnext", "dom"],
     },
-    "include": ["node_modules/bluebird"]
+    "include": ["node_modules/bluebird/js/release"]
 }

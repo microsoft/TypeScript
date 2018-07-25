@@ -1,0 +1,69 @@
+=== tests/cases/compiler/deeplyNestedAssignabilityIssue.ts ===
+interface A {
+>A : A
+
+    a: number;
+>a : number
+}
+
+interface Large {
+>Large : Large
+
+    something: {
+>something : { another: { more: { thing: A; }; yetstill: { another: A; }; }; }
+
+        another: {
+>another : { more: { thing: A; }; yetstill: { another: A; }; }
+
+            more: {
+>more : { thing: A; }
+
+                thing: A;
+>thing : A
+>A : A
+            }
+            yetstill: {
+>yetstill : { another: A; }
+
+                another: A;
+>another : A
+>A : A
+            }
+        }
+    }
+}
+
+const x: Large = {
+>x : Large
+>Large : Large
+>{    something: {        another: {            more: {                thing: {}            },            yetstill: {                another: {}            }        }    }} : { something: { another: { more: { thing: {}; }; yetstill: { another: {}; }; }; }; }
+
+    something: {
+>something : { another: { more: { thing: {}; }; yetstill: { another: {}; }; }; }
+>{        another: {            more: {                thing: {}            },            yetstill: {                another: {}            }        }    } : { another: { more: { thing: {}; }; yetstill: { another: {}; }; }; }
+
+        another: {
+>another : { more: { thing: {}; }; yetstill: { another: {}; }; }
+>{            more: {                thing: {}            },            yetstill: {                another: {}            }        } : { more: { thing: {}; }; yetstill: { another: {}; }; }
+
+            more: {
+>more : { thing: {}; }
+>{                thing: {}            } : { thing: {}; }
+
+                thing: {}
+>thing : {}
+>{} : {}
+
+            },
+            yetstill: {
+>yetstill : { another: {}; }
+>{                another: {}            } : { another: {}; }
+
+                another: {}
+>another : {}
+>{} : {}
+            }
+        }
+    }
+}
+

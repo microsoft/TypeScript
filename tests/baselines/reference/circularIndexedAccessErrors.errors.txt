@@ -9,13 +9,13 @@ tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(37,30): error
 ==== tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts (6 errors) ====
     type T1 = {
         x: T1["x"];  // Error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
     };
     
     type T2<K extends "x" | "y"> = {
         x: T2<K>[K];  // Error
-        ~~~~~~~~~~~~
+        ~
 !!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
         y: number;
     }
@@ -29,13 +29,13 @@ tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(37,30): error
     
     interface T4<T extends T4<T>> {
         x: T4<T>["x"];  // Error
-        ~~~~~~~~~~~~~~
+        ~
 !!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
     }
     
     class C1 {
         x: C1["x"];  // Error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
     }
     

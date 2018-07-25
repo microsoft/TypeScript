@@ -2,11 +2,11 @@
 
 // Should handle namespace and module implementations
 
-//// /*implementation0*/namespace Foo {
+//// namespace /*implementation0*/Foo {
 ////     export function hello() {}
 //// }
 ////
-//// /*implementation1*/module Bar {
+//// module /*implementation1*/Bar {
 ////     export function sure() {}
 //// }
 ////

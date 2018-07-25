@@ -13,8 +13,8 @@ System.register([], function (exports_1, context_1) {
         else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
+    var Testing123_1, Testing123;
     var __moduleName = context_1 && context_1.id;
-    var Testing123, Testing123_1;
     return {
         setters: [],
         execute: function () {

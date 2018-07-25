@@ -1,0 +1,38 @@
+tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,2): error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'key' is missing in type '{ x: number; }'.
+
+
+==== tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx (1 errors) ====
+    declare namespace JSX {
+        interface Element { }
+        interface ElementClass {
+            render: any;
+        }
+        interface IntrinsicAttributes {
+            key: string | number
+        }
+        interface IntrinsicClassAttributes<T> {
+            ref: T
+        }
+        interface IntrinsicElements {
+            div: {
+                text?: string;
+                width?: number;
+            }
+    
+            span: any;
+        }
+    }
+    
+    interface I {
+        new(n: string): {
+            x: number
+            render(): void
+        }
+    }
+    var E: I;
+    <E x={10} />
+     ~
+!!! error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2322:   Property 'key' is missing in type '{ x: number; }'.
+    

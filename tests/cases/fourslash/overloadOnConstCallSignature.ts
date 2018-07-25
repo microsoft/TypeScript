@@ -9,10 +9,11 @@
 
 ////var /*2*/x = foo(/*1*/
 
-goTo.marker('1');
-verify.signatureHelpCountIs(4);
-verify.currentSignatureHelpIs('foo(name: "order"): string');
+verify.signatureHelp({
+    marker: "1",
+    overloadsCount: 4,
+    text: 'foo(name: "order"): string',
+})
 edit.insert('"hi"');
 
-goTo.marker('2');
-verify.quickInfoIs('var x: string');
+verify.quickInfoAt("2", "var x: string");

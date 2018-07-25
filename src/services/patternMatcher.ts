@@ -33,12 +33,12 @@ namespace ts {
         // this will return a successful match, having only tested "SK" against "SyntaxKind".  At
         // that point a call can be made to 'getMatches("SyntaxKind", "ts.compiler")', with the
         // work to create 'ts.compiler' only being done once the first match succeeded.
-        getMatchesForLastSegmentOfPattern(candidate: string): PatternMatch[];
+        getMatchForLastSegmentOfPattern(candidate: string): PatternMatch | undefined;
 
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getMatches(candidateContainers: ReadonlyArray<string> | undefined, candidate: string): PatternMatch[] | undefined;
+        getFullMatch(candidateContainers: ReadonlyArray<string>, candidate: string): PatternMatch | undefined;
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -109,13 +109,13 @@ namespace ts {
         if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length)) return undefined;
 
         return {
-            getMatches: (containers, candidate) => getMatches(containers, candidate, dotSeparatedSegments, stringToWordSpans),
-            getMatchesForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
+            getFullMatch: (containers, candidate) => getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
+            getMatchForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
             patternContainsDots: dotSeparatedSegments.length > 1
         };
     }
 
-    function getMatches(candidateContainers: ReadonlyArray<string> | undefined, candidate: string, dotSeparatedSegments: ReadonlyArray<Segment>, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] | undefined {
+    function getFullMatch(candidateContainers: ReadonlyArray<string>, candidate: string, dotSeparatedSegments: ReadonlyArray<Segment>, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
         // First, check that the last part of the dot separated pattern matches the name of the
         // candidate.  If not, then there's no point in proceeding and doing the more
         // expensive work.
@@ -123,8 +123,6 @@ namespace ts {
         if (!candidateMatch) {
             return undefined;
         }
-
-        candidateContainers = candidateContainers || emptyArray;
 
         // -1 because the last part was checked against the name, and only the rest
         // of the parts are checked against the container.
@@ -134,29 +132,13 @@ namespace ts {
             return undefined;
         }
 
-        // So far so good.  Now break up the container for the candidate and check if all
-        // the dotted parts match up correctly.
-        const totalMatch = candidateMatch;
-
+        let bestMatch: PatternMatch | undefined;
         for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
              i >= 0;
              i -= 1, j -= 1) {
-
-            const segment = dotSeparatedSegments[i];
-            const containerName = candidateContainers[j];
-
-            const containerMatch = matchSegment(containerName, segment, stringToWordSpans);
-            if (!containerMatch) {
-                // This container didn't match the pattern piece.  So there's no match at all.
-                return undefined;
-            }
-
-            addRange(totalMatch, containerMatch);
+            bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
         }
-
-        // Success, this symbol's full name matched against the dotted name the user was asking
-        // about.
-        return totalMatch;
+        return bestMatch;
     }
 
     function getWordSpans(word: string, stringToWordSpans: Map<TextSpan[]>): TextSpan[] {
@@ -219,7 +201,7 @@ namespace ts {
         }
     }
 
-    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] {
+    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
         // First check if the segment matches as is.  This is also useful if the segment contains
         // characters we would normally strip when splitting into parts that we also may want to
         // match in the candidate.  For example if the segment is "@int" and the candidate is
@@ -229,9 +211,7 @@ namespace ts {
         // multi-word segment.
         if (every(segment.totalTextChunk.text, ch => ch !== CharacterCodes.space && ch !== CharacterCodes.asterisk)) {
             const match = matchTextChunk(candidate, segment.totalTextChunk, stringToWordSpans);
-            if (match) {
-                return [match];
-            }
+            if (match) return match;
         }
 
         // The logic for pattern matching is now as follows:
@@ -271,20 +251,19 @@ namespace ts {
         // Only if all words have some sort of match is the pattern considered matched.
 
         const subWordTextChunks = segment.subWordTextChunks;
-        let matches: PatternMatch[];
-
+        let bestMatch: PatternMatch | undefined;
         for (const subWordTextChunk of subWordTextChunks) {
-            // Try to match the candidate with this word
-            const result = matchTextChunk(candidate, subWordTextChunk, stringToWordSpans);
-            if (!result) {
-                return undefined;
-            }
-
-            matches = matches || [];
-            matches.push(result);
+            bestMatch = betterMatch(bestMatch, matchTextChunk(candidate, subWordTextChunk, stringToWordSpans));
         }
+        return bestMatch;
+    }
 
-        return matches;
+    function betterMatch(a: PatternMatch | undefined, b: PatternMatch | undefined): PatternMatch | undefined {
+        return min(a, b, compareMatches);
+    }
+    function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined): Comparison {
+        return a === undefined ? Comparison.GreaterThan : b === undefined ? Comparison.LessThan
+            : compareValues(a.kind, b.kind) || compareBooleans(!a.isCaseSensitive, !b.isCaseSensitive);
     }
 
     function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan: TextSpan = { start: 0, length: pattern.length }): boolean {
@@ -306,8 +285,8 @@ namespace ts {
 
         let currentCandidate = 0;
         let currentChunkSpan = 0;
-        let firstMatch: number;
-        let contiguous: boolean;
+        let firstMatch: number | undefined;
+        let contiguous: boolean | undefined;
 
         while (true) {
             // Let's consider our termination cases

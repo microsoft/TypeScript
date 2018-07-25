@@ -32,14 +32,14 @@ interface I2<T extends U, U extends V, V extends T> { }
 >T : T
 
 function f<U extends T, T extends U>() { }
->f : <U extends T, T extends U>() => void
+>f : <U, T>() => void
 >U : U
 >T : T
 >T : T
 >U : U
 
 function f2<T extends U, U extends V, V extends T>() { }
->f2 : <T extends U, U extends V, V extends T>() => void
+>f2 : <T, U, V>() => void
 >T : T
 >U : U
 >U : U
@@ -48,7 +48,7 @@ function f2<T extends U, U extends V, V extends T>() { }
 >T : T
 
 var a: {
->a : { <U extends T, T extends U>(): void; <T extends U, U extends V, V extends T>(): void; }
+>a : { <U, T>(): void; <T, U, V>(): void; }
 
     <U extends T, T extends U>(): void;
 >U : U
@@ -66,16 +66,16 @@ var a: {
 }
 
 var b = <U extends T, T extends U>() => { }
->b : <U extends T, T extends U>() => void
-><U extends T, T extends U>() => { } : <U extends T, T extends U>() => void
+>b : <U, T>() => void
+><U extends T, T extends U>() => { } : <U, T>() => void
 >U : U
 >T : T
 >T : T
 >U : U
 
 var b2 = <T extends U, U extends V, V extends T>() => { }
->b2 : <T extends U, U extends V, V extends T>() => void
-><T extends U, U extends V, V extends T>() => { } : <T extends U, U extends V, V extends T>() => void
+>b2 : <T, U, V>() => void
+><T extends U, U extends V, V extends T>() => { } : <T, U, V>() => void
 >T : T
 >U : U
 >U : U
@@ -91,4 +91,17 @@ class D<U extends T, T extends V, V extends T> { }
 >V : V
 >V : V
 >T : T
+
+// Repro from #25740
+
+type Foo<T> = [T] extends [number] ? {} : {};
+>Foo : Foo<T>
+>T : T
+>T : T
+
+function foo<S extends Foo<S>>() {}
+>foo : <S>() => void
+>S : S
+>Foo : Foo<T>
+>S : S
 

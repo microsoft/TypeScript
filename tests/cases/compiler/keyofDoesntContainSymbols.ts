@@ -1,4 +1,6 @@
 // @lib: es6
+// @keyofStringsOnly: true
+
 const sym = Symbol();
 const num = 0;
 const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };

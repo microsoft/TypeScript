@@ -1,5 +1,5 @@
 tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(5,10): error TS2471: A computed property name of the form 'Symbol.iterator' must be of type 'symbol'.
-tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(10,11): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(10,11): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/conformance/Symbols/ES5SymbolProperty2.ts (2 errors) ====
@@ -16,4 +16,4 @@ tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(10,11): error TS2304: Cann
     
     (new M.C)[Symbol.iterator];
               ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.

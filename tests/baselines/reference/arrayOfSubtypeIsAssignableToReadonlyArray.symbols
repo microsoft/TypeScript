@@ -11,7 +11,7 @@ class B extends A { b }
 class C<T> extends Array<T> { c }
 >C : Symbol(C, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 23))
 >T : Symbol(T, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 8))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 8))
 >c : Symbol(C.c, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 29))
 
@@ -35,12 +35,12 @@ declare var crb: C<B>;
 
 declare var rra: ReadonlyArray<A>;
 >rra : Symbol(rra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 7, 11))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 >A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
 
 declare var rrb: ReadonlyArray<B>;
 >rrb : Symbol(rrb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 8, 11))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 13))
 
 rra = ara;

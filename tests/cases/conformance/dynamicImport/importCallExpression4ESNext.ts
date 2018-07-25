@@ -1,4 +1,5 @@
-﻿// @module: esnext
+﻿// @lib: esnext
+// @module: esnext
 // @target: esnext
 // @filename: 0.ts
 export class B {

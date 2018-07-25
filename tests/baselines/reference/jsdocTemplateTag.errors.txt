@@ -1,0 +1,32 @@
+tests/cases/conformance/jsdoc/forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+  Type 'void' is not assignable to type 'Animation'.
+
+
+==== tests/cases/conformance/jsdoc/forgot.js (1 errors) ====
+    /**
+     * @param {T} a
+     * @template T
+     */
+    function f(a) {
+        return () => a
+    }
+    let n = f(1)()
+    
+    /**
+     * @param {T} a
+     * @template T
+     * @returns {function(): T}
+     */
+    function g(a) {
+        return () => a
+    }
+    let s = g('hi')()
+    
+    /**
+     * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
+     */
+    Element.prototype.animate = function(keyframes) {};
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+!!! error TS2322:   Type 'void' is not assignable to type 'Animation'.
+    
