@@ -15,10 +15,10 @@ async function innerPromise(): Promise<string> {
     let blob_1;
     try {
         let blob = await resp.blob();
-        let blob_1 = blob.byteOffset;
+        blob_1 = blob.byteOffset;
     }
     catch (err) {
-        let blob_1 = 'Error';
+        blob_1 = 'Error';
     }
     return blob_1.toString();
 }

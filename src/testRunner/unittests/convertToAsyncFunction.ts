@@ -72,6 +72,26 @@ interface IArguments {}
 interface Number { toExponential: any; }
 interface Object {}
 declare function fetch(input?, init?): Promise<Response>;
+interface Response extends Body {
+    readonly headers: Headers;
+    readonly ok: boolean;
+    readonly redirected: boolean;
+    readonly status: number;
+    readonly statusText: string;
+    readonly trailer: Promise<Headers>;
+    readonly type: ResponseType;
+    readonly url: string;
+    clone(): Response;
+}
+interface Body {
+    readonly body: ReadableStream | null;
+    readonly bodyUsed: boolean;
+    arrayBuffer(): Promise<ArrayBuffer>;
+    blob(): Promise<Blob>;
+    formData(): Promise<FormData>;
+    json(): Promise<any>;
+    text(): Promise<string>;
+}
 declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 interface PromiseLike<T> {
     /**
@@ -768,11 +788,25 @@ function [#|f|]() {
 
 
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_Param", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Param1", `
 function [#|f|]() {
-    return my_print(fetch("https://typescriptlang.org").then(res => console.log(res)))
+    return my_print(fetch("https://typescriptlang.org").then(res => console.log(res)));
 }
 function my_print (resp) {
+    if (resp.ok) {
+        console.log(resp.buffer);
+    }
+    return resp;
+}
+
+`
+        );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_Param2", `
+function [#|f|]() {
+    return my_print(fetch("https://typescriptlang.org").then(res => console.log(res))).catch(err => console.log("Error!", err));
+}
+function my_print (resp): Promise<void> {
     if (resp.ok) {
         console.log(resp.buffer);
     }
@@ -782,6 +816,7 @@ function my_print (resp) {
 
 `
         );
+
 
         _testConvertToAsyncFunction("convertToAsyncFunction_MultipleReturns", `
 function [#|f|](): Promise<void> {
