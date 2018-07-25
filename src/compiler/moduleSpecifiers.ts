@@ -145,63 +145,58 @@ namespace ts.moduleSpecifiers {
         return firstDefined(imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
     }
 
-    function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost) {
+    function stringsEqual(a: string, b: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+        return getCanonicalFileName(a) === getCanonicalFileName(b);
+    }
+
+    function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] {
+        const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
+        const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
+        while ((aParts[aParts.length - 2]) !== "node_modules" && bParts[bParts.length - 2] !== "node_modules" && stringsEqual(aParts[aParts.length - 1], bParts[bParts.length - 1], getCanonicalFileName)) {
+            aParts.pop();
+            bParts.pop();
+        }
+        return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
+    }
+
+    function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
+        const result = createMap<string>();
         const symlinks = mapDefined(files, sf =>
             sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
                 res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] : undefined));
-        const result = createMap<string>();
-        if (symlinks) {
-            const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
-            const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
-            for (const [resolvedPath, originalPath] of symlinks) {
-                const resolvedParts = getPathComponents(toPath(resolvedPath, currentDirectory, getCanonicalFileName));
-                const originalParts = getPathComponents(toPath(originalPath, currentDirectory, getCanonicalFileName));
-                while (compareStrings(resolvedParts[resolvedParts.length - 1], originalParts[originalParts.length - 1]) === Comparison.EqualTo) {
-                    resolvedParts.pop();
-                    originalParts.pop();
-                }
-                result.set(getPathFromPathComponents(originalParts), getPathFromPathComponents(resolvedParts));
-            }
+        for (const [resolvedPath, originalPath] of symlinks) {
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName);
+            result.set(commonOriginal, commonResolved);
         }
         return result;
     }
 
-    function getAllModulePathsUsingIndirectSymlinks(files: ReadonlyArray<SourceFile>, target: string, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost) {
-        const links = discoverProbableSymlinks(files, getCanonicalFileName, host);
-        const paths = arrayFrom(links.keys());
-        let options: string[] | undefined;
-        const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
-        for (const path of paths) {
-            const resolved = links.get(path)!;
-            if (compareStrings(target.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo) {
-                const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
-                const option = resolvePath(path, relative);
-                if (!host.fileExists || host.fileExists(option)) {
-                    if (!options) options = [];
-                    options.push(option);
-                }
-            }
-        }
-        if (options) {
-            options.push(target); // Since these are speculative, we also include the original resolved name as a possibility
-            return options;
-        }
-        return [target];
-    }
-
     /**
      * Looks for existing imports that use symlinks to this module.
-     * Only if no symlink is available, the real path will be used.
+     * Symlinks will be returned first so they are preferred over the real path.
      */
     function getAllModulePaths(files: ReadonlyArray<SourceFile>, importedFileName: string, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost, redirectTargetsMap: RedirectTargetsMap): ReadonlyArray<string> {
         const redirects = redirectTargetsMap.get(importedFileName);
         const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
-        const symlinks = mapDefined(files, sf =>
-            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
-                res && contains(importedFileNames, res.resolvedFileName) ? res.originalPath : undefined));
-        return symlinks.length === 0
-            ? flatMap(importedFileNames, importedFileName => getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(importedFileName, host.getCurrentDirectory ? host.getCurrentDirectory() : ""), getCanonicalFileName, host))
-            : symlinks;
+        const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+        const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
+        const links = discoverProbableSymlinks(files, getCanonicalFileName, cwd);
+
+        const result: string[] = [];
+        const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+        links.forEach((resolved, path) => {
+            const target = targets.find(t => compareStrings(t.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo);
+            if (target === undefined) return;
+
+            const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
+            const option = resolvePath(path, relative);
+            if (!host.fileExists || host.fileExists(option)) {
+                result.push(option);
+            }
+        });
+        result.push(...targets);
+        return result;
     }
 
     function getRelativePathNParents(relativePath: string): number {
@@ -225,10 +220,7 @@ namespace ts.moduleSpecifiers {
             for (const patternText of paths[key]) {
                 const pattern = removeFileExtension(normalizePath(patternText));
                 const indexOfStar = pattern.indexOf("*");
-                if (indexOfStar === 0 && pattern.length === 1) {
-                    continue;
-                }
-                else if (indexOfStar !== -1) {
+                if (indexOfStar !== -1) {
                     const prefix = pattern.substr(0, indexOfStar);
                     const suffix = pattern.substr(indexOfStar + 1);
                     if (relativeToBaseUrl.length >= prefix.length + suffix.length &&

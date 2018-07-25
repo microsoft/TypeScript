@@ -777,16 +777,53 @@ function initializer(this: C = new C()): number { return this.n; }
 
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (this, m) => m + this.n;
->c.explicitProperty = (this, m) : any
+>c.explicitProperty = (this, m) => m + this.n : (this: { n: number; }, m: number) => any
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->(this, m) : any
->this, m : any
->this : any
->m : any
+>(this, m) => m + this.n : (this: { n: number; }, m: number) => any
+>this : { n: number; }
+>m : number
 >m + this.n : any
->m : any
+>m : number
+>this.n : any
+>this : any
+>n : any
+
+const f2 = <T>(this: {n: number}, m: number) => m + this.n;
+>f2 : <T>(this: { n: number; }, m: number) => any
+><T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => any
+>T : T
+>this : { n: number; }
+>n : number
+>m : number
+>m + this.n : any
+>m : number
+>this.n : any
+>this : any
+>n : any
+
+const f3 = async (this: {n: number}, m: number) => m + this.n;
+>f3 : (this: { n: number; }, m: number) => Promise<any>
+>async (this: {n: number}, m: number) => m + this.n : (this: { n: number; }, m: number) => Promise<any>
+>this : { n: number; }
+>n : number
+>m : number
+>m + this.n : any
+>m : number
+>this.n : any
+>this : any
+>n : any
+
+const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
+>f4 : <T>(this: { n: number; }, m: number) => Promise<any>
+>async <T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => Promise<any>
+>T : T
+>this : { n: number; }
+>n : number
+>m : number
+>m + this.n : any
+>m : number
 >this.n : any
 >this : any
 >n : any

@@ -2417,6 +2417,10 @@
         "category": "Error",
         "code": 2729
     },
+    "An arrow function cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2730
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

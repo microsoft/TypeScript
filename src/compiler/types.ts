@@ -3403,6 +3403,7 @@ namespace ts {
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
         JSContainer             = 1 << 26,  // Contains Javascript special declarations
+        ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
 
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
@@ -4688,7 +4689,7 @@ namespace ts {
 
     export interface UpToDateHost {
         fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date;
+        getModifiedTime(fileName: string): Date | undefined;
         getUnchangedTime?(fileName: string): Date | undefined;
         getLastStatus?(fileName: string): UpToDateStatus | undefined;
         setLastStatus?(fileName: string, status: UpToDateStatus): void;
@@ -4826,7 +4827,7 @@ namespace ts {
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
 
-        getModifiedTime?(fileName: string): Date;
+        getModifiedTime?(fileName: string): Date | undefined;
         setModifiedTime?(fileName: string, date: Date): void;
         deleteFile?(fileName: string): void;
     }

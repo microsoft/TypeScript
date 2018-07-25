@@ -288,8 +288,7 @@ namespace ts.server {
 
     function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, areEqual: (a: T, b: T) => boolean) {
         const outputs: T[] = [];
-        projectService.forEachProject(project => {
-            if (project.isOrphan() || !project.languageServiceEnabled) return;
+        projectService.forEachEnabledProject(project => {
             const theseOutputs = action(project);
             outputs.push(...theseOutputs.filter(output => !outputs.some(o => areEqual(o, output))));
         });
@@ -298,40 +297,55 @@ namespace ts.server {
 
     function combineProjectOutputWhileOpeningReferencedProjects<T>(
         projects: Projects,
+        defaultProject: Project,
         projectService: ProjectService,
         action: (project: Project) => ReadonlyArray<T>,
         getLocation: (t: T) => sourcemaps.SourceMappableLocation,
         resultsEqual: (a: T, b: T) => boolean,
     ): T[] {
         const outputs: T[] = [];
-        combineProjectOutputWorker(projects, <sourcemaps.SourceMappableLocation><any>undefined, projectService, ({ project }, tryAddToTodo) => {
-            for (const output of action(project)) {
-                if (!contains(outputs, output, resultsEqual) && !tryAddToTodo(project, getLocation(output))) {
-                    outputs.push(output);
+        combineProjectOutputWorker<undefined>(
+            projects,
+            defaultProject,
+            /*initialLocation*/ undefined,
+            projectService,
+            ({ project }, tryAddToTodo) => {
+                for (const output of action(project)) {
+                    if (!contains(outputs, output, resultsEqual) && !tryAddToTodo(project, getLocation(output))) {
+                        outputs.push(output);
+                    }
                 }
-            }
-        });
+            },
+            /*getDefinition*/ undefined);
         return outputs;
     }
 
-    function combineProjectOutputForRenameLocations(projects: Projects, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> {
+    function combineProjectOutputForRenameLocations(
+        projects: Projects, defaultProject: Project, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService, findInStrings: boolean, findInComments: boolean
+    ): ReadonlyArray<RenameLocation> {
         const outputs: RenameLocation[] = [];
 
-        combineProjectOutputWorker(projects, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
+        combineProjectOutputWorker<sourcemaps.SourceMappableLocation>(projects, defaultProject, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
             for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.position, findInStrings, findInComments) || emptyArray) {
                 if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
                     outputs.push(output);
                 }
             }
-        });
+        }, () => getDefinitionLocation(defaultProject, initialLocation));
 
         return outputs;
     }
 
-    function combineProjectOutputForReferences(projects: Projects, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService): ReadonlyArray<ReferencedSymbol> {
+    function getDefinitionLocation(defaultProject: Project, initialLocation: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
+        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.position);
+        const info = infos && firstOrUndefined(infos);
+        return info && { fileName: info.fileName, position: info.textSpan.start };
+    }
+
+    function combineProjectOutputForReferences(projects: Projects, defaultProject: Project, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService): ReadonlyArray<ReferencedSymbol> {
         const outputs: ReferencedSymbol[] = [];
 
-        combineProjectOutputWorker(projects, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
+        combineProjectOutputWorker<sourcemaps.SourceMappableLocation>(projects, defaultProject, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
             for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.position) || emptyArray) {
                 let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, outputReferencedSymbol.definition));
                 if (!symbolToAddTo) {
@@ -345,89 +359,102 @@ namespace ts.server {
                     }
                 }
             }
-        });
+        }, () => getDefinitionLocation(defaultProject, initialLocation));
 
         return outputs.filter(o => o.references.length !== 0);
     }
 
-    interface ProjectAndLocation {
+    interface ProjectAndLocation<TLocation extends sourcemaps.SourceMappableLocation | undefined> {
         readonly project: Project;
-        readonly location: sourcemaps.SourceMappableLocation;
+        readonly location: TLocation;
     }
 
-    interface ToDoAndSeenProjects {
-        readonly toDo: ProjectAndLocation[];
-        readonly seenProjects: Map<true>;
-    }
-
-    function combineProjectOutputWorker(
-        projects: Projects,
-        initialLocation: sourcemaps.SourceMappableLocation,
-        projectService: ProjectService,
-        cb: (where: ProjectAndLocation, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
-    ): void {
-        let toDoAndSeenProjects: ToDoAndSeenProjects | undefined;
+    function forEachProjectInProjects(projects: Projects, path: string | undefined, cb: (project: Project, path: string | undefined) => void): void {
         for (const project of isProjectsArray(projects) ? projects : projects.projects) {
-            toDoAndSeenProjects = callbackProjectAndLocation(projects, { project, location: initialLocation }, projectService, toDoAndSeenProjects, cb);
+            cb(project, path);
         }
         if (!isArray(projects) && projects.symLinkedProjects) {
-            projects.symLinkedProjects.forEach((symlinkedProjects, path) => {
+            projects.symLinkedProjects.forEach((symlinkedProjects, symlinkedPath) => {
                 for (const project of symlinkedProjects) {
-                    toDoAndSeenProjects = callbackProjectAndLocation(projects, { project, location: { fileName: path, position: initialLocation.position } }, projectService, toDoAndSeenProjects, cb);
+                    cb(project, symlinkedPath);
+                }
+            });
+        }
+    }
+
+    function combineProjectOutputWorker<TLocation extends sourcemaps.SourceMappableLocation | undefined>(
+        projects: Projects,
+        defaultProject: Project,
+        initialLocation: TLocation,
+        projectService: ProjectService,
+        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
+        getDefinition: (() => sourcemaps.SourceMappableLocation | undefined) | undefined,
+    ): void {
+        let toDo: ProjectAndLocation<TLocation>[] | undefined;
+        const seenProjects = createMap<true>();
+        forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
+            // TLocation shoud be either `sourcemaps.SourceMappableLocation` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
+            const location = (initialLocation ? { fileName: path, position: initialLocation.position } : undefined) as TLocation;
+            toDo = callbackProjectAndLocation({ project, location }, projectService, toDo, seenProjects, cb);
+        });
+
+        // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
+        if (getDefinition) {
+            const memGetDefinition = memoize(getDefinition);
+            projectService.forEachEnabledProject(project => {
+                if (!addToSeen(seenProjects, project.projectName)) return;
+                const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
+                if (definition) {
+                    toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
                 }
             });
         }
 
-        while (toDoAndSeenProjects && toDoAndSeenProjects.toDo.length) {
-            toDoAndSeenProjects = callbackProjectAndLocation(projects, Debug.assertDefined(toDoAndSeenProjects.toDo.pop()), projectService, toDoAndSeenProjects, cb);
+        while (toDo && toDo.length) {
+            toDo = callbackProjectAndLocation(Debug.assertDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
         }
     }
 
-    function callbackProjectAndLocation(
-        originalProjects: Projects, // For lazily populating seenProjects
-        projectAndLocation: ProjectAndLocation,
+    function getDefinitionInProject(definition: sourcemaps.SourceMappableLocation | undefined, definingProject: Project, project: Project): sourcemaps.SourceMappableLocation | undefined {
+        if (!definition || project.containsFile(toNormalizedPath(definition.fileName))) return definition;
+        const mappedDefinition = definingProject.getLanguageService().getSourceMapper().tryGetGeneratedLocation(definition);
+        return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
+    }
+
+    function callbackProjectAndLocation<TLocation extends sourcemaps.SourceMappableLocation | undefined>(
+        projectAndLocation: ProjectAndLocation<TLocation>,
         projectService: ProjectService,
-        toDoAndSeenProjects: ToDoAndSeenProjects | undefined,
-        cb: (where: ProjectAndLocation, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
-    ): ToDoAndSeenProjects | undefined {
+        toDo: ProjectAndLocation<TLocation>[] | undefined,
+        seenProjects: Map<true>,
+        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
+    ): ProjectAndLocation<TLocation>[] | undefined {
         if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         cb(projectAndLocation, (project, location) => {
+            seenProjects.set(projectAndLocation.project.projectName, true);
             const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
             if (!originalLocation) return false;
             const originalProjectAndScriptInfo = projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
             if (!originalProjectAndScriptInfo) return false;
 
             if (originalProjectAndScriptInfo) {
-                if (toDoAndSeenProjects === undefined) {
-                    toDoAndSeenProjects = { toDo: [], seenProjects: createMap<true>() };
-                    for (const project of isProjectsArray(originalProjects) ? originalProjects : originalProjects.projects) {
-                        toDoAndSeenProjects.seenProjects.set(project.projectName, true);
-                    }
-                    if (!isArray(originalProjects) && originalProjects.symLinkedProjects) {
-                        originalProjects.symLinkedProjects.forEach(symlinkedProjects => {
-                            for (const project of symlinkedProjects) {
-                                toDoAndSeenProjects!.seenProjects.set(project.projectName, true);
-                            }
-                        });
-                    }
-                }
+                toDo = toDo || [];
 
                 for (const project of originalProjectAndScriptInfo.projects) {
-                    addToTodo({ project, location: originalLocation }, toDoAndSeenProjects);
+                    addToTodo({ project, location: originalLocation as TLocation }, toDo, seenProjects);
                 }
                 const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalProjectAndScriptInfo.scriptInfo);
                 if (symlinkedProjectsMap) {
                     symlinkedProjectsMap.forEach((symlinkedProjects) => {
-                        for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation }, toDoAndSeenProjects!);
+                        for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
                     });
                 }
             }
             return true;
         });
-        return toDoAndSeenProjects;
+        return toDo;
     }
 
-    function addToTodo(projectAndLocation: ProjectAndLocation, { seenProjects, toDo }: ToDoAndSeenProjects): void {
+    function addToTodo<TLocation extends sourcemaps.SourceMappableLocation | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
         if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
     }
 
@@ -1117,7 +1144,7 @@ namespace ts.server {
             const position = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
 
-            const locations = combineProjectOutputForRenameLocations(projects, { fileName: args.file, position }, this.projectService, !!args.findInStrings, !!args.findInComments);
+            const locations = combineProjectOutputForRenameLocations(projects, this.getDefaultProject(args), { fileName: args.file, position }, this.projectService, !!args.findInStrings, !!args.findInComments);
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
@@ -1144,7 +1171,7 @@ namespace ts.server {
             const file = toNormalizedPath(args.file);
             const projects = this.getProjects(args);
             const position = this.getPositionInFile(args, file);
-            const references = combineProjectOutputForReferences(projects, { fileName: args.file, position }, this.projectService);
+            const references = combineProjectOutputForReferences(projects, this.getDefaultProject(args), { fileName: args.file, position }, this.projectService);
 
             if (simplifiedResult) {
                 const defaultProject = this.getDefaultProject(args);
@@ -1649,6 +1676,7 @@ namespace ts.server {
             else {
                 return combineProjectOutputWhileOpeningReferencedProjects<NavigateToItem>(
                     this.getProjects(args),
+                    this.getDefaultProject(args),
                     this.projectService,
                     project =>
                         project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
@@ -1767,15 +1795,12 @@ namespace ts.server {
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> | undefined {
-            if (args.errorCodes!.length === 0) { // TODO: GH#18217
-                return undefined;
-            }
             const { file, project } = this.getFileAndProject(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
 
-            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes!, this.getFormatOptions(file), this.getPreferences(file));
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
             return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(codeAction)) : codeActions;
         }
 

@@ -1,3 +1,5 @@
+// @target: es6
+
 class C {
     n: number;
     explicitThis(this: this, m: number): number {
@@ -173,3 +175,6 @@ function initializer(this: C = new C()): number { return this.n; }
 
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (this, m) => m + this.n;
+const f2 = <T>(this: {n: number}, m: number) => m + this.n;
+const f3 = async (this: {n: number}, m: number) => m + this.n;
+const f4 = async <T>(this: {n: number}, m: number) => m + this.n;

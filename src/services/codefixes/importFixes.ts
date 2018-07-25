@@ -4,6 +4,8 @@ namespace ts.codefix {
     const errorCodes: ReadonlyArray<number> = [
         Diagnostics.Cannot_find_name_0.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
+        Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
+        Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
         Diagnostics.Cannot_find_namespace_0.code,
         Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code,
         Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here.code,

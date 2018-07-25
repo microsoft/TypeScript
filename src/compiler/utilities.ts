@@ -142,6 +142,16 @@ namespace ts {
         return undefined;
     }
 
+    export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefined | "quit"): T | undefined {
+        while (true) {
+            const res = callback(node);
+            if (res === "quit") return undefined;
+            if (res !== undefined) return res;
+            if (isSourceFile(node)) return undefined;
+            node = node.parent;
+        }
+    }
+
     /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
@@ -3152,26 +3162,38 @@ namespace ts {
         return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
-    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
+    export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
         const compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(fileName, host, compilerOptions.outDir));
         }
         else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+            emitOutputFilePathWithoutExtension = removeFileExtension(fileName);
         }
 
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    export function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost) {
+    export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
+        // TODO: GH#25810 following should work but makes the build break:
+        // return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+
         const options = host.getCompilerOptions();
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
         const path = outputDir
-            ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
-            : sourceFile.fileName;
+            ? getSourceFilePathInNewDir(fileName, host, outputDir)
+            : fileName;
+        return removeFileExtension(path) + Extension.Dts;
+    }
+
+    export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+        const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
+
+        const path = outputDir
+            ? getSourceFilePathInNewDirWorker(fileName, outputDir, currentDirectory, commonSourceDirectory, getCanonicalFileName)
+            : fileName;
         return removeFileExtension(path) + Extension.Dts;
     }
 
@@ -3213,10 +3235,13 @@ namespace ts {
         return !(options.noEmitForJsFiles && isSourceFileJavaScript(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
     }
 
-    export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
-        let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
-        const commonSourceDirectory = host.getCommonSourceDirectory();
-        const isSourceFileInCommonSourceDirectory = host.getCanonicalFileName(sourceFilePath).indexOf(host.getCanonicalFileName(commonSourceDirectory)) === 0;
+    export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
+        return getSourceFilePathInNewDirWorker(fileName, newDirPath, host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+    }
+
+    export function getSourceFilePathInNewDirWorker(fileName: string, newDirPath: string, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+        let sourceFilePath = getNormalizedAbsolutePath(fileName, currentDirectory);
+        const isSourceFileInCommonSourceDirectory = getCanonicalFileName(sourceFilePath).indexOf(getCanonicalFileName(commonSourceDirectory)) === 0;
         sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
         return combinePaths(newDirPath, sourceFilePath);
     }

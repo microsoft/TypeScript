@@ -135,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const mtimeAfter = sys.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
@@ -2009,9 +2009,17 @@ namespace ts {
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
-                // NOTE: this only makes sense for case-insensitive file systems
-                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
-                    reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
+                if (file && options.forceConsistentCasingInFileNames) {
+                    let inputName = fileName;
+                    const checkedName = file.fileName;
+                    const isRedirect = toPath(checkedName) !== toPath(inputName);
+                    if (isRedirect) {
+                        inputName = getProjectReferenceRedirect(fileName) || fileName;
+                    }
+                    if (getNormalizedAbsolutePath(checkedName, currentDirectory) !== getNormalizedAbsolutePath(inputName, currentDirectory)) {
+                        reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile, refPos, refEnd);
+                    }
                 }
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,

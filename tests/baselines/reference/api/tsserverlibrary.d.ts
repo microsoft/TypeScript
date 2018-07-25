@@ -2049,6 +2049,7 @@ declare namespace ts {
         Optional = 16777216,
         Transient = 33554432,
         JSContainer = 67108864,
+        ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,
         Value = 67216319,
@@ -2583,7 +2584,7 @@ declare namespace ts {
     }
     interface UpToDateHost {
         fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date;
+        getModifiedTime(fileName: string): Date | undefined;
         getUnchangedTime?(fileName: string): Date | undefined;
         getLastStatus?(fileName: string): UpToDateStatus | undefined;
         setLastStatus?(fileName: string, status: UpToDateStatus): void;
@@ -2687,7 +2688,7 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
-        getModifiedTime?(fileName: string): Date;
+        getModifiedTime?(fileName: string): Date | undefined;
         setModifiedTime?(fileName: string, date: Date): void;
         deleteFile?(fileName: string): void;
     }
@@ -3024,7 +3025,7 @@ declare namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        getModifiedTime?(path: string): Date;
+        getModifiedTime?(path: string): Date | undefined;
         setModifiedTime?(path: string, time: Date): void;
         deleteFile?(path: string): void;
         /**
@@ -6279,7 +6280,7 @@ declare namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes?: ReadonlyArray<number>;
+        errorCodes: ReadonlyArray<number>;
     }
     interface GetCombinedCodeFixRequestArgs {
         scope: GetCombinedCodeFixScope;

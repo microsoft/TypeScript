@@ -74,7 +74,7 @@ node_modules/lodash/_baseUniq.js(33,33): error TS2554: Expected 0 arguments, but
 node_modules/lodash/_baseUniq.js(39,5): error TS2322: Type 'SetCache' is not assignable to type 'any[]'.
 node_modules/lodash/_baseUniq.js(62,15): error TS2554: Expected 2 arguments, but got 3.
 node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/lodash/node_modules/lodash/_cloneBuffer")'.
+node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '{}'.
 node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/_copySymbols.js(13,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_copySymbolsIn.js(13,29): error TS2554: Expected 0 arguments, but got 1.
@@ -146,7 +146,6 @@ node_modules/lodash/_isLaziable.js(24,14): error TS2554: Expected 0 arguments, b
 node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
-node_modules/lodash/_nodeUtil.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/lodash/node_modules/lodash/_nodeUtil")'.
 node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'boolean | Global'.
   Property 'process' does not exist on type 'false'.
@@ -327,7 +326,6 @@ node_modules/lodash/fp.js(2,18): error TS2554: Expected 3-4 arguments, but got 2
 node_modules/lodash/includes.js(24,10): error TS1003: Identifier expected.
 node_modules/lodash/includes.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/lodash/intersectionBy.js(41,32): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/isBuffer.js(5,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/lodash/node_modules/lodash/isBuffer")'.
 node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/isEqual.js(32,10): error TS2554: Expected 3-5 arguments, but got 2.
 node_modules/lodash/isEqualWith.js(38,59): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'boolean'.

@@ -338,50 +338,54 @@ namespace ts.JsDoc {
         readonly parameters?: ReadonlyArray<ParameterDeclaration>;
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
-        for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
-            switch (commentOwner.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.MethodSignature:
-                    const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
-                    return { commentOwner, parameters };
+        return forEachAncestor(tokenAtPos, getCommentOwnerInfoWorker);
+    }
+    function getCommentOwnerInfoWorker(commentOwner: Node): CommentOwnerInfo | undefined | "quit" {
+        switch (commentOwner.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.MethodSignature:
+                const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
+                return { commentOwner, parameters };
 
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.TypeAliasDeclaration:
-                    return { commentOwner };
+            case SyntaxKind.PropertyAssignment:
+                return getCommentOwnerInfoWorker((commentOwner as PropertyAssignment).initializer);
 
-                case SyntaxKind.VariableStatement: {
-                    const varStatement = <VariableStatement>commentOwner;
-                    const varDeclarations = varStatement.declarationList.declarations;
-                    const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
-                        ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer!)
-                        : undefined;
-                    return { commentOwner, parameters };
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.TypeAliasDeclaration:
+                return { commentOwner };
+
+            case SyntaxKind.VariableStatement: {
+                const varStatement = <VariableStatement>commentOwner;
+                const varDeclarations = varStatement.declarationList.declarations;
+                const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
+                    ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer!)
+                    : undefined;
+                return { commentOwner, parameters };
+            }
+
+            case SyntaxKind.SourceFile:
+                return "quit";
+
+            case SyntaxKind.ModuleDeclaration:
+                // If in walking up the tree, we hit a a nested namespace declaration,
+                // then we must be somewhere within a dotted namespace name; however we don't
+                // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
+                return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
+
+            case SyntaxKind.BinaryExpression: {
+                const be = commentOwner as BinaryExpression;
+                if (getSpecialPropertyAssignmentKind(be) === SpecialPropertyAssignmentKind.None) {
+                    return "quit";
                 }
-
-                case SyntaxKind.SourceFile:
-                    return undefined;
-
-                case SyntaxKind.ModuleDeclaration:
-                    // If in walking up the tree, we hit a a nested namespace declaration,
-                    // then we must be somewhere within a dotted namespace name; however we don't
-                    // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
-                    return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
-
-                case SyntaxKind.BinaryExpression: {
-                    const be = commentOwner as BinaryExpression;
-                    if (getSpecialPropertyAssignmentKind(be) === SpecialPropertyAssignmentKind.None) {
-                        return undefined;
-                    }
-                    const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
-                    return { commentOwner, parameters };
-                }
+                const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
+                return { commentOwner, parameters };
             }
         }
     }
