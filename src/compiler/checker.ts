@@ -8850,8 +8850,9 @@ namespace ts {
             return true;
         }
 
-        // Remove all unions of primitive types from the given list and replace them with a
-        // single union containing an intersection of those primitive types.
+        // If the given list of types contains more than one union of primitive types, replace the
+        // first with a union containing an intersection of those primitive types, then remove the
+        // other unions and return true. Otherwise, do nothing and return false.
         function intersectUnionsOfPrimitiveTypes(types: Type[]) {
             let unionTypes: UnionType[] | undefined;
             const index = findIndex(types, t => (t.flags & TypeFlags.UnionOfPrimitiveTypes) !== 0);
