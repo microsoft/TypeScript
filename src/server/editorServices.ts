@@ -2564,7 +2564,9 @@ namespace ts.server {
                         externalProject.enableLanguageService();
                     }
                     // external project already exists and not config files were added - update the project and return;
+                    // The graph update here isnt postponed since any file open operation needs all updated external projects
                     this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave);
+                    externalProject.updateGraph();
                     return;
                 }
                 // some config files were added to external project (that previously were not there)
@@ -2622,8 +2624,11 @@ namespace ts.server {
             }
             else {
                 // no config files - remove the item from the collection
+                // Create external project and update its graph, do not delay update since
+                // any file open operation needs all updated external projects
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
-                this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
+                const project = this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
+                project.updateGraph();
             }
         }
 
