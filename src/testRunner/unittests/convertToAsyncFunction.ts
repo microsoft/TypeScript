@@ -404,6 +404,17 @@ function [#|innerPromise|](): Promise<string> {
 }
 `
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRet", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
+    }).then(blob => {
+        return blob.toString();   
+    });
+}
+`
+        );
+
         _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn01", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org").then(resp => console.log(resp));
@@ -536,10 +547,9 @@ function my_print (resp) {
 );
 
         _testConvertToAsyncFunction("convertToAsyncFunction_MultipleReturns", `
-function [#|f|](): Promise<string> {
+function [#|f|](): Promise<void> {
     let x = fetch("https://microsoft.com").then(res => console.log("Microsoft:", res));
     if (x.ok) {
-
         return fetch("https://typescriptlang.org").then(res => console.log(res));
     }
     return x.then(resp => {
