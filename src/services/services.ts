@@ -1489,19 +1489,6 @@ namespace ts {
             }
         }
 
-        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
-            if ((isIdentifier(node) || isStringLiteral(node))
-                && isPropertyAssignment(node.parent)
-                && node.parent.name === node) {
-                const type = checker.getContextualType(node.parent.parent);
-                const property = type && checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
-                if (property) {
-                    return property;
-                }
-            }
-            return checker.getSymbolAtLocation(node);
-        }
-
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
             synchronizeHostData();
@@ -2187,28 +2174,60 @@ namespace ts {
      */
     /* @internal */
     export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
+        const element = getContainingObjectLiteralElementWorker(node);
+        return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName : undefined;
+    }
+    function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralElement | undefined {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent as ObjectLiteralElementWithName : undefined;
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
             // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                    node.parent.name === node ? node.parent as ObjectLiteralElementWithName : undefined;
+                    node.parent.name === node ? node.parent : undefined;
         }
         return undefined;
     }
-    /* @internal */
-    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName };
 
     /* @internal */
-    export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
-        const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
-        const contextualType = typeChecker.getContextualType(objectLiteral)!; // TODO: GH#18217
-        return getPropertySymbolsFromType(contextualType, node.name!)!; // TODO: GH#18217
+    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes };
+
+    function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+        const object = getContainingObjectLiteralElement(node);
+        if (object) {
+            const contextualType = checker.getContextualType(object.parent);
+            const properties = contextualType && getPropertySymbolsFromContextualType(object, checker, contextualType, /*unionSymbolOk*/ false);
+            if (properties && properties.length === 1) {
+                return first(properties);
+            }
+        }
+        return checker.getSymbolAtLocation(node);
+    }
+
+    /** Gets all symbols for one property. Does not get symbols for every property. */
+    /* @internal */
+    export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): ReadonlyArray<Symbol> {
+        const name = getNameFromPropertyName(node.name);
+        if (!name) return emptyArray;
+        if (!contextualType.isUnion()) {
+            const symbol = contextualType.getProperty(name);
+            return symbol ? [symbol] : emptyArray;
+        }
+
+        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => isObjectLiteralExpression(node.parent) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+        if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
+            const symbol = contextualType.getProperty(name);
+            if (symbol) return [symbol];
+        }
+        if (discriminatedPropertySymbols.length === 0) {
+            // Bad discriminant -- do again without discriminating
+            return mapDefined(contextualType.types, t => t.getProperty(name));
+        }
+        return discriminatedPropertySymbols;
     }
 
     /* @internal */
