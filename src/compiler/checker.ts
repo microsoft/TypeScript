@@ -120,6 +120,7 @@ namespace ts {
                 return node ? getTypeFromTypeNode(node) : errorType;
             },
             getParameterType: getTypeAtPosition,
+            getPromisedTypeOfPromise,
             getReturnTypeOfSignature,
             getNullableType,
             getNonNullableType,
@@ -291,7 +292,6 @@ namespace ts {
             getNeverType: () => neverType,
             isSymbolAccessible,
             isArrayLikeType,
-            isPromiseLikeType,
             getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
@@ -12074,12 +12074,6 @@ namespace ts {
 
         function isArrayType(type: Type): boolean {
             return !!(getObjectFlags(type) & ObjectFlags.Reference) && (<TypeReference>type).target === globalArrayType;
-        }
-
-        function isPromiseLikeType(type: Type): boolean {
-            const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ false); // this is only called from the language service, so don't report errors if the promise type doesn't exist
-            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalPromiseType ||
-                !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, globalPromiseType);
         }
 
         function isArrayLikeType(type: Type): boolean {

@@ -114,22 +114,24 @@ namespace ts {
     }
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
-        if (isAsyncFunction(node) || !node.body) {
+
+        const functionType = checker.getTypeAtLocation(node);
+        if (isAsyncFunction(node) || !node.body || !functionType) {
             return;
         }
 
-        const returnType = checker.getTypeAtLocation(node);
-        if (!returnType) {
+        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
+        const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
+
+        if (!returnType || !checker.getPromisedTypeOfPromise(returnType)) {
             return;
         }
 
-        if (checker.isPromiseLikeType(returnType)) {
-            // collect all the return statements
-            // check that a property access expression exists in there and that it is a handler
-            const retStmts = getReturnStatementsWithPromiseCallbacks(node);
-            if (retStmts.length > 0) {
-                diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
-            }
+        // collect all the return statements
+        // check that a property access expression exists in there and that it is a handler
+        const returnStatements = getReturnStatementsWithPromiseCallbacks(node);
+        if (returnStatements.length > 0) {
+            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
         }
     }
 
@@ -148,7 +150,7 @@ namespace ts {
             }
 
             if (isReturnStatement(child)) {
-               forEachChild(child, hasCallback);
+                forEachChild(child, hasCallback);
             }
 
             function hasCallback(returnChild: Node) {

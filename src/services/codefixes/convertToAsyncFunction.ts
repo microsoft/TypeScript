@@ -154,7 +154,7 @@ namespace ts.codefix {
             return false;
         }
 
-        return checker.isPromiseLikeType(nodeType) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
+        return !!checker.getPromisedTypeOfPromise(nodeType) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
     }
 
     function parseCallback(node: Expression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>, prevArgName?: [Identifier, number]): Statement[] {
@@ -371,7 +371,7 @@ namespace ts.codefix {
             return false;
         }
 
-        return (<PropertyAccessExpression>node.expression).name.text === funcName && checker.isPromiseLikeType(nodeType);
+        return (<PropertyAccessExpression>node.expression).name.text === funcName && !!checker.getPromisedTypeOfPromise(nodeType);
     }
 
     function getArgName(funcNode: Node, synthNamesMap: Map<[Identifier, number]>): [Identifier, number] {
