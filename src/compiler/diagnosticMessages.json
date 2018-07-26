@@ -2425,6 +2425,10 @@
         "category": "Error",
         "code": 2731
     },
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+        "category": "Error",
+        "code": 2732
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

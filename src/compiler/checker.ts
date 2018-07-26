@@ -2220,6 +2220,12 @@ namespace ts {
                         const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
                         error(errorNode, diag, tsExtension, removeExtension(moduleReference, tsExtension));
                     }
+                    else if (!compilerOptions.resolveJsonModule &&
+                        fileExtensionIs(moduleReference, Extension.Json) &&
+                        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs &&
+                        getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) {
+                        error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
+                    }
                     else {
                         error(errorNode, moduleNotFoundError, moduleReference);
                     }
