@@ -3184,6 +3184,8 @@ declare namespace ts {
      * @returns The original parse tree node if found; otherwise, undefined.
      */
     function getParseTreeNode<T extends Node>(node: Node | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
+    /** Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__' */
+    function escapeLeadingUnderscores(identifier: string): __String;
     /**
      * Remove extra underscore from escaped identifier text content.
      *
