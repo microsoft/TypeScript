@@ -1,18 +1,25 @@
-//// [es5ExportDefaultFunctionDeclaration4.ts]
+//// [declarationEmitModuleWithScopeMarker.ts]
 declare module "bar" {
     var before: typeof func;
+
+    export function normal(): void;
 
     export default function func(): typeof func;
 
     var after: typeof func;
+
+    export {}
 }
 
-//// [es5ExportDefaultFunctionDeclaration4.js]
+
+//// [declarationEmitModuleWithScopeMarker.js]
 
 
-//// [es5ExportDefaultFunctionDeclaration4.d.ts]
+//// [declarationEmitModuleWithScopeMarker.d.ts]
 declare module "bar" {
     var before: typeof func;
+    export function normal(): void;
     export default function func(): typeof func;
     var after: typeof func;
+    export {};
 }
