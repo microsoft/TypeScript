@@ -769,3 +769,35 @@ events.emit('done');
 >emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >'done' : "done"
 
+// Repro from #25871
+
+declare var ff1: (... args: any[]) => void;
+>ff1 : (...args: any[]) => void
+>args : any[]
+
+declare var ff2: () => void;
+>ff2 : () => void
+
+declare var ff3: (...args: []) => void;
+>ff3 : () => void
+>args : []
+
+declare var ff4: (a: never) => void;
+>ff4 : (a: never) => void
+>a : never
+
+ff1 = ff2;
+>ff1 = ff2 : () => void
+>ff1 : (...args: any[]) => void
+>ff2 : () => void
+
+ff1 = ff3;
+>ff1 = ff3 : () => void
+>ff1 : (...args: any[]) => void
+>ff3 : () => void
+
+ff1 = ff4;  // Error
+>ff1 = ff4 : (a: never) => void
+>ff1 : (...args: any[]) => void
+>ff4 : (a: never) => void
+

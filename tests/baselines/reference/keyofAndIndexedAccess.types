@@ -83,7 +83,7 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >K10 : "name" | "width" | "height" | "visible"
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : number | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K11 : number | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 
 type K12 = keyof Dictionary<Shape>;  // string
 >K12 : string | number
@@ -98,7 +98,7 @@ type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >K15 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : number | "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K16 : number | "0" | "1" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"

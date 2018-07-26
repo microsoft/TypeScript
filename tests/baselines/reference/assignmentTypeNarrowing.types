@@ -62,6 +62,7 @@ x; // number
 >{x = ""} = {x: true} : { x?: true; }
 >{x = ""} : { x?: string | number | boolean | RegExp; }
 >x : string | number | boolean | RegExp
+>"" : ""
 >{x: true} : { x?: true; }
 >x : true
 >true : true

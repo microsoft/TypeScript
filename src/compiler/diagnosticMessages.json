@@ -983,6 +983,10 @@
         "category": "Error",
         "code": 1343
     },
+    "'A label is not allowed here.": {
+        "category": "Error",
+        "code": 1344
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1192,7 +1196,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Type '{0}' cannot be converted to type '{1}'.": {
+    "Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.": {
         "category": "Error",
         "code": 2352
     },
@@ -2412,6 +2416,18 @@
     "Property '{0}' is used before its initialization.": {
         "category": "Error",
         "code": 2729
+    },
+    "An arrow function cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2730
+    },
+    "Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.": {
+        "category": "Error",
+        "code": 2731
+    },
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+        "category": "Error",
+        "code": 2732
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3904,6 +3920,10 @@
     "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
         "category": "Error",
         "code": 7040
+    },
+    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+        "category": "Error",
+        "code": 7041
     },
     "You cannot rename this element.": {
         "category": "Error",

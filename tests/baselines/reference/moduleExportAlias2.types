@@ -35,17 +35,17 @@ declare var module: { exports: any };
 /// <reference path='node.d.ts' />
 exports = module.exports = C
 >exports = module.exports = C : typeof C
->exports : typeof import("tests/cases/conformance/salsa/semver")
+>exports : typeof C
 >module.exports = C : typeof C
->module.exports : any
->module : { exports: any; }
->exports : any
+>module.exports : typeof C
+>module : { "tests/cases/conformance/salsa/semver": typeof C; }
+>exports : typeof C
 >C : typeof C
 
 exports.f = n => n + 1
 >exports.f = n => n + 1 : (n: any) => any
 >exports.f : (n: any) => any
->exports : typeof import("tests/cases/conformance/salsa/semver")
+>exports : typeof C
 >f : (n: any) => any
 >n => n + 1 : (n: any) => any
 >n : any

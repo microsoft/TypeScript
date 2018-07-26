@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.0";
+    const versionMajorMinor = "3.1";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -545,7 +545,7 @@ declare namespace ts {
     }
     interface TypeParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.TypeParameter;
-        parent: DeclarationWithTypeParameters | InferTypeNode;
+        parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         name: Identifier;
         constraint?: TypeNode;
         default?: TypeNode;
@@ -1317,7 +1317,8 @@ declare namespace ts {
         block: Block;
     }
     type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
-    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    type DeclarationWithTypeParameterChildren = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
     interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
@@ -2048,6 +2049,7 @@ declare namespace ts {
         Optional = 16777216,
         Transient = 33554432,
         JSContainer = 67108864,
+        ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,
         Value = 67216319,
@@ -2104,7 +2106,8 @@ declare namespace ts {
         Computed = "__computed",
         Resolving = "__resolving__",
         ExportEquals = "export=",
-        Default = "default"
+        Default = "default",
+        This = "this"
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
@@ -2480,6 +2483,7 @@ declare namespace ts {
         strictFunctionTypes?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
+        stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
@@ -2581,7 +2585,7 @@ declare namespace ts {
     }
     interface UpToDateHost {
         fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date;
+        getModifiedTime(fileName: string): Date | undefined;
         getUnchangedTime?(fileName: string): Date | undefined;
         getLastStatus?(fileName: string): UpToDateStatus | undefined;
         setLastStatus?(fileName: string, status: UpToDateStatus): void;
@@ -2685,7 +2689,7 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
-        getModifiedTime?(fileName: string): Date;
+        getModifiedTime?(fileName: string): Date | undefined;
         setModifiedTime?(fileName: string, date: Date): void;
         deleteFile?(fileName: string): void;
     }
@@ -3022,7 +3026,7 @@ declare namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        getModifiedTime?(path: string): Date;
+        getModifiedTime?(path: string): Date | undefined;
         setModifiedTime?(path: string, time: Date): void;
         deleteFile?(path: string): void;
         /**

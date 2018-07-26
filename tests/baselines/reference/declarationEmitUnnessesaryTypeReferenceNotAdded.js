@@ -44,30 +44,3 @@ exports.default = parseArgs;
 //// [index.d.ts]
 import minimist = require('minimist');
 export default function parseArgs(): minimist.ParsedArgs;
-
-
-//// [DtsFileErrors]
-
-
-error TS2688: Cannot find type definition file for 'minimist'.
-error TS2688: Cannot find type definition file for 'process'.
-/index.d.ts(1,27): error TS2307: Cannot find module 'minimist'.
-
-
-!!! error TS2688: Cannot find type definition file for 'minimist'.
-!!! error TS2688: Cannot find type definition file for 'process'.
-==== /index.d.ts (1 errors) ====
-    import minimist = require('minimist');
-                              ~~~~~~~~~~
-!!! error TS2307: Cannot find module 'minimist'.
-    export default function parseArgs(): minimist.ParsedArgs;
-    
-==== /node_modules/@types/minimist/minimist.d.ts (0 errors) ====
-    declare namespace thing {
-        interface ParsedArgs {}
-    }
-    declare function thing(x: any): thing.ParsedArgs;
-    export = thing;
-==== /node_modules/@types/process/process.d.ts (0 errors) ====
-    declare const thing: any;
-    export = thing;

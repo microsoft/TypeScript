@@ -316,6 +316,7 @@ for ({ name = "noName" } = robot, i = 0; i < 1; i++) {
 >{ name = "noName" } = robot : Robot
 >{ name = "noName" } : { name?: string; }
 >name : string
+>"noName" : "noName"
 >robot : Robot
 >i = 0 : 0
 >i : number
@@ -338,6 +339,7 @@ for ({ name = "noName" } = getRobot(), i = 0; i < 1; i++) {
 >{ name = "noName" } = getRobot() : Robot
 >{ name = "noName" } : { name?: string; }
 >name : string
+>"noName" : "noName"
 >getRobot() : Robot
 >getRobot : () => Robot
 >i = 0 : 0
@@ -361,6 +363,7 @@ for ({ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0;
 >{ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name = "noName" } : { name?: string; }
 >name : string
+>"noName" : "noName"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
@@ -395,9 +398,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -436,9 +441,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -478,9 +485,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -790,7 +799,9 @@ for ({ name = "noName", skill = "skill" } = robot, i = 0; i < 1; i++) {
 >{ name = "noName", skill = "skill" } = robot : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
 >name : string
+>"noName" : "noName"
 >skill : string
+>"skill" : "skill"
 >robot : Robot
 >i = 0 : 0
 >i : number
@@ -813,7 +824,9 @@ for ({ name = "noName", skill = "skill" } = getRobot(), i = 0; i < 1; i++) {
 >{ name = "noName", skill = "skill" } = getRobot() : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
 >name : string
+>"noName" : "noName"
 >skill : string
+>"skill" : "skill"
 >getRobot() : Robot
 >getRobot : () => Robot
 >i = 0 : 0
@@ -837,7 +850,9 @@ for ({ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "tr
 >{ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
 >name : string
+>"noName" : "noName"
 >skill : string
+>"skill" : "skill"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
@@ -867,6 +882,7 @@ for ({
 
     name = "noName",
 >name : string
+>"noName" : "noName"
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -875,9 +891,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -911,6 +929,7 @@ for ({
 
     name = "noName",
 >name : string
+>"noName" : "noName"
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -919,9 +938,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -956,6 +977,7 @@ for ({
 
     name = "noName",
 >name : string
+>"noName" : "noName"
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -964,9 +986,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }

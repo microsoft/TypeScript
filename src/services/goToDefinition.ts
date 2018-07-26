@@ -68,13 +68,12 @@ namespace ts.GoToDefinition {
         //      bar<Test>(({pr/*goto*/op1})=>{});
         if (isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent) &&
             (node === (parent.propertyName || parent.name))) {
+            const name = getNameFromPropertyName(node);
             const type = typeChecker.getTypeAtLocation(parent.parent);
-            if (type) {
-                const propSymbols = getPropertySymbolsFromType(type, node);
-                if (propSymbols) {
-                    return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
-                }
-            }
+            return name === undefined ? emptyArray : flatMap(type.isUnion() ? type.types : [type], t => {
+                const prop = t.getProperty(name);
+                return prop && getDefinitionFromSymbol(typeChecker, prop, node);
+            });
         }
 
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
@@ -87,9 +86,12 @@ namespace ts.GoToDefinition {
         //      function Foo(arg: Props) {}
         //      Foo( { pr/*1*/op1: 10, prop2: true })
         const element = getContainingObjectLiteralElement(node);
-        if (element && typeChecker.getContextualType(element.parent as Expression)) {
-            return flatMap(getPropertySymbolsFromContextualType(typeChecker, element), propertySymbol =>
-                getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+        if (element) {
+            const contextualType = element && typeChecker.getContextualType(element.parent);
+            if (contextualType) {
+                return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
+                    getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            }
         }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
@@ -135,15 +137,8 @@ namespace ts.GoToDefinition {
 
         const symbol = typeChecker.getSymbolAtLocation(node);
         const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, node);
-        if (!type) {
-            return undefined;
-        }
-
-        if (type.isUnion() && !(type.flags & TypeFlags.Enum)) {
-            return flatMap(type.types, t => t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
-        }
-
-        return type.symbol && getDefinitionFromSymbol(typeChecker, type.symbol, node);
+        return type && flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
+            t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
     }
 
     export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
@@ -229,7 +224,7 @@ namespace ts.GoToDefinition {
         }
 
         function getCallSignatureDefinition(): DefinitionInfo[] | undefined {
-            return isCallExpressionTarget(node) || isNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
+            return isCallOrNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
                 ? getSignatureDefinition(symbol.declarations, /*selectConstructors*/ false)
                 : undefined;
         }

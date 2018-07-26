@@ -7,10 +7,10 @@ export function abc(a, b, c) { return 5; }
 >5 : 5
 
 module.exports = { abc };
->module.exports = { abc } : { abc: (a: any, b: any, c: any) => number; }
->module.exports : any
->module : any
->exports : any
+>module.exports = { abc } : typeof import("tests/cases/conformance/salsa/bug24934")
+>module.exports : typeof import("tests/cases/conformance/salsa/bug24934")
+>module : { "tests/cases/conformance/salsa/bug24934": typeof import("tests/cases/conformance/salsa/bug24934"); }
+>exports : typeof import("tests/cases/conformance/salsa/bug24934")
 >{ abc } : { abc: (a: any, b: any, c: any) => number; }
 >abc : (a: any, b: any, c: any) => number
 

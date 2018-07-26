@@ -333,7 +333,7 @@ namespace ts.textChanges {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
 
-        private insertText(sourceFile: SourceFile, pos: number, text: string): void {
+        public insertText(sourceFile: SourceFile, pos: number, text: string): void {
             this.replaceRangeWithText(sourceFile, createTextRange(pos), text);
         }
 

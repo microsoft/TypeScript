@@ -135,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const mtimeAfter = sys.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
@@ -592,6 +592,7 @@ namespace ts {
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensionsWithJsonIfResolveJsonModule = options.resolveJsonModule ? [...supportedExtensions, Extension.Json] : undefined;
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createMap<boolean>();
@@ -1925,7 +1926,7 @@ namespace ts {
             refFile?: SourceFile): SourceFile | undefined {
 
             if (hasExtension(fileName)) {
-                if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
+                if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule || supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
                     if (fail) fail(Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
                     return undefined;
                 }
@@ -2007,9 +2008,17 @@ namespace ts {
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
-                // NOTE: this only makes sense for case-insensitive file systems
-                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
-                    reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
+                if (file && options.forceConsistentCasingInFileNames) {
+                    let inputName = fileName;
+                    const checkedName = file.fileName;
+                    const isRedirect = toPath(checkedName) !== toPath(inputName);
+                    if (isRedirect) {
+                        inputName = getProjectReferenceRedirect(fileName) || fileName;
+                    }
+                    if (getNormalizedAbsolutePath(checkedName, currentDirectory) !== getNormalizedAbsolutePath(inputName, currentDirectory)) {
+                        reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile, refPos, refEnd);
+                    }
                 }
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
@@ -2365,7 +2374,7 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+            if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
 

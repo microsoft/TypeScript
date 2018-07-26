@@ -1,6 +1,6 @@
-tests/cases/compiler/genericTypeAssertions6.ts(8,13): error TS2352: Type 'U' cannot be converted to type 'T'.
-tests/cases/compiler/genericTypeAssertions6.ts(9,13): error TS2352: Type 'T' cannot be converted to type 'U'.
-tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Type 'U' cannot be converted to type 'T'.
+tests/cases/compiler/genericTypeAssertions6.ts(8,13): error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/compiler/genericTypeAssertions6.ts(9,13): error TS2352: Conversion of type 'T' to type 'U' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Date' is not comparable to type 'T'.
 
 
@@ -14,10 +14,10 @@ tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Type 'U' ca
         f(x: T, y: U) {
             x = <T>y;
                 ~~~~
-!!! error TS2352: Type 'U' cannot be converted to type 'T'.
+!!! error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
             y = <U>x;
                 ~~~~
-!!! error TS2352: Type 'T' cannot be converted to type 'U'.
+!!! error TS2352: Conversion of type 'T' to type 'U' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
         }
     }
     
@@ -29,7 +29,7 @@ tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Type 'U' ca
             var d = <U>new Date();
             var e = <T><U>new Date();
                     ~~~~~~~~~~~~~~~~
-!!! error TS2352: Type 'U' cannot be converted to type 'T'.
+!!! error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'Date' is not comparable to type 'T'.
         }
     }
