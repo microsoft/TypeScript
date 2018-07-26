@@ -15,8 +15,8 @@ mini.M.defaults()
 >defaults : (def: any) => any
 
 var m = new mini.M()
->m : typeof M
->new mini.M() : typeof M
+>m : M
+>new mini.M() : M
 >mini.M : typeof M
 >mini : { (): void; M: typeof M; filter: () => void; }
 >M : typeof M
@@ -24,7 +24,7 @@ var m = new mini.M()
 m.m()
 >m.m() : void
 >m.m : () => void
->m : typeof M
+>m : M
 >m : () => void
 
 mini.filter()
@@ -44,9 +44,9 @@ declare var module: any;
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
 >module.exports = minimatch : { (): void; M: typeof M; filter: () => void; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { (): void; M: typeof M; filter: () => void; }
+>module : { "tests/cases/conformance/salsa/minimatch": { (): void; M: typeof M; filter: () => void; }; }
+>exports : { (): void; M: typeof M; filter: () => void; }
 >minimatch : { (): void; M: typeof M; filter: () => void; }
 
 minimatch.M = M

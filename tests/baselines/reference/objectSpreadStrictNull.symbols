@@ -124,7 +124,7 @@ function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: 
 >fields : Symbol(fields, Decl(objectSpreadStrictNull.ts, 37, 11))
 >Fields : Symbol(Fields, Decl(objectSpreadStrictNull.ts, 27, 44))
 >partialFields : Symbol(partialFields, Decl(objectSpreadStrictNull.ts, 37, 26))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Fields : Symbol(Fields, Decl(objectSpreadStrictNull.ts, 27, 44))
 >nearlyPartialFields : Symbol(nearlyPartialFields, Decl(objectSpreadStrictNull.ts, 37, 58))
 >NearlyPartialFields : Symbol(NearlyPartialFields, Decl(objectSpreadStrictNull.ts, 32, 1))

@@ -1,15 +1,15 @@
 === tests/cases/conformance/salsa/a.js ===
 var my = my || {};
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->my || {} : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->{} : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
+>my : typeof my
+>my || {} : typeof my | { [x: string]: any; }
+>my : typeof my
+>{} : { [x: string]: any; }
 
 /** @param {number} n */
 my.method = function(n) {
 >my.method = function(n) {    return n + 1;} : (n: number) => number
 >my.method : (n: number) => number
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
+>my : typeof my
 >method : (n: number) => number
 >function(n) {    return n + 1;} : (n: number) => number
 >n : number
@@ -22,45 +22,45 @@ my.method = function(n) {
 my.number = 1;
 >my.number = 1 : 1
 >my.number : number
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
+>my : typeof my
 >number : number
 >1 : 1
 
 my.object = {};
 >my.object = {} : { [x: string]: any; }
 >my.object : { [x: string]: any; }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
+>my : typeof my
 >object : { [x: string]: any; }
 >{} : { [x: string]: any; }
 
 my.predicate = my.predicate || {};
->my.predicate = my.predicate || {} : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my.predicate || {} : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->{} : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>my.predicate = my.predicate || {} : typeof my.predicate
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
+>my.predicate || {} : { [x: string]: any; }
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
+>{} : { [x: string]: any; }
 
 my.predicate.query = function () {
 >my.predicate.query = function () {    var me = this;    me.property = false;} : { (): void; another(): number; result: string; }
 >my.predicate.query : { (): void; another(): number; result: string; }
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
 >query : { (): void; another(): number; result: string; }
 >function () {    var me = this;    me.property = false;} : { (): void; another(): number; result: string; }
 
     var me = this;
->me : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->this : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>me : typeof my.predicate
+>this : typeof my.predicate
 
     me.property = false;
 >me.property = false : false
 >me.property : any
->me : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>me : typeof my.predicate
 >property : any
 >false : false
 
@@ -69,18 +69,18 @@ var q = new my.predicate.query();
 >q : any
 >new my.predicate.query() : any
 >my.predicate.query : { (): void; another(): number; result: string; }
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
 >query : { (): void; another(): number; result: string; }
 
 my.predicate.query.another = function () {
 >my.predicate.query.another = function () {    return 1;} : () => number
 >my.predicate.query.another : () => number
 >my.predicate.query : { (): void; another(): number; result: string; }
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
 >query : { (): void; another(): number; result: string; }
 >another : () => number
 >function () {    return 1;} : () => number
@@ -92,9 +92,9 @@ my.predicate.query.result = 'none'
 >my.predicate.query.result = 'none' : "none"
 >my.predicate.query.result : string
 >my.predicate.query : { (): void; another(): number; result: string; }
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
 >query : { (): void; another(): number; result: string; }
 >result : string
 >'none' : "none"
@@ -105,15 +105,15 @@ my.predicate.query.result = 'none'
 my.predicate.sort = my.predicate.sort || function (first, second) {
 >my.predicate.sort = my.predicate.sort || function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
 >my.predicate.sort : (first: number, second: number) => number
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
 >sort : (first: number, second: number) => number
 >my.predicate.sort || function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
 >my.predicate.sort : (first: number, second: number) => number
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
 >sort : (first: number, second: number) => number
 >function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
 >first : number
@@ -128,13 +128,13 @@ my.predicate.sort = my.predicate.sort || function (first, second) {
 >second : number
 }
 my.predicate.type = class {
->my.predicate.type = class {    m() { return 101; }} : typeof (Anonymous class)
->my.predicate.type : typeof (Anonymous class)
->my.predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->my : { [x: string]: any; method(n: number): number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }; }
->predicate : { [x: string]: any; query: { (): void; another(): number; result: string; }; sort(first: number, second: number): number; type: typeof (Anonymous class); }
->type : typeof (Anonymous class)
->class {    m() { return 101; }} : typeof (Anonymous class)
+>my.predicate.type = class {    m() { return 101; }} : typeof type
+>my.predicate.type : typeof type
+>my.predicate : typeof my.predicate
+>my : typeof my
+>predicate : typeof my.predicate
+>type : typeof type
+>class {    m() { return 101; }} : typeof type
 
     m() { return 101; }
 >m : () => number
@@ -144,47 +144,47 @@ my.predicate.type = class {
 
 // global-ish prefixes
 var min = window.min || {};
->min : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
+>min : typeof min
 >window.min || {} : any
 >window.min : any
->window : any
+>window : Window
 >min : any
->{} : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
+>{} : { [x: string]: any; }
 
 min.nest = this.min.nest || function () { };
->min.nest = this.min.nest || function () { } : { (): void; other: typeof (Anonymous class); }
->min.nest : { (): void; other: typeof (Anonymous class); }
->min : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
->nest : { (): void; other: typeof (Anonymous class); }
->this.min.nest || function () { } : { (): void; other: typeof (Anonymous class); }
+>min.nest = this.min.nest || function () { } : { (): void; other: typeof other; }
+>min.nest : { (): void; other: typeof other; }
+>min : typeof min
+>nest : { (): void; other: typeof other; }
+>this.min.nest || function () { } : { (): void; other: typeof other; }
 >this.min.nest : any
 >this.min : any
 >this : any
 >min : any
 >nest : any
->function () { } : { (): void; other: typeof (Anonymous class); }
+>function () { } : { (): void; other: typeof other; }
 
 min.nest.other = self.min.nest.other || class { };
->min.nest.other = self.min.nest.other || class { } : typeof (Anonymous class)
->min.nest.other : typeof (Anonymous class)
->min.nest : { (): void; other: typeof (Anonymous class); }
->min : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
->nest : { (): void; other: typeof (Anonymous class); }
->other : typeof (Anonymous class)
->self.min.nest.other || class { } : typeof (Anonymous class)
+>min.nest.other = self.min.nest.other || class { } : typeof other
+>min.nest.other : typeof other
+>min.nest : { (): void; other: typeof other; }
+>min : typeof min
+>nest : { (): void; other: typeof other; }
+>other : typeof other
+>self.min.nest.other || class { } : typeof other
 >self.min.nest.other : any
 >self.min.nest : any
 >self.min : any
->self : any
+>self : Window
 >min : any
 >nest : any
 >other : any
->class { } : typeof (Anonymous class)
+>class { } : typeof other
 
 min.property = global.min.property || {};
 >min.property = global.min.property || {} : { [x: string]: any; }
 >min.property : { [x: string]: any; }
->min : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
+>min : typeof min
 >property : { [x: string]: any; }
 >global.min.property || {} : { [x: string]: any; }
 >global.min.property : any

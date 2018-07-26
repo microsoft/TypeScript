@@ -28,13 +28,11 @@ function walk(ctx: Lint.WalkContext<void>): void {
     function shouldIgnoreCalledExpression(expression: ts.Expression): boolean {
         if (expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
             const methodName = (expression as ts.PropertyAccessExpression).name.text;
-            if (methodName.indexOf("set") === 0) {
+            if (methodName.startsWith("set") || methodName.startsWith("assert")) {
                 return true;
             }
             switch (methodName) {
                 case "apply":
-                case "assert":
-                case "assertEqual":
                 case "call":
                 case "equal":
                 case "fail":
@@ -46,11 +44,10 @@ function walk(ctx: Lint.WalkContext<void>): void {
         }
         else if (expression.kind === ts.SyntaxKind.Identifier) {
             const functionName = (expression as ts.Identifier).text;
-            if (functionName.indexOf("set") === 0) {
+            if (functionName.startsWith("set") || functionName.startsWith("assert")) {
                 return true;
             }
             switch (functionName) {
-                case "assert":
                 case "contains":
                 case "createAnonymousType":
                 case "createImportSpecifier":

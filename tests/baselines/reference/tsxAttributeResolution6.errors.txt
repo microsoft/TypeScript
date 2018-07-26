@@ -1,10 +1,6 @@
-tests/cases/conformance/jsx/file.tsx(10,8): error TS2322: Type '{ s: true; }' is not assignable to type '{ n?: boolean; s?: string; }'.
-  Types of property 's' are incompatible.
-    Type 'true' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(11,8): error TS2322: Type '{ n: string; }' is not assignable to type '{ n?: boolean; s?: string; }'.
-  Types of property 'n' are incompatible.
-    Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(12,1): error TS2322: Type '{}' is not assignable to type '{ n: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(10,8): error TS2322: Type 'true' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(11,8): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(12,2): error TS2322: Type '{}' is not assignable to type '{ n: boolean; }'.
   Property 'n' is missing in type '{}'.
 
 
@@ -20,16 +16,14 @@ tests/cases/conformance/jsx/file.tsx(12,1): error TS2322: Type '{}' is not assig
     // Error
     <test1 s />;
            ~
-!!! error TS2322: Type '{ s: true; }' is not assignable to type '{ n?: boolean; s?: string; }'.
-!!! error TS2322:   Types of property 's' are incompatible.
-!!! error TS2322:     Type 'true' is not assignable to type 'string'.
+!!! error TS2322: Type 'true' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:25: The expected type comes from property 's' which is declared here on type '{ n?: boolean; s?: string; }'
     <test1 n='true' />;
-           ~~~~~~~~
-!!! error TS2322: Type '{ n: string; }' is not assignable to type '{ n?: boolean; s?: string; }'.
-!!! error TS2322:   Types of property 'n' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'boolean'.
+           ~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:12: The expected type comes from property 'n' which is declared here on type '{ n?: boolean; s?: string; }'
     <test2 />;
-    ~~~~~~~~~
+     ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type '{ n: boolean; }'.
 !!! error TS2322:   Property 'n' is missing in type '{}'.
     

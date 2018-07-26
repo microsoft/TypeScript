@@ -10,9 +10,15 @@ sourceFile:ES5For-of8.ts
 -------------------------------------------------------------------
 >>>function foo() {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^
+4 >            ^^^^^^^^^->
 1 >
+2 >function 
+3 >         foo
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
 ---
 >>>    return { x: 0 };
 1->^^^^
@@ -23,7 +29,7 @@ sourceFile:ES5For-of8.ts
 6 >                ^
 7 >                 ^^
 8 >                   ^
-1->function foo() {
+1->() {
   >    
 2 >    return 
 3 >           { 

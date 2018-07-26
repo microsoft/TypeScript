@@ -8,4 +8,4 @@
 ////function f ({ [|next|]: { [|next|]: x} }: Recursive) {
 ////}
 
-verify.singleReferenceGroup("(property) Recursive.next: Recursive");
+verify.singleReferenceGroup("(property) Recursive.next?: Recursive");

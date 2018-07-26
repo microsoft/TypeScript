@@ -22,14 +22,18 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(71,5): error TS2411: Property 'foo' of type '() => string' is not assignable to string index type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(73,5): error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(74,5): error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(78,5): error TS2322: Type '{ a: string; b: number; c: () => void; "d": string; "e": number; 1.0: string; 2.0: number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }' is not assignable to type '{ [x: string]: string; }'.
-  Property 'b' is incompatible with index signature.
-    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(80,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(81,5): error TS2322: Type '() => void' is not assignable to type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(83,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(85,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(87,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(88,5): error TS2322: Type 'MyString' is not assignable to type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(90,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(93,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(94,5): error TS2322: Type '() => string' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts (27 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts (33 errors) ====
     // String indexer types constrain the types of named properties in their containing type
     
     interface MyString extends String {
@@ -43,25 +47,25 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
     
         a: string; // ok
         b: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'b' of type 'number' is not assignable to string index type 'string'.
         c: () => {} // error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type '() => {}' is not assignable to string index type 'string'.
         "d": string; // ok
         "e": number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '"e"' of type 'number' is not assignable to string index type 'string'.
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '2.0' of type 'number' is not assignable to string index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
         f: MyString; // error
-        ~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
     
         get X() { // ok
@@ -95,18 +99,18 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
     
         a: string; // ok
         b: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'b' of type 'number' is not assignable to string index type 'string'.
         c: () => {} // error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type '() => {}' is not assignable to string index type 'string'.
         "d": string; // ok
         "e": number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '"e"' of type 'number' is not assignable to string index type 'string'.
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '2.0' of type 'number' is not assignable to string index type 'string'.
         (): string; // ok
         (x): number // ok
@@ -115,10 +119,10 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
 !!! error TS2411: Property 'foo' of type '() => string' is not assignable to string index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
         f: MyString; // error
-        ~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
     }
     
@@ -127,18 +131,18 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
     
         a: string; // ok
         b: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'b' of type 'number' is not assignable to string index type 'string'.
         c: () => {} // error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type '() => {}' is not assignable to string index type 'string'.
         "d": string; // ok
         "e": number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '"e"' of type 'number' is not assignable to string index type 'string'.
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '2.0' of type 'number' is not assignable to string index type 'string'.
         (): string; // ok
         (x): number // ok
@@ -147,29 +151,43 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
 !!! error TS2411: Property 'foo' of type '() => string' is not assignable to string index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
         f: MyString; // error
-        ~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
     }
     
     // error
     var b: { [x: string]: string; } = {
-        ~
-!!! error TS2322: Type '{ a: string; b: number; c: () => void; "d": string; "e": number; 1.0: string; 2.0: number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }' is not assignable to type '{ [x: string]: string; }'.
-!!! error TS2322:   Property 'b' is incompatible with index signature.
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
         a: '',
         b: 1, 
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         c: () => { }, 
+        ~
+!!! error TS2322: Type '() => void' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         "d": '', 
         "e": 1, 
+        ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         1.0: '',
         2.0: 1, 
+        ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         "3.0": '', 
         "4.0": 1, 
+        ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         f: <MyString>null, 
+        ~
+!!! error TS2322: Type 'MyString' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
     
         get X() { 
             ~
@@ -180,6 +198,9 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo() { 
+        ~~~
+!!! error TS2322: Type '() => string' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
             return '';
         }
     }

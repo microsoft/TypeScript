@@ -15,6 +15,7 @@ tests/cases/compiler/letDeclarations-scopes2.ts(25,1): error TS2304: Cannot find
         local2; // Error
         ~~~~~~
 !!! error TS2552: Cannot find name 'local2'. Did you mean 'local'?
+!!! related TS2728 tests/cases/compiler/letDeclarations-scopes2.ts:4:9: 'local' is declared here.
     
         {
             let local2 = 0;
@@ -29,6 +30,7 @@ tests/cases/compiler/letDeclarations-scopes2.ts(25,1): error TS2304: Cannot find
         local2; // Error
         ~~~~~~
 !!! error TS2552: Cannot find name 'local2'. Did you mean 'local'?
+!!! related TS2728 tests/cases/compiler/letDeclarations-scopes2.ts:4:9: 'local' is declared here.
     }
     
     local;  // Error

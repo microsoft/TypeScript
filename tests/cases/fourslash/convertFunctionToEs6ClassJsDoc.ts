@@ -17,7 +17,7 @@
 /////**
 ////  * This is a cool function!
 ////*/
-////fn.prototype.bar = function (x, y, z) {
+////fn.prototype.bar = function (y) {
 ////    this.x = y;
 ////};
 
@@ -38,7 +38,7 @@ verify.codeFix({
     /**
       * This is a cool function!
     */
-    bar(x, y, z) {
+    bar(y) {
         this.x = y;
     }
 }

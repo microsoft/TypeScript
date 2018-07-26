@@ -7,30 +7,30 @@ var mod = require('./mod');
 >'./mod' : "./mod"
 
 var a = new mod.A()
->a : { a: number; } & { [x: string]: any; m(n: number): number; }
->new mod.A() : { a: number; } & { [x: string]: any; m(n: number): number; }
->mod.A : () => void
+>a : A & { [x: string]: any; m(n: number): number; }
+>new mod.A() : A & { [x: string]: any; m(n: number): number; }
+>mod.A : typeof A
 >mod : typeof import("tests/cases/conformance/salsa/mod")
->A : () => void
+>A : typeof A
 
 var b = new mod.B()
->b : { b: number; } & { [x: string]: any; m(n: number): number; }
->new mod.B() : { b: number; } & { [x: string]: any; m(n: number): number; }
->mod.B : () => void
+>b : B & { [x: string]: any; m(n: number): number; }
+>new mod.B() : B & { [x: string]: any; m(n: number): number; }
+>mod.B : typeof B
 >mod : typeof import("tests/cases/conformance/salsa/mod")
->B : () => void
+>B : typeof B
 
 a.m('nope')
 >a.m('nope') : number
 >a.m : (n: number) => number
->a : { a: number; } & { [x: string]: any; m(n: number): number; }
+>a : A & { [x: string]: any; m(n: number): number; }
 >m : (n: number) => number
 >'nope' : "nope"
 
 b.m('not really')
 >b.m('not really') : number
 >b.m : (n: number) => number
->b : { b: number; } & { [x: string]: any; m(n: number): number; }
+>b : B & { [x: string]: any; m(n: number): number; }
 >m : (n: number) => number
 >'not really' : "not really"
 
@@ -45,8 +45,8 @@ declare var exports: any;
 === tests/cases/conformance/salsa/mod.js ===
 /// <reference path='./types.d.ts'/>
 var A = function() {
->A : () => void
->function() {    this.a = 1} : () => void
+>A : typeof A
+>function() {    this.a = 1} : typeof A
 
     this.a = 1
 >this.a = 1 : 1
@@ -56,8 +56,8 @@ var A = function() {
 >1 : 1
 }
 var B = function() {
->B : () => void
->function() {    this.b = 2} : () => void
+>B : typeof B
+>function() {    this.b = 2} : typeof B
 
     this.b = 2
 >this.b = 2 : 2
@@ -67,28 +67,28 @@ var B = function() {
 >2 : 2
 }
 exports.A = A
->exports.A = A : () => void
->exports.A : () => void
+>exports.A = A : typeof A
+>exports.A : typeof A
 >exports : typeof import("tests/cases/conformance/salsa/mod")
->A : () => void
->A : () => void
+>A : typeof A
+>A : typeof A
 
 exports.B = B
->exports.B = B : () => void
->exports.B : () => void
+>exports.B = B : typeof B
+>exports.B : typeof B
 >exports : typeof import("tests/cases/conformance/salsa/mod")
->B : () => void
->B : () => void
+>B : typeof B
+>B : typeof B
 
 A.prototype = B.prototype = {
 >A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
->A.prototype : any
->A : () => void
->prototype : any
+>A.prototype : { [x: string]: any; m(n: number): number; }
+>A : typeof A
+>prototype : { [x: string]: any; m(n: number): number; }
 >B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
->B.prototype : any
->B : () => void
->prototype : any
+>B.prototype : { [x: string]: any; m(n: number): number; }
+>B : typeof B
+>prototype : { [x: string]: any; m(n: number): number; }
 >{    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
 
     /** @param {number} n */

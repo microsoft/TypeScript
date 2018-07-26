@@ -1,0 +1,31 @@
+=== tests/cases/compiler/types.d.ts ===
+declare namespace A {
+>A : any
+
+    export namespace B {
+>B : any
+
+        export namespace C {
+>C : any
+
+            export namespace D {
+>D : any
+            }
+        }
+    }
+}
+=== tests/cases/compiler/usage.ts ===
+class Foo {
+>Foo : Foo
+
+    f(@decorate user: A.B.C.D.E): void {}
+>f : (user: any) => void
+>decorate : any
+>user : any
+>A : any
+>B : any
+>C : any
+>D : any
+>E : No type information available!
+}
+

@@ -5,6 +5,7 @@
 ////     * @return {...*}
 ////     */
 ////    m(x) {
+////        return [x];
 ////    }
 ////}
 
@@ -16,6 +17,7 @@ verify.codeFix({
      * @return {...*}
      */
     m(x): any[] {
+        return [x];
     }
 }`,
 });

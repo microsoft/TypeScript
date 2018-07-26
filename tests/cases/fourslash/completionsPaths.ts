@@ -23,6 +23,5 @@
 // @Filename: /src/folder/4.ts
 ////const foo = require(`x//*4*/`);
 
-const [r0, r1, r2, r3] = test.ranges();
 verify.completionsAt("1", ["y", "x"], { isNewIdentifierLocation: true });
 verify.completionsAt(["2", "3", "4"], ["bar", "foo"], { isNewIdentifierLocation: true });

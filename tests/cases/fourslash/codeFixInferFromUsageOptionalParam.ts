@@ -2,6 +2,7 @@
 
 // @noImplicitAny: true
 ////function f([|a? |]){
+////    a;
 ////}
 ////f();
 ////f(1);

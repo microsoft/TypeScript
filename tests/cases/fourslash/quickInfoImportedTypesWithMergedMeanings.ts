@@ -17,7 +17,7 @@ verify.quickInfoAt("1", [
     "(alias) function Original(): void",
     "(alias) type Original<T> = () => T",
     "(alias) namespace Original",
-    "import Original",
+    "export Original",
 ].join("\n"), "some docs ");
 
 verify.quickInfoAt("2", [

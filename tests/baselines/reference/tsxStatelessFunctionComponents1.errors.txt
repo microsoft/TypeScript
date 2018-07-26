@@ -1,18 +1,13 @@
-tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ naaame: string; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
-  Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
-    Property 'name' is missing in type '{ naaame: string; }'.
-tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type '{ name: number; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-  Type '{ name: number; }' is not assignable to type '{ name?: string; }'.
-    Types of property 'name' are incompatible.
-      Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(29,15): error TS2559: Type '{ naaaaaaame: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
-tests/cases/conformance/jsx/file.tsx(34,23): error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
-  Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
-    Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
-tests/cases/conformance/jsx/file.tsx(37,23): error TS2559: Type '{ prop1: true; }' has no properties in common with type 'IntrinsicAttributes'.
-tests/cases/conformance/jsx/file.tsx(38,24): error TS2559: Type '{ ref: (x: any) => any; }' has no properties in common with type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(19,10): error TS2322: Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
+  Property 'name' is missing in type '{ naaame: string; }'.
+tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(29,10): error TS2559: Type '{ naaaaaaame: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(34,10): error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
+  Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
+tests/cases/conformance/jsx/file.tsx(37,10): error TS2559: Type '{ prop1: true; }' has no properties in common with type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(38,11): error TS2559: Type '{ ref: (x: any) => any; }' has no properties in common with type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
-tests/cases/conformance/jsx/file.tsx(45,24): error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
@@ -35,10 +30,9 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2559: Type '{ prop1: boolea
     let a1 = <Greet name='world' extra-prop />;
     // Error
     let b = <Greet naaame='world' />;
-                   ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ naaame: string; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
-!!! error TS2322:   Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
-!!! error TS2322:     Property 'name' is missing in type '{ naaame: string; }'.
+             ~~~~~
+!!! error TS2322: Type '{ naaame: string; }' is not assignable to type '{ name: string; }'.
+!!! error TS2322:   Property 'name' is missing in type '{ naaame: string; }'.
     
     // OK
     let c = <Meet />;
@@ -47,31 +41,27 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2559: Type '{ prop1: boolea
     let d = <Meet name='me' />;
     // Error
     let e = <Meet name={42} />;
-                  ~~~~~~~~~
-!!! error TS2322: Type '{ name: number; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-!!! error TS2322:   Type '{ name: number; }' is not assignable to type '{ name?: string; }'.
-!!! error TS2322:     Types of property 'name' are incompatible.
-!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+                  ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     // Error
     let f = <Meet naaaaaaame='no' />;
-                  ~~~~~~~~~~~~~~~
+             ~~~~
 !!! error TS2559: Type '{ naaaaaaame: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
     
     // OK
     let g = <MeetAndGreet prop-name="Bob" />;
     // Error
     let h = <MeetAndGreet extra-prop-name="World" />;
-                          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
-!!! error TS2322:   Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
-!!! error TS2322:     Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
+             ~~~~~~~~~~~~
+!!! error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
+!!! error TS2322:   Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
     
     // Error
     let i = <EmptyPropSFC prop1 />
-                          ~~~~~
+             ~~~~~~~~~~~~
 !!! error TS2559: Type '{ prop1: true; }' has no properties in common with type 'IntrinsicAttributes'.
     let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              ~~~~~~~~~~~~
 !!! error TS2559: Type '{ ref: (x: any) => any; }' has no properties in common with type 'IntrinsicAttributes'.
     
     let o = {
@@ -82,7 +72,7 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2559: Type '{ prop1: boolea
     
     // OK as access properties are allow when spread
     let i2 = <EmptyPropSFC {...o} />
-                           ~~~~~~
+              ~~~~~~~~~~~~
 !!! error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes'.
     
     let o1: any;

@@ -13,7 +13,7 @@
 
 goTo.marker("");
 verify.completionListContains({ name: "foo", source: "/a" }, "(alias) const foo: 0\nexport default foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
+    includeCompletionsForModuleExports: true,
     sourceDisplay: "./a",
 });
 

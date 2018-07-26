@@ -7,6 +7,7 @@
 
 // @Filename: /a.ts
 ////import * as abs from [|"abs/subModule"|];
+////abs;
 
 test.setTypesRegistry({
     "abs": undefined,

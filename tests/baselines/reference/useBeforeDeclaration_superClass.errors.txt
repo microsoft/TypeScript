@@ -1,4 +1,4 @@
-tests/cases/compiler/useBeforeDeclaration_superClass.ts(25,18): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/useBeforeDeclaration_superClass.ts(25,18): error TS2729: Property 'x' is used before its initialization.
 
 
 ==== tests/cases/compiler/useBeforeDeclaration_superClass.ts (1 errors) ====
@@ -28,7 +28,8 @@ tests/cases/compiler/useBeforeDeclaration_superClass.ts(25,18): error TS2448: Bl
     class J implements I {
         old_x = this.x;
                      ~
-!!! error TS2448: Block-scoped variable 'x' used before its declaration.
+!!! error TS2729: Property 'x' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_superClass.ts:26:5: 'x' is declared here.
         x = 1;
     }
     

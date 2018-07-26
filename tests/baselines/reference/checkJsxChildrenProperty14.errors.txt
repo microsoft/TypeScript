@@ -1,8 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(42,27): error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & SingleChildProp'.
-  Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
-    Types of property 'children' are incompatible.
-      Type 'Element[]' is not assignable to type 'Element'.
-        Property 'type' is missing in type 'Element[]'.
+tests/cases/conformance/jsx/file.tsx(42,11): error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
+  Types of property 'children' are incompatible.
+    Type 'Element[]' is not assignable to type 'Element'.
+      Property 'type' is missing in type 'Element[]'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -48,9 +47,8 @@ tests/cases/conformance/jsx/file.tsx(42,27): error TS2322: Type '{ children: Ele
     
     // Error
     let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
-                              ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & SingleChildProp'.
-!!! error TS2322:   Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
-!!! error TS2322:     Types of property 'children' are incompatible.
-!!! error TS2322:       Type 'Element[]' is not assignable to type 'Element'.
-!!! error TS2322:         Property 'type' is missing in type 'Element[]'.
+              ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
+!!! error TS2322:   Types of property 'children' are incompatible.
+!!! error TS2322:     Type 'Element[]' is not assignable to type 'Element'.
+!!! error TS2322:       Property 'type' is missing in type 'Element[]'.

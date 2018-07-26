@@ -64,9 +64,3 @@
 ////label7: while (true) continue label5;
 
 verify.rangesAreOccurrences(false);
-
-goTo.marker();
-verify.occurrencesAtPositionCount(test.ranges().length);
-for (const range of test.ranges()) {
-    verify.occurrencesAtPositionContains(range, false);
-}

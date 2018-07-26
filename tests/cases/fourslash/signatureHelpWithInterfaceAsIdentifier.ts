@@ -5,5 +5,4 @@
 ////}
 ////C(/*1*/);
 
-goTo.marker('1');
-verify.not.signatureHelpPresent();
+verify.noSignatureHelp("1");

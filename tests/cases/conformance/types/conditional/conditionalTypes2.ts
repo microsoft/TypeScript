@@ -136,3 +136,14 @@ type B<T, V> =
 
 type C<T, V, E> =
   { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
+
+// Repro from #23100
+
+type A2<T, V, E> =
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
+
+type B2<T, V> =
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
+
+type C2<T, V, E> =
+    T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;

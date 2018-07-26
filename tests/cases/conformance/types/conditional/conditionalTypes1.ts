@@ -303,7 +303,7 @@ function f50() {
 
 // Repro from #21862
 
-type OldDiff<T extends string, U extends string> = (
+type OldDiff<T extends keyof any, U extends keyof any> = (
     & { [P in T]: P; }
     & { [P in U]: never; }
     & { [x: string]: never; }

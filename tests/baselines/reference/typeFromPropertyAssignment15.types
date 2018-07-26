@@ -1,14 +1,14 @@
 === tests/cases/conformance/salsa/a.js ===
 var Outer = {};
->Outer : { [x: string]: any; Inner: typeof (Anonymous class); }
->{} : { [x: string]: any; Inner: typeof (Anonymous class); }
+>Outer : typeof Outer
+>{} : { [x: string]: any; }
 
 Outer.Inner = class {
->Outer.Inner = class {    constructor() {        this.x = 1    }    m() { }} : typeof (Anonymous class)
->Outer.Inner : typeof (Anonymous class)
->Outer : { [x: string]: any; Inner: typeof (Anonymous class); }
->Inner : typeof (Anonymous class)
->class {    constructor() {        this.x = 1    }    m() { }} : typeof (Anonymous class)
+>Outer.Inner = class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
 
     constructor() {
         this.x = 1
@@ -24,34 +24,34 @@ Outer.Inner = class {
 
 /** @type {Outer.Inner} */
 var inner
->inner : (Anonymous class)
+>inner : Inner
 
 inner.x
 >inner.x : number
->inner : (Anonymous class)
+>inner : Inner
 >x : number
 
 inner.m()
 >inner.m() : void
 >inner.m : () => void
->inner : (Anonymous class)
+>inner : Inner
 >m : () => void
 
 var inno = new Outer.Inner()
->inno : (Anonymous class)
->new Outer.Inner() : (Anonymous class)
->Outer.Inner : typeof (Anonymous class)
->Outer : { [x: string]: any; Inner: typeof (Anonymous class); }
->Inner : typeof (Anonymous class)
+>inno : Inner
+>new Outer.Inner() : Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
 
 inno.x
 >inno.x : number
->inno : (Anonymous class)
+>inno : Inner
 >x : number
 
 inno.m()
 >inno.m() : void
 >inno.m : () => void
->inno : (Anonymous class)
+>inno : Inner
 >m : () => void
 

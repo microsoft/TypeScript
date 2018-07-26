@@ -6,6 +6,8 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(24,5): error TS23
   Types of property 'foo' are incompatible.
     Type 'B extends string ? keyof B : B' is not assignable to type 'A extends string ? keyof A : A'.
       Type 'keyof B' is not assignable to type 'keyof A'.
+        Type 'string | number | symbol' is not assignable to type 'keyof A'.
+          Type 'string' is not assignable to type 'keyof A'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
   Types of property 'foo' are incompatible.
     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
@@ -60,6 +62,8 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:   Types of property 'foo' are incompatible.
 !!! error TS2322:     Type 'B extends string ? keyof B : B' is not assignable to type 'A extends string ? keyof A : A'.
 !!! error TS2322:       Type 'keyof B' is not assignable to type 'keyof A'.
+!!! error TS2322:         Type 'string | number | symbol' is not assignable to type 'keyof A'.
+!!! error TS2322:           Type 'string' is not assignable to type 'keyof A'.
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
@@ -191,4 +195,15 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
     
     type C<T, V, E> =
       { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
+    
+    // Repro from #23100
+    
+    type A2<T, V, E> =
+        T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
+    
+    type B2<T, V> =
+        T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
+    
+    type C2<T, V, E> =
+        T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
     

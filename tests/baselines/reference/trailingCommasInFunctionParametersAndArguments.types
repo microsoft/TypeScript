@@ -12,6 +12,11 @@ function f2(...args,) {}
 >f2 : (...args: any[]) => void
 >args : any[]
 
+// Allowed for ambient declarations
+declare function f25(...args,): void;
+>f25 : (...args: any[]) => void
+>args : any[]
+
 f2(...[],);
 >f2(...[],) : void
 >f2 : (...args: any[]) => void

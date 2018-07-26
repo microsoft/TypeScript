@@ -40,19 +40,19 @@ function boxify<T>(obj: T): Boxified<T> {
 >T : T
 
         for (let k in obj) {
->k : keyof T
+>k : Extract<keyof T, string>
 >obj : T
 
             result[k] = { value: obj[k] };
->result[k] = { value: obj[k] } : { value: T[keyof T]; }
->result[k] : Boxified<T>[keyof T]
+>result[k] = { value: obj[k] } : { value: T[Extract<keyof T, string>]; }
+>result[k] : Boxified<T>[Extract<keyof T, string>]
 >result : Boxified<T>
->k : keyof T
->{ value: obj[k] } : { value: T[keyof T]; }
->value : T[keyof T]
->obj[k] : T[keyof T]
+>k : Extract<keyof T, string>
+>{ value: obj[k] } : { value: T[Extract<keyof T, string>]; }
+>value : T[Extract<keyof T, string>]
+>obj[k] : T[Extract<keyof T, string>]
 >obj : T
->k : keyof T
+>k : Extract<keyof T, string>
         }
         return result;
 >result : Boxified<T>

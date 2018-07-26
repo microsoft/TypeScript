@@ -7,6 +7,7 @@
 //// * @param {*} beta - I have no idea how this got here
 //// */
 ////function [|f|](x, y, z: string, alpha, beta) {
+////    x; y; z; alpha; beta;
 ////}
 
 verify.getSuggestionDiagnostics([{
@@ -17,6 +18,7 @@ verify.getSuggestionDiagnostics([{
 verify.codeFix({
     description: "Annotate with type from JSDoc",
     newFileContent:
+// TODO: GH#22358
 `/**
  * @param {number} x - the first parameter
  * @param {{ a: string, b: Date }} y - the most complex parameter
@@ -25,5 +27,6 @@ verify.codeFix({
  * @param {*} beta - I have no idea how this got here
  */
 function f(x: number, y: { a: string; b: Date; }, z: string, alpha, beta: any) {
+    x; y; z; alpha; beta;
 }`,
 });

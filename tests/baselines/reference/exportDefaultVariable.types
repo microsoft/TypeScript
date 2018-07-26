@@ -5,7 +5,7 @@ declare var io: any;
 >io : any
 
 declare module 'module' {
->'module' : typeof 'module'
+>'module' : typeof import("module")
 
     export default io;
 >io : any

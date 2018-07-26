@@ -1,0 +1,4 @@
+=== tests/cases/conformance/externalModules/exportDefaultClassNameWithObject.ts ===
+export default class Object {}
+>Object : Object
+

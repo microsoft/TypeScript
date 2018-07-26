@@ -1,20 +1,23 @@
-=== tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts ===
+=== /a.ts ===
+import * as _ from "./a";
+>_ : Symbol(_, Decl(a.ts, 0, 6))
+
 for (const _ of []) { }
->_ : Symbol(_, Decl(unusedLocalsStartingWithUnderscore.ts, 0, 10))
+>_ : Symbol(_, Decl(a.ts, 2, 10))
 
 for (const _ in []) { }
->_ : Symbol(_, Decl(unusedLocalsStartingWithUnderscore.ts, 2, 10))
+>_ : Symbol(_, Decl(a.ts, 4, 10))
 
-namespace M {
->M : Symbol(M, Decl(unusedLocalsStartingWithUnderscore.ts, 2, 23))
+namespace _ns {
+>_ns : Symbol(_ns, Decl(a.ts, 4, 23))
 
     let _;
->_ : Symbol(_, Decl(unusedLocalsStartingWithUnderscore.ts, 5, 7))
+>_ : Symbol(_, Decl(a.ts, 7, 7))
 
     for (const _ of []) { }
->_ : Symbol(_, Decl(unusedLocalsStartingWithUnderscore.ts, 6, 14))
+>_ : Symbol(_, Decl(a.ts, 8, 14))
 
     for (const _ in []) { }
->_ : Symbol(_, Decl(unusedLocalsStartingWithUnderscore.ts, 8, 14))
+>_ : Symbol(_, Decl(a.ts, 10, 14))
 }
-    
+

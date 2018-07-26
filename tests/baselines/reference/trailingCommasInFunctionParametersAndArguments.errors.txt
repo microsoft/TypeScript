@@ -10,6 +10,9 @@ tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts(5,
                        ~
 !!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
     
+    // Allowed for ambient declarations
+    declare function f25(...args,): void;
+    
     f2(...[],);
     
     // Not confused by overloads

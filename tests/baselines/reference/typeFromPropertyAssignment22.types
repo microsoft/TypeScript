@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/npm-install.js ===
 function Installer () {
->Installer : () => void
+>Installer : typeof Installer
 
     this.args = 0
 >this.args = 0 : 0
@@ -13,7 +13,7 @@ Installer.prototype.loadArgMetadata = function (next) {
 >Installer.prototype.loadArgMetadata = function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
 >Installer.prototype.loadArgMetadata : any
 >Installer.prototype : any
->Installer : () => void
+>Installer : typeof Installer
 >prototype : any
 >loadArgMetadata : any
 >function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
@@ -27,29 +27,29 @@ Installer.prototype.loadArgMetadata = function (next) {
         this.args = 'hi'
 >this.args = 'hi' : "hi"
 >this.args : number
->this : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
+>this : Installer
 >args : number
 >'hi' : "hi"
 
         this.newProperty = 1
 >this.newProperty = 1 : 1
 >this.newProperty : number | undefined
->this : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
+>this : Installer
 >newProperty : number | undefined
 >1 : 1
     }
 }
 var i = new Installer()
->i : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
->new Installer() : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
->Installer : () => void
+>i : Installer
+>new Installer() : Installer
+>Installer : typeof Installer
 
 i.newProperty = i.args // ok, number ==> number | undefined
 >i.newProperty = i.args : number
 >i.newProperty : number | undefined
->i : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
+>i : Installer
 >newProperty : number | undefined
 >i.args : number
->i : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
+>i : Installer
 >args : number
 

@@ -4,9 +4,9 @@ function f(...x: number[]) {
 >x : Symbol(x, Decl(restArgAssignmentCompat.ts, 0, 11))
 
     x.forEach((n, i) => void ('item ' + i + ' = ' + n));
->x.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>x.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(restArgAssignmentCompat.ts, 0, 11))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(restArgAssignmentCompat.ts, 1, 15))
 >i : Symbol(i, Decl(restArgAssignmentCompat.ts, 1, 17))
 >i : Symbol(i, Decl(restArgAssignmentCompat.ts, 1, 17))

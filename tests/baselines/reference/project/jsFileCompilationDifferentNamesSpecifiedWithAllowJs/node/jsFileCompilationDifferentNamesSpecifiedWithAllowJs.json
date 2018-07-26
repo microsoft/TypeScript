@@ -5,7 +5,7 @@
     "declaration": true,
     "project": "DifferentNamesSpecifiedWithAllowJs",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "DifferentNamesSpecifiedWithAllowJs/a.ts",
         "DifferentNamesSpecifiedWithAllowJs/b.js"
     ],

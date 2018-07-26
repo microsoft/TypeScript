@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 ////class C {
 ////    /** @param {number} value */
-////    set c(value) { return 12 }
+////    set c(value) { return value }
 ////}
 
 verify.codeFix({
@@ -9,6 +9,6 @@ verify.codeFix({
     newFileContent:
 `class C {
     /** @param {number} value */
-    set c(value: number) { return 12 }
+    set c(value: number) { return value }
 }`,
 });

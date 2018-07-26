@@ -12,8 +12,8 @@ class C extends Base {
 >super : typeof Base
 
         var obj = {
->obj : { [x: string]: () => void; }
->{            [(super(), "prop")]() { }        } : { [x: string]: () => void; }
+>obj : { [(super(), "prop")](): void; }
+>{            [(super(), "prop")]() { }        } : { [(super(), "prop")](): void; }
 
             [(super(), "prop")]() { }
 >[(super(), "prop")] : () => void

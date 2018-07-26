@@ -1,1 +1,0 @@
-/// <reference path="extractSymbol.ts" />

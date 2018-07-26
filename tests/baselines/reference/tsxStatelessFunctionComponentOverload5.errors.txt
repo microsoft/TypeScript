@@ -1,28 +1,16 @@
-tests/cases/conformance/jsx/file.tsx(48,24): error TS2322: Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }'.
-tests/cases/conformance/jsx/file.tsx(49,24): error TS2322: Type '{ children: string; to: string; onClick: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ children: string; to: string; onClick: (e: any) => void; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: any) => void; }'.
-tests/cases/conformance/jsx/file.tsx(50,24): error TS2322: Type '{ onClick: () => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ onClick: () => void; to: string; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ onClick: () => void; to: string; }'.
-tests/cases/conformance/jsx/file.tsx(51,24): error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ onClick: (k: MouseEvent<any>) => void; to: string; }'.
-tests/cases/conformance/jsx/file.tsx(53,24): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
-tests/cases/conformance/jsx/file.tsx(54,24): error TS2322: Type '{ children: number; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ children: number; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ children: number; onClick(e: any): void; }'.
-tests/cases/conformance/jsx/file.tsx(55,24): error TS2322: Type '{ children: string; className: true; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ children: string; className: true; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ children: string; className: true; onClick(e: any): void; }'.
-tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ data-format: true; }' is not assignable to type 'HyphenProps'.
-    Types of property '"data-format"' are incompatible.
-      Type 'true' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(48,13): error TS2322: Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'HyphenProps'.
+  Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }'.
+tests/cases/conformance/jsx/file.tsx(49,13): error TS2322: Type '{ children: string; to: string; onClick: (e: any) => void; }' is not assignable to type 'HyphenProps'.
+  Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: any) => void; }'.
+tests/cases/conformance/jsx/file.tsx(50,13): error TS2322: Type '{ onClick: () => void; to: string; }' is not assignable to type 'HyphenProps'.
+  Property '"data-format"' is missing in type '{ onClick: () => void; to: string; }'.
+tests/cases/conformance/jsx/file.tsx(51,13): error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'HyphenProps'.
+  Property '"data-format"' is missing in type '{ onClick: (k: MouseEvent<any>) => void; to: string; }'.
+tests/cases/conformance/jsx/file.tsx(53,13): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
+  Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
+tests/cases/conformance/jsx/file.tsx(54,51): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(55,68): error TS2322: Type 'true' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type 'true' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
@@ -74,44 +62,35 @@ tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ data-format: 
     
     // Error
     const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }'.
+                ~~~~~~~~~~
+!!! error TS2322: Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'HyphenProps'.
+!!! error TS2322:   Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }'.
     const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: string; to: string; onClick: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ children: string; to: string; onClick: (e: any) => void; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: any) => void; }'.
+                ~~~~~~~~~~
+!!! error TS2322: Type '{ children: string; to: string; onClick: (e: any) => void; }' is not assignable to type 'HyphenProps'.
+!!! error TS2322:   Property '"data-format"' is missing in type '{ children: string; to: string; onClick: (e: any) => void; }'.
     const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ onClick: () => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ onClick: () => void; to: string; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ onClick: () => void; to: string; }'.
+                ~~~~~~~~~~
+!!! error TS2322: Type '{ onClick: () => void; to: string; }' is not assignable to type 'HyphenProps'.
+!!! error TS2322:   Property '"data-format"' is missing in type '{ onClick: () => void; to: string; }'.
     const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ onClick: (k: MouseEvent<any>) => void; to: string; }'.
+                ~~~~~~~~~~
+!!! error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'HyphenProps'.
+!!! error TS2322:   Property '"data-format"' is missing in type '{ onClick: (k: MouseEvent<any>) => void; to: string; }'.
     const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
     const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
+                ~~~~~~~~~~
+!!! error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
+!!! error TS2322:   Property '"data-format"' is missing in type '{ to: string; onClick(e: any): void; }'.
     const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: number; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ children: number; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ children: number; onClick(e: any): void; }'.
+                                                      ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & HyphenProps'
     const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: string; className: true; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ children: string; className: true; onClick(e: any): void; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ children: string; className: true; onClick(e: any): void; }'.
+                                                                       ~~~~~~~~~
+!!! error TS2322: Type 'true' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & HyphenProps'
     const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
                            ~~~~~~~~~~~
-!!! error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ data-format: true; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Types of property '"data-format"' are incompatible.
-!!! error TS2322:       Type 'true' is not assignable to type 'string'.
+!!! error TS2322: Type 'true' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:17:5: The expected type comes from property 'data-format' which is declared here on type 'IntrinsicAttributes & HyphenProps'

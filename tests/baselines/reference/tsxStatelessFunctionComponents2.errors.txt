@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(19,16): error TS2559: Type '{ ref: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(19,10): error TS2559: Type '{ ref: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(25,42): error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
 tests/cases/conformance/jsx/file.tsx(27,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
 tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
@@ -24,7 +24,7 @@ tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNot
     let b = <Greet key="k" />;
     // Error - not allowed to specify 'ref' on SFCs
     let c = <Greet ref="myRef" />;
-                   ~~~~~~~~~~~
+             ~~~~~
 !!! error TS2559: Type '{ ref: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
     
     
@@ -34,6 +34,7 @@ tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNot
     let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
                                              ~~~~~
 !!! error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
+!!! related TS2728 /.lib/lib.d.ts:438:5: 'substr' is declared here.
     // Error (ref callback is contextually typed)
     let f = <BigGreeter ref={x => x.notARealProperty} />;
                                     ~~~~~~~~~~~~~~~~

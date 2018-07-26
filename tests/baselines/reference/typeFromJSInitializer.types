@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/a.js ===
 function A () {
->A : () => void
+>A : typeof A
 
     // should get any on this-assignments in constructor
     this.unknown = null
@@ -25,63 +25,63 @@ function A () {
 >[] : never[]
 }
 var a = new A()
->a : { unknown: any; unknowable: any; empty: any[]; }
->new A() : { unknown: any; unknowable: any; empty: any[]; }
->A : () => void
+>a : A
+>new A() : A
+>A : typeof A
 
 a.unknown = 1
 >a.unknown = 1 : 1
 >a.unknown : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknown : any
 >1 : 1
 
 a.unknown = true
 >a.unknown = true : true
 >a.unknown : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknown : any
 >true : true
 
 a.unknown = {}
 >a.unknown = {} : { [x: string]: any; }
 >a.unknown : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknown : any
 >{} : { [x: string]: any; }
 
 a.unknown = 'hi'
 >a.unknown = 'hi' : "hi"
 >a.unknown : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknown : any
 >'hi' : "hi"
 
 a.unknowable = 1
 >a.unknowable = 1 : 1
 >a.unknowable : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknowable : any
 >1 : 1
 
 a.unknowable = true
 >a.unknowable = true : true
 >a.unknowable : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknowable : any
 >true : true
 
 a.unknowable = {}
 >a.unknowable = {} : { [x: string]: any; }
 >a.unknowable : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknowable : any
 >{} : { [x: string]: any; }
 
 a.unknowable = 'hi'
 >a.unknowable = 'hi' : "hi"
 >a.unknowable : any
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >unknowable : any
 >'hi' : "hi"
 
@@ -89,7 +89,7 @@ a.empty.push(1)
 >a.empty.push(1) : number
 >a.empty.push : (...items: any[]) => number
 >a.empty : any[]
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >empty : any[]
 >push : (...items: any[]) => number
 >1 : 1
@@ -98,7 +98,7 @@ a.empty.push(true)
 >a.empty.push(true) : number
 >a.empty.push : (...items: any[]) => number
 >a.empty : any[]
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >empty : any[]
 >push : (...items: any[]) => number
 >true : true
@@ -107,7 +107,7 @@ a.empty.push({})
 >a.empty.push({}) : number
 >a.empty.push : (...items: any[]) => number
 >a.empty : any[]
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >empty : any[]
 >push : (...items: any[]) => number
 >{} : {}
@@ -116,7 +116,7 @@ a.empty.push('hi')
 >a.empty.push('hi') : number
 >a.empty.push : (...items: any[]) => number
 >a.empty : any[]
->a : { unknown: any; unknowable: any; empty: any[]; }
+>a : A
 >empty : any[]
 >push : (...items: any[]) => number
 >'hi' : "hi"

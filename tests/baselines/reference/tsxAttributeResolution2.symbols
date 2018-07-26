@@ -26,9 +26,9 @@ interface Attribs1 {
 >test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
 >c1 : Symbol(c1, Decl(file.tsx, 11, 6))
 >x : Symbol(x, Decl(file.tsx, 11, 12))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(file.tsx, 11, 12))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 <test1 data-c1={(x) => x.leng} />; // OK
 >test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))

@@ -4,11 +4,12 @@
 //// * @param {number} a
 //// * @param {T} b
 //// */
-////function /*1*/f<T>(a, b) {
+////function f<T>(a, b) {
 ////}
 
 verify.codeFix({
     description: "Annotate with type from JSDoc",
+    errorCode: 80004, // ignore 'unused T'
     newFileContent:
 `/**
  * @param {number} a

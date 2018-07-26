@@ -1,0 +1,217 @@
+=== tests/cases/conformance/types/tuple/restTupleElements1.ts ===
+type T00 = [string?];
+>T00 : Symbol(T00, Decl(restTupleElements1.ts, 0, 0))
+
+type T01 = [string, string?];
+>T01 : Symbol(T01, Decl(restTupleElements1.ts, 0, 21))
+
+type T02 = [string?, string];  // Error
+>T02 : Symbol(T02, Decl(restTupleElements1.ts, 1, 29))
+
+type T03 = [...string[]];
+>T03 : Symbol(T03, Decl(restTupleElements1.ts, 2, 29))
+
+type T04 = [...[...string[]]];
+>T04 : Symbol(T04, Decl(restTupleElements1.ts, 3, 25))
+
+type T05 = [...[...[...string[]]]];
+>T05 : Symbol(T05, Decl(restTupleElements1.ts, 4, 30))
+
+type T06 = [string, ...string[]];
+>T06 : Symbol(T06, Decl(restTupleElements1.ts, 5, 35))
+
+type T07 = [...string[], string];  // Error
+>T07 : Symbol(T07, Decl(restTupleElements1.ts, 6, 33))
+
+type T08 = [...string];  // Error
+>T08 : Symbol(T08, Decl(restTupleElements1.ts, 7, 33))
+
+type T09 = [...string?];  // Error
+>T09 : Symbol(T09, Decl(restTupleElements1.ts, 8, 23))
+
+type T10 = [string, ...[...string[]]];
+>T10 : Symbol(T10, Decl(restTupleElements1.ts, 9, 24))
+
+type T11 = [string, ...[...[...string[]]]];
+>T11 : Symbol(T11, Decl(restTupleElements1.ts, 10, 38))
+
+type T15 = [boolean, number, ...string[]];
+>T15 : Symbol(T15, Decl(restTupleElements1.ts, 11, 43))
+
+type L15 = T15["length"];  // number
+>L15 : Symbol(L15, Decl(restTupleElements1.ts, 13, 42))
+>T15 : Symbol(T15, Decl(restTupleElements1.ts, 11, 43))
+
+declare function assign<T, S extends T>(): void;
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+>T : Symbol(T, Decl(restTupleElements1.ts, 16, 24))
+>S : Symbol(S, Decl(restTupleElements1.ts, 16, 26))
+>T : Symbol(T, Decl(restTupleElements1.ts, 16, 24))
+
+assign<number[], [...number[]]>();
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<number[], [number, ...number[]]>();
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[...number[]], number[]>();
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], number[]>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], []>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], [number]>();
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], [number, number]>();
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], [number, number, ...number[]]>();
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number], [...number[]]>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number], [number, ...number[]]>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], [number, ...string[]]>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], [string, ...number[]]>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], [number, number, string]>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+assign<[number, ...number[]], [number, number, number, string]>();  // Error
+>assign : Symbol(assign, Decl(restTupleElements1.ts, 14, 25))
+
+type T20 = [number, string, ...boolean[]];
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T21 = T20[0];
+>T21 : Symbol(T21, Decl(restTupleElements1.ts, 36, 42))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T22 = T20[0 | 1];
+>T22 : Symbol(T22, Decl(restTupleElements1.ts, 38, 18))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T23 = T20[0 | 1 | 2];
+>T23 : Symbol(T23, Decl(restTupleElements1.ts, 39, 22))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T24 = T20[0 | 1 | 2 | 3];
+>T24 : Symbol(T24, Decl(restTupleElements1.ts, 40, 26))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T25 = T20[1 | 2 | 3];
+>T25 : Symbol(T25, Decl(restTupleElements1.ts, 41, 30))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T26 = T20[2 | 3];
+>T26 : Symbol(T26, Decl(restTupleElements1.ts, 42, 26))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T27 = T20[3];
+>T27 : Symbol(T27, Decl(restTupleElements1.ts, 43, 22))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+type T28 = T20[number];
+>T28 : Symbol(T28, Decl(restTupleElements1.ts, 44, 18))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+declare const t: T20;
+>t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
+>T20 : Symbol(T20, Decl(restTupleElements1.ts, 34, 66))
+
+declare const x: number;
+>x : Symbol(x, Decl(restTupleElements1.ts, 48, 13))
+
+let e0 = t[0];  // number
+>e0 : Symbol(e0, Decl(restTupleElements1.ts, 50, 3))
+>t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
+>0 : Symbol(0)
+
+let e1 = t[1];  // string
+>e1 : Symbol(e1, Decl(restTupleElements1.ts, 51, 3))
+>t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
+>1 : Symbol(1)
+
+let e2 = t[2];  // boolean
+>e2 : Symbol(e2, Decl(restTupleElements1.ts, 52, 3))
+>t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
+
+let e3 = t[3];  // boolean
+>e3 : Symbol(e3, Decl(restTupleElements1.ts, 53, 3))
+>t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
+
+let ex = t[x];  // number | string | boolean
+>ex : Symbol(ex, Decl(restTupleElements1.ts, 54, 3))
+>t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
+>x : Symbol(x, Decl(restTupleElements1.ts, 48, 13))
+
+declare function f0<T, U>(x: [T, ...U[]]): [T, U];
+>f0 : Symbol(f0, Decl(restTupleElements1.ts, 54, 14))
+>T : Symbol(T, Decl(restTupleElements1.ts, 56, 20))
+>U : Symbol(U, Decl(restTupleElements1.ts, 56, 22))
+>x : Symbol(x, Decl(restTupleElements1.ts, 56, 26))
+>T : Symbol(T, Decl(restTupleElements1.ts, 56, 20))
+>U : Symbol(U, Decl(restTupleElements1.ts, 56, 22))
+>T : Symbol(T, Decl(restTupleElements1.ts, 56, 20))
+>U : Symbol(U, Decl(restTupleElements1.ts, 56, 22))
+
+f0([]);  // Error
+>f0 : Symbol(f0, Decl(restTupleElements1.ts, 54, 14))
+
+f0([1]);
+>f0 : Symbol(f0, Decl(restTupleElements1.ts, 54, 14))
+
+f0([1, 2, 3]);
+>f0 : Symbol(f0, Decl(restTupleElements1.ts, 54, 14))
+
+f0([1, "hello", true]);
+>f0 : Symbol(f0, Decl(restTupleElements1.ts, 54, 14))
+
+declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
+>f1 : Symbol(f1, Decl(restTupleElements1.ts, 61, 23))
+>a : Symbol(a, Decl(restTupleElements1.ts, 63, 20))
+>x : Symbol(x, Decl(restTupleElements1.ts, 63, 25))
+>x : Symbol(x, Decl(restTupleElements1.ts, 63, 52))
+
+declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;
+>f2 : Symbol(f2, Decl(restTupleElements1.ts, 63, 84))
+>a : Symbol(a, Decl(restTupleElements1.ts, 64, 20))
+>x : Symbol(x, Decl(restTupleElements1.ts, 64, 28))
+>x : Symbol(x, Decl(restTupleElements1.ts, 64, 55))
+
+f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
+>f1 : Symbol(f1, Decl(restTupleElements1.ts, 61, 23))
+>x : Symbol(x, Decl(restTupleElements1.ts, 66, 4))
+>x : Symbol(x, Decl(restTupleElements1.ts, 66, 4))
+>x : Symbol(x, Decl(restTupleElements1.ts, 66, 15))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(restTupleElements1.ts, 66, 15))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(restTupleElements1.ts, 66, 30))
+>x.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(restTupleElements1.ts, 66, 30))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+
+f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
+>f2 : Symbol(f2, Decl(restTupleElements1.ts, 63, 84))
+>x : Symbol(x, Decl(restTupleElements1.ts, 67, 3))
+>x : Symbol(x, Decl(restTupleElements1.ts, 67, 3))
+>x : Symbol(x, Decl(restTupleElements1.ts, 67, 14))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(restTupleElements1.ts, 67, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(restTupleElements1.ts, 67, 29))
+>x.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(restTupleElements1.ts, 67, 29))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+

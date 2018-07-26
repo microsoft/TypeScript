@@ -6,9 +6,9 @@ class A {
 >a : Symbol(A.a, Decl(getterControlFlowStrictNull.ts, 0, 9))
 
         if (Math.random() > 0.5) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
             return '';
         }
@@ -23,9 +23,9 @@ class B {
 >a : Symbol(B.a, Decl(getterControlFlowStrictNull.ts, 9, 9))
 
         if (Math.random() > 0.5) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
             return '';
         }

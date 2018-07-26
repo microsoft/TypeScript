@@ -5,6 +5,7 @@
 //// * @returns {number}
 //// */
 ////function f(x) {
+////    return x;
 ////}
 
 verify.codeFix({
@@ -15,5 +16,6 @@ verify.codeFix({
  * @returns {number}
  */
 function f(x: number): number {
+    return x;
 }`,
 });

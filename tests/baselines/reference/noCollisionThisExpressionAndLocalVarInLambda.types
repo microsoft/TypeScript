@@ -1,6 +1,6 @@
 === tests/cases/compiler/noCollisionThisExpressionAndLocalVarInLambda.ts ===
 declare function alert(message?: any): void;
->alert : (message?: any) => void
+>alert : { (message?: any): void; (message?: any): void; }
 >message : any
 
 var x = {
@@ -25,7 +25,7 @@ var x = {
 }
 alert(x.doStuff(x => alert(x)));
 >alert(x.doStuff(x => alert(x))) : void
->alert : (message?: any) => void
+>alert : { (message?: any): void; (message?: any): void; }
 >x.doStuff(x => alert(x)) : () => any
 >x.doStuff : (callback: any) => () => any
 >x : { doStuff: (callback: any) => () => any; }
@@ -33,6 +33,6 @@ alert(x.doStuff(x => alert(x)));
 >x => alert(x) : (x: any) => void
 >x : any
 >alert(x) : void
->alert : (message?: any) => void
+>alert : { (message?: any): void; (message?: any): void; }
 >x : any
 
