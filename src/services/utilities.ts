@@ -194,16 +194,20 @@ namespace ts {
     }
 
     export function isCallExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTarget(node, SyntaxKind.CallExpression);
+        return isCallOrNewExpressionTargetWorker(node, isCallExpression);
     }
 
     export function isNewExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTarget(node, SyntaxKind.NewExpression);
+        return isCallOrNewExpressionTargetWorker(node, isNewExpression);
     }
 
-    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind): boolean {
+    export function isCallOrNewExpressionTarget(node: Node): boolean {
+        return isCallOrNewExpressionTargetWorker(node, isCallOrNewExpression);
+    }
+
+    function isCallOrNewExpressionTargetWorker<T extends CallExpression | NewExpression>(node: Node, pred: (node: Node) => node is T): boolean {
         const target = climbPastPropertyAccess(node);
-        return !!target && !!target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
+        return !!target && !!target.parent && pred(target.parent) && target.parent.expression === target;
     }
 
     export function climbPastPropertyAccess(node: Node) {
