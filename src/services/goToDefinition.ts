@@ -135,9 +135,24 @@ namespace ts.GoToDefinition {
         }
 
         const symbol = typeChecker.getSymbolAtLocation(node);
-        const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+        const type = symbol && getTypeForTypeDefinition(symbol, node, typeChecker);
         return type && flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
             t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
+    }
+
+    function getTypeForTypeDefinition(symbol: Symbol, node: Node, checker: TypeChecker): Type | undefined {
+        const type = checker.getTypeOfSymbolAtLocation(symbol, node);
+        if (!type) return undefined;
+
+        // If the type is just a function's inferred type,
+        // go-to-type should go to the return type instead, since go-to-definition takes you to the function anyway.
+        if (type.symbol === symbol ||
+            // At `const f = () => {}`, the symbol is `f` and the type symbol is at `() => {}`
+            symbol.valueDeclaration && type.symbol && isVariableDeclaration(symbol.valueDeclaration) && symbol.valueDeclaration.initializer === type.symbol.valueDeclaration as Node) {
+            const sigs = type.getCallSignatures();
+            if (sigs.length === 1) return checker.getReturnTypeOfSignature(first(sigs));
+        }
+        return type;
     }
 
     export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {

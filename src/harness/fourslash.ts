@@ -1674,7 +1674,7 @@ Actual: ${stringify(fullActual)}`);
             for (const { name, text } of outputFiles) {
                 const fromTestFile = this.getFileContent(name);
                 if (fromTestFile !== text) {
-                    this.raiseError("Emit output is not as expected: " + showTextDiff(fromTestFile, text));
+                    this.raiseError(`Emit output for ${name} is not as expected: ${showTextDiff(fromTestFile, text)}`);
                 }
             }
         }
