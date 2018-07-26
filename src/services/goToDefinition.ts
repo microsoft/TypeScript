@@ -68,11 +68,12 @@ namespace ts.GoToDefinition {
         //      bar<Test>(({pr/*goto*/op1})=>{});
         if (isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent) &&
             (node === (parent.propertyName || parent.name))) {
+            const name = getNameFromPropertyName(node);
             const type = typeChecker.getTypeAtLocation(parent.parent);
-            const propSymbols = getPropertySymbolsFromType(type, node);
-            if (propSymbols) {
-                return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
-            }
+            return name === undefined ? emptyArray : flatMap(type.isUnion() ? type.types : [type], t => {
+                const prop = t.getProperty(name);
+                return prop && getDefinitionFromSymbol(typeChecker, prop, node);
+            });
         }
 
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
