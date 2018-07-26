@@ -3921,6 +3921,10 @@
         "category": "Error",
         "code": 7040
     },
+    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+        "category": "Error",
+        "code": 7041
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

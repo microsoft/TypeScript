@@ -15279,7 +15279,7 @@ namespace ts {
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
             let container = getThisContainer(node, /* includeArrowFunctions */ true);
-            let needToCaptureLexicalThis = false;
+            let capturedByArrowFunction = false;
 
             if (container.kind === SyntaxKind.Constructor) {
                 checkThisBeforeSuper(node, container, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
@@ -15288,9 +15288,7 @@ namespace ts {
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
-
-                // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
-                needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES2015);
+                capturedByArrowFunction = true;
             }
 
             switch (container.kind) {
@@ -15320,14 +15318,19 @@ namespace ts {
                     break;
             }
 
-            if (needToCaptureLexicalThis) {
+            // When targeting es6, mark that we'll need to capture `this` in its lexically bound scope.
+            if (capturedByArrowFunction && languageVersion < ScriptTarget.ES2015) {
                 captureLexicalThis(node, container);
             }
 
             const type = tryGetThisTypeAt(node, container);
             if (!type && noImplicitThis) {
                 // With noImplicitThis, functions may not reference 'this' if it has type 'any'
-                error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+                error(
+                    node,
+                    capturedByArrowFunction ?
+                        Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation :
+                        Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this_which_implicitly_has_type_any);
             }
             return type || anyType;
         }
