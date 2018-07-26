@@ -57,6 +57,7 @@ namespace ts.codefix {
             for (let stmt of oldNodes) {
                 if (String(getNodeId(stmt)) === key) {
                     changes.replaceNodeWithNodes(sourceFile, stmt, value);
+                    break;
                 }
             }
         });
@@ -67,27 +68,35 @@ namespace ts.codefix {
             return;
         }
 
+        function willBeParsed(node: Expression): boolean {
+            return returnsAPromise(node, checker) || (isCallExpression(node) && (isCallback(node, "then", checker) || isCallback(node, "catch", checker)));
+        }
+
         forEachChild(func.body, function visit(node: Node) {
             if (isCallExpression(node) && isCallback(node, "then", checker)) {
                 lastDotThen.set(String(getNodeId(node)), false);
 
                 for (const arg of node.arguments) {
                     forEachChild(arg, function visit(argChild: Expression) {
-                        if (isCallExpression(argChild) && (returnsAPromise(argChild, checker) || isCallback(argChild, "then", checker) || isCallback(argChild, "catch", checker))) {
+                        if (willBeParsed(argChild)) {
                             lastDotThen.set(String(getNodeId(argChild)), false);
                         }
                     });
                 }
 
                 forEachChild(node, function visit(child: Node) {
-                    if (isCallExpression(child) && (returnsAPromise(child, checker) || isCallback(child, "then", checker) || isCallback(child, "catch", checker))) {
+                    if (isExpression(child) && willBeParsed(child)) {
                         if (!lastDotThen.get(String(getNodeId(child)))) {
                             lastDotThen.set(String(getNodeId(child)), true);
                         }
 
+                        if (!isCallExpression(child)) {
+                            return;
+                        }
+
                         for (const arg of child.arguments) {
                             forEachChild(arg, function visit(argChild: Expression) {
-                                if (isCallExpression(argChild) && (returnsAPromise(argChild, checker) || isCallback(argChild, "then", checker) || isCallback(child, "catch", checker))) {
+                                if (willBeParsed(argChild)) {
                                     lastDotThen.set(String(getNodeId(argChild)), true);
                                 }
                             });
@@ -106,6 +115,11 @@ namespace ts.codefix {
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, varNamesMap: Map<string>, synthNamesMap: Map<[Identifier, number]>): FunctionLikeDeclaration {
         const allVarNames: Identifier[] = [];
 
+        function isFunctionRef(node: Node): boolean {
+            const callExpr = climbPastPropertyAccess(node);
+            return !isCallExpression(callExpr) || callExpr.expression !== node;
+        }
+
         forEachChild(nodeToRename, function visit(node: Node) {
 
             if (isIdentifier(node)) {
@@ -114,7 +128,7 @@ namespace ts.codefix {
                 const newName = getNewNameIfConflict(node, allVarNames);
 
                 // if the identifier refers to a function
-                if (symbol && type && type.getCallSignatures().length > 0) {
+                if (symbol && type && type.getCallSignatures().length > 0 && isFunctionRef(node)) {
                     if (type.getCallSignatures()[0].parameters.length) {
                         // add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                         const synthName = createIdentifier(type.getCallSignatures()[0].parameters[0].name);
@@ -124,8 +138,16 @@ namespace ts.codefix {
                     }
                 }
                 else if (symbol && !varNamesMap.get(String(getSymbolId(symbol)))) {
-                    varNamesMap.set(String(getSymbolId(symbol)), newName.text);
-                    allVarNames.push(node);
+                    for (const ident of allVarNames) {
+                        if (ident.text === node.text && ident.symbol !== node.symbol){
+                            varNamesMap.set(String(getSymbolId(symbol)), newName.text);
+                        }
+                    }
+
+                    if (node.parent && isParameter(node.parent)) {
+                        allVarNames.push(node)
+                        synthNamesMap.set(node.text, [node, allVarNames.filter(elem => elem.text === node.text).length]);
+                    }
                 }
             }
             else {
@@ -141,13 +163,13 @@ namespace ts.codefix {
         return numVarsSameName === 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
     }
 
-    function returnsAPromise(node: CallExpression, checker: TypeChecker): boolean {
+    function returnsAPromise(node: Expression, checker: TypeChecker): boolean {
         const nodeType = checker.getTypeAtLocation(node);
         if (!nodeType) {
             return false;
         }
 
-        return !!checker.getPromisedTypeOfPromise(nodeType) && !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker);
+        return !!checker.getPromisedTypeOfPromise(nodeType) && (!isCallExpression(node) || !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker));
     }
 
     function parseCallback(node: Expression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>, prevArgName?: [Identifier, number]): Statement[] {
@@ -155,10 +177,7 @@ namespace ts.codefix {
             return [];
         }
 
-        if (isCallExpression(node) && returnsAPromise(node, checker)) {
-            return parsePromiseCall(node, lastDotThenMap, prevArgName);
-        }
-        else if (isCallExpression(node) && isCallback(node, "then", checker)) {
+        if (isCallExpression(node) && isCallback(node, "then", checker)) {
             return parseThen(node, checker, outermostParent, synthNamesMap, lastDotThenMap, prevArgName);
         }
         else if (isCallExpression(node) && isCallback(node, "catch", checker)) {
@@ -166,6 +185,9 @@ namespace ts.codefix {
         }
         else if (isPropertyAccessExpression(node)) {
             return parseCallback(node.expression, checker, outermostParent, synthNamesMap, lastDotThenMap, prevArgName);
+        }
+        else if (returnsAPromise(node, checker)) {
+            return parsePromiseCall(node, lastDotThenMap, prevArgName);
         }
 
         return [];
@@ -228,12 +250,13 @@ namespace ts.codefix {
         }
     }
 
-    function parsePromiseCall(node: CallExpression, lastDotThenMap: Map<boolean>, prevArgName?: [Identifier, number]): Statement[] {
+    function parsePromiseCall(node: Expression, lastDotThenMap: Map<boolean>, prevArgName?: [Identifier, number]): Statement[] {
         const nextDotThen = lastDotThenMap.get(String(getNodeId(node)));
         const hasPrevArgName = prevArgName && prevArgName[0].text.length > 0;
         if (hasPrevArgName && nextDotThen && isPropertyAccessExpression(node.original!.parent)) {
 
             if (prevArgName![1] > 1) {
+                prevArgName![1] -= 1;
                 return [createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), createAwait(node)))];
             }
 
@@ -270,6 +293,7 @@ namespace ts.codefix {
                 }
 
                 if (prevArgName![1] > 1) {
+                    prevArgName![1] -= 1;
                     return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), createAwait(synthCall)))]);
                 }
 
@@ -303,6 +327,7 @@ namespace ts.codefix {
 
                     if (hasPrevArgName && nextDotThen) {
                         if (prevArgName![1] > 1) {
+                            prevArgName![1] -= 1;
                             return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), func.body as Expression))]);
                         }
 
@@ -335,6 +360,7 @@ namespace ts.codefix {
 
         return createNodeArray(ret);
     }
+
 
     function getInnerCallbackBody(checker: TypeChecker, innerRetStmts: Node[], synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>, prevArgName?: [Identifier, number]) {
         let innerCbBody: Statement[] = [];
@@ -372,7 +398,8 @@ namespace ts.codefix {
         let name: [Identifier, number] | undefined;
 
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
-            name = [funcNode.parameters[0].name as Identifier, 1];
+            //name = [funcNode.parameters[0].name as Identifier, 1];
+            name = synthNamesMap.get((<Identifier>funcNode.parameters[0].name).text);
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
             name = [funcNode.arguments[0] as Identifier, 1];

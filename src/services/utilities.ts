@@ -1636,7 +1636,7 @@ namespace ts {
     }
 
     function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker, renameMap: Map<string>): boolean {
-        return !!((node && isIdentifier(node!) && checker.getSymbolAtLocation(node!)) && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node!)!))));
+        return !!(node && isIdentifier(node) && checker.getSymbolAtLocation(node) && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node)!))));
     }
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<string>, checker?: TypeChecker): T {
