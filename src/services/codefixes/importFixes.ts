@@ -203,14 +203,14 @@ namespace ts.codefix {
     ): ReadonlyArray<ImportFix> {
         const checker = program.getTypeChecker();
         const existingImports = flatMap(exportInfos, info => getExistingImportDeclarations(info, checker, sourceFile));
-        const useNamespace = tryUseExistingNamespaceImport(existingImports, symbolName, position, checker);
+        const useNamespace = position === undefined ? undefined : tryUseExistingNamespaceImport(existingImports, symbolName, position, checker);
         const addToExisting = tryAddToExistingImport(existingImports);
         // Don't bother providing an action to add a new import if we can add to an existing one.
         const addImport = addToExisting ? [addToExisting] : getFixesForAddImport(exportInfos, existingImports, program, sourceFile, position, host, preferences);
         return [...(useNamespace ? [useNamespace] : emptyArray), ...addImport];
     }
 
-    function tryUseExistingNamespaceImport(existingImports: ReadonlyArray<FixAddToExistingImportInfo>, symbolName: string, position: number | undefined, checker: TypeChecker): FixUseNamespaceImport | undefined {
+    function tryUseExistingNamespaceImport(existingImports: ReadonlyArray<FixAddToExistingImportInfo>, symbolName: string, position: number, checker: TypeChecker): FixUseNamespaceImport | undefined {
         // It is possible that multiple import statements with the same specifier exist in the file.
         // e.g.
         //
@@ -223,7 +223,7 @@ namespace ts.codefix {
         //     1. change "member3" to "ns.member3"
         //     2. add "member3" to the second import statement's import list
         // and it is up to the user to decide which one fits best.
-        return position === undefined ? undefined : firstDefined(existingImports, ({ declaration }): FixUseNamespaceImport | undefined => {
+        return firstDefined(existingImports, ({ declaration }): FixUseNamespaceImport | undefined => {
             const namespace = getNamespaceImportName(declaration);
             if (namespace) {
                 const moduleSymbol = checker.getAliasedSymbol(checker.getSymbolAtLocation(namespace)!);
