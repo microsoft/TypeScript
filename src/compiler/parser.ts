@@ -6835,7 +6835,7 @@ namespace ts {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral | undefined;
                         let childTypeTag: JSDocTypeTag | undefined;
-                        const start = scanner.getStartPos();
+                        const start = atToken.pos;
                         while (child = tryParse(() => parseChildPropertyTag())) {
                             if (!jsdocTypeLiteral) {
                                 jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
