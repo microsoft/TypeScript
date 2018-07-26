@@ -1633,6 +1633,8 @@ namespace ts {
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return (<ShorthandPropertyAssignment>parent).objectAssignmentInitializer === node;
             default:
                 return isExpressionNode(parent);
         }
