@@ -70,8 +70,10 @@ namespace ts.GoToDefinition {
             (node === (parent.propertyName || parent.name))) {
             const name = getNameFromPropertyName(node);
             const type = typeChecker.getTypeAtLocation(parent.parent);
-            const propSymbols = name === undefined ? emptyArray : mapDefined(type.isUnion() ? type.types : [type], t => t.getProperty(name));
-            return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
+            return name === undefined ? emptyArray : flatMap(type.isUnion() ? type.types : [type], t => {
+                const prop = t.getProperty(name);
+                return prop && getDefinitionFromSymbol(typeChecker, prop, node);
+            });
         }
 
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
