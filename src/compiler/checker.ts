@@ -15317,12 +15317,12 @@ namespace ts {
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
                         return getFlowTypeOfReference(node, getInferredClassType(classSymbol));
                     }
-
+                }
                 // Check if it's a constructor definition, can be either a variable decl or function decl
                 // i.e.
                 //   * /** @constructor */ function [name]() { ... }
                 //   * /** @constructor */ var x = function() { ... }
-                } else if ((container.kind === SyntaxKind.FunctionExpression ||
+                else if ((container.kind === SyntaxKind.FunctionExpression ||
                             container.kind === SyntaxKind.FunctionDeclaration) &&
                            getJSDocClassTag(container)) {
                     const classType = getJavaScriptClassType(container.symbol);
