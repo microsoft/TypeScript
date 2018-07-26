@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-lib/adapters/http.js(12,19): error TS2307: Cannot find module './../../package.json'.
+lib/adapters/http.js(12,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 lib/adapters/http.js(83,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 lib/adapters/http.js(189,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
