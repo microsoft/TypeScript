@@ -1196,7 +1196,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Type '{0}' cannot be converted to type '{1}'.": {
+    "Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.": {
         "category": "Error",
         "code": 2352
     },
@@ -2421,9 +2421,13 @@
         "category": "Error",
         "code": 2730
     },
-    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+    "Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.": {
         "category": "Error",
         "code": 2731
+    },
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+        "category": "Error",
+        "code": 2732
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
