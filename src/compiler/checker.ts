@@ -29188,10 +29188,6 @@ namespace ts {
                 }
                 checkGrammarForDisallowedTrailingComma(elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
 
-                if (node.name.kind === SyntaxKind.ArrayBindingPattern || node.name.kind === SyntaxKind.ObjectBindingPattern) {
-                    return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
-                }
-
                 if (node.propertyName) {
                     return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_have_a_property_name);
                 }
