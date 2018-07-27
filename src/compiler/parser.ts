@@ -491,6 +491,8 @@ namespace ts {
                     visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
             case SyntaxKind.JSDocThisTag:
                 return visitNode(cbNode, (node as JSDocThisTag).typeExpression);
+            case SyntaxKind.JSDocEnumTag:
+                return visitNode(cbNode, (node as JSDocEnumTag).typeExpression);
             case SyntaxKind.JSDocSignature:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -6527,6 +6529,9 @@ namespace ts {
                         case "this":
                             tag = parseThisTag(atToken, tagName);
                             break;
+                        case "enum":
+                            tag = parseEnumTag(atToken, tagName);
+                            break;
                         case "arg":
                         case "argument":
                         case "param":
@@ -6810,6 +6815,15 @@ namespace ts {
 
                 function parseThisTag(atToken: AtToken, tagName: Identifier): JSDocThisTag {
                     const tag = <JSDocThisTag>createNode(SyntaxKind.JSDocThisTag, atToken.pos);
+                    tag.atToken = atToken;
+                    tag.tagName = tagName;
+                    tag.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
+                    skipWhitespace();
+                    return finishNode(tag);
+                }
+
+                function parseEnumTag(atToken: AtToken, tagName: Identifier): JSDocEnumTag {
+                    const tag = <JSDocEnumTag>createNode(SyntaxKind.JSDocEnumTag, atToken.pos);
                     tag.atToken = atToken;
                     tag.tagName = tagName;
                     tag.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);

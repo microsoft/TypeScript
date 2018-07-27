@@ -372,6 +372,7 @@ namespace ts {
         JSDocAugmentsTag,
         JSDocClassTag,
         JSDocCallbackTag,
+        JSDocEnumTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocThisTag,
@@ -581,6 +582,7 @@ namespace ts {
         | FunctionTypeNode
         | ConstructorTypeNode
         | JSDocFunctionType
+        | ExportDeclaration
         | EndOfFileToken;
 
     export type HasType =
@@ -2202,7 +2204,7 @@ namespace ts {
         name: Identifier;
     }
 
-    export interface ExportDeclaration extends DeclarationStatement {
+    export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
         /** Will not be assigned in the case of `export * from "foo";` */
@@ -2346,6 +2348,11 @@ namespace ts {
 
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+
+    export interface JSDocEnumTag extends JSDocTag {
+        kind: SyntaxKind.JSDocEnumTag;
+        typeExpression?: JSDocTypeExpression;
     }
 
     export interface JSDocThisTag extends JSDocTag {
