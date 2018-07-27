@@ -1,4 +1,3 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(1,33): error TS2501: A rest element cannot contain a binding pattern.
 tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,32): error TS2345: Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'ReadonlyArray<[string, number]>'.
   Types of property 'concat' are incompatible.
     Type '{ (...items: ConcatArray<[string, number] | [string, boolean]>[]): ([string, number] | [string, boolean])[]; (...items: ([string, number] | [string, boolean] | ConcatArray<[string, number] | [string, boolean]>)[]): ([string, number] | [string, boolean])[]; }' is not assignable to type '{ (...items: ConcatArray<[string, number]>[]): [string, number][]; (...items: ([string, number] | ConcatArray<[string, number]>)[]): [string, number][]; }'.
@@ -8,10 +7,8 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,32): error
             Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts (2 errors) ====
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts (1 errors) ====
     function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
-                                    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2501: A rest element cannot contain a binding pattern.
     takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'ReadonlyArray<[string, number]>'.

@@ -1,7 +1,0 @@
-tests/cases/compiler/restParameterWithBindingPattern2.ts(1,15): error TS2501: A rest element cannot contain a binding pattern.
-
-
-==== tests/cases/compiler/restParameterWithBindingPattern2.ts (1 errors) ====
-    function a(...[a, b]) { }
-                  ~~~~~~
-!!! error TS2501: A rest element cannot contain a binding pattern.
