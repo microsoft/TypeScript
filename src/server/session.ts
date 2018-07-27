@@ -258,10 +258,6 @@ namespace ts.server {
         readonly symLinkedProjects: MultiMap<Project>;
     };
 
-    function isProjectsArray(projects: Projects): projects is ReadonlyArray<Project> {
-        return !!(<ReadonlyArray<Project>>projects).length;
-    }
-
     /**
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
@@ -273,8 +269,8 @@ namespace ts.server {
         comparer?: (a: U, b: U) => number,
         areEqual?: (a: U, b: U) => boolean,
     ): U[] {
-        const outputs = flatMap(isProjectsArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
-        if (!isProjectsArray(projects) && projects.symLinkedProjects) {
+        const outputs = flatMap(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
+        if (!isArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((projects, path) => {
                 const value = getValue(path as Path);
                 outputs.push(...flatMap(projects, project => action(project, value)));
@@ -370,7 +366,7 @@ namespace ts.server {
     }
 
     function forEachProjectInProjects(projects: Projects, path: string | undefined, cb: (project: Project, path: string | undefined) => void): void {
-        for (const project of isProjectsArray(projects) ? projects : projects.projects) {
+        for (const project of isArray(projects) ? projects : projects.projects) {
             cb(project, path);
         }
         if (!isArray(projects) && projects.symLinkedProjects) {
