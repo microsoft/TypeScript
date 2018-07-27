@@ -1106,7 +1106,7 @@ namespace ts.server {
             return project.getLanguageService().getRenameInfo(file, position);
         }
 
-        private getProjects(args: protocol.FileRequestArgs): Projects {
+        private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
             let projects: ReadonlyArray<Project> | undefined;
             let symLinkedProjects: MultiMap<Project> | undefined;
             if (args.projectFileName) {
@@ -1116,13 +1116,18 @@ namespace ts.server {
                 }
             }
             else {
-                const scriptInfo = this.projectService.getScriptInfo(args.file)!;
+                const scriptInfo = getScriptInfoEnsuringProjectsUptoDate ?
+                    this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file) :
+                    this.projectService.getScriptInfo(args.file);
+                if (!scriptInfo) {
+                    return ignoreNoProjectError ? emptyArray : Errors.ThrowNoProject();
+                }
                 projects = scriptInfo.containingProjects;
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
-            if ((!projects || !projects.length) && !symLinkedProjects) {
+            if (!ignoreNoProjectError && (!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
             return symLinkedProjects ? { projects: projects!, symLinkedProjects } : projects!; // TODO: GH#18217
@@ -1465,29 +1470,16 @@ namespace ts.server {
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): ReadonlyArray<protocol.CompileOnSaveAffectedFileListSingleProject> {
-            let info: ScriptInfo | undefined;
-            let project: Project | undefined;
-            if (args.projectFileName) {
-                // Do not update all projects if we are looking for specific project to compile on save
-                project = this.projectService.findProject(args.projectFileName)!;
-                if (project.dirty) project.updateGraph();
-                info = this.projectService.getScriptInfo(args.file);
-            }
-            else {
-                info = this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file);
-            }
-
+            const projects = this.getProjects(args, /*getScriptInfoEnsuringProjectsUptoDate*/ true, /*ignoreNoProjectError*/ true);
+            const info = this.projectService.getScriptInfo(args.file);
             if (!info) {
                 return emptyArray;
             }
 
-            // if specified a project, we only return affected file list in this project
-            const projects = args.projectFileName ? [project!] : info.containingProjects;
-            const symLinkedProjects = !args.projectFileName && this.projectService.getSymlinkedProjects(info);
             return combineProjectOutput(
                 info,
                 path => this.projectService.getScriptInfoForPath(path)!,
-                symLinkedProjects ? { projects, symLinkedProjects } : projects,
+                projects,
                 (project, info) => {
                     let result: protocol.CompileOnSaveAffectedFileListSingleProject | undefined;
                     if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.isOrphan() && !project.getCompilationSettings().noEmit) {
