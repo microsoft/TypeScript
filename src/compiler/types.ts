@@ -3803,6 +3803,7 @@ namespace ts {
         ReverseMapped    = 1 << 11, // Object contains a property from a reverse-mapped type
         JsxAttributes    = 1 << 12, // Jsx attributes type
         MarkerType       = 1 << 13, // Marker type used for variance probing
+        JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         ClassOrInterface = Class | Interface
     }
 
