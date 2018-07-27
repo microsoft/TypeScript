@@ -12,7 +12,7 @@ namespace ts.codefix {
             const info = getInfo(context.sourceFile, context.span.start, context.program.getTypeChecker());
             if (!info) return undefined;
 
-            if (info.kind === InfoKind.enum) {
+            if (info.kind === InfoKind.Enum) {
                 const { token, parentDeclaration } = info;
                 const changes = textChanges.ChangeTracker.with(context, t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), token, parentDeclaration));
                 return [createCodeFixAction(fixName, changes, [Diagnostics.Add_missing_enum_member_0, token.text], fixId, Diagnostics.Add_all_missing_members)];
@@ -39,7 +39,7 @@ namespace ts.codefix {
                         return;
                     }
 
-                    if (info.kind === InfoKind.enum) {
+                    if (info.kind === InfoKind.Enum) {
                         const { token, parentDeclaration } = info;
                         addEnumMemberDeclaration(changes, checker, token, parentDeclaration);
                     }
@@ -93,18 +93,15 @@ namespace ts.codefix {
     }
 
     type ClassOrInterface = ClassLikeDeclaration | InterfaceDeclaration;
-    interface InfoBase {
-        readonly kind: InfoKind;
+    const enum InfoKind { Enum, ClassOrInterface }
+    interface EnumInfo {
+        readonly kind: InfoKind.Enum;
         readonly token: Identifier;
-        readonly parentDeclaration: EnumDeclaration | ClassOrInterface;
-    }
-    enum InfoKind { enum, class }
-    interface EnumInfo extends InfoBase {
-        readonly kind: InfoKind.enum;
         readonly parentDeclaration: EnumDeclaration;
     }
-    interface ClassOrInterfaceInfo extends InfoBase {
-        readonly kind: InfoKind.class;
+    interface ClassOrInterfaceInfo {
+        readonly kind: InfoKind.ClassOrInterface;
+        readonly token: Identifier;
         readonly parentDeclaration: ClassOrInterface;
         readonly makeStatic: boolean;
         readonly declSourceFile: SourceFile;
@@ -136,11 +133,11 @@ namespace ts.codefix {
             const declSourceFile = classOrInterface.getSourceFile();
             const inJs = isSourceFileJavaScript(declSourceFile);
             const call = tryCast(parent.parent, isCallExpression);
-            return { kind: InfoKind.class, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
+            return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
         if (enumDeclaration) {
-            return { kind: InfoKind.enum, token, parentDeclaration: enumDeclaration };
+            return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
         return undefined;
     }
