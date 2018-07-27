@@ -7030,8 +7030,8 @@ namespace ts {
                         skipWhitespace();
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         typeParameter.name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
-                        skipWhitespace();
                         finishNode(typeParameter);
+                        skipWhitespace();
                         typeParameters.push(typeParameter);
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
 

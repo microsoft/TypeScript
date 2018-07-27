@@ -455,7 +455,7 @@ namespace ts.server {
                         break;
                     }
                 default:
-                    assertTypeIsNever(response);
+                    assertType<never>(response);
             }
         }
 

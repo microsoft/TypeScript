@@ -3655,6 +3655,10 @@
         "category": "Message",
         "code": 6204
     },
+    "All type parameters are unused": {
+        "category": "Error",
+        "code": 6205
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4208,6 +4212,14 @@
         "category": "Message",
         "code": 90010
     },
+    "Remove template tag": {
+        "category": "Message",
+        "code": 90011
+    },
+    "Remove type parameters": {
+        "category": "Message",
+        "code": 90012
+    },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
         "code": 90013
@@ -4275,6 +4287,14 @@
     "Add async modifier to containing function": {
         "category": "Message",
         "code": 90029
+    },
+    "Replace 'infer {0}' with 'unknown'": {
+        "category": "Message",
+        "code": 90030
+    },
+    "Replace all unused 'infer' with 'unknown'": {
+        "category": "Message",
+        "code": 90031
     },
     "Convert function to an ES2015 class": {
         "category": "Message",
