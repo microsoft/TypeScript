@@ -188,6 +188,10 @@ namespace ts {
                 const node = getParseTreeNode(nodeIn, isExpression);
                 return node ? getContextualType(node) : undefined;
             },
+            getContextualTypeForObjectLiteralElement: nodeIn => {
+                const node = getParseTreeNode(nodeIn, isObjectLiteralElementLike);
+                return node ? getContextualTypeForObjectLiteralElement(node) : undefined;
+            },
             getContextualTypeForArgumentAtIndex: (nodeIn, argIndex) => {
                 const node = getParseTreeNode(nodeIn, isCallLikeExpression);
                 return node && getContextualTypeForArgumentAtIndex(node, argIndex);
@@ -16096,7 +16100,7 @@ namespace ts {
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>parent);
+                    return getContextualTypeForObjectLiteralElement(<PropertyAssignment | ShorthandPropertyAssignment>parent);
                 case SyntaxKind.SpreadAssignment:
                     return getApparentTypeOfContextualType(parent.parent as ObjectLiteralExpression);
                 case SyntaxKind.ArrayLiteralExpression: {
