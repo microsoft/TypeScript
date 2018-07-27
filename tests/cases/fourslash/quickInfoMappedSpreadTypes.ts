@@ -18,13 +18,13 @@
 ////f4./*f4*/bar;
 
 goTo.marker("f");
-verify.quickInfoIs("(property) Foo.bar: number", "Doc ");
+verify.quickInfoIs("(property) Foo.bar: number", "Doc");
 
 goTo.marker("f2");
-verify.quickInfoIs("(property) bar: string", "Doc ");
+verify.quickInfoIs("(property) bar: string", "Doc");
 
 goTo.marker("f3");
-verify.quickInfoIs("(property) Foo.bar: number", "Doc ");
+verify.quickInfoIs("(property) Foo.bar: number", "Doc");
 
 goTo.marker("f4");
-verify.quickInfoIs("(property) bar: string", "Doc ");
+verify.quickInfoIs("(property) bar: string", "Doc");
