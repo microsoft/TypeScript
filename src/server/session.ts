@@ -427,23 +427,20 @@ namespace ts.server {
         if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         cb(projectAndLocation, (project, location) => {
             seenProjects.set(projectAndLocation.project.projectName, true);
-            const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
+            const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
             if (!originalLocation) return false;
-            const originalProjectAndScriptInfo = projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
-            if (!originalProjectAndScriptInfo) return false;
 
-            if (originalProjectAndScriptInfo) {
-                toDo = toDo || [];
+            const originalScriptInfo = projectService.getScriptInfo(originalLocation.fileName)!;
+            toDo = toDo || [];
 
-                for (const project of originalProjectAndScriptInfo.projects) {
-                    addToTodo({ project, location: originalLocation as TLocation }, toDo, seenProjects);
-                }
-                const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalProjectAndScriptInfo.scriptInfo);
-                if (symlinkedProjectsMap) {
-                    symlinkedProjectsMap.forEach((symlinkedProjects) => {
-                        for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
-                    });
-                }
+            for (const project of originalScriptInfo.containingProjects) {
+                addToTodo({ project, location: originalLocation as TLocation }, toDo, seenProjects);
+            }
+            const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalScriptInfo);
+            if (symlinkedProjectsMap) {
+                symlinkedProjectsMap.forEach((symlinkedProjects) => {
+                    for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
+                });
             }
             return true;
         });
