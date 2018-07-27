@@ -116,5 +116,34 @@ function consume(t,s,f) {
 >Second.MISTAKE : string
 >Second : { MISTAKE: string; OK: number; FINE: number; }
 >MISTAKE : string
+
+    v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+>v = 'something else' : "something else"
+>v : string
+>'something else' : "something else"
 }
+/** @param {string} s */
+function ff(s) {
+>ff : (s: string) => any
+>s : string
+
+    // element access with arbitrary string is an error only with noImplicitAny
+    if (!Target[s]) {
+>!Target[s] : boolean
+>Target[s] : any
+>Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
+>s : string
+
+        return null
+>null : null
+    }
+    else {
+        return Target[s]
+>Target[s] : any
+>Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
+>s : string
+    }
+}
+
+
 

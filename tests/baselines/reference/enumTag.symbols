@@ -94,5 +94,28 @@ function consume(t,s,f) {
 >Second.MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
 >Second : Symbol(Second, Decl(a.js, 10, 5))
 >MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
+
+    v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+>v : Symbol(v, Decl(a.js, 35, 7))
 }
+/** @param {string} s */
+function ff(s) {
+>ff : Symbol(ff, Decl(a.js, 39, 1))
+>s : Symbol(s, Decl(a.js, 41, 12))
+
+    // element access with arbitrary string is an error only with noImplicitAny
+    if (!Target[s]) {
+>Target : Symbol(Target, Decl(a.js, 1, 5))
+>s : Symbol(s, Decl(a.js, 41, 12))
+
+        return null
+    }
+    else {
+        return Target[s]
+>Target : Symbol(Target, Decl(a.js, 1, 5))
+>s : Symbol(s, Decl(a.js, 41, 12))
+    }
+}
+
+
 

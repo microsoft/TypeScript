@@ -21650,7 +21650,7 @@ namespace ts {
                 checkComputedPropertyName(node.name);
             }
 
-            return checkExpressionForMutableLocation(node.initializer, checkMode)
+            return checkExpressionForMutableLocation(node.initializer, checkMode);
         }
 
         function checkObjectLiteralMethod(node: MethodDeclaration, checkMode?: CheckMode): Type {

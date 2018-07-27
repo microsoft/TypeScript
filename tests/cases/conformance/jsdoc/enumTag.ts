@@ -40,4 +40,17 @@ function consume(t,s,f) {
     var v = Target.START
     v = Target.UNKNOWN // error, can't find 'UNKNOWN'
     v = Second.MISTAKE // meh..ok, I guess?
+    v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
 }
+/** @param {string} s */
+function ff(s) {
+    // element access with arbitrary string is an error only with noImplicitAny
+    if (!Target[s]) {
+        return null
+    }
+    else {
+        return Target[s]
+    }
+}
+
+

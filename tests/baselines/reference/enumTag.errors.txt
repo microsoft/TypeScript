@@ -48,5 +48,18 @@ tests/cases/conformance/jsdoc/a.js(37,16): error TS2339: Property 'UNKNOWN' does
                    ~~~~~~~
 !!! error TS2339: Property 'UNKNOWN' does not exist on type '{ START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }'.
         v = Second.MISTAKE // meh..ok, I guess?
+        v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
     }
+    /** @param {string} s */
+    function ff(s) {
+        // element access with arbitrary string is an error only with noImplicitAny
+        if (!Target[s]) {
+            return null
+        }
+        else {
+            return Target[s]
+        }
+    }
+    
+    
     
