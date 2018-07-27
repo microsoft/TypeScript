@@ -3306,8 +3306,8 @@ namespace ts {
     export interface AllAccessorDeclarations {
         firstAccessor: AccessorDeclaration;
         secondAccessor: AccessorDeclaration | undefined;
-        getAccessor: AccessorDeclaration | undefined;
-        setAccessor: AccessorDeclaration | undefined;
+        getAccessor: GetAccessorDeclaration | undefined;
+        setAccessor: SetAccessorDeclaration | undefined;
     }
 
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
