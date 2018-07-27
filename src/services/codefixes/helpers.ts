@@ -117,6 +117,7 @@ namespace ts.codefix {
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
+        body: boolean,
     ): MethodDeclaration {
         const checker = context.program.getTypeChecker();
         const types = map(args,
@@ -142,7 +143,7 @@ namespace ts.codefix {
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
-            createStubbedMethodBody(preferences));
+            body ? createStubbedMethodBody(preferences) : undefined);
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
