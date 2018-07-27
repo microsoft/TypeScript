@@ -707,7 +707,7 @@ namespace ts.server {
 
         /* @internal */
         private forEachProject(cb: (project: Project) => void) {
-            for (const p of this.inferredProjects) cb(p);
+            this.inferredProjects.forEach(cb);
             this.configuredProjects.forEach(cb);
             this.externalProjects.forEach(cb);
         }
@@ -2110,19 +2110,34 @@ namespace ts.server {
             if (!originalLocation) return undefined;
 
             const { fileName } = originalLocation;
-            const originalScriptInfo = this.getScriptInfo(fileName);
-            if (originalScriptInfo && originalScriptInfo.containingProjects.length) {
-                return originalLocation;
-            }
+            if (!this.getScriptInfo(fileName) && !this.host.fileExists(fileName)) return undefined;
 
-            const info: OriginalFileInfo = { fileName: toNormalizedPath(fileName), path: this.toPath(fileName) };
-            const configFileName = this.getConfigFileNameForFile(info);
+            const originalFileInfo: OriginalFileInfo = { fileName: toNormalizedPath(fileName), path: this.toPath(fileName) };
+            const configFileName = this.getConfigFileNameForFile(originalFileInfo);
             if (!configFileName) return undefined;
 
             const configuredProject = this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
             updateProjectIfDirty(configuredProject);
+            // Keep this configured project as referenced from project
+            addOriginalConfiguredProject(configuredProject);
 
-            return configuredProject.containsFile(info.fileName) ? originalLocation : undefined;
+            const originalScriptInfo = this.getScriptInfo(fileName);
+            if (!originalScriptInfo || !originalScriptInfo.containingProjects.length) return undefined;
+
+            // Add configured projects as referenced
+            originalScriptInfo.containingProjects.forEach(project => {
+                if (project.projectKind === ProjectKind.Configured) {
+                    addOriginalConfiguredProject(project as ConfiguredProject);
+                }
+            });
+            return originalLocation;
+
+            function addOriginalConfiguredProject(originalProject: ConfiguredProject) {
+                if (!project.originalConfiguredProjects) {
+                    project.originalConfiguredProjects = createMap<true>();
+                }
+                project.originalConfiguredProjects.set(originalProject.canonicalConfigFilePath, true);
+            }
         }
 
         /** @internal */
@@ -2185,14 +2200,9 @@ namespace ts.server {
             }
             Debug.assert(!info.isOrphan());
 
-            // Remove the configured projects that have zero references from open files.
             // This was postponed from closeOpenFile to after opening next file,
             // so that we can reuse the project if we need to right away
-            this.configuredProjects.forEach(project => {
-                if (!project.hasOpenRef()) {
-                    this.removeProject(project);
-                }
-            });
+            this.removeOrphanConfiguredProjects();
 
             // Remove orphan inferred projects now that we have reused projects
             // We need to create a duplicate because we cant guarantee order after removal
@@ -2218,6 +2228,30 @@ namespace ts.server {
 
             this.telemetryOnOpenFile(info);
             return { configFileName, configFileErrors };
+        }
+
+        private removeOrphanConfiguredProjects() {
+            const toRemoveConfiguredProjects = cloneMap(this.configuredProjects);
+
+            // Do not remove configured projects that are used as original projects of other
+            this.inferredProjects.forEach(markOriginalProjectsAsUsed);
+            this.externalProjects.forEach(markOriginalProjectsAsUsed);
+            this.configuredProjects.forEach(project => {
+                // If project has open ref (there are more than zero references from external project/open file), keep it alive as well as any project it references
+                if (project.hasOpenRef()) {
+                    toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
+                    markOriginalProjectsAsUsed(project);
+                }
+            });
+
+            // Remove all the non marked projects
+            toRemoveConfiguredProjects.forEach(project => this.removeProject(project));
+
+            function markOriginalProjectsAsUsed(project: Project) {
+                if (!project.isOrphan() && project.originalConfiguredProjects) {
+                    project.originalConfiguredProjects.forEach((_value, configuredProjectPath) => toRemoveConfiguredProjects.delete(configuredProjectPath));
+                }
+            }
         }
 
         private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {

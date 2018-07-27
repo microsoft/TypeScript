@@ -158,6 +158,9 @@ namespace ts.server {
         /*@internal*/
         typingFiles: SortedReadonlyArray<string> = emptyArray;
 
+        /*@internal*/
+        originalConfiguredProjects: Map<true> | undefined;
+
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
