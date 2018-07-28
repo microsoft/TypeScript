@@ -52,7 +52,7 @@ namespace ts {
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
         maxNumberOfFilesToIterateForInvalidation?: number;
-        getCurrentProgram(): Program;
+        getCurrentProgram(): Program | undefined;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -497,7 +497,8 @@ namespace ts {
         }
 
         function watchFailedLookupLocationOfNonRelativeModuleResolutions(resolutions: ResolutionWithFailedLookupLocations[], name: string) {
-            const updateResolution = resolutionHost.getCurrentProgram().getTypeChecker().tryFindAmbientModuleWithoutAugmentations(name) ?
+            const program = resolutionHost.getCurrentProgram();
+            const updateResolution = program && program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(name) ?
                 setRefCountToUndefined : watchFailedLookupLocationOfResolution;
             resolutions.forEach(updateResolution);
         }
