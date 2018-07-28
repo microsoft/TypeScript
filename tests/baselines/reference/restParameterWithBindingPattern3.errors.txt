@@ -1,0 +1,10 @@
+tests/cases/compiler/restParameterWithBindingPattern3.ts(1,16): error TS2322: Type '1' is not assignable to type 'string'.
+tests/cases/compiler/restParameterWithBindingPattern3.ts(1,23): error TS2322: Type 'true' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/restParameterWithBindingPattern3.ts (2 errors) ====
+    function a(...[a = 1, b = true]: string[]) { }
+                   ~
+!!! error TS2322: Type '1' is not assignable to type 'string'.
+                          ~
+!!! error TS2322: Type 'true' is not assignable to type 'string'.

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/restParameterWithBindingPattern3.ts ===
+function a(...[a = 1, b = true]: string[]) { }
+>a : (...[a, b]: string[]) => void
+>a : string
+>1 : 1
+>b : string
+>true : true
+

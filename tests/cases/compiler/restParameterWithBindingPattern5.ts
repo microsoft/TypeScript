@@ -1,0 +1,1 @@
+function a(...{0: a, length, 3: d}: [boolean, string, number]) { }

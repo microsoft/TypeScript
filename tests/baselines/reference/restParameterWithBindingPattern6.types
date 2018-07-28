@@ -1,0 +1,8 @@
+=== tests/cases/compiler/restParameterWithBindingPattern6.ts ===
+function a(...[a, , , d]: [boolean, string, number]) { }
+>a : (__0_0: boolean, __0_1: string, __0_2: number) => void
+>a : boolean
+> : undefined
+> : undefined
+>d : any
+

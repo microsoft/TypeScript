@@ -1,0 +1,7 @@
+=== tests/cases/compiler/restParameterWithBindingPattern5.ts ===
+function a(...{0: a, length, 3: d}: [boolean, string, number]) { }
+>a : Symbol(a, Decl(restParameterWithBindingPattern5.ts, 0, 0))
+>a : Symbol(a, Decl(restParameterWithBindingPattern5.ts, 0, 15))
+>length : Symbol(length, Decl(restParameterWithBindingPattern5.ts, 0, 20))
+>d : Symbol(d, Decl(restParameterWithBindingPattern5.ts, 0, 28))
+
