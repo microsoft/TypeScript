@@ -487,7 +487,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bei einem Build mit dem Flag "-dry" würde das Projekt "{0}" erstellt.]]></Val>
+            <Val><![CDATA[Bei einem Build ohne das Flag "-dry" würde das Projekt "{0}" erstellt.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -496,7 +496,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bei einem Build mit dem Flag "-dry" würden die folgenden Dateien gelöscht: {0}]]></Val>
+            <Val><![CDATA[Bei einem Build ohne das Flag "-dry" würden die folgenden Dateien gelöscht: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

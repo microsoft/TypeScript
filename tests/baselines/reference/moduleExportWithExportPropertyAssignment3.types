@@ -50,18 +50,18 @@ declare function require(name: string): any;
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"
->module.exports.bothBefore : any
->module.exports : any
->module : { exports: any; }
->exports : any
->bothBefore : any
+>module.exports.bothBefore : string | number
+>module.exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>module : { "tests/cases/conformance/salsa/mod1": { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }; }
+>exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>bothBefore : string | number
 >'string' : "string"
 
 module.exports = {
->module.exports = {    justExport: 1,    bothBefore: 2,    bothAfter: 3,} : { [x: string]: any; justExport: number; bothBefore: number; bothAfter: number; }
->module.exports : any
->module : { exports: any; }
->exports : any
+>module.exports = {    justExport: 1,    bothBefore: 2,    bothAfter: 3,} : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>module.exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>module : { "tests/cases/conformance/salsa/mod1": { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }; }
+>exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
 >{    justExport: 1,    bothBefore: 2,    bothAfter: 3,} : { [x: string]: any; justExport: number; bothBefore: number; bothAfter: number; }
 
     justExport: 1,
@@ -78,19 +78,19 @@ module.exports = {
 }
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter = 'string' : "string"
->module.exports.bothAfter : any
->module.exports : any
->module : { exports: any; }
->exports : any
->bothAfter : any
+>module.exports.bothAfter : string | number
+>module.exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>module : { "tests/cases/conformance/salsa/mod1": { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }; }
+>exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>bothAfter : string | number
 >'string' : "string"
 
 module.exports.justProperty = 'string'
 >module.exports.justProperty = 'string' : "string"
->module.exports.justProperty : any
->module.exports : any
->module : { exports: any; }
->exports : any
->justProperty : any
+>module.exports.justProperty : string
+>module.exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>module : { "tests/cases/conformance/salsa/mod1": { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }; }
+>exports : { [x: string]: any; justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
+>justProperty : string
 >'string' : "string"
 

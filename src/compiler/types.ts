@@ -755,7 +755,7 @@ namespace ts {
 
     export interface TypeParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.TypeParameter;
-        parent: DeclarationWithTypeParameters | InferTypeNode;
+        parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         name: Identifier;
         constraint?: TypeNode;
         default?: TypeNode;
@@ -2036,7 +2036,8 @@ namespace ts {
 
     export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
 
-    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    export type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    export type DeclarationWithTypeParameterChildren = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
@@ -3401,6 +3402,7 @@ namespace ts {
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
         JSContainer             = 1 << 26,  // Contains Javascript special declarations
+        ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
 
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
@@ -3561,6 +3563,7 @@ namespace ts {
         Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
+        This = "this",
     }
 
     /**
@@ -3677,7 +3680,7 @@ namespace ts {
         /* @internal */
         FreshLiteral            = 1 << 25,  // Fresh literal or unique type
         /* @internal */
-        UnionOfUnitTypes        = 1 << 26,  // Type is union of unit types
+        UnionOfPrimitiveTypes   = 1 << 26,  // Type is union of primitive types
         /* @internal */
         ContainsWideningType    = 1 << 27,  // Type is or contains undefined or null widening type
         /* @internal */
@@ -3722,7 +3725,7 @@ namespace ts {
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | Unknown | ESSymbol | Object | NonPrimitive,
         /* @internal */
-        NotUnit = Any | String | Number | Boolean | Enum | ESSymbol | Void | Never | StructuredOrInstantiable,
+        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -4365,7 +4368,7 @@ namespace ts {
         strictFunctionTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         strictPropertyInitialization?: boolean;  // Always combine with strict property
-        /* @internal */ stripInternal?: boolean;
+        stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         /* @internal */ suppressOutputPathCheck?: boolean;
@@ -4686,7 +4689,7 @@ namespace ts {
 
     export interface UpToDateHost {
         fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date;
+        getModifiedTime(fileName: string): Date | undefined;
         getUnchangedTime?(fileName: string): Date | undefined;
         getLastStatus?(fileName: string): UpToDateStatus | undefined;
         setLastStatus?(fileName: string, status: UpToDateStatus): void;
@@ -4824,7 +4827,7 @@ namespace ts {
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
 
-        getModifiedTime?(fileName: string): Date;
+        getModifiedTime?(fileName: string): Date | undefined;
         setModifiedTime?(fileName: string, date: Date): void;
         deleteFile?(fileName: string): void;
     }

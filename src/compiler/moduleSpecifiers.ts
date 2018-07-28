@@ -194,7 +194,12 @@ namespace ts.moduleSpecifiers {
         const symlinks = mapDefined(files, sf =>
             sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
                 res && res.resolvedFileName === importedFileName ? res.originalPath : undefined));
-        return symlinks.length === 0 ? getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(importedFileName, host.getCurrentDirectory ? host.getCurrentDirectory() : ""), getCanonicalFileName, host) : symlinks;
+        const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+        const baseOptions = getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(importedFileName, cwd), getCanonicalFileName, host);
+        if (symlinks.length === 0) {
+            return baseOptions;
+        }
+        return deduplicate(concatenate(baseOptions, flatMap(symlinks, importedFileName => getAllModulePathsUsingIndirectSymlinks(files, getNormalizedAbsolutePath(importedFileName, cwd), getCanonicalFileName, host))));
     }
 
     function getRelativePathNParents(relativePath: string): number {
@@ -218,10 +223,7 @@ namespace ts.moduleSpecifiers {
             for (const patternText of paths[key]) {
                 const pattern = removeFileExtension(normalizePath(patternText));
                 const indexOfStar = pattern.indexOf("*");
-                if (indexOfStar === 0 && pattern.length === 1) {
-                    continue;
-                }
-                else if (indexOfStar !== -1) {
+                if (indexOfStar !== -1) {
                     const prefix = pattern.substr(0, indexOfStar);
                     const suffix = pattern.substr(indexOfStar + 1);
                     if (relativeToBaseUrl.length >= prefix.length + suffix.length &&

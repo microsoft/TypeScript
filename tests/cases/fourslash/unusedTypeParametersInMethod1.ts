@@ -6,6 +6,6 @@
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'",
+    description: "Remove type parameters",
     newRangeContent: "f1()",
 });

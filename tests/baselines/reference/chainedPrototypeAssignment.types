@@ -86,9 +86,9 @@ A.prototype = B.prototype = {
 >A : typeof A
 >prototype : { [x: string]: any; m(n: number): number; }
 >B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
->B.prototype : { [x: string]: any; }
+>B.prototype : { [x: string]: any; m(n: number): number; }
 >B : typeof B
->prototype : { [x: string]: any; }
+>prototype : { [x: string]: any; m(n: number): number; }
 >{    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
 
     /** @param {number} n */

@@ -4,10 +4,10 @@ class Bar { }
 >Bar : Bar
 
 module.exports = { Foo: Bar };
->module.exports = { Foo: Bar } : { [x: string]: any; Foo: typeof Bar; }
->module.exports : any
->module : any
->exports : any
+>module.exports = { Foo: Bar } : { [x: string]: any; Foo: any; }
+>module.exports : { [x: string]: any; Foo: any; }
+>module : { "tests/cases/conformance/jsdoc/mod3": { [x: string]: any; Foo: any; }; }
+>exports : { [x: string]: any; Foo: any; }
 >{ Foo: Bar } : { [x: string]: any; Foo: typeof Bar; }
 >Foo : typeof Bar
 >Bar : typeof Bar

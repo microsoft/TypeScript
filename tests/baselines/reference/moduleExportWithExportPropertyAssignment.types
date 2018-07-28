@@ -28,20 +28,20 @@ declare function require(name: string): any;
 === tests/cases/conformance/salsa/mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports = function () { }
->module.exports = function () { } : () => void
->module.exports : any
->module : { exports: any; }
->exports : any
+>module.exports = function () { } : { (): void; f: (a: number) => void; }
+>module.exports : { (): void; f: (a: number) => void; }
+>module : { "tests/cases/conformance/salsa/mod1": { (): void; f: (a: number) => void; }; }
+>exports : { (): void; f: (a: number) => void; }
 >function () { } : () => void
 
 /** @param {number} a */
 module.exports.f = function (a) { }
 >module.exports.f = function (a) { } : (a: number) => void
->module.exports.f : any
->module.exports : any
->module : { exports: any; }
->exports : any
->f : any
+>module.exports.f : (a: number) => void
+>module.exports : { (): void; f: (a: number) => void; }
+>module : { "tests/cases/conformance/salsa/mod1": { (): void; f: (a: number) => void; }; }
+>exports : { (): void; f: (a: number) => void; }
+>f : (a: number) => void
 >function (a) { } : (a: number) => void
 >a : number
 

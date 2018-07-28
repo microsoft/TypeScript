@@ -142,6 +142,16 @@ namespace ts {
         return undefined;
     }
 
+    export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefined | "quit"): T | undefined {
+        while (true) {
+            const res = callback(node);
+            if (res === "quit") return undefined;
+            if (res !== undefined) return res;
+            if (isSourceFile(node)) return undefined;
+            node = node.parent;
+        }
+    }
+
     /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
@@ -667,6 +677,19 @@ namespace ts {
     export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocSignature:
+                return true;
+            default:
+                assertType<DeclarationWithTypeParameterChildren>(node);
+                return isDeclarationWithTypeParameterChildren(node);
+        }
+    }
+
+    export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren;
+    export function isDeclarationWithTypeParameterChildren(node: DeclarationWithTypeParameterChildren): node is DeclarationWithTypeParameterChildren {
+        switch (node.kind) {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.MethodSignature:
@@ -686,12 +709,9 @@ namespace ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.JSDocCallbackTag:
-            case SyntaxKind.JSDocTypedefTag:
-            case SyntaxKind.JSDocSignature:
                 return true;
             default:
-                assertTypeIsNever(node);
+                assertType<never>(node);
                 return false;
         }
     }
@@ -776,7 +796,7 @@ namespace ts {
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
         const start = skipTrivia(sourceFile.text, nodes.pos);
         return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
     }
@@ -1623,6 +1643,8 @@ namespace ts {
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return (<ShorthandPropertyAssignment>parent).objectAssignmentInitializer === node;
             default:
                 return isExpressionNode(parent);
         }
@@ -3152,26 +3174,38 @@ namespace ts {
         return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
-    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
+    export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
         const compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(fileName, host, compilerOptions.outDir));
         }
         else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+            emitOutputFilePathWithoutExtension = removeFileExtension(fileName);
         }
 
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    export function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost) {
+    export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
+        // TODO: GH#25810 following should work but makes the build break:
+        // return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+
         const options = host.getCompilerOptions();
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
         const path = outputDir
-            ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
-            : sourceFile.fileName;
+            ? getSourceFilePathInNewDir(fileName, host, outputDir)
+            : fileName;
+        return removeFileExtension(path) + Extension.Dts;
+    }
+
+    export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+        const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
+
+        const path = outputDir
+            ? getSourceFilePathInNewDirWorker(fileName, outputDir, currentDirectory, commonSourceDirectory, getCanonicalFileName)
+            : fileName;
         return removeFileExtension(path) + Extension.Dts;
     }
 
@@ -3213,10 +3247,13 @@ namespace ts {
         return !(options.noEmitForJsFiles && isSourceFileJavaScript(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
     }
 
-    export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
-        let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
-        const commonSourceDirectory = host.getCommonSourceDirectory();
-        const isSourceFileInCommonSourceDirectory = host.getCanonicalFileName(sourceFilePath).indexOf(host.getCanonicalFileName(commonSourceDirectory)) === 0;
+    export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
+        return getSourceFilePathInNewDirWorker(fileName, newDirPath, host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+    }
+
+    export function getSourceFilePathInNewDirWorker(fileName: string, newDirPath: string, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+        let sourceFilePath = getNormalizedAbsolutePath(fileName, currentDirectory);
+        const isSourceFileInCommonSourceDirectory = getCanonicalFileName(sourceFilePath).indexOf(getCanonicalFileName(commonSourceDirectory)) === 0;
         sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
         return combinePaths(newDirPath, sourceFilePath);
     }
@@ -8100,5 +8137,76 @@ namespace ts {
             }
         }
         return { min, max };
+    }
+
+    export interface ReadonlyNodeSet<TNode extends Node> {
+        has(node: TNode): boolean;
+        forEach(cb: (node: TNode) => void): void;
+        some(pred: (node: TNode) => boolean): boolean;
+    }
+
+    export class NodeSet<TNode extends Node> implements ReadonlyNodeSet<TNode> {
+        private map = createMap<TNode>();
+
+        add(node: TNode): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        tryAdd(node: TNode): boolean {
+            if (this.has(node)) return false;
+            this.add(node);
+            return true;
+        }
+        has(node: TNode): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: TNode) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: TNode) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
+    }
+
+    export interface ReadonlyNodeMap<TNode extends Node, TValue> {
+        get(node: TNode): TValue | undefined;
+        has(node: TNode): boolean;
+    }
+
+    export class NodeMap<TNode extends Node, TValue> implements ReadonlyNodeMap<TNode, TValue> {
+        private map = createMap<{ node: TNode, value: TValue }>();
+
+        get(node: TNode): TValue | undefined {
+            const res = this.map.get(String(getNodeId(node)));
+            return res && res.value;
+        }
+
+        getOrUpdate(node: TNode, setValue: () => TValue): TValue {
+            const res = this.get(node);
+            if (res) return res;
+            const value = setValue();
+            this.set(node, value);
+            return value;
+        }
+
+        set(node: TNode, value: TValue): void {
+            this.map.set(String(getNodeId(node)), { node, value });
+        }
+
+        has(node: TNode): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+
+        forEach(cb: (value: TValue, node: TNode) => void): void {
+            this.map.forEach(({ node, value }) => cb(value, node));
+        }
+    }
+
+    export function rangeOfNode(node: Node): TextRange {
+        return { pos: getTokenPosOfNode(node), end: node.end };
+    }
+
+    export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
+        // Include the `<>`
+        return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
     }
 }

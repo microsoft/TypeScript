@@ -6,7 +6,9 @@ export function abc(a, b, c) { return 5; }
 >c : Symbol(c, Decl(bug24934.js, 0, 25))
 
 module.exports = { abc };
->module : Symbol(module)
+>module.exports : Symbol("tests/cases/conformance/salsa/bug24934", Decl(bug24934.js, 0, 0))
+>module : Symbol(module, Decl(bug24934.js, 0, 42))
+>exports : Symbol("tests/cases/conformance/salsa/bug24934", Decl(bug24934.js, 0, 0))
 >abc : Symbol(abc, Decl(bug24934.js, 1, 18))
 
 === tests/cases/conformance/salsa/use.js ===
