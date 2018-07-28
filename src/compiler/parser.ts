@@ -6400,7 +6400,7 @@ namespace ts {
                         switch (token()) {
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
-                                    removeTrailingNewlines(comments);
+                                    removeTrailingWhitespace(comments);
                                     addTag(parseTag(indent));
                                     // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
                                     // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
@@ -6460,7 +6460,7 @@ namespace ts {
                         nextJSDocToken();
                     }
                     removeLeadingNewlines(comments);
-                    removeTrailingNewlines(comments);
+                    removeTrailingWhitespace(comments);
                     return createJSDocComment();
                 });
 
@@ -6470,8 +6470,8 @@ namespace ts {
                     }
                 }
 
-                function removeTrailingNewlines(comments: string[]) {
-                    while (comments.length && (comments[comments.length - 1] === "\n" || comments[comments.length - 1] === "\r")) {
+                function removeTrailingWhitespace(comments: string[]) {
+                    while (comments.length && comments[comments.length - 1].trim() === "") {
                         comments.pop();
                     }
                 }
@@ -6632,7 +6632,7 @@ namespace ts {
                     }
 
                     removeLeadingNewlines(comments);
-                    removeTrailingNewlines(comments);
+                    removeTrailingWhitespace(comments);
                     return comments.length === 0 ? undefined : comments.join("");
                 }
 
