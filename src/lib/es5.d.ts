@@ -1379,6 +1379,11 @@ type Extract<T, U> = T extends U ? T : never;
 type NonNullable<T> = T extends null | undefined ? never : T;
 
 /**
+ * Obtain the parameters type of a function type
+ */
+type Parameters<T> = T extends (... args: infer T) => any ? T : never; 
+
+/**
  * Obtain the return type of a function type
  */
 type ReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : any;
