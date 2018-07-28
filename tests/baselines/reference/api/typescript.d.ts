@@ -368,20 +368,21 @@ declare namespace ts {
         JSDocAugmentsTag = 293,
         JSDocClassTag = 294,
         JSDocCallbackTag = 295,
-        JSDocParameterTag = 296,
-        JSDocReturnTag = 297,
-        JSDocThisTag = 298,
-        JSDocTypeTag = 299,
-        JSDocTemplateTag = 300,
-        JSDocTypedefTag = 301,
-        JSDocPropertyTag = 302,
-        SyntaxList = 303,
-        NotEmittedStatement = 304,
-        PartiallyEmittedExpression = 305,
-        CommaListExpression = 306,
-        MergeDeclarationMarker = 307,
-        EndOfDeclarationMarker = 308,
-        Count = 309,
+        JSDocEnumTag = 296,
+        JSDocParameterTag = 297,
+        JSDocReturnTag = 298,
+        JSDocThisTag = 299,
+        JSDocTypeTag = 300,
+        JSDocTemplateTag = 301,
+        JSDocTypedefTag = 302,
+        JSDocPropertyTag = 303,
+        SyntaxList = 304,
+        NotEmittedStatement = 305,
+        PartiallyEmittedExpression = 306,
+        CommaListExpression = 307,
+        MergeDeclarationMarker = 308,
+        EndOfDeclarationMarker = 309,
+        Count = 310,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -408,9 +409,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 146,
         FirstJSDocNode = 281,
-        LastJSDocNode = 302,
+        LastJSDocNode = 303,
         FirstJSDocTagNode = 292,
-        LastJSDocTagNode = 302
+        LastJSDocTagNode = 303
     }
     enum NodeFlags {
         None = 0,
@@ -479,7 +480,7 @@ declare namespace ts {
     }
     interface JSDocContainer {
     }
-    type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | EndOfFileToken;
+    type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | EndOfFileToken;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
     type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertySignature | PropertyDeclaration | PropertyAssignment | EnumMember;
@@ -1438,7 +1439,7 @@ declare namespace ts {
         kind: SyntaxKind.NamespaceExportDeclaration;
         name: Identifier;
     }
-    interface ExportDeclaration extends DeclarationStatement {
+    interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
         /** Will not be assigned in the case of `export * from "foo";` */
@@ -1556,6 +1557,10 @@ declare namespace ts {
     }
     interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+    interface JSDocEnumTag extends JSDocTag {
+        kind: SyntaxKind.JSDocEnumTag;
+        typeExpression?: JSDocTypeExpression;
     }
     interface JSDocThisTag extends JSDocTag {
         kind: SyntaxKind.JSDocThisTag;
@@ -3221,6 +3226,8 @@ declare namespace ts {
     function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
     /** Gets the JSDoc class tag for the node if present */
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
+    /** Gets the JSDoc enum tag for the node if present */
+    function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
     function getJSDocThisTag(node: Node): JSDocThisTag | undefined;
     /** Gets the JSDoc return tag for the node if present */
@@ -3413,6 +3420,7 @@ declare namespace ts {
     function isJSDoc(node: Node): node is JSDoc;
     function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
     function isJSDocClassTag(node: Node): node is JSDocClassTag;
+    function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
     function isJSDocThisTag(node: Node): node is JSDocThisTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
