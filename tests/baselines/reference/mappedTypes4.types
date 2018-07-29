@@ -103,7 +103,7 @@ type T01 = Readonly<A | B | C | null | undefined>;
 >null : null
 
 type T02 = Boxified<A | B[] | C | string>
->T02 : string | Boxified<A> | Boxified<C> | Boxified<B[]>
+>T02 : string | Boxified<A> | Boxified<C> | Box<B>[]
 >Boxified : Boxified<T>
 >A : A
 >B : B
