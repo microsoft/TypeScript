@@ -41,6 +41,8 @@
 ////export type First<T, U> = T;
 ////export interface ISecond<T, U> { u: U; }
 ////export const cls = class<T, U> { u: U; };
+////export class Ctu<T, U> {}
+////export type Length<T> = T extends ArrayLike<infer U> ? number : never; // Not affected, can't delete
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
@@ -78,5 +80,7 @@ for (const {} in {}) {}
 
 export type First<T> = T;
 export interface ISecond<U> { u: U; }
-export const cls = class<U> { u: U; };`,
+export const cls = class<U> { u: U; };
+export class Ctu {}
+export type Length<T> = T extends ArrayLike<infer U> ? number : never; // Not affected, can't delete`,
 });

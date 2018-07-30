@@ -19,6 +19,12 @@
 //// */
 ////function h() {}
 ////
+/////**
+//// * Doc
+//// * @template T,U Comment
+//// */
+////function h2() {}
+////
 /////** @template T Comment @return {void} */
 ////function i() {}
 ////
@@ -34,7 +40,7 @@ verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
     fixAllDescription: "Delete all unused declarations",
     newFileContent:
-`
+`/** Parameter doc comment */
 function f() {}
 
 /**
@@ -49,6 +55,12 @@ function g() {}
  * Comment
  */
 function h() {}
+
+/**
+ * Doc
+ * Comment
+ */
+function h2() {}
 
 /** Comment @return {void} */
 function i() {}

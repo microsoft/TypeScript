@@ -1,8 +1,11 @@
 tests/cases/conformance/types/rest/genericRestParameters1.ts(22,1): error TS2556: Expected 3 arguments, but got 1 or more.
 tests/cases/conformance/types/rest/genericRestParameters1.ts(31,1): error TS2556: Expected 3 arguments, but got 1 or more.
+tests/cases/conformance/types/rest/genericRestParameters1.ts(166,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
+  Types of parameters 'a' and 'args' are incompatible.
+    Type 'any' is not assignable to type 'never'.
 
 
-==== tests/cases/conformance/types/rest/genericRestParameters1.ts (2 errors) ====
+==== tests/cases/conformance/types/rest/genericRestParameters1.ts (3 errors) ====
     declare let f1: (...x: [number, string, boolean]) => void;
     declare let f2: (x0: number, x1: string, x2: boolean) => void;
     
@@ -161,4 +164,20 @@ tests/cases/conformance/types/rest/genericRestParameters1.ts(31,1): error TS2556
     events.emit('jump', 20, 'up');
     events.emit('stop', 'Bye!');
     events.emit('done');
+    
+    // Repro from #25871
+    
+    declare var ff1: (... args: any[]) => void;
+    
+    declare var ff2: () => void;
+    declare var ff3: (...args: []) => void;
+    declare var ff4: (a: never) => void;
+    
+    ff1 = ff2;
+    ff1 = ff3;
+    ff1 = ff4;  // Error
+    ~~~
+!!! error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
+!!! error TS2322:   Types of parameters 'a' and 'args' are incompatible.
+!!! error TS2322:     Type 'any' is not assignable to type 'never'.
     

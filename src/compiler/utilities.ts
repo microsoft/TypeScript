@@ -677,6 +677,19 @@ namespace ts {
     export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocSignature:
+                return true;
+            default:
+                assertType<DeclarationWithTypeParameterChildren>(node);
+                return isDeclarationWithTypeParameterChildren(node);
+        }
+    }
+
+    export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren;
+    export function isDeclarationWithTypeParameterChildren(node: DeclarationWithTypeParameterChildren): node is DeclarationWithTypeParameterChildren {
+        switch (node.kind) {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.MethodSignature:
@@ -696,12 +709,9 @@ namespace ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.JSDocCallbackTag:
-            case SyntaxKind.JSDocTypedefTag:
-            case SyntaxKind.JSDocSignature:
                 return true;
             default:
-                assertTypeIsNever(node);
+                assertType<never>(node);
                 return false;
         }
     }
@@ -786,7 +796,7 @@ namespace ts {
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
         const start = skipTrivia(sourceFile.text, nodes.pos);
         return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
     }
@@ -1633,6 +1643,8 @@ namespace ts {
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return (<ShorthandPropertyAssignment>parent).objectAssignmentInitializer === node;
             default:
                 return isExpressionNode(parent);
         }
@@ -4983,6 +4995,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocClassTag);
     }
 
+    /** Gets the JSDoc enum tag for the node if present */
+    export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined {
+        return getFirstJSDocTag(node, isJSDocEnumTag);
+    }
+
     /** Gets the JSDoc this tag for the node if present */
     export function getJSDocThisTag(node: Node): JSDocThisTag | undefined {
         return getFirstJSDocTag(node, isJSDocThisTag);
@@ -5745,6 +5762,10 @@ namespace ts {
 
     export function isJSDocClassTag(node: Node): node is JSDocClassTag {
         return node.kind === SyntaxKind.JSDocClassTag;
+    }
+
+    export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
+        return node.kind === SyntaxKind.JSDocEnumTag;
     }
 
     export function isJSDocThisTag(node: Node): node is JSDocThisTag {
@@ -6620,18 +6641,7 @@ namespace ts {
     }
 
     export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
-        switch (node.kind) {
-            case SyntaxKind.JsxAttribute:
-            case SyntaxKind.JsxSpreadAttribute:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return true;
-            default:
-                return false;
-        }
+        return node.kind === SyntaxKind.JsxAttribute || node.kind === SyntaxKind.JsxSpreadAttribute || isObjectLiteralElementLike(node);
     }
 
     /* @internal */
@@ -8125,5 +8135,76 @@ namespace ts {
             }
         }
         return { min, max };
+    }
+
+    export interface ReadonlyNodeSet<TNode extends Node> {
+        has(node: TNode): boolean;
+        forEach(cb: (node: TNode) => void): void;
+        some(pred: (node: TNode) => boolean): boolean;
+    }
+
+    export class NodeSet<TNode extends Node> implements ReadonlyNodeSet<TNode> {
+        private map = createMap<TNode>();
+
+        add(node: TNode): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        tryAdd(node: TNode): boolean {
+            if (this.has(node)) return false;
+            this.add(node);
+            return true;
+        }
+        has(node: TNode): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: TNode) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: TNode) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
+    }
+
+    export interface ReadonlyNodeMap<TNode extends Node, TValue> {
+        get(node: TNode): TValue | undefined;
+        has(node: TNode): boolean;
+    }
+
+    export class NodeMap<TNode extends Node, TValue> implements ReadonlyNodeMap<TNode, TValue> {
+        private map = createMap<{ node: TNode, value: TValue }>();
+
+        get(node: TNode): TValue | undefined {
+            const res = this.map.get(String(getNodeId(node)));
+            return res && res.value;
+        }
+
+        getOrUpdate(node: TNode, setValue: () => TValue): TValue {
+            const res = this.get(node);
+            if (res) return res;
+            const value = setValue();
+            this.set(node, value);
+            return value;
+        }
+
+        set(node: TNode, value: TValue): void {
+            this.map.set(String(getNodeId(node)), { node, value });
+        }
+
+        has(node: TNode): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+
+        forEach(cb: (value: TValue, node: TNode) => void): void {
+            this.map.forEach(({ node, value }) => cb(value, node));
+        }
+    }
+
+    export function rangeOfNode(node: Node): TextRange {
+        return { pos: getTokenPosOfNode(node), end: node.end };
+    }
+
+    export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
+        // Include the `<>`
+        return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
     }
 }

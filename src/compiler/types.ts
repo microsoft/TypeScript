@@ -372,6 +372,7 @@ namespace ts {
         JSDocAugmentsTag,
         JSDocClassTag,
         JSDocCallbackTag,
+        JSDocEnumTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocThisTag,
@@ -581,6 +582,7 @@ namespace ts {
         | FunctionTypeNode
         | ConstructorTypeNode
         | JSDocFunctionType
+        | ExportDeclaration
         | EndOfFileToken;
 
     export type HasType =
@@ -858,6 +860,7 @@ namespace ts {
         name?: PropertyName;
     }
 
+    /** Unlike ObjectLiteralElement, excludes JSXAttribute and JSXSpreadAttribute. */
     export type ObjectLiteralElementLike
         = PropertyAssignment
         | ShorthandPropertyAssignment
@@ -2202,7 +2205,7 @@ namespace ts {
         name: Identifier;
     }
 
-    export interface ExportDeclaration extends DeclarationStatement {
+    export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
         /** Will not be assigned in the case of `export * from "foo";` */
@@ -2346,6 +2349,11 @@ namespace ts {
 
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+
+    export interface JSDocEnumTag extends JSDocTag {
+        kind: SyntaxKind.JSDocEnumTag;
+        typeExpression?: JSDocTypeExpression;
     }
 
     export interface JSDocThisTag extends JSDocTag {
@@ -3564,6 +3572,7 @@ namespace ts {
         Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
+        This = "this",
     }
 
     /**
@@ -3680,7 +3689,7 @@ namespace ts {
         /* @internal */
         FreshLiteral            = 1 << 25,  // Fresh literal or unique type
         /* @internal */
-        UnionOfUnitTypes        = 1 << 26,  // Type is union of unit types
+        UnionOfPrimitiveTypes   = 1 << 26,  // Type is union of primitive types
         /* @internal */
         ContainsWideningType    = 1 << 27,  // Type is or contains undefined or null widening type
         /* @internal */
@@ -3725,7 +3734,7 @@ namespace ts {
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | Unknown | ESSymbol | Object | NonPrimitive,
         /* @internal */
-        NotUnit = Any | String | Number | Boolean | Enum | ESSymbol | Void | Never | StructuredOrInstantiable,
+        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */

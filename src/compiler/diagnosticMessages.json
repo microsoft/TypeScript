@@ -1196,7 +1196,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Type '{0}' cannot be converted to type '{1}'.": {
+    "Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.": {
         "category": "Error",
         "code": 2352
     },
@@ -2420,6 +2420,14 @@
     "An arrow function cannot have a 'this' parameter.": {
         "category": "Error",
         "code": 2730
+    },
+    "Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.": {
+        "category": "Error",
+        "code": 2731
+    },
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+        "category": "Error",
+        "code": 2732
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3647,6 +3655,10 @@
         "category": "Message",
         "code": 6204
     },
+    "All type parameters are unused": {
+        "category": "Error",
+        "code": 6205
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3912,6 +3924,10 @@
     "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
         "category": "Error",
         "code": 7040
+    },
+    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+        "category": "Error",
+        "code": 7041
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -4196,6 +4212,14 @@
         "category": "Message",
         "code": 90010
     },
+    "Remove template tag": {
+        "category": "Message",
+        "code": 90011
+    },
+    "Remove type parameters": {
+        "category": "Message",
+        "code": 90012
+    },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
         "code": 90013
@@ -4263,6 +4287,14 @@
     "Add async modifier to containing function": {
         "category": "Message",
         "code": 90029
+    },
+    "Replace 'infer {0}' with 'unknown'": {
+        "category": "Message",
+        "code": 90030
+    },
+    "Replace all unused 'infer' with 'unknown'": {
+        "category": "Message",
+        "code": 90031
     },
     "Convert function to an ES2015 class": {
         "category": "Message",
