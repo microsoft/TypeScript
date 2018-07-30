@@ -102,7 +102,7 @@ exports.x
 module.exports.y = {
 >module.exports.y : Symbol(y, Decl(test.js, 45, 9))
 >module.exports : Symbol(y, Decl(test.js, 45, 9))
->module : Symbol(module, Decl(test.js, 45, 9), Decl(test.js, 51, 1))
+>module : Symbol(module, Decl(test.js, 45, 9))
 >exports : Symbol("tests/cases/conformance/salsa/test", Decl(test.js, 0, 0))
 >y : Symbol(y, Decl(test.js, 45, 9))
 
@@ -116,7 +116,7 @@ module.exports.y = {
 module.exports.y
 >module.exports.y : Symbol(y, Decl(test.js, 45, 9))
 >module.exports : Symbol("tests/cases/conformance/salsa/test", Decl(test.js, 0, 0))
->module : Symbol(module, Decl(test.js, 45, 9), Decl(test.js, 51, 1))
+>module : Symbol(module, Decl(test.js, 45, 9))
 >exports : Symbol("tests/cases/conformance/salsa/test", Decl(test.js, 0, 0))
 >y : Symbol(y, Decl(test.js, 45, 9))
 
