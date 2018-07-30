@@ -95,4 +95,29 @@ c5_v2 = class { };
 new c5_v2();
 >c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
 
+/** @class */
+function C6() {
+>C6 : Symbol(C6, Decl(index.js, 38, 12))
+
+  this.functions = [x => x, x => x + 1, x => x - 1]
+>this.functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+>this : Symbol(C6, Decl(index.js, 38, 12))
+>functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+>x : Symbol(x, Decl(index.js, 42, 20))
+>x : Symbol(x, Decl(index.js, 42, 20))
+>x : Symbol(x, Decl(index.js, 42, 27))
+>x : Symbol(x, Decl(index.js, 42, 27))
+>x : Symbol(x, Decl(index.js, 42, 39))
+>x : Symbol(x, Decl(index.js, 42, 39))
+
+};
+
+var c6_v1 = new C6();
+>c6_v1 : Symbol(c6_v1, Decl(index.js, 45, 3))
+>C6 : Symbol(C6, Decl(index.js, 38, 12))
+
+var c6_v2 = C6();
+>c6_v2 : Symbol(c6_v2, Decl(index.js, 46, 3))
+>C6 : Symbol(C6, Decl(index.js, 38, 12))
+
 
