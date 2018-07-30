@@ -3495,6 +3495,102 @@ namespace ts.projectSystem {
                 openFilesForSession([{ file, projectRootPath }], session);
             }
         });
+
+        describe("CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
+            const projectRoot = "/user/username/projects/myproject";
+            const core: File = {
+                path: `${projectRoot}/core/core.ts`,
+                content: "let z = 10;"
+            };
+            const app1: File = {
+                path: `${projectRoot}/app1/app.ts`,
+                content: "let x = 10;"
+            };
+            const app2: File = {
+                path: `${projectRoot}/app2/app.ts`,
+                content: "let y = 10;"
+            };
+            const app1Config: File = {
+                path: `${projectRoot}/app1/tsconfig.json`,
+                content: JSON.stringify({
+                    files: ["app.ts", "../core/core.ts"],
+                    compilerOptions: { outFile : "build/output.js" },
+                    compileOnSave: true
+                })
+            };
+            const app2Config: File = {
+                path: `${projectRoot}/app2/tsconfig.json`,
+                content: JSON.stringify({
+                    files: ["app.ts", "../core/core.ts"],
+                    compilerOptions: { outFile: "build/output.js" },
+                    compileOnSave: true
+                })
+            };
+            const files = [libFile, core, app1, app2, app1Config, app2Config];
+
+            function insertString(session: TestSession, file: File) {
+                session.executeCommandSeq<protocol.ChangeRequest>({
+                    command: protocol.CommandTypes.Change,
+                    arguments: {
+                        file: file.path,
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: "let k = 1"
+                    }
+                });
+            }
+
+            function getSession() {
+                const host = createServerHost(files);
+                const session = createSession(host);
+                openFilesForSession([app1, app2, core], session);
+                const service = session.getProjectService();
+                checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+                const project1 = service.configuredProjects.get(app1Config.path)!;
+                const project2 = service.configuredProjects.get(app2Config.path)!;
+                checkProjectActualFiles(project1, [libFile.path, app1.path, core.path, app1Config.path]);
+                checkProjectActualFiles(project2, [libFile.path, app2.path, core.path, app2Config.path]);
+                insertString(session, app1);
+                insertString(session, app2);
+                assert.equal(project1.dirty, true);
+                assert.equal(project2.dirty, true);
+                return session;
+            }
+
+            it("when projectFile is specified", () => {
+                const session = getSession();
+                const response = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: {
+                        file: core.path,
+                        projectFileName: app1Config.path
+                    }
+                }).response;
+                assert.deepEqual(response, [
+                    { projectFileName: app1Config.path, fileNames: [core.path, app1.path], projectUsesOutFile: true }
+                ]);
+                assert.equal(session.getProjectService().configuredProjects.get(app1Config.path)!.dirty, false);
+                assert.equal(session.getProjectService().configuredProjects.get(app2Config.path)!.dirty, true);
+            });
+
+            it("when projectFile is not specified", () => {
+                const session = getSession();
+                const response = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: {
+                        file: core.path
+                    }
+                }).response;
+                assert.deepEqual(response, [
+                    { projectFileName: app1Config.path, fileNames: [core.path, app1.path], projectUsesOutFile: true },
+                    { projectFileName: app2Config.path, fileNames: [core.path, app2.path], projectUsesOutFile: true }
+                ]);
+                assert.equal(session.getProjectService().configuredProjects.get(app1Config.path)!.dirty, false);
+                assert.equal(session.getProjectService().configuredProjects.get(app2Config.path)!.dirty, false);
+            });
+        });
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
