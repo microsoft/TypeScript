@@ -9,3 +9,4 @@ function a() {
     }
     var a = _a[0], b = _a[1];
 }
+//# sourceMappingURL=restParameterWithBindingPattern2.js.map
