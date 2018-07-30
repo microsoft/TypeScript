@@ -7157,6 +7157,12 @@ namespace ts {
         return path.slice(0, Math.max(rootLength, path.lastIndexOf(directorySeparator)));
     }
 
+    export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+        const canonicalFileName = getCanonicalFileName(fileName);
+        const canonicalDirectoryName = getCanonicalFileName(directoryName);
+        return startsWith(canonicalFileName, canonicalDirectoryName + "/") || startsWith(canonicalFileName, canonicalDirectoryName + "\\");
+    }
+
     export function isUrl(path: string) {
         return getEncodedRootLength(path) < 0;
     }

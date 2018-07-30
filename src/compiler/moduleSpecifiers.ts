@@ -1,4 +1,4 @@
-// Used by importFixes to synthesize import module specifiers.
+// Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 /* @internal */
 namespace ts.moduleSpecifiers {
     export interface ModuleSpecifierPreferences {
@@ -17,9 +17,21 @@ namespace ts.moduleSpecifiers {
         redirectTargetsMap: RedirectTargetsMap,
     ): string {
         const info = getInfo(compilerOptions, importingSourceFile, importingSourceFileName, host);
-        const modulePaths = getAllModulePaths(files, toFileName, info.getCanonicalFileName, host, redirectTargetsMap);
+        const modulePaths = getAllModulePaths(files, importingSourceFileName, toFileName, info.getCanonicalFileName, host, redirectTargetsMap);
         return firstDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions)) ||
             first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
+    }
+    
+    export function getModuleSpecifierForDeclarationFile(
+        moduleSymbol: Symbol,
+        compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        files: ReadonlyArray<SourceFile>,
+        preferences: ModuleSpecifierPreferences,
+        redirectTargetsMap: RedirectTargetsMap,
+    ): string {
+        return first(first(getModuleSpecifiers(moduleSymbol, compilerOptions, importingSourceFile, host, files, preferences, redirectTargetsMap)));
     }
 
     // For each symlink/original for a module, returns a list of ways to import that file.
@@ -40,7 +52,7 @@ namespace ts.moduleSpecifiers {
             return Debug.fail("Files list must be present to resolve symlinks in specifier resolution");
         }
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration);
-        const modulePaths = getAllModulePaths(files, moduleSourceFile.fileName, info.getCanonicalFileName, host, redirectTargetsMap);
+        const modulePaths = getAllModulePaths(files, importingSourceFile.path, moduleSourceFile.fileName, info.getCanonicalFileName, host, redirectTargetsMap);
 
         const global = mapDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions));
         return global.length ? global.map(g => [g]) : modulePaths.map(moduleFileName =>
@@ -149,11 +161,16 @@ namespace ts.moduleSpecifiers {
         return getCanonicalFileName(a) === getCanonicalFileName(b);
     }
 
+    // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
+    // ALso, don't assume that an `@foo` directory is linked. More likely the contents of that are linked.
+    function isNodeModulesOrScopedPackageDirectory(s: string): boolean {
+        return s === "node_modules" || startsWith(s, "@");
+    }
+
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] {
         const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
         const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
-        // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
-        while ((aParts[aParts.length - 2]) !== "node_modules" && bParts[bParts.length - 2] !== "node_modules" && stringsEqual(aParts[aParts.length - 1], bParts[bParts.length - 1], getCanonicalFileName)) {
+        while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2]) && !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2]) && stringsEqual(aParts[aParts.length - 1], bParts[bParts.length - 1], getCanonicalFileName)) {
             aParts.pop();
             bParts.pop();
         }
@@ -176,7 +193,7 @@ namespace ts.moduleSpecifiers {
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
      */
-    function getAllModulePaths(files: ReadonlyArray<SourceFile>, importedFileName: string, getCanonicalFileName: (file: string) => string, host: ModuleSpecifierResolutionHost, redirectTargetsMap: RedirectTargetsMap): ReadonlyArray<string> {
+    function getAllModulePaths(files: ReadonlyArray<SourceFile>, importingFileName: string, importedFileName: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost, redirectTargetsMap: RedirectTargetsMap): ReadonlyArray<string> {
         const redirects = redirectTargetsMap.get(importedFileName);
         const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
         const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
@@ -186,6 +203,10 @@ namespace ts.moduleSpecifiers {
         const result: string[] = [];
         const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
         links.forEach((resolved, path) => {
+            if (startsWithDirectory(importingFileName, resolved, getCanonicalFileName)) {
+                return; // Don't want to a package to globally import from itself
+            }
+
             const target = targets.find(t => compareStrings(t.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo);
             if (target === undefined) return;
 

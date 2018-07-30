@@ -3883,7 +3883,7 @@ namespace ts {
                     const links = getSymbolLinks(symbol);
                     let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
                     if (!specifier) {
-                        specifier = flatten(moduleSpecifiers.getModuleSpecifiers(
+                        specifier = moduleSpecifiers.getModuleSpecifierForDeclarationFile(
                             symbol,
                             compilerOptions,
                             contextFile,
@@ -3891,7 +3891,7 @@ namespace ts {
                             context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
                             { importModuleSpecifierPreference: "non-relative" },
                             host.redirectTargetsMap,
-                        ))[0];
+                        );
                         links.specifierCache = links.specifierCache || createMap();
                         links.specifierCache.set(contextFile.path, specifier);
                     }
