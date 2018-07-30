@@ -6588,7 +6588,13 @@ namespace ts {
                 // in the process of resolving (see issue #6072). The temporarily empty signature list
                 // will never be observed because a qualified name can't reference signatures.
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-                    type.callSignatures = getSignaturesOfSymbol(symbol);
+                    // If the function is explicitly marked with `@class`, then it must be constructed.
+                    if (isInJavaScriptFile(symbol.valueDeclaration) && getJSDocClassTag(symbol.valueDeclaration)) {
+                        type.constructSignatures = getSignaturesOfSymbol(symbol);
+                    }
+                    else {
+                        type.callSignatures = getSignaturesOfSymbol(symbol);
+                    }
                 }
                 // And likewise for construct signatures for classes
                 if (symbol.flags & SymbolFlags.Class) {
