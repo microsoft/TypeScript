@@ -62,7 +62,7 @@ function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 
 function foo4([...multiRobotAInfo]: Robot) {
 >foo4 : ([...multiRobotAInfo]: [string, [string, string]]) => void
->multiRobotAInfo : (string | [string, string])[]
+>multiRobotAInfo : [string, [string, string]]
 >Robot : [string, [string, string]]
 
     console.log(multiRobotAInfo);
@@ -70,7 +70,7 @@ function foo4([...multiRobotAInfo]: Robot) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->multiRobotAInfo : (string | [string, string])[]
+>multiRobotAInfo : [string, [string, string]]
 }
 
 foo1(robotA);
