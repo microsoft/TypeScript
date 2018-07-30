@@ -1,7 +1,0 @@
-=== tests/cases/compiler/restParameterWithBindingPattern5.ts ===
-function a(...{0: a, length, 3: d}: [boolean, string, number]) { }
->a : (__0_0: boolean, __0_1: string, __0_2: number) => void
->a : boolean
->length : 3
->d : string | number | boolean
-

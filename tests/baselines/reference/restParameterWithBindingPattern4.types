@@ -1,6 +1,0 @@
-=== tests/cases/compiler/restParameterWithBindingPattern4.ts ===
-function a(...[...foo = []]: string[]) { }
->a : (...[...foo]: string[]) => void
->foo : string[]
->[] : undefined[]
-

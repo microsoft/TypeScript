@@ -1,1 +1,0 @@
-function a(...[a, , , d]: [boolean, string, number]) { }
