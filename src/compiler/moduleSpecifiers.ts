@@ -21,7 +21,7 @@ namespace ts.moduleSpecifiers {
         return firstDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions)) ||
             first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
     }
-    
+
     export function getModuleSpecifierForDeclarationFile(
         moduleSymbol: Symbol,
         compilerOptions: CompilerOptions,

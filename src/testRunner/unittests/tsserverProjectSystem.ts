@@ -176,6 +176,18 @@ namespace ts.projectSystem {
         return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, deferred: 0, ...nonZeroStats };
     }
 
+    export interface ConfigFileDiagnostic {
+        fileName: string | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string;
+        category: DiagnosticCategory;
+        code: number;
+        reportsUnnecessary?: {};
+        source?: string;
+        relatedInformation?: DiagnosticRelatedInformation[];
+    }
+
     export class TestServerEventManager {
         private events: server.ProjectServiceEvent[] = [];
         readonly session: TestSession;
@@ -216,10 +228,14 @@ namespace ts.projectSystem {
             this.events.forEach(event => assert.notEqual(event.eventName, eventName));
         }
 
-        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string) {
+        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string, errors: ReadonlyArray<ConfigFileDiagnostic>) {
             const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
             assert.equal(eventData.configFileName, configFileName);
             assert.equal(eventData.triggerFile, triggerFile);
+            const actual = eventData.diagnostics.map(({ file, messageText, ...rest }) => ({ fileName: file && file.fileName, messageText: isString(messageText) ? messageText : "", ...rest }));
+            if (errors) {
+                assert.deepEqual(actual, errors);
+            }
         }
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
@@ -3479,6 +3495,102 @@ namespace ts.projectSystem {
                 openFilesForSession([{ file, projectRootPath }], session);
             }
         });
+
+        describe("CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
+            const projectRoot = "/user/username/projects/myproject";
+            const core: File = {
+                path: `${projectRoot}/core/core.ts`,
+                content: "let z = 10;"
+            };
+            const app1: File = {
+                path: `${projectRoot}/app1/app.ts`,
+                content: "let x = 10;"
+            };
+            const app2: File = {
+                path: `${projectRoot}/app2/app.ts`,
+                content: "let y = 10;"
+            };
+            const app1Config: File = {
+                path: `${projectRoot}/app1/tsconfig.json`,
+                content: JSON.stringify({
+                    files: ["app.ts", "../core/core.ts"],
+                    compilerOptions: { outFile : "build/output.js" },
+                    compileOnSave: true
+                })
+            };
+            const app2Config: File = {
+                path: `${projectRoot}/app2/tsconfig.json`,
+                content: JSON.stringify({
+                    files: ["app.ts", "../core/core.ts"],
+                    compilerOptions: { outFile: "build/output.js" },
+                    compileOnSave: true
+                })
+            };
+            const files = [libFile, core, app1, app2, app1Config, app2Config];
+
+            function insertString(session: TestSession, file: File) {
+                session.executeCommandSeq<protocol.ChangeRequest>({
+                    command: protocol.CommandTypes.Change,
+                    arguments: {
+                        file: file.path,
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: "let k = 1"
+                    }
+                });
+            }
+
+            function getSession() {
+                const host = createServerHost(files);
+                const session = createSession(host);
+                openFilesForSession([app1, app2, core], session);
+                const service = session.getProjectService();
+                checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+                const project1 = service.configuredProjects.get(app1Config.path)!;
+                const project2 = service.configuredProjects.get(app2Config.path)!;
+                checkProjectActualFiles(project1, [libFile.path, app1.path, core.path, app1Config.path]);
+                checkProjectActualFiles(project2, [libFile.path, app2.path, core.path, app2Config.path]);
+                insertString(session, app1);
+                insertString(session, app2);
+                assert.equal(project1.dirty, true);
+                assert.equal(project2.dirty, true);
+                return session;
+            }
+
+            it("when projectFile is specified", () => {
+                const session = getSession();
+                const response = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: {
+                        file: core.path,
+                        projectFileName: app1Config.path
+                    }
+                }).response;
+                assert.deepEqual(response, [
+                    { projectFileName: app1Config.path, fileNames: [core.path, app1.path], projectUsesOutFile: true }
+                ]);
+                assert.equal(session.getProjectService().configuredProjects.get(app1Config.path)!.dirty, false);
+                assert.equal(session.getProjectService().configuredProjects.get(app2Config.path)!.dirty, true);
+            });
+
+            it("when projectFile is not specified", () => {
+                const session = getSession();
+                const response = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: {
+                        file: core.path
+                    }
+                }).response;
+                assert.deepEqual(response, [
+                    { projectFileName: app1Config.path, fileNames: [core.path, app1.path], projectUsesOutFile: true },
+                    { projectFileName: app2Config.path, fileNames: [core.path, app2.path], projectUsesOutFile: true }
+                ]);
+                assert.equal(session.getProjectService().configuredProjects.get(app1Config.path)!.dirty, false);
+                assert.equal(session.getProjectService().configuredProjects.get(app2Config.path)!.dirty, false);
+            });
+        });
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
@@ -4698,13 +4810,41 @@ namespace ts.projectSystem {
     });
 
     describe("tsserverProjectSystem Configure file diagnostics events", () => {
+        function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string): ConfigFileDiagnostic {
+            const d = Diagnostics.Unknown_compiler_option_0;
+            const start = configFile.content.indexOf(prop) - 1; // start at "prop"
+            return {
+                fileName: configFile.path,
+                start,
+                length: prop.length + 2,
+                messageText: formatStringFromArgs(d.message, [prop]),
+                category: d.category,
+                code: d.code,
+                reportsUnnecessary: undefined
+            };
+        }
+
+        function getFileNotFoundDiagnostic(configFile: File, relativeFileName: string): ConfigFileDiagnostic {
+            const findString = `{"path":"./${relativeFileName}"}`;
+            const d = Diagnostics.File_0_does_not_exist;
+            const start = configFile.content.indexOf(findString);
+            return {
+                fileName: configFile.path,
+                start,
+                length: findString.length,
+                messageText: formatStringFromArgs(d.message, [`${getDirectoryPath(configFile.path)}/${relativeFileName}`]),
+                category: d.category,
+                code: d.code,
+                reportsUnnecessary: undefined
+            };
+        }
 
         it("are generated when the config file has errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -4713,29 +4853,32 @@ namespace ts.projectSystem {
                     }
                 }`
             };
-            const serverEventManager = new TestServerEventManager([file, configFile]);
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "foo"),
+                getUnknownCompilerOptionDiagnostic(configFile, "allowJS")
+            ]);
         });
 
         it("are generated when the config file doesn't have errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {}
                 }`
             };
-            const serverEventManager = new TestServerEventManager([file, configFile]);
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
         });
 
         it("are generated when the config file changes", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
@@ -4746,37 +4889,40 @@ namespace ts.projectSystem {
                 }`
             };
 
-            const serverEventManager = new TestServerEventManager([file, configFile]);
+            const files = [file, libFile, configFile];
+            const serverEventManager = new TestServerEventManager(files);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
 
             configFile.content = `{
                 "compilerOptions": {
                     "haha": 123
                 }
             }`;
-            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.reloadFS(files);
             serverEventManager.host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "haha")
+            ]);
 
             configFile.content = `{
                 "compilerOptions": {}
             }`;
-            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.reloadFS(files);
             serverEventManager.host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, emptyArray);
         });
 
         it("are not generated when the config file does not include file opened and config file has errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const file2 = {
+            const file2: File = {
                 path: "/a/b/test.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -4792,11 +4938,11 @@ namespace ts.projectSystem {
         });
 
         it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "compilerOptions": {
@@ -4805,21 +4951,21 @@ namespace ts.projectSystem {
                     }
                 }`
             };
-            const serverEventManager = new TestServerEventManager([file, configFile], /*suppressDiagnosticEvents*/ true);
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile], /*suppressDiagnosticEvents*/ true);
             openFilesForSession([file], serverEventManager.session);
             serverEventManager.hasZeroEvent("configFileDiag");
         });
 
         it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {
-            const file = {
+            const file: File = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            const file2 = {
+            const file2: File = {
                 path: "/a/b/test.ts",
                 content: "let x = 10"
             };
-            const configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                     "files": ["app.ts"]
@@ -4829,6 +4975,27 @@ namespace ts.projectSystem {
             const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
             openFilesForSession([file2], serverEventManager.session);
             serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("contains the project reference errors", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const noSuchTsconfig = "no-such-tsconfig.json";
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "files": ["app.ts"],
+                    "references": [{"path":"./${noSuchTsconfig}"}]
+                }`
+            };
+
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
+                getFileNotFoundDiagnostic(configFile, noSuchTsconfig)
+            ]);
         });
     });
 
@@ -8943,7 +9110,7 @@ export function Test2() {
         });
     });
 
-    function makeSampleProjects() {
+    describe("tsserverProjectSystem project references", () => {
         const aTs: File = {
             path: "/a/a.ts",
             content: "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};",
@@ -8999,62 +9166,121 @@ export function Test2() {
             content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.ts.map`,
         };
 
+        const dummyFile: File = {
+            path: "/dummy/dummy.ts",
+            content: "let a = 10;"
+        };
+
         const userTs: File = {
             path: "/user/user.ts",
             content: 'import { fnA, instanceA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
         };
 
-        const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, userTs]);
-        const session = createSession(host);
+        function makeSampleProjects() {
+            const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, userTs, dummyFile]);
+            const session = createSession(host);
 
-        checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
-        checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
+            checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
+            checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
 
-        // Testing what happens if we delete the original sources.
-        host.removeFile(bTs.path);
+            // Testing what happens if we delete the original sources.
+            host.removeFile(bTs.path);
 
-        openFilesForSession([userTs], session);
+            openFilesForSession([userTs], session);
+            const service = session.getProjectService();
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            return session;
+        }
 
-        return { session, aTs, bDts, userTs };
-    }
+        function verifyInferredProjectUnchanged(session: TestSession) {
+            checkProjectActualFiles(session.getProjectService().inferredProjects[0], [userTs.path, aDts.path, bDts.path]);
+        }
 
-    describe("tsserverProjectSystem project references", () => {
+        function verifyDummyProject(session: TestSession) {
+            checkProjectActualFiles(session.getProjectService().inferredProjects[0], [dummyFile.path]);
+        }
+
+        function verifyOnlyOrphanInferredProject(session: TestSession) {
+            openFilesForSession([dummyFile], session);
+            checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1 });
+            verifyDummyProject(session);
+        }
+
+        function verifySingleInferredProject(session: TestSession) {
+            checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1 });
+            verifyInferredProjectUnchanged(session);
+
+            // Close user file should close all the projects after opening dummy file
+            closeFilesForSession([userTs], session);
+            verifyOnlyOrphanInferredProject(session);
+        }
+
+        function verifyATsConfigProject(session: TestSession) {
+            checkProjectActualFiles(session.getProjectService().configuredProjects.get(aTsconfig.path)!, [aTs.path, aTsconfig.path]);
+        }
+
+        function verifyATsConfigOriginalProject(session: TestSession) {
+            checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
+            verifyInferredProjectUnchanged(session);
+             verifyATsConfigProject(session);
+            // Close user file should close all the projects
+            closeFilesForSession([userTs], session);
+            verifyOnlyOrphanInferredProject(session);
+        }
+
+        function verifyATsConfigWhenOpened(session: TestSession) {
+            checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
+            verifyInferredProjectUnchanged(session);
+            verifyATsConfigProject(session);
+
+            closeFilesForSession([userTs], session);
+            openFilesForSession([dummyFile], session);
+            checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
+            verifyDummyProject(session);
+            verifyATsConfigProject(session); // ATsConfig should still be alive
+        }
+
         it("goToDefinition", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+            verifySingleInferredProject(session);
         });
 
         it("getDefinitionAndBoundSpan", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual(response, {
                 textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
                 definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
             });
+            verifySingleInferredProject(session);
         });
 
         it("goToType", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.TypeDefinitionRequest, protocol.TypeDefinitionResponse>(session, protocol.CommandTypes.TypeDefinition, protocolFileLocationFromSubstring(userTs, "instanceA"));
             assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "IfaceA")]);
+            verifySingleInferredProject(session);
         });
 
         it("goToImplementation", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.ImplementationRequest, protocol.ImplementationResponse>(session, protocol.CommandTypes.Implementation, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+            verifySingleInferredProject(session);
         });
 
         it("goToDefinition -- target does not exist", () => {
-            const { session, bDts, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
             // bTs does not exist, so stick with bDts
             assert.deepEqual(response, [protocolFileSpanFromSubstring(bDts, "fnB")]);
+            verifySingleInferredProject(session);
         });
 
         it("navigateTo", () => {
-            const { session, aTs, bDts, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
             assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(response, [
                 {
@@ -9082,6 +9308,8 @@ export function Test2() {
                     kindModifiers: "export",
                 },
             ]);
+
+            verifyATsConfigOriginalProject(session);
         });
 
         const referenceATs = (aTs: File): protocol.ReferencesResponseItem => makeReferenceItem(aTs, /*isDefinition*/ true, "fnA", "export function fnA() {}");
@@ -9091,7 +9319,7 @@ export function Test2() {
         ];
 
         it("findAllReferences", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
 
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
@@ -9100,10 +9328,12 @@ export function Test2() {
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
                 symbolDisplayString: "(alias) fnA(): void\nimport fnA",
             });
+
+            verifyATsConfigOriginalProject(session);
         });
 
         it("findAllReferences -- starting at definition", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(aTs, "fnA"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
@@ -9112,10 +9342,11 @@ export function Test2() {
                 symbolStartOffset: protocolLocationFromSubstring(aTs.content, "fnA").offset,
                 symbolDisplayString: "function fnA(): void",
             });
+            verifyATsConfigWhenOpened(session);
         });
 
         it("findAllReferencesFull", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
 
             interface ReferencesFullRequest extends protocol.FileLocationRequest { command: protocol.CommandTypes.ReferencesFull; }
             interface ReferencesFullResponse extends protocol.Response { body: ReadonlyArray<ReferencedSymbol>; }
@@ -9172,10 +9403,11 @@ export function Test2() {
                     ],
                 }
             ]);
+            verifyATsConfigOriginalProject(session);
         });
 
         it("findAllReferences -- target does not exist", () => {
-            const { session, bDts, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
 
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
@@ -9188,6 +9420,7 @@ export function Test2() {
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnB()").offset,
                 symbolDisplayString: "(alias) fnB(): void\nimport fnB",
             });
+            verifySingleInferredProject(session);
         });
 
         const renameATs = (aTs: File): protocol.SpanGroup => ({
@@ -9203,7 +9436,7 @@ export function Test2() {
         });
 
         it("renameLocations", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
                 info: {
@@ -9216,10 +9449,11 @@ export function Test2() {
                 },
                 locs: [renameUserTs(userTs), renameATs(aTs)],
             });
+            verifyATsConfigOriginalProject(session);
         });
 
         it("renameLocations -- starting at definition", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
             const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "fnA"));
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
@@ -9233,20 +9467,22 @@ export function Test2() {
                 },
                 locs: [renameATs(aTs), renameUserTs(userTs)],
             });
+            verifyATsConfigWhenOpened(session);
         });
 
         it("renameLocationsFull", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<ReadonlyArray<RenameLocation>>(response, [
                 documentSpanFromSubstring(userTs, "fnA"),
                 documentSpanFromSubstring(userTs, "fnA", { index: 1 }),
                 documentSpanFromSubstring(aTs, "fnA"),
             ]);
+            verifyATsConfigOriginalProject(session);
         });
 
         it("renameLocations -- target does not exist", () => {
-            const { session, bDts, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnB()"));
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
                 info: {
@@ -9271,11 +9507,11 @@ export function Test2() {
                     }
                 ],
             });
-
+            verifySingleInferredProject(session);
         });
 
         it("getEditsForFileRename", () => {
-            const { session, aTs, userTs } = makeSampleProjects();
+            const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, protocol.CommandTypes.GetEditsForFileRename, {
                 oldFilePath: aTs.path,
                 newFilePath: "/a/aNew.ts",
@@ -9288,6 +9524,7 @@ export function Test2() {
                     ],
                 },
             ]);
+            verifySingleInferredProject(session);
         });
     });
 
@@ -9344,7 +9581,7 @@ export function Test2() {
         });
     });
 
-    describe("Untitled files", () => {
+    describe("tsserverProjectSystem Untitled files", () => {
         it("Can convert positions to locations", () => {
             const aTs: File = { path: "/proj/a.ts", content: "" };
             const tsconfig: File = { path: "/proj/tsconfig.json", content: "{}" };

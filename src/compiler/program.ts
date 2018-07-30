@@ -2712,12 +2712,12 @@ namespace ts {
 
         function createDiagnosticForReference(index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
             const referencesSyntax = getProjectReferencesSyntax();
-            if (referencesSyntax) {
-                if (createOptionDiagnosticInArrayLiteralSyntax(referencesSyntax, index, message, arg0, arg1)) {
-                    return;
-                }
+            if (referencesSyntax && referencesSyntax.elements.length > index) {
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, referencesSyntax.elements[index], message, arg0, arg1));
             }
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            else {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            }
         }
 
         function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
@@ -2768,15 +2768,6 @@ namespace ts {
                 programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
-        }
-
-        function createOptionDiagnosticInArrayLiteralSyntax(arrayLiteral: ArrayLiteralExpression, index: number, message: DiagnosticMessage, arg0: string | number | undefined, arg1?: string | number, arg2?: string | number): boolean {
-            if (arrayLiteral.elements.length <= index) {
-                // Out-of-bounds
-                return false;
-            }
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, arrayLiteral.elements[index], message, arg0, arg1, arg2));
-            return false; // TODO: GH#18217 This function always returns `false`!`
         }
 
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
