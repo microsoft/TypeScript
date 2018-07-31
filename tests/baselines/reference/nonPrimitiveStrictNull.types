@@ -166,31 +166,22 @@ if (typeof d === 'undefined') {
 }
 
 interface Proxy<T extends object> {}
->Proxy : Proxy<T>
->T : T
 
 var x: Proxy<number>; // error
 >x : Proxy<number>
->Proxy : Proxy<T>
 
 var y: Proxy<null>; // error
 >y : Proxy<null>
->Proxy : Proxy<T>
 >null : null
 
 var z: Proxy<undefined>; // error
 >z : Proxy<undefined>
->Proxy : Proxy<T>
 
 interface Blah {
->Blah : Blah
-
   foo: number;
 >foo : number
 }
 
 var u: Proxy<Blah>; // ok
 >u : Proxy<Blah>
->Proxy : Proxy<T>
->Blah : Blah
 

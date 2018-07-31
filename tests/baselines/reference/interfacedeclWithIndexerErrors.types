@@ -1,7 +1,5 @@
 === tests/cases/compiler/interfacedeclWithIndexerErrors.ts ===
 interface a0 {
->a0 : a0
-
     (): string;
     (a, b, c?: string): number;
 >a : any
@@ -51,42 +49,29 @@ interface a0 {
 
 
 interface a1 {
->a1 : a1
-
     [n: number]: number;
 >n : number
 }
 
 interface a2 {
->a2 : a2
-
     [s: string]: number;
 >s : string
 }
 
 interface a {
->a : a
 }
 
 interface b extends a {
->b : b
->a : a
 }
 
 interface c extends a, b {
->c : c
->a : a
->b : b
 }
 
 interface d extends a {
->d : d
->a : a
 }
 
 class c1 implements a {
 >c1 : c1
->a : a
 }
 var instance2 = new c1();
 >instance2 : c1

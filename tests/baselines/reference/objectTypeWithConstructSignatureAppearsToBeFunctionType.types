@@ -2,14 +2,11 @@
 // no errors expected below 
 
 interface I {
->I : I
-
     new(): number;
 }
 
 var i: I;
 >i : I
->I : I
 
 var r2: number = i();
 >r2 : number

@@ -1,8 +1,7 @@
 === tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule_0.ts ===
 export interface i {
->i : i
-}
-
-=== tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule_1.ts ===
+No type information for this code.}
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule_1.ts ===
 import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
 No type information for this code.

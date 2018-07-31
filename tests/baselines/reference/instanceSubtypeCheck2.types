@@ -1,19 +1,14 @@
 === tests/cases/compiler/instanceSubtypeCheck2.ts ===
 class C1<T> {
 >C1 : C1<T>
->T : T
 
     x: C2<T>;
 >x : C2<T>
->C2 : C2<T>
->T : T
 }
 
 class C2<T> extends C1<T> {
 >C2 : C2<T>
->T : T
 >C1 : C1<T>
->T : T
 
     x: string
 >x : string

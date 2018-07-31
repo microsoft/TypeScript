@@ -4,7 +4,6 @@ import foo = require("./foo_0");
 
 var color: foo;
 >color : foo
->foo : foo
 
 if(color === foo.green){
 >color === foo.green : boolean

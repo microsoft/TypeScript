@@ -17,18 +17,12 @@ import BaseA from './BaseA';
 
 export default class B<T: BaseA> {
 >B : B<T, BaseA>
->T : T
->BaseA : BaseA
 
     _AClass: Class<T>;
 >_AClass : any
->Class : No type information available!
->T : T
 
     constructor(AClass: Class<T>) {
 >AClass : any
->Class : No type information available!
->T : T
 
         this._AClass = AClass;
 >this._AClass = AClass : any
@@ -48,7 +42,6 @@ import BaseB from './BaseB';
 export default class SubB extends BaseB<SubA> {
 >SubB : SubB
 >BaseB : BaseB<SubA, any>
->SubA : SubA
 
     constructor() {
         super(SubA);

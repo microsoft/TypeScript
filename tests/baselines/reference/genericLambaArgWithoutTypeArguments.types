@@ -1,11 +1,7 @@
 === tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
    x: T;
 >x : T
->T : T
 }
 function foo(a) {
 >foo : (a: any) => any
@@ -19,7 +15,6 @@ foo((arg: Foo) => { return arg.x; });
 >foo : (a: any) => any
 >(arg: Foo) => { return arg.x; } : (arg: any) => any
 >arg : any
->Foo : Foo<T>
 >arg.x : any
 >arg : any
 >x : any

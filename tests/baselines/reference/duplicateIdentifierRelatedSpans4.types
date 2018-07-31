@@ -1,7 +1,5 @@
 === tests/cases/compiler/file1.ts ===
 interface TopLevel {
->TopLevel : TopLevel
-
     duplicate1: () => string;
 >duplicate1 : () => string
 
@@ -28,8 +26,6 @@ interface TopLevel {
 }
 === tests/cases/compiler/file2.ts ===
 interface TopLevel {
->TopLevel : TopLevel
-
     duplicate1(): number;
 >duplicate1 : () => number
 

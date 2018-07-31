@@ -51,7 +51,6 @@ declare module ReactRouter {
 >Route : any
 
 	interface Thing { }
->Thing : Thing
 }
 declare module 'react-router' {
 >'react-router' : typeof import("react-router")

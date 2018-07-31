@@ -22,8 +22,6 @@ function bar(s?: string) { }
 >s : string
 
 interface I {
->I : I
-
     foo? ();
 >foo : { (): any; (s: string): any; }
 

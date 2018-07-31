@@ -3,7 +3,6 @@ declare global {
 >global : any
 
     interface Something {x}
->Something : Something
 >x : any
 }
 export {};
@@ -12,7 +11,6 @@ declare global {
 >global : any
 
     interface Something {y}
->Something : Something
 >y : any
 }
 export {};

@@ -23,7 +23,6 @@ type ADT = {
 function invoke(item: ADT) {
 >invoke : (item: ADT) => void
 >item : ADT
->ADT : ADT
 
     if (item.kind === "a") {
 >item.kind === "a" : boolean

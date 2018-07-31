@@ -292,9 +292,7 @@ f3((a, b, c, ...x) => {})
 
 function f4<T extends any[]>(t: T) {
 >f4 : <T extends any[]>(t: T) => void
->T : T
 >t : T
->T : T
 
     (function(...x){})(...t);
 >(function(...x){})(...t) : void
@@ -330,7 +328,6 @@ function f4<T extends any[]>(t: T) {
 >cb : (x: number, ...args: T) => void
 >x : number
 >args : T
->T : T
 
     f((...x) => {});
 >f((...x) => {}) : void

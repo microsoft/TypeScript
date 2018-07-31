@@ -21,27 +21,22 @@ class Derived3 extends Base { biz() { } }
 function foo(tagName: 'canvas'): Derived3;
 >foo : { (tagName: "canvas"): Derived3; (tagName: "div"): Derived2; (tagName: "span"): Derived1; (tagName: number): Base; }
 >tagName : "canvas"
->Derived3 : Derived3
 
 function foo(tagName:  'div'): Derived2;
 >foo : { (tagName: "canvas"): Derived3; (tagName: "div"): Derived2; (tagName: "span"): Derived1; (tagName: number): Base; }
 >tagName : "div"
->Derived2 : Derived2
 
 function foo(tagName: 'span'): Derived1;
 >foo : { (tagName: "canvas"): Derived3; (tagName: "div"): Derived2; (tagName: "span"): Derived1; (tagName: number): Base; }
 >tagName : "span"
->Derived1 : Derived1
 
 function foo(tagName: number): Base;
 >foo : { (tagName: "canvas"): Derived3; (tagName: "div"): Derived2; (tagName: "span"): Derived1; (tagName: number): Base; }
 >tagName : number
->Base : Base
 
 function foo(tagName: any): Base {
 >foo : { (tagName: "canvas"): Derived3; (tagName: "div"): Derived2; (tagName: "span"): Derived1; (tagName: number): Base; }
 >tagName : any
->Base : Base
 
     return null;
 >null : null

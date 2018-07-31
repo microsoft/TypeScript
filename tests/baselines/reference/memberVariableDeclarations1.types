@@ -16,12 +16,10 @@ class Employee {
 
     public manager: Employee = null;
 >manager : Employee
->Employee : Employee
 >null : null
 
     public reports: Employee[] = [];
 >reports : Employee[]
->Employee : Employee
 >[] : undefined[]
 }
 
@@ -39,11 +37,9 @@ class Employee2 {
 
     public manager: Employee;
 >manager : Employee
->Employee : Employee
 
     public reports: Employee[];
 >reports : Employee[]
->Employee : Employee
 
     constructor() {
         this.retired = false;
@@ -71,11 +67,9 @@ class Employee2 {
 
 var e1: Employee;
 >e1 : Employee
->Employee : Employee
 
 var e2: Employee2;
 >e2 : Employee2
->Employee2 : Employee2
 
 e1 = e2;
 >e1 = e2 : Employee2

@@ -1,22 +1,14 @@
 === tests/cases/compiler/unusedTypeParameters5.ts ===
 class A<Dummy> {
 >A : A<Dummy>
->Dummy : Dummy
 
     public x: Dummy;
 >x : Dummy
->Dummy : Dummy
 }
 
 var x: {
 >x : new <T, U, K>(a: T) => A<U>
 
     new <T, U, K>(a: T): A<U>;
->T : T
->U : U
->K : K
 >a : T
->T : T
->A : A<Dummy>
->U : U
 }

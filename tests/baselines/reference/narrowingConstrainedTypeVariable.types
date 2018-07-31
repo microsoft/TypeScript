@@ -6,10 +6,7 @@ class C { }
 
 function f1<T extends C>(v: T | string): void {
 >f1 : <T extends C>(v: string | T) => void
->T : T
->C : C
 >v : string | T
->T : T
 
     if (v instanceof C) {
 >v instanceof C : boolean
@@ -18,7 +15,6 @@ function f1<T extends C>(v: T | string): void {
 
         const x: T = v;
 >x : T
->T : T
 >v : T
     }
     else {
@@ -33,13 +29,7 @@ class D { }
 
 function f2<T extends C, U extends D>(v: T | U) {
 >f2 : <T extends C, U extends D>(v: T | U) => void
->T : T
->C : C
->U : U
->D : D
 >v : T | U
->T : T
->U : U
 
     if (v instanceof C) {
 >v instanceof C : boolean
@@ -48,13 +38,11 @@ function f2<T extends C, U extends D>(v: T | U) {
 
         const x: T = v;
 >x : T
->T : T
 >v : T
     }
     else {
         const y: U = v;
 >y : U
->U : U
 >v : U
     }
 }
@@ -65,10 +53,7 @@ class E { x: string | undefined }
 
 function f3<T extends E>(v: T | { x: string }) {
 >f3 : <T extends E>(v: T | { x: string; }) => void
->T : T
->E : E
 >v : T | { x: string; }
->T : T
 >x : string
 
     if (v instanceof E) {
@@ -78,7 +63,6 @@ function f3<T extends E>(v: T | { x: string }) {
 
         const x: T = v;
 >x : T
->T : T
 >v : T
     }
     else {
