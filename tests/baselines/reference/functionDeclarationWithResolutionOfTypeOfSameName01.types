@@ -1,6 +1,5 @@
 === tests/cases/compiler/functionDeclarationWithResolutionOfTypeOfSameName01.ts ===
 interface f {
->f : f
 }
 
 function f() {
@@ -8,6 +7,5 @@ function f() {
 
     <f>f;
 ><f>f : f
->f : f
 >f : () => void
 }

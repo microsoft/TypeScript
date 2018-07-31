@@ -1,11 +1,9 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts ===
 class B<T> {
 >B : B<T>
->T : T
 
     constructor(a: T) { }
 >a : T
->T : T
 }
 class C extends B<string> { }
 >C : C

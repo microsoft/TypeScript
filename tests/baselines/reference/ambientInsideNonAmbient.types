@@ -15,7 +15,6 @@ module M {
 >E : E
 
     export declare module M { }
->M : any
 }
 
 module M2 {
@@ -34,5 +33,4 @@ module M2 {
 >E : E
 
     declare module M { }
->M : any
 }

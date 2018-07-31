@@ -123,7 +123,6 @@ let globalC = import.import.import.malkovich;
 === tests/cases/conformance/es2019/importMeta/assignmentTargets.ts ===
 export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
 >foo : ImportMeta
->ImportMeta : ImportMeta
 >import.meta.blah = import.meta.blue = import.meta : ImportMeta
 >import.meta.blah : any
 >import.meta : ImportMeta
@@ -148,8 +147,6 @@ declare global {
 >global : any
 
   interface ImportMeta {
->ImportMeta : ImportMeta
-
     wellKnownProperty: { a: number, b: string, c: boolean };
 >wellKnownProperty : { a: number; b: string; c: boolean; }
 >a : number

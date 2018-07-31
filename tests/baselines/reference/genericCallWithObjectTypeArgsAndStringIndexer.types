@@ -3,9 +3,7 @@
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
->T : T
 >x : T
->T : T
 
     return x;
 >x : T
@@ -14,7 +12,6 @@ function foo<T>(x: T) {
 var a: { [x: string]: Date };
 >a : { [x: string]: Date; }
 >x : string
->Date : Date
 
 var r = foo(a);
 >r : { [x: string]: Date; }
@@ -24,14 +21,11 @@ var r = foo(a);
 
 function other<T>(arg: T) {
 >other : <T>(arg: T) => void
->T : T
 >arg : T
->T : T
 
     var b: { [x: string]: T };
 >b : { [x: string]: T; }
 >x : string
->T : T
 
     var r2 = foo(b); // T
 >r2 : { [x: string]: T; }
@@ -42,15 +36,11 @@ function other<T>(arg: T) {
 
 function other2<T extends Date>(arg: T) {
 >other2 : <T extends Date>(arg: T) => void
->T : T
->Date : Date
 >arg : T
->T : T
 
     var b: { [x: string]: T };
 >b : { [x: string]: T; }
 >x : string
->T : T
 
     var r2 = foo(b);
 >r2 : { [x: string]: T; }
@@ -60,7 +50,6 @@ function other2<T extends Date>(arg: T) {
 
     var d: Date = r2['hm']; // ok
 >d : Date
->Date : Date
 >r2['hm'] : T
 >r2 : { [x: string]: T; }
 >'hm' : "hm"
@@ -68,17 +57,11 @@ function other2<T extends Date>(arg: T) {
 
 function other3<T extends Date, U extends Date>(arg: T) {
 >other3 : <T extends Date, U extends Date>(arg: T) => void
->T : T
->Date : Date
->U : U
->Date : Date
 >arg : T
->T : T
 
     var b: { [x: string]: T };
 >b : { [x: string]: T; }
 >x : string
->T : T
 
     var r2 = foo(b);
 >r2 : { [x: string]: T; }
@@ -88,7 +71,6 @@ function other3<T extends Date, U extends Date>(arg: T) {
 
     var d: Date = r2['hm']; // ok
 >d : Date
->Date : Date
 >r2['hm'] : T
 >r2 : { [x: string]: T; }
 >'hm' : "hm"

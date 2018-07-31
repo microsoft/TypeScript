@@ -5,7 +5,6 @@ export type Point = [number, number];
 export function increment(point: Point) {
 >increment : (point: [number, number]) => number[]
 >point : [number, number]
->Point : [number, number]
 
   return point.map(d => d + 1);
 >point.map(d => d + 1) : number[]

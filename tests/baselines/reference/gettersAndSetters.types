@@ -124,15 +124,12 @@ o.Foo = 0;
 
 
 interface I1 {
->I1 : I1
-
     (n:number):number;
 >n : number
 }
 
 var i:I1 = function (n) {return n;}
 >i : I1
->I1 : I1
 >function (n) {return n;} : (n: number) => number
 >n : number
 >n : number

@@ -1,7 +1,5 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare namespace JSX { interface Element { } }
->JSX : any
->Element : Element
 
 function foo() {
 >foo : () => void

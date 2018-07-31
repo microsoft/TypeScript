@@ -3,30 +3,19 @@
 
 type Pairs<T> = {
 >Pairs : Pairs<T>
->T : T
 
     [TKey in keyof T]: {
->TKey : TKey
->T : T
-
         key: TKey;
 >key : TKey
->TKey : TKey
 
         value: T[TKey];
 >value : T[TKey]
->T : T
->TKey : TKey
 
     };
 };
 
 type Pair<T> = Pairs<T>[keyof T];
 >Pair : Pairs<T>[keyof T]
->T : T
->Pairs : Pairs<T>
->T : T
->T : T
 
 type FooBar = {
 >FooBar : FooBar
@@ -42,8 +31,6 @@ type FooBar = {
 // Error expected here
 let pair1: Pair<FooBar> = {
 >pair1 : { key: "foo"; value: string; } | { key: "bar"; value: number; }
->Pair : Pairs<T>[keyof T]
->FooBar : FooBar
 >{    key: "foo",    value: 3} : { key: "foo"; value: number; }
 
     key: "foo",
@@ -59,9 +46,6 @@ let pair1: Pair<FooBar> = {
 // Error expected here
 let pair2: Pairs<FooBar>[keyof FooBar] = {
 >pair2 : { key: "foo"; value: string; } | { key: "bar"; value: number; }
->Pairs : Pairs<T>
->FooBar : FooBar
->FooBar : FooBar
 >{    key: "foo",    value: 3} : { key: "foo"; value: number; }
 
     key: "foo",

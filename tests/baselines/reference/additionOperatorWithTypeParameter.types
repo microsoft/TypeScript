@@ -7,12 +7,8 @@ enum E { a, b }
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
     var a: any;
 >a : any
@@ -28,11 +24,9 @@ function foo<T, U>(t: T, u: U) {
 
     var e: Object;
 >e : Object
->Object : Object
 
     var g: E;
 >g : E
->E : E
 
     var f: void;
 >f : void

@@ -323,7 +323,6 @@ declare module "GlobalWidgets" {
     }
     export function createWidget3(): Widget3;
 >createWidget3 : () => Widget3
->Widget3 : Widget3
 
     export module SpecializedGlobalWidget {
 >SpecializedGlobalWidget : typeof SpecializedGlobalWidget
@@ -336,7 +335,6 @@ declare module "GlobalWidgets" {
         }
         function createWidget4(): Widget4;
 >createWidget4 : () => Widget4
->Widget4 : Widget4
     }
 }
 

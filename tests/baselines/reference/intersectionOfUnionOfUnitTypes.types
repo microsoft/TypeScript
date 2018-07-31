@@ -49,108 +49,63 @@ let y5: (0 | 1 | 2) & (1 | 2 | 3) & (2 | 3 | 4) & (3 | 4 | 5);  // never
 let z0: (E.A | E.B | E.C) & (E.A | E.B | E.C);  // E.A | E.B | E.C
 >z0 : E.A | E.B | E.C
 >E : any
->A : E.A
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->A : E.A
 >E : any
->B : E.B
 >E : any
->C : E.C
 
 let z1: (E.A | E.B | E.C) & (E.B | E.C | E.D);  // E.B | E.C
 >z1 : E.B | E.C
 >E : any
->A : E.A
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->D : E.D
 
 let z2: (E.A | E.B | E.C) & (E.C | E.D | E.E);  // E.C
 >z2 : E.C
 >E : any
->A : E.A
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->C : E.C
 >E : any
->D : E.D
 >E : any
->E : E.E
 
 let z3: (E.A | E.B | E.C) & (E.D | E.E | E.F);  // never
 >z3 : never
 >E : any
->A : E.A
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->D : E.D
 >E : any
->E : E.E
 >E : any
->F : E.F
 
 let z4: (E.A | E.B | E.C) & (E.B | E.C | E.D) & (E.C | E.D | E.E);  // E.C
 >z4 : E.C
 >E : any
->A : E.A
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->D : E.D
 >E : any
->C : E.C
 >E : any
->D : E.D
 >E : any
->E : E.E
 
 let z5: (E.A | E.B | E.C) & (E.B | E.C | E.D) & (E.C | E.D | E.E) & (E.D | E.E | E.F);  // never
 >z5 : never
 >E : any
->A : E.A
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->B : E.B
 >E : any
->C : E.C
 >E : any
->D : E.D
 >E : any
->C : E.C
 >E : any
->D : E.D
 >E : any
->E : E.E
 >E : any
->D : E.D
 >E : any
->E : E.E
 >E : any
->F : E.F
 

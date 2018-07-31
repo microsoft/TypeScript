@@ -2,51 +2,32 @@
 // clas + interface
 class C1<T> { }
 >C1 : C1<T>
->T : T
 
 interface C1<T> { a: T; }
->C1 : C1<T>
->T : T
 >a : T
->T : T
 
 // interface + class
 class C2<T> { a: T; }
 >C2 : C2<T>
->T : T
 >a : T
->T : T
 
 interface C2<T> { }
->C2 : C2<T>
->T : T
 
 // interfaces
 interface C3<T> { a(c: (p: T) => void): void; }
->C3 : C3<T>
->T : T
 >a : (c: (p: T) => void) => void
 >c : (p: T) => void
 >p : T
->T : T
 
 interface C3<T> { b: string; }
->C3 : C3<T>
->T : T
 >b : string
 
 interface C3<T> { c: number; }
->C3 : C3<T>
->T : T
 >c : number
 
 interface C3<T> { d: boolean;  }
->C3 : C3<T>
->T : T
 >d : boolean
 
 interface C3<T> { e: any; }
->C3 : C3<T>
->T : T
 >e : any
 

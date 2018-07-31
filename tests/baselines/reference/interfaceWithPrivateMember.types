@@ -2,19 +2,13 @@
 // interfaces do not permit private members, these are errors
 
 interface I {
->I : I
-
     private x: string;
 >x : string
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     private y: T;
 >y : T
->T : T
 }
 
 var x: {

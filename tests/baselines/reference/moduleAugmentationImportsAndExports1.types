@@ -31,11 +31,8 @@ declare module "./f1" {
 >"./f1" : typeof import("tests/cases/compiler/f1")
 
     interface A {
->A : A
-
         foo(): B;
 >foo : () => B
->B : B
     }
 }
 
@@ -47,7 +44,6 @@ import "./f3";
 
 let a: A;
 >a : A
->A : A
 
 let b = a.foo().n;
 >b : number

@@ -6,7 +6,6 @@ class CDoc {
         function doSomething(a: Function) {
 >doSomething : (a: Function) => void
 >a : Function
->Function : Function
         }
         doSomething(() => undefined);
 >doSomething(() => undefined) : void

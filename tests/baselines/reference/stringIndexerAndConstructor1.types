@@ -1,7 +1,5 @@
 === tests/cases/compiler/stringIndexerAndConstructor1.ts ===
 interface I {
->I : I
-
     [s: string]: number;
 >s : string
 

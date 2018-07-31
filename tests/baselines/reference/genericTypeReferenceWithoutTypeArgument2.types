@@ -3,51 +3,36 @@
 // all of these are errors 
 
 interface I<T> {
->I : I<T>
->T : T
-
     foo: T;
 >foo : T
->T : T
 }
 
 var c: I;
 >c : any
->I : I<T>
 
 var a: { x: I };
 >a : { x: any; }
 >x : any
->I : I<T>
 
 var b: { (x: I): I };
 >b : (x: any) => any
 >x : any
->I : I<T>
->I : I<T>
 
 var d: { [x: I]: I };
 >d : {}
 >x : any
->I : I<T>
->I : I<T>
 
 var e = (x: I) => { var y: I; return y; }
 >e : (x: any) => any
 >(x: I) => { var y: I; return y; } : (x: any) => any
 >x : any
->I : I<T>
 >y : any
->I : I<T>
 >y : any
 
 function f(x: I): I { var y: I; return y; }
 >f : (x: any) => any
 >x : any
->I : I<T>
->I : I<T>
 >y : any
->I : I<T>
 >y : any
 
 var g = function f(x: I): I { var y: I; return y; }
@@ -55,10 +40,7 @@ var g = function f(x: I): I { var y: I; return y; }
 >function f(x: I): I { var y: I; return y; } : (x: any) => any
 >f : (x: any) => any
 >x : any
->I : I<T>
->I : I<T>
 >y : any
->I : I<T>
 >y : any
 
 class D extends I {
@@ -67,17 +49,10 @@ class D extends I {
 }
 
 interface U extends I {}
->U : U
->I : I<T>
 
 module M {
->M : any
-
     export interface E<T> { foo: T }
->E : E<T>
->T : T
 >foo : T
->T : T
 }
 
 class D2 extends M.C { }
@@ -87,42 +62,28 @@ class D2 extends M.C { }
 >C : any
 
 interface D3<T extends M.E> { }
->D3 : D3<T>
->T : T
 >M : any
->E : M.E<T>
 
 interface I2 extends M.C { }
->I2 : I2
->M.C : any
 >M : any
->C : No type information available!
 
 function h<T extends I>(x: T) { }
 >h : <T extends any>(x: T) => void
->T : T
->I : I<T>
 >x : T
->T : T
 
 function i<T extends M.E>(x: T) { }
 >i : <T extends any>(x: T) => void
->T : T
 >M : any
->E : M.E<T>
 >x : T
->T : T
 
 var j = <C>null;
 >j : any
 ><C>null : any
->C : No type information available!
 >null : null
 
 var k = <M.E>null;
 >k : any
 ><M.E>null : any
 >M : any
->E : M.E<T>
 >null : null
 

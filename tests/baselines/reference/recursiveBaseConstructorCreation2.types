@@ -9,7 +9,6 @@ declare class abc extends base
 {
    foo: xyz;
 >foo : xyz
->xyz : xyz
 }
 declare class xyz extends abc
 >xyz : xyz

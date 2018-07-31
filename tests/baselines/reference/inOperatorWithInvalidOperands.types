@@ -19,7 +19,6 @@ var a3: {};
 
 var a4: E
 >a4 : E
->E : E
 
 var ra1 = a1 in x;
 >ra1 : boolean

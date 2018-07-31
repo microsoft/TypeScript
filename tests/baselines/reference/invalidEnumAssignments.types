@@ -21,11 +21,9 @@ enum E2 {
 
 var e: E;
 >e : E
->E : E
 
 var e2: E2;
 >e2 : E2
->E2 : E2
 
 e = E2.A;
 >e = E2.A : E2.A
@@ -59,9 +57,7 @@ e = '';
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     e = a;
 >e = a : T

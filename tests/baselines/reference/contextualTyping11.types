@@ -5,7 +5,6 @@ class foo { public bar:{id:number;}[] = [<foo>({})]; }
 >id : number
 >[<foo>({})] : foo[]
 ><foo>({}) : foo
->foo : foo
 >({}) : {}
 >{} : {}
 

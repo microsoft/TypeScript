@@ -1,72 +1,54 @@
 === tests/cases/compiler/returnTypeTypeArguments.ts ===
 class One<T>{
 >One : One<T>
->T : T
 
     value: T;
 >value : T
->T : T
 }
 class Two<T, U>{
 >Two : Two<T, U>
->T : T
->U : U
 
     value: T;
 >value : T
->T : T
 
     id: U;
 >id : U
->U : U
 }
 class Three<T, U, V>{
 >Three : Three<T, U, V>
->T : T
->U : U
->V : V
 
     value: T;
 >value : T
->T : T
 
     id: U;
 >id : U
->U : U
 
     name: V;
 >name : V
->V : V
 }
 
 function A1(): One { return null; }
 >A1 : () => any
->One : One<T>
 >null : null
 
 function A2(): Two { return null; }
 >A2 : () => any
->Two : Two<T, U>
 >null : null
 
 function A3(): Three { return null; }
 >A3 : () => any
->Three : Three<T, U, V>
 >null : null
 
 function B1(): Two<number> { return null; }
 >B1 : () => any
->Two : Two<T, U>
 >null : null
 
 function B2(): Three<string> { return null; }
 >B2 : () => any
->Three : Three<T, U, V>
 >null : null
 
 function B3(): Three<string, number> { return null; }
 >B3 : () => any
->Three : Three<T, U, V>
 >null : null
 
 class C {
@@ -74,135 +56,99 @@ class C {
 
     A1(): One { return null; }
 >A1 : () => any
->One : One<T>
 >null : null
 
     A2(): Two { return null; }
 >A2 : () => any
->Two : Two<T, U>
 >null : null
 
     A3(): Three { return null; }
 >A3 : () => any
->Three : Three<T, U, V>
 >null : null
 
     B1(): Two<number> { return null; }
 >B1 : () => any
->Two : Two<T, U>
 >null : null
 
     B2(): Three<string> { return null; }
 >B2 : () => any
->Three : Three<T, U, V>
 >null : null
 
     B3(): Three<string, number> { return null; }
 >B3 : () => any
->Three : Three<T, U, V>
 >null : null
 }
 
 class D<T> {
 >D : D<T>
->T : T
 
     A2(): Two<T> { return null; }
 >A2 : () => any
->Two : Two<T, U>
->T : T
 >null : null
 
     A3(): Three<T> { return null; }
 >A3 : () => any
->Three : Three<T, U, V>
->T : T
 >null : null
 
     B1(): Two<T> { return null; }
 >B1 : () => any
->Two : Two<T, U>
->T : T
 >null : null
 
     B2(): Three<T> { return null; }
 >B2 : () => any
->Three : Three<T, U, V>
->T : T
 >null : null
 
     B3(): Three<string, T> { return null; }
 >B3 : () => any
->Three : Three<T, U, V>
->T : T
 >null : null
 }
 
 interface I<T> {
->I : I<T>
->T : T
-
     value: T;
 >value : T
->T : T
 }
 
 class Y<T>
 >Y : Y<T>
->T : T
 {
     value: T;
 >value : T
->T : T
 }
 
 class X<T>
 >X : X<T>
->T : T
 {
     p1: () => X;
 >p1 : () => any
->X : X<T>
 
     p2: { [idx: number]: X }
 >p2 : { [idx: number]: any; }
 >idx : number
->X : X<T>
 
     p3: X[]
 >p3 : any[]
->X : X<T>
 
     p4: I<X>
 >p4 : I<any>
->I : I<T>
->X : X<T>
 
     p5: X
 >p5 : any
->X : X<T>
 
     p6: () => Y;
 >p6 : () => any
->Y : Y<T>
 
     p7: { [idx: number]: Y }
 >p7 : { [idx: number]: any; }
 >idx : number
->Y : Y<T>
 
     p8: Y[]
 >p8 : any[]
->Y : Y<T>
 
     p9: I<Y>
 >p9 : I<any>
->I : I<T>
->Y : Y<T>
 
     pa: Y
 >pa : any
->Y : Y<T>
 }
 
 declare var a: {
@@ -210,47 +156,35 @@ declare var a: {
 
     p1: () => X;
 >p1 : () => any
->X : X<T>
 
     p2: { [idx: number]: X }
 >p2 : { [idx: number]: any; }
 >idx : number
->X : X<T>
 
     p3: X[]
 >p3 : any[]
->X : X<T>
 
     p4: I<X>
 >p4 : I<any>
->I : I<T>
->X : X<T>
 
     p5: X
 >p5 : any
->X : X<T>
 
     p6: () => Y;
 >p6 : () => any
->Y : Y<T>
 
     p7: { [idx: number]: Y }
 >p7 : { [idx: number]: any; }
 >idx : number
->Y : Y<T>
 
     p8: Y[]
 >p8 : any[]
->Y : Y<T>
 
     p9: I<Y>
 >p9 : I<any>
->I : I<T>
->Y : Y<T>
 
     pa: Y
 >pa : any
->Y : Y<T>
 
 };
 

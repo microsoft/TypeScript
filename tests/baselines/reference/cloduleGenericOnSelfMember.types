@@ -1,11 +1,9 @@
 === tests/cases/compiler/cloduleGenericOnSelfMember.ts ===
 class ServiceBase<T> {
 >ServiceBase : ServiceBase<T>
->T : T
 
     field: T;
 >field : T
->T : T
 }
 class Service extends ServiceBase<typeof Service.Base> {
 >Service : Service

@@ -5,20 +5,14 @@ declare function Callbacks(flags?: string): void;
 
 declare function Callbacks<T>(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
->T : T
 >flags : string
 
 declare function Callbacks<T1, T2>(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
->T1 : T1
->T2 : T2
 >flags : string
 
 declare function Callbacks<T1, T2, T3>(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
->T1 : T1
->T2 : T2
->T3 : T3
 >flags : string
 
 Callbacks<number, string, boolean>('s'); // no error

@@ -8,8 +8,6 @@
 // E.g., C1M1A1 = "Class 1, Method 1, Argument 1"
 
 interface I1 {
->I1 : I1
-
     C1M1():number;
 >C1M1 : () => number
 
@@ -169,14 +167,12 @@ var L4 = function (L4A1:number,L4A2?:number) { return L4A1 + L4A2; }
 
 var c1o1:C1 = new C1(5);
 >c1o1 : C1
->C1 : C1
 >new C1(5) : C1
 >C1 : typeof C1
 >5 : 5
 
 var i1o1:I1 = new C1(5);
 >i1o1 : I1
->I1 : I1
 >new C1(5) : C1
 >C1 : typeof C1
 >5 : 5

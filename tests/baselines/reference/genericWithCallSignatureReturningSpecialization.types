@@ -1,19 +1,13 @@
 === tests/cases/compiler/genericWithCallSignatureReturningSpecialization.ts ===
 interface B<T> {
->B : B<T>
->T : T
-
     f(): B<number>;
 >f : () => B<number>
->B : B<T>
 
     (value: T): void;
 >value : T
->T : T
 }
 var x: B<boolean>;
 >x : B<boolean>
->B : B<T>
 
 x(true); // was error
 >x(true) : void
