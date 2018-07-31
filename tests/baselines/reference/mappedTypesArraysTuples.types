@@ -1,94 +1,61 @@
 === tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts ===
 type Box<T> = { value: T };
 >Box : Box<T>
->T : T
 >value : T
->T : T
 
 type Boxified<T> = { [P in keyof T]: Box<T[P]> };
 >Boxified : Boxified<T>
->T : T
->P : P
->T : T
->Box : Box<T>
->T : T
->P : P
 
 type T00 = Boxified<[number, string?, ...boolean[]]>;
 >T00 : [Box<number>, Box<string | undefined>?, ...Box<boolean>[]]
->Boxified : Boxified<T>
 
 type T01 = Partial<[number, string?, ...boolean[]]>;
 >T01 : [(number | undefined)?, (string | undefined)?, ...(boolean | undefined)[]]
->Partial : Partial<T>
 
 type T02 = Required<[number, string?, ...boolean[]]>;
 >T02 : [number, string, ...boolean[]]
->Required : Required<T>
 
 type T10 = Boxified<string[]>;
 >T10 : Box<string>[]
->Boxified : Boxified<T>
 
 type T11 = Partial<string[]>;
 >T11 : (string | undefined)[]
->Partial : Partial<T>
 
 type T12 = Required<string[]>;
 >T12 : string[]
->Required : Required<T>
 
 type T13 = Boxified<ReadonlyArray<string>>;
 >T13 : ReadonlyArray<Box<string>>
->Boxified : Boxified<T>
->ReadonlyArray : ReadonlyArray<T>
 
 type T14 = Partial<ReadonlyArray<string>>;
 >T14 : ReadonlyArray<string | undefined>
->Partial : Partial<T>
->ReadonlyArray : ReadonlyArray<T>
 
 type T15 = Required<ReadonlyArray<string>>;
 >T15 : ReadonlyArray<string>
->Required : Required<T>
->ReadonlyArray : ReadonlyArray<T>
 
 type T20 = Boxified<(string | undefined)[]>;
 >T20 : Box<string | undefined>[]
->Boxified : Boxified<T>
 
 type T21 = Partial<(string | undefined)[]>;
 >T21 : (string | undefined)[]
->Partial : Partial<T>
 
 type T22 = Required<(string | undefined)[]>;
 >T22 : string[]
->Required : Required<T>
 
 type T23 = Boxified<ReadonlyArray<string | undefined>>;
 >T23 : ReadonlyArray<Box<string | undefined>>
->Boxified : Boxified<T>
->ReadonlyArray : ReadonlyArray<T>
 
 type T24 = Partial<ReadonlyArray<string | undefined>>;
 >T24 : ReadonlyArray<string | undefined>
->Partial : Partial<T>
->ReadonlyArray : ReadonlyArray<T>
 
 type T25 = Required<ReadonlyArray<string | undefined>>;
 >T25 : ReadonlyArray<string>
->Required : Required<T>
->ReadonlyArray : ReadonlyArray<T>
 
 type T30 = Boxified<Partial<string[]>>;
 >T30 : Box<string | undefined>[]
->Boxified : Boxified<T>
->Partial : Partial<T>
 
 type T31 = Partial<Boxified<string[]>>;
 >T31 : (Box<string> | undefined)[]
->Partial : Partial<T>
->Boxified : Boxified<T>
 
 type A = { a: string };
 >A : A
@@ -100,27 +67,13 @@ type B = { b: string };
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
 >T40 : string | Box<string>[] | Boxified<A> | Box<A>[] | ReadonlyArray<Box<A>> | [Box<A>, Box<B>]
->Boxified : Boxified<T>
->A : A
->A : A
->ReadonlyArray : ReadonlyArray<T>
->A : A
->A : A
->B : B
 
 declare function unboxify<T>(x: Boxified<T>): T;
 >unboxify : <T>(x: Boxified<T>) => T
->T : T
 >x : Boxified<T>
->Boxified : Boxified<T>
->T : T
->T : T
 
 declare let x10: [Box<number>, Box<string>, ...Box<boolean>[]];
 >x10 : [Box<number>, Box<string>, ...Box<boolean>[]]
->Box : Box<T>
->Box : Box<T>
->Box : Box<T>
 
 let y10 = unboxify(x10);
 >y10 : [number, string, ...boolean[]]
@@ -130,7 +83,6 @@ let y10 = unboxify(x10);
 
 declare let x11: Box<number>[];
 >x11 : Box<number>[]
->Box : Box<T>
 
 let y11 = unboxify(x11);
 >y11 : number[]
@@ -141,9 +93,7 @@ let y11 = unboxify(x11);
 declare let x12: { a: Box<number>, b: Box<string[]> };
 >x12 : { a: Box<number>; b: Box<string[]>; }
 >a : Box<number>
->Box : Box<T>
 >b : Box<string[]>
->Box : Box<T>
 
 let y12 = unboxify(x12);
 >y12 : { a: number; b: string[]; }
@@ -153,11 +103,7 @@ let y12 = unboxify(x12);
 
 declare function nonpartial<T>(x: Partial<T>): T;
 >nonpartial : <T>(x: Partial<T>) => T
->T : T
 >x : Partial<T>
->Partial : Partial<T>
->T : T
->T : T
 
 declare let x20: [number | undefined, string?, ...boolean[]];
 >x20 : [number | undefined, (string | undefined)?, ...boolean[]]
@@ -190,39 +136,20 @@ let y22 = nonpartial(x22);
 
 type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 >Awaited : Awaited<T>
->T : T
->T : T
->PromiseLike : PromiseLike<T>
->U : U
->U : U
->T : T
 
 type Awaitified<T> = { [P in keyof T]: Awaited<T[P]> };
 >Awaitified : Awaitified<T>
->T : T
->P : P
->T : T
->Awaited : Awaited<T>
->T : T
->P : P
 
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->T : T
 >values : T
->T : T
->Promise : Promise<T>
->Awaitified : Awaitified<T>
->T : T
 
 function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >f1 : (a: number, b: Promise<number>, c: string[], d: Promise<string[]>) => void
 >a : number
 >b : Promise<number>
->Promise : Promise<T>
 >c : string[]
 >d : Promise<string[]>
->Promise : Promise<T>
 
     let x1 = all(a);
 >x1 : Promise<[number]>

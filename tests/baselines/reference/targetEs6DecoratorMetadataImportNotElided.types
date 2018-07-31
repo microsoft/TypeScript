@@ -15,7 +15,6 @@ export class MyComponent {
 
     _ref: TemplateRef;
 >_ref : TemplateRef
->TemplateRef : TemplateRef
 
     @Input()
 >Input() : any
@@ -30,7 +29,6 @@ export class MyComponent {
     set ref(value: TemplateRef) { this._ref = value; }
 >ref : TemplateRef
 >value : TemplateRef
->TemplateRef : TemplateRef
 >this._ref = value : TemplateRef
 >this._ref : TemplateRef
 >this : this
