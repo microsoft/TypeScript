@@ -1,0 +1,127 @@
+tests/cases/compiler/incorrectArrowFunction.ts(7,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(7,10): error TS1109: Expression expected.
+tests/cases/compiler/incorrectArrowFunction.ts(7,12): error TS1005: ';' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(8,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(8,9): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/incorrectArrowFunction.ts(8,11): error TS1005: ';' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(9,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(9,10): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/incorrectArrowFunction.ts(9,13): error TS1005: ';' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(10,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(10,13): error TS1005: ';' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(11,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(11,10): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/incorrectArrowFunction.ts(11,11): error TS1005: ')' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(11,13): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/compiler/incorrectArrowFunction.ts(11,19): error TS1005: ';' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(11,21): error TS1128: Declaration or statement expected.
+tests/cases/compiler/incorrectArrowFunction.ts(12,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(12,12): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/incorrectArrowFunction.ts(12,15): error TS1005: ')' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(12,17): error TS2693: 'Foo' only refers to a type, but is being used as a value here.
+tests/cases/compiler/incorrectArrowFunction.ts(12,20): error TS1005: ';' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(12,22): error TS1128: Declaration or statement expected.
+tests/cases/compiler/incorrectArrowFunction.ts(13,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(13,9): error TS2304: Cannot find name 'async'.
+tests/cases/compiler/incorrectArrowFunction.ts(13,18): error TS1005: ';' expected.
+tests/cases/compiler/incorrectArrowFunction.ts(14,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(14,21): error TS1109: Expression expected.
+tests/cases/compiler/incorrectArrowFunction.ts(15,8): error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+tests/cases/compiler/incorrectArrowFunction.ts(15,9): error TS2304: Cannot find name 'async'.
+tests/cases/compiler/incorrectArrowFunction.ts(15,15): error TS1005: ';' expected.
+
+
+==== tests/cases/compiler/incorrectArrowFunction.ts (31 errors) ====
+    declare const foo;
+    
+    interface Foo {
+        a: number
+    }
+    
+    true || () => 1;
+           ~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+             ~
+!!! error TS1109: Expression expected.
+               ~~
+!!! error TS1005: ';' expected.
+    true || a => 1;
+           ~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+            ~
+!!! error TS2304: Cannot find name 'a'.
+              ~~
+!!! error TS1005: ';' expected.
+    true || (a) => 2;
+           ~~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+             ~
+!!! error TS2304: Cannot find name 'a'.
+                ~~
+!!! error TS1005: ';' expected.
+    true || foo => 1;
+           ~~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+                ~~
+!!! error TS1005: ';' expected.
+    true || (a: number) => 1;
+           ~~~~~~~~~~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+             ~
+!!! error TS2304: Cannot find name 'a'.
+              ~
+!!! error TS1005: ')' expected.
+                ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                      ~
+!!! error TS1005: ';' expected.
+                        ~~
+!!! error TS1128: Declaration or statement expected.
+    true || ({ a }: Foo) => 1;
+           ~~~~~~~~~~~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+               ~
+!!! error TS2304: Cannot find name 'a'.
+                  ~
+!!! error TS1005: ')' expected.
+                    ~~~
+!!! error TS2693: 'Foo' only refers to a type, but is being used as a value here.
+                       ~
+!!! error TS1005: ';' expected.
+                         ~~
+!!! error TS1128: Declaration or statement expected.
+    true || async () => 1;
+           ~~~~~~~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+            ~~~~~
+!!! error TS2304: Cannot find name 'async'.
+                     ~~
+!!! error TS1005: ';' expected.
+    true || async a => 1;
+           ~~~~~~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+                        ~
+!!! error TS1109: Expression expected.
+    true || async => 1;
+           ~~~~~~~~~~~
+!!! error TS17018: Invalid arrow-function arguments, parentheses around the arrow-function may help.
+            ~~~~~
+!!! error TS2304: Cannot find name 'async'.
+                  ~~
+!!! error TS1005: ';' expected.
+    
+    true || (() => 1);
+    true || (a => 1);
+    true || ((a) => 2);
+    true || (foo => 1);
+    true || ((a: number) => 1);
+    true || (({ a }: Foo) => 1);
+    true || (async () => 1);
+    true || (async a => 1);
+    true || (async => 1);
+    (() => 1) || (() => 2);
+    
+    true || (false);
+    true || false;
+    true || foo;
+    

@@ -3791,7 +3791,18 @@ namespace ts {
                     }
                 }
                 else {
-                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                    const op = parseTokenNode<Token<BinaryOperator>>();
+                    if (isParenthesizedArrowFunctionExpression() !== Tristate.False) {
+                        const maybeArrow = lookAhead(tryParseParenthesizedArrowFunctionExpression);
+                        if (maybeArrow) {
+                            parseErrorAtRange(maybeArrow, Diagnostics.Invalid_arrow_function_arguments_parentheses_around_the_arrow_function_may_help);
+                        }
+                    }
+                    else if (lookAhead(isStartOfSimpleArrowFunction)) {
+                        const maybeArrow = tryParseAsyncSimpleArrowFunctionExpression() || lookAhead(() => parseSimpleArrowFunctionExpression(<Identifier>parseBinaryExpressionOrHigher(/*precedence*/ 0)));
+                        parseErrorAtRange(maybeArrow, Diagnostics.Invalid_arrow_function_arguments_parentheses_around_the_arrow_function_may_help);
+                    }
+                    leftOperand = makeBinaryExpression(leftOperand, op, parseBinaryExpressionOrHigher(newPrecedence));
                 }
             }
 
@@ -6013,6 +6024,14 @@ namespace ts {
 
         function nextTokenIsSlash() {
             return nextToken() === SyntaxKind.SlashToken;
+        }
+
+        function isStartOfSimpleArrowFunction () {
+            if (token() === SyntaxKind.AsyncKeyword) {
+                nextToken();
+                return isIdentifier() && nextToken() === SyntaxKind.EqualsGreaterThanToken || token() === SyntaxKind.EqualsGreaterThanToken;
+            }
+            return isIdentifier() && nextToken() === SyntaxKind.EqualsGreaterThanToken;
         }
 
         function parseNamespaceExportDeclaration(node: NamespaceExportDeclaration): NamespaceExportDeclaration {

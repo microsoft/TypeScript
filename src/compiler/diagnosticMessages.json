@@ -4125,6 +4125,10 @@
         "category": "Error",
         "code": 17017
     },
+    "Invalid arrow-function arguments, parentheses around the arrow-function may help.": {
+        "category": "Error",
+        "code": 17018
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",

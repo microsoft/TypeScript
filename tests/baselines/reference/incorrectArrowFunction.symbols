@@ -1,0 +1,56 @@
+=== tests/cases/compiler/incorrectArrowFunction.ts ===
+declare const foo;
+>foo : Symbol(foo, Decl(incorrectArrowFunction.ts, 0, 13))
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(incorrectArrowFunction.ts, 0, 18))
+
+    a: number
+>a : Symbol(Foo.a, Decl(incorrectArrowFunction.ts, 2, 15))
+}
+
+true || () => 1;
+true || a => 1;
+true || (a) => 2;
+true || foo => 1;
+>foo : Symbol(foo, Decl(incorrectArrowFunction.ts, 0, 13))
+
+true || (a: number) => 1;
+true || ({ a }: Foo) => 1;
+>a : Symbol(a, Decl(incorrectArrowFunction.ts, 11, 10))
+
+true || async () => 1;
+true || async a => 1;
+true || async => 1;
+
+true || (() => 1);
+true || (a => 1);
+>a : Symbol(a, Decl(incorrectArrowFunction.ts, 17, 9))
+
+true || ((a) => 2);
+>a : Symbol(a, Decl(incorrectArrowFunction.ts, 18, 10))
+
+true || (foo => 1);
+>foo : Symbol(foo, Decl(incorrectArrowFunction.ts, 19, 9))
+
+true || ((a: number) => 1);
+>a : Symbol(a, Decl(incorrectArrowFunction.ts, 20, 10))
+
+true || (({ a }: Foo) => 1);
+>a : Symbol(a, Decl(incorrectArrowFunction.ts, 21, 11))
+>Foo : Symbol(Foo, Decl(incorrectArrowFunction.ts, 0, 18))
+
+true || (async () => 1);
+true || (async a => 1);
+>a : Symbol(a, Decl(incorrectArrowFunction.ts, 23, 14))
+
+true || (async => 1);
+>async : Symbol(async, Decl(incorrectArrowFunction.ts, 24, 9))
+
+(() => 1) || (() => 2);
+
+true || (false);
+true || false;
+true || foo;
+>foo : Symbol(foo, Decl(incorrectArrowFunction.ts, 0, 13))
+
