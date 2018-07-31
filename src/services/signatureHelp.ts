@@ -66,7 +66,7 @@ namespace ts.SignatureHelp {
                 return undefined;
             }
             const candidates: Signature[] = [];
-            const resolvedSignature = checker.getResolvedSignature(invocation.node, candidates, argumentInfo.argumentCount)!; // TODO: GH#18217
+            const resolvedSignature = checker.getResolvedSignatureForSignatureHelp(invocation.node, candidates, argumentInfo.argumentCount)!; // TODO: GH#18217
             return candidates.length === 0 ? undefined : { candidates, resolvedSignature };
         }
         else if (invocation.kind === InvocationKind.TypeArgs) {

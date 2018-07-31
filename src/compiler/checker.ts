@@ -198,13 +198,10 @@ namespace ts {
             },
             isContextSensitive,
             getFullyQualifiedName,
-            getResolvedSignature: (nodeIn, candidatesOutArray, theArgumentCount) => {
-                const node = getParseTreeNode(nodeIn, isCallLikeExpression);
-                apparentArgumentCount = theArgumentCount;
-                const res = node ? getResolvedSignature(node, candidatesOutArray) : undefined;
-                apparentArgumentCount = undefined;
-                return res;
-            },
+            getResolvedSignature: (node, candidatesOutArray, agumentCount) =>
+                getResolvedSignatureWorker(node, candidatesOutArray, agumentCount, /*isForSignatureHelp*/ false),
+            getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, agumentCount) =>
+                getResolvedSignatureWorker(node, candidatesOutArray, agumentCount, /*isForSignatureHelp*/ true),
             getConstantValue: nodeIn => {
                 const node = getParseTreeNode(nodeIn, canHaveConstantValue);
                 return node ? getConstantValue(node) : undefined;
@@ -353,6 +350,14 @@ namespace ts {
                 }
             }
         };
+
+        function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, isForSignatureHelp: boolean): Signature | undefined {
+            const node = getParseTreeNode(nodeIn, isCallLikeExpression);
+            apparentArgumentCount = argumentCount;
+            const res = node ? getResolvedSignature(node, candidatesOutArray, isForSignatureHelp) : undefined;
+            apparentArgumentCount = undefined;
+            return res;
+        }
 
         const tupleTypes = createMap<GenericType>();
         const unionTypes = createMap<UnionType>();
@@ -17194,7 +17199,7 @@ namespace ts {
                 const jsxStatelessElementType = getJsxStatelessElementTypeAt(openingLikeElement);
                 if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
-                    const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
+                    const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined, /*isForSignatureHelp*/ false);
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature!.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature!.parameters[0]));
@@ -17231,7 +17236,7 @@ namespace ts {
                 if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
                     const candidatesOutArray: Signature[] = [];
-                    getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, candidatesOutArray);
+                    getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, candidatesOutArray, /*isForSignatureHelp*/ false);
                     let result: Type | undefined;
                     let allMatchingAttributesType: Type | undefined;
                     for (const candidate of candidatesOutArray) {
@@ -19094,7 +19099,7 @@ namespace ts {
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, fallbackError?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean, fallbackError?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -19180,7 +19185,7 @@ namespace ts {
             // If we are in signature help, a trailing comma indicates that we intend to provide another argument,
             // so we will only accept overloads with arity at least 1 higher than the current number of provided arguments.
             const signatureHelpTrailingComma =
-                candidatesOutArray && node.kind === SyntaxKind.CallExpression && node.arguments.hasTrailingComma;
+                isForSignatureHelp && node.kind === SyntaxKind.CallExpression && node.arguments.hasTrailingComma;
 
             // Section 4.12.1:
             // if the candidate list contains one or more signatures for which the type of each argument
@@ -19422,7 +19427,7 @@ namespace ts {
             return maxParamsIndex;
         }
 
-        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined): Signature {
+        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
@@ -19437,7 +19442,7 @@ namespace ts {
                     const baseTypeNode = getEffectiveBaseTypeNode(getContainingClass(node)!);
                     if (baseTypeNode) {
                         const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments, baseTypeNode);
-                        return resolveCall(node, baseConstructors, candidatesOutArray);
+                        return resolveCall(node, baseConstructors, candidatesOutArray, isForSignatureHelp);
                     }
                 }
                 return resolveUntypedCall(node);
@@ -19490,7 +19495,7 @@ namespace ts {
                 }
                 return resolveErrorCall(node);
             }
-            return resolveCall(node, callSignatures, candidatesOutArray);
+            return resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp);
         }
 
         /**
@@ -19504,7 +19509,7 @@ namespace ts {
                 !numCallSignatures && !numConstructSignatures && !(apparentFuncType.flags & (TypeFlags.Union | TypeFlags.Never)) && isTypeAssignableTo(funcType, globalFunctionType);
         }
 
-        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[] | undefined): Signature {
+        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
             if (node.arguments && languageVersion < ScriptTarget.ES5) {
                 const spreadIndex = getSpreadArgumentIndex(node.arguments);
                 if (spreadIndex >= 0) {
@@ -19557,7 +19562,7 @@ namespace ts {
                     return resolveErrorCall(node);
                 }
 
-                return resolveCall(node, constructSignatures, candidatesOutArray);
+                return resolveCall(node, constructSignatures, candidatesOutArray, isForSignatureHelp);
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
@@ -19566,7 +19571,7 @@ namespace ts {
             // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                const signature = resolveCall(node, callSignatures, candidatesOutArray);
+                const signature = resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp);
                 if (!isJavaScriptConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
@@ -19673,7 +19678,7 @@ namespace ts {
             }
         }
 
-        function resolveTaggedTemplateExpression(node: TaggedTemplateExpression, candidatesOutArray: Signature[] | undefined): Signature {
+        function resolveTaggedTemplateExpression(node: TaggedTemplateExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
             const tagType = checkExpression(node.tag);
             const apparentType = getApparentType(tagType);
 
@@ -19694,7 +19699,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray);
+            return resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp);
         }
 
         /**
@@ -19725,7 +19730,7 @@ namespace ts {
         /**
          * Resolves a decorator as if it were a call expression.
          */
-        function resolveDecorator(node: Decorator, candidatesOutArray: Signature[] | undefined): Signature {
+        function resolveDecorator(node: Decorator, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
             const funcType = checkExpression(node.expression);
             const apparentType = getApparentType(funcType);
             if (apparentType === errorType) {
@@ -19754,7 +19759,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
+            return resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp, headMessage);
         }
 
         /**
@@ -19779,32 +19784,32 @@ namespace ts {
          * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
          *                           the function will fill it up with appropriate candidate signatures
          */
-        function getResolvedJsxStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[] | undefined): Signature | undefined {
+        function getResolvedJsxStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature | undefined {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
             if (callSignatures && callSignatures.length > 0) {
-                return resolveCall(openingLikeElement, callSignatures, candidatesOutArray);
+                return resolveCall(openingLikeElement, callSignatures, candidatesOutArray, isForSignatureHelp);
             }
 
             return undefined;
         }
 
-        function resolveSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
+        function resolveSignature(node: CallLikeExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
-                    return resolveCallExpression(node, candidatesOutArray);
+                    return resolveCallExpression(node, candidatesOutArray, isForSignatureHelp);
                 case SyntaxKind.NewExpression:
-                    return resolveNewExpression(node, candidatesOutArray);
+                    return resolveNewExpression(node, candidatesOutArray, isForSignatureHelp);
                 case SyntaxKind.TaggedTemplateExpression:
-                    return resolveTaggedTemplateExpression(node, candidatesOutArray);
+                    return resolveTaggedTemplateExpression(node, candidatesOutArray, isForSignatureHelp);
                 case SyntaxKind.Decorator:
-                    return resolveDecorator(node, candidatesOutArray);
+                    return resolveDecorator(node, candidatesOutArray, isForSignatureHelp);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     // This code-path is called by language service
                     const exprTypes = checkExpression(node.tagName);
                     return forEachType(exprTypes, exprType => {
-                        const sfcResult = getResolvedJsxStatelessFunctionSignature(node, exprType, candidatesOutArray);
+                        const sfcResult = getResolvedJsxStatelessFunctionSignature(node, exprType, candidatesOutArray, isForSignatureHelp);
                         if (sfcResult && sfcResult !== unknownSignature) {
                             return sfcResult;
                         }
@@ -19825,7 +19830,7 @@ namespace ts {
          *                           the function will fill it up with appropriate candidate signatures
          * @return a signature of the call-like expression or undefined if one can't be found
          */
-        function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
+        function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[] | undefined, isForSignatureHelp = false): Signature {
             const links = getNodeLinks(node);
             // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
             // However, it is possible that either candidatesOutArray was not passed in the first time,
@@ -19836,7 +19841,7 @@ namespace ts {
                 return cached;
             }
             links.resolvedSignature = resolvingSignature;
-            const result = resolveSignature(node, candidatesOutArray);
+            const result = resolveSignature(node, candidatesOutArray, isForSignatureHelp);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
