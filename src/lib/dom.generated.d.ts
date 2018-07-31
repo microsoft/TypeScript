@@ -14333,6 +14333,7 @@ interface Storage {
      * storage[key] = value
      */
     setItem(key: string, value: string): void;
+    [name: string]: any;
 }
 
 declare var Storage: {
