@@ -12,32 +12,35 @@ namespace ts.codefix {
     });
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, context: CodeFixContextBase): void {
         // get the function declaration - returns a promise
-        const funcToConvert: FunctionLikeDeclaration = getContainingFunction(getTokenAtPosition(sourceFile, position)) as FunctionLikeDeclaration;
+        const functionToConvert: FunctionLikeDeclaration = getContainingFunction(getTokenAtPosition(sourceFile, position)) as FunctionLikeDeclaration;
+        if (!functionToConvert) {
+            return;
+        }
 
         // add the async keyword
-        changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, funcToConvert);
+        changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
-        const synthNamesMap: Map<[Identifier, number]> = new MapCtr(); // number indicates the number of times it is used after declaration
-        const lastDotThenMap: Map<boolean> = new MapCtr();
+        const synthNamesMap: Map<[Identifier, number]> = createMap(); // number indicates the number of times it is used after declaration
+        const lastDotThenMap: Map<boolean> = createMap();
 
-        const funcToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(funcToConvert, checker, synthNamesMap, context);
-        findLastDotThens(funcToConvertRenamed, lastDotThenMap, checker);
+        const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context);
+        findLastDotThens(functionToConvertRenamed, lastDotThenMap, checker);
 
-        let retStmts = getReturnStatementsWithPromiseCallbacks(funcToConvertRenamed);
-        let allNewNodes: Map<Node[]> = new MapCtr();
-        for (const stmt of retStmts) {
-            if (isCallExpression(stmt)) {
-                const newNodes = parseCallback(stmt, checker, stmt, synthNamesMap, lastDotThenMap, context);
+        const returnStatements = getReturnStatementsWithPromiseCallbacks(functionToConvertRenamed);
+        let allNewNodes: Map<Node[]> = createMap();
+        for (const statement of returnStatements) {
+            if (isCallExpression(statement)) {
+                const newNodes = parseCallback(statement, checker, statement, synthNamesMap, lastDotThenMap, context);
                 if (newNodes.length) {
-                    allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
+                    allNewNodes = allNewNodes.set(String(getNodeId(statement)), newNodes);
                 }
             }
             else {
-                forEachChild(stmt, function visit(node: Node) {
+                forEachChild(statement, function visit(node: Node) {
                     if (isCallExpression(node)) {
                         const newNodes = parseCallback(node, checker, node, synthNamesMap, lastDotThenMap, context);
                         if (newNodes.length) {
-                            allNewNodes = allNewNodes.set(String(getNodeId(stmt)), newNodes);
+                            allNewNodes = allNewNodes.set(String(getNodeId(statement)), newNodes);
                         }
                     }
                     else if (!isFunctionLike(node)) {
@@ -47,15 +50,14 @@ namespace ts.codefix {
             }
         }
 
-        replaceNodes(changes, sourceFile, retStmts, allNewNodes);
+        replaceNodes(changes, sourceFile, returnStatements, allNewNodes);
     }
 
-    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes_: Node[], allNewNodes: Map<Node[]>) {
-        let oldNodes = oldNodes_.slice();
-        allNewNodes.forEach((value: Node[], key: string) => {
-            for (let stmt of oldNodes) {
-                if (String(getNodeId(stmt)) === key) {
-                    changes.replaceNodeWithNodes(sourceFile, stmt, value);
+    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes: Node[], allNewNodes: Map<Node[]>) {
+        allNewNodes.forEach((value, key) => {
+            for (const statement of oldNodes) {
+                if (String(getNodeId(statement)) === key) {
+                    changes.replaceNodeWithNodes(sourceFile, statement, value);
                     break;
                 }
             }
@@ -116,7 +118,7 @@ namespace ts.codefix {
         const allVarNames: Identifier[] = [];
 
         function isFunctionRef(node: Node): boolean {
-            const callExpr = climbPastPropertyAccess(node)
+            const callExpr = climbPastPropertyAccess(node);
             return !isCallExpression(callExpr) || callExpr.expression !== node;
         }
 
@@ -225,7 +227,6 @@ namespace ts.codefix {
     function parseThen(node: CallExpression, checker: TypeChecker, outermostParent: CallExpression, synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>, context: CodeFixContextBase, prevArgName?: [Identifier, number]): Statement[] {
         const [res, rej] = node.arguments;
 
-        // TODO - what if this is a binding pattern and not an Identifier
         if (!res) {
             return parseCallback(node.expression, checker, outermostParent, synthNamesMap, lastDotThenMap, context, prevArgName);
         }
@@ -283,20 +284,20 @@ namespace ts.codefix {
     function getCallbackBody(func: Node, prevArgName: [Identifier, number] | undefined, argName: [Identifier, number], parent: CallExpression, checker: TypeChecker, synthNamesMap: Map<[Identifier, number]>, lastDotThenMap: Map<boolean>, context: CodeFixContextBase): NodeArray<Statement> {
 
         function createVariableDeclarationOrAssignment(prevArgName: [Identifier, number], rightHandSide: Expression): NodeArray<Statement> {
-            if (prevArgName![1] > 1) {
-                prevArgName![1] -= 1;
-                return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName![0]), rightHandSide))]);
+            if (prevArgName[1] > 1) {
+                prevArgName[1] -= 1;
+                return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName[0]), rightHandSide))]);
             }
 
-            prevArgName![1] -= 1;
+            prevArgName[1] -= 1;
             return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
-                (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName![0]), /*type*/ undefined, rightHandSide)], NodeFlags.Let)))]);
+                (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName[0]), /*type*/ undefined, rightHandSide)], NodeFlags.Let)))]);
         }
 
         function subtractReferences(pos: number, argName: [Identifier, number]): void {
-            let refNode = argName[0].parent ? argName[0] : argName[0].original;
+            const refNode = argName[0].parent ? argName[0] : argName[0].original;
             if (hasArgName && refNode) {
-                let numArgUses = FindAllReferences.getReferenceEntriesForNode(pos, refNode, context.program, [context.sourceFile], context.cancellationToken);
+                const numArgUses = FindAllReferences.getReferenceEntriesForNode(pos, refNode, context.program, [context.sourceFile], context.cancellationToken);
                 if (numArgUses) {
                     argName[1] -= numArgUses.length;
                 }
@@ -312,7 +313,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                let synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName[0]]);
+                const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName[0]]);
                 if (!nextDotThen) {
                     return createNodeArray([createReturn(synthCall)]);
                 }
@@ -415,14 +416,14 @@ namespace ts.codefix {
     function getArgName(funcNode: Node, synthNamesMap: Map<[Identifier, number]>, checker: TypeChecker): [Identifier, number] {
 
         function getMapEntryIfExists(node: Identifier): [Identifier, number] {
-            let originalNode = getOriginalNode(node);
-            let symbol = getSymbol(originalNode);
+            const originalNode = getOriginalNode(node);
+            const symbol = getSymbol(originalNode);
 
             if (!symbol) {
                 return [node, 1];
             }
 
-            let mapEntry = synthNamesMap.get(String(getSymbolId(symbol)));
+            const mapEntry = synthNamesMap.get(String(getSymbolId(symbol)));
             return mapEntry ? mapEntry : [node, 1];
         }
 
@@ -437,7 +438,7 @@ namespace ts.codefix {
         let name: [Identifier, number] | undefined;
 
         if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
-            let param = funcNode.parameters[0].name as Identifier;
+            const param = funcNode.parameters[0].name as Identifier;
             name = getMapEntryIfExists(param);
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
