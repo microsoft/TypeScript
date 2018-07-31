@@ -3050,7 +3050,7 @@ declare var CharacterData: {
     new(): CharacterData;
 };
 
-interface ChildNode {
+interface ChildNode extends Node {
     /**
      * Inserts nodes just after node, while replacing strings in nodes with equivalent Text nodes.
      * Throws a "HierarchyRequestError" DOMException if the constraints of
@@ -10215,11 +10215,11 @@ interface Node extends EventTarget {
     /**
      * Returns the children.
      */
-    readonly childNodes: NodeListOf<Node & ChildNode>;
+    readonly childNodes: NodeListOf<ChildNode>;
     /**
      * Returns the first child.
      */
-    readonly firstChild: Node & ChildNode | null;
+    readonly firstChild: ChildNode | null;
     /**
      * Returns true if node is connected and false otherwise.
      */
@@ -10227,7 +10227,7 @@ interface Node extends EventTarget {
     /**
      * Returns the last child.
      */
-    readonly lastChild: Node & ChildNode | null;
+    readonly lastChild: ChildNode | null;
     /**
      * Returns the next sibling.
      */
