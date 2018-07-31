@@ -33,9 +33,9 @@ class Derived extends Base {
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >window : Window
->setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >() => null : () => any
 >null : null
 >100 : 100
@@ -136,9 +136,9 @@ module M2 {
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >window : Window
->setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >() => null : () => any
 >null : null
 >100 : 100

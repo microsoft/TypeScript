@@ -78,7 +78,7 @@ type T01 = Readonly<A | B | C | null | undefined>;
 >null : null
 
 type T02 = Boxified<A | B[] | C | string>
->T02 : string | Boxified<A> | Boxified<C> | Boxified<B[]>
+>T02 : string | Boxified<A> | Boxified<C> | Box<B>[]
 
 type T03 = Readonly<string | number | boolean | null | undefined | void>;
 >T03 : string | number | boolean | void | null | undefined

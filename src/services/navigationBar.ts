@@ -612,7 +612,7 @@ namespace ts.NavigationBar {
      * We store 'A' as associated with a NavNode, and use getModuleName to traverse down again.
      */
     function getInteriorModule(decl: ModuleDeclaration): ModuleDeclaration {
-        return decl.body!.kind === SyntaxKind.ModuleDeclaration ? getInteriorModule(<ModuleDeclaration>decl.body) : decl; // TODO: GH#18217
+        return decl.body && isModuleDeclaration(decl.body) ? getInteriorModule(decl.body) : decl;
     }
 
     function isComputedProperty(member: EnumMember): boolean {
