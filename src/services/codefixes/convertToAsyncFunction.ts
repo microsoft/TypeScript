@@ -342,13 +342,11 @@ namespace ts.codefix {
                 }
                 else if (isArrowFunction(func)) {
                     // if there is another outer dot then, don't actually return
-
                     const innerRetStmts = getReturnStatementsWithPromiseCallbacks(createReturn(func.body as Expression));
                     const innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, lastDotThenMap, context, prevArgName);
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
-
 
                     subtractReferences(func.body.pos, argName);
                     if (hasPrevArgName && nextDotThen) {
