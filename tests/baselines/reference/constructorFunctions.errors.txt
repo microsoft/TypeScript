@@ -54,4 +54,3 @@ tests/cases/conformance/salsa/index.js(30,15): error TS2348: Value of type 'type
     
     var c6_v1 = new C6();
     
-    

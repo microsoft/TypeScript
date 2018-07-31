@@ -77,8 +77,8 @@ function C3() {
 };
 
 const c3_v1 = C3();
->c3_v1 : any
->C3() : any
+>c3_v1 : C3
+>C3() : C3
 >C3 : typeof C3
 
 const c3_v2 = new C3();
@@ -103,8 +103,8 @@ var C4 = function () {
 };
 
 const c4_v1 = C4();
->c4_v1 : any
->C4() : any
+>c4_v1 : C4
+>C4() : C4
 >C4 : typeof C4
 
 const c4_v2 = new C4();
@@ -167,5 +167,4 @@ var c6_v1 = new C6();
 >c6_v1 : C6
 >new C6() : C6
 >C6 : typeof C6
-
 

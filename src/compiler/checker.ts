@@ -6588,13 +6588,7 @@ namespace ts {
                 // in the process of resolving (see issue #6072). The temporarily empty signature list
                 // will never be observed because a qualified name can't reference signatures.
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-                    // If the function is explicitly marked with `@class`, then it must be constructed.
-                    if (isInJavaScriptFile(symbol.valueDeclaration) && getJSDocClassTag(symbol.valueDeclaration)) {
-                        type.constructSignatures = getSignaturesOfSymbol(symbol);
-                    }
-                    else {
-                        type.callSignatures = getSignaturesOfSymbol(symbol);
-                    }
+                    type.callSignatures = getSignaturesOfSymbol(symbol);
                 }
                 // And likewise for construct signatures for classes
                 if (symbol.flags & SymbolFlags.Class) {
@@ -15328,9 +15322,8 @@ namespace ts {
                 // i.e.
                 //   * /** @constructor */ function [name]() { ... }
                 //   * /** @constructor */ var x = function() { ... }
-                else if ((container.kind === SyntaxKind.FunctionExpression ||
-                            container.kind === SyntaxKind.FunctionDeclaration) &&
-                           getJSDocClassTag(container)) {
+                else if ((container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
+                         getJSDocClassTag(container)) {
                     const classType = getJavaScriptClassType(container.symbol);
                     if (classType) {
                         return getFlowTypeOfReference(node, classType);
@@ -19407,6 +19400,11 @@ namespace ts {
                 else {
                     invocationError(node, apparentType, SignatureKind.Call);
                 }
+                return resolveErrorCall(node);
+            }
+            // If the function is explicitly marked with `@class`, then it must be constructed.
+            if (callSignatures.some(sig => isInJavaScriptFile(sig.declaration) && !!getJSDocClassTag(sig.declaration!))) {
+                error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 return resolveErrorCall(node);
             }
             return resolveCall(node, callSignatures, candidatesOutArray);
