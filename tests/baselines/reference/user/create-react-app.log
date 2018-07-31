@@ -24,7 +24,7 @@ packages/create-react-app/createReactApp.js(47,24): error TS2307: Cannot find mo
 packages/create-react-app/createReactApp.js(49,28): error TS2307: Cannot find module 'hyperquest'.
 packages/create-react-app/createReactApp.js(50,25): error TS2307: Cannot find module 'envinfo'.
 packages/create-react-app/createReactApp.js(52,30): error TS2307: Cannot find module 'react-dev-utils/workspaceUtils'.
-packages/create-react-app/createReactApp.js(53,29): error TS2307: Cannot find module './package.json'.
+packages/create-react-app/createReactApp.js(53,29): error TS2732: Cannot find module './package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 packages/create-react-app/createReactApp.js(771,20): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 packages/create-react-app/index.js(45,5): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
@@ -48,6 +48,7 @@ packages/react-dev-utils/__tests__/ignoredFiles.test.js(40,3): error TS2304: Can
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(46,5): error TS2304: Cannot find name 'expect'.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(49,3): error TS2304: Cannot find name 'it'.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(53,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/browsersHelper.js(9,30): error TS2307: Cannot find module 'browserslist'.
 packages/react-dev-utils/browsersHelper.js(13,23): error TS2307: Cannot find module 'pkg-up'.
 packages/react-dev-utils/browsersHelper.js(61,36): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 packages/react-dev-utils/browsersHelper.js(97,25): error TS2538: Type 'undefined' cannot be used as an index type.
