@@ -21066,7 +21066,7 @@ namespace ts {
                         else {
                             checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
                             const type = isTupleType(sourceType) ?
-                                getArrayLiteralType((sourceType.typeArguments || emptyArray).slice(elementIndex, getTypeReferenceArity(sourceType))) :
+                                sliceTupleType(sourceType, elementIndex) :
                                 createArrayType(elementType);
                             return checkDestructuringAssignment(restExpression, type, checkMode);
                         }
