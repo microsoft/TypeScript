@@ -638,8 +638,8 @@ namespace ts.projectSystem {
             const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
-            checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, ["/a/b/c", combinePaths(getDirectoryPath(appFile.path), nodeModulesAtTypes)], /*recursive*/ true);
+            checkWatchedDirectories(host, ["/a/b/c"], /*recursive*/ false);
+            checkWatchedDirectories(host, [combinePaths(getDirectoryPath(appFile.path), nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -3051,21 +3051,18 @@ namespace ts.projectSystem {
             assert.isDefined(project);
             checkProjectActualFiles(project, map(files, file => file.path));
             checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
-            checkWatchedDirectories(host, [], /*recursive*/ false);
-            const watchedRecursiveDirectories = ["/a/b/node_modules/@types"];
-            watchedRecursiveDirectories.push("/a/b");
-            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+            checkWatchedDirectoriesDetailed(host, ["/a/b"], 1, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
 
             files.push(file2);
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
-            watchedRecursiveDirectories.pop();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
             checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
             checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
-            checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
 
             // On next file open the files file2a should be closed and not watched any more
             projectService.openClientFile(file2.path);
@@ -3073,8 +3070,8 @@ namespace ts.projectSystem {
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
             checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
             checkWatchedFiles(host, [libFile.path, configFile.path]);
-            checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
 
         });
 
@@ -3114,7 +3111,7 @@ namespace ts.projectSystem {
             checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
-            watchedRecursiveDirectories.push(`${root}/a/b/src`, `${root}/a/b/node_modules`);
+            watchedRecursiveDirectories.push(`${root}/a/b/src/node_modules`, `${root}/a/b/node_modules`);
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
         });
 
@@ -6947,7 +6944,7 @@ namespace ts.projectSystem {
                 const { configFileName } = projectService.openClientFile(file1.path);
                 assert.equal(configFileName, tsconfigFile.path as server.NormalizedPath, `should find config`); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
                 checkNumberOfConfiguredProjects(projectService, 1);
-                const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, canonicalFrontendDir].concat(getNodeModuleDirectories(getDirectoryPath(canonicalFrontendDir)));
+                const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, `${canonicalFrontendDir}/types`, `${canonicalFrontendDir}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(canonicalFrontendDir)));
 
                 const project = projectService.configuredProjects.get(canonicalConfigPath)!;
                 verifyProjectAndWatchedDirectories();
@@ -7101,7 +7098,7 @@ namespace ts.projectSystem {
                 const projectService = createProjectService(host);
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
-                const recursiveWatchedDirectories: string[] = [appFolder].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
+                const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
                 verifyProject();
 
                 let timeoutAfterReloadFs = timeoutDuringPartialInstallation;
@@ -7181,7 +7178,7 @@ namespace ts.projectSystem {
                 const lodashIndexPath = root + "/a/b/node_modules/@types/lodash/index.d.ts";
                 projectFiles.push(find(filesAndFoldersToAdd, f => f.path === lodashIndexPath)!);
                 // we would now not have failed lookup in the parent of appFolder since lodash is available
-                recursiveWatchedDirectories.length = 1;
+                recursiveWatchedDirectories.length = 2;
                 // npm installation complete, timeout after reload fs
                 timeoutAfterReloadFs = true;
                 verifyAfterPartialOrCompleteNpmInstall(2);
@@ -7701,9 +7698,9 @@ namespace ts.projectSystem {
                     const openFiles = [file1.path];
                     const watchedRecursiveDirectories = useSlashRootAsSomeNotRootFolderInUserDirectory ?
                         // Folders of node_modules lookup not in changedRoot
-                        ["a/b/project", "a/b/node_modules", "a/node_modules", "node_modules"].map(v => rootFolder + v) :
+                        ["a/b/project", "a/b/project/node_modules", "a/b/node_modules", "a/node_modules", "node_modules"].map(v => rootFolder + v) :
                         // Folder of tsconfig
-                        ["/a/b/project"];
+                        ["/a/b/project", "/a/b/project/node_modules"];
                     const host = createServerHost(projectFiles);
                     const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host);
                     const projectService = session.getProjectService();
@@ -7732,7 +7729,7 @@ namespace ts.projectSystem {
                     host.reloadFS(projectFiles);
                     host.runQueuedTimeoutCallbacks();
                     if (useSlashRootAsSomeNotRootFolderInUserDirectory) {
-                        watchedRecursiveDirectories.length = 2;
+                        watchedRecursiveDirectories.length = 3;
                     }
                     else {
                         // file2 addition wont be detected
@@ -8160,10 +8157,10 @@ new C();`
                 checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
-            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: string[], nonRecursiveDirectories: string[]) {
+            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: ReadonlyMap<number>, nonRecursiveDirectories: string[]) {
                 checkWatchedFilesDetailed(host, files.filter(f => f !== recognizersDateTimeSrcFile.path), 1);
-                checkWatchedDirectoriesDetailed(host, nonRecursiveDirectories, 1,  /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, recursiveDirectories, 1, /*recursive*/ true);
+                checkWatchedDirectoriesDetailed(host, nonRecursiveDirectories, 1, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(host, recursiveDirectories, /*recursive*/ true);
             }
 
             function createSessionAndOpenFile(host: TestServerHost) {
@@ -8184,8 +8181,16 @@ new C();`
                     const filesWithNodeModulesSetup = [...filesWithSources, nodeModulesRecorgnizersText];
                     const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
-                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, ...(withPathMapping ? emptyArray : [recognizersDateTime]), ...getTypeRootsFromLocation(recognizersDateTime)];
-                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...(withPathMapping ? [recognizersText] : emptyArray), ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+                    const watchedDirectoriesWithResolvedModule = arrayToMap(getTypeRootsFromLocation(recognizersDateTime), k => k, () => 1);
+                    watchedDirectoriesWithResolvedModule.set(`${recognizersDateTime}/src`, withPathMapping ? 1 : 2); // wild card + failed lookups
+                    if (!withPathMapping) {
+                        watchedDirectoriesWithResolvedModule.set(`${recognizersDateTime}/node_modules`, 1); // failed lookups
+                    }
+                    const watchedDirectoriesWithUnresolvedModule = cloneMap(watchedDirectoriesWithResolvedModule);
+                    watchedDirectoriesWithUnresolvedModule.set(`${recognizersDateTime}/src`, 2); // wild card + failed lookups
+                    [`${recognizersDateTime}/node_modules`, ...(withPathMapping ? [recognizersText] : emptyArray), ...getNodeModuleDirectories(packages)].forEach(d => {
+                        watchedDirectoriesWithUnresolvedModule.set(d, 1);
+                    });
                     const nonRecursiveWatchedDirectories = withPathMapping ? [packages] : emptyArray;
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
@@ -8418,11 +8423,10 @@ new C();`
             return `Reusing resolution of module '${moduleName}' to file '${file.path}' from old program.`;
         }
 
-        function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File) {
+        function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: ReadonlyArray<string>) {
             checkWatchedFiles(host, mapDefined(files, f => f === openFile ? undefined : f.path));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            const configDirectory = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, [configDirectory, `${configDirectory}/${nodeModulesAtTypes}`], /*recursive*/ true);
+            checkWatchedDirectories(host, [projectLocation, `${projectLocation}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)], /*recursive*/ true);
         }
 
         describe("from files in same folder", () => {
@@ -8466,6 +8470,7 @@ new C();`
             });
 
             it("non relative module name", () => {
+                const expectedNonRelativeDirectories = [`${projectLocation}/node_modules`, `${projectLocation}/src`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
@@ -8479,7 +8484,7 @@ new C();`
                 const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
-                verifyWatchesWithConfigFile(host, files, file1);
+                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
                 file1.content += fileContent;
                 file2.content += fileContent;
@@ -8489,7 +8494,7 @@ new C();`
                     getExpectedReusingResolutionFromOldProgram(file1, module1Name),
                     getExpectedReusingResolutionFromOldProgram(file1, module2Name)
                 ]);
-                verifyWatchesWithConfigFile(host, files, file1);
+                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
             });
         });
 
@@ -8558,6 +8563,7 @@ new C();`
             });
 
             it("non relative module name", () => {
+                const expectedNonRelativeDirectories = [`${projectLocation}/node_modules`, `${projectLocation}/product`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
@@ -8577,7 +8583,7 @@ new C();`
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
-                verifyWatchesWithConfigFile(host, files, file1);
+                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
                 file1.content += fileContent;
                 file2.content += fileContent;
@@ -8590,7 +8596,7 @@ new C();`
                     getExpectedReusingResolutionFromOldProgram(file1, module1Name),
                     getExpectedReusingResolutionFromOldProgram(file1, module2Name)
                 ]);
-                verifyWatchesWithConfigFile(host, files, file1);
+                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
             });
 
             it("non relative module name from inferred project", () => {
@@ -8627,7 +8633,7 @@ new C();`
                     watchedFiles.push(combinePaths(d, "tsconfig.json"), combinePaths(d, "jsconfig.json"));
                 });
                 const watchedRecursiveDirectories = getTypeRootsFromLocation(currentDirectory).concat([
-                    currentDirectory, `${projectLocation}/product/${nodeModules}`,
+                    `${currentDirectory}/node_modules`, `${currentDirectory}/feature`, `${projectLocation}/product/${nodeModules}`,
                     `${projectLocation}/${nodeModules}`, `${projectLocation}/product/test/${nodeModules}`,
                     `${projectLocation}/product/test/src/${nodeModules}`
                 ]);
@@ -8697,7 +8703,6 @@ export const x = 10;`
                         outDir: "../out",
                         baseUrl: "./",
                         typeRoots: ["typings"]
-
                     }
                 })
             };
@@ -8713,13 +8718,15 @@ export const x = 10;`
                     checkWatchedDirectories(host, emptyArray,  /*recursive*/ false); // since fs resolves to ambient module, shouldnt watch failed lookup
                 }
                 else {
-                    checkWatchedDirectoriesDetailed(host, [`${projectRoot}`], 1,  /*recursive*/ false); // failed lookup for fs
+                    checkWatchedDirectoriesDetailed(host, [`${projectRoot}`, `${projectRoot}/src`], 1,  /*recursive*/ false); // failed lookup for fs
                 }
                 const expectedWatchedDirectories = createMap<number>();
-                expectedWatchedDirectories.set(`${projectRoot}/src`, 2); // Wild card and failed lookup
+                expectedWatchedDirectories.set(`${projectRoot}/src`, 1); // Wild card
+                expectedWatchedDirectories.set(`${projectRoot}/src/somefolder`, 1); // failedLookup for somefolder/module2
+                expectedWatchedDirectories.set(`${projectRoot}/src/node_modules`, 1); // failed lookup for somefolder/module2
                 expectedWatchedDirectories.set(`${projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
                 expectedWatchedDirectories.set(`${projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
-                expectedWatchedDirectories.set(`${projectRoot}/src/typings`, 1); // typeroot directory
+                expectedWatchedDirectories.set(`${projectRoot}/src/typings`, useNodeFile ? 1 : 2); // typeroot directory + failed lookup if not using node file
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
             }
 
