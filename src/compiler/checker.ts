@@ -9082,6 +9082,9 @@ namespace ts {
          * Returns if a type is or consists of a JSLiteral object type
          */
         function isJSLiteralType(type: Type): boolean {
+            if (noImplicitAny) {
+                return false; // Flag is meaningless under `noImplicitAny` mode
+            }
             // In addition to objects which are directly literals,
             // * unions where every element is a jsliteral
             // * intersections where at least one element is a jsliteral
@@ -9152,7 +9155,7 @@ namespace ts {
                     return neverType;
                 }
                 if (isJSLiteralType(objectType)) {
-                    return anyType; // TODO: We should consider still marking these as errors if `noImplictAny` is on
+                    return anyType;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
                     if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
@@ -9175,7 +9178,7 @@ namespace ts {
                 }
             }
             if (isJSLiteralType(objectType)) {
-                return anyType; // TODO: We should consider still marking these as errors if `noImplictAny` is on
+                return anyType;
             }
             if (accessNode) {
                 const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
@@ -17913,7 +17916,7 @@ namespace ts {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
                 if (!(indexInfo && indexInfo.type)) {
                     if (isJSLiteralType(leftType)) {
-                        return anyType; // TODO: We should consider still marking these as errors if `noImplictAny` is on
+                        return anyType;
                     }
                     if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
                         reportNonexistentProperty(right, leftType.flags & TypeFlags.TypeParameter && (leftType as TypeParameter).isThisType ? apparentType : leftType);
