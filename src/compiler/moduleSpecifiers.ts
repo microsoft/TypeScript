@@ -163,14 +163,16 @@ namespace ts.moduleSpecifiers {
 
     // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
     // ALso, don't assume that an `@foo` directory is linked. More likely the contents of that are linked.
-    function isNodeModulesOrScopedPackageDirectory(s: string): boolean {
-        return s === "node_modules" || startsWith(s, "@");
+    function isNodeModulesOrScopedPackageDirectory(s: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+        return getCanonicalFileName(s) === "node_modules" || startsWith(s, "@");
     }
 
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] {
         const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
         const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
-        while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2]) && !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2]) && stringsEqual(aParts[aParts.length - 1], bParts[bParts.length - 1], getCanonicalFileName)) {
+        while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
+            !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
+            stringsEqual(aParts[aParts.length - 1], bParts[bParts.length - 1], getCanonicalFileName)) {
             aParts.pop();
             bParts.pop();
         }
