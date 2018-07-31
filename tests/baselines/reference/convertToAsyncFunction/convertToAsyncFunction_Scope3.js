@@ -17,7 +17,7 @@ async function f() {
   var obj;
   let res = await fetch("https://typescriptlang.org");
     obj = {
-        func: function f_1() {
+        func: function f() {
             console.log(res);
         }
     };

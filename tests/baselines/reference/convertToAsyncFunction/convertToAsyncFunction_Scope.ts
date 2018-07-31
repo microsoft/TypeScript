@@ -20,7 +20,7 @@ function /*[#|*/f/*|]*/() {
 async function f() {
     var var1:Promise<Response>, var2;
     await fetch('https://typescriptlang.org');
-    let res_2 = await Promise.resolve();
+    let res = await Promise.resolve();
     var2 = "test";
     let res_1 = fetch("https://microsoft.com");
     let response = var1 === res_1;

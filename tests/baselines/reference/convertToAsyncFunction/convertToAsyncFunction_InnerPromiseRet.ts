@@ -12,13 +12,13 @@ function /*[#|*/innerPromise/*|]*/(): Promise<string> {
 
 async function innerPromise(): Promise<string> {
     let resp = await fetch("https://typescriptlang.org");
-    let blob_1;
+    let blob_2;
     try {
         let blob = await resp.blob();
-        blob_1 = blob.byteOffset;
+        blob_2 = blob.byteOffset;
     }
     catch (err) {
-        blob_1 = 'Error';
+        blob_2 = 'Error';
     }
-    return blob_1.toString();
+    return blob_2.toString();
 }

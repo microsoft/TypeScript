@@ -13,6 +13,6 @@ function /*[#|*/f/*|]*/(): Promise<string> {
 async function f(): Promise<string> {
     let resp = await fetch("https://typescriptlang.org");
     let blob = await resp.blob();
-    let blob_1 = blob.byteOffset;
-    return blob_1.toString();
+    let blob_2 = blob.byteOffset;
+    return blob_2.toString();
 }

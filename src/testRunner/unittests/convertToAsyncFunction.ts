@@ -63,7 +63,7 @@ namespace ts {
         return { source: text, ranges };
     }
 
-    const libFile: ts.TestFSWithWatch.File = {
+    const libFile: TestFSWithWatch.File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -522,7 +522,7 @@ function [#|f|](): Promise<void> {
 }`
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_MultipleThens", `
-function [#|f|]():Promise<boolean> {
+function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res).then(res2);
 }
 function res(result){
@@ -1015,7 +1015,7 @@ function [#|f|]() {
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.Convert_to_async_function, true);
+        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.Convert_to_async_function, /*includeLib*/ true);
     }
 
     function _testConvertToAsyncFunctionFailed(caption: string, text: string) {
