@@ -9,7 +9,7 @@ namespace ts {
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
         getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type | undefined,
-        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
+        getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
         getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier) {
 
         return getSymbolWalker;
@@ -93,7 +93,7 @@ namespace ts {
             }
 
             function visitTypeParameter(type: TypeParameter): void {
-                visitType(getConstraintFromTypeParameter(type));
+                visitType(getConstraintOfTypeParameter(type));
             }
 
             function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {

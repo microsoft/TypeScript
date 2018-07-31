@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-index.js(3,25): error TS2307: Cannot find module './package.json'.
+index.js(3,25): error TS2732: Cannot find module './package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 index.js(138,21): error TS2532: Object is possibly 'undefined'.
 src/cli/util.js(262,64): error TS2339: Property 'length' does not exist on type 'Ignore'.
 src/cli/util.js(335,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
@@ -96,7 +96,7 @@ src/main/core-options.js(187,3): error TS2322: Type '{ since: string; category: 
 src/main/parser.js(61,9): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.
-src/main/support.js(5,32): error TS2307: Cannot find module '../../package.json'.
+src/main/support.js(5,32): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 src/main/support.js(36,24): error TS2339: Property 'name' does not exist on type 'never'.
 src/main/support.js(36,35): error TS2339: Property 'name' does not exist on type 'never'.
 src/main/support.js(36,48): error TS2339: Property 'name' does not exist on type 'never'.

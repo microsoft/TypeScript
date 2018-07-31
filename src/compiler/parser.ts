@@ -491,6 +491,8 @@ namespace ts {
                     visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
             case SyntaxKind.JSDocThisTag:
                 return visitNode(cbNode, (node as JSDocThisTag).typeExpression);
+            case SyntaxKind.JSDocEnumTag:
+                return visitNode(cbNode, (node as JSDocEnumTag).typeExpression);
             case SyntaxKind.JSDocSignature:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -3537,8 +3539,9 @@ namespace ts {
                 }
 
                 // If we had "(" followed by something that's not an identifier,
-                // then this definitely doesn't look like a lambda.
-                if (!isIdentifier()) {
+                // then this definitely doesn't look like a lambda.  "this" is not
+                // valid, but we want to parse it and then give a semantic error.
+                if (!isIdentifier() && second !== SyntaxKind.ThisKeyword) {
                     return Tristate.False;
                 }
 
@@ -6397,7 +6400,7 @@ namespace ts {
                         switch (token()) {
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
-                                    removeTrailingNewlines(comments);
+                                    removeTrailingWhitespace(comments);
                                     addTag(parseTag(indent));
                                     // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
                                     // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
@@ -6457,7 +6460,7 @@ namespace ts {
                         nextJSDocToken();
                     }
                     removeLeadingNewlines(comments);
-                    removeTrailingNewlines(comments);
+                    removeTrailingWhitespace(comments);
                     return createJSDocComment();
                 });
 
@@ -6467,8 +6470,8 @@ namespace ts {
                     }
                 }
 
-                function removeTrailingNewlines(comments: string[]) {
-                    while (comments.length && (comments[comments.length - 1] === "\n" || comments[comments.length - 1] === "\r")) {
+                function removeTrailingWhitespace(comments: string[]) {
+                    while (comments.length && comments[comments.length - 1].trim() === "") {
                         comments.pop();
                     }
                 }
@@ -6525,6 +6528,9 @@ namespace ts {
                             break;
                         case "this":
                             tag = parseThisTag(atToken, tagName);
+                            break;
+                        case "enum":
+                            tag = parseEnumTag(atToken, tagName);
                             break;
                         case "arg":
                         case "argument":
@@ -6626,7 +6632,7 @@ namespace ts {
                     }
 
                     removeLeadingNewlines(comments);
-                    removeTrailingNewlines(comments);
+                    removeTrailingWhitespace(comments);
                     return comments.length === 0 ? undefined : comments.join("");
                 }
 
@@ -6816,6 +6822,15 @@ namespace ts {
                     return finishNode(tag);
                 }
 
+                function parseEnumTag(atToken: AtToken, tagName: Identifier): JSDocEnumTag {
+                    const tag = <JSDocEnumTag>createNode(SyntaxKind.JSDocEnumTag, atToken.pos);
+                    tag.atToken = atToken;
+                    tag.tagName = tagName;
+                    tag.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
+                    skipWhitespace();
+                    return finishNode(tag);
+                }
+
                 function parseTypedefTag(atToken: AtToken, tagName: Identifier, indent: number): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
@@ -6834,7 +6849,7 @@ namespace ts {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral | undefined;
                         let childTypeTag: JSDocTypeTag | undefined;
-                        const start = scanner.getStartPos();
+                        const start = atToken.pos;
                         while (child = tryParse(() => parseChildPropertyTag())) {
                             if (!jsdocTypeLiteral) {
                                 jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
@@ -7029,8 +7044,8 @@ namespace ts {
                         skipWhitespace();
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         typeParameter.name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
-                        skipWhitespace();
                         finishNode(typeParameter);
+                        skipWhitespace();
                         typeParameters.push(typeParameter);
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
 

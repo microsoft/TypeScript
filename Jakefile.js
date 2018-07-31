@@ -51,7 +51,8 @@ const TaskNames = {
     configureInsiders: "configure-insiders",
     publishInsiders: "publish-insiders",
     configureNightly: "configure-nightly",
-    publishNightly: "publish-nightly"
+    publishNightly: "publish-nightly",
+    help: "help"
 };
 
 const Paths = {};
@@ -257,6 +258,11 @@ task(TaskNames.publishNightly, [TaskNames.coreBuild, TaskNames.configureNightly,
     var cmd = "npm publish --tag next";
     exec(cmd, () => complete());
 }, { async: true });
+
+task(TaskNames.help, function() {
+    var cmd = "jake --tasks";
+    exec(cmd, () => complete());
+})
 
 task(TaskNames.configureInsiders, [TaskNames.scripts], function () {
     const cmd = `${host} ${Paths.scripts.configurePrerelease} insiders ${Paths.packageJson} ${Paths.versionFile}`;
