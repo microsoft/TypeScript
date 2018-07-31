@@ -354,12 +354,15 @@ namespace ts.formatting {
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
-                        return getListIfStartEndIsInListRange((<ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
+                    case SyntaxKind.JSDocTemplateTag: {
+                        const { typeParameters } = <ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node.parent;
+                        return getListIfStartEndIsInListRange(typeParameters, node.getStart(sourceFile), end);
+                    }
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression: {
                         const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<CallExpression>node.parent).typeArguments, start, end) ||
-                            getListIfStartEndIsInListRange((<CallExpression>node.parent).arguments, start, end);
+                        return getListIfStartEndIsInListRange((<CallExpression | NewExpression>node.parent).typeArguments, start, end) ||
+                            getListIfStartEndIsInListRange((<CallExpression | NewExpression>node.parent).arguments, start, end);
                     }
                     case SyntaxKind.VariableDeclarationList:
                         return getListIfStartEndIsInListRange((<VariableDeclarationList>node.parent).declarations, node.getStart(sourceFile), end);

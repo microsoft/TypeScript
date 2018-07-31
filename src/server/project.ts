@@ -158,6 +158,9 @@ namespace ts.server {
         /*@internal*/
         typingFiles: SortedReadonlyArray<string> = emptyArray;
 
+        /*@internal*/
+        originalConfiguredProjects: Map<true> | undefined;
+
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
@@ -711,7 +714,7 @@ namespace ts.server {
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean {
-            const info = this.projectService.getScriptInfoForPath(this.toPath(filename));
+            const info = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
