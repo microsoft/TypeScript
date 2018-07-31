@@ -207,34 +207,24 @@ module M2 {
 var generic1 = <T>(n: T) => [n];
 >generic1 : <T>(n: T) => T[]
 ><T>(n: T) => [n] : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
 >[n] : T[]
 >n : T
 
 var generic1: { <T>(n: T): T[] }; // Incorrect error, Bug 829597
 >generic1 : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
->T : T
 
 var generic2 = <T>(n: T) => { return [n]; };
 >generic2 : <T>(n: T) => T[]
 ><T>(n: T) => { return [n]; } : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
 >[n] : T[]
 >n : T
 
 var generic2: { <T>(n: T): T[] };
 >generic2 : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
->T : T
 
 // <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
 var asserted1 = <any>((n) => [n]);

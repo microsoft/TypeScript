@@ -72,12 +72,10 @@ enum E { A }
 function foo6(x: E);
 >foo6 : { (x: E): any; (x: E): any; }
 >x : E
->E : E
 
 function foo6(x: E);
 >foo6 : { (x: E): any; (x: E): any; }
 >x : E
->E : E
 
 function foo6(x: any) { }
 >foo6 : { (x: E): any; (x: E): any; }

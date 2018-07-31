@@ -1,88 +1,50 @@
 === tests/cases/compiler/infinitelyExpandingOverloads.ts ===
 interface KnockoutSubscription2<T> {
->KnockoutSubscription2 : KnockoutSubscription2<T>
->T : T
-
     target: KnockoutObservableBase2<T>;
 >target : KnockoutObservableBase2<T>
->KnockoutObservableBase2 : KnockoutObservableBase2<T>
->T : T
 }
 interface KnockoutObservableBase2<T> {
->KnockoutObservableBase2 : KnockoutObservableBase2<T>
->T : T
-
     subscribe(callback: (newValue: T) => void, target?: any, topic?: string): KnockoutSubscription2<T>;
 >subscribe : (callback: (newValue: T) => void, target?: any, topic?: string) => KnockoutSubscription2<T>
 >callback : (newValue: T) => void
 >newValue : T
->T : T
 >target : any
 >topic : string
->KnockoutSubscription2 : KnockoutSubscription2<T>
->T : T
 }
 interface ValidationPlacement2<TValue> {
->ValidationPlacement2 : ValidationPlacement2<TValue>
->TValue : TValue
-
     initialize(validatable: Validatable2<TValue>): void;
 >initialize : (validatable: Validatable2<TValue>) => void
 >validatable : Validatable2<TValue>
->Validatable2 : Validatable2<TValue>
->TValue : TValue
 }
 interface Validatable2<TValue> {
->Validatable2 : Validatable2<TValue>
->TValue : TValue
-
     validators: KnockoutObservableBase2<Validator2<TValue>>;
 >validators : KnockoutObservableBase2<Validator2<TValue>>
->KnockoutObservableBase2 : KnockoutObservableBase2<T>
->Validator2 : Validator2<TValue>
->TValue : TValue
 }
 class Validator2<TValue> {
 >Validator2 : Validator2<TValue>
->TValue : TValue
 
     private _subscription: KnockoutSubscription2<TValue>;
 >_subscription : KnockoutSubscription2<TValue>
->KnockoutSubscription2 : KnockoutSubscription2<T>
->TValue : TValue
 }
 class ViewModel<TValue> {
 >ViewModel : ViewModel<TValue>
->TValue : TValue
 
     public validationPlacements: Array<ValidationPlacement2<TValue>> = new Array<ValidationPlacement2<TValue>>();
 >validationPlacements : ValidationPlacement2<TValue>[]
->Array : T[]
->ValidationPlacement2 : ValidationPlacement2<TValue>
->TValue : TValue
 >new Array<ValidationPlacement2<TValue>>() : ValidationPlacement2<TValue>[]
 >Array : ArrayConstructor
->ValidationPlacement2 : ValidationPlacement2<TValue>
->TValue : TValue
 }
 class Widget<TValue> {
 >Widget : Widget<TValue>
->TValue : TValue
 
     constructor(viewModelType: new () => ViewModel<TValue>); // Shouldnt error on this overload
 >viewModelType : new () => ViewModel<TValue>
->ViewModel : ViewModel<TValue>
->TValue : TValue
 
     constructor(viewModelType: new () => ViewModel<TValue>) {
 >viewModelType : new () => ViewModel<TValue>
->ViewModel : ViewModel<TValue>
->TValue : TValue
     }
     public get options(): ViewModel<TValue> {
 >options : ViewModel<TValue>
->ViewModel : ViewModel<TValue>
->TValue : TValue
 
         return null;
 >null : null

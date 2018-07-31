@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts ===
 interface Real {
->Real : Real
-
     method(this: this, n: number): void;
 >method : (this: this, n: number) => void
 >this : this
@@ -11,8 +9,6 @@ interface Real {
 >data : string
 }
 interface Fake {
->Fake : Fake
-
     method(this: this, n: number): void;
 >method : (this: this, n: number) => void
 >this : this
@@ -24,8 +20,6 @@ interface Fake {
 function test(r: Real | Fake) {
 >test : (r: Real | Fake) => void
 >r : Real | Fake
->Real : Real
->Fake : Fake
 
     r.method(12);
 >r.method(12) : void

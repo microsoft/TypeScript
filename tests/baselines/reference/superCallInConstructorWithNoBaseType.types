@@ -11,11 +11,9 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     public constructor(public x: T) {
 >x : T
->T : T
 
         super(); // error
 >super() : void

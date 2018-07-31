@@ -1,12 +1,10 @@
 === tests/cases/compiler/genericObjectLitReturnType.ts ===
 class X<T>
 >X : X<T>
->T : T
 {
     f(t: T) { return { a: t }; }
 >f : (t: T) => { a: T; }
 >t : T
->T : T
 >{ a: t } : { a: T; }
 >a : T
 >t : T
@@ -15,7 +13,6 @@ class X<T>
  
 var x: X<number>;
 >x : X<number>
->X : X<T>
 
 var t1 = x.f(5);
 >t1 : { a: number; }

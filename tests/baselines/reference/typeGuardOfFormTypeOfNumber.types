@@ -26,19 +26,15 @@ var strOrNumOrBool: string | number | boolean;
 
 var strOrC: string | C;
 >strOrC : string | C
->C : C
 
 var numOrC: number | C;
 >numOrC : number | C
->C : C
 
 var boolOrC: boolean | C;
 >boolOrC : boolean | C
->C : C
 
 var c: C;
 >c : C
->C : C
 
 //	A type guard of the form typeof x === s, 
 //  where s is a string literal with the value 'string', 'number', or 'boolean',

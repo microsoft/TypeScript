@@ -19,37 +19,29 @@ class Derived3 extends Base { biz() { } }
 >biz : () => void
 
 interface Document2 {
->Document2 : Document2
-
     createElement(tagName: 'canvas'): Derived1;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >tagName : "canvas"
->Derived1 : Derived1
 
     createElement(tagName: 'div'): Derived2;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >tagName : "div"
->Derived2 : Derived2
 
     createElement(tagName: 'span'): Derived3;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >tagName : "span"
->Derived3 : Derived3
 
     createElement(tagName: string): Base;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >tagName : string
->Base : Base
 }
 
 var d2: Document2;
 >d2 : Document2
->Document2 : Document2
 
 // these are ok
 var htmlElement: Base = d2.createElement("yo")
 >htmlElement : Base
->Base : Base
 >d2.createElement("yo") : Base
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2
@@ -58,7 +50,6 @@ var htmlElement: Base = d2.createElement("yo")
 
 var htmlCanvasElement: Derived1 = d2.createElement("canvas");
 >htmlCanvasElement : Derived1
->Derived1 : Derived1
 >d2.createElement("canvas") : Derived1
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2
@@ -67,7 +58,6 @@ var htmlCanvasElement: Derived1 = d2.createElement("canvas");
 
 var htmlDivElement: Derived2 = d2.createElement("div");
 >htmlDivElement : Derived2
->Derived2 : Derived2
 >d2.createElement("div") : Derived2
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2
@@ -76,7 +66,6 @@ var htmlDivElement: Derived2 = d2.createElement("div");
 
 var htmlSpanElement: Derived3 = d2.createElement("span");
 >htmlSpanElement : Derived3
->Derived3 : Derived3
 >d2.createElement("span") : Derived3
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2
@@ -86,7 +75,6 @@ var htmlSpanElement: Derived3 = d2.createElement("span");
 // these are errors
 var htmlElement2: Derived1 = d2.createElement("yo")
 >htmlElement2 : Derived1
->Derived1 : Derived1
 >d2.createElement("yo") : Base
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2
@@ -95,7 +83,6 @@ var htmlElement2: Derived1 = d2.createElement("yo")
 
 var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
 >htmlCanvasElement2 : Derived3
->Derived3 : Derived3
 >d2.createElement("canvas") : Derived1
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2
@@ -104,7 +91,6 @@ var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
 
 var htmlDivElement2: Derived1 = d2.createElement("div");
 >htmlDivElement2 : Derived1
->Derived1 : Derived1
 >d2.createElement("div") : Derived2
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2
@@ -113,7 +99,6 @@ var htmlDivElement2: Derived1 = d2.createElement("div");
 
 var htmlSpanElement2: Derived1 = d2.createElement("span");
 >htmlSpanElement2 : Derived1
->Derived1 : Derived1
 >d2.createElement("span") : Derived3
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >d2 : Document2

@@ -1,30 +1,24 @@
 === tests/cases/compiler/genericDerivedTypeWithSpecializedBase.ts ===
 class A<T> {
 >A : A<T>
->T : T
 
     x: T;
 >x : T
->T : T
 }
 
 class B<U> extends A<string> {
 >B : B<U>
->U : U
 >A : A<string>
 
     y: U;
 >y : U
->U : U
 }
 
 var x: A<number>;
 >x : A<number>
->A : A<T>
 
 var y: B<number>;
 >y : B<number>
->B : B<U>
 
 x = y;  // error
 >x = y : B<number>

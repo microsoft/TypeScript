@@ -2,35 +2,25 @@
 // Derived type indexer must be subtype of base type indexer
 
 interface Base { foo: string; }
->Base : Base
 >foo : string
 
 interface Derived extends Base { bar: string; }
->Derived : Derived
->Base : Base
 >bar : string
 
 interface Derived2 extends Derived { baz: string; }
->Derived2 : Derived2
->Derived : Derived
 >baz : string
 
 interface A {
->A : A
-
     [x: number]: Base;
 >x : number
->Base : Base
 }
 
 var a: A;
 >a : A
->A : A
 
 var b: { [x: number]: Derived; }
 >b : { [x: number]: Derived; }
 >x : number
->Derived : Derived
 
 a = b;
 >a = b : { [x: number]: Derived; }
@@ -45,7 +35,6 @@ b = a; // error
 var b2: { [x: number]: Derived2; }
 >b2 : { [x: number]: Derived2; }
 >x : number
->Derived2 : Derived2
 
 a = b2;
 >a = b2 : { [x: number]: Derived2; }
@@ -61,39 +50,24 @@ module Generics {
 >Generics : typeof Generics
 
     interface A<T extends Base> {
->A : A<T>
->T : T
->Base : Base
-
         [x: number]: T;
 >x : number
->T : T
     }
 
     interface B extends A<Base> {
->B : B
->A : A<T>
->Base : Base
-
         [x: number]: Derived; // ok
 >x : number
->Derived : Derived
     }
 
     function foo<T extends Base>() {
 >foo : <T extends Base>() => void
->T : T
->Base : Base
 
         var a: A<T>;
 >a : A<T>
->A : A<T>
->T : T
 
         var b: { [x: number]: Derived; }
 >b : { [x: number]: Derived; }
 >x : number
->Derived : Derived
 
         a = b; // error
 >a = b : { [x: number]: Derived; }
@@ -108,7 +82,6 @@ module Generics {
         var b2: { [x: number]: Derived2; }
 >b2 : { [x: number]: Derived2; }
 >x : number
->Derived2 : Derived2
 
         a = b2; // error
 >a = b2 : { [x: number]: Derived2; }
@@ -123,7 +96,6 @@ module Generics {
         var b3: { [x: number]: T; }
 >b3 : { [x: number]: T; }
 >x : number
->T : T
 
         a = b3; // ok
 >a = b3 : { [x: number]: T; }

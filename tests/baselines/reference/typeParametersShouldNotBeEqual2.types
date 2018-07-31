@@ -1,21 +1,12 @@
 === tests/cases/compiler/typeParametersShouldNotBeEqual2.ts ===
 function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
 >ff : <T extends Date, U extends Date, V>(x: T, y: U, z: V) => void
->T : T
->Date : Date
->U : U
->Date : Date
->V : V
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
 
     var zz: Object;
 >zz : Object
->Object : Object
 
     x = x;  // Ok
 >x = x : T

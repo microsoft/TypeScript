@@ -5,18 +5,14 @@ export {}
 declare let f1: (x: Object) => Object;
 >f1 : (x: Object) => Object
 >x : Object
->Object : Object
->Object : Object
 
 declare let f2: (x: Object) => string;
 >f2 : (x: Object) => string
 >x : Object
->Object : Object
 
 declare let f3: (x: string) => Object;
 >f3 : (x: string) => Object
 >x : string
->Object : Object
 
 declare let f4: (x: string) => string;
 >f4 : (x: string) => string
@@ -84,31 +80,19 @@ f4 = f3;  // Error
 
 type Func<T, U> = (x: T) => U;
 >Func : Func<T, U>
->T : T
->U : U
 >x : T
->T : T
->U : U
 
 declare let g1: Func<Object, Object>;
 >g1 : Func<Object, Object>
->Func : Func<T, U>
->Object : Object
->Object : Object
 
 declare let g2: Func<Object, string>;
 >g2 : Func<Object, string>
->Func : Func<T, U>
->Object : Object
 
 declare let g3: Func<string, Object>;
 >g3 : Func<string, Object>
->Func : Func<T, U>
->Object : Object
 
 declare let g4: Func<string, string>;
 >g4 : Func<string, string>
->Func : Func<T, U>
 
 g1 = g2;  // Ok
 >g1 = g2 : Func<Object, string>
@@ -172,27 +156,15 @@ g4 = g3;  // Error
 
 declare let h1: Func<Func<Object, void>, Object>;
 >h1 : Func<Func<Object, void>, Object>
->Func : Func<T, U>
->Func : Func<T, U>
->Object : Object
->Object : Object
 
 declare let h2: Func<Func<Object, void>, string>;
 >h2 : Func<Func<Object, void>, string>
->Func : Func<T, U>
->Func : Func<T, U>
->Object : Object
 
 declare let h3: Func<Func<string, void>, Object>;
 >h3 : Func<Func<string, void>, Object>
->Func : Func<T, U>
->Func : Func<T, U>
->Object : Object
 
 declare let h4: Func<Func<string, void>, string>;
 >h4 : Func<Func<string, void>, string>
->Func : Func<T, U>
->Func : Func<T, U>
 
 h1 = h2;  // Ok
 >h1 = h2 : Func<Func<Object, void>, string>
@@ -256,27 +228,15 @@ h4 = h3;  // Error
 
 declare let i1: Func<Object, Func<Object, void>>;
 >i1 : Func<Object, Func<Object, void>>
->Func : Func<T, U>
->Object : Object
->Func : Func<T, U>
->Object : Object
 
 declare let i2: Func<Object, Func<string, void>>;
 >i2 : Func<Object, Func<string, void>>
->Func : Func<T, U>
->Object : Object
->Func : Func<T, U>
 
 declare let i3: Func<string, Func<Object, void>>;
 >i3 : Func<string, Func<Object, void>>
->Func : Func<T, U>
->Func : Func<T, U>
->Object : Object
 
 declare let i4: Func<string, Func<string, void>>;
 >i4 : Func<string, Func<string, void>>
->Func : Func<T, U>
->Func : Func<T, U>
 
 i1 = i2;  // Error
 >i1 = i2 : Func<Object, Func<string, void>>
@@ -339,40 +299,26 @@ i4 = i3;  // Ok
 >i3 : Func<string, Func<Object, void>>
 
 interface Animal { animal: void }
->Animal : Animal
 >animal : void
 
 interface Dog extends Animal { dog: void }
->Dog : Dog
->Animal : Animal
 >dog : void
 
 interface Cat extends Animal { cat: void }
->Cat : Cat
->Animal : Animal
 >cat : void
 
 interface Comparer1<T> {
->Comparer1 : Comparer1<T>
->T : T
-
     compare(a: T, b: T): number;
 >compare : (a: T, b: T) => number
 >a : T
->T : T
 >b : T
->T : T
 }
 
 declare let animalComparer1: Comparer1<Animal>;
 >animalComparer1 : Comparer1<Animal>
->Comparer1 : Comparer1<T>
->Animal : Animal
 
 declare let dogComparer1: Comparer1<Dog>;
 >dogComparer1 : Comparer1<Dog>
->Comparer1 : Comparer1<T>
->Dog : Dog
 
 animalComparer1 = dogComparer1;  // Ok
 >animalComparer1 = dogComparer1 : Comparer1<Dog>
@@ -385,26 +331,17 @@ dogComparer1 = animalComparer1;  // Ok
 >animalComparer1 : Comparer1<Animal>
 
 interface Comparer2<T> {
->Comparer2 : Comparer2<T>
->T : T
-
     compare: (a: T, b: T) => number;
 >compare : (a: T, b: T) => number
 >a : T
->T : T
 >b : T
->T : T
 }
 
 declare let animalComparer2: Comparer2<Animal>;
 >animalComparer2 : Comparer2<Animal>
->Comparer2 : Comparer2<T>
->Animal : Animal
 
 declare let dogComparer2: Comparer2<Dog>;
 >dogComparer2 : Comparer2<Dog>
->Comparer2 : Comparer2<T>
->Dog : Dog
 
 animalComparer2 = dogComparer2;  // Error
 >animalComparer2 = dogComparer2 : Comparer2<Dog>
@@ -419,28 +356,19 @@ dogComparer2 = animalComparer2;  // Ok
 // Crate<T> is invariant in --strictFunctionTypes mode
 
 interface Crate<T> {
->Crate : Crate<T>
->T : T
-
     item: T;
 >item : T
->T : T
 
     onSetItem: (item: T) => void;
 >onSetItem : (item: T) => void
 >item : T
->T : T
 }
 
 declare let animalCrate: Crate<Animal>;
 >animalCrate : Crate<Animal>
->Crate : Crate<T>
->Animal : Animal
 
 declare let dogCrate: Crate<Dog>;
 >dogCrate : Crate<Dog>
->Crate : Crate<T>
->Dog : Dog
 
 // Errors below should elaborate the reason for invariance
 
@@ -460,15 +388,11 @@ declare let fc1: (f: (x: Animal) => Animal) => void;
 >fc1 : (f: (x: Animal) => Animal) => void
 >f : (x: Animal) => Animal
 >x : Animal
->Animal : Animal
->Animal : Animal
 
 declare let fc2: (f: (x: Dog) => Dog) => void;
 >fc2 : (f: (x: Dog) => Dog) => void
 >f : (x: Dog) => Dog
 >x : Dog
->Dog : Dog
->Dog : Dog
 
 fc1 = fc2;  // Error
 >fc1 = fc2 : (f: (x: Dog) => Dog) => void
@@ -492,15 +416,11 @@ namespace n1 {
         static f1(x: Animal): Animal { throw "wat"; }
 >f1 : (x: Animal) => Animal
 >x : Animal
->Animal : Animal
->Animal : Animal
 >"wat" : "wat"
 
         static f2(x: Dog): Animal { throw "wat"; };
 >f2 : (x: Dog) => Animal
 >x : Dog
->Dog : Dog
->Animal : Animal
 >"wat" : "wat"
     }
     declare let f1: (cb: typeof Foo.f1) => void;
@@ -533,26 +453,16 @@ namespace n2 {
 
     type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
 >BivariantHack : (x: Input) => Output
->Input : Input
->Output : Output
 >foo : (x: Input) => Output
 >x : Input
->Input : Input
->Output : Output
 
     declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
 >f1 : (cb: (x: Animal) => Animal) => void
 >cb : (x: Animal) => Animal
->BivariantHack : (x: Input) => Output
->Animal : Animal
->Animal : Animal
 
     declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
 >f2 : (cb: (x: Dog) => Animal) => void
 >cb : (x: Dog) => Animal
->BivariantHack : (x: Input) => Output
->Dog : Dog
->Animal : Animal
 
     f1 = f2;
 >f1 = f2 : (cb: (x: Dog) => Animal) => void

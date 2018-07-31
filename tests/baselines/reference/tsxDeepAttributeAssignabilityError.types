@@ -3,19 +3,14 @@ import * as React from 'react'
 >React : typeof React
 
 interface MyProps {
->MyProps : MyProps
-
     x: string;
 >x : string
 
     y: MyInnerProps;
 >y : MyInnerProps
->MyInnerProps : MyInnerProps
 }
 
 interface MyInnerProps {
->MyInnerProps : MyInnerProps
-
     value: string;
 >value : string
 }
@@ -23,7 +18,6 @@ interface MyInnerProps {
 export function MyComponent(_props: MyProps) {
 >MyComponent : (_props: MyProps) => JSX.Element
 >_props : MyProps
->MyProps : MyProps
 
     return <span>my component</span>;
 ><span>my component</span> : JSX.Element

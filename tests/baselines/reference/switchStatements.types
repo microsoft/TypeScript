@@ -76,7 +76,6 @@ switch (x) {
 
     case <T>(x: number) => '':
 ><T>(x: number) => '' : <T>(x: number) => string
->T : T
 >x : number
 >'' : ""
 
@@ -84,7 +83,6 @@ switch (x) {
 >(<T>(x: number) => '')(2) : string
 >(<T>(x: number) => '') : <T>(x: number) => string
 ><T>(x: number) => '' : <T>(x: number) => string
->T : T
 >x : number
 >'' : ""
 >2 : 2
@@ -166,7 +164,6 @@ switch (['a']) { }
 
 switch (<T>(x: number) => '') { }
 ><T>(x: number) => '' : <T>(x: number) => string
->T : T
 >x : number
 >'' : ""
 
@@ -174,9 +171,7 @@ switch ((<T>(x: T) => '')(1)) { }
 >(<T>(x: T) => '')(1) : string
 >(<T>(x: T) => '') : <T>(x: T) => string
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
 >x : T
->T : T
 >'' : ""
 >1 : 1
 

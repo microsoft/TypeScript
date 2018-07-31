@@ -2,21 +2,17 @@
 // Should be error to use 'T' in all declarations within Foo.
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     static a = (n: T) => { };
 >a : (n: any) => void
 >(n: T) => { } : (n: any) => void
 >n : any
->T : No type information available!
 
     static b: T;
 >b : any
->T : No type information available!
 
     static c: T[] = [];
 >c : any[]
->T : No type information available!
 >[] : undefined[]
 
     static d = false || ((x: T) => x || undefined)(null)
@@ -27,7 +23,6 @@ class Foo<T> {
 >((x: T) => x || undefined) : (x: any) => any
 >(x: T) => x || undefined : (x: any) => any
 >x : any
->T : No type information available!
 >x || undefined : any
 >x : any
 >undefined : undefined
@@ -37,14 +32,11 @@ class Foo<T> {
 >e : (x: any) => any
 >function (x: T) { return null; } : (x: any) => any
 >x : any
->T : No type information available!
 >null : null
 
     static f(xs: T[]): T[] {
 >f : (xs: any[]) => any[]
 >xs : any[]
->T : No type information available!
->T : No type information available!
 
         return xs.reverse();
 >xs.reverse() : any[]

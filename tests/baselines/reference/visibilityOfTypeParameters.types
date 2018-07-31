@@ -4,10 +4,7 @@ export class MyClass {
 
     protected myMethod<T>(val: T): T {
 >myMethod : <T>(val: T) => T
->T : T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T

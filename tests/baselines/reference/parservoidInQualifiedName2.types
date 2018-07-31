@@ -2,5 +2,4 @@
 var v : x.void;
 >v : any
 >x : any
->void : No type information available!
 

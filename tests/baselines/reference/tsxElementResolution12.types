@@ -1,27 +1,18 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface ElementAttributesProperty { pr: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >pr : any
 
 	interface IntrinsicElements { }
->IntrinsicElements : IntrinsicElements
 }
 
 interface Obj1type {
->Obj1type : Obj1type
-
 	new(n: string): any;
 >n : string
 }
 var Obj1: Obj1type;
 >Obj1 : Obj1type
->Obj1type : Obj1type
 
 <Obj1 x={10} />; // OK
 ><Obj1 x={10} /> : JSX.Element
@@ -30,8 +21,6 @@ var Obj1: Obj1type;
 >10 : 10
 
 interface Obj2type {
->Obj2type : Obj2type
-
 	new(n: string): { q?: number; pr: any };
 >n : string
 >q : number
@@ -39,7 +28,6 @@ interface Obj2type {
 }
 var Obj2: Obj2type;
 >Obj2 : Obj2type
->Obj2type : Obj2type
 
 <Obj2 x={10} />; // OK
 ><Obj2 x={10} /> : JSX.Element
@@ -48,15 +36,12 @@ var Obj2: Obj2type;
 >10 : 10
 
 interface Obj3type {
->Obj3type : Obj3type
-
 	new(n: string): { x: number; };
 >n : string
 >x : number
 }
 var Obj3: Obj3type;
 >Obj3 : Obj3type
->Obj3type : Obj3type
 
 <Obj3 x={10} />; // Error
 ><Obj3 x={10} /> : JSX.Element
@@ -78,8 +63,6 @@ var attributes: any;
 >{} : {}
 
 interface Obj4type {
->Obj4type : Obj4type
-
 	new(n: string): { x: number; pr: { x: number; } };
 >n : string
 >x : number
@@ -88,7 +71,6 @@ interface Obj4type {
 }
 var Obj4: Obj4type;
 >Obj4 : Obj4type
->Obj4type : Obj4type
 
 <Obj4 x={10} />; // OK
 ><Obj4 x={10} /> : JSX.Element

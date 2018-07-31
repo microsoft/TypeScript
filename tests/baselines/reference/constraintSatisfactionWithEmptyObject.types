@@ -4,10 +4,7 @@
 // Object constraint
 function foo<T extends Object>(x: T) { }
 >foo : <T extends Object>(x: T) => void
->T : T
->Object : Object
 >x : T
->T : T
 
 var r = foo({});
 >r : void
@@ -27,12 +24,9 @@ var r = foo({});
 
 class C<T extends Object> {
 >C : C<T>
->T : T
->Object : Object
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var r2 = new C({});
@@ -42,24 +36,16 @@ var r2 = new C({});
 >{} : {}
 
 interface I<T extends Object> {
->I : I<T>
->T : T
->Object : Object
-
     x: T;
 >x : T
->T : T
 }
 var i: I<{}>;
 >i : I<{}>
->I : I<T>
 
 // {} constraint
 function foo2<T extends {}>(x: T) { }
 >foo2 : <T extends {}>(x: T) => void
->T : T
 >x : T
->T : T
 
 var r = foo2({});
 >r : void
@@ -79,11 +65,9 @@ var r = foo2({});
 
 class C2<T extends {}> {
 >C2 : C2<T>
->T : T
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var r2 = new C2({});
@@ -93,15 +77,10 @@ var r2 = new C2({});
 >{} : {}
 
 interface I2<T extends {}> {
->I2 : I2<T>
->T : T
-
     x: T;
 >x : T
->T : T
 }
 var i2: I2<{}>;
 >i2 : I2<{}>
->I2 : I2<T>
 
 

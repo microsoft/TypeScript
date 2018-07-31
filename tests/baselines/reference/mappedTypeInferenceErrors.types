@@ -3,28 +3,15 @@
 
 type ComputedOf<T> = {
 >ComputedOf : ComputedOf<T>
->T : T
 
     [K in keyof T]: () => T[K];
->K : K
->T : T
->T : T
->K : K
 }
 
 declare function foo<P, C>(options: { props: P, computed: ComputedOf<C> } & ThisType<P & C>): void;
 >foo : <P, C>(options: { props: P; computed: ComputedOf<C>; } & ThisType<P & C>) => void
->P : P
->C : C
 >options : { props: P; computed: ComputedOf<C>; } & ThisType<P & C>
 >props : P
->P : P
 >computed : ComputedOf<C>
->ComputedOf : ComputedOf<T>
->C : C
->ThisType : ThisType<T>
->P : P
->C : C
 
 foo({
 >foo({    props: { x: 10, y: 20 },    computed: {        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    }}) : any

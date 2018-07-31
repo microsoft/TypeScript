@@ -41,7 +41,6 @@ var r4b = new r3(); // error
 
 var x3: Array<() => string>;
 >x3 : (() => string)[]
->Array : T[]
 
 var r5 = x2[1];
 >r5 : () => string
