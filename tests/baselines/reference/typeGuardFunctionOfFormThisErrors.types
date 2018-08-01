@@ -4,7 +4,6 @@ class RoyalGuard {
 
     isLeader(): this is LeadGuard {
 >isLeader : () => this is LeadGuard
->LeadGuard : LeadGuard
 
         return this instanceof LeadGuard;
 >this instanceof LeadGuard : boolean
@@ -13,7 +12,6 @@ class RoyalGuard {
     }
     isFollower(): this is FollowerGuard {
 >isFollower : () => this is FollowerGuard
->FollowerGuard : FollowerGuard
 
         return this instanceof FollowerGuard;
 >this instanceof FollowerGuard : boolean
@@ -39,18 +37,13 @@ class FollowerGuard extends RoyalGuard {
 }
 
 interface GuardInterface extends RoyalGuard {}
->GuardInterface : GuardInterface
->RoyalGuard : RoyalGuard
-
 let a: RoyalGuard = new FollowerGuard();
 >a : RoyalGuard
->RoyalGuard : RoyalGuard
 >new FollowerGuard() : FollowerGuard
 >FollowerGuard : typeof FollowerGuard
 
 let b: GuardInterface = new LeadGuard();
 >b : GuardInterface
->GuardInterface : GuardInterface
 >new LeadGuard() : LeadGuard
 >LeadGuard : typeof LeadGuard
 

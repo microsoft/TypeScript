@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface Prop {
->Prop : Prop
-
     a: number,
 >a : number
 
@@ -14,22 +12,18 @@ interface Prop {
 
 declare class MyComp<P> extends React.Component<P, {}> {
 >MyComp : MyComp<P>
->P : P
 >React.Component : React.Component<P, {}>
 >React : typeof React
 >Component : typeof React.Component
->P : P
 
     internalProp: P;
 >internalProp : P
->P : P
 }
 
 let x = <MyComp<Prop> a={10} b="hi" />; // OK
 >x : JSX.Element
 ><MyComp<Prop> a={10} b="hi" /> : JSX.Element
 >MyComp : typeof MyComp
->Prop : Prop
 >a : number
 >10 : 10
 >b : string
@@ -39,7 +33,6 @@ x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
 >x : JSX.Element
 ><MyComp<Prop> a={10} b="hi"></MyComp> : JSX.Element
 >MyComp : typeof MyComp
->Prop : Prop
 >a : number
 >10 : 10
 >b : string
@@ -50,7 +43,6 @@ x = <MyComp<Prop> a={10} b={20} />; // error
 >x : JSX.Element
 ><MyComp<Prop> a={10} b={20} /> : JSX.Element
 >MyComp : typeof MyComp
->Prop : Prop
 >a : number
 >10 : 10
 >b : number
@@ -61,7 +53,6 @@ x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
 >x : JSX.Element
 ><MyComp<Prop> a={10} b={20}></MyComp> : JSX.Element
 >MyComp : typeof MyComp
->Prop : Prop
 >a : number
 >10 : 10
 >b : number
@@ -73,8 +64,6 @@ x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
 >x : JSX.Element
 ><MyComp<Prop, Prop> a={10} b="hi" /> : JSX.Element
 >MyComp : typeof MyComp
->Prop : Prop
->Prop : Prop
 >a : number
 >10 : 10
 >b : string
@@ -84,8 +73,6 @@ x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
 >x : JSX.Element
 ><MyComp<Prop, Prop> a={10} b="hi"></MyComp> : JSX.Element
 >MyComp : typeof MyComp
->Prop : Prop
->Prop : Prop
 >a : number
 >10 : 10
 >b : string
@@ -125,19 +112,13 @@ x= <MyComp<{}>></MyComp> // OK
 
 declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<P & P2, {}> {
 >MyComp2 : MyComp2<P, P2>
->P : P
 >a : string
->P2 : P2
 >React.Component : React.Component<P & P2, {}>
 >React : typeof React
 >Component : typeof React.Component
->P : P
->P2 : P2
 
     internalProp: [P, P2];
 >internalProp : [P, P2]
->P : P
->P2 : P2
 }
 x = <MyComp2<{a: string, b: string}> a="a" b="b" />; // OK
 >x = <MyComp2<{a: string, b: string}> a="a" b="b" /> : JSX.Element
@@ -165,7 +146,6 @@ x = <MyComp2<Prop> a={10} b="hi" />; // error
 >x : JSX.Element
 ><MyComp2<Prop> a={10} b="hi" /> : JSX.Element
 >MyComp2 : typeof MyComp2
->Prop : Prop
 >a : number
 >10 : 10
 >b : string
@@ -175,7 +155,6 @@ x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
 >x : JSX.Element
 ><MyComp2<Prop> a={10} b="hi"></MyComp2> : JSX.Element
 >MyComp2 : typeof MyComp2
->Prop : Prop
 >a : number
 >10 : 10
 >b : string
@@ -209,7 +188,6 @@ x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" />; // error
 >MyComp2 : typeof MyComp2
 >a : string
 >b : string
->Prop : Prop
 >a : string
 >b : string
 
@@ -220,7 +198,6 @@ x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
 >MyComp2 : typeof MyComp2
 >a : string
 >b : string
->Prop : Prop
 >a : string
 >b : string
 >MyComp2 : typeof MyComp2

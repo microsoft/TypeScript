@@ -1121,7 +1121,7 @@ namespace ts {
             }
 
             // Perform the capture.
-            captureThisForNode(statements, ctor, superCallExpression || createActualThis(), firstStatement);
+            captureThisForNode(statements, ctor, superCallExpression || createActualThis());
 
             // If we're actually replacing the original statement, we need to signal this to the caller.
             if (superCallExpression) {
@@ -1443,7 +1443,7 @@ namespace ts {
             }
         }
 
-        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement?: Statement): void {
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
             enableSubstitutionsForCapturedThis();
             const captureThisStatement = createVariableStatement(
                 /*modifiers*/ undefined,
@@ -1456,7 +1456,6 @@ namespace ts {
                 ])
             );
             setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
-            setTextRange(captureThisStatement, originalStatement);
             setSourceMapRange(captureThisStatement, node);
             statements.push(captureThisStatement);
         }

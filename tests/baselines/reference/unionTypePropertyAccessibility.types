@@ -29,80 +29,48 @@ class Private {
 
 var v1: Default;
 >v1 : Default
->Default : Default
 
 var v2: Public;
 >v2 : Public
->Public : Public
 
 var v3: Protected;
 >v3 : Protected
->Protected : Protected
 
 var v4: Private;
 >v4 : Private
->Private : Private
 
 var v5: Default | Public;
 >v5 : Default | Public
->Default : Default
->Public : Public
 
 var v6: Default | Protected;
 >v6 : Default | Protected
->Default : Default
->Protected : Protected
 
 var v7: Default | Private;
 >v7 : Default | Private
->Default : Default
->Private : Private
 
 var v8: Public | Protected;
 >v8 : Public | Protected
->Public : Public
->Protected : Protected
 
 var v9: Public | Private;
 >v9 : Public | Private
->Public : Public
->Private : Private
 
 var v10: Protected | Private;
 >v10 : Protected | Private
->Protected : Protected
->Private : Private
 
 var v11: Default | Public | Protected;
 >v11 : Default | Public | Protected
->Default : Default
->Public : Public
->Protected : Protected
 
 var v12: Default | Public | Private;
 >v12 : Default | Public | Private
->Default : Default
->Public : Public
->Private : Private
 
 var v13: Default | Protected | Private;
 >v13 : Default | Protected | Private
->Default : Default
->Protected : Protected
->Private : Private
 
 var v14: Public | Private | Protected;
 >v14 : Public | Protected | Private
->Public : Public
->Private : Private
->Protected : Protected
 
 var v15: Default | Public | Private | Protected;
 >v15 : Default | Public | Protected | Private
->Default : Default
->Public : Public
->Private : Private
->Protected : Protected
 
 v1.member;
 >v1.member : string

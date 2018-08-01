@@ -1,14 +1,10 @@
 === tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts ===
 class A<T1, T2> {
 >A : A<T1, T2>
->T1 : T1
->T2 : T2
 
     constructor(private map: (value: T1) => T2) {
 >map : (value: T1) => T2
 >value : T1
->T1 : T1
->T2 : T2
 
     }
 }

@@ -4,16 +4,12 @@ type S = "a" | "b";
 
 type T = S[] | S;
 >T : T
->S : S
->S : S
 
 var s: S;
 >s : S
->S : S
 
 var t: T;
 >t : T
->T : T
 
 var str: string;
 >str : string
@@ -24,7 +20,6 @@ s = <S>t;
 >s = <S>t : S
 >s : S
 ><S>t : S
->S : S
 >t : T
 
 s = t as S;
@@ -32,13 +27,11 @@ s = t as S;
 >s : S
 >t as S : S
 >t : T
->S : S
 
 s = <S>str;
 >s = <S>str : S
 >s : S
 ><S>str : S
->S : S
 >str : string
 
 s = str as S;
@@ -46,7 +39,6 @@ s = str as S;
 >s : S
 >str as S : S
 >str : string
->S : S
 
 ////////////////
 
@@ -54,7 +46,6 @@ t = <T>s;
 >t = <T>s : T
 >t : T
 ><T>s : T
->T : T
 >s : S
 
 t = s as T;
@@ -62,13 +53,11 @@ t = s as T;
 >t : T
 >s as T : T
 >s : S
->T : T
 
 t = <T>str;
 >t = <T>str : T
 >t : T
 ><T>str : T
->T : T
 >str : string
 
 t = str as T;
@@ -76,7 +65,6 @@ t = str as T;
 >t : T
 >str as T : T
 >str : string
->T : T
 
 ////////////////
 

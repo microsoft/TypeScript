@@ -4,21 +4,15 @@ export var x = 1;  // Makes this an external module
 >1 : 1
 
 interface Iterator<T> { x: T }
->Iterator : Iterator<T>
->T : T
 >x : T
->T : T
 
 module Q {
 >Q : typeof Q
 
     export function foo<T>(x: (a: Iterator<T>) => number) {
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
->T : T
 >x : (a: Iterator<T>) => number
 >a : Iterator<T>
->Iterator : Iterator<T>
->T : T
 
         return x;
 >x : (a: Iterator<T>) => number

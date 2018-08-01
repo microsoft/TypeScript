@@ -42,7 +42,6 @@ var z1 = G[G.A];
 
 var g: G;
 >g : G
->G : G
 
 g = "string";
 >g = "string" : "string"
@@ -52,7 +51,6 @@ g = "string";
 function foo(x: G) { }
 >foo : (x: G) => void
 >x : G
->G : G
 
 G.B = 3;
 >G.B = 3 : 3

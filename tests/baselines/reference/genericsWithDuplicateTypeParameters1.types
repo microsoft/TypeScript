@@ -1,61 +1,34 @@
 === tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts ===
 function f<x, x>() { }
 >f : <x>() => void
->x : x
->x : x
 
 function f2<X, X>(a: X, b: X): X { return null; }
 >f2 : <X>(a: X, b: X) => X
->X : X
->X : X
 >a : X
->X : X
 >b : X
->X : X
->X : X
 >null : null
 
 class C<X, X> {
 >C : C<X>
->X : X
->X : X
 
     public f<x, x>() {}
 >f : <x>() => void
->x : x
->x : x
 
     public f2<X, X>(a: X, b: X): X { return null; }
 >f2 : <X>(a: X, b: X) => X
->X : X
->X : X
 >a : X
->X : X
 >b : X
->X : X
->X : X
 >null : null
 }
 
 interface I<X, X> {
->I : I<X>
->X : X
->X : X
-
     f<X, X>();
 >f : <X>() => any
->X : X
->X : X
 
     f2<X, X>(a: X, b: X): X;
 >f2 : <X>(a: X, b: X) => X
->X : X
->X : X
 >a : X
->X : X
 >b : X
->X : X
->X : X
 }
 
 var m = {
@@ -66,19 +39,12 @@ var m = {
 >a : <X>() => void
 >function f<X, X>() {} : <X>() => void
 >f : <X>() => void
->X : X
->X : X
 
     b: function f2<X, X>(a: X, b: X): X { return null; }
 >b : <X>(a: X, b: X) => X
 >function f2<X, X>(a: X, b: X): X { return null; } : <X>(a: X, b: X) => X
 >f2 : <X>(a: X, b: X) => X
->X : X
->X : X
 >a : X
->X : X
 >b : X
->X : X
->X : X
 >null : null
 }

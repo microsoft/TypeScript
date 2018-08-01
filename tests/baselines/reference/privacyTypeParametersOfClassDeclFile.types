@@ -9,14 +9,10 @@ export class publicClass {
 
 export class publicClassWithPrivateTypeParameters<T extends privateClass> { // Error
 >publicClassWithPrivateTypeParameters : publicClassWithPrivateTypeParameters<T>
->T : T
->privateClass : privateClass
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -25,14 +21,10 @@ export class publicClassWithPrivateTypeParameters<T extends privateClass> { // E
 
 export class publicClassWithPublicTypeParameters<T extends publicClass> {
 >publicClassWithPublicTypeParameters : publicClassWithPublicTypeParameters<T>
->T : T
->publicClass : publicClass
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -41,14 +33,10 @@ export class publicClassWithPublicTypeParameters<T extends publicClass> {
 
 class privateClassWithPrivateTypeParameters<T extends privateClass> {
 >privateClassWithPrivateTypeParameters : privateClassWithPrivateTypeParameters<T>
->T : T
->privateClass : privateClass
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -57,14 +45,10 @@ class privateClassWithPrivateTypeParameters<T extends privateClass> {
 
 class privateClassWithPublicTypeParameters<T extends publicClass> {
 >privateClassWithPublicTypeParameters : privateClassWithPublicTypeParameters<T>
->T : T
->publicClass : publicClass
 
     myMethod(val: T): T { 
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -73,13 +57,10 @@ class privateClassWithPublicTypeParameters<T extends publicClass> {
 
 export class publicClassWithPublicTypeParametersWithoutExtends<T> {
 >publicClassWithPublicTypeParametersWithoutExtends : publicClassWithPublicTypeParametersWithoutExtends<T>
->T : T
 
     myMethod(val: T): T { 
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -88,13 +69,10 @@ export class publicClassWithPublicTypeParametersWithoutExtends<T> {
 
 class privateClassWithPublicTypeParametersWithoutExtends<T> {
 >privateClassWithPublicTypeParametersWithoutExtends : privateClassWithPublicTypeParametersWithoutExtends<T>
->T : T
 
     myMethod(val: T): T { 
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -103,15 +81,11 @@ class privateClassWithPublicTypeParametersWithoutExtends<T> {
 
 export class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> { // Error
 >publicClassWithTypeParametersFromPrivateModule : publicClassWithTypeParametersFromPrivateModule<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -120,15 +94,11 @@ export class publicClassWithTypeParametersFromPrivateModule<T extends privateMod
 
 class privateClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> {
 >privateClassWithTypeParametersFromPrivateModule : privateClassWithTypeParametersFromPrivateModule<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         return val;
 >val : T
@@ -148,14 +118,10 @@ export module publicModule {
 
     export class publicClassWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
 >publicClassWithPrivateTypeParameters : publicClassWithPrivateTypeParameters<T>
->T : T
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -164,14 +130,10 @@ export module publicModule {
 
     export class publicClassWithPublicTypeParameters<T extends publicClassInPublicModule> {
 >publicClassWithPublicTypeParameters : publicClassWithPublicTypeParameters<T>
->T : T
->publicClassInPublicModule : publicClassInPublicModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -180,14 +142,10 @@ export module publicModule {
 
     class privateClassWithPrivateTypeParameters<T extends privateClassInPublicModule> {
 >privateClassWithPrivateTypeParameters : privateClassWithPrivateTypeParameters<T>
->T : T
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -196,14 +154,10 @@ export module publicModule {
 
     class privateClassWithPublicTypeParameters<T extends publicClassInPublicModule> {
 >privateClassWithPublicTypeParameters : privateClassWithPublicTypeParameters<T>
->T : T
->publicClassInPublicModule : publicClassInPublicModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -212,13 +166,10 @@ export module publicModule {
 
     export class publicClassWithPublicTypeParametersWithoutExtends<T> {
 >publicClassWithPublicTypeParametersWithoutExtends : publicClassWithPublicTypeParametersWithoutExtends<T>
->T : T
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -227,13 +178,10 @@ export module publicModule {
 
     class privateClassWithPublicTypeParametersWithoutExtends<T> {
 >privateClassWithPublicTypeParametersWithoutExtends : privateClassWithPublicTypeParametersWithoutExtends<T>
->T : T
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -242,15 +190,11 @@ export module publicModule {
 
     export class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> { // Error
 >publicClassWithTypeParametersFromPrivateModule : publicClassWithTypeParametersFromPrivateModule<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -259,15 +203,11 @@ export module publicModule {
 
     class privateClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> {
 >privateClassWithTypeParametersFromPrivateModule : privateClassWithTypeParametersFromPrivateModule<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -288,14 +228,10 @@ module privateModule {
 
     export class publicClassWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
 >publicClassWithPrivateTypeParameters : publicClassWithPrivateTypeParameters<T>
->T : T
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -304,14 +240,10 @@ module privateModule {
 
     export class publicClassWithPublicTypeParameters<T extends publicClassInPrivateModule> {
 >publicClassWithPublicTypeParameters : publicClassWithPublicTypeParameters<T>
->T : T
->publicClassInPrivateModule : publicClassInPrivateModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -320,14 +252,10 @@ module privateModule {
 
     class privateClassWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
 >privateClassWithPrivateTypeParameters : privateClassWithPrivateTypeParameters<T>
->T : T
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -336,14 +264,10 @@ module privateModule {
 
     class privateClassWithPublicTypeParameters<T extends publicClassInPrivateModule> {
 >privateClassWithPublicTypeParameters : privateClassWithPublicTypeParameters<T>
->T : T
->publicClassInPrivateModule : publicClassInPrivateModule
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -352,13 +276,10 @@ module privateModule {
 
     export class publicClassWithPublicTypeParametersWithoutExtends<T> {
 >publicClassWithPublicTypeParametersWithoutExtends : publicClassWithPublicTypeParametersWithoutExtends<T>
->T : T
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T
@@ -367,13 +288,10 @@ module privateModule {
 
     class privateClassWithPublicTypeParametersWithoutExtends<T> {
 >privateClassWithPublicTypeParametersWithoutExtends : privateClassWithPublicTypeParametersWithoutExtends<T>
->T : T
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
             return val;
 >val : T

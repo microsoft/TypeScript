@@ -1,15 +1,10 @@
 === tests/cases/compiler/specializedSignatureInInterface.ts ===
 interface A {
->A : A
-
   (key:string):void;
 >key : string
 }
 
 interface B extends A {
->B : B
->A : A
-
   (key:'foo'):string;
 >key : "foo"
 

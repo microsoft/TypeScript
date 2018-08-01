@@ -1,7 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty2.ts ===
 interface I {
->I : I
-
     [Symbol.unscopables](): string;
 >[Symbol.unscopables] : () => string
 >Symbol.unscopables : any

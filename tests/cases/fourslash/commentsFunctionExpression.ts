@@ -61,12 +61,12 @@ verify.signatureHelp(
 // no documentation from nested lambda
 verify.quickInfos({
     7: "function anotherFunc(a: number): string",
-    8: ["(local var) lambdaVar: (b: string) => string", "inner docs \ndocumentation"],
-    9: ["(parameter) b: string", "inner parameter "],
+    8: ["(local var) lambdaVar: (b: string) => string", "inner docs\ndocumentation"],
+    9: ["(parameter) b: string", "inner parameter"],
     10: "(local var) localVar: string",
     11: "(local var) localVar: string",
-    12: ["(parameter) b: string", "inner parameter "],
-    13: ["(local var) lambdaVar: (b: string) => string", "inner docs \ndocumentation"],
+    12: ["(parameter) b: string", "inner parameter"],
+    13: ["(local var) lambdaVar: (b: string) => string", "inner docs\ndocumentation"],
     14: [
         "var assigned: (s: string) => number",
         "Summary on expression\nOn variable"
@@ -74,14 +74,14 @@ verify.quickInfos({
 });
 
 goTo.marker('15');
-verify.completionListContains('s', '(parameter) s: string', "On parameter \nparam on expression\nthe first parameter!");
+verify.completionListContains('s', '(parameter) s: string', "On parameter\nparam on expression\nthe first parameter!");
 verify.quickInfoAt("16", "var assigned: (s: string) => number", "Summary on expression\nOn variable");
 goTo.marker('17');
 verify.completionListContains("assigned", "var assigned: (s: string) => number", "Summary on expression\nOn variable");
 verify.signatureHelp({
     marker: "18",
     docComment: "Summary on expression\nOn variable",
-    parameterDocComment: "On parameter \nparam on expression\nthe first parameter!",
+    parameterDocComment: "On parameter\nparam on expression\nthe first parameter!",
     tags: [
         { name: "param", text: "s param on expression" },
         { name: "returns", text: "return on expression" },

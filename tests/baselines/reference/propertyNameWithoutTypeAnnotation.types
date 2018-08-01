@@ -7,8 +7,6 @@ class C {
 }
 
 interface I {
->I : I
-
     foo;
 >foo : any
 }
@@ -43,7 +41,6 @@ var r2 = (<I>null).foo;
 >(<I>null).foo : any
 >(<I>null) : I
 ><I>null : I
->I : I
 >null : null
 >foo : any
 

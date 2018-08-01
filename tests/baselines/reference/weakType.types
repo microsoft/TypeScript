@@ -1,7 +1,5 @@
 === tests/cases/compiler/weakType.ts ===
 interface Settings {
->Settings : Settings
-
     timeout?: number;
 >timeout : number
 
@@ -18,8 +16,6 @@ function getDefaultSettings() {
 >1000 : 1000
 }
 interface CtorOnly {
->CtorOnly : CtorOnly
-
     new(s: string): { timeout: 1000 }
 >s : string
 >timeout : 1000
@@ -28,7 +24,6 @@ interface CtorOnly {
 function doSomething(settings: Settings) { /* ... */ }
 >doSomething : (settings: Settings) => void
 >settings : Settings
->Settings : Settings
 
 // forgot to call `getDefaultSettings`
 doSomething(getDefaultSettings);
@@ -50,7 +45,6 @@ doSomething(null as CtorOnly);
 >doSomething : (settings: Settings) => void
 >null as CtorOnly : CtorOnly
 >null : null
->CtorOnly : CtorOnly
 
 doSomething(12);
 >doSomething(12) : void
@@ -79,12 +73,8 @@ type ConfigurableEnd = { useEnd?: boolean }
 
 type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
 >ConfigurableStartEnd : ConfigurableStartEnd
->ConfigurableStart : ConfigurableStart
->ConfigurableEnd : ConfigurableEnd
 
 interface InsertOptions {
->InsertOptions : InsertOptions
-
     prefix?: string
 >prefix : string
 
@@ -93,13 +83,10 @@ interface InsertOptions {
 }
 type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 >ChangeOptions : ChangeOptions
->ConfigurableStartEnd : ConfigurableStartEnd
->InsertOptions : InsertOptions
 
 function del(options: ConfigurableStartEnd = {},
 >del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
 >options : ConfigurableStartEnd
->ConfigurableStartEnd : ConfigurableStartEnd
 >{} : {}
 
              error: { error?: number } = {}) {
@@ -109,7 +96,6 @@ function del(options: ConfigurableStartEnd = {},
 
     let changes: ChangeOptions[];
 >changes : ChangeOptions[]
->ChangeOptions : ChangeOptions
 
     changes.push(options);
 >changes.push(options) : number
@@ -134,18 +120,14 @@ class K {
 }
 // Ctor isn't a weak type because it has a construct signature
 interface Ctor {
->Ctor : Ctor
-
     new (s: string): K
 >s : string
->K : K
 
     n?: number
 >n : number
 }
 let ctor: Ctor = K
 >ctor : Ctor
->Ctor : Ctor
 >K : typeof K
 
 type Spoiler = { nope?: string }
@@ -177,8 +159,6 @@ declare let unknown: {
 }
 let weak: Weak & Spoiler = unknown
 >weak : Weak & Spoiler
->Weak : Weak
->Spoiler : Spoiler
 >unknown : { properties: { wrong: string; }; }
 
 

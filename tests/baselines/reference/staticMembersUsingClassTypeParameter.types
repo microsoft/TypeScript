@@ -2,44 +2,33 @@
 // BUG 745747
 class C<T> {
 >C : C<T>
->T : T
 
     static x: T;
 >x : any
->T : No type information available!
 
     static f(x: T) {}
 >f : (x: any) => void
 >x : any
->T : No type information available!
 }
 
 class C2<T, U> {
 >C2 : C2<T, U>
->T : T
->U : U
 
     static x: U;
 >x : any
->U : No type information available!
 
     static f(x: U) { }
 >f : (x: any) => void
 >x : any
->U : No type information available!
 }
 
 class C3<T extends Date> {
 >C3 : C3<T>
->T : T
->Date : Date
 
     static x: T;
 >x : any
->T : No type information available!
 
     static f(x: T) { }
 >f : (x: any) => void
 >x : any
->T : No type information available!
 }

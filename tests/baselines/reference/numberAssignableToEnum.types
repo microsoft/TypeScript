@@ -8,7 +8,6 @@ var n: number;
 
 var e: E;
 >e : E
->E : E
 
 e = n;
 >e = n : number

@@ -3,22 +3,16 @@
 // with types that are intersections of the respective members in the constituent types
 
 interface A { a: string }
->A : A
 >a : string
 
 interface B { b: string }
->B : B
 >b : string
 
 interface C { c: string }
->C : C
 >c : string
 
 var abc: A & B & C;
 >abc : A & B & C
->A : A
->B : B
->C : C
 
 abc.a = "hello";
 >abc.a = "hello" : "hello"
@@ -42,25 +36,16 @@ abc.c = "hello";
 >"hello" : "hello"
 
 interface X { x: A }
->X : X
 >x : A
->A : A
 
 interface Y { x: B }
->Y : Y
 >x : B
->B : B
 
 interface Z { x: C }
->Z : Z
 >x : C
->C : C
 
 var xyz: X & Y & Z;
 >xyz : X & Y & Z
->X : X
->Y : Y
->Z : Z
 
 xyz.x.a = "hello";
 >xyz.x.a = "hello" : "hello"
@@ -99,8 +84,6 @@ type F2 = (x: number) => number;
 
 var f: F1 & F2;
 >f : F1 & F2
->F1 : F1
->F2 : F2
 
 var s = f("hello");
 >s : string
@@ -115,8 +98,6 @@ var n = f(42);
 >42 : 42
 
 interface D {
->D : D
-
     nested: { doublyNested: { d: string; }, different: { e: number } };
 >nested : { doublyNested: { d: string; }; different: { e: number; }; }
 >doublyNested : { d: string; }
@@ -125,8 +106,6 @@ interface D {
 >e : number
 }
 interface E {
->E : E
-
     nested: { doublyNested: { f: string; }, other: {g: number } };
 >nested : { doublyNested: { f: string; }; other: { g: number; }; }
 >doublyNested : { f: string; }
@@ -136,8 +115,6 @@ interface E {
 }
 const de: D & E = {
 >de : D & E
->D : D
->E : E
 >{    nested: {        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    }} : { nested: { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }; }
 
     nested: {

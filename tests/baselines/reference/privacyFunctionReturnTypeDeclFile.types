@@ -8,75 +8,43 @@ export class publicClass {
 }
 
 export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
     new (): privateClass; // Error
->privateClass : privateClass
-
     (): privateClass; // Error
->privateClass : privateClass
-
     [x: number]: privateClass; // Error
 >x : number
->privateClass : privateClass
 
     myMethod(): privateClass; // Error
 >myMethod : () => privateClass
->privateClass : privateClass
 }
 
 export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
     new (): publicClass;
->publicClass : publicClass
-
     (): publicClass;
->publicClass : publicClass
-
     [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
     myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
 }
 
 interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
     new (): privateClass;
->privateClass : privateClass
-
     (): privateClass;
->privateClass : privateClass
-
     [x: number]: privateClass;
 >x : number
->privateClass : privateClass
 
     myMethod(): privateClass;
 >myMethod : () => privateClass
->privateClass : privateClass
 }
 
 interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
     new (): publicClass;
->publicClass : publicClass
-
     (): publicClass;
->publicClass : publicClass
-
     [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
     myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
 }
 
 export class publicClassWithWithPrivateParmeterTypes {
@@ -84,28 +52,24 @@ export class publicClassWithWithPrivateParmeterTypes {
 
     static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     myPublicMethod(): privateClass { // Error
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
@@ -145,28 +109,24 @@ export class publicClassWithWithPublicParmeterTypes {
 
     static myPublicStaticMethod(): publicClass { 
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     myPublicMethod(): publicClass { 
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
@@ -206,28 +166,24 @@ class privateClassWithWithPrivateParmeterTypes {
 
     static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
@@ -267,28 +223,24 @@ class privateClassWithWithPublicParmeterTypes {
 
     static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
@@ -325,28 +277,24 @@ class privateClassWithWithPublicParmeterTypes {
 
 export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     return null;
 >null : null
 }
 export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     return null;
 >null : null
 }
 function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     return null;
 >null : null
 }
 function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     return null;
 >null : null
@@ -382,40 +330,30 @@ function privateFunctionWithPublicParmeterTypes1() {
 
 export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
 export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
 declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
 declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
 export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
     new (): privateModule.publicClass; // Error
 >privateModule : any
->publicClass : privateModule.publicClass
 
     (): privateModule.publicClass; // Error
 >privateModule : any
->publicClass : privateModule.publicClass
 
     [x: number]: privateModule.publicClass // Error
 >x : number
 >privateModule : any
->publicClass : privateModule.publicClass
 
     myMethod(): privateModule.publicClass; // Error
 >myMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 }
 export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
@@ -423,7 +361,6 @@ export class publicClassWithPrivateModuleParameterTypes {
     static myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -431,7 +368,6 @@ export class publicClassWithPrivateModuleParameterTypes {
     myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -458,7 +394,6 @@ export class publicClassWithPrivateModuleParameterTypes {
 export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
     return null;
 >null : null
@@ -475,28 +410,21 @@ export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
 export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
 interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
     new (): privateModule.publicClass; 
 >privateModule : any
->publicClass : privateModule.publicClass
 
     (): privateModule.publicClass;
 >privateModule : any
->publicClass : privateModule.publicClass
 
     [x: number]: privateModule.publicClass
 >x : number
 >privateModule : any
->publicClass : privateModule.publicClass
 
     myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 }
 class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
@@ -504,7 +432,6 @@ class privateClassWithPrivateModuleParameterTypes {
     static myPublicStaticMethod(): privateModule.publicClass { 
 >myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -512,7 +439,6 @@ class privateClassWithPrivateModuleParameterTypes {
     myPublicMethod(): privateModule.publicClass { 
 >myPublicMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -539,7 +465,6 @@ class privateClassWithPrivateModuleParameterTypes {
 function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
     return null;
 >null : null
@@ -556,7 +481,6 @@ function privateFunctionWithPrivateModuleParameterTypes1() {
 declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
 export module publicModule {
 >publicModule : typeof publicModule
@@ -570,75 +494,43 @@ export module publicModule {
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (): privateClass; // Error
->privateClass : privateClass
-
         (): privateClass; // Error
->privateClass : privateClass
-
         [x: number]: privateClass; // Error
 >x : number
->privateClass : privateClass
 
         myMethod(): privateClass; // Error
 >myMethod : () => privateClass
->privateClass : privateClass
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
->publicClass : publicClass
-
         (): publicClass;
->publicClass : publicClass
-
         [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (): privateClass;
->privateClass : privateClass
-
         (): privateClass;
->privateClass : privateClass
-
         [x: number]: privateClass;
 >x : number
->privateClass : privateClass
 
         myMethod(): privateClass;
 >myMethod : () => privateClass
->privateClass : privateClass
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
->publicClass : publicClass
-
         (): publicClass;
->publicClass : publicClass
-
         [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
     }
 
     export class publicClassWithWithPrivateParmeterTypes {
@@ -646,28 +538,24 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         myPublicMethod(): privateClass { // Error
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -707,28 +595,24 @@ export module publicModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -768,28 +652,24 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -829,28 +709,24 @@ export module publicModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -887,28 +763,24 @@ export module publicModule {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
@@ -944,40 +816,30 @@ export module publicModule {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass; // Error
 >privateModule : any
->publicClass : privateModule.publicClass
 
         (): privateModule.publicClass; // Error
 >privateModule : any
->publicClass : privateModule.publicClass
 
         [x: number]: privateModule.publicClass; // Error
 >x : number
 >privateModule : any
->publicClass : privateModule.publicClass
 
         myMethod(): privateModule.publicClass; // Error
 >myMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
     export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
@@ -985,7 +847,6 @@ export module publicModule {
         static myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -993,7 +854,6 @@ export module publicModule {
         myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -1020,7 +880,6 @@ export module publicModule {
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -1037,28 +896,21 @@ export module publicModule {
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
->publicClass : privateModule.publicClass
 
         (): privateModule.publicClass;
 >privateModule : any
->publicClass : privateModule.publicClass
 
         [x: number]: privateModule.publicClass;
 >x : number
 >privateModule : any
->publicClass : privateModule.publicClass
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
     class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
@@ -1066,7 +918,6 @@ export module publicModule {
         static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -1074,7 +925,6 @@ export module publicModule {
         myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -1101,7 +951,6 @@ export module publicModule {
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -1118,7 +967,6 @@ export module publicModule {
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 }
 
 module privateModule {
@@ -1133,75 +981,43 @@ module privateModule {
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (): privateClass; 
->privateClass : privateClass
-
         (): privateClass; 
->privateClass : privateClass
-
         [x: number]: privateClass; 
 >x : number
->privateClass : privateClass
 
         myMethod(): privateClass; 
 >myMethod : () => privateClass
->privateClass : privateClass
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
->publicClass : publicClass
-
         (): publicClass;
->publicClass : publicClass
-
         [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (): privateClass;
->privateClass : privateClass
-
         (): privateClass;
->privateClass : privateClass
-
         [x: number]: privateClass;
 >x : number
->privateClass : privateClass
 
         myMethod(): privateClass;
 >myMethod : () => privateClass
->privateClass : privateClass
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
->publicClass : publicClass
-
         (): publicClass;
->publicClass : publicClass
-
         [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
     }
 
     export class publicClassWithWithPrivateParmeterTypes {
@@ -1209,28 +1025,24 @@ module privateModule {
 
         static myPublicStaticMethod(): privateClass { 
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         myPublicMethod(): privateClass { 
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -1270,28 +1082,24 @@ module privateModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1331,28 +1139,24 @@ module privateModule {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -1392,28 +1196,24 @@ module privateModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1450,28 +1250,24 @@ module privateModule {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { 
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
@@ -1507,40 +1303,30 @@ module privateModule {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; 
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
         (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
         [x: number]: privateModule.publicClass;
 >x : number
 >privateModule : any
->publicClass : publicClass
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
     }
     export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
@@ -1548,7 +1334,6 @@ module privateModule {
         static myPublicStaticMethod(): privateModule.publicClass { 
 >myPublicStaticMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1556,7 +1341,6 @@ module privateModule {
         myPublicMethod(): privateModule.publicClass { 
 >myPublicMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1583,7 +1367,6 @@ module privateModule {
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
 >publicFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
         return null;
 >null : null
@@ -1600,28 +1383,21 @@ module privateModule {
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
         (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
         [x: number]: privateModule.publicClass;
 >x : number
 >privateModule : any
->publicClass : publicClass
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
     }
     class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
@@ -1629,7 +1405,6 @@ module privateModule {
         static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1637,7 +1412,6 @@ module privateModule {
         myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1664,7 +1438,6 @@ module privateModule {
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
         return null;
 >null : null
@@ -1681,7 +1454,6 @@ module privateModule {
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
 }
 
 === tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts ===
@@ -1689,49 +1461,37 @@ class publicClassInGlobal {
 >publicClassInGlobal : publicClassInGlobal
 }
 interface publicInterfaceWithPublicParmeterTypesInGlobal {
->publicInterfaceWithPublicParmeterTypesInGlobal : publicInterfaceWithPublicParmeterTypesInGlobal
-
     new (): publicClassInGlobal;
->publicClassInGlobal : publicClassInGlobal
-
     (): publicClassInGlobal;
->publicClassInGlobal : publicClassInGlobal
-
     [x: number]: publicClassInGlobal;
 >x : number
->publicClassInGlobal : publicClassInGlobal
 
     myMethod(): publicClassInGlobal;
 >myMethod : () => publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 }
 class publicClassWithWithPublicParmeterTypesInGlobal {
 >publicClassWithWithPublicParmeterTypesInGlobal : publicClassWithWithPublicParmeterTypesInGlobal
 
     static myPublicStaticMethod(): publicClassInGlobal {
 >myPublicStaticMethod : () => publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
     }
     private static myPrivateStaticMethod(): publicClassInGlobal {
 >myPrivateStaticMethod : () => publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
     }
     myPublicMethod(): publicClassInGlobal {
 >myPublicMethod : () => publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
     }
     private myPrivateMethod(): publicClassInGlobal {
 >myPrivateMethod : () => publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
@@ -1767,7 +1527,6 @@ class publicClassWithWithPublicParmeterTypesInGlobal {
 }
 function publicFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal {
 >publicFunctionWithPublicParmeterTypesInGlobal : () => publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
     return null;
 >null : null
@@ -1781,7 +1540,6 @@ function publicFunctionWithPublicParmeterTypesInGlobal1() {
 }
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
 >publicAmbientFunctionWithPublicParmeterTypesInGlobal : () => publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
 module publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
@@ -1806,75 +1564,43 @@ module publicModuleInGlobal {
         }
 
         export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
             new (): privateClass;
->privateClass : privateClass
-
             (): privateClass;
->privateClass : privateClass
-
             [x: number]: privateClass;
 >x : number
->privateClass : privateClass
 
             myMethod(): privateClass;
 >myMethod : () => privateClass
->privateClass : privateClass
         }
 
         export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
             new (): publicClass;
->publicClass : publicClass
-
             (): publicClass;
->publicClass : publicClass
-
             [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
             myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
         }
 
         interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
             new (): privateClass;
->privateClass : privateClass
-
             (): privateClass;
->privateClass : privateClass
-
             [x: number]: privateClass;
 >x : number
->privateClass : privateClass
 
             myMethod(): privateClass;
 >myMethod : () => privateClass
->privateClass : privateClass
         }
 
         interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
             new (): publicClass;
->publicClass : publicClass
-
             (): publicClass;
->publicClass : publicClass
-
             [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
             myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
         }
 
         export class publicClassWithWithPrivateParmeterTypes {
@@ -1882,28 +1608,24 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
@@ -1943,28 +1665,24 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -2004,28 +1722,24 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
@@ -2065,28 +1779,24 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -2123,28 +1833,24 @@ module publicModuleInGlobal {
 
         export function publicFunctionWithPrivateParmeterTypes(): privateClass {
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -2180,40 +1886,30 @@ module publicModuleInGlobal {
 
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
             new (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
             (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
             [x: number]: privateModule.publicClass;
 >x : number
 >privateModule : any
->publicClass : publicClass
 
             myMethod(): privateModule.publicClass;
 >myMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
         }
         export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
@@ -2221,7 +1917,6 @@ module publicModuleInGlobal {
             static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -2229,7 +1924,6 @@ module publicModuleInGlobal {
             myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -2256,7 +1950,6 @@ module publicModuleInGlobal {
         export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >publicFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -2273,28 +1966,21 @@ module publicModuleInGlobal {
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
         interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
             new (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
             (): privateModule.publicClass;
 >privateModule : any
->publicClass : publicClass
 
             [x: number]: privateModule.publicClass;
 >x : number
 >privateModule : any
->publicClass : publicClass
 
             myMethod(): privateModule.publicClass;
 >myMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
         }
         class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
@@ -2302,7 +1988,6 @@ module publicModuleInGlobal {
             static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -2310,7 +1995,6 @@ module publicModuleInGlobal {
             myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -2337,7 +2021,6 @@ module publicModuleInGlobal {
         function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -2354,79 +2037,46 @@ module publicModuleInGlobal {
         declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
 >privateModule : any
->publicClass : publicClass
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (): privateClass; // Error
->privateClass : privateClass
-
         (): privateClass; // Error
->privateClass : privateClass
-
         [x: number]: privateClass; // Error
 >x : number
->privateClass : privateClass
 
         myMethod(): privateClass; // Error
 >myMethod : () => privateClass
->privateClass : privateClass
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
->publicClass : publicClass
-
         (): publicClass;
->publicClass : publicClass
-
         [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (): privateClass;
->privateClass : privateClass
-
         (): privateClass;
->privateClass : privateClass
-
         [x: number]: privateClass;
 >x : number
->privateClass : privateClass
 
         myMethod(): privateClass;
 >myMethod : () => privateClass
->privateClass : privateClass
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
->publicClass : publicClass
-
         (): publicClass;
->publicClass : publicClass
-
         [x: number]: publicClass;
 >x : number
->publicClass : publicClass
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->publicClass : publicClass
     }
 
     export class publicClassWithWithPrivateParmeterTypes {
@@ -2434,28 +2084,24 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         myPublicMethod(): privateClass { // Error
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -2495,28 +2141,24 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -2556,28 +2198,24 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -2617,28 +2255,24 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -2675,28 +2309,24 @@ module publicModuleInGlobal {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
         return null;
 >null : null
@@ -2732,40 +2362,30 @@ module publicModuleInGlobal {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->privateClass : privateClass
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->publicClass : publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass; // Error
 >privateModule : any
->publicClass : privateModule.publicClass
 
         (): privateModule.publicClass; // Error
 >privateModule : any
->publicClass : privateModule.publicClass
 
         [x: number]: privateModule.publicClass; // Error
 >x : number
 >privateModule : any
->publicClass : privateModule.publicClass
 
         myMethod(): privateModule.publicClass; // Error
 >myMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
     export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
@@ -2773,7 +2393,6 @@ module publicModuleInGlobal {
         static myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2781,7 +2400,6 @@ module publicModuleInGlobal {
         myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2808,7 +2426,6 @@ module publicModuleInGlobal {
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -2825,28 +2442,21 @@ module publicModuleInGlobal {
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
->publicClass : privateModule.publicClass
 
         (): privateModule.publicClass;
 >privateModule : any
->publicClass : privateModule.publicClass
 
         [x: number]: privateModule.publicClass;
 >x : number
 >privateModule : any
->publicClass : privateModule.publicClass
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
     class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
@@ -2854,7 +2464,6 @@ module publicModuleInGlobal {
         static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2862,7 +2471,6 @@ module publicModuleInGlobal {
         myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2889,7 +2497,6 @@ module publicModuleInGlobal {
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -2906,5 +2513,4 @@ module publicModuleInGlobal {
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 }

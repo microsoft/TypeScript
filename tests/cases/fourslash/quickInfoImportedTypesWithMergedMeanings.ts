@@ -18,11 +18,11 @@ verify.quickInfoAt("1", [
     "(alias) type Original<T> = () => T",
     "(alias) namespace Original",
     "export Original",
-].join("\n"), "some docs ");
+].join("\n"), "some docs");
 
 verify.quickInfoAt("2", [
     "(alias) function Alias(): void",
     "(alias) type Alias<T> = () => T",
     "(alias) namespace Alias",
     "import Alias",
-].join("\n"), "some docs ");
+].join("\n"), "some docs");

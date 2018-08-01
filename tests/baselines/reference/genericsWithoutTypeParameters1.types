@@ -1,61 +1,42 @@
 === tests/cases/compiler/genericsWithoutTypeParameters1.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo(): T { return null }
 >foo : () => T
->T : T
 >null : null
 }
 
 interface I<T> {
->I : I<T>
->T : T
-
     bar(): T;
 >bar : () => T
->T : T
 }
 
 var c1: C;
 >c1 : any
->C : C<T>
 
 var i1: I;
 >i1 : any
->I : I<T>
 
 var c2: C<I>;
 >c2 : C<any>
->C : C<T>
->I : I<T>
 
 var i2: I<C>;
 >i2 : I<any>
->I : I<T>
->C : C<T>
 
 function foo(x: C, y: I) { }
 >foo : (x: any, y: any) => void
 >x : any
->C : C<T>
 >y : any
->I : I<T>
 
 function foo2(x: C<I>, y: I<C>) { }
 >foo2 : (x: C<any>, y: I<any>) => void
 >x : C<any>
->C : C<T>
->I : I<T>
 >y : I<any>
->I : I<T>
->C : C<T>
 
 var x: { a: C } = { a: new C<number>() };
 >x : { a: any; }
 >a : any
->C : C<T>
 >{ a: new C<number>() } : { a: C<number>; }
 >a : C<number>
 >new C<number>() : C<number>
@@ -64,7 +45,6 @@ var x: { a: C } = { a: new C<number>() };
 var x2: { a: I } = { a: { bar() { return 1 } } };
 >x2 : { a: any; }
 >a : any
->I : I<T>
 >{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
 >a : { bar(): number; }
 >{ bar() { return 1 } } : { bar(): number; }
@@ -73,40 +53,28 @@ var x2: { a: I } = { a: { bar() { return 1 } } };
 
 class D<T> {
 >D : D<T>
->T : T
 
     x: C;
 >x : any
->C : C<T>
 
     y: D;
 >y : any
->D : D<T>
 }
 
 interface J<T> {
->J : J<T>
->T : T
-
     x: I;
 >x : any
->I : I<T>
 
     y: J;
 >y : any
->J : J<T>
 }
 
 class A<T> { }
 >A : A<T>
->T : T
 
 function f<T>(x: T): A {
 >f : <T>(x: T) => any
->T : T
 >x : T
->T : T
->A : A<T>
 
     return null;
 >null : null

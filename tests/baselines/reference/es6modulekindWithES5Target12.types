@@ -44,7 +44,6 @@ export namespace E {
 }
 
 export namespace N {
->N : typeof N
 }
 
 export namespace N {

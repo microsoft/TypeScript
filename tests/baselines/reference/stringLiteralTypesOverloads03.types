@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads03.ts ===
 interface Base {
->Base : Base
-
     x: string;
 >x : string
 
@@ -10,25 +8,16 @@ interface Base {
 }
 
 interface HelloOrWorld extends Base {
->HelloOrWorld : HelloOrWorld
->Base : Base
-
     p1: boolean;
 >p1 : boolean
 }
 
 interface JustHello extends Base {
->JustHello : JustHello
->Base : Base
-
     p2: boolean;
 >p2 : boolean
 }
 
 interface JustWorld extends Base {
->JustWorld : JustWorld
->Base : Base
-
     p3: boolean;
 >p3 : boolean
 }
@@ -45,22 +34,18 @@ let helloOrWorld: "hello" | "world";
 function f(p: "hello"): JustHello;
 >f : { (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; (p: string): Base; }
 >p : "hello"
->JustHello : JustHello
 
 function f(p: "hello" | "world"): HelloOrWorld;
 >f : { (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; (p: string): Base; }
 >p : "hello" | "world"
->HelloOrWorld : HelloOrWorld
 
 function f(p: "world"): JustWorld;
 >f : { (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; (p: string): Base; }
 >p : "world"
->JustWorld : JustWorld
 
 function f(p: string): Base;
 >f : { (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; (p: string): Base; }
 >p : string
->Base : Base
 
 function f(...args: any[]): any {
 >f : { (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; (p: string): Base; }
@@ -91,22 +76,18 @@ let fResult3 = f(helloOrWorld);
 function g(p: string): Base;
 >g : { (p: string): Base; (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; }
 >p : string
->Base : Base
 
 function g(p: "hello"): JustHello;
 >g : { (p: string): Base; (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; }
 >p : "hello"
->JustHello : JustHello
 
 function g(p: "hello" | "world"): HelloOrWorld;
 >g : { (p: string): Base; (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; }
 >p : "hello" | "world"
->HelloOrWorld : HelloOrWorld
 
 function g(p: "world"): JustWorld;
 >g : { (p: string): Base; (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; }
 >p : "world"
->JustWorld : JustWorld
 
 function g(...args: any[]): any {
 >g : { (p: string): Base; (p: "hello"): JustHello; (p: "hello" | "world"): HelloOrWorld; (p: "world"): JustWorld; }

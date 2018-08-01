@@ -5,5 +5,4 @@ class Foo {
     public banana (x: break) { }
 >banana : (x: any) => void
 >x : any
->break : No type information available!
 }

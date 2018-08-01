@@ -3,26 +3,18 @@
 
 class C<T extends { length: number }> {
 >C : C<T>
->T : T
 >length : number
 
     constructor(x: T) { }
 >x : T
->T : T
 
     foo<U extends T>(x: U) {
 >foo : <U extends T>(x: U) => <V extends U>(x: V) => V
->U : U
->T : T
 >x : U
->U : U
 
         function bar<V extends U>(x: V) {
 >bar : <V extends U>(x: V) => V
->V : V
->U : U
 >x : V
->V : V
 
             return x;
 >x : V

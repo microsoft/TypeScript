@@ -1,7 +1,6 @@
 === tests/cases/compiler/cyclicGenericTypeInstantiationInference.ts ===
 function foo<T>() {
 >foo : <T>() => { y2: any; }
->T : T
 
     var z = foo<typeof y>();
 >z : { y2: any; }
@@ -24,7 +23,6 @@ function foo<T>() {
 
 function bar<T>() {
 >bar : <T>() => { y2: any; }
->T : T
 
     var z = bar<typeof y>();
 >z : { y2: any; }
@@ -55,7 +53,6 @@ var b = bar<number>();
 
 function test<T>(x: typeof a): void { }
 >test : <T>(x: { y2: any; }) => void
->T : T
 >x : { y2: any; }
 >a : { y2: any; }
 

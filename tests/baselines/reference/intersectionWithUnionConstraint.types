@@ -1,11 +1,7 @@
 === tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts ===
 function f1<T extends string | number, U extends string | number>(x: T & U) {
 >f1 : <T extends string | number, U extends string | number>(x: T & U) => void
->T : T
->U : U
 >x : T & U
->T : T
->U : U
 
     // Combined constraint of 'T & U' is 'string | number'
     let y: string | number = x;
@@ -15,12 +11,8 @@ function f1<T extends string | number, U extends string | number>(x: T & U) {
 
 function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
 >f2 : <T extends string | number | undefined, U extends string | null | undefined>(x: T & U) => void
->T : T
->U : U
 >null : null
 >x : T & U
->T : T
->U : U
 
     let y1: string | number = x;     // Error
 >y1 : string | number
@@ -56,9 +48,7 @@ type T1 = (string | number | undefined) & (string | null | undefined);  // strin
 
 function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
 >f3 : <T extends string | number | undefined>(x: (T & undefined) | (T & number) | (T & object)) => void
->T : T
 >x : (T & undefined) | (T & number) | (T & object)
->T : T
 
     const y: number | undefined = x;
 >y : number | undefined
@@ -67,9 +57,7 @@ function f3<T extends string | number | undefined>(x: T & (number | object | und
 
 function f4<T extends string | number>(x: T & (number | object)) {
 >f4 : <T extends string | number>(x: (T & number) | (T & object)) => void
->T : T
 >x : (T & number) | (T & object)
->T : T
 
     const y: number = x;
 >y : number
@@ -78,12 +66,7 @@ function f4<T extends string | number>(x: T & (number | object)) {
 
 function f5<T, U extends keyof T>(x: keyof T & U) {
 >f5 : <T, U extends keyof T>(x: keyof T & U) => void
->T : T
->U : U
->T : T
 >x : keyof T & U
->T : T
->U : U
 
     let y: keyof any = x;
 >y : string | number | symbol
@@ -94,26 +77,10 @@ function f5<T, U extends keyof T>(x: keyof T & U) {
 
 type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : NoErrorHere<K> }
 >Example : Example<T, U>
->T : T
->U : U
->K : K
->T : T
->K : K
->U : U
->UnexpectedError : T
->K : K
->NoErrorHere : T
->K : K
 
 type UnexpectedError<T extends PropertyKey> = T
 >UnexpectedError : T
->T : T
->PropertyKey : string | number | symbol
->T : T
 
 type NoErrorHere<T extends PropertyKey> = T
 >NoErrorHere : T
->T : T
->PropertyKey : string | number | symbol
->T : T
 

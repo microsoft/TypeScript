@@ -1,18 +1,14 @@
 === tests/cases/compiler/typeParameterArgumentEquivalence5.ts ===
 function foo<T,U>() {
 >foo : <T, U>() => void
->T : T
->U : U
 
     var x: () => (item) => U;
 >x : () => (item: any) => U
 >item : any
->U : U
 
     var y: () => (item) => T;
 >y : () => (item: any) => T
 >item : any
->T : T
 
     x = y;  // Should be an error
 >x = y : () => (item: any) => T

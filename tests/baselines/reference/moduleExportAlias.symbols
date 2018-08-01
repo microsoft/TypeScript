@@ -121,7 +121,7 @@ exports.func2 = function () { };
 var moduleExportsAlias = module.exports;
 >moduleExportsAlias : Symbol(moduleExportsAlias, Decl(b.js, 4, 3))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 moduleExportsAlias.func3 = function () { };
@@ -132,7 +132,7 @@ moduleExportsAlias.func3 = function () { };
 module.exports.func4 = function () { };
 >module.exports.func4 : Symbol(func4, Decl(b.js, 5, 43))
 >module.exports : Symbol(func4, Decl(b.js, 5, 43))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >func4 : Symbol(func4, Decl(b.js, 5, 43))
 
@@ -140,7 +140,7 @@ var multipleDeclarationAlias1 = exports = module.exports;
 >multipleDeclarationAlias1 : Symbol(multipleDeclarationAlias1, Decl(b.js, 8, 3))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias1.func5 = function () { };
@@ -151,7 +151,7 @@ multipleDeclarationAlias1.func5 = function () { };
 var multipleDeclarationAlias2 = module.exports = exports;
 >multipleDeclarationAlias2 : Symbol(multipleDeclarationAlias2, Decl(b.js, 11, 3))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
@@ -177,7 +177,7 @@ var multipleDeclarationAlias4 = someOtherVariable = module.exports;
 >multipleDeclarationAlias4 : Symbol(multipleDeclarationAlias4, Decl(b.js, 18, 3))
 >someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias4.func8 = function () { };
@@ -188,7 +188,7 @@ multipleDeclarationAlias4.func8 = function () { };
 var multipleDeclarationAlias5 = module.exports = exports = {};
 >multipleDeclarationAlias5 : Symbol(multipleDeclarationAlias5, Decl(b.js, 21, 3))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
@@ -201,7 +201,7 @@ var multipleDeclarationAlias6 = exports = module.exports = {};
 >multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias6.func10 = function () { };
@@ -212,7 +212,7 @@ multipleDeclarationAlias6.func10 = function () { };
 exports = module.exports = someOtherVariable = {};
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
 
@@ -224,14 +224,14 @@ exports.func11 = function () { };
 module.exports.func12 = function () { };
 >module.exports.func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 >module.exports : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 
 exports = module.exports = someOtherVariable = {};
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
 
@@ -243,14 +243,14 @@ exports.func11 = function () { };
 module.exports.func12 = function () { };
 >module.exports.func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 >module.exports : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 
 exports = module.exports = {};
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 exports.func13 = function () { };
@@ -261,14 +261,14 @@ exports.func13 = function () { };
 module.exports.func14 = function () { };
 >module.exports.func14 : Symbol(func14, Decl(b.js, 36, 33))
 >module.exports : Symbol(func14, Decl(b.js, 36, 33))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >func14 : Symbol(func14, Decl(b.js, 36, 33))
 
 exports = module.exports = {};
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 exports.func15 = function () { };
@@ -279,13 +279,13 @@ exports.func15 = function () { };
 module.exports.func16 = function () { };
 >module.exports.func16 : Symbol(func16, Decl(b.js, 40, 33))
 >module.exports : Symbol(func16, Decl(b.js, 40, 33))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >func16 : Symbol(func16, Decl(b.js, 40, 33))
 
 module.exports = exports = {};
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
@@ -297,13 +297,13 @@ exports.func17 = function () { };
 module.exports.func18 = function () { };
 >module.exports.func18 : Symbol(func18, Decl(b.js, 44, 33))
 >module.exports : Symbol(func18, Decl(b.js, 44, 33))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >func18 : Symbol(func18, Decl(b.js, 44, 33))
 
 module.exports = {};
 >module.exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 
 exports.func19 = function () { };
@@ -314,7 +314,7 @@ exports.func19 = function () { };
 module.exports.func20 = function () { };
 >module.exports.func20 : Symbol(func20, Decl(b.js, 48, 33))
 >module.exports : Symbol(func20, Decl(b.js, 48, 33))
->module : Symbol(module, Decl(b.js, 4, 24), Decl(b.js, 5, 43), Decl(b.js, 8, 41), Decl(b.js, 11, 31), Decl(b.js, 18, 51) ... and 14 more)
+>module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
 >func20 : Symbol(func20, Decl(b.js, 48, 33))
 

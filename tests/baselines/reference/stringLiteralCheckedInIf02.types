@@ -4,15 +4,10 @@ type S = "a" | "b";
 
 type T = S[] | S;
 >T : T
->S : S
->S : S
 
 function isS(t: T): t is S {
 >isS : (t: T) => t is S
 >t : T
->T : T
->t : any
->S : S
 
     return t === "a" || t === "b";
 >t === "a" || t === "b" : boolean
@@ -27,7 +22,6 @@ function isS(t: T): t is S {
 function f(foo: T) {
 >f : (foo: T) => S
 >foo : T
->T : T
 
     if (isS(foo)) {
 >isS(foo) : boolean
