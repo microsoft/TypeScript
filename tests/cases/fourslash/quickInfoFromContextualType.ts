@@ -7,4 +7,4 @@
 ////}
 ////const i: I = { /**/x: 0 };
 
-verify.quickInfoAt("", "(property) I.x: number", "Documentation ");
+verify.quickInfoAt("", "(property) I.x: number", "Documentation");

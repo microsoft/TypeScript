@@ -1,11 +1,9 @@
 === tests/cases/compiler/staticMethodsReferencingClassTypeParameters.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     static s(p: T) { return p; }
 >s : (p: any) => any
 >p : any
->T : No type information available!
 >p : any
 }

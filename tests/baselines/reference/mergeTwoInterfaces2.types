@@ -6,15 +6,12 @@ module M2 {
 >M2 : typeof M2
 
     export interface A {
->A : A
-
         foo: string;
 >foo : string
     }
 
     var a: A;
 >a : A
->A : A
 
     var r1 = a.foo
 >r1 : string
@@ -33,15 +30,12 @@ module M2 {
 >M2 : typeof M2
 
     export interface A {
->A : A
-
         bar: number;
 >bar : number
     }
 
     var a: A;
 >a : A
->A : A
 
     var r1 = a.foo
 >r1 : string
@@ -64,15 +58,12 @@ module M2 {
 >M3 : typeof M3
 
         export interface A {
->A : A
-
             foo: string;
 >foo : string
         }
 
         var a: A;
 >a : A
->A : A
 
         var r1 = a.foo
 >r1 : string
@@ -95,15 +86,12 @@ module M2 {
 >M3 : typeof M3
 
         export interface A {
->A : A
-
             bar: number;
 >bar : number
         }
 
         var a: A;
 >a : A
->A : A
 
         var r1 = a.foo
 >r1 : string

@@ -2,28 +2,21 @@
 // Repro from #16985
 
 interface MyInterface {
->MyInterface : MyInterface
-
   something: number;
 >something : number
 }
 
 class MyClass<T extends MyInterface> {
 >MyClass : MyClass<T>
->T : T
->MyInterface : MyInterface
 
   doIt(data : Partial<T>) {}
 >doIt : (data: Partial<T>) => void
 >data : Partial<T>
->Partial : Partial<T>
->T : T
 }
 
 class MySubClass extends MyClass<MyInterface> {}
 >MySubClass : MySubClass
 >MyClass : MyClass<MyInterface>
->MyInterface : MyInterface
 
 function fn(arg: typeof MyClass) {};
 >fn : (arg: typeof MyClass) => void

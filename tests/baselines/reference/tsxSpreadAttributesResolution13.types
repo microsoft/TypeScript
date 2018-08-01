@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface ComponentProps {
->ComponentProps : ComponentProps
-
     property1: string;
 >property1 : string
 
@@ -15,7 +13,6 @@ interface ComponentProps {
 export default function Component(props: ComponentProps) {
 >Component : (props: ComponentProps) => JSX.Element
 >props : ComponentProps
->ComponentProps : ComponentProps
 
     let condition1: boolean;
 >condition1 : boolean
@@ -44,8 +41,6 @@ export default function Component(props: ComponentProps) {
 }
 
 interface AnotherComponentProps {
->AnotherComponentProps : AnotherComponentProps
-
     property1: string;
 >property1 : string
 }
@@ -53,7 +48,6 @@ interface AnotherComponentProps {
 function ChildComponent({ property1 }: AnotherComponentProps) {
 >ChildComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >property1 : string
->AnotherComponentProps : AnotherComponentProps
 
     return (
 >(        <span>{property1}</span>    ) : JSX.Element

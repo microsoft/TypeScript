@@ -3,8 +3,6 @@ module A {
 >A : typeof A
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -14,7 +12,6 @@ module A {
 
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
->Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -22,16 +19,12 @@ module A {
 >0 : 0
 
     export interface Point3d extends Point {
->Point3d : Point3d
->Point : Point
-
         z: number;
 >z : number
     }
 
     export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
 >Origin3d : Point3d
->Point3d : Point3d
 >{ x: 0, y: 0, z: 0 } : { x: number; y: number; z: number; }
 >x : number
 >0 : 0
@@ -41,23 +34,15 @@ module A {
 >0 : 0
 
     export interface Line<TPoint extends Point>{
->Line : Line<TPoint>
->TPoint : TPoint
->Point : Point
-
         new (start: TPoint, end: TPoint);
 >start : TPoint
->TPoint : TPoint
 >end : TPoint
->TPoint : TPoint
 
         start: TPoint;
 >start : TPoint
->TPoint : TPoint
 
         end: TPoint;
 >end : TPoint
->TPoint : TPoint
     }
 }
 

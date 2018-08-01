@@ -3,11 +3,7 @@ declare global {
 >global : any
 
     namespace JSX {
->JSX : any
-
         interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
             [e: string]: any;
 >e : string
         }

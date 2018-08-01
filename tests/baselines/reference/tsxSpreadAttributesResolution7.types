@@ -18,7 +18,6 @@ class TextComponent extends React.Component<TextProps, {}> {
 >React.Component : React.Component<TextProps, {}>
 >React : typeof React
 >Component : typeof React.Component
->TextProps : TextProps
 
     render() {
 >render : () => JSX.Element
@@ -33,7 +32,6 @@ class TextComponent extends React.Component<TextProps, {}> {
 // OK
 const textPropsFalse: TextProps = {
 >textPropsFalse : TextProps
->TextProps : TextProps
 >{    editable: false} : { editable: false; }
 
     editable: false
@@ -50,7 +48,6 @@ let y1 = <TextComponent {...textPropsFalse} />
 
 const textPropsTrue: TextProps = {
 >textPropsTrue : TextProps
->TextProps : TextProps
 >{    editable: true,    onEdit: () => {}} : { editable: true; onEdit: () => void; }
 
     editable: true,

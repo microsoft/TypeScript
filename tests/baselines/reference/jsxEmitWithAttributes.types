@@ -1,10 +1,6 @@
 === tests/cases/compiler/Element.ts ===
 declare namespace JSX {
->JSX : any
-
     interface Element {
->Element : Element
-
         name: string;
 >name : string
 
@@ -39,9 +35,7 @@ export namespace Element {
     export function isElement(el: any): el is JSX.Element {
 >isElement : (el: any) => el is JSX.Element
 >el : any
->el : any
 >JSX : any
->Element : JSX.Element
 
         return el.markAsChildOfRootElement !== undefined;
 >el.markAsChildOfRootElement !== undefined : boolean

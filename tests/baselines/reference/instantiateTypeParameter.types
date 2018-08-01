@@ -1,9 +1,5 @@
 === tests/cases/compiler/instantiateTypeParameter.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     var x: T<>;
 >x : any
->T : No type information available!
 }

@@ -40,7 +40,6 @@ module T {
 >w : any
 
     module w { } //ok
->w : any
 
     var f;
 >f : any
@@ -58,7 +57,6 @@ module T {
 >i : any
 
     interface i { } //ok
->i : i
 
     class C { }
 >C : C
@@ -76,17 +74,13 @@ module T {
 >fi : () => void
 
     interface fi { } // ok
->fi : fi
 
     class cli { }
 >cli : cli
 
     interface cli { }
->cli : cli
 
     interface cli2 { }
->cli2 : cli2
-
     class cli2 { }
 >cli2 : cli2
 }

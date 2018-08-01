@@ -11,14 +11,10 @@ declare namespace React {
     function createClass(spec: any): ClassicComponentClass;
 >createClass : (spec: any) => ClassicComponentClass
 >spec : any
->ClassicComponentClass : ClassicComponentClass
 
     interface ClassicComponentClass {
->ClassicComponentClass : ClassicComponentClass
-
         new (props?: any): ClassicComponentClass;
 >props : any
->ClassicComponentClass : ClassicComponentClass
     }
 }
 
@@ -26,10 +22,7 @@ declare global {
 >global : any
 
     namespace JSX {
->JSX : any
-
         interface ElementAttributesProperty { }
->ElementAttributesProperty : ElementAttributesProperty
     }
 }
 

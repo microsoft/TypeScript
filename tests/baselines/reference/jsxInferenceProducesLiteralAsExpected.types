@@ -4,14 +4,6 @@ import React = require("react");
 
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 >FunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
->T : T
->K : K
->T : T
->T : T
->K : K
->Function : Function
->K : K
->T : T
 
 class TestObject {
 >TestObject : TestObject
@@ -29,24 +21,15 @@ class TestObject {
 >() => { } : () => void
 }
 interface TestProps<T> {
->TestProps : TestProps<T>
->T : T
-
     model: T;
 >model : T
->T : T
 
     foo: FunctionPropertyNames<T>;
 >foo : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
->FunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
->T : T
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
 >Test : <T>(props: TestProps<T>) => JSX.Element
->T : T
 >props : TestProps<T>
->TestProps : TestProps<T>
->T : T
 ><></> : JSX.Element
 
 const model = new TestObject();
@@ -66,7 +49,6 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 >el2 : JSX.Element
 ><Test<TestObject> model={model} foo="c" /> : JSX.Element
 >Test : <T>(props: TestProps<T>) => JSX.Element
->TestObject : TestObject
 >model : TestObject
 >model : TestObject
 >foo : "c"

@@ -1,19 +1,13 @@
 === tests/cases/compiler/unknownSymbolOffContextualType1.ts ===
 declare var document: Document;
 >document : Document
->Document : Document
 
 interface Document {
->Document : Document
-
     getElementById(elementId: string): HTMLElement;
 >getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >elementId : string
->HTMLElement : HTMLElement
 }
 interface HTMLElement {
->HTMLElement : HTMLElement
-
     isDisabled: boolean;
 >isDisabled : boolean
 }

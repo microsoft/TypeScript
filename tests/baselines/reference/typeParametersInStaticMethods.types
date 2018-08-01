@@ -1,15 +1,12 @@
 === tests/cases/compiler/typeParametersInStaticMethods.ts ===
 class foo<T> {
 >foo : foo<T>
->T : T
 
     static M(x: (x: T) => { x: { y: T } }) {
 >M : (x: (x: any) => { x: { y: any; }; }) => void
 >x : (x: any) => { x: { y: any; }; }
 >x : any
->T : No type information available!
 >x : { y: any; }
 >y : any
->T : No type information available!
     }
 } 

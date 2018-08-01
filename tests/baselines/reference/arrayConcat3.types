@@ -2,26 +2,12 @@
 // TODO: remove lib hack when https://github.com/Microsoft/TypeScript/issues/20454 is fixed
 type Fn<T extends object> = <U extends T>(subj: U) => U
 >Fn : Fn<T>
->T : T
->U : U
->T : T
 >subj : U
->U : U
->U : U
 
 function doStuff<T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) {
 >doStuff : <T extends object, T1 extends T>(a: Fn<T>[], b: Fn<T1>[]) => void
->T : T
->T1 : T1
->T : T
 >a : Fn<T>[]
->Array : T[]
->Fn : Fn<T>
->T : T
 >b : Fn<T1>[]
->Array : T[]
->Fn : Fn<T>
->T1 : T1
 
     b.concat(a);
 >b.concat(a) : Fn<T1>[]

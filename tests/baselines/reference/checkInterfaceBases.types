@@ -1,20 +1,13 @@
 === tests/cases/compiler/app.ts ===
 ///<reference path='jquery.d.ts' />
 interface SecondEvent {
->SecondEvent : SecondEvent
-
     data: any;
 >data : any
 }
 interface Third extends JQueryEventObjectTest, SecondEvent {}
->Third : Third
->JQueryEventObjectTest : JQueryEventObjectTest
->SecondEvent : SecondEvent
 
 === tests/cases/compiler/jquery.d.ts ===
 interface JQueryEventObjectTest {
->JQueryEventObjectTest : JQueryEventObjectTest
-
     data: any;
 >data : any
 

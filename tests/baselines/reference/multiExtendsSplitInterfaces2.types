@@ -1,37 +1,26 @@
 === tests/cases/compiler/multiExtendsSplitInterfaces2.ts ===
 interface A {
->A : A
-
 	a: number;
 >a : number
 }
 
 interface I extends A {
->I : I
->A : A
-
 	i1: number;
 >i1 : number
 }
 
 interface B {
->B : B
-
 	b: number;
 >b : number
 }
 
 interface I extends B {
->I : I
->B : B
-
 	i2: number;
 >i2 : number
 }
 
 var i: I;
 >i : I
->I : I
 
 var a = i.a;
 >a : number

@@ -1,7 +1,6 @@
 === tests/cases/compiler/customEventDetail.ts ===
 var x: CustomEvent;
 >x : CustomEvent<any>
->CustomEvent : CustomEvent<T>
 
 // valid since detail is any
 x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });

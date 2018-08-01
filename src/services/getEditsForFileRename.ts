@@ -156,7 +156,7 @@ namespace ts {
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, allFiles, preferences)
+                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, allFiles, preferences, program.redirectTargetsMap)
                         : undefined;
                 });
         }

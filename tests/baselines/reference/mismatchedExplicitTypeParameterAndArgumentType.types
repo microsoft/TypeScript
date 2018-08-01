@@ -1,18 +1,12 @@
 === tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts ===
 function map<T, U>(xs: T[], f: (x: T) => U) {
 >map : <T, U>(xs: T[], f: (x: T) => U) => U[]
->T : T
->U : U
 >xs : T[]
->T : T
 >f : (x: T) => U
 >x : T
->T : T
->U : U
 
     var ys: U[] = [];
 >ys : U[]
->U : U
 >[] : undefined[]
 
     xs.forEach(x => ys.push(f(x)));
@@ -66,8 +60,6 @@ var r6 = map<Object, Object>([1, ""], (x) => x.toString());
 >r6 : Object[]
 >map<Object, Object>([1, ""], (x) => x.toString()) : Object[]
 >map : <T, U>(xs: T[], f: (x: T) => U) => U[]
->Object : Object
->Object : Object
 >[1, ""] : (string | number)[]
 >1 : 1
 >"" : ""

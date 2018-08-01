@@ -11,7 +11,6 @@ class K {
 
 var k1: K;
 >k1 : K
->K : K
 
 k1.foo;
 >k1.foo : number

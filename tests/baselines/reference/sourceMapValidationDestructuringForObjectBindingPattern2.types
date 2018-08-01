@@ -7,8 +7,6 @@ declare var console: {
 >msg : any
 }
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 
@@ -17,8 +15,6 @@ interface Robot {
 }
 
 interface MultiRobot {
->MultiRobot : MultiRobot
-
     name: string;
 >name : string
 
@@ -36,7 +32,6 @@ interface MultiRobot {
 
 let robot: Robot = { name: "mower", skill: "mowing" };
 >robot : Robot
->Robot : Robot
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
 >"mower" : "mower"
@@ -45,7 +40,6 @@ let robot: Robot = { name: "mower", skill: "mowing" };
 
 let multiRobot: MultiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >multiRobot : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"mower" : "mower"
@@ -136,7 +130,6 @@ for ({ name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; i <
 >name : string
 >nameA : string
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -226,7 +219,6 @@ for ({ skills: { primary: primaryA, secondary: secondaryA } } =
 
     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"
@@ -305,7 +297,6 @@ for ({ name } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; i < 1; i++
 >{ name } : { name: string; }
 >name : string
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -389,7 +380,6 @@ for ({ skills: { primary, secondary } } =
 
     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"
@@ -479,7 +469,6 @@ for ({ name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimming
 >skill : string
 >skillA : string
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -575,7 +564,6 @@ for ({ name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
 
     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"
@@ -657,7 +645,6 @@ for ({ name, skill } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; i <
 >name : string
 >skill : string
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -744,7 +731,6 @@ for ({ name, skills: { primary, secondary } } =
 
     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"
