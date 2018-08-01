@@ -250,6 +250,9 @@ namespace ts.server {
         /*@internal*/
         cacheSourceFile: DocumentRegistrySourceFileCache;
 
+        /*@internal*/
+        mTime?: number;
+
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
