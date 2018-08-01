@@ -1,4 +1,3 @@
 === tests/cases/compiler/primitiveTypeAsInterfaceName.ts ===
 interface number {}
->number : number
-
+No type information for this code.

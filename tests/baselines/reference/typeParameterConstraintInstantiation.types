@@ -2,25 +2,14 @@
 // Check that type parameter constraints are properly instantiated
 
 interface Mapper<T> {
->Mapper : Mapper<T>
->T : T
-
     map<U extends T, V extends U[]>(f: (item: T) => U): V;
 >map : <U extends T, V extends U[]>(f: (item: T) => U) => V
->U : U
->T : T
->V : V
->U : U
 >f : (item: T) => U
 >item : T
->T : T
->U : U
->V : V
 }
 
 var m: Mapper<string>;
 >m : Mapper<string>
->Mapper : Mapper<T>
 
 var a = m.map((x: string) => x);  // string[]
 >a : string[]

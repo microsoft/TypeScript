@@ -1,24 +1,16 @@
 === tests/cases/compiler/ClassDeclaration25.ts ===
 interface IList<T> {
->IList : IList<T>
->T : T
-
     data(): T;
 >data : () => T
->T : T
 
     next(): string;
 >next : () => string
 }
 class List<U> implements IList<U> {
 >List : List<U>
->U : U
->IList : IList<T>
->U : U
 
     data(): U;
 >data : () => U
->U : U
 
     next(): string;
 >next : () => string

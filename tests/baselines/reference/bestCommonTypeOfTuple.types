@@ -30,16 +30,12 @@ var t1: [(x: number) => string, (x: number) => number];
 
 var t2: [E1, E2];
 >t2 : [E1, E2]
->E1 : E1
->E2 : E2
 
 var t3: [number, any];
 >t3 : [number, any]
 
 var t4: [E1, E2, number];
 >t4 : [E1, E2, number]
->E1 : E1
->E2 : E2
 
 // no error
 t1 = [f1, f2];

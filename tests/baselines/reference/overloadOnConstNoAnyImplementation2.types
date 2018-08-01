@@ -1,7 +1,5 @@
 === tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts ===
 interface I {
->I : I
-
     x1(a: number, callback: (x: 'hi') => number);
 >x1 : (a: number, callback: (x: "hi") => number) => any
 >a : number
@@ -52,7 +50,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 c.x1(1, (x: 'hi') => { return 1; } );
 >c.x1(1, (x: 'hi') => { return 1; } ) : any

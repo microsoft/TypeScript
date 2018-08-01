@@ -2,19 +2,13 @@
 // Repro from #22823
 
 interface Props {
->Props : Props
-
     foo?: boolean;
 >foo : boolean | undefined
 }
 
 function foo<P extends Props>(props: Readonly<P>) {
 >foo : <P extends Props>(props: Readonly<P>) => void
->P : P
->Props : Props
 >props : Readonly<P>
->Readonly : Readonly<T>
->P : P
 
     let { foo = false } = props;
 >foo : boolean

@@ -56,7 +56,6 @@ enum e6 { One }
 >One : e6
 
 module e6 { } // ok
->e6 : typeof e6
 
 enum e6a { One }
 >e6a : e6a

@@ -12,9 +12,7 @@ export function getStyles() {
 === tests/cases/compiler/Folder/monorepo/package-a/index.d.ts ===
 export declare const styles: import("styled-components").InterpolationValue[];
 >styles : import("tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
->InterpolationValue : import("tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components").InterpolationValue
 
 === tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components.d.ts ===
 export interface InterpolationValue {}
->InterpolationValue : InterpolationValue
-
+No type information for this code.

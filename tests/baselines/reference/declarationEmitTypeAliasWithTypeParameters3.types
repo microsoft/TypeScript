@@ -1,13 +1,9 @@
 === tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters3.ts ===
 type Foo<T> = {
 >Foo : Foo<T>
->T : T
 
     foo<U>(): Foo<U>
 >foo : <U>() => Foo<U>
->U : U
->Foo : Foo<T>
->U : U
 
 };
 function bar() {
@@ -16,6 +12,5 @@ function bar() {
     return {} as Foo<number>;
 >{} as Foo<number> : Foo<number>
 >{} : {}
->Foo : Foo<T>
 }
 

@@ -31,17 +31,14 @@ var e: {
     readonly A: E1.A;
 >A : E1.A
 >E1 : any
->A : E1.A
 
     readonly B: E1.B;
 >B : E1.B
 >E1 : any
->B : E1.B
 
     readonly C: E1.C;
 >C : E1.C
 >E1 : any
->C : E1.C
 
     readonly [n: number]: string;
 >n : number

@@ -64,7 +64,7 @@ namespace ts.SignatureHelp {
                     return undefined;
                 }
                 const candidates: Signature[] = [];
-                const resolvedSignature = checker.getResolvedSignature(invocation.node, candidates, argumentCount)!; // TODO: GH#18217
+                const resolvedSignature = checker.getResolvedSignatureForSignatureHelp(invocation.node, candidates, argumentCount)!; // TODO: GH#18217
                 return candidates.length === 0 ? undefined : { candidates, resolvedSignature };
             }
             case InvocationKind.TypeArgs: {
@@ -102,31 +102,16 @@ namespace ts.SignatureHelp {
         if (argumentInfo.invocation.kind === InvocationKind.Contextual) return undefined;
         // See if we can find some symbol with the call expression name that has call signatures.
         const expression = getExpressionFromInvocation(argumentInfo.invocation);
-        const name = isIdentifier(expression) ? expression : isPropertyAccessExpression(expression) ? expression.name : undefined;
-        if (!name || !name.escapedText) {
-            return undefined;
-        }
-
+        const name = isIdentifier(expression) ? expression.text : isPropertyAccessExpression(expression) ? expression.name.text : undefined;
         const typeChecker = program.getTypeChecker();
-        for (const sourceFile of program.getSourceFiles()) {
-            const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = nameToDeclarations.get(name.text);
-
-            if (declarations) {
-                for (const declaration of declarations) {
-                    const symbol = declaration.symbol;
-                    if (symbol) {
-                        const type = typeChecker.getTypeOfSymbolAtLocation(symbol, declaration);
-                        if (type) {
-                            const callSignatures = type.getCallSignatures();
-                            if (callSignatures && callSignatures.length) {
-                                return typeChecker.runWithCancellationToken(cancellationToken, typeChecker => createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, sourceFile, typeChecker));
-                            }
-                        }
-                    }
+        return name === undefined ? undefined : firstDefined(program.getSourceFiles(), sourceFile =>
+            firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
+                const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
+                const callSignatures = type && type.getCallSignatures();
+                if (callSignatures && callSignatures.length) {
+                    return typeChecker.runWithCancellationToken(cancellationToken, typeChecker => createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, sourceFile, typeChecker));
                 }
-            }
-        }
+            }));
     }
 
     function lessThanFollowsCalledExpression(startingToken: Node, sourceFile: SourceFile, calledExpression: Expression) {

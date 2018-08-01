@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration7ES5.ts ===
 interface ISomething {
->ISomething : ISomething
-
     foo: string,
 >foo : string
 
@@ -13,13 +11,11 @@ function foo({}, {foo, bar}: ISomething) {}
 >foo : ({}: {}, { foo, bar }: ISomething) => void
 >foo : string
 >bar : string
->ISomething : ISomething
 
 function baz([], {foo, bar}: ISomething) {}
 >baz : ([]: any[], { foo, bar }: ISomething) => void
 >foo : string
 >bar : string
->ISomething : ISomething
 
 function one([], {}) {}
 >one : ([]: any[], {}: {}) => void

@@ -16,7 +16,6 @@ declare module "SubModule" {
 
         public main: MainModule;
 >main : MainModule
->MainModule : MainModule
 
         constructor();
     }
@@ -33,7 +32,6 @@ declare module "MainModule" {
 >MainModule : MainModule
 
         public SubModule: SubModule;
->SubModule : SubModule
 >SubModule : SubModule
 
         constructor();

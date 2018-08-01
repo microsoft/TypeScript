@@ -9,7 +9,6 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     x = this;
 >x : this
@@ -17,5 +16,4 @@ class D<T> {
 
     y: T;
 >y : T
->T : T
 }

@@ -8,18 +8,14 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 interface I {
->I : I
-
     fooo: string;
 >fooo : string
 }
 
 var i: I;
 >i : I
->I : I
 
 c = i; // error
 >c = i : I

@@ -1,13 +1,10 @@
 === tests/cases/conformance/expressions/functionCalls/callWithSpread.ts ===
 interface X {
->X : X
-
     foo(x: number, y: number, ...z: string[]): X;
 >foo : (x: number, y: number, ...z: string[]) => X
 >x : number
 >y : number
 >z : string[]
->X : X
 }
 
 function foo(x: number, y: number, ...z: string[]) {
@@ -25,11 +22,9 @@ var z: number[];
 
 var obj: X;
 >obj : X
->X : X
 
 var xa: X[];
 >xa : X[]
->X : X
 
 foo(1, 2, "abc");
 >foo(1, 2, "abc") : void
@@ -266,7 +261,6 @@ xa[1].foo(1, 2, ...a, "abc");
 >(<Function>xa[1].foo)(...[1, 2, "abc"]) : any
 >(<Function>xa[1].foo) : Function
 ><Function>xa[1].foo : Function
->Function : Function
 >xa[1].foo : (x: number, y: number, ...z: string[]) => X
 >xa[1] : X
 >xa : X[]

@@ -1,37 +1,24 @@
 === tests/cases/compiler/typeCheckTypeArgument.ts ===
 var f: <T extends UNKNOWN>() => void;
 >f : <T extends any>() => void
->T : T
->UNKNOWN : No type information available!
 
 interface IFoo<T extends UNKNOWN> { }
->IFoo : IFoo<T>
->T : T
->UNKNOWN : No type information available!
 
 class Foo<T extends UNKNOWN> { }
 >Foo : Foo<T>
->T : T
->UNKNOWN : No type information available!
 
 function bar<T extends UNKNOWN>() { }
 >bar : <T extends any>() => void
->T : T
->UNKNOWN : No type information available!
 
 class Foo2 {
 >Foo2 : Foo2
 
     method<T extends UNKNOWN>() { }
 >method : <T extends any>() => void
->T : T
->UNKNOWN : No type information available!
 }
 
 (<T extends UNKNOWN>(a) => { });
 >(<T extends UNKNOWN>(a) => { }) : <T extends any>(a: any) => void
 ><T extends UNKNOWN>(a) => { } : <T extends any>(a: any) => void
->T : T
->UNKNOWN : No type information available!
 >a : any
 

@@ -1752,6 +1752,12 @@ namespace ts {
         type SerializedEntityNameAsExpression = Identifier | BinaryExpression | PropertyAccessExpression;
         type SerializedTypeNode = SerializedEntityNameAsExpression | VoidExpression | ConditionalExpression;
 
+        function getAccessorTypeNode(node: AccessorDeclaration) {
+            const accessors = resolver.getAllAccessorDeclarations(node);
+            return accessors.setAccessor && getSetAccessorTypeAnnotationNode(accessors.setAccessor)
+                || accessors.getAccessor && getEffectiveReturnTypeNode(accessors.getAccessor);
+        }
+
         /**
          * Serializes the type of a node for use with decorator type metadata.
          *
@@ -1761,10 +1767,10 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                case SyntaxKind.GetAccessor:
                     return serializeTypeNode((<PropertyDeclaration | ParameterDeclaration | GetAccessorDeclaration>node).type);
                 case SyntaxKind.SetAccessor:
-                    return serializeTypeNode(getSetAccessorTypeAnnotationNode(<SetAccessorDeclaration>node));
+                case SyntaxKind.GetAccessor:
+                    return serializeTypeNode(getAccessorTypeNode(node as AccessorDeclaration));
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.MethodDeclaration:

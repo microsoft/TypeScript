@@ -19,11 +19,9 @@ class A1 {
 
     public a: Base;
 >a : Base
->Base : Base
 
     public b: Base;
 >b : Base
->Base : Base
 }
 
 class B1 {
@@ -31,11 +29,9 @@ class B1 {
 
     public a: Base;
 >a : Base
->Base : Base
 
     public b: Derived;
 >b : Derived
->Derived : Derived
 }
 
 class A2 {
@@ -55,19 +51,15 @@ class B2 extends A2 {
 
 var a1: A1;
 >a1 : A1
->A1 : A1
 
 var a2: A2;
 >a2 : A2
->A2 : A2
 
 var b1: B1;
 >b1 : B1
->B1 : B1
 
 var b2: B2;
 >b2 : B2
->B2 : B2
 
 // operator <
 var ra1 = a1 < b1;

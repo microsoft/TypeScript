@@ -4,8 +4,6 @@ declare module 'react' {
 
 	class Component<T, U> { }
 >Component : Component<T, U>
->T : T
->U : U
 }
 
 === tests/cases/conformance/jsx/app.tsx ===

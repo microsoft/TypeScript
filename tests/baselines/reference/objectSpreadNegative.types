@@ -22,11 +22,9 @@ class PublicX {
 }
 let publicX: PublicX;
 >publicX : PublicX
->PublicX : PublicX
 
 let privateOptionalX: PrivateOptionalX;
 >privateOptionalX : PrivateOptionalX
->PrivateOptionalX : PrivateOptionalX
 
 let o2 = { ...publicX, ...privateOptionalX };
 >o2 : {}
@@ -59,11 +57,9 @@ let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumbe
 
 // assignability as target
 interface Bool { b: boolean };
->Bool : Bool
 >b : boolean
 
 interface Str { s: string };
->Str : Str
 >s : string
 
 let spread = { ...{ b: true }, ...{s: "foo" } };
@@ -199,7 +195,6 @@ class C { p = 1; m() { } }
 
 let c: C = new C()
 >c : C
->C : C
 >new C() : C
 >C : typeof C
 
@@ -234,12 +229,8 @@ spreadObj.a; // error 'a' is not in {}
 // generics
 function f<T, U>(t: T, u: U) {
 >f : <T, U>(t: T, u: U) => any
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
     return { ...t, ...u, id: 'id' };
 >{ ...t, ...u, id: 'id' } : any
@@ -250,12 +241,8 @@ function f<T, U>(t: T, u: U) {
 }
 function override<U>(initial: U, override: U): U {
 >override : <U>(initial: U, override: U) => U
->U : U
 >initial : U
->U : U
 >override : U
->U : U
->U : U
 
     return { ...initial, ...override };
 >{ ...initial, ...override } : any
@@ -352,7 +339,6 @@ type Extra = { a: string, b: string, extra: string };
 
 const extra1: A = { a: "a", b: "b", extra: "extra" };
 >extra1 : A
->A : A
 >{ a: "a", b: "b", extra: "extra" } : { a: string; b: string; extra: string; }
 >a : string
 >"a" : "a"
@@ -373,19 +359,16 @@ const extra2 = { a: "a", b: "b", extra: "extra" };
 
 const a1: A = { ...extra1 }; // error spans should be here
 >a1 : A
->A : A
 >{ ...extra1 } : { a: string; b: string; }
 >extra1 : A
 
 const a2: A = { ...extra2 }; // not on the symbol declarations above
 >a2 : A
->A : A
 >{ ...extra2 } : { a: string; b: string; extra: string; }
 >extra2 : { a: string; b: string; extra: string; }
 
 const extra3: Extra = { a: "a", b: "b", extra: "extra" };
 >extra3 : Extra
->Extra : Extra
 >{ a: "a", b: "b", extra: "extra" } : { a: string; b: string; extra: string; }
 >a : string
 >"a" : "a"
@@ -396,7 +379,6 @@ const extra3: Extra = { a: "a", b: "b", extra: "extra" };
 
 const a3: A = { ...extra3 }; // same here
 >a3 : A
->A : A
 >{ ...extra3 } : { a: string; b: string; extra: string; }
 >extra3 : Extra
 

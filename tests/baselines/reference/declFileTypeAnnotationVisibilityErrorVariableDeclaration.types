@@ -13,7 +13,6 @@ module m {
     // Directly using names from this module
     var x: private1;
 >x : private1
->private1 : private1
 
     var y = new private1();
 >y : private1
@@ -22,7 +21,6 @@ module m {
 
     export var k: private1;
 >k : private1
->private1 : private1
 
     export var l = new private1();
 >l : private1
@@ -31,7 +29,6 @@ module m {
 
     var x2: public1;
 >x2 : public1
->public1 : public1
 
     var y2 = new public1();
 >y2 : public1
@@ -40,7 +37,6 @@ module m {
 
     export var k2: public1;
 >k2 : public1
->public1 : public1
 
     export var l2 = new public1();
 >l2 : public1
@@ -58,7 +54,6 @@ module m {
     var x3: m2.public2;
 >x3 : m2.public2
 >m2 : any
->public2 : m2.public2
 
     var y3 = new m2.public2();
 >y3 : m2.public2
@@ -70,7 +65,6 @@ module m {
     export var k3: m2.public2;
 >k3 : m2.public2
 >m2 : any
->public2 : m2.public2
 
     export var l3 = new m2.public2();
 >l3 : m2.public2

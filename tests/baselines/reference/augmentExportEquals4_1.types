@@ -33,7 +33,6 @@ declare module "file1" {
 >"file1" : typeof x
 
     interface A { a }
->A : A
 >a : any
 
     let b: number;
@@ -48,7 +47,6 @@ import "file2";
 let a: x.A;
 >a : x.A
 >x : any
->A : x.A
 
 let b = x.b;
 >b : number

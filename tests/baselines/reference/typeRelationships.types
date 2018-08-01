@@ -43,7 +43,6 @@ class C {
 
         var a: C[];
 >a : C[]
->C : C
 
         var a = [this, this.c];  // C[] since this is subtype of C
 >a : C[]

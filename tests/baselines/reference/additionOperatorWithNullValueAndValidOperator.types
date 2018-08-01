@@ -15,7 +15,6 @@ var b: number;
 
 var c: E;
 >c : E
->E : E
 
 var d: string;
 >d : string

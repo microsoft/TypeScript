@@ -22,11 +22,7 @@ declare module ng {
     }
 
     interface IQService {
->IQService : IQService
-
         all(promises: IPromise < any > []): IPromise<
 >all : (promises: any[]) => any
 >promises : any[]
->IPromise : No type information available!
->IPromise : No type information available!
 

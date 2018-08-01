@@ -3,17 +3,11 @@ type Kind = "A" | "B"
 >Kind : Kind
 
 interface Entity {
->Entity : Entity
-
     kind: Kind;
 >kind : Kind
->Kind : Kind
 }
 
 interface A extends Entity {
->A : A
->Entity : Entity
-
     kind: "A";
 >kind : "A"
 
@@ -22,9 +16,6 @@ interface A extends Entity {
 }
 
 interface B extends Entity {
->B : B
->Entity : Entity
-
     kind: "B";
 >kind : "B"
 
@@ -35,34 +26,22 @@ interface B extends Entity {
 function hasKind(entity: Entity, kind: "A"): entity is A;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
->Entity : Entity
 >kind : "A"
->entity : any
->A : A
 
 function hasKind(entity: Entity, kind: "B"): entity is B;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
->Entity : Entity
 >kind : "B"
->entity : any
->B : B
 
 function hasKind(entity: Entity, kind: Kind): entity is Entity;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
->Entity : Entity
 >kind : Kind
->Kind : Kind
->entity : any
->Entity : Entity
 
 function hasKind(entity: Entity, kind: Kind): boolean {
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
->Entity : Entity
 >kind : Kind
->Kind : Kind
 
     return entity.kind === kind;
 >entity.kind === kind : boolean
@@ -74,7 +53,6 @@ function hasKind(entity: Entity, kind: Kind): boolean {
 
 let x: A = {
 >x : A
->A : A
 >{    kind: "A",    a: 100,} : { kind: "A"; a: number; }
 
     kind: "A",

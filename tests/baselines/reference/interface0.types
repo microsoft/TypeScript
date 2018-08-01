@@ -1,16 +1,11 @@
 === tests/cases/compiler/interface0.ts ===
 interface Generic<T> {
->Generic : Generic<T>
->T : T
-
     x: T;
 >x : T
->T : T
 }
 
 var y: Generic<number> = { x: 3 };
 >y : Generic<number>
->Generic : Generic<T>
 >{ x: 3 } : { x: number; }
 >x : number
 >3 : 3

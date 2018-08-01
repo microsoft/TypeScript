@@ -3,14 +3,8 @@
 
 function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
 >f1 : <K extends string, T>(obj: { [P in K]: T; }, k: K) => void
->K : K
->T : T
 >obj : { [P in K]: T; }
->P : P
->K : K
->T : T
 >k : K
->K : K
 
     const b = k in obj;
 >b : boolean
@@ -20,7 +14,6 @@ function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
 
     let k1: K;
 >k1 : K
->K : K
 
     for (k1 in obj) {
 >k1 : K
@@ -46,14 +39,8 @@ function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
 
 function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
 >f2 : <T>(obj: { [P in keyof T]: T[P]; }, k: keyof T) => void
->T : T
 >obj : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 >k : keyof T
->T : T
 
     const b = k in obj;
 >b : boolean
@@ -63,7 +50,6 @@ function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
 
     let k1: keyof T;
 >k1 : keyof T
->T : T
 
     for (k1 in obj) {
 >k1 : keyof T
@@ -89,16 +75,8 @@ function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
 
 function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
 >f3 : <T, K extends keyof T>(obj: { [P in K]: T[P]; }, k: K) => void
->T : T
->K : K
->T : T
 >obj : { [P in K]: T[P]; }
->P : P
->K : K
->T : T
->P : P
 >k : K
->K : K
 
     const b = k in obj;
 >b : boolean
@@ -108,7 +86,6 @@ function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
 
     let k1: K;
 >k1 : K
->K : K
 
     for (k1 in obj) {
 >k1 : K
