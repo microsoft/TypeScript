@@ -9,7 +9,7 @@ class Parser {
 
 class Parser {
     async f():Promise<void> {
-        let result = await fetch('https://typescriptlang.org');
+        const result = await fetch('https://typescriptlang.org');
         return console.log(result);
     }
 }

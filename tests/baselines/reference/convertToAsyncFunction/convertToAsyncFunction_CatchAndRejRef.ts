@@ -17,7 +17,7 @@ function catch_err(err){
 async function f():Promise<void> {
     try {
         try {
-            let result = await fetch('https://typescriptlang.org');
+            const result = await fetch('https://typescriptlang.org');
             return res(result);
         }
         catch (rejection) {

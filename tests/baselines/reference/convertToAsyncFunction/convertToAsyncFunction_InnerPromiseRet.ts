@@ -11,14 +11,14 @@ function /*[#|*/innerPromise/*|]*/(): Promise<string> {
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function innerPromise(): Promise<string> {
-    let resp = await fetch("https://typescriptlang.org");
-    let blob_2;
+    const resp = await fetch("https://typescriptlang.org");
+    let blob_1;
     try {
-        let blob = await resp.blob();
-        blob_2 = blob.byteOffset;
+        const blob = await resp.blob();
+        blob_1 = blob.byteOffset;
     }
     catch (err) {
-        blob_2 = 'Error';
+        blob_1 = 'Error';
     }
-    return blob_2.toString();
+    return blob_1.toString();
 }

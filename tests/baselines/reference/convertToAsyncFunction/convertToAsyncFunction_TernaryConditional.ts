@@ -9,6 +9,6 @@ function /*[#|*/f/*|]*/() {
 
 async function f() {
     let i;
-    let res = await Promise.resolve();
+    const res = await Promise.resolve();
     return res ? i = res : i = 100;
 } 

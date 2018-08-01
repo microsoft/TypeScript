@@ -533,7 +533,7 @@ function res2(result2){
 }`
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_MultipleThensSameVarName", `
-function [#|f|]():Promise<boolean> {
+function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res).then(res2);
 }
 function res(result){
@@ -818,7 +818,7 @@ function my_print (resp): Promise<void> {
         );
 
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_MultipleReturns", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_MultipleReturns1", `
 function [#|f|](): Promise<void> {
     let x = fetch("https://microsoft.com").then(res => console.log("Microsoft:", res));
     if (x.ok) {
@@ -830,6 +830,21 @@ function [#|f|](): Promise<void> {
 }
 `
         );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_MultipleReturns2", `
+function [#|f|](): Promise<void> {
+    let x = fetch("https://microsoft.com").then(res => console.log("Microsoft:", res));
+    if (x.ok) {
+        return fetch("https://typescriptlang.org").then(res => console.log(res));
+    }
+    return x.then(resp => {
+        var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
+        return fetch("https://micorosft.com").then(res => console.log("Another one!"));
+    });
+}
+`
+        );
+
 
         _testConvertToAsyncFunctionFailed("convertToAsyncFunction_SeperateLines", `
 function [#|f|](): Promise<string> {
@@ -888,7 +903,7 @@ function [#|f|]() {
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_Scope", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_Scope1", `
 function [#|f|]() {
     var var1:Promise<Response>, var2;
     return fetch('https://typescriptlang.org').then( _ => 

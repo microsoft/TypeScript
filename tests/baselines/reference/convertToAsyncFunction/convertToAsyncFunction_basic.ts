@@ -6,6 +6,6 @@ function /*[#|*/f/*|]*/(): Promise<void>{
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f(): Promise<void>{
-    let result = await fetch('https://typescriptlang.org');
+    const result = await fetch('https://typescriptlang.org');
     console.log(result);
 }

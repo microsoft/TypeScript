@@ -9,6 +9,6 @@ function /*[#|*/f/*|]*/():Promise<void>{
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f():Promise<void>{
-    let vals = await Promise.all([fetch('https://typescriptlang.org'), fetch('https://microsoft.com'), fetch('https://youtube.com')]);
+    const vals = await Promise.all([fetch('https://typescriptlang.org'), fetch('https://microsoft.com'), fetch('https://youtube.com')]);
     vals.forEach(console.log);
 }

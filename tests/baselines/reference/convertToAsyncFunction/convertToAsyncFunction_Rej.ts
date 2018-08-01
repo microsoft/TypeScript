@@ -8,7 +8,7 @@ function /*[#|*/f/*|]*/():Promise<void> {
 
 async function f():Promise<void> {
     try {
-        let result = await fetch('https://typescriptlang.org');
+        const result = await fetch('https://typescriptlang.org');
         console.log(result);
     }
     catch (rejection) {

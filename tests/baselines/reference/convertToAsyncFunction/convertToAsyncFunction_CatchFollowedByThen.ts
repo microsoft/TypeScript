@@ -21,7 +21,7 @@ async function f(){
         result = await res(result);
     }
     catch (reject) {
-        result = await rej(reject);
+        const result = await rej(reject);
     }
     return res(result);
 }

@@ -15,7 +15,7 @@ function /*[#|*/f/*|]*/() {
 
 async function f() {
   var obj;
-  let res = await fetch("https://typescriptlang.org");
+  const res = await fetch("https://typescriptlang.org");
     obj = {
         func: function f() {
             console.log(res);

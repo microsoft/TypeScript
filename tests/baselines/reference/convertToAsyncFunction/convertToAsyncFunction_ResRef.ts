@@ -10,7 +10,7 @@ function res(result){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f():Promise<boolean> {
-    let result = await fetch('https://typescriptlang.org');
+    const result = await fetch('https://typescriptlang.org');
     return res(result);
 }
 function res(result){

@@ -7,6 +7,6 @@ function /*[#|*/f/*|]*/() {
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f() {
-    let res = await Promise.resolve();
+    const res = await Promise.resolve();
     return console.log(res);
 } 

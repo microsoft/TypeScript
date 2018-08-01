@@ -9,7 +9,7 @@ function /*[#|*/f/*|]*/(){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f(){
-    let res = await fetch("https://typescriptlang.org");
+    const res = await fetch("https://typescriptlang.org");
     for (let i = 0; i < 10; i++) {
         console.log(res);
     }

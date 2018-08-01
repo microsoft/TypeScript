@@ -11,8 +11,8 @@ function /*[#|*/f/*|]*/(): Promise<string> {
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f(): Promise<string> {
-    let resp = await fetch("https://typescriptlang.org");
-    let blob = await resp.blob();
-    let blob_2 = blob.byteOffset;
-    return blob_2.toString();
+    const resp = await fetch("https://typescriptlang.org");
+    const blob = await resp.blob();
+    const blob_1 = blob.byteOffset;
+    return blob_1.toString();
 }

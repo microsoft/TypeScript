@@ -1,6 +1,6 @@
 // ==ORIGINAL==
 
-function /*[#|*/f/*|]*/():Promise<boolean> {
+function /*[#|*/f/*|]*/():Promise<void> {
     return fetch('https://typescriptlang.org').then(res).then(res2);
 }
 function res(result){
@@ -12,10 +12,10 @@ function res2(result){
 
 // ==ASYNC FUNCTION::Convert to async function==
 
-async function f():Promise<boolean> {
-    let result = await fetch('https://typescriptlang.org');
-    result = await res(result);
-    return res2(result);
+async function f():Promise<void> {
+    const result = await fetch('https://typescriptlang.org');
+    const result_1 = await res(result);
+    return res2(result_1);
 }
 function res(result){
     return result.ok;

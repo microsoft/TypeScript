@@ -19,11 +19,11 @@ function res_func(result){
 async function f(){
     var res = 100;
     if (res > 50) {
-        let res_2 = await fetch("https://typescriptlang.org");
-        return console.log(res_2);
+        const res_1 = await fetch("https://typescriptlang.org");
+        return console.log(res_1);
     }
     else {
-        let result = await fetch("https://typescriptlang.org");
+        const result = await fetch("https://typescriptlang.org");
         return res_func(result);
     }
 }
