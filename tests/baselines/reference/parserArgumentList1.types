@@ -2,7 +2,6 @@
 export function removeClass (node:HTMLElement, className:string) {
 >removeClass : (node: HTMLElement, className: string) => void
 >node : HTMLElement
->HTMLElement : HTMLElement
 >className : string
 
 	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {

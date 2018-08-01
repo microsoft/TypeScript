@@ -1,18 +1,10 @@
 === tests/cases/compiler/extendGenericArray2.ts ===
 interface IFoo<T> {
->IFoo : IFoo<T>
->T : T
-
     x: T;
 >x : T
->T : T
 }
 
 interface Array<T> extends IFoo<T> { }
->Array : T[]
->T : T
->IFoo : IFoo<T>
->T : T
 
 var arr: string[] = [];
 >arr : string[]

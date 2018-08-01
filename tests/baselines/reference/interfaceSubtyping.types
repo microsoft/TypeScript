@@ -1,13 +1,10 @@
 === tests/cases/compiler/interfaceSubtyping.ts ===
 interface iface {
->iface : iface
-
     foo(): void;
 >foo : () => void
 }
 class Camera implements iface{
 >Camera : Camera
->iface : iface
 
     constructor (public str: string) {
 >str : string

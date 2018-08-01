@@ -323,8 +323,6 @@ declare module "interface" {
 >"interface" : typeof import("interface")
 
     interface Foo {
->Foo : Foo
-
         x: number;
 >x : number
 
@@ -355,8 +353,6 @@ declare module "interface-variable" {
 >"interface-variable" : typeof import("interface-variable")
 
     interface Foo {
->Foo : Foo
-
         x: number;
 >x : number
 
@@ -396,8 +392,6 @@ declare module "interface-module" {
 >"interface-module" : typeof import("interface-module")
 
     interface Foo {
->Foo : Foo
-
         x: number;
 >x : number
 
@@ -421,11 +415,7 @@ declare module "variable-module" {
 >"variable-module" : typeof import("variable-module")
 
     module Foo {
->Foo : { a: number; b: number; }
-
         interface Bar {
->Bar : Bar
-
             x: number;
 >x : number
 

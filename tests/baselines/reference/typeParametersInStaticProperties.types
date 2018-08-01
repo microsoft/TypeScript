@@ -1,9 +1,7 @@
 === tests/cases/compiler/typeParametersInStaticProperties.ts ===
 class foo<T> {
 >foo : foo<T>
->T : T
 
     static P: T;
 >P : any
->T : No type information available!
 } 

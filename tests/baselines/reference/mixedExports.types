@@ -13,26 +13,15 @@ declare module M {
 }
 
 declare module M1 {
->M1 : any
-
      export interface Foo {}
->Foo : Foo
-
      interface Foo {}
->Foo : Foo
 }
 
 module A {
->A : any
-
      interface X {x}
->X : X
 >x : any
 
      export module X {}
->X : any
-
      interface X {y}
->X : X
 >y : any
 }

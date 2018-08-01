@@ -1,7 +1,5 @@
 === tests/cases/compiler/readonlyMembers.ts ===
 interface X {
->X : X
-
     readonly a: number;
 >a : number
 
@@ -10,7 +8,6 @@ interface X {
 }
 var x: X = { a: 0 };
 >x : X
->X : X
 >{ a: 0 } : { a: number; }
 >a : number
 >0 : 0

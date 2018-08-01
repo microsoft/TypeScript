@@ -8,21 +8,16 @@ type B = {b: string}
 const flowtypes = <A>(b: B) => {
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 ><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->A : A
 >b : B
->B : B
 
   type Combined = A & B
 >Combined : A & B
->A : A
->B : B
 
   const combined = (fn: (combined: Combined) => void) => null
 >combined : (fn: (combined: A & B) => void) => any
 >(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
 >fn : (combined: A & B) => void
 >combined : A & B
->Combined : A & B
 >null : null
 
   const literal = (fn: (aPlusB: A & B) => void) => null
@@ -30,8 +25,6 @@ const flowtypes = <A>(b: B) => {
 >(fn: (aPlusB: A & B) => void) => null : (fn: (aPlusB: A & B) => void) => any
 >fn : (aPlusB: A & B) => void
 >aPlusB : A & B
->A : A
->B : B
 >null : null
 
   return {combined, literal}
@@ -90,9 +83,7 @@ combined(comb => {
 
 declare function f<T>(a: T): { a: typeof a };
 >f : <T>(a: T) => { a: T; }
->T : T
 >a : T
->T : T
 >a : T
 >a : T
 

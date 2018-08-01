@@ -1,65 +1,40 @@
 === tests/cases/compiler/strictFunctionTypes1.ts ===
 declare function f1<T>(f1: (x: T) => void, f2: (x: T) => void): (x: T) => void;
 >f1 : <T>(f1: (x: T) => void, f2: (x: T) => void) => (x: T) => void
->T : T
 >f1 : (x: T) => void
 >x : T
->T : T
 >f2 : (x: T) => void
 >x : T
->T : T
 >x : T
->T : T
 
 declare function f2<T>(obj: T, f1: (x: T) => void, f2: (x: T) => void): T;
 >f2 : <T>(obj: T, f1: (x: T) => void, f2: (x: T) => void) => T
->T : T
 >obj : T
->T : T
 >f1 : (x: T) => void
 >x : T
->T : T
 >f2 : (x: T) => void
 >x : T
->T : T
->T : T
 
 declare function f3<T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void): T;
 >f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
->T : T
 >obj : T
->T : T
 >f1 : (x: T) => void
 >x : T
->T : T
 >f2 : (f: (x: T) => void) => void
 >f : (x: T) => void
 >x : T
->T : T
->T : T
 
 interface Func<T> { (x: T): void }
->Func : Func<T>
->T : T
 >x : T
->T : T
 
 declare function f4<T>(f1: Func<T>, f2: Func<T>): Func<T>;
 >f4 : <T>(f1: Func<T>, f2: Func<T>) => Func<T>
->T : T
 >f1 : Func<T>
->Func : Func<T>
->T : T
 >f2 : Func<T>
->Func : Func<T>
->T : T
->Func : Func<T>
->T : T
 
 declare function fo(x: Object): void;
 >fo : (x: Object) => void
 >x : Object
->Object : Object
 
 declare function fs(x: string): void;
 >fs : (x: string) => void
@@ -123,11 +98,7 @@ const x11 = f3(never, fo, fx);  // "def"
 
 declare function foo<T>(a: ReadonlyArray<T>): T;
 >foo : <T>(a: ReadonlyArray<T>) => T
->T : T
 >a : ReadonlyArray<T>
->ReadonlyArray : ReadonlyArray<T>
->T : T
->T : T
 
 let x = foo([]);  // never
 >x : never

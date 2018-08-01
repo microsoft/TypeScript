@@ -6,8 +6,6 @@ module TypeScript {
 >CompilerDiagnostics : typeof CompilerDiagnostics
 
         export interface IDiagnosticWriter {
->IDiagnosticWriter : IDiagnosticWriter
-
             Alert(output: string): void;
 >Alert : (output: string) => void
 >output : string

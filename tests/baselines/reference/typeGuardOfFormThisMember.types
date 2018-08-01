@@ -8,11 +8,9 @@ namespace Test {
 
 		isFSO: this is FileSystemObject;
 >isFSO : boolean
->FileSystemObject : FileSystemObject
 
 		get isFile(): this is File {
 >isFile : boolean
->File : File
 
 			return this instanceof File;
 >this instanceof File : boolean
@@ -27,7 +25,6 @@ namespace Test {
 		}
 		get isDirectory(): this is Directory {
 >isDirectory : boolean
->Directory : Directory
 
 			return this instanceof Directory;
 >this instanceof Directory : boolean
@@ -36,7 +33,6 @@ namespace Test {
 		}
 		isNetworked: this is (Networked & this);
 >isNetworked : boolean
->Networked : Networked
 
 		constructor(public path: string) {}
 >path : string
@@ -59,18 +55,14 @@ namespace Test {
 
 		children: FileSystemObject[];
 >children : FileSystemObject[]
->FileSystemObject : FileSystemObject
 	}
 	export interface Networked {
->Networked : Networked
-
 		host: string;
 >host : string
 	}
 
 	let file: FileSystemObject = new File("foo/bar.txt", "foo");
 >file : FileSystemObject
->FileSystemObject : FileSystemObject
 >new File("foo/bar.txt", "foo") : File
 >File : typeof File
 >"foo/bar.txt" : "foo/bar.txt"
@@ -153,48 +145,28 @@ namespace Test {
 	}
 	
 	interface GenericLeadGuard<T> extends GenericGuard<T> {
->GenericLeadGuard : GenericLeadGuard<T>
->T : T
->GenericGuard : GenericGuard<T>
->T : T
-
 		lead(): void;
 >lead : () => void
 	}
 	
 	interface GenericFollowerGuard<T> extends GenericGuard<T> {
->GenericFollowerGuard : GenericFollowerGuard<T>
->T : T
->GenericGuard : GenericGuard<T>
->T : T
-
 		follow(): void;
 >follow : () => void
 	}
 	
 	interface GenericGuard<T> {
->GenericGuard : GenericGuard<T>
->T : T
-
 		target: T;
 >target : T
->T : T
 
 		isLeader: this is (GenericLeadGuard<T>);
 >isLeader : boolean
->GenericLeadGuard : GenericLeadGuard<T>
->T : T
 
 		isFollower: this is GenericFollowerGuard<T>;
 >isFollower : boolean
->GenericFollowerGuard : GenericFollowerGuard<T>
->T : T
 	}
 
 	let guard: GenericGuard<File>;
 >guard : GenericGuard<File>
->GenericGuard : GenericGuard<T>
->File : File
 
 	if (guard.isLeader) {
 >guard.isLeader : boolean
@@ -220,24 +192,17 @@ namespace Test {
 	}
 
 	interface SpecificGuard {
->SpecificGuard : SpecificGuard
-
 		isMoreSpecific: this is MoreSpecificGuard;
 >isMoreSpecific : boolean
->MoreSpecificGuard : MoreSpecificGuard
 	}
 
 	interface MoreSpecificGuard extends SpecificGuard {
->MoreSpecificGuard : MoreSpecificGuard
->SpecificGuard : SpecificGuard
-
 		do(): void;
 >do : () => void
 	}
 
 	let general: SpecificGuard;
 >general : SpecificGuard
->SpecificGuard : SpecificGuard
 
 	if (general.isMoreSpecific) {
 >general.isMoreSpecific : boolean

@@ -11,12 +11,10 @@ function attr(name: string, value: string): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >name : string
 >value : string
->Accessor : Accessor
 
 function attr(map: any): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >map : any
->Accessor : Accessor
 
 function attr(nameOrMap: any, value?: string): any {
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
@@ -52,12 +50,10 @@ function attr2(name: string, value: string): Accessor;
 >attr2 : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >name : string
 >value : string
->Accessor : Accessor
 
 function attr2(map: any): Accessor;
 >attr2 : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >map : any
->Accessor : Accessor
 
 function attr2(nameOrMap: any, value?: string): string {
 >attr2 : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }

@@ -1,12 +1,7 @@
 === tests/cases/compiler/forAwaitForUnion.ts ===
 async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >f : <T>(source: Iterable<T> | AsyncIterable<T>) => Promise<void>
->T : T
 >source : Iterable<T> | AsyncIterable<T>
->Iterable : Iterable<T>
->T : T
->AsyncIterable : AsyncIterable<T>
->T : T
 
     for await (const x of source) {
 >x : T

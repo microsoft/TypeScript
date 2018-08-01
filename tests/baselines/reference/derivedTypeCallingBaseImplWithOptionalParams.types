@@ -1,14 +1,11 @@
 === tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts ===
 interface MyInterface {
->MyInterface : MyInterface
-
     myMethod(...myList: any[]);
 >myMethod : (...myList: any[]) => any
 >myList : any[]
 }
 class MyClass implements MyInterface {
 >MyClass : MyClass
->MyInterface : MyInterface
 
     myMethod(myList: any[]) { // valid
 >myMethod : (myList: any[]) => void
@@ -18,7 +15,6 @@ class MyClass implements MyInterface {
 
 var x: MyInterface = new MyClass();
 >x : MyInterface
->MyInterface : MyInterface
 >new MyClass() : MyClass
 >MyClass : typeof MyClass
 
@@ -30,7 +26,6 @@ x.myMethod(); // should be valid, but MyClass has no implementation to handle it
 
 var y: MyClass = new MyClass();
 >y : MyClass
->MyClass : MyClass
 >new MyClass() : MyClass
 >MyClass : typeof MyClass
 

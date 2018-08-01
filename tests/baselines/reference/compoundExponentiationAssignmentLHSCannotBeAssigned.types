@@ -235,7 +235,6 @@ x5 **= {};
 
 var x6: E;
 >x6 : E
->E : E
 
 x6 **= b;
 >x6 **= b : number

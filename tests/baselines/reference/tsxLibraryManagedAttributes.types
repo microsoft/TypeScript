@@ -1,51 +1,19 @@
 === tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx ===
 type Defaultize<TProps, TDefaults> =
 >Defaultize : Defaultize<TProps, TDefaults>
->TProps : TProps
->TDefaults : TDefaults
 
     & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}
->K : K
->Extract : Extract<T, U>
->TProps : TProps
->TDefaults : TDefaults
->TProps : TProps
->K : K
-
     & {[K in Exclude<keyof TProps, keyof TDefaults>]: TProps[K]}
->K : K
->Exclude : Exclude<T, U>
->TProps : TProps
->TDefaults : TDefaults
->TProps : TProps
->K : K
-
     & Partial<TDefaults>;
->Partial : Partial<T>
->TDefaults : TDefaults
 
 type InferredPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
 >InferredPropTypes : InferredPropTypes<P>
->P : P
->K : K
->P : P
->P : P
->K : K
->PropTypeChecker : PropTypeChecker<U, TRequired>
->T : T
->U : U
->PropTypeChecker : PropTypeChecker<U, TRequired>
->T : T
->U : U
 >checkedType : unique symbol
 
 declare const checkedType: unique symbol;
 >checkedType : unique symbol
 
 interface PropTypeChecker<U, TRequired = false> {
->PropTypeChecker : PropTypeChecker<U, TRequired>
->U : U
->TRequired : TRequired
 >false : false
 
     (props: any, propName: string, componentName: string, location: any, propFullName: string): boolean;
@@ -57,17 +25,12 @@ interface PropTypeChecker<U, TRequired = false> {
 
     isRequired: PropTypeChecker<U, true>;
 >isRequired : PropTypeChecker<U, true>
->PropTypeChecker : PropTypeChecker<U, TRequired>
->U : U
 >true : true
 
     [checkedType]: TRequired extends true ? U : U | null | undefined;
 >[checkedType] : TRequired extends true ? U : U | null | undefined
 >checkedType : unique symbol
->TRequired : TRequired
 >true : true
->U : U
->U : U
 >null : null
 }
 
@@ -76,101 +39,55 @@ declare namespace PropTypes {
 
     export const number: PropTypeChecker<number>;
 >number : PropTypeChecker<number, false>
->PropTypeChecker : PropTypeChecker<U, TRequired>
 
     export const string: PropTypeChecker<string>;
 >string : PropTypeChecker<string, false>
->PropTypeChecker : PropTypeChecker<U, TRequired>
 
     export const node: PropTypeChecker<ReactNode>;
 >node : PropTypeChecker<ReactNode, false>
->PropTypeChecker : PropTypeChecker<U, TRequired>
->ReactNode : ReactNode
 }
 
 type ReactNode = string | number | ReactComponent<{}, {}>;
 >ReactNode : ReactNode
->ReactComponent : ReactComponent<P, S>
 
 declare class ReactComponent<P={}, S={}> {
 >ReactComponent : ReactComponent<P, S>
->P : P
->S : S
 
     constructor(props: P);
 >props : P
->P : P
 
     props: P & Readonly<{children: ReactNode[]}>;
 >props : P & Readonly<{ children: ReactNode[]; }>
->P : P
->Readonly : Readonly<T>
 >children : ReactNode[]
->ReactNode : ReactNode
 
     setState(s: Partial<S>): S;
 >setState : (s: Partial<S>) => S
 >s : Partial<S>
->Partial : Partial<T>
->S : S
->S : S
 
     render(): ReactNode;
 >render : () => ReactNode
->ReactNode : ReactNode
 }
 
 declare namespace JSX {
->JSX : any
-
     interface Element extends ReactComponent {}
->Element : Element
->ReactComponent : ReactComponent<P, S>
-
     interface IntrinsicElements {}
->IntrinsicElements : IntrinsicElements
-
     type LibraryManagedAttributes<TComponent, TProps> =
 >LibraryManagedAttributes : LibraryManagedAttributes<TComponent, TProps>
->TComponent : TComponent
->TProps : TProps
 
         TComponent extends { defaultProps: infer D; propTypes: infer P; }
->TComponent : TComponent
 >defaultProps : D
->D : D
 >propTypes : P
->P : P
 
             ? Defaultize<TProps & InferredPropTypes<P>, D>
->Defaultize : Defaultize<TProps, TDefaults>
->TProps : TProps
->InferredPropTypes : InferredPropTypes<P>
->P : P
->D : D
-
             : TComponent extends { defaultProps: infer D }
->TComponent : TComponent
 >defaultProps : D
->D : D
 
                 ? Defaultize<TProps, D>
->Defaultize : Defaultize<TProps, TDefaults>
->TProps : TProps
->D : D
-
                 : TComponent extends { propTypes: infer P }
->TComponent : TComponent
 >propTypes : P
->P : P
 
                     ? TProps & InferredPropTypes<P>
->TProps : TProps
->InferredPropTypes : InferredPropTypes<P>
->P : P
-
                     : TProps;
->TProps : TProps
 }
 
 class Component extends ReactComponent {
@@ -356,8 +273,6 @@ const m = <JustDefaultProps foo="no" />; // error, wrong type
 >foo : string
 
 interface FooProps {
->FooProps : FooProps
-
     foo: string;
 >foo : string
 }
@@ -365,7 +280,6 @@ interface FooProps {
 class BothWithSpecifiedGeneric extends ReactComponent<FooProps> {
 >BothWithSpecifiedGeneric : BothWithSpecifiedGeneric
 >ReactComponent : ReactComponent<FooProps, {}>
->FooProps : FooProps
 
     static propTypes = {
 >propTypes : { foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }
@@ -456,7 +370,6 @@ const s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} />; // Error,
 class JustPropTypesWithSpecifiedGeneric extends ReactComponent<FooProps> {
 >JustPropTypesWithSpecifiedGeneric : JustPropTypesWithSpecifiedGeneric
 >ReactComponent : ReactComponent<FooProps, {}>
->FooProps : FooProps
 
     static propTypes = {
 >propTypes : { foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }
@@ -511,7 +424,6 @@ const w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} />; // error,
 class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
 >JustDefaultPropsWithSpecifiedGeneric : JustDefaultPropsWithSpecifiedGeneric
 >ReactComponent : ReactComponent<FooProps, {}>
->FooProps : FooProps
 
     static defaultProps = {
 >defaultProps : { foo: string; }

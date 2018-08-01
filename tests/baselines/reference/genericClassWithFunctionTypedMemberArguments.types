@@ -7,15 +7,11 @@ module ImmediatelyFix {
 
     class C<T> {
 >C : C<T>
->T : T
 
         foo<T>(x: (a: T) => T) {
 >foo : <T>(x: (a: T) => T) => T
->T : T
 >x : (a: T) => T
 >a : T
->T : T
->T : T
 
             return x(null);
 >x(null) : T
@@ -36,9 +32,7 @@ module ImmediatelyFix {
 >c : C<number>
 >foo : <T>(x: (a: T) => T) => T
 ><U>(x: U) => '' : <U>(x: U) => string
->U : U
 >x : U
->U : U
 >'' : ""
 
     var r2 = c.foo<string>(<U>(x: U) => ''); // string 
@@ -48,9 +42,7 @@ module ImmediatelyFix {
 >c : C<number>
 >foo : <T>(x: (a: T) => T) => T
 ><U>(x: U) => '' : <U>(x: U) => string
->U : U
 >x : U
->U : U
 >'' : ""
 
     var r3 = c.foo(x => ''); // {}
@@ -65,14 +57,11 @@ module ImmediatelyFix {
 
     class C2<T> {
 >C2 : C2<T>
->T : T
 
         foo(x: (a: T) => T) {
 >foo : (x: (a: T) => T) => T
 >x : (a: T) => T
 >a : T
->T : T
->T : T
 
             return x(null);
 >x(null) : T
@@ -93,9 +82,7 @@ module ImmediatelyFix {
 >c2 : C2<number>
 >foo : (x: (a: number) => number) => number
 ><U>(x: U) => 1 : <U>(x: U) => number
->U : U
 >x : U
->U : U
 >1 : 1
 
     var r3a = c2.foo(x => 1); // number
@@ -114,18 +101,12 @@ module WithCandidates {
 
     class C<T> {
 >C : C<T>
->T : T
 
         foo2<T, U>(x: T, cb: (a: T) => U) {
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
->T : T
->U : U
 >x : T
->T : T
 >cb : (a: T) => U
 >a : T
->T : T
->U : U
 
             return cb(x);
 >cb(x) : U
@@ -136,7 +117,6 @@ module WithCandidates {
 
     var c: C<number>;
 >c : C<number>
->C : C<T>
 
     var r4 = c.foo2(1, function <Z>(a: Z) { return '' }); // string, contextual signature instantiation is applied to generic functions
 >r4 : string
@@ -146,9 +126,7 @@ module WithCandidates {
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >1 : 1
 >function <Z>(a: Z) { return '' } : <Z>(a: Z) => string
->Z : Z
 >a : Z
->Z : Z
 >'' : ""
 
     var r5 = c.foo2(1, (a) => ''); // string
@@ -170,26 +148,18 @@ module WithCandidates {
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >'' : ""
 ><Z>(a: Z) => 1 : <Z>(a: Z) => number
->Z : Z
 >a : Z
->Z : Z
 >1 : 1
 
     class C2<T, U> {
 >C2 : C2<T, U>
->T : T
->U : U
 
         foo3(x: T, cb: (a: T) => U, y: U) {
 >foo3 : (x: T, cb: (a: T) => U, y: U) => U
 >x : T
->T : T
 >cb : (a: T) => U
 >a : T
->T : T
->U : U
 >y : U
->U : U
 
             return cb(x);
 >cb(x) : U
@@ -200,7 +170,6 @@ module WithCandidates {
 
     var c2: C2<number, string>;
 >c2 : C2<number, string>
->C2 : C2<T, U>
 
     var r7 = c2.foo3(1, <Z>(a: Z) => '', ''); // string
 >r7 : string
@@ -210,9 +179,7 @@ module WithCandidates {
 >foo3 : (x: number, cb: (a: number) => string, y: string) => string
 >1 : 1
 ><Z>(a: Z) => '' : <Z>(a: Z) => string
->Z : Z
 >a : Z
->Z : Z
 >'' : ""
 >'' : ""
 
@@ -230,21 +197,13 @@ module WithCandidates {
 
     class C3<T, U> {
 >C3 : C3<T, U>
->T : T
->U : U
 
         foo3<T,U>(x: T, cb: (a: T) => U, y: U) {
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
->T : T
->U : U
 >x : T
->T : T
 >cb : (a: T) => U
 >a : T
->T : T
->U : U
 >y : U
->U : U
 
             return cb(x);
 >cb(x) : U
@@ -254,16 +213,11 @@ module WithCandidates {
     }
     var c3: C3<number, string>;
 >c3 : C3<number, string>
->C3 : C3<T, U>
 
     function other<T, U>(t: T, u: U) {
 >other : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
         var r10 = c.foo2(1, (x: T) => ''); // error
 >r10 : any
@@ -274,7 +228,6 @@ module WithCandidates {
 >1 : 1
 >(x: T) => '' : (x: T) => string
 >x : T
->T : T
 >'' : ""
 
         var r10 = c.foo2(1, (x) => ''); // string
@@ -297,7 +250,6 @@ module WithCandidates {
 >1 : 1
 >(x: T) => '' : (x: T) => string
 >x : T
->T : T
 >'' : ""
 >'' : ""
 
@@ -310,7 +262,6 @@ module WithCandidates {
 >1 : 1
 >(x: T) => '' : (x: T) => string
 >x : T
->T : T
 >'' : ""
 >1 : 1
 

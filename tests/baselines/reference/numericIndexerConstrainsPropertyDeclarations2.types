@@ -23,19 +23,15 @@ class Foo {
 
     [x: number]: A;
 >x : number
->A : A
 
     1.0: A; // ok
 >1.0 : A
->A : A
 
     2.0: B; // ok
 >2.0 : B
->B : B
 
     "2.5": B // ok
 >"2.5" : B
->B : B
 
     3.0: number; // error
 >3.0 : number
@@ -45,23 +41,17 @@ class Foo {
 }
 
 interface Foo2 {
->Foo2 : Foo2
-
     [x: number]: A;
 >x : number
->A : A
 
     1.0: A; // ok
 >1.0 : A
->A : A
 
     2.0: B; // ok
 >2.0 : B
->B : B
 
     "2.5": B // ok
 >"2.5" : B
->B : B
 
     3.0: number; // error
 >3.0 : number
@@ -75,19 +65,15 @@ var a: {
 
     [x: number]: A;
 >x : number
->A : A
 
     1.0: A; // ok
 >1.0 : A
->A : A
 
     2.0: B; // ok
 >2.0 : B
->B : B
 
     "2.5": B // ok
 >"2.5" : B
->B : B
 
     3.0: number; // error
 >3.0 : number
@@ -101,7 +87,6 @@ var a: {
 var b: { [x: number]: A } = {
 >b : { [x: number]: A; }
 >x : number
->A : A
 >{    1.0: new A(),     2.0: new B(),     "2.5": new B(),    3.0: 1,    "4.0": ''} : { 1.0: A; 2.0: B; "2.5": B; 3.0: number; "4.0": string; }
 
     1.0: new A(), 

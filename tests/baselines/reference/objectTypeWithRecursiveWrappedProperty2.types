@@ -3,17 +3,12 @@
 
 class List<T> {
 >List : List<T>
->T : T
 
     data: T;
 >data : T
->T : T
 
     next: List<List<T>>;
 >next : List<List<T>>
->List : List<T>
->List : List<T>
->T : T
 }
 
 var list1 = new List<number>();

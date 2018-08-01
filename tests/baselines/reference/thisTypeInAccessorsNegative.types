@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts ===
 interface Foo {
->Foo : Foo
-
     n: number;
 >n : number
 
@@ -9,8 +7,6 @@ interface Foo {
 >x : number
 }
 interface Bar {
->Bar : Bar
-
     wrong: "place" | "time" | "method" | "technique";
 >wrong : "place" | "time" | "method" | "technique"
 }
@@ -25,7 +21,6 @@ const mismatch = {
     get x(this: Foo) { return this.n; },
 >x : number
 >this : Foo
->Foo : Foo
 >this.n : number
 >this : Foo
 >n : number
@@ -33,7 +28,6 @@ const mismatch = {
     set x(this: Bar, n) { this.wrong = "method"; }
 >x : number
 >this : Bar
->Bar : Bar
 >n : number
 >this.wrong = "method" : "method"
 >this.wrong : "place" | "time" | "method" | "technique"
@@ -43,7 +37,6 @@ const mismatch = {
 }
 const contextual: Foo = {
 >contextual : Foo
->Foo : Foo
 >{    n: 16,    get x() { return this.n; }} : { n: number; readonly x: number; }
 
     n: 16,

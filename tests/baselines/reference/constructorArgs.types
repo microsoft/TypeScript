@@ -1,7 +1,5 @@
 === tests/cases/compiler/constructorArgs.ts ===
 interface Options {
->Options : Options
-
  value: number;
 >value : number
 }
@@ -20,7 +18,6 @@ class Sub extends Super {
 
  constructor(public options:Options) {
 >options : Options
->Options : Options
 
   super(options.value);
 >super(options.value) : void

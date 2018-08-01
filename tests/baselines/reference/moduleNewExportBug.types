@@ -3,8 +3,6 @@ module mod1 {
 >mod1 : typeof mod1
 
 	interface mInt {
->mInt : mInt
-
 		new (bar:any):any;
 >bar : any
 
@@ -21,7 +19,6 @@ module mod1 {
 var c : mod1.C; // ERROR: C should not be visible
 >c : any
 >mod1 : any
->C : No type information available!
 
 
 

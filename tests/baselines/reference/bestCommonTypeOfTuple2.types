@@ -1,24 +1,18 @@
 === tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts ===
 interface base { }
->base : base
-
 interface base1 { i }
->base1 : base1
 >i : any
 
 class C implements base { c }
 >C : C
->base : base
 >c : any
 
 class D implements base { d }
 >D : D
->base : base
 >d : any
 
 class E implements base { e }
 >E : E
->base : base
 >e : any
 
 class F extends C { f }
@@ -28,7 +22,6 @@ class F extends C { f }
 
 class C1 implements base1 { i = "foo"; c }
 >C1 : C1
->base1 : base1
 >i : string
 >"foo" : "foo"
 >c : any
@@ -42,28 +35,18 @@ class D1 extends C1 { i = "bar"; d }
 
 var t1: [C, base];
 >t1 : [C, base]
->C : C
->base : base
 
 var t2: [C, D];
 >t2 : [C, D]
->C : C
->D : D
 
 var t3: [C1, D1];
 >t3 : [C1, D1]
->C1 : C1
->D1 : D1
 
 var t4: [base1, C1];
 >t4 : [base1, C1]
->base1 : base1
->C1 : C1
 
 var t5: [C1, F]
 >t5 : [C1, F]
->C1 : C1
->F : F
 
 var e11 = t1[4]; // base
 >e11 : base | C
