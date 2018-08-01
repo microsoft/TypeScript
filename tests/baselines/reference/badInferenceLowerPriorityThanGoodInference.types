@@ -1,25 +1,16 @@
 === tests/cases/compiler/badInferenceLowerPriorityThanGoodInference.ts ===
 interface Foo<A> {
->Foo : Foo<A>
->A : A
-
     a: A;
 >a : A
->A : A
 
     b: (x: A) => void;
 >b : (x: A) => void
 >x : A
->A : A
 }
 
 declare function canYouInferThis<A>(fn: () => Foo<A>): A;
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
->A : A
 >fn : () => Foo<A>
->Foo : Foo<A>
->A : A
->A : A
 
 const result = canYouInferThis(() => ({
 >result : { BLAH: number; }
