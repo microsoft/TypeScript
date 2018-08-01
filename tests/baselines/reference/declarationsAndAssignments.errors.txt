@@ -23,15 +23,9 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,5): 
       Property 'x' is missing in type '{ y: false; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(158,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'number[]', but here has type '[number, number]'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(159,19): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'number[]', but here has type '[number]'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(160,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a3' must be of type 'any[]', but here has type '[]'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(176,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a1' must be of type '(string | boolean)[]', but here has type '[string, boolean]'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(177,19): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a2' must be of type 'boolean[]', but here has type '[boolean]'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(178,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a3' must be of type 'any[]', but here has type '[]'.
 
 
-==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (28 errors) ====
+==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (22 errors) ====
     function f0() {
         var [] = [1, "hello"];
         var [x] = [1, "hello"];
@@ -229,49 +223,39 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(178,22):
         var x = ([a, b] = [1, 2]);
     }
     
-    function f20() {
+    function f20(v: [number, number, number]) {
         var x: number;
         var y: number;
         var z: number;
-        var a: number[];
-        var a3: any[];
-        var [...a] = [1, 2, 3];
-        var [x, ...a] = [1, 2, 3];
-                   ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'number[]', but here has type '[number, number]'.
-        var [x, y, ...a] = [1, 2, 3];
-                      ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'number[]', but here has type '[number]'.
-        var [x, y, z, ...a3] = [1, 2, 3];
-                         ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a3' must be of type 'any[]', but here has type '[]'.
-        [...a] = [1, 2, 3];
-        [x, ...a] = [1, 2, 3];
-        [x, y, ...a] = [1, 2, 3];
-        [x, y, z, ...a3] = [1, 2, 3];
+        var a0: [];
+        var a1: [number];
+        var a2: [number, number];
+        var a3: [number, number, number];
+        var [...a3] = v;
+        var [x, ...a2] = v;
+        var [x, y, ...a1] = v;
+        var [x, y, z, ...a0] = v;
+        [...a3] = v;
+        [x, ...a2] = v;
+        [x, y, ...a1] = v;
+        [x, y, z, ...a0] = v;
     }
     
-    function f21() {
+    function f21(v: [number, string, boolean]) {
         var x: number;
         var y: string;
         var z: boolean;
-        var a0: (number | string | boolean)[];
-        var a1: (string | boolean)[];
-        var a2: boolean[];
-        var a3: any[];
-        var [...a0] = [1, "hello", true];
-        var [x, ...a1] = [1, "hello", true];
-                   ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a1' must be of type '(string | boolean)[]', but here has type '[string, boolean]'.
-        var [x, y, ...a2] = [1, "hello", true];
-                      ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a2' must be of type 'boolean[]', but here has type '[boolean]'.
-        var [x, y, z, ...a3] = [1, "hello", true];
-                         ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a3' must be of type 'any[]', but here has type '[]'.
-        [...a0] = [1, "hello", true];
-        [x, ...a1] = [1, "hello", true];
-        [x, y, ...a2] = [1, "hello", true];
-        [x, y, z, ...a3] = [1, "hello", true];
+        var a0: [number, string, boolean];
+        var a1: [string, boolean];
+        var a2: [boolean];
+        var a3: [];
+        var [...a0] = v;
+        var [x, ...a1] = v;
+        var [x, y, ...a2] = v;
+        var [x, y, z, ...a3] = v;
+        [...a0] = v;
+        [x, ...a1] = v;
+        [x, y, ...a2] = v;
+        [x, y, z, ...a3] = v;
     }
     
