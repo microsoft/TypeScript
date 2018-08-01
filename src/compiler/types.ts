@@ -2625,7 +2625,7 @@ namespace ts {
         /* @internal */ localJsxNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
 
-        /*@internal*/ getExportedModulesFromDeclarationEmit?(): ExportedModulesFromDeclarationEmit;
+        /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     /*@internal*/

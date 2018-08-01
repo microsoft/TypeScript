@@ -234,10 +234,10 @@ namespace ts {
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
             if (exportedModuleSpecifiers || exportedModuleSymbolsUsingImportTypeNodes) {
-                updated.getExportedModulesFromDeclarationEmit = () => ({
+                updated.exportedModulesFromDeclarationEmit = {
                     exportedModuleSpecifiers: exportedModuleSpecifiers || emptyArray,
                     exportedModuleSymbolsUsingImportTypeNodes: exportedModuleSymbolsUsingImportTypeNodes || emptyArray
-                });
+                };
             }
             return updated;
 

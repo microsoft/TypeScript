@@ -226,8 +226,7 @@ namespace ts {
                 printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
                 if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
                     const sourceFile = declarationTransform.transformed[0] as SourceFile;
-                    exportedModulesFromDeclarationEmit = sourceFile.getExportedModulesFromDeclarationEmit &&
-                        sourceFile.getExportedModulesFromDeclarationEmit();
+                    exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
                 }
             }
             declarationTransform.dispose();
