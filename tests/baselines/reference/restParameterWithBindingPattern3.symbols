@@ -19,3 +19,9 @@ function d(...[a, , , d]: [boolean, string, number]) { }
 >a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 6, 15))
 >d : Symbol(d, Decl(restParameterWithBindingPattern3.ts, 6, 21))
 
+function e(...{0: a = 1, 1: b = true, ...rest: rest}: [boolean, string, number]) { }
+>e : Symbol(e, Decl(restParameterWithBindingPattern3.ts, 6, 56))
+>a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 8, 15))
+>b : Symbol(b, Decl(restParameterWithBindingPattern3.ts, 8, 24))
+>rest : Symbol(rest, Decl(restParameterWithBindingPattern3.ts, 8, 37))
+

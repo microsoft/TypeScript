@@ -2,9 +2,12 @@ tests/cases/compiler/restParameterWithBindingPattern3.ts(1,16): error TS2322: Ty
 tests/cases/compiler/restParameterWithBindingPattern3.ts(1,23): error TS2322: Type 'true' is not assignable to type 'string'.
 tests/cases/compiler/restParameterWithBindingPattern3.ts(3,23): error TS1186: A rest element cannot have an initializer.
 tests/cases/compiler/restParameterWithBindingPattern3.ts(7,23): error TS2493: Tuple type '[boolean, string, number]' with length '3' cannot be assigned to tuple with length '4'.
+tests/cases/compiler/restParameterWithBindingPattern3.ts(9,19): error TS2322: Type '1' is not assignable to type 'boolean'.
+tests/cases/compiler/restParameterWithBindingPattern3.ts(9,29): error TS2322: Type 'true' is not assignable to type 'string'.
+tests/cases/compiler/restParameterWithBindingPattern3.ts(9,48): error TS2566: A rest element cannot have a property name.
 
 
-==== tests/cases/compiler/restParameterWithBindingPattern3.ts (4 errors) ====
+==== tests/cases/compiler/restParameterWithBindingPattern3.ts (7 errors) ====
     function a(...[a = 1, b = true]: string[]) { }
                    ~
 !!! error TS2322: Type '1' is not assignable to type 'string'.
@@ -20,3 +23,11 @@ tests/cases/compiler/restParameterWithBindingPattern3.ts(7,23): error TS2493: Tu
     function d(...[a, , , d]: [boolean, string, number]) { }
                           ~
 !!! error TS2493: Tuple type '[boolean, string, number]' with length '3' cannot be assigned to tuple with length '4'.
+    
+    function e(...{0: a = 1, 1: b = true, ...rest: rest}: [boolean, string, number]) { }
+                      ~
+!!! error TS2322: Type '1' is not assignable to type 'boolean'.
+                                ~
+!!! error TS2322: Type 'true' is not assignable to type 'string'.
+                                                   ~~~~
+!!! error TS2566: A rest element cannot have a property name.
