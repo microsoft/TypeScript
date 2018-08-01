@@ -142,7 +142,7 @@ namespace ts {
     export function getReturnStatementsWithPromiseCallbacks(node: Node): Node[] {
         const returnStatements: Node[] = [];
         if (isFunctionLike(node)) {
-            forEachChild(node, visit); 
+            forEachChild(node, visit);
         }
         else {
             visit(node);
