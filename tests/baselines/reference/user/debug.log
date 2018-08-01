@@ -5,7 +5,8 @@ node_modules/debug/src/browser.js(14,41): error TS2304: Cannot find name 'chrome
 node_modules/debug/src/browser.js(15,21): error TS2304: Cannot find name 'chrome'.
 node_modules/debug/src/browser.js(48,47): error TS2339: Property 'process' does not exist on type 'Window'.
 node_modules/debug/src/browser.js(48,65): error TS2339: Property 'process' does not exist on type 'Window'.
-node_modules/debug/src/browser.js(59,139): error TS2551: Property 'WebkitAppearance' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitAppearance'?
+node_modules/debug/src/browser.js(59,99): error TS2339: Property 'style' does not exist on type 'HTMLElement'.
+node_modules/debug/src/browser.js(59,133): error TS2339: Property 'style' does not exist on type 'HTMLElement'.
 node_modules/debug/src/browser.js(61,73): error TS2339: Property 'firebug' does not exist on type 'Console'.
 node_modules/debug/src/browser.js(187,13): error TS2304: Cannot find name 'LocalStorage'.
 node_modules/debug/src/debug.js(25,1): error TS2323: Cannot redeclare exported variable 'names'.
