@@ -340,8 +340,8 @@ namespace ts.codefix {
                     const indices = getReturnStatementsWithPromiseCallbacksIndices(func.body);
                     let refactoredStmts: Statement[] = [];
 
-                    for (let i=0; i<func.body.statements.length; i++) {
-                        let statement = func.body.statements[i];
+                    for (let i = 0; i < func.body.statements.length; i++) {
+                        const statement = func.body.statements[i];
                         if (indices.filter(elem => elem === i).length) {
                             refactoredStmts = refactoredStmts.concat(getInnerCallbackBody(checker, [statement], synthNamesMap, lastDotThenMap, context, constIdentifiers, prevArgName));
                         }
@@ -374,9 +374,9 @@ namespace ts.codefix {
     }
 
     function getReturnStatementsWithPromiseCallbacksIndices(block: Block): number[] {
-        let indices: number[] = [];
+        const indices: number[] = [];
         for (let i = 0; i < block.statements.length; i++) {
-            let statement = block.statements[i];
+            const statement = block.statements[i];
             if (getReturnStatementsWithPromiseCallbacks(statement).length) {
                 indices.push(i);
            }
