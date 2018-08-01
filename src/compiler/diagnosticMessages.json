@@ -3662,7 +3662,7 @@
 
     "Do not emit insignificant whitespace or insignificant trailing semicolons to output.": {
         "category": "Message",
-        "code": 6205
+        "code": 6206
     },
 
 
