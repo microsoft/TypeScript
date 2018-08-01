@@ -20,7 +20,7 @@ namespace ts.codefix {
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
-       const synthNamesMap: Map<[Identifier, number]> = createMap(); // number indicates the number of times it is used after declaration
+        const synthNamesMap: Map<[Identifier, number]> = createMap(); // number indicates the number of times it is used after declaration
 
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context);
         const lastDotThenMap = findLastDotThens(functionToConvertRenamed, checker);
@@ -62,7 +62,7 @@ namespace ts.codefix {
                 changes.replaceNodeWithNodes(sourceFile, statement, newNodes);
             }
         }
-   }
+    }
 
     function getConstIdentifiers(synthNamesMap: Map<[Identifier, number]>): Identifier[] {
         const constIdentifiers: Identifier[] = [];
@@ -337,20 +337,26 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
                 // Arrow functions with block bodies { } will enter this control flow
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    const innerRetStmts = getReturnStatementsWithPromiseCallbacks(func.body);
-                    const innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, lastDotThenMap, context, constIdentifiers, prevArgName);
+                    const indices = getReturnStatementsWithPromiseCallbacksIndices(func.body);
+                    let refactoredStmts: Statement[] = [];
 
-
-                    if (innerCbBody.length > 0) {
-                        return createNodeArray(innerCbBody);
+                    for (let i=0; i<func.body.statements.length; i++) {
+                        let statement = func.body.statements[i];
+                        if (indices.filter(elem => elem === i).length) {
+                            refactoredStmts = refactoredStmts.concat(getInnerCallbackBody(checker, [statement], synthNamesMap, lastDotThenMap, context, constIdentifiers, prevArgName));
+                        }
+                        else {
+                            refactoredStmts.push(statement);
+                        }
                     }
 
-                    return nextDotThen ? removeReturns(func.body.statements, prevArgName![0], constIdentifiers) : getSynthesizedDeepClones(func.body.statements);
+                    return nextDotThen ? removeReturns(createNodeArray(refactoredStmts), prevArgName![0], constIdentifiers) : getSynthesizedDeepClones(createNodeArray(refactoredStmts));
                 }
                 else {
                     const funcBody = (<ArrowFunction>func).body;
                     const innerRetStmts = getReturnStatementsWithPromiseCallbacks(createReturn(funcBody as Expression));
                     const innerCbBody = getInnerCallbackBody(checker, innerRetStmts, synthNamesMap, lastDotThenMap, context, constIdentifiers, prevArgName);
+
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
                     }
@@ -365,6 +371,17 @@ namespace ts.codefix {
                 break;
         }
         return createNodeArray([]);
+    }
+
+    function getReturnStatementsWithPromiseCallbacksIndices(block: Block): number[] {
+        let indices: number[] = [];
+        for (let i = 0; i < block.statements.length; i++) {
+            let statement = block.statements[i];
+            if (getReturnStatementsWithPromiseCallbacks(statement).length) {
+                indices.push(i);
+           }
+        }
+        return indices;
     }
 
     function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[]): NodeArray<Statement> {
