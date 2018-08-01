@@ -80,14 +80,16 @@ namespace ts.codefix {
         }
 
         function willBeParsed(node: Expression): boolean {
-            return returnsAPromise(node, checker) || (isCallExpression(node) && (isCallback(node, "then", checker) || isCallback(node, "catch", checker)));
+            let nodeType = checker.getTypeAtLocation(node);
+            return !!nodeType && (returnsAPromise(node, nodeType, checker) || (isCallExpression(node) && !!checker.getPromisedTypeOfPromise(nodeType) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"))));
         }
 
         // maps nodes to boolean - true indicates that there is another .then() in the callback chain
         const lastDotThen: Map<boolean> = createMap();
 
         forEachChild(func.body, function visit(node: Node) {
-            if (isCallExpression(node) && isCallback(node, "then", checker)) {
+            let nodeType = checker.getTypeAtLocation(node);
+            if (isCallExpression(node) && nodeType && !!checker.getPromisedTypeOfPromise(nodeType) && hasPropertyAccessExpressionWithName(node, "then")) {
                 // false - there is no following .then() in the callback chain
                 lastDotThen.set(getNodeId(node).toString(), false);
 
@@ -192,13 +194,8 @@ namespace ts.codefix {
         return numVarsSameName === 0 ? [name, 1] : [createIdentifier(name.text + "_" + numVarsSameName), numVarsSameName];
     }
 
-    function returnsAPromise(node: Expression, checker: TypeChecker): boolean {
-        const nodeType = checker.getTypeAtLocation(node);
-        if (!nodeType) {
-            return false;
-        }
-
-        return !!checker.getPromisedTypeOfPromise(nodeType) && (!isCallExpression(node) || !isCallback(node, "then", checker) && !isCallback(node, "catch", checker) && !isCallback(node, "finally", checker));
+    function returnsAPromise(node: Expression, nodeType: Type, checker: TypeChecker): boolean {
+        return (!isCallExpression(node) || !hasPropertyAccessExpressionWithName(node, "then") && !hasPropertyAccessExpressionWithName(node, "catch")) && !!checker.getPromisedTypeOfPromise(nodeType);
     }
 
     // dispatch function to recursively build the refactoring
@@ -208,16 +205,18 @@ namespace ts.codefix {
             return [];
         }
 
-        if (isCallExpression(node) && isCallback(node, "then", checker)) {
+        const nodeType = checker.getTypeAtLocation(node);
+
+        if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "then") && nodeType && !!checker.getPromisedTypeOfPromise(nodeType)) {
             return parseThen(node, checker, outermostParent, synthNamesMap, lastDotThenMap, context, constIdentifiers, prevArgName);
         }
-        else if (isCallExpression(node) && isCallback(node, "catch", checker)) {
+        else if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "catch") && nodeType && !!checker.getPromisedTypeOfPromise(nodeType)) {
             return parseCatch(node, checker, synthNamesMap, lastDotThenMap, context, constIdentifiers, prevArgName);
         }
         else if (isPropertyAccessExpression(node)) {
             return parseCallback(node.expression, checker, outermostParent, synthNamesMap, lastDotThenMap, context, constIdentifiers, prevArgName);
         }
-        else if (returnsAPromise(node, checker)) {
+        else if (nodeType && returnsAPromise(node, nodeType, checker)) {
             return parsePromiseCall(node, lastDotThenMap, constIdentifiers, prevArgName);
         }
 
@@ -423,17 +422,14 @@ namespace ts.codefix {
         return innerCbBody;
     }
 
-    function isCallback(node: CallExpression, funcName: string, checker: TypeChecker): boolean {
-        if (node.expression.kind !== SyntaxKind.PropertyAccessExpression) {
+    function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
+
+        if (!isPropertyAccessExpression(node.expression)) {
             return false;
         }
 
-        const nodeType = checker.getTypeAtLocation(node);
-        if (!nodeType) {
-            return false;
-        }
-
-        return (<PropertyAccessExpression>node.expression).name.text === funcName && !!checker.getPromisedTypeOfPromise(nodeType);
+        return node.expression.name.text === funcName;
+        
     }
 
     function getArgName(funcNode: Node, synthNamesMap: Map<[Identifier, number]>, checker: TypeChecker): [Identifier, number] {
