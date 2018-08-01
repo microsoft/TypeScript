@@ -9077,17 +9077,17 @@ namespace ts {
 
         /**
          * Returns if a type is or consists of a JSLiteral object type
+         * In addition to objects which are directly literals,
+         * * unions where every element is a jsliteral
+         * * intersections where at least one element is a jsliteral
+         * * and instantiable types constrained to a jsliteral
+         * Should all count as literals and not print errors on access or assignment of possibly existing properties.
+         * This mirrors the behavior of the index signature propagation, to which this behaves similarly (but doesn't affect assignability or inference).
          */
         function isJSLiteralType(type: Type): boolean {
             if (noImplicitAny) {
                 return false; // Flag is meaningless under `noImplicitAny` mode
             }
-            // In addition to objects which are directly literals,
-            // * unions where every element is a jsliteral
-            // * intersections where at least one element is a jsliteral
-            // * and instantiable types constrained to a jsliteral
-            // Should all count as literals and not print errors on access or assignment of imaginary properties.
-            // This mirrors the behavior of the index signature propagation in the old implementation which utilized one.
             if (getObjectFlags(type) & ObjectFlags.JSLiteral) {
                 return true;
             }
