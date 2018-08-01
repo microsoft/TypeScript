@@ -20548,9 +20548,13 @@ namespace ts {
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
                 // Skip parameters, return signature with return type that retains noncontextual parts so inferences can still be drawn in an early stage
                 if (!getEffectiveReturnTypeNode(node) && hasContextSensitiveReturnExpression(node)) {
+                    const links = getNodeLinks(node);
+                    if (links.contextFreeType) {
+                        return links.contextFreeType;
+                    }
                     const returnType = getReturnTypeFromBody(node, checkMode);
                     const singleReturnSignature = createSignature(undefined, undefined, undefined, emptyArray, returnType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-                    return createAnonymousType(node.symbol, emptySymbols, [singleReturnSignature], emptyArray, undefined, undefined);
+                    return links.contextFreeType = createAnonymousType(node.symbol, emptySymbols, [singleReturnSignature], emptyArray, undefined, undefined);
                 }
                 return anyFunctionType;
             }
