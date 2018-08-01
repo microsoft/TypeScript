@@ -15,7 +15,6 @@ for (aBoolean in {}) { }
 
 var aRegExp: RegExp;
 >aRegExp : RegExp
->RegExp : RegExp
 
 for (aRegExp in {}) { }
 >aRegExp : RegExp
@@ -86,9 +85,7 @@ for (var x in (<T>(x: T) => x)) { }
 >x : string
 >(<T>(x: T) => x) : <T>(x: T) => T
 ><T>(x: T) => x : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 for (var x in function (x: string, y: number) { return x + y }) { }
@@ -195,8 +192,6 @@ class B extends A {
 }
 
 interface I {
->I : I
-
     id: number;
 >id : number
 
@@ -205,7 +200,6 @@ interface I {
 }
 var i: I;
 >i : I
->I : I
 
 for (var x in i[42]) { } 
 >x : string

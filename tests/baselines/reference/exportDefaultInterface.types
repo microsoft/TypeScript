@@ -1,11 +1,9 @@
 === tests/cases/compiler/a.ts ===
 export default interface A { value: number; }
->A : A
 >value : number
 
 var a: A;
 >a : A
->A : A
 
 a.value.toExponential();
 >a.value.toExponential() : string
@@ -21,7 +19,6 @@ import A from './a';
 
 var a: A;
 >a : A
->A : A
 
 a.value.toExponential();
 >a.value.toExponential() : string

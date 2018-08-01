@@ -1,10 +1,8 @@
 === tests/cases/compiler/parameterNamesInTypeParameterList.ts ===
 function f0<T extends typeof a>(a: T) {
 >f0 : <T extends any>(a: T) => void
->T : T
 >a : any
 >a : T
->T : T
 
 	a.b;
 >a.b : any
@@ -14,11 +12,9 @@ function f0<T extends typeof a>(a: T) {
 
 function f1<T extends typeof a>({a}: {a:T}) {
 >f1 : <T extends any>({ a }: { a: T; }) => void
->T : T
 >a : any
 >a : T
 >a : T
->T : T
 
 	a.b;
 >a.b : any
@@ -28,10 +24,8 @@ function f1<T extends typeof a>({a}: {a:T}) {
 
 function f2<T extends typeof a>([a]: T[]) {
 >f2 : <T extends any>([a]: T[]) => void
->T : T
 >a : any
 >a : T
->T : T
 
 	a.b;
 >a.b : any
@@ -44,10 +38,8 @@ class A {
 
 	m0<T extends typeof a>(a: T) {
 >m0 : <T extends any>(a: T) => void
->T : T
 >a : any
 >a : T
->T : T
 
 		a.b
 >a.b : any
@@ -56,11 +48,9 @@ class A {
 	}
 	m1<T extends typeof a>({a}: {a:T}) {
 >m1 : <T extends any>({ a }: { a: T; }) => void
->T : T
 >a : any
 >a : T
 >a : T
->T : T
 
 		a.b
 >a.b : any
@@ -69,10 +59,8 @@ class A {
 	}
 	m2<T extends typeof a>([a]: T[]) {
 >m2 : <T extends any>([a]: T[]) => void
->T : T
 >a : any
 >a : T
->T : T
 
 		a.b
 >a.b : any

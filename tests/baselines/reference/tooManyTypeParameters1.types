@@ -1,7 +1,6 @@
 === tests/cases/compiler/tooManyTypeParameters1.ts ===
 function f<T>() { }
 >f : <T>() => void
->T : T
 
 f<string, string>();
 >f<string, string>() : any
@@ -10,7 +9,6 @@ f<string, string>();
 var x = <T>() => {};
 >x : <T>() => void
 ><T>() => {} : <T>() => void
->T : T
 
 x<number,number>();
 >x<number,number>() : any
@@ -18,20 +16,13 @@ x<number,number>();
 
 class C<T> {}
 >C : C<T>
->T : T
 
 var c = new C<Date,Date>();
 >c : any
 >new C<Date,Date>() : any
 >C : typeof C
->Date : Date
->Date : Date
 
 interface I<T> {}
->I : I<T>
->T : T
-
 var i: I<number,number>;
 >i : any
->I : I<T>
 

@@ -3,16 +3,13 @@
 
 declare function call<TS extends unknown[]>(
 >call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
->TS : TS
 
     handler: (...args: TS) => void,
 >handler : (...args: TS) => void
 >args : TS
->TS : TS
 
     ...args: TS): void;
 >args : TS
->TS : TS
   
 call((x: number, y: number) => x + y);
 >call((x: number, y: number) => x + y) : any

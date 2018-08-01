@@ -3,46 +3,35 @@ module M {
 >M : typeof M
 
     export interface I {
->I : I
-
         works:()=>R;
 >works : () => R
->R : R
 
         alsoWorks:()=>R;
 >alsoWorks : () => R
->R : R
 
         doesntWork:()=>R;
 >doesntWork : () => R
->R : R
     }
 
     export interface R {
->R : R
-
         anything:number;
 >anything : number
 
         oneI:I;
 >oneI : I
->I : I
     }
 
     export class C implements I {
 >C : C
->I : I
 
         constructor(public x:number) {
 >x : number
         }
         works():R {
 >works : () => R
->R : R
 
             return <R>({ anything: 1 });
 ><R>({ anything: 1 }) : R
->R : R
 >({ anything: 1 }) : { anything: number; }
 >{ anything: 1 } : { anything: number; }
 >anything : number
@@ -51,7 +40,6 @@ module M {
 
         doesntWork():R {
 >doesntWork : () => R
->R : R
 
             return { anything:1, oneI:this };
 >{ anything:1, oneI:this } : { anything: number; oneI: this; }
@@ -63,11 +51,9 @@ module M {
 
         worksToo():R {
 >worksToo : () => R
->R : R
 
             return <R>({ oneI: this });
 ><R>({ oneI: this }) : R
->R : R
 >({ oneI: this }) : { oneI: this; }
 >{ oneI: this } : { oneI: this; }
 >oneI : this

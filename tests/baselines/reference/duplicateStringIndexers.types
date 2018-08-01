@@ -5,8 +5,6 @@ module test {
 >test : typeof test
 
     interface Number {
->Number : Number
-
         [x: string]: string;
 >x : string
 
@@ -15,8 +13,6 @@ module test {
     }
 
     interface String {
->String : String
-
         [x: string]: string;
 >x : string
 
@@ -25,16 +21,11 @@ module test {
     }
 
     interface Array<T> {
->Array : Array<T>
->T : T
+        [x: string]: T;
+>x : string
 
         [x: string]: T;
 >x : string
->T : T
-
-        [x: string]: T;
->x : string
->T : T
     }
 
     class C {
@@ -48,8 +39,6 @@ module test {
     }
 
     interface I {
->I : I
-
         [x: string]: string;
 >x : string
 

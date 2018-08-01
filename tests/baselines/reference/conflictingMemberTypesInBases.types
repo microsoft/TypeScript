@@ -1,30 +1,17 @@
 === tests/cases/compiler/conflictingMemberTypesInBases.ts ===
 interface A {
->A : A
-
     m: string;
 >m : string
 }
 interface B extends A {
->B : B
->A : A
 }
 interface C {
->C : C
-
     m: number;
 >m : number
 }
 interface D extends C {
->D : D
->C : C
 }
 
 interface E extends B { } // Error here for extending B and D
->E : E
->B : B
-
 interface E extends D { } // No duplicate error here
->E : E
->D : D
 

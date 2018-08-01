@@ -27,8 +27,8 @@
 ////};
 
 verify.quickInfos({
-    uKind: ['(property) A.kind: "a"', "Kind A "],
-    uProp: ["(property) A.prop: number", "Prop A "],
+    uKind: ['(property) A.kind: "a"', "Kind A"],
+    uProp: ["(property) A.prop: number", "Prop A"],
     u2Kind: '(property) kind: "bogus"',
     u2Prop: "(property) prop: number",
 });

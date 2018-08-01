@@ -15,22 +15,16 @@ function f1() {
 
         x: E;
 >x : E
->E : E
     }
     interface I {
->I : I
-
         x: E;
 >x : E
->E : E
     }
     type A = I[];
 >A : I[]
->I : I
 
     let a: A = [new C()];
 >a : I[]
->A : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -69,22 +63,16 @@ function f2() {
 
             x: E;
 >x : E
->E : E
         }
         interface I {
->I : I
-
             x: E;
 >x : E
->E : E
         }
         type A = I[];
 >A : I[]
->I : I
 
         let a: A = [new C()];
 >a : I[]
->A : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -131,22 +119,16 @@ function f3(b: boolean) {
 
                 x: E;
 >x : E
->E : E
             }
             interface I {
->I : I
-
                 x: E;
 >x : E
->E : E
             }
             type A = I[];
 >A : I[]
->I : I
 
             let a: A = [new C()];
 >a : I[]
->A : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -171,22 +153,16 @@ function f3(b: boolean) {
 
                 x: E;
 >x : E
->E : E
             }
             interface J {
->J : J
-
                 x: E;
 >x : E
->E : E
             }
             type C = J[];
 >C : J[]
->J : J
 
             let c: C = [new A()];
 >c : J[]
->C : J[]
 >[new A()] : A[]
 >new A() : A
 >A : typeof A
@@ -228,7 +204,6 @@ function f5() {
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C
@@ -251,7 +226,6 @@ function f5() {
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C
@@ -276,7 +250,6 @@ class A {
 
             x: E;
 >x : E
->E : E
         }
     }
     m() {
@@ -295,7 +268,6 @@ class A {
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C
@@ -317,7 +289,6 @@ class A {
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C

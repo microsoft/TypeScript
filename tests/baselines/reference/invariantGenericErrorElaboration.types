@@ -3,7 +3,6 @@
 
 const wat: Runtype<any> = Num;
 >wat : Runtype<any>
->Runtype : Runtype<A>
 >Num : Num
 
 const Foo = Obj({ foo: Num })
@@ -15,64 +14,32 @@ const Foo = Obj({ foo: Num })
 >Num : Num
 
 interface Runtype<A> {
->Runtype : Runtype<A>
->A : A
-
   constraint: Constraint<this>
 >constraint : Constraint<this>
->Constraint : Constraint<A>
 
   witness: A
 >witness : A
->A : A
 }
 
 interface Num extends Runtype<number> {
->Num : Num
->Runtype : Runtype<A>
-
   tag: 'number'
 >tag : "number"
 }
 declare const Num: Num
 >Num : Num
->Num : Num
 
 interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in keyof O]: O[K]['witness'] }> {}
->Obj : Obj<O>
->O : O
->_ : _
->Runtype : Runtype<A>
->Runtype : Runtype<A>
->K : K
->O : O
->O : O
->K : K
-
 declare function Obj<O extends { [_: string]: Runtype<any> }>(fields: O): Obj<O>;
 >Obj : <O extends { [_: string]: Runtype<any>; }>(fields: O) => Obj<O>
->O : O
 >_ : string
->Runtype : Runtype<A>
 >fields : O
->O : O
->Obj : Obj<O>
->O : O
 
 interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
->Constraint : Constraint<A>
->A : A
->Runtype : Runtype<A>
->Runtype : Runtype<A>
->A : A
-
   underlying: A,
 >underlying : A
->A : A
 
   check: (x: A['witness']) => void,
 >check : (x: A["witness"]) => void
 >x : A["witness"]
->A : A
 }
 

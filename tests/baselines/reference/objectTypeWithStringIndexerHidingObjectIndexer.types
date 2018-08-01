@@ -3,11 +3,8 @@
 // no errors expected below 
 
 interface Object {
->Object : Object
-
     [x: string]: Object;
 >x : string
->Object : Object
 }
 var o = {};
 >o : {}
@@ -30,7 +27,6 @@ class C {
 }
 var c: C;
 >c : C
->C : C
 
 var r2: string = c[''];
 >r2 : string
@@ -39,8 +35,6 @@ var r2: string = c[''];
 >'' : ""
 
 interface I {
->I : I
-
     bar: string;
 >bar : string
 
@@ -49,7 +43,6 @@ interface I {
 }
 var i: I;
 >i : I
->I : I
 
 var r3: string = i[''];
 >r3 : string

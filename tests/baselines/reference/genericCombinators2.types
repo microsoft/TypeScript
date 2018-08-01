@@ -1,72 +1,40 @@
 === tests/cases/compiler/genericCombinators2.ts ===
 interface Collection<T, U> {
->Collection : Collection<T, U>
->T : T
->U : U
-
     length: number;
 >length : number
 
     add(x: T, y: U): void;
 >add : (x: T, y: U) => void
 >x : T
->T : T
 >y : U
->U : U
 
     remove(x: T, y: U): boolean;
 >remove : (x: T, y: U) => boolean
 >x : T
->T : T
 >y : U
->U : U
 }
 
 interface Combinators {
->Combinators : Combinators
-
     map<T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>;
 >map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
->T : T
->U : U
 >c : Collection<T, U>
->Collection : Collection<T, U>
->T : T
->U : U
 >f : (x: T, y: U) => any
 >x : T
->T : T
 >y : U
->U : U
->Collection : Collection<T, U>
 
     map<T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>;
 >map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
->T : T
->U : U
->V : V
 >c : Collection<T, U>
->Collection : Collection<T, U>
->T : T
->U : U
 >f : (x: T, y: U) => V
 >x : T
->T : T
 >y : U
->U : U
->V : V
->Collection : Collection<T, U>
->T : T
->V : V
 }
 
 var _: Combinators;
 >_ : Combinators
->Combinators : Combinators
 
 var c2: Collection<number, string>;
 >c2 : Collection<number, string>
->Collection : Collection<T, U>
 
 var rf1 = (x: number, y: string) => { return x.toFixed() };
 >rf1 : (x: number, y: string) => string
@@ -84,7 +52,6 @@ var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
 >_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
 >_ : Combinators
 >map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
->Date : Date
 >c2 : Collection<number, string>
 >(x, y) => { return x.toFixed() } : (x: number, y: string) => string
 >x : number
@@ -100,7 +67,6 @@ var r5b = _.map<number, string, Date>(c2, rf1);
 >_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
 >_ : Combinators
 >map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
->Date : Date
 >c2 : Collection<number, string>
 >rf1 : (x: number, y: string) => string
 

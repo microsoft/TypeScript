@@ -2,23 +2,15 @@
 // same example but with constraints on each type parameter
 class Chain2<T extends { length: number }> {
 >Chain2 : Chain2<T>
->T : T
 >length : number
 
     constructor(public value: T) { }
 >value : T
->T : T
 
     then<S extends Function>(cb: (x: T) => S): Chain2<S> {
 >then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
->S : S
->Function : Function
 >cb : (x: T) => S
 >x : T
->T : T
->S : S
->Chain2 : Chain2<T>
->S : S
 
         var result = cb(this.value);
 >result : S

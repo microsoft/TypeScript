@@ -1,12 +1,9 @@
 === tests/cases/compiler/inheritedFunctionAssignmentCompatibility.ts ===
 interface IResultCallback extends Function { }
->IResultCallback : IResultCallback
->Function : Function
 
 function fn(cb: IResultCallback) { }
 >fn : (cb: IResultCallback) => void
 >cb : IResultCallback
->IResultCallback : IResultCallback
 
 fn((a, b) => true);
 >fn((a, b) => true) : void

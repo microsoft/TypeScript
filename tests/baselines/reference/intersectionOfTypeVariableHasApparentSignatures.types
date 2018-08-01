@@ -1,19 +1,11 @@
 === tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts ===
 interface Component<P> {
->Component : Component<P>
->P : P
-
     props: Readonly<P> & Readonly<{ children?: {} }>;
 >props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
->Readonly : Readonly<T>
->P : P
->Readonly : Readonly<T>
 >children : {} | undefined
 }
 
 interface Props {
->Props : Props
-
     children?: (items: {x: number}) => void
 >children : ((items: { x: number; }) => void) | undefined
 >items : { x: number; }
@@ -22,11 +14,7 @@ interface Props {
 
 declare function f<T extends Props>(i: Component<T>): void;
 >f : <T extends Props>(i: Component<T>) => void
->T : T
->Props : Props
 >i : Component<T>
->Component : Component<P>
->T : T
 
 f({
 >f({    props: {        children: (({ x }) => { })    }}) : void

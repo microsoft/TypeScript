@@ -37,11 +37,9 @@ function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
 }
 function generic<T extends { x, y }>(t: T) {
 >generic : <T extends { x: any; y: any; }>(t: T) => any
->T : T
 >x : any
 >y : any
 >t : T
->T : T
 
     let { x, ...rest } = t;
 >x : any

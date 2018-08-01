@@ -1,17 +1,11 @@
 === tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts ===
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 >f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
->T : T
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >callbacks : ((x: T) => any)[]
->Array : T[]
 >x : T
->T : T
 
 interface Stuff {
->Stuff : Stuff
-
     x: number;
 >x : number
 
@@ -26,7 +20,6 @@ export const a = f<Stuff> `
 >a : void
 >f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : void
 >f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
->Stuff : Stuff
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 
     hello
@@ -57,37 +50,22 @@ export const a = f<Stuff> `
 
 declare function g<Input, T, U, V>(
 >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
->Input : Input
->T : T
->U : U
->V : V
 
     strs: TemplateStringsArray,
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 
     t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V): T | U | V;
 >t : (i: Input) => T
 >i : Input
->Input : Input
->T : T
 >u : (i: Input) => U
 >i : Input
->Input : Input
->U : U
 >v : (i: Input) => V
 >i : Input
->Input : Input
->V : V
->T : T
->U : U
->V : V
 
 export const b = g<Stuff, number, string, boolean> `
 >b : string | number | boolean
 >g<Stuff, number, string, boolean> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string | number | boolean
 >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
->Stuff : Stuff
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 
     hello
@@ -121,17 +99,12 @@ declare let obj: {
 
     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
 >prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->T : T
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : (input: T) => T
 >input : T
->T : T
->T : T
 
         returnedObjProp: T
 >returnedObjProp : T
->T : T
     }
 }
 
@@ -141,7 +114,6 @@ export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
 >obj["prop"] : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
 >obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
 >"prop" : "prop"
->Stuff : Stuff
 >`${(input) => ({ ...input })}` : string
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
 >input : Stuff
@@ -177,7 +149,6 @@ c = obj.prop<Stuff> `${(input) => ({ ...input })}`
 >obj.prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
 >obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
 >prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->Stuff : Stuff
 >`${(input) => ({ ...input })}` : string
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
 >input : Stuff

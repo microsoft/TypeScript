@@ -9,7 +9,6 @@ var a: any = x;
 
 var b: Object = x;
 >b : Object
->Object : Object
 >x : number
 
 var c: number = x;
@@ -22,7 +21,6 @@ enum E { A };
 
 var d: E = x;
 >d : E
->E : E
 >x : number
 
 var e = E.A;

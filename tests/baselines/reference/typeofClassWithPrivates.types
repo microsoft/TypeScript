@@ -1,7 +1,6 @@
 === tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     private a: number;
 >a : number
@@ -11,16 +10,13 @@ class C<T> {
 
     x: T;
 >x : T
->T : T
 
     static y: T;
 >y : any
->T : No type information available!
 }
 
 var c: C<string>;
 >c : C<string>
->C : C<T>
 
 var r: typeof C;
 >r : typeof C

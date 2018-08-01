@@ -1,7 +1,5 @@
 === tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts ===
 interface Window {
->Window : Window
-
     someMethod();
 >someMethod : () => any
 }
@@ -11,7 +9,6 @@ module M {
 
     type W = Window | string;
 >W : W
->Window : Window
 
     export module N {
 >N : typeof N
@@ -21,7 +18,6 @@ module M {
 
         export var p: W; // Should report error that W is private
 >p : W
->W : W
     }
 }
 
@@ -30,7 +26,6 @@ module M1 {
 
     export type W = Window | string;
 >W : string | Window
->Window : Window
 
     export module N {
 >N : typeof N
@@ -40,7 +35,6 @@ module M1 {
 
         export var p: W; // No error
 >p : string | Window
->W : string | Window
     }
 }
 
@@ -63,28 +57,22 @@ module M2 {
 
     type t1 = private1;
 >t1 : private1
->private1 : private1
 
     export type t2 = private1; // error
 >t2 : private1
->private1 : private1
 
     type t11 = public1;
 >t11 : public1
->public1 : public1
 
     export type t12 = public1;
 >t12 : public1
->public1 : public1
 
     type t111 = m3.public1;
 >t111 : m3.public1
 >m3 : any
->public1 : m3.public1
 
     export type t112 = m3.public1; // error
 >t112 : m3.public1
 >m3 : any
->public1 : m3.public1
 }
 

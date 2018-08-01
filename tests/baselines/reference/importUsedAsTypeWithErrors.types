@@ -1,7 +1,5 @@
 === tests/cases/compiler/test.ts ===
 export interface T {
->T : T
-
     value: string
 >value : string
 }

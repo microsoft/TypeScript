@@ -1,20 +1,16 @@
 === tests/cases/compiler/BaseClass.ts ===
 export type Constructor<T> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
->T : T
 
 export class MyBaseClass<T> {
 >MyBaseClass : MyBaseClass<T>
->T : T
 
     baseProperty: string;
 >baseProperty : string
 
     constructor(value: T) {}
 >value : T
->T : T
 }
 === tests/cases/compiler/MixinClass.ts ===
 import { Constructor, MyBaseClass } from './BaseClass';
@@ -22,22 +18,13 @@ import { Constructor, MyBaseClass } from './BaseClass';
 >MyBaseClass : typeof MyBaseClass
 
 export interface MyMixin {
->MyMixin : MyMixin
-
     mixinProperty: string;
 >mixinProperty : string
 }
 
 export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
 >MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
->T : T
->Constructor : Constructor<T>
->MyBaseClass : MyBaseClass<T>
 >base : T
->T : T
->T : T
->Constructor : Constructor<T>
->MyMixin : MyMixin
 
     return class extends base {
 >class extends base {        mixinProperty: string;    } : { new (...args: any[]): (Anonymous class); prototype: MyMixin<any>.(Anonymous class); } & T

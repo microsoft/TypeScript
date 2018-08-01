@@ -1,31 +1,24 @@
 === tests/cases/compiler/genericClasses3.ts ===
 class B<T> {
 >B : B<T>
->T : T
 
     a: T;
 >a : T
->T : T
 
     b: T;
 >b : T
->T : T
 }
 
 class C<T> extends B<T> {
 >C : C<T>
->T : T
 >B : B<T>
->T : T
 
     public x: T;
 >x : T
->T : T
 }
 
 var v2: C <string>;
 >v2 : C<string>
->C : C<T>
 
 var y = v2.x; // should be 'string'
 >y : string

@@ -10,8 +10,6 @@ function g() {
     if (a<b, b>(c + 1)) { }
 >a<b, b>(c + 1) : any
 >a : any
->b : No type information available!
->b : No type information available!
 >c + 1 : any
 >c : any
 >1 : 1
