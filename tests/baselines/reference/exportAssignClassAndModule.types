@@ -6,11 +6,9 @@ import Foo = require('./exportAssignClassAndModule_0');
 var z: Foo.Bar;
 >z : Foo.Bar
 >Foo : any
->Bar : Foo.Bar
 
 var zz: Foo;
 >zz : Foo
->Foo : Foo
 
 zz.x;
 >zz.x : Foo.Bar
@@ -24,13 +22,9 @@ class Foo {
     x: Foo.Bar;
 >x : Foo.Bar
 >Foo : any
->Bar : Foo.Bar
 }
 module Foo {
->Foo : typeof Foo
-
     export interface Bar {
->Bar : Bar
     }
 }
 export = Foo;

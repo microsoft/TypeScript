@@ -7,7 +7,6 @@ class C1 {
 }
 var c1: C1;
 >c1 : C1
->C1 : C1
 
 c1.x // OK
 >c1.x : number
@@ -23,7 +22,6 @@ class C2 {
 }
 var c2: C2;
 >c2 : C2
->C2 : C2
 
 c2.p // private, error
 >c2.p : number
@@ -39,7 +37,6 @@ class C3 {
 }
 var c3: C3;
 >c3 : C3
->C3 : C3
 
 c3.p // protected, error
 >c3.p : number

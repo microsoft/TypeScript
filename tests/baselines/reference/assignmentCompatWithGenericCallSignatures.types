@@ -3,17 +3,13 @@
 
 var f: <S extends { p: string }[]>(x: S) => void
 >f : <S extends { p: string; }[]>(x: S) => void
->S : S
 >p : string
 >x : S
->S : S
 
 var g: <T extends { p: string }>(x: T[]) => void
 >g : <T extends { p: string; }>(x: T[]) => void
->T : T
 >p : string
 >x : T[]
->T : T
 
 f = g; // ok
 >f = g : <T extends { p: string; }>(x: T[]) => void

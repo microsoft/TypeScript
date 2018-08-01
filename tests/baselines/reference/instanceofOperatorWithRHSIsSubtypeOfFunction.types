@@ -1,18 +1,14 @@
 === tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
 interface I extends Function { }
->I : I
->Function : Function
 
 var x: any;
 >x : any
 
 var f1: Function;
 >f1 : Function
->Function : Function
 
 var f2: I;
 >f2 : I
->I : I
 
 var f3: { (): void };
 >f3 : () => void

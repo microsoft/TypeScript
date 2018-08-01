@@ -17,5 +17,4 @@ declare module "url" {
 
     export function parse(): Url; 
 >parse : () => Url
->Url : Url
 }

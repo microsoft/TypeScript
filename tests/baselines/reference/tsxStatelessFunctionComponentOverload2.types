@@ -5,7 +5,6 @@ import React = require('react')
 declare function OneThing(): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >JSX : any
->Element : JSX.Element
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
@@ -13,7 +12,6 @@ declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >yy : number
 >yy1 : string
 >JSX : any
->Element : JSX.Element
 
 let obj = {
 >obj : { yy: number; yy1: string; }

@@ -51,6 +51,7 @@ node_modules/async/autoInject.js(160,28): error TS2695: Left side of comma opera
 node_modules/async/autoInject.js(164,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(168,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/cargo.js(62,12): error TS2304: Cannot find name 'AsyncFunction'.
+node_modules/async/cargo.js(67,14): error TS2304: Cannot find name 'module'.
 node_modules/async/cargo.js(67,20): error TS1005: '}' expected.
 node_modules/async/cargo.js(92,11): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/compose.js(8,37): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -129,7 +130,7 @@ node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ [x: string]: any
   Property 'exports' is missing in type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; ... 10 more ...; resume: () => void; }'.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'push' is missing in type 'IArguments'.
+  Property 'pop' is missing in type 'IArguments'.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.

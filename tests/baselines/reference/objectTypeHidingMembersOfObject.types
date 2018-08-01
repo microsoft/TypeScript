@@ -10,7 +10,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 var r1: void = c.valueOf();
 >r1 : void
@@ -20,15 +19,12 @@ var r1: void = c.valueOf();
 >valueOf : () => void
 
 interface I {
->I : I
-
     valueOf(): void;
 >valueOf : () => void
 }
 
 var i: I;
 >i : I
->I : I
 
 var r2: void = i.valueOf();
 >r2 : void

@@ -6,31 +6,17 @@ class AsyncEnumeratorDone { };
 >AsyncEnumeratorDone : AsyncEnumeratorDone
 
 interface IAsyncEnumerator<T> {
->IAsyncEnumerator : IAsyncEnumerator<T>
->T : T
-
     next1(): Promise<T | AsyncEnumeratorDone>;
 >next1 : () => Promise<AsyncEnumeratorDone | T>
->Promise : Promise<T>
->T : T
->AsyncEnumeratorDone : AsyncEnumeratorDone
 
     next2(): Promise<T> | Promise<AsyncEnumeratorDone>;
 >next2 : () => Promise<T> | Promise<AsyncEnumeratorDone>
->Promise : Promise<T>
->T : T
->Promise : Promise<T>
->AsyncEnumeratorDone : AsyncEnumeratorDone
 
     next3(): Promise<T | {}>;
 >next3 : () => Promise<{} | T>
->Promise : Promise<T>
->T : T
 
     next4(): Promise<T | { x: string }>;
 >next4 : () => Promise<T | { x: string; }>
->Promise : Promise<T>
->T : T
 >x : string
 }
 
@@ -39,7 +25,6 @@ async function main() {
 
     const x: IAsyncEnumerator<number> = null;
 >x : IAsyncEnumerator<number>
->IAsyncEnumerator : IAsyncEnumerator<T>
 >null : null
 
     let a = await x.next1();

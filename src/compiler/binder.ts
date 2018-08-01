@@ -306,7 +306,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(getDeclarationName(node)!); // TODO: GH#18217
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.assertDefined(getDeclarationName(node)));
         }
 
         /**
@@ -383,9 +383,11 @@ namespace ts {
                         let message = symbol.flags & SymbolFlags.BlockScopedVariable
                             ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                             : Diagnostics.Duplicate_identifier_0;
+                        let messageNeedsName = true;
 
                         if (symbol.flags & SymbolFlags.Enum || includes & SymbolFlags.Enum) {
                             message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
+                            messageNeedsName = false;
                         }
 
                         if (symbol.declarations && symbol.declarations.length) {
@@ -394,6 +396,7 @@ namespace ts {
                             // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
                             if (isDefaultExport) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                messageNeedsName = false;
                             }
                             else {
                                 // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
@@ -403,14 +406,16 @@ namespace ts {
                                 if (symbol.declarations && symbol.declarations.length &&
                                     (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                                     message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                    messageNeedsName = false;
                                 }
                             }
                         }
 
-                        forEach(symbol.declarations, declaration => {
-                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(declaration) || declaration, message, getDisplayName(declaration)));
-                        });
-                        file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(node) || node, message, getDisplayName(node)));
+                        const addError = (decl: Declaration): void => {
+                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(decl) || decl, message, messageNeedsName ? getDisplayName(decl) : undefined));
+                        };
+                        forEach(symbol.declarations, addError);
+                        addError(node);
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }
@@ -1913,6 +1918,15 @@ namespace ts {
             }
         }
 
+        function checkStrictModeLabeledStatement(node: LabeledStatement) {
+            // Grammar checking for labeledStatement
+            if (inStrictMode && options.target! >= ScriptTarget.ES2015) {
+                if (isDeclarationStatement(node.statement) || isVariableStatement(node.statement)) {
+                    errorOnFirstToken(node.label, Diagnostics.A_label_is_not_allowed_here);
+                }
+            }
+        }
+
         function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
             const span = getSpanOfTokenAtPosition(file, node.pos);
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
@@ -2058,6 +2072,13 @@ namespace ts {
                     if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
                         bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
                     }
+                    if (isInJavaScriptFile(node) &&
+                        file.commonJsModuleIndicator &&
+                        isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
+                        !lookupSymbolForNameWorker(container, "module" as __String)) {
+                        declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
+                            SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
                 case SyntaxKind.BinaryExpression:
                     const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
@@ -2099,6 +2120,8 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
+                case SyntaxKind.LabeledStatement:
+                    return checkStrictModeLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.ThisType:
                     seenThisKeyword = true;
                     return;

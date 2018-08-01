@@ -11,7 +11,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 var r = c.y;
 >r : number
@@ -31,7 +30,6 @@ class D {
 
 var d: D;
 >d : D
->D : D
 
 var r2 = d.y;
 >r2 : number
@@ -51,7 +49,6 @@ class E {
 
 var e: E;
 >e : E
->E : E
 
 var r3 = e.y; // error
 >r3 : number
@@ -71,7 +68,6 @@ class F {
 
 var f: F;
 >f : F
->F : F
 
 var r4 = f.y; // error
 >r4 : number

@@ -3,8 +3,6 @@ declare module Module {
 >Module : typeof Module
 
     interface Interface {
->Interface : Interface
-
         // Should return error for implicit any on return type.
         new ();
     }

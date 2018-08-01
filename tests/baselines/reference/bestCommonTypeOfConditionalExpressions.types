@@ -28,15 +28,12 @@ class Derived2 extends Base { baz: string; }
 
 var base: Base;
 >base : Base
->Base : Base
 
 var derived: Derived;
 >derived : Derived
->Derived : Derived
 
 var derived2: Derived2;
 >derived2 : Derived2
->Derived2 : Derived2
 
 var r = true ? 1 : 2;
 >r : number
@@ -74,19 +71,16 @@ var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => vo
 >x : number
 >(x: Object) => { } : (x: Object) => void
 >x : Object
->Object : Object
 
 var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { }; 
 >r7 : (x: Object) => void
 >x : Object
->Object : Object
 >true ? (x: number) => { } : (x: Object) => { } : (x: number) => void
 >true : true
 >(x: number) => { } : (x: number) => void
 >x : number
 >(x: Object) => { } : (x: Object) => void
 >x : Object
->Object : Object
 
 var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
 >r8 : (x: Object) => void
@@ -94,13 +88,11 @@ var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => vo
 >true : true
 >(x: Object) => { } : (x: Object) => void
 >x : Object
->Object : Object
 >(x: number) => { } : (x: number) => void
 >x : number
 
 var r10: Base = true ? derived : derived2; // no error since we use the contextual type in BCT
 >r10 : Base
->Base : Base
 >true ? derived : derived2 : Derived | Derived2
 >true : true
 >derived : Derived
@@ -115,13 +107,8 @@ var r11 = true ? base : derived2;
 
 function foo5<T, U>(t: T, u: U): Object {
 >foo5 : <T, U>(t: T, u: U) => Object
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
->Object : Object
 
     return true ? t : u; // BCT is Object
 >true ? t : u : T | U

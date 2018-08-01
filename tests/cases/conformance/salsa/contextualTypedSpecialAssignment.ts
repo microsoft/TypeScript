@@ -50,8 +50,7 @@ exports.x = {
 }
 exports.x
 
-/** @type {DoneStatus} contextual typing is allowed, but module.exports.y: any.
-Guess it doesn't check the type tag? */
+/** @type {DoneStatus} */
 module.exports.y = {
     status: "done",
     m(n) { }
@@ -77,7 +76,7 @@ F.prototype = {
 
 // @Filename: mod.js
 // module.exports assignment
-/** @type {{ status: 'done' }} */
+/** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
     status: "done",
     m(n) { }

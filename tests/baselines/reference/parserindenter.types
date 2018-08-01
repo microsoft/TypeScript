@@ -22,32 +22,26 @@ module Formatting {
 
     export class Indenter implements ILineIndenationResolver  {
 >Indenter : Indenter
->ILineIndenationResolver : No type information available!
 
         private indentationBag: IndentationBag;
 >indentationBag : any
->IndentationBag : No type information available!
 
         private scriptBlockBeginLineNumber: number;
 >scriptBlockBeginLineNumber : number
 
         private offsetIndentationDeltas: Dictionary_int_int;
 >offsetIndentationDeltas : any
->Dictionary_int_int : No type information available!
 
         constructor(
             public logger: TypeScript.ILogger,
 >logger : any
 >TypeScript : any
->ILogger : No type information available!
 
             public tree: ParseTree,
 >tree : any
->ParseTree : No type information available!
 
             public snapshot: ITextSnapshot,
 >snapshot : any
->ITextSnapshot : No type information available!
 
             public languageHostIndentation: string,
 >languageHostIndentation : string
@@ -55,11 +49,9 @@ module Formatting {
             public editorOptions: Services.EditorOptions,
 >editorOptions : any
 >Services : any
->EditorOptions : No type information available!
 
             public firstToken: TokenSpan,
 >firstToken : any
->TokenSpan : No type information available!
 
             public smartIndent: boolean) {
 >smartIndent : boolean
@@ -129,13 +121,9 @@ module Formatting {
         public GetIndentationEdits(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEdits : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
 >token : any
->TokenSpan : No type information available!
 >nextToken : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
 >sameLineIndent : boolean
->List_TextEditInfo : No type information available!
 
             if (this.logger.information()) {
 >this.logger.information() : any
@@ -295,13 +283,9 @@ module Formatting {
         public GetIndentationEditsWorker(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
 >token : any
->TokenSpan : No type information available!
 >nextToken : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
 >sameLineIndent : boolean
->List_TextEditInfo : No type information available!
 
             var result = new List_TextEditInfo();
 >result : any
@@ -310,7 +294,6 @@ module Formatting {
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : any
->IndentationInfo : No type information available!
 >null : null
 
             // This handles the case:
@@ -598,8 +581,6 @@ module Formatting {
         private GetCommentIndentationEdits(token: TokenSpan): List_TextEditInfo {
 >GetCommentIndentationEdits : (token: any) => any
 >token : any
->TokenSpan : No type information available!
->List_TextEditInfo : No type information available!
 
             var result = new List_TextEditInfo();
 >result : any
@@ -755,7 +736,6 @@ module Formatting {
 >indentText : string
 >editorOptions : any
 >Services : any
->EditorOptions : No type information available!
 
             return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
 >GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false) : any
@@ -770,7 +750,6 @@ module Formatting {
 >text : string
 >editorOptions : any
 >Services : any
->EditorOptions : No type information available!
 >includeNonIndentChars : boolean
 
             var indentSize = 0;
@@ -849,14 +828,10 @@ module Formatting {
         private GetSpecialCaseIndentation(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentation : (token: any, node: any) => any
 >token : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
->IndentationInfo : No type information available!
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : any
->IndentationInfo : No type information available!
 >null : null
 
             switch (token.Token) {
@@ -1020,12 +995,9 @@ module Formatting {
         private GetSpecialCaseIndentationForLCurly(node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForLCurly : (node: any) => any
 >node : any
->ParseNode : No type information available!
->IndentationInfo : No type information available!
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : any
->IndentationInfo : No type information available!
 >null : null
 
             if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||
@@ -1117,14 +1089,10 @@ module Formatting {
         private GetSpecialCaseIndentationForSemicolon(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => any
 >token : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
->IndentationInfo : No type information available!
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : any
->IndentationInfo : No type information available!
 >null : null
 
             if (this.smartIndent) {
@@ -1206,14 +1174,10 @@ module Formatting {
         private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForComment : (token: any, node: any) => any
 >token : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
->IndentationInfo : No type information available!
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : any
->IndentationInfo : No type information available!
 >null : null
 
             // Only indent line comment and the first line of block comment
@@ -1312,9 +1276,7 @@ module Formatting {
         private CanIndentComment(token: TokenSpan, node: ParseNode): boolean {
 >CanIndentComment : (token: any, node: any) => boolean
 >token : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
 
             switch (node.AuthorNode.Details.Kind) {
 >node.AuthorNode.Details.Kind : any
@@ -1456,7 +1418,6 @@ module Formatting {
 >ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: any) => void
 >languageHostIndentation : string
 >tree : any
->ParseTree : No type information available!
         {
             if (languageHostIndentation == null || tree.StartNodeSelf == null)
 >languageHostIndentation == null || tree.StartNodeSelf == null : boolean
@@ -1536,10 +1497,8 @@ module Formatting {
         private GetIndentEdit(indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean): TextEditInfo {
 >GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
 >indentInfo : any
->IndentationInfo : No type information available!
 >tokenStartPosition : number
 >sameLineIndent : boolean
->TextEditInfo : No type information available!
 
             var indentText = this.ApplyIndentationLevel(indentInfo.Prefix, indentInfo.Level);
 >indentText : string
@@ -1878,14 +1837,10 @@ module Formatting {
         private  ApplyIndentationDeltaFromParent(token: TokenSpan, node: ParseNode): IndentationInfo {
 >ApplyIndentationDeltaFromParent : (token: any, node: any) => any
 >token : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
->IndentationInfo : No type information available!
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : any
->IndentationInfo : No type information available!
 >null : null
 
             var indentableParent = node;
@@ -1977,7 +1932,6 @@ module Formatting {
 >ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any
 >tokenStartPosition : number
 >delta : number
->IndentationInfo : No type information available!
 
             // Get current indentation
             var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
@@ -2029,7 +1983,6 @@ module Formatting {
 >ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
 >currentIndent : string
 >delta : number
->IndentationInfo : No type information available!
 
             if (delta == 0)
 >delta == 0 : boolean
@@ -2300,7 +2253,6 @@ module Formatting {
         private FillInheritedIndentation(tree: ParseTree): void
 >FillInheritedIndentation : (tree: any) => void
 >tree : any
->ParseTree : No type information available!
         {
             var offset = -1;
 >offset : number
@@ -2309,7 +2261,6 @@ module Formatting {
 
             var indentNode: ParseNode = null;
 >indentNode : any
->ParseNode : No type information available!
 >null : null
 
             if (tree.StartNodeSelf != null) {
@@ -2440,7 +2391,6 @@ module Formatting {
                 else {
                     var parent: ParseNode;
 >parent : any
->ParseNode : No type information available!
 
                     // Otherwise base on parent indentation.
                     if (this.smartIndent) {
@@ -2777,7 +2727,6 @@ module Formatting {
 
             var indentationEdit: IndentationEditInfo;
 >indentationEdit : any
->IndentationEditInfo : No type information available!
 
             // First check if we already have indentation info in our indentation bag
             indentationEdit = this.indentationBag.FindIndent(offset);
@@ -2867,12 +2816,10 @@ module Formatting {
         private RegisterIndentation(indent: TextEditInfo, sameLineIndent: boolean): void
 >RegisterIndentation : (indent: any, sameLineIndent: boolean) => void
 >indent : any
->TextEditInfo : No type information available!
 >sameLineIndent : boolean
         {
             var indentationInfo: IndentationEditInfo = null;
 >indentationInfo : any
->IndentationEditInfo : No type information available!
 >null : null
 
             if (sameLineIndent) {
@@ -2958,9 +2905,7 @@ module Formatting {
         private AdjustStartOffsetIfNeeded(token: TokenSpan, node: ParseNode): void
 >AdjustStartOffsetIfNeeded : (token: any, node: any) => void
 >token : any
->TokenSpan : No type information available!
 >node : any
->ParseNode : No type information available!
         {
             if (token == null)
 >token == null : boolean
@@ -3073,7 +3018,6 @@ module Formatting {
         private IsMultiLineString(token: TokenSpan): boolean {
 >IsMultiLineString : (token: any) => boolean
 >token : any
->TokenSpan : No type information available!
 
             return token.tokenID === TypeScript.TokenID.StringLiteral &&
 >token.tokenID === TypeScript.TokenID.StringLiteral &&                this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition()) : boolean

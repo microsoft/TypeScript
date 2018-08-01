@@ -31,16 +31,16 @@ class Foo { } // should error
 exports.Bar = class { }
 >exports.Bar = class { } : typeof Bar
 >exports.Bar : typeof Bar
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>exports : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
 >Bar : typeof Bar
 >class { } : typeof Bar
 
 /** @typedef {number} Baz */
 module.exports = {
->module.exports = {    Baz: class { }} : { [x: string]: any; Baz: typeof Baz; }
->module.exports : any
->module : any
->exports : any
+>module.exports = {    Baz: class { }} : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
+>module.exports : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
+>module : { "tests/cases/conformance/jsdoc/mod1": { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }; }
+>exports : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
 >{    Baz: class { }} : { [x: string]: any; Baz: typeof Baz; }
 
     Baz: class { }
@@ -59,16 +59,16 @@ var Qux = 2;
 exports.Quid = 2;
 >exports.Quid = 2 : 2
 >exports.Quid : any
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>exports : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
 >Quid : any
 >2 : 2
 
 /** @typedef {number} Quack */
 module.exports = {
->module.exports = {    Quack: 2} : { [x: string]: any; Quack: number; }
->module.exports : any
->module : any
->exports : any
+>module.exports = {    Quack: 2} : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
+>module.exports : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
+>module : { "tests/cases/conformance/jsdoc/mod1": { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }; }
+>exports : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
 >{    Quack: 2} : { [x: string]: any; Quack: number; }
 
     Quack: 2

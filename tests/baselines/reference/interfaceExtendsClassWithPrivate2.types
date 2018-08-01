@@ -13,9 +13,6 @@ class C {
 }
 
 interface I extends C {
->I : I
->C : C
-
     other(x: any): any;
 >other : (x: any) => any
 >x : any
@@ -24,7 +21,6 @@ interface I extends C {
 class D extends C implements I { // error
 >D : D
 >C : C
->I : I
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
@@ -51,7 +47,6 @@ class D extends C implements I { // error
 class D2 extends C implements I { // error
 >D2 : D2
 >C : C
->I : I
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any

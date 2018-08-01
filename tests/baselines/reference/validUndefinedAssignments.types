@@ -35,7 +35,6 @@ class C { foo: string }
 
 var f: C;
 >f : C
->C : C
 
 f = x;
 >f = x : any
@@ -43,12 +42,10 @@ f = x;
 >x : any
 
 interface I { foo: string }
->I : I
 >foo : string
 
 var g: I;
 >g : I
->I : I
 
 g = x;
 >g = x : any
@@ -62,9 +59,7 @@ var h: { f(): void } = x;
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     a = x;
 >a = x : any

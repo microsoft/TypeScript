@@ -21,18 +21,15 @@ module consumer {
                 var g:provider.UsefulClass= null;
 >g : provider.UsefulClass
 >provider : any
->UsefulClass : provider.UsefulClass
 >null : null
                 
                 function use():provider.UsefulClass { 
 >use : () => provider.UsefulClass
 >provider : any
->UsefulClass : provider.UsefulClass
 
                                 var p2:provider.UsefulClass= new provider.UsefulClass();
 >p2 : provider.UsefulClass
 >provider : any
->UsefulClass : provider.UsefulClass
 >new provider.UsefulClass() : provider.UsefulClass
 >provider.UsefulClass : typeof provider.UsefulClass
 >provider : typeof provider

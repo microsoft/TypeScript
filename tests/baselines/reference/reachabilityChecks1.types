@@ -23,10 +23,7 @@ module A1 {
 >true : true
 
     module A {
->A : any
-
         interface F {}
->F : F
     }
 }
 
@@ -62,8 +59,6 @@ module A4 {
 >true : true
 
     module A {
->A : typeof A
-
         const enum E { X }
 >E : E
 >X : E
@@ -103,7 +98,6 @@ module B {
 
     for (; ;);
     module C {
->C : any
     }
 }
 

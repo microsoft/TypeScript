@@ -8,7 +8,6 @@ class Base {
 }
 class Generic<T> {
 >Generic : Generic<T>
->T : T
 }
 class Derived {
 >Derived : Derived
@@ -18,7 +17,6 @@ class Derived {
 
     constructor(public host: Generic<this>) {
 >host : Generic<any>
->Generic : Generic<T>
 
         let self: this = this;
 >self : this

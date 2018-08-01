@@ -15,13 +15,8 @@ import s2 = require('elements2');
 
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements { }
->IntrinsicElements : IntrinsicElements
 }
 
 declare module 'elements1' {

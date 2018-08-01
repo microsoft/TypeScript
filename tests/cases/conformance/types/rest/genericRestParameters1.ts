@@ -155,3 +155,15 @@ events.emit('move', 10, 'left');
 events.emit('jump', 20, 'up');
 events.emit('stop', 'Bye!');
 events.emit('done');
+
+// Repro from #25871
+
+declare var ff1: (... args: any[]) => void;
+
+declare var ff2: () => void;
+declare var ff3: (...args: []) => void;
+declare var ff4: (a: never) => void;
+
+ff1 = ff2;
+ff1 = ff3;
+ff1 = ff4;  // Error

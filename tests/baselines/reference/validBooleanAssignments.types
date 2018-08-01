@@ -9,12 +9,10 @@ var a: any = x;
 
 var b: Object = x;
 >b : Object
->Object : Object
 >x : true
 
 var c: Boolean = x;
 >c : Boolean
->Boolean : Boolean
 >x : true
 
 var d: boolean = x;

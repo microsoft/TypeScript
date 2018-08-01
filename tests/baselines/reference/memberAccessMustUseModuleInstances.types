@@ -19,7 +19,6 @@ export class Promise {
     static timeout(delay: number): Promise {
 >timeout : (delay: number) => Promise
 >delay : number
->Promise : Promise
 
         return null;
 >null : null

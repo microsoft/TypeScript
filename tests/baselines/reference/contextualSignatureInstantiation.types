@@ -7,65 +7,35 @@
 
 declare function foo<T>(cb: (x: number, y: string) => T): T;
 >foo : <T>(cb: (x: number, y: string) => T) => T
->T : T
 >cb : (x: number, y: string) => T
 >x : number
 >y : string
->T : T
->T : T
 
 declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->T : T
->U : U
->V : V
 >x : T
->T : T
 >y : U
->U : U
 >cb : (x: T, y: U) => V
 >x : T
->T : T
 >y : U
->U : U
->V : V
->V : V
 
 declare function baz<T, U>(x: T, y: T, cb: (x: T, y: T) => U): U;
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
->T : T
->U : U
 >x : T
->T : T
 >y : T
->T : T
 >cb : (x: T, y: T) => U
 >x : T
->T : T
 >y : T
->T : T
->U : U
->U : U
 
 declare function g<T>(x: T, y: T): T;
 >g : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 declare function h<T, U>(x: T, y: U): T[] | U[];
 >h : <T, U>(x: T, y: U) => T[] | U[]
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->T : T
->U : U
 
 var a: number;
 >a : number

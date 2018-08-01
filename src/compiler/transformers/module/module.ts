@@ -767,7 +767,7 @@ namespace ts {
             if (moduleKind !== ModuleKind.AMD) {
                 if (!node.importClause) {
                     // import "mod";
-                    return setTextRange(createExpressionStatement(createRequireCall(node)), node);
+                    return setOriginalNode(setTextRange(createExpressionStatement(createRequireCall(node)), node), node);
                 }
                 else {
                     const variables: VariableDeclaration[] = [];
@@ -806,15 +806,17 @@ namespace ts {
                     }
 
                     statements = append(statements,
-                        setTextRange(
-                            createVariableStatement(
-                                /*modifiers*/ undefined,
-                                createVariableDeclarationList(
-                                    variables,
-                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
-                            ),
-                            /*location*/ node
+                        setOriginalNode(
+                            setTextRange(
+                                createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList(
+                                        variables,
+                                        languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                    )
+                                ),
+                                /*location*/ node),
+                            /*original*/ node
                         )
                     );
                 }
@@ -826,13 +828,15 @@ namespace ts {
                         /*modifiers*/ undefined,
                         createVariableDeclarationList(
                             [
-                                setTextRange(
-                                    createVariableDeclaration(
-                                        getSynthesizedClone(namespaceDeclaration.name),
-                                        /*type*/ undefined,
-                                        getGeneratedNameForNode(node)
-                                    ),
-                                    /*location*/ node
+                                setOriginalNode(
+                                    setTextRange(
+                                        createVariableDeclaration(
+                                            getSynthesizedClone(namespaceDeclaration.name),
+                                            /*type*/ undefined,
+                                            getGeneratedNameForNode(node)
+                                        ),
+                                        /*location*/ node),
+                                    /*original*/ node
                                 )
                             ],
                             languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
@@ -880,33 +884,37 @@ namespace ts {
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
-                        setTextRange(
-                            createExpressionStatement(
-                                createExportExpression(
-                                    node.name,
-                                    createRequireCall(node)
-                                )
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createExpressionStatement(
+                                    createExportExpression(
+                                        node.name,
+                                        createRequireCall(node)
+                                    )
+                                ),
+                                node),
                             node
                         )
                     );
                 }
                 else {
                     statements = append(statements,
-                        setTextRange(
-                            createVariableStatement(
-                                /*modifiers*/ undefined,
-                                createVariableDeclarationList(
-                                    [
-                                        createVariableDeclaration(
-                                            getSynthesizedClone(node.name),
-                                            /*type*/ undefined,
-                                            createRequireCall(node)
-                                        )
-                                    ],
-                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList(
+                                        [
+                                            createVariableDeclaration(
+                                                getSynthesizedClone(node.name),
+                                                /*type*/ undefined,
+                                                createRequireCall(node)
+                                            )
+                                        ],
+                                        /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                    )
+                                ),
+                                node),
                             node
                         )
                     );
@@ -915,10 +923,12 @@ namespace ts {
             else {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
-                        setTextRange(
-                            createExpressionStatement(
-                                createExportExpression(getExportName(node), getLocalName(node))
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createExpressionStatement(
+                                    createExportExpression(getExportName(node), getLocalName(node))
+                                ),
+                                node),
                             node
                         )
                     );
@@ -956,18 +966,20 @@ namespace ts {
                 // export { x, y } from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
                     statements.push(
-                        setTextRange(
-                            createVariableStatement(
-                                /*modifiers*/ undefined,
-                                createVariableDeclarationList([
-                                    createVariableDeclaration(
-                                        generatedName,
-                                        /*type*/ undefined,
-                                        createRequireCall(node)
-                                    )
-                                ])
-                            ),
-                            /*location*/ node
+                        setOriginalNode(
+                            setTextRange(
+                                createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList([
+                                        createVariableDeclaration(
+                                            generatedName,
+                                            /*type*/ undefined,
+                                            createRequireCall(node)
+                                        )
+                                    ])
+                                ),
+                                /*location*/ node),
+                            /* original */ node
                         )
                     );
                 }
@@ -977,10 +989,12 @@ namespace ts {
                         specifier.propertyName || specifier.name
                     );
                     statements.push(
-                        setTextRange(
-                            createExpressionStatement(
-                                createExportExpression(getExportName(specifier), exportedValue)
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createExpressionStatement(
+                                    createExportExpression(getExportName(specifier), exportedValue)
+                                ),
+                                specifier),
                             specifier
                         )
                     );
@@ -990,10 +1004,12 @@ namespace ts {
             }
             else {
                 // export * from "mod";
-                return setTextRange(
-                    createExpressionStatement(
-                        createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
-                    ),
+                return setOriginalNode(
+                    setTextRange(
+                        createExpressionStatement(
+                            createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
+                        ),
+                        node),
                     node
                 );
             }
@@ -1140,7 +1156,7 @@ namespace ts {
                 }
 
                 if (expressions) {
-                    statements = append(statements, setTextRange(createExpressionStatement(inlineExpressions(expressions)), node));
+                    statements = append(statements, setOriginalNode(setTextRange(createExpressionStatement(inlineExpressions(expressions)), node), node));
                 }
             }
             else {

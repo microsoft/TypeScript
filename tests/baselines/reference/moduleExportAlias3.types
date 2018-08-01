@@ -5,9 +5,9 @@ class C {
 }
 module.exports = {
 >module.exports = {    C} : { [x: string]: any; C: typeof C; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { [x: string]: any; C: typeof C; }
+>module : { "tests/cases/conformance/salsa/bug24062": { [x: string]: any; C: typeof C; }; }
+>exports : { [x: string]: any; C: typeof C; }
 >{    C} : { [x: string]: any; C: typeof C; }
 
     C

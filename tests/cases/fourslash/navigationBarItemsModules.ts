@@ -4,6 +4,8 @@
 ////
 ////declare module 'X2.Y2.Z2' {}
 ////
+////declare module "foo";
+////
 ////module A.B.C {
 ////    export var x;
 ////}
@@ -24,15 +26,17 @@
 ////    }
 ////}
 
-//We have 8 module keywords, and 4 var keywords.
-//The declarations of A.B.C.x do not get merged, so the 4 vars are independent.
-//The two 'A' modules, however, do get merged, so in reality we have 7 modules.
 verify.navigationTree({
     "text": "<global>",
     "kind": "script",
     "childItems": [
         {
             "text": "'X2.Y2.Z2'",
+            "kind": "module",
+            "kindModifiers": "declare"
+        },
+        {
+            "text": "\"foo\"",
             "kind": "module",
             "kindModifiers": "declare"
         },
@@ -105,6 +109,11 @@ verify.navigationBar([
                 "kindModifiers": "declare"
             },
             {
+              "text": "\"foo\"",
+              "kind": "module",
+              "kindModifiers": "declare"
+            },
+            {
                 "text": "\"X.Y.Z\"",
                 "kind": "module",
                 "kindModifiers": "declare"
@@ -125,6 +134,12 @@ verify.navigationBar([
     },
     {
         "text": "'X2.Y2.Z2'",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
+    },
+    {
+        "text": "\"foo\"",
         "kind": "module",
         "kindModifiers": "declare",
         "indent": 1

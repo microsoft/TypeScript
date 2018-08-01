@@ -1,9 +1,9 @@
 === tests/cases/compiler/foo.js ===
 module.exports = function () {
 >module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { [x: string]: any; c: number; }
->module.exports : any
->module : any
->exports : any
+>module.exports : () => { [x: string]: any; c: number; }
+>module : { "tests/cases/compiler/foo": () => { [x: string]: any; c: number; }; }
+>exports : () => { [x: string]: any; c: number; }
 >function () {  class A { }  return {    c: A.b = 1,  }} : () => { [x: string]: any; c: number; }
 
   class A { }
