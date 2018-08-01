@@ -540,6 +540,7 @@ namespace ts {
         executingFile: string;
         newLine?: string;
         useCaseSensitiveFileNames?: boolean;
+        echoIsTTY?: boolean;
         echo(s: string): void;
         quit(exitCode?: number): void;
         fileExists(path: string): boolean;
@@ -1158,6 +1159,9 @@ namespace ts {
                 newLine: ChakraHost.newLine || "\r\n",
                 args: ChakraHost.args,
                 useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
+                writeOutputIsTTY() {
+                    return !!ChakraHost.echoIsTTY;
+                },
                 write: ChakraHost.echo,
                 readFile(path: string, _encoding?: string) {
                     // encoding is automatically handled by the implementation in ChakraHost
