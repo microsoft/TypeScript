@@ -17,6 +17,10 @@ function rest(...args: any[]) {
     'use strict';
 }
 
+function rest1(a = 1, ...args) {
+    'use strict';
+}
+
 function paramDefault(param = 1) {
     'use strict';
 }
@@ -67,6 +71,14 @@ function rest() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
+    }
+}
+function rest1(a) {
+    'use strict';
+    if (a === void 0) { a = 1; }
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
     }
 }
 function paramDefault(param) {

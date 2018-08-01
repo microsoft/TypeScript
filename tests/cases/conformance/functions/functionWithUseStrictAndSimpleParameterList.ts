@@ -16,6 +16,10 @@ function rest(...args: any[]) {
     'use strict';
 }
 
+function rest1(a = 1, ...args) {
+    'use strict';
+}
+
 function paramDefault(param = 1) {
     'use strict';
 }

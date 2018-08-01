@@ -991,13 +991,17 @@
         "category": "Error",
         "code": 1345
     },
-    "'use strict' directive cannot be used with non simple parameter list.": {
+    "'use strict' directive cannot be used with non-simple parameter list.": {
         "category": "Error",
         "code": 1346
     },
-    "{0} is here.": {
+    "Non-simple parameter declared here.": {
         "category": "Error",
         "code": 1347
+    },
+    "'use strict' directive used here.": {
+        "category": "Error",
+        "code": 1348
     },
 
     "Duplicate identifier '{0}'.": {

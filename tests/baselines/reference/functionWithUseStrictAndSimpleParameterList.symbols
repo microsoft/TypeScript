@@ -31,52 +31,60 @@ function rest(...args: any[]) {
     'use strict';
 }
 
+function rest1(a = 1, ...args) {
+>rest1 : Symbol(rest1, Decl(functionWithUseStrictAndSimpleParameterList.ts, 16, 1))
+>a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 18, 15))
+>args : Symbol(args, Decl(functionWithUseStrictAndSimpleParameterList.ts, 18, 21))
+
+    'use strict';
+}
+
 function paramDefault(param = 1) {
->paramDefault : Symbol(paramDefault, Decl(functionWithUseStrictAndSimpleParameterList.ts, 16, 1))
->param : Symbol(param, Decl(functionWithUseStrictAndSimpleParameterList.ts, 18, 22))
+>paramDefault : Symbol(paramDefault, Decl(functionWithUseStrictAndSimpleParameterList.ts, 20, 1))
+>param : Symbol(param, Decl(functionWithUseStrictAndSimpleParameterList.ts, 22, 22))
 
     'use strict';
 }
 
 function objectBindingPattern({foo}: any) {
->objectBindingPattern : Symbol(objectBindingPattern, Decl(functionWithUseStrictAndSimpleParameterList.ts, 20, 1))
->foo : Symbol(foo, Decl(functionWithUseStrictAndSimpleParameterList.ts, 22, 31))
+>objectBindingPattern : Symbol(objectBindingPattern, Decl(functionWithUseStrictAndSimpleParameterList.ts, 24, 1))
+>foo : Symbol(foo, Decl(functionWithUseStrictAndSimpleParameterList.ts, 26, 31))
 
     'use strict';
 }
 
 function arrayBindingPattern([foo]: any[]) {
->arrayBindingPattern : Symbol(arrayBindingPattern, Decl(functionWithUseStrictAndSimpleParameterList.ts, 24, 1))
->foo : Symbol(foo, Decl(functionWithUseStrictAndSimpleParameterList.ts, 26, 30))
+>arrayBindingPattern : Symbol(arrayBindingPattern, Decl(functionWithUseStrictAndSimpleParameterList.ts, 28, 1))
+>foo : Symbol(foo, Decl(functionWithUseStrictAndSimpleParameterList.ts, 30, 30))
 
     'use strict';
 }
 
 function manyParameter(a = 10, b = 20) {
->manyParameter : Symbol(manyParameter, Decl(functionWithUseStrictAndSimpleParameterList.ts, 28, 1))
->a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 30, 23))
->b : Symbol(b, Decl(functionWithUseStrictAndSimpleParameterList.ts, 30, 30))
+>manyParameter : Symbol(manyParameter, Decl(functionWithUseStrictAndSimpleParameterList.ts, 32, 1))
+>a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 34, 23))
+>b : Symbol(b, Decl(functionWithUseStrictAndSimpleParameterList.ts, 34, 30))
 
     "use strict";
 }
 
 function manyPrologue(a = 10, b = 20) {
->manyPrologue : Symbol(manyPrologue, Decl(functionWithUseStrictAndSimpleParameterList.ts, 32, 1))
->a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 34, 22))
->b : Symbol(b, Decl(functionWithUseStrictAndSimpleParameterList.ts, 34, 29))
+>manyPrologue : Symbol(manyPrologue, Decl(functionWithUseStrictAndSimpleParameterList.ts, 36, 1))
+>a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 38, 22))
+>b : Symbol(b, Decl(functionWithUseStrictAndSimpleParameterList.ts, 38, 29))
 
     "foo";
     "use strict";
 }
 
 function invalidPrologue(a = 10, b = 20) {
->invalidPrologue : Symbol(invalidPrologue, Decl(functionWithUseStrictAndSimpleParameterList.ts, 37, 1))
->a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 39, 25))
->b : Symbol(b, Decl(functionWithUseStrictAndSimpleParameterList.ts, 39, 32))
+>invalidPrologue : Symbol(invalidPrologue, Decl(functionWithUseStrictAndSimpleParameterList.ts, 41, 1))
+>a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 43, 25))
+>b : Symbol(b, Decl(functionWithUseStrictAndSimpleParameterList.ts, 43, 32))
 
     "foo";
     const c = 1;
->c : Symbol(c, Decl(functionWithUseStrictAndSimpleParameterList.ts, 41, 9))
+>c : Symbol(c, Decl(functionWithUseStrictAndSimpleParameterList.ts, 45, 9))
 
     "use strict";
 }

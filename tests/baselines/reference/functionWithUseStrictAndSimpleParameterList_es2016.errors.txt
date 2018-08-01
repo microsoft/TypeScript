@@ -1,30 +1,33 @@
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(1,12): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(2,5): error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(15,15): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(16,5): error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(19,23): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(20,5): error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(23,31): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(24,5): error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(27,30): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(28,5): error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(31,24): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(31,32): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(32,5): error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(35,23): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(35,31): error TS1344: This parameter is not allowed with 'use strict' directive.
-tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(37,5): error TS1345: 'use strict' directive cannot be used with non simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(1,12): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(2,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(15,15): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(16,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(19,16): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(19,23): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(20,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(23,23): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(24,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(27,31): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(28,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(31,30): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(32,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(35,24): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(35,32): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(36,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(39,23): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(39,31): error TS1345: This parameter is not allowed with 'use strict' directive.
+tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts(41,5): error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
 
 
-==== tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts (16 errors) ====
+==== tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts (19 errors) ====
     function a(a = 10) {
                ~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:2:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:2:5: 'use strict' directive used here.
         "use strict";
         ~~~~~~~~~~~~~
-!!! error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:1:12: parameter is here.
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:1:12: Non-simple parameter declared here.
     }
     
     export var foo = 10;
@@ -39,71 +42,85 @@ tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es
     
     function rest(...args: any[]) {
                   ~~~~~~~~~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:16:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:16:5: 'use strict' directive used here.
         'use strict';
         ~~~~~~~~~~~~~
-!!! error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:15:15: parameter is here.
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:15:15: Non-simple parameter declared here.
+    }
+    
+    function rest1(a = 1, ...args) {
+                   ~~~~~
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:20:5: 'use strict' directive used here.
+                          ~~~~~~~
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:20:5: 'use strict' directive used here.
+        'use strict';
+        ~~~~~~~~~~~~~
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:19:16: Non-simple parameter declared here.
+!!! related TS6204 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:19:23: and here.
     }
     
     function paramDefault(param = 1) {
                           ~~~~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:20:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:24:5: 'use strict' directive used here.
         'use strict';
         ~~~~~~~~~~~~~
-!!! error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:19:23: parameter is here.
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:23:23: Non-simple parameter declared here.
     }
     
     function objectBindingPattern({foo}: any) {
                                   ~~~~~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:24:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:28:5: 'use strict' directive used here.
         'use strict';
         ~~~~~~~~~~~~~
-!!! error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:23:31: parameter is here.
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:27:31: Non-simple parameter declared here.
     }
     
     function arrayBindingPattern([foo]: any[]) {
                                  ~~~~~~~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:28:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:32:5: 'use strict' directive used here.
         'use strict';
         ~~~~~~~~~~~~~
-!!! error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:27:30: parameter is here.
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:31:30: Non-simple parameter declared here.
     }
     
     function manyParameter(a = 10, b = 20) {
                            ~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:32:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:36:5: 'use strict' directive used here.
                                    ~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:32:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:36:5: 'use strict' directive used here.
         "use strict";
         ~~~~~~~~~~~~~
-!!! error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:31:24: parameter is here.
-!!! related TS6204 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:31:32: and here.
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:35:24: Non-simple parameter declared here.
+!!! related TS6204 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:35:32: and here.
     }
     
     function manyPrologue(a = 10, b = 20) {
                           ~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:37:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:41:5: 'use strict' directive used here.
                                   ~~~~~~
-!!! error TS1344: This parameter is not allowed with 'use strict' directive.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:37:5: use strict directive is here.
+!!! error TS1345: This parameter is not allowed with 'use strict' directive.
+!!! related TS1348 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:41:5: 'use strict' directive used here.
         "foo";
         "use strict";
         ~~~~~~~~~~~~~
-!!! error TS1345: 'use strict' directive cannot be used with non simple parameter list.
-!!! related TS1346 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:35:23: parameter is here.
-!!! related TS6204 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:35:31: and here.
+!!! error TS1346: 'use strict' directive cannot be used with non-simple parameter list.
+!!! related TS1347 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:39:23: Non-simple parameter declared here.
+!!! related TS6204 tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts:39:31: and here.
     }
     
     function invalidPrologue(a = 10, b = 20) {

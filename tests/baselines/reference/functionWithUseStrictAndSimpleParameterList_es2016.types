@@ -39,6 +39,16 @@ function rest(...args: any[]) {
 >'use strict' : "use strict"
 }
 
+function rest1(a = 1, ...args) {
+>rest1 : (a?: number, ...args: any[]) => void
+>a : number
+>1 : 1
+>args : any[]
+
+    'use strict';
+>'use strict' : "use strict"
+}
+
 function paramDefault(param = 1) {
 >paramDefault : (param?: number) => void
 >param : number
