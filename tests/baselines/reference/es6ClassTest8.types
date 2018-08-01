@@ -34,35 +34,24 @@ class Vector {
     static norm(v:Vector):Vector {return null;}
 >norm : (v: Vector) => Vector
 >v : Vector
->Vector : Vector
->Vector : Vector
 >null : null
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
 >minus : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
->Vector : Vector
 >v2 : Vector
->Vector : Vector
->Vector : Vector
 >null : null
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
 >times : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
->Vector : Vector
 >v2 : Vector
->Vector : Vector
->Vector : Vector
 >null : null
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
 >cross : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
->Vector : Vector
 >v2 : Vector
->Vector : Vector
->Vector : Vector
 >null : null
 
     constructor(public x: number,
@@ -78,10 +67,7 @@ class Vector {
     static dot(v1:Vector, v2:Vector):Vector {return null;}    
 >dot : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
->Vector : Vector
 >v2 : Vector
->Vector : Vector
->Vector : Vector
 >null : null
 
 }              
@@ -91,21 +77,16 @@ class Camera {
 
     public forward: Vector;
 >forward : Vector
->Vector : Vector
 
     public right: Vector;
 >right : Vector
->Vector : Vector
 
     public up: Vector;
 >up : Vector
->Vector : Vector
 
     constructor(public pos: Vector, lookAt: Vector) { 
 >pos : Vector
->Vector : Vector
 >lookAt : Vector
->Vector : Vector
 
         var down = new Vector(0.0, -1.0, 0.0);
 >down : Vector

@@ -6,7 +6,6 @@ enum Enum { None = 0 }
 
 var enumType: Enum = Enum.None;
 >enumType : Enum
->Enum : Enum
 >Enum.None : Enum
 >Enum : typeof Enum
 >None : Enum

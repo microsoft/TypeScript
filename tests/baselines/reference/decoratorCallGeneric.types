@@ -1,22 +1,14 @@
 === tests/cases/conformance/decorators/decoratorCallGeneric.ts ===
 interface I<T> {
->I : I<T>
->T : T
-
     prototype: T,
 >prototype : T
->T : T
 
     m: () => T
 >m : () => T
->T : T
 }
 function dec<T>(c: I<T>) { }
 >dec : <T>(c: I<T>) => void
->T : T
 >c : I<T>
->I : I<T>
->T : T
 
 @dec
 >dec : <T>(c: I<T>) => void

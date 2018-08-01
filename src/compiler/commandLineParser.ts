@@ -1333,9 +1333,10 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));
                 }
 
-                const keyText = unescapeLeadingUnderscores(getTextOfPropertyName(element.name));
-                const option = knownOptions ? knownOptions.get(keyText) : undefined;
-                if (extraKeyDiagnosticMessage && !option) {
+                const textOfKey = getTextOfPropertyName(element.name);
+                const keyText = textOfKey && unescapeLeadingUnderscores(textOfKey);
+                const option = keyText && knownOptions ? knownOptions.get(keyText) : undefined;
+                if (keyText && extraKeyDiagnosticMessage && !option) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
                 }
                 const value = convertPropertyValueToJson(element.initializer, option);

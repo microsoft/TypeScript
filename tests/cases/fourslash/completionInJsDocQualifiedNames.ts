@@ -12,4 +12,4 @@
 ////const x = 0;
 
 goTo.marker();
-verify.completionListContains("T", "type T = number", "tee ", "type");
+verify.completionListContains("T", "type T = number", "tee", "type");

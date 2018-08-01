@@ -2,7 +2,7 @@ tests/cases/compiler/fuzzy.ts(13,18): error TS2420: Class 'C' incorrectly implem
   Property 'alsoWorks' is missing in type 'C'.
 tests/cases/compiler/fuzzy.ts(21,34): error TS2322: Type 'this' is not assignable to type 'I'.
   Type 'C' is not assignable to type 'I'.
-tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Type '{ oneI: this; }' cannot be converted to type 'R'.
+tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Conversion of type '{ oneI: this; }' to type 'R' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'anything' is missing in type '{ oneI: this; }'.
 
 
@@ -40,7 +40,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Type '{ oneI: this; }' canno
             worksToo():R {
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '{ oneI: this; }' cannot be converted to type 'R'.
+!!! error TS2352: Conversion of type '{ oneI: this; }' to type 'R' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'anything' is missing in type '{ oneI: this; }'.
             }
         }

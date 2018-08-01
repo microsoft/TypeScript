@@ -983,6 +983,10 @@
         "category": "Error",
         "code": 1343
     },
+    "'A label is not allowed here.": {
+        "category": "Error",
+        "code": 1344
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1192,7 +1196,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Type '{0}' cannot be converted to type '{1}'.": {
+    "Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.": {
         "category": "Error",
         "code": 2352
     },
@@ -2056,6 +2060,10 @@
         "category": "Error",
         "code": 2574
     },
+    "No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.": {
+        "category": "Error",
+        "code": 2575
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2408,6 +2416,18 @@
     "Property '{0}' is used before its initialization.": {
         "category": "Error",
         "code": 2729
+    },
+    "An arrow function cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2730
+    },
+    "Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.": {
+        "category": "Error",
+        "code": 2731
+    },
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+        "category": "Error",
+        "code": 2732
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2863,6 +2883,10 @@
     "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
         "category": "Error",
         "code": 5070
+    },
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+        "category": "Error",
+        "code": 5071
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -3631,6 +3655,10 @@
         "category": "Message",
         "code": 6204
     },
+    "All type parameters are unused": {
+        "category": "Error",
+        "code": 6205
+    },
 
     "Do not emit insignificant whitespace or insignificant trailing semicolons to output.": {
         "category": "Message",
@@ -3903,6 +3931,10 @@
         "category": "Error",
         "code": 7040
     },
+    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+        "category": "Error",
+        "code": 7041
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4018,6 +4050,10 @@
     "JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.": {
         "category": "Error",
         "code": 8029
+    },
+    "The type of a function declaration must match the function's signature.": {
+        "category": "Error",
+        "code": 8030
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -4182,6 +4218,14 @@
         "category": "Message",
         "code": 90010
     },
+    "Remove template tag": {
+        "category": "Message",
+        "code": 90011
+    },
+    "Remove type parameters": {
+        "category": "Message",
+        "code": 90012
+    },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
         "code": 90013
@@ -4249,6 +4293,22 @@
     "Add async modifier to containing function": {
         "category": "Message",
         "code": 90029
+    },
+    "Replace 'infer {0}' with 'unknown'": {
+        "category": "Message",
+        "code": 90030
+    },
+    "Replace all unused 'infer' with 'unknown'": {
+        "category": "Message",
+        "code": 90031
+    },
+    "Import default '{0}' from module \"{1}\"": {
+        "category": "Message",
+        "code": 90032
+    },
+    "Add default import '{0}' to existing import declaration from \"{1}\"": {
+        "category": "Message",
+        "code": 90033
     },
     "Convert function to an ES2015 class": {
         "category": "Message",

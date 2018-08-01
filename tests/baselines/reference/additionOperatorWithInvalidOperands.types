@@ -29,11 +29,9 @@ var b: number;
 
 var c: Object;
 >c : Object
->Object : Object
 
 var d: Number;
 >d : Number
->Number : Number
 
 // boolean + every type except any and string
 var r1 = a + a;

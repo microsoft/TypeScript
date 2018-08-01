@@ -24,7 +24,7 @@ verify.completionListContains({ name: "M", source: "m" }, "class M", "", "class"
 verify.applyCodeActionFromCompletion("", {
     name: "M",
     source: "m",
-    description: `Import 'M' from module "m"`,
+    description: `Import default 'M' from module "m"`,
     newFileContent: `import M from "m";
 
 `,

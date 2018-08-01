@@ -124,7 +124,7 @@ namespace ts.codefix {
         const { parent } = token;
         if (!isPropertyAccessExpression(parent)) return undefined;
 
-        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression)!);
+        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression));
         const { symbol } = leftExpressionType;
         if (!symbol || !symbol.declarations) return undefined;
 
@@ -183,7 +183,7 @@ namespace ts.codefix {
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
-            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)!)); // TODO: GH#18217
+            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
         }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);

@@ -4,7 +4,6 @@
 
 let x: $;
 >x : $
->$ : $
 
 let y = () => x
 >y : () => $
@@ -21,7 +20,6 @@ declare let $: { x: number }
     
 === /types/lib/index.d.ts ===
 interface $ { x }
->$ : $
 >x : any
 
 

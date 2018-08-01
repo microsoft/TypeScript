@@ -1,4 +1,4 @@
-tests/cases/compiler/noImplicitThisFunctions.ts(13,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/compiler/noImplicitThisFunctions.ts(13,12): error TS7041: The containing arrow function captures the global value of 'this' which implicitly has type 'any'.
 tests/cases/compiler/noImplicitThisFunctions.ts(17,38): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
@@ -17,7 +17,7 @@ tests/cases/compiler/noImplicitThisFunctions.ts(17,38): error TS2683: 'this' imp
         // error: this is implicitly any
         return this.a + z;
                ~~~~
-!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! error TS7041: The containing arrow function captures the global value of 'this' which implicitly has type 'any'.
     }
     
     // error: `this` is `window`, but is still of type `any`

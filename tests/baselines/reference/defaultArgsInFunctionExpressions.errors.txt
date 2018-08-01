@@ -2,9 +2,9 @@ tests/cases/compiler/defaultArgsInFunctionExpressions.ts(4,19): error TS2345: Ar
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(5,1): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(8,20): error TS2322: Type '3' is not assignable to type 'string'.
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(11,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/defaultArgsInFunctionExpressions.ts(14,51): error TS2352: Type 'string' cannot be converted to type 'number'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(14,51): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(17,41): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/compiler/defaultArgsInFunctionExpressions.ts(20,62): error TS2352: Type 'string' cannot be converted to type 'number'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(20,62): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(28,15): error TS2708: Cannot use namespace 'T' as a value.
 
 
@@ -32,7 +32,7 @@ tests/cases/compiler/defaultArgsInFunctionExpressions.ts(28,15): error TS2708: C
     // Contextually type the default arg with the type annotation
     var f3 = function (a: (s: string) => any = (s) => <number>s) { };
                                                       ~~~~~~~~~
-!!! error TS2352: Type 'string' cannot be converted to type 'number'.
+!!! error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     
     // Type check using the function's contextual type
     var f4: (a: number) => void = function (a = "") { };
@@ -42,7 +42,7 @@ tests/cases/compiler/defaultArgsInFunctionExpressions.ts(28,15): error TS2708: C
     // Contextually type the default arg using the function's contextual type
     var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
                                                                  ~~~~~~~~~
-!!! error TS2352: Type 'string' cannot be converted to type 'number'.
+!!! error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     
     // Instantiated module
     module T { }

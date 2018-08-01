@@ -1,7 +1,5 @@
 === tests/cases/compiler/color.ts ===
 interface Color {
->Color : Color
-
     c: string;
 >c : string
 }
@@ -14,7 +12,6 @@ import Color from "./color";
 
 export declare function styled(): Color;
 >styled : () => Color
->Color : Color
 
 === tests/cases/compiler/file2.ts ===
 import { styled }  from "./file1";

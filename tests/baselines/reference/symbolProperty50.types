@@ -3,7 +3,6 @@ module M {
 >M : typeof M
 
     interface Symbol { }
->Symbol : Symbol
 
     class C {
 >C : C

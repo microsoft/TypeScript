@@ -10,31 +10,19 @@ class Derived extends Base { private b: string; }
 
 // Note - commmenting "extends Foo" prevents the error
 interface Foo {
->Foo : Foo
-
     [i: number]: Base;
 >i : number
->Base : Base
 }
 interface FooOf<TBase extends Base> extends Foo {
->FooOf : FooOf<TBase>
->TBase : TBase
->Base : Base
->Foo : Foo
-
     [i: number]: TBase;
 >i : number
->TBase : TBase
 }
 var x: FooOf<Derived> = null;
 >x : FooOf<Derived>
->FooOf : FooOf<TBase>
->Derived : Derived
 >null : null
 
 var y: Derived = x[0];
 >y : Derived
->Derived : Derived
 >x[0] : Derived
 >x : FooOf<Derived>
 >0 : 0

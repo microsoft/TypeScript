@@ -1,36 +1,17 @@
 === tests/cases/compiler/indexedAccessCanBeHighOrder.ts ===
 declare function get<U, Y extends keyof U>(x: U, y: Y): U[Y];
 >get : <U, Y extends keyof U>(x: U, y: Y) => U[Y]
->U : U
->Y : Y
->U : U
 >x : U
->U : U
 >y : Y
->Y : Y
->U : U
->Y : Y
 
 declare function find<T, K extends keyof T>(o: T[K]): [T, K];
 >find : <T, K extends keyof T>(o: T[K]) => [T, K]
->T : T
->K : K
->T : T
 >o : T[K]
->T : T
->K : K
->T : T
->K : K
 
 function impl<A, B extends keyof A>(a: A, b: B) {
 >impl : <A, B extends keyof A>(a: A, b: B) => [A, B]
->A : A
->B : B
->A : A
 >a : A
->A : A
 >b : B
->B : B
 
     const item = get(a, b);
 >item : A[B]

@@ -8,8 +8,6 @@ module MsPortal.Util.TemplateEngine {
 >"use strict" : "use strict"
  
     interface TemplateKeyValue {
->TemplateKeyValue : TemplateKeyValue
-
         [name: string]: string;
 >name : string
     }
@@ -19,11 +17,9 @@ module MsPortal.Util.TemplateEngine {
 
         private _templateStorage: TemplateStorage;
 >_templateStorage : TemplateStorage
->TemplateStorage : TemplateStorage
  
         constructor(templateStorage: TemplateStorage) {
 >templateStorage : TemplateStorage
->TemplateStorage : TemplateStorage
 
             this._templateStorage = templateStorage;
 >this._templateStorage = templateStorage : TemplateStorage
@@ -57,12 +53,10 @@ module MsPortal.Util.TemplateEngine {
 
         public templateSources: TemplateKeyValue = {};
 >templateSources : TemplateKeyValue
->TemplateKeyValue : TemplateKeyValue
 >{} : {}
 
         public templateData: TemplateKeyValue = {};
 >templateData : TemplateKeyValue
->TemplateKeyValue : TemplateKeyValue
 >{} : {}
     }
 }

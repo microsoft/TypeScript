@@ -3,7 +3,6 @@ module _modes {
 >_modes : typeof _modes
 
  export interface IMode {
->IMode : IMode
   
  }
  
@@ -25,7 +24,6 @@ module editor {
  var i : modes.IMode;
 >i : modes.IMode
 >modes : any
->IMode : modes.IMode
   
  // If you just use p1:modes, the compiler accepts it - should be an error
  class Bug {
@@ -33,15 +31,12 @@ module editor {
 
      constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
 >p1 : any
->modes : No type information available!
 >p2 : any
 >modes : any
->Mode : No type information available!
 
          var x:modes.Mode;
 >x : any
 >modes : any
->Mode : No type information available!
      }
     
  }

@@ -21,7 +21,6 @@ type ADT = {
 }
 let wrong: ADT = { tag: "T", a1: "extra" }
 >wrong : ADT
->ADT : ADT
 >{ tag: "T", a1: "extra" } : { tag: "T"; a1: string; }
 >tag : "T"
 >"T" : "T"
@@ -73,7 +72,6 @@ type Ambiguous = {
 }
 let amb: Ambiguous
 >amb : Ambiguous
->Ambiguous : Ambiguous
 
 // no error for ambiguous tag, even when it could satisfy both constituents at once
 amb = { tag: "A", x: "hi" }
@@ -165,7 +163,6 @@ type Overlapping =
 
 let over: Overlapping
 >over : Overlapping
->Overlapping : Overlapping
 
 // these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
@@ -235,14 +232,11 @@ type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
 >AB : AB
 >kind : "A"
 >n : AN
->AN : AN
 >kind : "B"
 >n : BN
->BN : BN
 
 const abab: AB = {
 >abab : AB
->AB : AB
 >{    kind: "A",    n: {        a: "a",        b: "b", // excess -- kind: "A"    }} : { kind: "A"; n: { a: string; b: string; }; }
 
     kind: "A",
@@ -264,7 +258,6 @@ const abab: AB = {
 }
 const abac: AB = {
 >abac : AB
->AB : AB
 >{    kind: "A",    n: {        a: "a",        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }    }} : { kind: "A"; n: { a: string; c: string; }; }
 
     kind: "A",

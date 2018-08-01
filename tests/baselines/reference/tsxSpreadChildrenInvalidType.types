@@ -1,13 +1,7 @@
 === tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		[s: string]: any;
 >s : string
 	}
@@ -16,8 +10,6 @@ declare var React: any;
 >React : any
 
 interface TodoProp {
->TodoProp : TodoProp
-
     id: number;
 >id : number
 
@@ -25,11 +17,8 @@ interface TodoProp {
 >todo : string
 }
 interface TodoListProps {
->TodoListProps : TodoListProps
-
     todos: TodoProp[];
 >todos : TodoProp[]
->TodoProp : TodoProp
 }
 function Todo(prop: { key: number, todo: string }) {
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
@@ -55,7 +44,6 @@ function Todo(prop: { key: number, todo: string }) {
 function TodoList({ todos }: TodoListProps) {
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
 >todos : TodoProp[]
->TodoListProps : TodoListProps
 
     return <div>
 ><div>        {...<Todo key={todos[0].id} todo={todos[0].todo} />}    </div> : JSX.Element
@@ -83,7 +71,6 @@ function TodoList({ todos }: TodoListProps) {
 function TodoListNoError({ todos }: TodoListProps) {
 >TodoListNoError : ({ todos }: TodoListProps) => JSX.Element
 >todos : TodoProp[]
->TodoListProps : TodoListProps
 
     // any is not checked
     return <div>
@@ -113,7 +100,6 @@ function TodoListNoError({ todos }: TodoListProps) {
 }
 let x: TodoListProps;
 >x : TodoListProps
->TodoListProps : TodoListProps
 
     <TodoList {...x}/>
 ><TodoList {...x}/> : JSX.Element

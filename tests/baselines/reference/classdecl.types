@@ -91,7 +91,6 @@ module m1 {
 
 
     export interface ib {
->ib : ib
     }
 }
 
@@ -107,9 +106,7 @@ module m2 {
         }
         export class ib2 implements m1.ib {
 >ib2 : ib2
->m1.ib : any
 >m1 : typeof m1
->ib : m1.ib
         }
     }
 }
@@ -123,9 +120,7 @@ class c extends m1.b {
 
 class ib2 implements m1.ib {
 >ib2 : ib2
->m1.ib : any
 >m1 : typeof m1
->ib : m1.ib
 }
 
 declare class aAmbient {

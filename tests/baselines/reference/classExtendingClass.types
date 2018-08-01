@@ -22,7 +22,6 @@ class D extends C {
 
 var d: D;
 >d : D
->D : D
 
 var r = d.foo;
 >r : string
@@ -52,29 +51,22 @@ var r4 = D.other();
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 
     thing(x: T) { }
 >thing : (x: T) => void
 >x : T
->T : T
 
     static other<T>(x: T) { }
 >other : <T>(x: T) => void
->T : T
 >x : T
->T : T
 }
 
 class D2<T> extends C2<T> {
 >D2 : D2<T>
->T : T
 >C2 : C2<T>
->T : T
 
     bar: string;
 >bar : string
@@ -82,7 +74,6 @@ class D2<T> extends C2<T> {
 
 var d2: D2<string>;
 >d2 : D2<string>
->D2 : D2<T>
 
 var r5 = d2.foo;
 >r5 : string

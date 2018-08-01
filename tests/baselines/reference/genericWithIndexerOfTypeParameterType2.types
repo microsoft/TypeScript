@@ -1,19 +1,15 @@
 === tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts ===
 export class Collection<TItem extends CollectionItem> {
 >Collection : Collection<TItem>
->TItem : TItem
->CollectionItem : CollectionItem
 
     _itemsByKey: { [key: string]: TItem; };
 >_itemsByKey : { [key: string]: TItem; }
 >key : string
->TItem : TItem
 }
 
 export class List extends Collection<ListItem>{
 >List : List
 >Collection : Collection<ListItem>
->ListItem : ListItem
 
     Bar() {}
 >Bar : () => void

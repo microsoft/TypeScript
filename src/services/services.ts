@@ -1448,32 +1448,15 @@ namespace ts {
             const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-                // Try getting just type at this position and show
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                        if (isLabelName(node)) {
-                            // Type here will be 'any', avoid displaying this.
-                            return undefined;
-                        }
-                        // falls through
-                    case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.QualifiedName:
-                    case SyntaxKind.ThisKeyword:
-                    case SyntaxKind.ThisType:
-                    case SyntaxKind.SuperKeyword:
-                        // For the identifiers/this/super etc get the type at position
-                        const type = typeChecker.getTypeAtLocation(node);
-                        return type && {
-                            kind: ScriptElementKind.unknown,
-                            kindModifiers: ScriptElementKindModifier.none,
-                            textSpan: createTextSpanFromNode(node, sourceFile),
-                            displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
-                            documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                            tags: type.symbol ? type.symbol.getJsDocTags() : undefined
-                        };
-                }
-
-                return undefined;
+                const type = shouldGetType(sourceFile, node, position) ? typeChecker.getTypeAtLocation(node) : undefined;
+                return type && {
+                    kind: ScriptElementKind.unknown,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    textSpan: createTextSpanFromNode(node, sourceFile),
+                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
+                    documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
+                    tags: type.symbol ? type.symbol.getJsDocTags() : undefined
+                };
             }
 
             const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
@@ -1489,17 +1472,21 @@ namespace ts {
             };
         }
 
-        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
-            if ((isIdentifier(node) || isStringLiteral(node))
-                && isPropertyAssignment(node.parent)
-                && node.parent.name === node) {
-                const type = checker.getContextualType(node.parent.parent);
-                const property = type && checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
-                if (property) {
-                    return property;
-                }
+        function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return !isLabelName(node);
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.QualifiedName:
+                    // Don't return quickInfo if inside the comment in `a/**/.b`
+                    return !isInComment(sourceFile, position);
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+                default:
+                    return false;
             }
-            return checker.getSymbolAtLocation(node);
         }
 
         /// Goto definition
@@ -2186,7 +2173,11 @@ namespace ts {
      * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
      */
     /* @internal */
-    export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement | undefined {
+    export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
+        const element = getContainingObjectLiteralElementWorker(node);
+        return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName : undefined;
+    }
+    function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralElement | undefined {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
@@ -2203,34 +2194,40 @@ namespace ts {
     }
 
     /* @internal */
-    export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
-        const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
-        const contextualType = typeChecker.getContextualType(objectLiteral)!; // TODO: GH#18217
-        return getPropertySymbolsFromType(contextualType, node.name!)!; // TODO: GH#18217
-    }
+    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes };
 
-    /* @internal */
-    export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
-        if (name && type) {
-            const result: Symbol[] = [];
-            const symbol = type.getProperty(name);
-            if (type.flags & TypeFlags.Union) {
-                forEach((<UnionType>type).types, t => {
-                    const symbol = t.getProperty(name);
-                    if (symbol) {
-                        result.push(symbol);
-                    }
-                });
-                return result;
-            }
-
-            if (symbol) {
-                result.push(symbol);
-                return result;
+    function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+        const object = getContainingObjectLiteralElement(node);
+        if (object) {
+            const contextualType = checker.getContextualType(object.parent);
+            const properties = contextualType && getPropertySymbolsFromContextualType(object, checker, contextualType, /*unionSymbolOk*/ false);
+            if (properties && properties.length === 1) {
+                return first(properties);
             }
         }
-        return undefined;
+        return checker.getSymbolAtLocation(node);
+    }
+
+    /** Gets all symbols for one property. Does not get symbols for every property. */
+    /* @internal */
+    export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): ReadonlyArray<Symbol> {
+        const name = getNameFromPropertyName(node.name);
+        if (!name) return emptyArray;
+        if (!contextualType.isUnion()) {
+            const symbol = contextualType.getProperty(name);
+            return symbol ? [symbol] : emptyArray;
+        }
+
+        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => isObjectLiteralExpression(node.parent) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+        if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
+            const symbol = contextualType.getProperty(name);
+            if (symbol) return [symbol];
+        }
+        if (discriminatedPropertySymbols.length === 0) {
+            // Bad discriminant -- do again without discriminating
+            return mapDefined(contextualType.types, t => t.getProperty(name));
+        }
+        return discriminatedPropertySymbols;
     }
 
     function isArgumentOfElementAccessExpression(node: Node) {

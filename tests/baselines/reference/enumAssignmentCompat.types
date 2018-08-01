@@ -18,19 +18,15 @@ enum W {
 
 
 interface WStatic {
->WStatic : WStatic
 
     a: W;
 >a : W
->W : W
 
     b: W;
 >b : W
->W : W
 
     c: W;
 >c : W
->W : W
 
 }
 
@@ -38,7 +34,6 @@ interface WStatic {
 
 var x: WStatic = W;
 >x : WStatic
->WStatic : WStatic
 >W : typeof W
 
 var y: typeof W = W;
@@ -86,24 +81,20 @@ var e: typeof W.a = 4;
 
 var f: WStatic = W.a; // error
 >f : WStatic
->WStatic : WStatic
 >W.a : W.a
 >W : typeof W
 >a : W.a
 
 var g: WStatic = 5; // error
 >g : WStatic
->WStatic : WStatic
 >5 : 5
 
 var h: W = 3;
 >h : W
->W : W
 >3 : 3
 
 var i: W = W.a;
 >i : W
->W : W
 >W.a : W.a
 >W : typeof W
 >a : W.a
@@ -123,5 +114,4 @@ W.D;
 var p: W.D;
 >p : W.D
 >W : any
->D : W.D
 

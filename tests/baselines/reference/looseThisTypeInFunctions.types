@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts ===
 interface I {
->I : I
-
     n: number;
 >n : number
 
@@ -11,15 +9,12 @@ interface I {
 >m : number
 }
 interface Unused {
->Unused : Unused
-
     implicitNoThis(m: number): number;
 >implicitNoThis : (m: number) => number
 >m : number
 }
 class C implements I {
 >C : C
->I : I
 
     n: number;
 >n : number
@@ -103,12 +98,10 @@ let o = {
 };
 let i: I = o;
 >i : I
->I : I
 >o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 
 let o2: I = {
 >o2 : I
->I : I
 >{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: number; explicitThis: (this: I, m: number) => any; }
 
     n: 1001,
@@ -145,7 +138,6 @@ let n = x(12); // callee:void doesn't match this:I
 
 let u: Unused;
 >u : Unused
->Unused : Unused
 
 let y = u.implicitNoThis;
 >y : (m: number) => number

@@ -4,11 +4,9 @@ declare var a: boolean;
 
 declare var p: Promise<boolean>;
 >p : Promise<boolean>
->Promise : Promise<T>
 
 async function func(): Promise<void> {
 >func : () => Promise<void>
->Promise : Promise<T>
 
     "use strict";
 >"use strict" : "use strict"

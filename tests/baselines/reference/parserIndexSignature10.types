@@ -1,7 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature10.ts ===
 interface I {
->I : I
-
    [a, b]: number
 >a : any
 >b : any

@@ -2,8 +2,6 @@
 // module then enum
 // should be errors
 module m4 { }
->m4 : typeof m4
-
 enum m4 { }
 >m4 : m4
 
@@ -26,8 +24,6 @@ enum m4b { One }
 >One : m4b
 
 module m4c { interface I { foo(): void } }
->m4c : typeof m4c
->I : I
 >foo : () => void
 
 enum m4c { One }
@@ -51,7 +47,5 @@ module m5 { export var y = 2; }
 >2 : 2
 
 module m5 { export interface I { foo(): void } } // should already be reasonably well covered
->m5 : typeof m5
->I : I
 >foo : () => void
 

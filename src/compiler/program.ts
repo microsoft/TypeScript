@@ -135,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const mtimeAfter = sys.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
@@ -592,6 +592,7 @@ namespace ts {
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensionsWithJsonIfResolveJsonModule = options.resolveJsonModule ? [...supportedExtensions, Extension.Json] : undefined;
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createMap<boolean>();
@@ -633,7 +634,8 @@ namespace ts {
         const packageIdToSourceFile = createMap<SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
         let sourceFileToPackageName = createMap<string>();
-        let redirectTargetsSet = createMap<true>();
+        // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
+        let redirectTargetsMap = createMultiMap<string>();
 
         const filesByName = createMap<SourceFile | undefined>();
         let missingFilePaths: ReadonlyArray<Path> | undefined;
@@ -751,7 +753,7 @@ namespace ts {
             getSourceFileFromReference,
             getLibFileFromReference,
             sourceFileToPackageName,
-            redirectTargetsSet,
+            redirectTargetsMap,
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
@@ -1072,7 +1074,7 @@ namespace ts {
                     fileChanged = false;
                     newSourceFile = oldSourceFile; // Use the redirect.
                 }
-                else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
+                else if (oldProgram.redirectTargetsMap.has(oldSourceFile.path)) {
                     // If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1219,7 +1221,7 @@ namespace ts {
             resolvedProjectReferences = oldProgram.getProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
-            redirectTargetsSet = oldProgram.redirectTargetsSet;
+            redirectTargetsMap = oldProgram.redirectTargetsMap;
 
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
@@ -1925,7 +1927,7 @@ namespace ts {
             refFile?: SourceFile): SourceFile | undefined {
 
             if (hasExtension(fileName)) {
-                if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
+                if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule || supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
                     if (fail) fail(Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
                     return undefined;
                 }
@@ -2007,9 +2009,17 @@ namespace ts {
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
-                // NOTE: this only makes sense for case-insensitive file systems
-                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
-                    reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
+                if (file && options.forceConsistentCasingInFileNames) {
+                    let inputName = fileName;
+                    const checkedName = file.fileName;
+                    const isRedirect = toPath(checkedName) !== toPath(inputName);
+                    if (isRedirect) {
+                        inputName = getProjectReferenceRedirect(fileName) || fileName;
+                    }
+                    if (getNormalizedAbsolutePath(checkedName, currentDirectory) !== getNormalizedAbsolutePath(inputName, currentDirectory)) {
+                        reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile, refPos, refEnd);
+                    }
                 }
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
@@ -2070,7 +2080,7 @@ namespace ts {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
                     const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path); // TODO: GH#18217
-                    redirectTargetsSet.set(fileFromPackageId.path, true);
+                    redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageName.set(path, packageId.name);
                     processingOtherFiles!.push(dupFile);
@@ -2365,7 +2375,7 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+            if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
 
@@ -2548,6 +2558,10 @@ namespace ts {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
                 }
+                // Any emit other than common js is error
+                else if (getEmitModuleKind(options) !== ModuleKind.CommonJS) {
+                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs, "resolveJsonModule", "module");
+                }
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot
@@ -2698,12 +2712,12 @@ namespace ts {
 
         function createDiagnosticForReference(index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
             const referencesSyntax = getProjectReferencesSyntax();
-            if (referencesSyntax) {
-                if (createOptionDiagnosticInArrayLiteralSyntax(referencesSyntax, index, message, arg0, arg1)) {
-                    return;
-                }
+            if (referencesSyntax && referencesSyntax.elements.length > index) {
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, referencesSyntax.elements[index], message, arg0, arg1));
             }
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            else {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            }
         }
 
         function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
@@ -2754,15 +2768,6 @@ namespace ts {
                 programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
-        }
-
-        function createOptionDiagnosticInArrayLiteralSyntax(arrayLiteral: ArrayLiteralExpression, index: number, message: DiagnosticMessage, arg0: string | number | undefined, arg1?: string | number, arg2?: string | number): boolean {
-            if (arrayLiteral.elements.length <= index) {
-                // Out-of-bounds
-                return false;
-            }
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, arrayLiteral.elements[index], message, arg0, arg1, arg2));
-            return false; // TODO: GH#18217 This function always returns `false`!`
         }
 
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {

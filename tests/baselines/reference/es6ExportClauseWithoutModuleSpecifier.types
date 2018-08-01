@@ -3,7 +3,6 @@ export class c {
 >c : c
 }
 export interface i {
->i : i
 }
 export module m {
 >m : typeof m
@@ -17,7 +16,6 @@ export var x = 10;
 >10 : 10
 
 export module uninstantiated {
->uninstantiated : any
 }
 
 === tests/cases/compiler/client.ts ===
