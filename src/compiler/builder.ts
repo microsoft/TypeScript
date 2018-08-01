@@ -41,7 +41,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldStateFiles?: number;
+        semanticDiagnosticsFromOldState?: Map<true>;
         /**
          * program corresponding to this state
          */
@@ -104,7 +104,10 @@ namespace ts {
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
                     state.semanticDiagnosticsPerFile!.set(sourceFilePath, diagnostics);
-                    state.semanticDiagnosticsFromOldStateFiles = (state.semanticDiagnosticsFromOldStateFiles || 0) + 1;
+                    if (!state.semanticDiagnosticsFromOldState) {
+                        state.semanticDiagnosticsFromOldState = createMap<true>();
+                    }
+                    state.semanticDiagnosticsFromOldState.set(sourceFilePath, true);
                 }
             }
         });
@@ -184,13 +187,8 @@ namespace ts {
      * Remove the semantic diagnostics cached from old state for affected File and the files that are referencing modules that export entities from affected file
      */
     function cleanSemanticDiagnosticsOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile) {
-        if (!state.semanticDiagnosticsFromOldStateFiles) {
-            Debug.assert(!state.semanticDiagnosticsPerFile!.has(affectedFile.path));
-            return;
-        }
-
         if (removeSemanticDiagnosticsOf(state, affectedFile.path)) {
-            // If there are no more diagnostics from old cache, remove them
+            // If there are no more diagnostics from old cache, done
             return;
         }
 
@@ -235,12 +233,12 @@ namespace ts {
      * returns true if there are no more semantic diagnostics from the old state
      */
     function removeSemanticDiagnosticsOf(state: BuilderProgramState, path: Path) {
-        if (state.semanticDiagnosticsPerFile!.delete(path)) {
-            Debug.assert((state.semanticDiagnosticsFromOldStateFiles || 0) > 0);
-            state.semanticDiagnosticsFromOldStateFiles!--;
-            return !state.semanticDiagnosticsFromOldStateFiles;
+        if (!state.semanticDiagnosticsFromOldState) {
+            return false;
         }
-        return false;
+        state.semanticDiagnosticsFromOldState.delete(path);
+        state.semanticDiagnosticsPerFile!.delete(path);
+        return !state.semanticDiagnosticsFromOldState.size;
     }
 
     /**
