@@ -1,14 +1,10 @@
 === tests/cases/compiler/file1.d.ts ===
 declare interface I1 {
->I1 : I1
-
     x: number
 >x : number
 }
 
 declare interface I2 {
->I2 : I2
-
     x: number
 >x : number
 }

@@ -1,19 +1,12 @@
 === tests/cases/compiler/inferObjectTypeFromStringLiteralToKeyof.ts ===
 declare function inference1<T>(name: keyof T): T;
 >inference1 : <T>(name: keyof T) => T
->T : T
 >name : keyof T
->T : T
->T : T
 
 declare function inference2<T>(target: T, name: keyof T): T;
 >inference2 : <T>(target: T, name: keyof T) => T
->T : T
 >target : T
->T : T
 >name : keyof T
->T : T
->T : T
 
 declare var two: "a" | "d";
 >two : "a" | "d"

@@ -1,13 +1,9 @@
 === tests/cases/compiler/augmentedTypeBracketNamedPropertyAccess.ts ===
 interface Object {
->Object : Object
-
     data: number;
 >data : number
 }
 interface Function {
->Function : Function
-
     functionData: string;
 >functionData : string
 }

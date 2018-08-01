@@ -4,17 +4,12 @@
 
 class C<T extends Date> {
 >C : C<T>
->T : T
->Date : Date
 
     g<T extends Number>() {
 >g : <T extends Number>() => void
->T : T
->Number : Number
 
         var x: T;
 >x : T
->T : T
 
         x.toFixed();
 >x.toFixed() : string
@@ -28,7 +23,6 @@ class C<T extends Date> {
 
         var x: T;
 >x : T
->T : T
 
         x.getDate();
 >x.getDate() : number
@@ -40,21 +34,12 @@ class C<T extends Date> {
 
 class C2<T extends Date, U extends Date> {
 >C2 : C2<T, U>
->T : T
->Date : Date
->U : U
->Date : Date
 
     g<T extends Number, U extends Number>() {
 >g : <T extends Number, U extends Number>() => void
->T : T
->Number : Number
->U : U
->Number : Number
 
         var x: U;
 >x : U
->U : U
 
         x.toFixed();
 >x.toFixed() : string
@@ -68,7 +53,6 @@ class C2<T extends Date, U extends Date> {
 
         var x: U;
 >x : U
->U : U
 
         x.getDate();
 >x.getDate() : number

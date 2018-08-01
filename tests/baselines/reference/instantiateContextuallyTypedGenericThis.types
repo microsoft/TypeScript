@@ -1,28 +1,19 @@
 === tests/cases/compiler/instantiateContextuallyTypedGenericThis.ts ===
 interface JQuery {
->JQuery : JQuery
-
     each<T>(
 >each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
->T : T
 
         collection: T[], callback: (this: T, dit: T) => T
 >collection : T[]
->T : T
 >callback : (this: T, dit: T) => T
 >this : T
->T : T
 >dit : T
->T : T
->T : T
 
     ): T[];
->T : T
 }
 
 let $: JQuery;
 >$ : JQuery
->JQuery : JQuery
 
 let lines: string[];
 >lines : string[]

@@ -15,11 +15,9 @@ class Foo {
 
 	member: Bar;
 >member : Bar
->Bar : Bar
 }
 declare var GlobalFoo: Foo;
 >GlobalFoo : Foo
->Foo : Foo
 
 === tests/cases/compiler/ref/c.d.ts ===
 /// <reference path="./d.d.ts" />
@@ -28,7 +26,6 @@ declare class Bar {
 
 	member: Baz;
 >member : Baz
->Baz : Baz
 }
 
 === tests/cases/compiler/ref/d.d.ts ===

@@ -240,11 +240,8 @@ function from16326(this: { header: Header }, header: Header, authToken: string):
 >from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
 >this : { header: Header; }
 >header : Header
->Header : Header
 >header : Header
->Header : Header
 >authToken : string
->Header : Header
 
     return {
 >{        ...this.header,        ...header,        ...authToken && { authToken }    } : { head: string; body: string; authToken: string; } | { authToken: string; head: string; body: string; }
@@ -407,7 +404,6 @@ class C { p = 1; m() { } }
 
 let c: C = new C()
 >c : C
->C : C
 >new C() : C
 >C : typeof C
 

@@ -2,8 +2,6 @@
 // duplicate property names are an error in all types
 
 interface Number {
->Number : Number
-
     foo: string;
 >foo : string
 
@@ -12,8 +10,6 @@ interface Number {
 }
 
 interface String {
->String : String
-
     foo(): string;
 >foo : { (): string; (): string; }
 
@@ -22,16 +18,11 @@ interface String {
 }
 
 interface Array<T> {
->Array : T[]
->T : T
+    foo: T;
+>foo : T
 
     foo: T;
 >foo : T
->T : T
-
-    foo: T;
->foo : T
->T : T
 }
 
 class C {
@@ -61,8 +52,6 @@ class C {
 }
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 

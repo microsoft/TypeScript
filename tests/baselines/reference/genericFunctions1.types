@@ -1,9 +1,7 @@
 === tests/cases/compiler/genericFunctions1.ts ===
 function foo<T > (x: T) { return x; }
 >foo : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 var x = foo(5); // 'x' should be number

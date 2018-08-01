@@ -5,11 +5,9 @@ type typeAlias1 = typeof varOfAliasedType1;
 
 var varOfAliasedType1: typeAlias1;
 >varOfAliasedType1 : any
->typeAlias1 : any
 
 var varOfAliasedType2: typeAlias2;
 >varOfAliasedType2 : any
->typeAlias2 : any
 
 type typeAlias2 = typeof varOfAliasedType2;
 >typeAlias2 : any
@@ -17,7 +15,6 @@ type typeAlias2 = typeof varOfAliasedType2;
 
 function func(): typeAlias3 { return null; }
 >func : () => any
->typeAlias3 : any
 >null : null
 
 var varOfAliasedType3 = func();

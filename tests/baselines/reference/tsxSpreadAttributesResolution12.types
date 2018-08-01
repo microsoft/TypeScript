@@ -32,8 +32,6 @@ const obj3: {y: false, overwrite: string} = {
 }
 
 interface Prop {
->Prop : Prop
-
     x: 2
 >x : 2
 
@@ -50,7 +48,6 @@ class OverWriteAttr extends React.Component<Prop, {}> {
 >React.Component : React.Component<Prop, {}>
 >React : typeof React
 >Component : typeof React.Component
->Prop : Prop
 
     render() {
 >render : () => JSX.Element

@@ -1,13 +1,6 @@
 === tests/cases/compiler/errorTypesAsTypeArguments.ts ===
 interface Foo<A> {
->Foo : Foo<A>
->A : A
-
   bar(baz: Foo<B>): Foo<C>;
 >bar : (baz: Foo<any>) => Foo<any>
 >baz : Foo<any>
->Foo : Foo<A>
->B : No type information available!
->Foo : Foo<A>
->C : No type information available!
 }

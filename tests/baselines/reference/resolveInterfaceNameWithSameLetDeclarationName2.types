@@ -1,17 +1,9 @@
 === tests/cases/compiler/resolveInterfaceNameWithSameLetDeclarationName2.ts ===
 interface foo { }
->foo : foo
-
 interface bar { }
->bar : bar
-
 let bar: bar | foo;
 >bar : foo | bar
->bar : bar
->foo : foo
 
 let foo: bar | foo;
 >foo : foo | bar
->bar : bar
->foo : foo
 

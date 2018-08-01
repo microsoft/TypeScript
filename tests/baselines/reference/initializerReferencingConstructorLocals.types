@@ -36,7 +36,6 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     a = z; // error
 >a : any
@@ -60,7 +59,6 @@ class D<T> {
 
     constructor(x: T) {
 >x : T
->T : T
 
         z = 1;
 >z = 1 : 1

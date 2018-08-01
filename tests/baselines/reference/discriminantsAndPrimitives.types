@@ -2,8 +2,6 @@
 // Repro from #10257 plus other tests
 
 interface Foo {
->Foo : Foo
-
     kind: "foo";
 >kind : "foo"
 
@@ -12,8 +10,6 @@ interface Foo {
 }
 
 interface Bar {
->Bar : Bar
-
     kind: "bar";
 >kind : "bar"
 
@@ -24,8 +20,6 @@ interface Bar {
 function f1(x: Foo | Bar | string) {
 >f1 : (x: string | Foo | Bar) => void
 >x : string | Foo | Bar
->Foo : Foo
->Bar : Bar
 
     if (typeof x !== 'string') {
 >typeof x !== 'string' : boolean
@@ -52,8 +46,6 @@ function f1(x: Foo | Bar | string) {
 function f2(x: Foo | Bar | string | undefined) {
 >f2 : (x: string | Foo | Bar | undefined) => void
 >x : string | Foo | Bar | undefined
->Foo : Foo
->Bar : Bar
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
@@ -80,8 +72,6 @@ function f2(x: Foo | Bar | string | undefined) {
 function f3(x: Foo | Bar | string | null) {
 >f3 : (x: string | Foo | Bar | null) => void
 >x : string | Foo | Bar | null
->Foo : Foo
->Bar : Bar
 >null : null
 
     if (x && typeof x !== "string") {
@@ -111,8 +101,6 @@ function f3(x: Foo | Bar | string | null) {
 function f4(x: Foo | Bar | string | number | null) {
 >f4 : (x: string | number | Foo | Bar | null) => void
 >x : string | number | Foo | Bar | null
->Foo : Foo
->Bar : Bar
 >null : null
 
     if (x && typeof x === "object") {

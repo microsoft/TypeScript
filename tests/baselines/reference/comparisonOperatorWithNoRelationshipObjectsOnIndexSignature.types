@@ -32,32 +32,26 @@ var b1: { [b: string]: number };
 var a2: { [index: string]: Base };
 >a2 : { [index: string]: Base; }
 >index : string
->Base : Base
 
 var b2: { [index: string]: C };
 >b2 : { [index: string]: C; }
 >index : string
->C : C
 
 var a3: { [index: number]: Base };
 >a3 : { [index: number]: Base; }
 >index : number
->Base : Base
 
 var b3: { [index: number]: C };
 >b3 : { [index: number]: C; }
 >index : number
->C : C
 
 var a4: { [index: number]: Derived };
 >a4 : { [index: number]: Derived; }
 >index : number
->Derived : Derived
 
 var b4: { [index: string]: Base };
 >b4 : { [index: string]: Base; }
 >index : string
->Base : Base
 
 // operator <
 var r1a1 = a1 < b1;

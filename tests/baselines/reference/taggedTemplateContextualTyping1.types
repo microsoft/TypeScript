@@ -2,41 +2,25 @@
 type FuncType = (x: <T>(p: T) => T) => typeof x;
 >FuncType : FuncType
 >x : <T>(p: T) => T
->T : T
 >p : T
->T : T
->T : T
 >x : <T>(p: T) => T
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
->T : T
 >templateStrs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >f : FuncType
->FuncType : FuncType
 >x : T
->T : T
->T : T
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
->T : T
 >templateStrs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >f : FuncType
->FuncType : FuncType
 >h : FuncType
->FuncType : FuncType
 >x : T
->T : T
->T : T
 
 function tempTag1<T>(...rest: any[]): T {
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
->T : T
 >rest : any[]
->T : T
 
     return undefined;
 >undefined : undefined
@@ -88,10 +72,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: 
 >x : <T>(p: T) => T
 >(y: <T>(p: T) => T) => { y<number>(undefined); return y } : (y: <T>(p: T) => T) => <T>(p: T) => T
 >y : <T>(p: T) => T
->T : T
 >p : T
->T : T
->T : T
 >y<number>(undefined) : number
 >y : <T>(p: T) => T
 >undefined : undefined
@@ -104,10 +85,7 @@ tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y =>
 >`${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }` : string
 >(x: <T>(p: T) => T) => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
->T : T
 >p : T
->T : T
->T : T
 >x<number>(undefined) : number
 >x : <T>(p: T) => T
 >undefined : undefined

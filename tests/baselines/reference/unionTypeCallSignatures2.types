@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/union/unionTypeCallSignatures2.ts ===
 interface A {
->A : A
-
     (x: number): number;
 >x : number
 
@@ -11,18 +9,12 @@ interface A {
 
     (x: Date): void;
 >x : Date
->Date : Date
 
     <T>(x: T[]): T[];
->T : T
 >x : T[]
->T : T
->T : T
 }
 
 interface B {
->B : B
-
     (x: number): number;
 >x : number
 
@@ -31,18 +23,12 @@ interface B {
 
     (x: Date): void;
 >x : Date
->Date : Date
 
     <T>(x: T[]): T[];
->T : T
 >x : T[]
->T : T
->T : T
 }
 
 interface C {
->C : C
-
     (x: string, ...y: string[]): number;
 >x : string
 >y : string[]
@@ -52,17 +38,11 @@ interface C {
 >s : string
 
     <T>(x: T[]): T[];
->T : T
 >x : T[]
->T : T
->T : T
 }
 
 var f1: A | B | C;
 >f1 : A | B | C
->A : A
->B : B
->C : C
 
 var n1 = f1(42);             // number
 >n1 : number
@@ -86,9 +66,6 @@ var a1 = f1([true, false]);  // boolean[]
 
 var f2: C | B | A;
 >f2 : A | B | C
->C : C
->B : B
->A : A
 
 var n2 = f2(42);             // number
 >n2 : number
@@ -112,9 +89,6 @@ var a2 = f2([true, false]);  // boolean[]
 
 var f3: B | A | C;
 >f3 : A | B | C
->B : B
->A : A
->C : C
 
 var n3 = f3(42);             // number
 >n3 : number

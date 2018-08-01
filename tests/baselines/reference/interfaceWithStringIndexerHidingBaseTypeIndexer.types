@@ -1,7 +1,5 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer.ts ===
 interface Base {
->Base : Base
-
     [x: string]: { a: number }
 >x : string
 >a : number
@@ -16,9 +14,6 @@ interface Base {
 }
 
 interface Derived extends Base {
->Derived : Derived
->Base : Base
-
     [x: string]: {
 >x : string
 

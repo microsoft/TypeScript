@@ -17,8 +17,6 @@ HelloNamespace.world;
 
 === tests/cases/compiler/helloInterface.ts ===
 interface HelloInterface {
->HelloInterface : HelloInterface
-
     world: any;
 >world : any
 }
@@ -28,8 +26,6 @@ export = HelloInterface;
 
 === tests/cases/compiler/helloNamespace.ts ===
 namespace HelloNamespace {
->HelloNamespace : any
-
     export type world = any;
 >world : any
 }

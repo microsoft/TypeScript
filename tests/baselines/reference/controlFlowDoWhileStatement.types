@@ -132,8 +132,6 @@ function f() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
->RegExp : RegExp
->Function : Function
 
     x = "";
 >x = "" : ""
@@ -177,8 +175,6 @@ function g() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
->RegExp : RegExp
->Function : Function
 
     x = "";
 >x = "" : ""

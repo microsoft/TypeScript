@@ -159,8 +159,6 @@ class Removable {
 >remainder : string
 }
 interface I {
->I : I
-
     m(): void;
 >m : () => void
 
@@ -182,7 +180,6 @@ var { removed, ...removableRest } = removable;
 
 var i: I = removable;
 >i : I
->I : I
 >removable : Removable
 
 var { removed, ...removableRest2 } = i;

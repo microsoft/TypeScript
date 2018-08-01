@@ -11,7 +11,6 @@ type MultiSkilledRobot = [string, [string, string]];
 
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : [string, [string, string]]
->MultiSkilledRobot : [string, [string, string]]
 >["mower", ["mowing", ""]] : [string, [string, string]]
 >"mower" : "mower"
 >["mowing", ""] : [string, string]
@@ -20,7 +19,6 @@ var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : [string, [string, string]]
->MultiSkilledRobot : [string, [string, string]]
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >"trimmer" : "trimmer"
 >["trimming", "edging"] : [string, string]

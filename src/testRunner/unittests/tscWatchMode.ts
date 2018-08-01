@@ -2262,8 +2262,11 @@ declare module "fs" {
             const files = [file, module, libFile];
             const host = createWatchedSystem(files, { currentDirectory });
             const watch = createWatchOfFilesAndCompilerOptions([file.path], host);
+
             checkProgramActualFiles(watch(), [file.path, libFile.path]);
             checkOutputErrorsInitial(host, [getDiagnosticModuleNotFoundOfFile(watch(), file, "qqq")]);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [`${currentDirectory}/node_modules`, `${currentDirectory}/node_modules/@types`], /*recursive*/ true);
 
             host.renameFolder(`${currentDirectory}/node_modules2`, `${currentDirectory}/node_modules`);
             host.runQueuedTimeoutCallbacks();
@@ -2622,7 +2625,7 @@ declare module "fs" {
             createWatchOfConfigFile("tsconfig.json", host);
             checkWatchedFilesDetailed(host, [libFile.path, mainFile.path, config.path, linkedPackageIndex.path, linkedPackageOther.path], 1);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, [mainPackageRoot, linkedPackageRoot, `${mainPackageRoot}/node_modules/@types`, `${projectRoot}/node_modules/@types`], 1, /*recursive*/ true);
+            checkWatchedDirectoriesDetailed(host, [`${mainPackageRoot}/@scoped`, `${mainPackageRoot}/node_modules`, linkedPackageRoot, `${mainPackageRoot}/node_modules/@types`, `${projectRoot}/node_modules/@types`], 1, /*recursive*/ true);
         });
     });
 
