@@ -42,7 +42,6 @@ var c: D.inner.Class1;
 >c : any
 >D : any
 >inner : any
->Class1 : No type information available!
 
 c = new D.inner.Class1();
 >c = new D.inner.Class1() : any

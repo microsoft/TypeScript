@@ -36,3 +36,34 @@ var k = function (x) { return x }
 >x : Symbol(x, Decl(test.js, 13, 18))
 >x : Symbol(x, Decl(test.js, 13, 18))
 
+
+/** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
+/** @type {Argle} */
+function blargle(s) {
+>blargle : Symbol(blargle, Decl(test.js, 13, 33))
+>s : Symbol(s, Decl(test.js, 18, 17))
+
+    return 0;
+}
+
+/** @type {0 | 1 | 2} - assignment should not error */
+var zeroonetwo = blargle('hi')
+>zeroonetwo : Symbol(zeroonetwo, Decl(test.js, 23, 3))
+>blargle : Symbol(blargle, Decl(test.js, 13, 33))
+
+/** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
+
+/** @type {Gioconda} */
+function monaLisa(sb) {
+>monaLisa : Symbol(monaLisa, Decl(test.js, 23, 30))
+>sb : Symbol(sb, Decl(test.js, 28, 18))
+
+    return typeof sb === 'string' ? 1 : 2;
+>sb : Symbol(sb, Decl(test.js, 28, 18))
+}
+
+/** @type {2 | 3} - overloads are not supported, so there will be an error */
+var twothree = monaLisa(false);
+>twothree : Symbol(twothree, Decl(test.js, 33, 3))
+>monaLisa : Symbol(monaLisa, Decl(test.js, 23, 30))
+

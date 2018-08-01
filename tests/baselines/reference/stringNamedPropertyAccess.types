@@ -10,7 +10,6 @@ class C {
 }
 var c: C;
 >c : C
->C : C
 
 var r1 = c["a b"];
 >r1 : number
@@ -25,14 +24,11 @@ var r1b = C['c d'];
 >'c d' : "c d"
 
 interface I {
->I : I
-
     "a b": number;
 >"a b" : number
 }
 var i: I;
 >i : I
->I : I
 
 var r2 = i["a b"];
 >r2 : number

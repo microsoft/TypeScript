@@ -142,6 +142,16 @@ namespace ts {
         return undefined;
     }
 
+    export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefined | "quit"): T | undefined {
+        while (true) {
+            const res = callback(node);
+            if (res === "quit") return undefined;
+            if (res !== undefined) return res;
+            if (isSourceFile(node)) return undefined;
+            node = node.parent;
+        }
+    }
+
     /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
@@ -401,21 +411,18 @@ namespace ts {
     }
 
     /**
-     * Appends a range of value to begin of an array, returning the array.
-     *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
-     * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
-     * appended. If an element of `from` is `undefined`, that element is not appended.
+     * Prepends statements to an array while taking care of prologue directives.
      */
-    export function prependStatements<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
+    export function addStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
         if (from === undefined || from.length === 0) return to;
-        if (to === undefined) return from.slice();
-        const prologue = to.length && isPrologueDirective(to[0]) && to.shift();
-        to.unshift(...from);
-        if (prologue) {
-            to.unshift(prologue);
+        let statementIndex = 0;
+        // skip all prologue directives to insert at the correct position
+        for (; statementIndex < to.length; ++statementIndex) {
+            if (!isPrologueDirective(to[statementIndex])) {
+                break;
+            }
         }
+        to.splice(statementIndex, 0, ...from);
         return to;
     }
 
@@ -556,11 +563,6 @@ namespace ts {
         return isString(value) ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
     }
 
-    // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
-    export function escapeLeadingUnderscores(identifier: string): __String {
-        return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
-    }
-
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
@@ -670,6 +672,19 @@ namespace ts {
     export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocSignature:
+                return true;
+            default:
+                assertType<DeclarationWithTypeParameterChildren>(node);
+                return isDeclarationWithTypeParameterChildren(node);
+        }
+    }
+
+    export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren;
+    export function isDeclarationWithTypeParameterChildren(node: DeclarationWithTypeParameterChildren): node is DeclarationWithTypeParameterChildren {
+        switch (node.kind) {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.MethodSignature:
@@ -689,12 +704,9 @@ namespace ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.JSDocCallbackTag:
-            case SyntaxKind.JSDocTypedefTag:
-            case SyntaxKind.JSDocSignature:
                 return true;
             default:
-                assertTypeIsNever(node);
+                assertType<never>(node);
                 return false;
         }
     }
@@ -779,7 +791,7 @@ namespace ts {
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
         const start = skipTrivia(sourceFile.text, nodes.pos);
         return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
     }
@@ -912,9 +924,7 @@ namespace ts {
     }
 
     export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
-        return n.kind === SyntaxKind.ImportType &&
-            (n as ImportTypeNode).argument.kind === SyntaxKind.LiteralType &&
-            isStringLiteral(((n as ImportTypeNode).argument as LiteralTypeNode).literal);
+        return isImportTypeNode(n) && isLiteralTypeNode(n.argument) && isStringLiteral(n.argument.literal);
     }
 
     export function isPrologueDirective(node: Node): node is PrologueDirective {
@@ -1628,6 +1638,8 @@ namespace ts {
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return (<ShorthandPropertyAssignment>parent).objectAssignmentInitializer === node;
             default:
                 return isExpressionNode(parent);
         }
@@ -3157,26 +3169,38 @@ namespace ts {
         return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
-    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
+    export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
         const compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(fileName, host, compilerOptions.outDir));
         }
         else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+            emitOutputFilePathWithoutExtension = removeFileExtension(fileName);
         }
 
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    export function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost) {
+    export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
+        // TODO: GH#25810 following should work but makes the build break:
+        // return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+
         const options = host.getCompilerOptions();
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
         const path = outputDir
-            ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
-            : sourceFile.fileName;
+            ? getSourceFilePathInNewDir(fileName, host, outputDir)
+            : fileName;
+        return removeFileExtension(path) + Extension.Dts;
+    }
+
+    export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+        const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
+
+        const path = outputDir
+            ? getSourceFilePathInNewDirWorker(fileName, outputDir, currentDirectory, commonSourceDirectory, getCanonicalFileName)
+            : fileName;
         return removeFileExtension(path) + Extension.Dts;
     }
 
@@ -3218,10 +3242,13 @@ namespace ts {
         return !(options.noEmitForJsFiles && isSourceFileJavaScript(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
     }
 
-    export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
-        let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
-        const commonSourceDirectory = host.getCommonSourceDirectory();
-        const isSourceFileInCommonSourceDirectory = host.getCanonicalFileName(sourceFilePath).indexOf(host.getCanonicalFileName(commonSourceDirectory)) === 0;
+    export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
+        return getSourceFilePathInNewDirWorker(fileName, newDirPath, host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+    }
+
+    export function getSourceFilePathInNewDirWorker(fileName: string, newDirPath: string, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+        let sourceFilePath = getNormalizedAbsolutePath(fileName, currentDirectory);
+        const isSourceFileInCommonSourceDirectory = getCanonicalFileName(sourceFilePath).indexOf(getCanonicalFileName(commonSourceDirectory)) === 0;
         sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
         return combinePaths(newDirPath, sourceFilePath);
     }
@@ -3283,8 +3310,8 @@ namespace ts {
         // TODO: GH#18217
         let firstAccessor!: AccessorDeclaration;
         let secondAccessor!: AccessorDeclaration;
-        let getAccessor!: AccessorDeclaration;
-        let setAccessor!: AccessorDeclaration;
+        let getAccessor!: GetAccessorDeclaration;
+        let setAccessor!: SetAccessorDeclaration;
         if (hasDynamicName(accessor)) {
             firstAccessor = accessor;
             if (accessor.kind === SyntaxKind.GetAccessor) {
@@ -3312,11 +3339,11 @@ namespace ts {
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                            getAccessor = <AccessorDeclaration>member;
+                            getAccessor = <GetAccessorDeclaration>member;
                         }
 
                         if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                            setAccessor = <AccessorDeclaration>member;
+                            setAccessor = <SetAccessorDeclaration>member;
                         }
                     }
                 }
@@ -4772,6 +4799,11 @@ namespace ts {
         return undefined;
     }
 
+    /** Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__' */
+    export function escapeLeadingUnderscores(identifier: string): __String {
+        return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
+    }
+
     /**
      * Remove extra underscore from escaped identifier text content.
      *
@@ -4961,6 +4993,11 @@ namespace ts {
     /** Gets the JSDoc class tag for the node if present */
     export function getJSDocClassTag(node: Node): JSDocClassTag | undefined {
         return getFirstJSDocTag(node, isJSDocClassTag);
+    }
+
+    /** Gets the JSDoc enum tag for the node if present */
+    export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined {
+        return getFirstJSDocTag(node, isJSDocEnumTag);
     }
 
     /** Gets the JSDoc this tag for the node if present */
@@ -5725,6 +5762,10 @@ namespace ts {
 
     export function isJSDocClassTag(node: Node): node is JSDocClassTag {
         return node.kind === SyntaxKind.JSDocClassTag;
+    }
+
+    export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
+        return node.kind === SyntaxKind.JSDocEnumTag;
     }
 
     export function isJSDocThisTag(node: Node): node is JSDocThisTag {
@@ -6600,18 +6641,7 @@ namespace ts {
     }
 
     export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
-        switch (node.kind) {
-            case SyntaxKind.JsxAttribute:
-            case SyntaxKind.JsxSpreadAttribute:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return true;
-            default:
-                return false;
-        }
+        return node.kind === SyntaxKind.JsxAttribute || node.kind === SyntaxKind.JsxSpreadAttribute || isObjectLiteralElementLike(node);
     }
 
     /* @internal */
@@ -7125,6 +7155,12 @@ namespace ts {
         // but not including any trailing directory separator.
         path = removeTrailingDirectorySeparator(path);
         return path.slice(0, Math.max(rootLength, path.lastIndexOf(directorySeparator)));
+    }
+
+    export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+        const canonicalFileName = getCanonicalFileName(fileName);
+        const canonicalDirectoryName = getCanonicalFileName(directoryName);
+        return startsWith(canonicalFileName, canonicalDirectoryName + "/") || startsWith(canonicalFileName, canonicalDirectoryName + "\\");
     }
 
     export function isUrl(path: string) {
@@ -8089,5 +8125,92 @@ namespace ts {
         const index = arr.indexOf(value);
         Debug.assert(index !== -1);
         return arr.slice(index);
+    }
+
+    export function minAndMax<T>(arr: ReadonlyArray<T>, getValue: (value: T) => number): { readonly min: number, readonly max: number } {
+        Debug.assert(arr.length !== 0);
+        let min = getValue(arr[0]);
+        let max = min;
+        for (let i = 1; i < arr.length; i++) {
+            const value = getValue(arr[i]);
+            if (value < min) {
+                min = value;
+            }
+            else if (value > max) {
+                max = value;
+            }
+        }
+        return { min, max };
+    }
+
+    export interface ReadonlyNodeSet<TNode extends Node> {
+        has(node: TNode): boolean;
+        forEach(cb: (node: TNode) => void): void;
+        some(pred: (node: TNode) => boolean): boolean;
+    }
+
+    export class NodeSet<TNode extends Node> implements ReadonlyNodeSet<TNode> {
+        private map = createMap<TNode>();
+
+        add(node: TNode): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        tryAdd(node: TNode): boolean {
+            if (this.has(node)) return false;
+            this.add(node);
+            return true;
+        }
+        has(node: TNode): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: TNode) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: TNode) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
+    }
+
+    export interface ReadonlyNodeMap<TNode extends Node, TValue> {
+        get(node: TNode): TValue | undefined;
+        has(node: TNode): boolean;
+    }
+
+    export class NodeMap<TNode extends Node, TValue> implements ReadonlyNodeMap<TNode, TValue> {
+        private map = createMap<{ node: TNode, value: TValue }>();
+
+        get(node: TNode): TValue | undefined {
+            const res = this.map.get(String(getNodeId(node)));
+            return res && res.value;
+        }
+
+        getOrUpdate(node: TNode, setValue: () => TValue): TValue {
+            const res = this.get(node);
+            if (res) return res;
+            const value = setValue();
+            this.set(node, value);
+            return value;
+        }
+
+        set(node: TNode, value: TValue): void {
+            this.map.set(String(getNodeId(node)), { node, value });
+        }
+
+        has(node: TNode): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+
+        forEach(cb: (value: TValue, node: TNode) => void): void {
+            this.map.forEach(({ node, value }) => cb(value, node));
+        }
+    }
+
+    export function rangeOfNode(node: Node): TextRange {
+        return { pos: getTokenPosOfNode(node), end: node.end };
+    }
+
+    export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
+        // Include the `<>`
+        return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
     }
 }

@@ -1,15 +1,11 @@
 === tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads2.ts ===
 interface A {
->A : A
-
     (): string;
     (x: number): number;
 >x : number
 }
 
 interface A {
->A : A
-
     (x: number, y: number): boolean;
 >x : number
 >y : number
@@ -17,7 +13,6 @@ interface A {
 
 var a: A;
 >a : A
->A : A
 
 var r = a();
 >r : string
@@ -41,38 +36,23 @@ module G {
 >G : typeof G
 
     interface A<T> {
->A : A<T>
->T : T
-
         (): string;
         (x: T): T;
 >x : T
->T : T
->T : T
     }
 
     interface A<T> {
->A : A<T>
->T : T
-
         (x: T, y: number): T;
 >x : T
->T : T
 >y : number
->T : T
 
         <U>(x: U, y: T): U;
->U : U
 >x : U
->U : U
 >y : T
->T : T
->U : U
     }
 
     var a: A<boolean>;
 >a : A<boolean>
->A : A<T>
 
     var r = a();
 >r : string

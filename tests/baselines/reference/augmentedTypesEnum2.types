@@ -5,8 +5,6 @@ enum e1 { One } // error
 >One : e1
 
 interface e1 { // error
->e1 : e1
-
     foo(): void;
 >foo : () => void
 }

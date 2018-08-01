@@ -2305,8 +2305,11 @@ declare module "fs" {
             const files = [file, module, libFile];
             const host = createWatchedSystem(files, { currentDirectory });
             const watch = createWatchOfFilesAndCompilerOptions([file.path], host);
+
             checkProgramActualFiles(watch(), [file.path, libFile.path]);
             checkOutputErrorsInitial(host, [getDiagnosticModuleNotFoundOfFile(watch(), file, "qqq")]);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [`${currentDirectory}/node_modules`, `${currentDirectory}/node_modules/@types`], /*recursive*/ true);
 
             host.renameFolder(`${currentDirectory}/node_modules2`, `${currentDirectory}/node_modules`);
             host.runQueuedTimeoutCallbacks();
@@ -2358,61 +2361,95 @@ declare module "fs" {
     describe("tsc-watch console clearing", () => {
         const currentDirectoryLog = "Current directory: / CaseSensitiveFileNames: false\n";
         const fileWatcherAddedLog = [
-            "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
+            "FileWatcher:: Added:: WatchInfo: /f.ts 250 Source file\n",
             "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
         ];
+
+        const file: File = {
+            path: "/f.ts",
+            content: ""
+        };
 
         function getProgramSynchronizingLog(options: CompilerOptions) {
             return [
                 "Synchronizing program\n",
                 "CreatingProgramWith::\n",
-                "  roots: [\"f.ts\"]\n",
+                "  roots: [\"/f.ts\"]\n",
                 `  options: ${JSON.stringify(options)}\n`
             ];
         }
 
-        function checkConsoleClearing(options: CompilerOptions = {}) {
-            const file = {
-                path: "f.ts",
-                content: ""
-            };
-            const files = [file, libFile];
-            const disableConsoleClear = options.diagnostics || options.extendedDiagnostics || options.preserveWatchOutput;
+        function isConsoleClearDisabled(options: CompilerOptions) {
+            return options.diagnostics || options.extendedDiagnostics || options.preserveWatchOutput;
+        }
+
+        function verifyCompilation(host: WatchedSystem, options: CompilerOptions, initialDisableOptions?: CompilerOptions) {
+            const disableConsoleClear = isConsoleClearDisabled(options);
             const hasLog = options.extendedDiagnostics || options.diagnostics;
-            const host = createWatchedSystem(files);
-            createWatchOfFilesAndCompilerOptions([file.path], host, options);
-            checkOutputErrorsInitial(host, emptyArray, disableConsoleClear, hasLog ? [
+            checkOutputErrorsInitial(host, emptyArray, initialDisableOptions ? isConsoleClearDisabled(initialDisableOptions) : disableConsoleClear, hasLog ? [
                 currentDirectoryLog,
                 ...getProgramSynchronizingLog(options),
                 ...(options.extendedDiagnostics ? fileWatcherAddedLog : emptyArray)
             ] : undefined);
-
-            file.content = "//";
-            host.reloadFS(files);
+            host.modifyFile(file.path, "//");
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, hasLog ? [
-                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n",
+                "FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 Source file\n",
                 "Scheduling update\n",
-                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n"
+                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 Source file\n"
             ] : undefined, hasLog ? getProgramSynchronizingLog(options) : undefined);
         }
 
+        function checkConsoleClearingUsingCommandLineOptions(options: CompilerOptions = {}) {
+            const files = [file, libFile];
+            const host = createWatchedSystem(files);
+            createWatchOfFilesAndCompilerOptions([file.path], host, options);
+            verifyCompilation(host, options);
+        }
+
         it("without --diagnostics or --extendedDiagnostics", () => {
-            checkConsoleClearing();
+            checkConsoleClearingUsingCommandLineOptions();
         });
         it("with --diagnostics", () => {
-            checkConsoleClearing({
+            checkConsoleClearingUsingCommandLineOptions({
                 diagnostics: true,
             });
         });
         it("with --extendedDiagnostics", () => {
-            checkConsoleClearing({
+            checkConsoleClearingUsingCommandLineOptions({
                 extendedDiagnostics: true,
             });
         });
         it("with --preserveWatchOutput", () => {
-            checkConsoleClearing({
+            checkConsoleClearingUsingCommandLineOptions({
                 preserveWatchOutput: true,
+            });
+        });
+
+        describe("when preserveWatchOutput is true in config file", () => {
+            const compilerOptions: CompilerOptions = {
+                preserveWatchOutput: true
+            };
+            const configFile: File = {
+                path: "/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+            const files = [file, configFile, libFile];
+            it("using createWatchOfConfigFile ", () => {
+                const host = createWatchedSystem(files);
+                createWatchOfConfigFile(configFile.path, host);
+                // Initially console is cleared if --preserveOutput is not provided since the config file is yet to be parsed
+                verifyCompilation(host, compilerOptions, {});
+            });
+            it("when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile", () => {
+                const host = createWatchedSystem(files);
+                const reportDiagnostic = createDiagnosticReporter(host);
+                const optionsToExtend: CompilerOptions = {};
+                const configParseResult = parseConfigFileWithSystem(configFile.path, optionsToExtend, host, reportDiagnostic)!;
+                const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath!, optionsToExtend, host, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(host));
+                watchCompilerHost.configFileParsingResult = configParseResult;
+                createWatchProgram(watchCompilerHost);
+                verifyCompilation(host, compilerOptions);
             });
         });
     });
@@ -2631,7 +2668,7 @@ declare module "fs" {
             createWatchOfConfigFile("tsconfig.json", host);
             checkWatchedFilesDetailed(host, [libFile.path, mainFile.path, config.path, linkedPackageIndex.path, linkedPackageOther.path], 1);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, [mainPackageRoot, linkedPackageRoot, `${mainPackageRoot}/node_modules/@types`, `${projectRoot}/node_modules/@types`], 1, /*recursive*/ true);
+            checkWatchedDirectoriesDetailed(host, [`${mainPackageRoot}/@scoped`, `${mainPackageRoot}/node_modules`, linkedPackageRoot, `${mainPackageRoot}/node_modules/@types`, `${projectRoot}/node_modules/@types`], 1, /*recursive*/ true);
         });
     });
 

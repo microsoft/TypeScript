@@ -1,13 +1,10 @@
 === tests/cases/compiler/typeVal.ts ===
 interface I {
->I : I
-
     I:number;
 >I : number
 }
 
 var I:I = { I: 3};
->I : I
 >I : I
 >{ I: 3} : { I: number; }
 >I : number

@@ -38,6 +38,7 @@ declare var module: any;
 === tests/cases/conformance/salsa/minimatch.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
+>module.exports : Symbol("tests/cases/conformance/salsa/minimatch", Decl(minimatch.js, 0, 0))
 >module : Symbol(export=, Decl(minimatch.js, 0, 0))
 >exports : Symbol(export=, Decl(minimatch.js, 0, 0))
 >minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))

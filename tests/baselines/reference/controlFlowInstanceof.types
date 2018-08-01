@@ -4,8 +4,6 @@
 function f1(s: Set<string> | Set<number>) {
 >f1 : (s: Set<string> | Set<number>) => void
 >s : Set<string> | Set<number>
->Set : Set<T>
->Set : Set<T>
 
     s = new Set<number>();
 >s = new Set<number>() : Set<number>
@@ -38,8 +36,6 @@ function f1(s: Set<string> | Set<number>) {
 function f2(s: Set<string> | Set<number>) {
 >f2 : (s: Set<string> | Set<number>) => void
 >s : Set<string> | Set<number>
->Set : Set<T>
->Set : Set<T>
 
     s = new Set<number>();
 >s = new Set<number>() : Set<number>
@@ -72,8 +68,6 @@ function f2(s: Set<string> | Set<number>) {
 function f3(s: Set<string> | Set<number>) {
 >f3 : (s: Set<string> | Set<number>) => void
 >s : Set<string> | Set<number>
->Set : Set<T>
->Set : Set<T>
 
     s;  // Set<string> | Set<number>
 >s : Set<string> | Set<number>
@@ -95,8 +89,6 @@ function f3(s: Set<string> | Set<number>) {
 function f4(s: Set<string> | Set<number>) {
 >f4 : (s: Set<string> | Set<number>) => void
 >s : Set<string> | Set<number>
->Set : Set<T>
->Set : Set<T>
 
     s = new Set<number>();
 >s = new Set<number>() : Set<number>
@@ -140,7 +132,6 @@ class C extends A { c: string }
 function foo(x: A | undefined) {
 >foo : (x: A) => void
 >x : A
->A : A
 
     x;  // A | undefined
 >x : A
@@ -219,8 +210,6 @@ function foo(x: A | undefined) {
 // Y is assignable to X, but not a subtype of X
 
 interface X {
->X : X
-
     x?: string;
 >x : string
 }
@@ -235,7 +224,6 @@ class Y {
 function goo(x: X) {
 >goo : (x: X) => void
 >x : X
->X : X
 
     x;
 >x : X

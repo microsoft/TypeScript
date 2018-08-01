@@ -67,41 +67,21 @@ namespace ts.NavigateTo {
         }
     }
 
-    function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
+    function tryAddSingleDeclarationName(declaration: Declaration, containers: Push<string>): boolean {
         const name = getNameOfDeclaration(declaration);
-        if (name && isPropertyNameLiteral(name)) {
-            containers.unshift(getTextOfIdentifierOrLiteral(name));
-            return true;
-        }
-        else if (name && name.kind === SyntaxKind.ComputedPropertyName) {
-            return tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ true);
-        }
-        else {
-            // Don't know how to add this.
-            return false;
-        }
+        return !!name && (pushLiteral(name, containers) || name.kind === SyntaxKind.ComputedPropertyName && tryAddComputedPropertyName(name.expression, containers));
     }
 
     // Only added the names of computed properties if they're simple dotted expressions, like:
     //
     //      [X.Y.Z]() { }
-    function tryAddComputedPropertyName(expression: Expression, containers: string[], includeLastPortion: boolean): boolean {
-        if (isPropertyNameLiteral(expression)) {
-            const text = getTextOfIdentifierOrLiteral(expression);
-            if (includeLastPortion) {
-                containers.unshift(text);
-            }
-            return true;
-        }
-        if (isPropertyAccessExpression(expression)) {
-            if (includeLastPortion) {
-                containers.unshift(expression.name.text);
-            }
+    function tryAddComputedPropertyName(expression: Expression, containers: Push<string>): boolean {
+        return pushLiteral(expression, containers)
+            || isPropertyAccessExpression(expression) && (containers.push(expression.name.text), true) && tryAddComputedPropertyName(expression.expression, containers);
+    }
 
-            return tryAddComputedPropertyName(expression.expression, containers, /*includeLastPortion*/ true);
-        }
-
-        return false;
+    function pushLiteral(node: Node, containers: Push<string>): boolean {
+        return isPropertyNameLiteral(node) && (containers.push(getTextOfIdentifierOrLiteral(node)), true);
     }
 
     function getContainers(declaration: Declaration): ReadonlyArray<string> {
@@ -110,9 +90,11 @@ namespace ts.NavigateTo {
         // First, if we started with a computed property name, then add all but the last
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
-        if (name && name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
+        if (name && name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers)) {
             return emptyArray;
         }
+        // Don't include the last portion.
+        containers.shift();
 
         // Now, walk up our containers, adding all their names to the container array.
         let container = getContainerNode(declaration);
@@ -125,7 +107,7 @@ namespace ts.NavigateTo {
             container = getContainerNode(container);
         }
 
-        return containers;
+        return containers.reverse();
     }
 
     function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {

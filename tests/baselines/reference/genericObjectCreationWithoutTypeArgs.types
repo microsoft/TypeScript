@@ -1,7 +1,6 @@
 === tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts ===
 class SS<T>{
 >SS : SS<T>
->T : T
 
 }
 

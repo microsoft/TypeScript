@@ -20,7 +20,6 @@ var r2 = y<string>();
 
 var c: Function;
 >c : Function
->Function : Function
 
 var r3 = c<number>(); // should be an error
 >r3 : any
@@ -29,7 +28,6 @@ var r3 = c<number>(); // should be an error
 
 class C implements Function {
 >C : C
->Function : Function
 
     prototype = null;
 >prototype : any
@@ -50,7 +48,6 @@ class C implements Function {
 
 var c2: C;
 >c2 : C
->C : C
 
 var r4 = c2<number>(); // should be an error
 >r4 : any
@@ -63,7 +60,6 @@ class C2 extends Function { } // error
 
 var c3: C2;
 >c3 : C2
->C2 : C2
 
 var r5 = c3<number>(); // error
 >r5 : any
@@ -71,14 +67,11 @@ var r5 = c3<number>(); // error
 >c3 : C2
 
 interface I {
->I : I
-
     (number): number;
 >number : any
 }
 var z: I;
 >z : I
->I : I
 
 var r6 = z<string>(1); // error
 >r6 : number
@@ -87,18 +80,12 @@ var r6 = z<string>(1); // error
 >1 : 1
 
 interface callable2<T> {
->callable2 : callable2<T>
->T : T
-
     (a: T): T;
 >a : T
->T : T
->T : T
 }
 
 var c4: callable2<number>;
 >c4 : callable2<number>
->callable2 : callable2<T>
 
 c4<number>(1);
 >c4<number>(1) : number
@@ -106,18 +93,12 @@ c4<number>(1);
 >1 : 1
 
 interface callable3<T> {
->callable3 : callable3<T>
->T : T
-
     (a: T): T;
 >a : T
->T : T
->T : T
 }
 
 var c5: callable3<number>;
 >c5 : callable3<number>
->callable3 : callable3<T>
 
 c5<string>(1); // error
 >c5<string>(1) : number

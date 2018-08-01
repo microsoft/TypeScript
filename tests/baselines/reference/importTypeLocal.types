@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/import/foo.ts ===
 interface Point {
->Point : Point
-
     x: number;
 >x : number
 
@@ -13,11 +11,7 @@ export = Point;
 
 === tests/cases/conformance/types/import/foo2.ts ===
 namespace Bar {
->Bar : typeof Bar
-
     export interface I {
->I : I
-
         a: string;
 >a : string
 
@@ -27,11 +21,7 @@ namespace Bar {
 }
 
 export namespace Baz {
->Baz : any
-
     export interface J {
->J : J
-
         a: number;
 >a : number
 
@@ -46,12 +36,10 @@ class Bar {
     item: Bar.I;
 >item : Bar.I
 >Bar : any
->I : Bar.I
 
     constructor(input: Baz.J) {}
 >input : Baz.J
 >Baz : any
->J : Baz.J
 }
 export { Bar }
 >Bar : typeof Bar
@@ -68,7 +56,6 @@ export const x: import("./foo") = { x: 0, y: 0 };
 export let y: import("./foo2").Bar.I = { a: "", b: 0 };
 >y : import("tests/cases/conformance/types/import/foo2").Bar.I
 >Bar : any
->I : import("tests/cases/conformance/types/import/foo2").Bar.I
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
 >"" : ""

@@ -1,23 +1,14 @@
 === tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts ===
 class Chain<T extends A> {
 >Chain : Chain<T>
->T : T
->A : A
 
     constructor(public value: T) { }
 >value : T
->T : T
 
     then<S extends T>(cb: (x: T) => S): Chain<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
->S : S
->T : T
 >cb : (x: T) => S
 >x : T
->T : T
->S : S
->Chain : Chain<T>
->S : S
 
         return null;
 >null : null

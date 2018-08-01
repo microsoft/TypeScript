@@ -22,15 +22,12 @@ declare namespace ns {
 var foge: N.S;
 >foge : any
 >N : any
->S : No type information available!
 
 var foo: M.F;
 >foo : any
 >M : any
->F : No type information available!
 
 let x: ns.A;
 >x : any
 >ns : any
->A : No type information available!
 

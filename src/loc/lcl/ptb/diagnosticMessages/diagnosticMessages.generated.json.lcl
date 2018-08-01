@@ -480,7 +480,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um build não -dry compilaria o projeto '{0}']]></Val>
+            <Val><![CDATA[Um build não -dry criaria o projeto '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

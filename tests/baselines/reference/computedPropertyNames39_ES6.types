@@ -13,7 +13,6 @@ class C {
 
     [s: number]: Foo2;
 >s : number
->Foo2 : Foo2
 
     // Computed properties
     get [1 << 6]() { return new Foo }
@@ -30,5 +29,4 @@ class C {
 >1 : 1
 >6 : 6
 >p : Foo2
->Foo2 : Foo2
 }

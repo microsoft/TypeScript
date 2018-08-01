@@ -62,7 +62,6 @@ module Ka {
 const e0: X.Foo | boolean = Y.Foo.A; // ok
 >e0 : boolean | X.Foo
 >X : any
->Foo : X.Foo
 >Y.Foo.A : Y.Foo.A
 >Y.Foo : typeof Y.Foo
 >Y : typeof Y
@@ -72,7 +71,6 @@ const e0: X.Foo | boolean = Y.Foo.A; // ok
 const e1: X.Foo | boolean = Z.Foo.A; // not legal, Z is computed
 >e1 : boolean | X.Foo
 >X : any
->Foo : X.Foo
 >Z.Foo.A : Z.Foo
 >Z.Foo : typeof Z.Foo
 >Z : typeof Z
@@ -83,10 +81,8 @@ const e2: X.Foo.A | X.Foo.B | boolean = Z.Foo.A; // still not legal
 >e2 : boolean | X.Foo
 >X : any
 >Foo : any
->A : X.Foo.A
 >X : any
 >Foo : any
->B : X.Foo.B
 >Z.Foo.A : Z.Foo
 >Z.Foo : typeof Z.Foo
 >Z : typeof Z
@@ -97,7 +93,6 @@ const e3: X.Foo.B | boolean = Z.Foo.A; // not legal
 >e3 : boolean | X.Foo.B
 >X : any
 >Foo : any
->B : X.Foo.B
 >Z.Foo.A : Z.Foo
 >Z.Foo : typeof Z.Foo
 >Z : typeof Z
@@ -108,7 +103,6 @@ const e4: X.Foo.A | boolean = Z.Foo.A; // not legal either because Z.Foo is comp
 >e4 : boolean | X.Foo.A
 >X : any
 >Foo : any
->A : X.Foo.A
 >Z.Foo.A : Z.Foo
 >Z.Foo : typeof Z.Foo
 >Z : typeof Z
@@ -118,7 +112,6 @@ const e4: X.Foo.A | boolean = Z.Foo.A; // not legal either because Z.Foo is comp
 const e5: Ka.Foo | boolean = Z.Foo.A; // ok
 >e5 : boolean | Ka.Foo
 >Ka : any
->Foo : Ka.Foo
 >Z.Foo.A : Z.Foo
 >Z.Foo : typeof Z.Foo
 >Z : typeof Z

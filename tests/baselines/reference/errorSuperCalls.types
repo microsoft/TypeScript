@@ -82,15 +82,11 @@ class NoBase {
 
 class Base<T> { private n: T; }
 >Base : Base<T>
->T : T
 >n : T
->T : T
 
 class Derived<T> extends Base<T> {
 >Derived : Derived<T>
->T : T
 >Base : Base<T>
->T : T
 
     //super call with type arguments 
     constructor() {

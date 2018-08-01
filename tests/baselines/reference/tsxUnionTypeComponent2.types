@@ -5,11 +5,9 @@ import React = require('react');
 type Invalid1 = React.ComponentClass<any> | number;
 >Invalid1 : Invalid1
 >React : any
->ComponentClass : React.ComponentClass<P>
 
 const X: Invalid1 = 1;
 >X : Invalid1
->Invalid1 : Invalid1
 >1 : 1
 
 <X />;

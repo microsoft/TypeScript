@@ -1,16 +1,13 @@
 === tests/cases/compiler/typeParametersInStaticAccessors.ts ===
 class foo<T> {
 >foo : foo<T>
->T : T
 
     static get Foo(): () => T { return null; }
 >Foo : () => any
->T : No type information available!
 >null : null
 
     static set Bar(v: { v: T }) { }
 >Bar : { v: any; }
 >v : { v: any; }
 >v : any
->T : No type information available!
 } 

@@ -1,7 +1,5 @@
 === tests/cases/compiler/typeInfer1.ts ===
 interface ITextWriter2 {
->ITextWriter2 : ITextWriter2
-
     Write(s:string):void;
 >Write : (s: string) => void
 >s : string
@@ -13,7 +11,6 @@ interface ITextWriter2 {
 
 var x: ITextWriter2 = {
 >x : ITextWriter2
->ITextWriter2 : ITextWriter2
 >{    Write: function (s:string):void {},    WriteLine: function(s:string):void {}} : { Write: (s: string) => void; WriteLine: (s: string) => void; }
 
     Write: function (s:string):void {},
@@ -29,7 +26,6 @@ var x: ITextWriter2 = {
 
 var yyyyyyyy: ITextWriter2 = {
 >yyyyyyyy : ITextWriter2
->ITextWriter2 : ITextWriter2
 >{    Moo: function() { return "cow"; }} : { Moo: () => string; }
 
     Moo: function() { return "cow"; }

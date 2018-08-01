@@ -583,6 +583,10 @@ interface Array<T> {}`
                 return;
             }
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
+            if (isFsFolder(fileOrDirectory)) {
+                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, "");
+                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, "");
+            }
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
@@ -599,12 +603,11 @@ interface Array<T> {}`
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
             if (isFsFolder(fileOrDirectory)) {
                 Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
-                const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
                 // since that is something we would want to do for both file as well as folder we are deleting
-                this.invokeWatchedDirectoriesCallback(fileOrDirectory.fullPath, relativePath);
-                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, relativePath);
+                this.invokeWatchedDirectoriesCallback(fileOrDirectory.fullPath, "");
+                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, "");
             }
 
             if (basePath !== fileOrDirectory.path) {

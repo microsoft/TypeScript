@@ -1,14 +1,11 @@
 === tests/cases/compiler/spreadTypeRemovesReadonly.ts ===
 interface ReadonlyData {
->ReadonlyData : ReadonlyData
-
     readonly value: string;
 >value : string
 }
 
 const data: ReadonlyData = { value: 'foo' };
 >data : ReadonlyData
->ReadonlyData : ReadonlyData
 >{ value: 'foo' } : { value: string; }
 >value : string
 >'foo' : "foo"

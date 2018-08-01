@@ -3,13 +3,11 @@
 function f(x: ()) {
 >f : (x: () => any) => void
 >x : () => any
-> : No type information available!
 }
 
 // Error (no '=>')
 var g: (param);
 >g : any
->param : No type information available!
 
 // Okay
 var h: { () }

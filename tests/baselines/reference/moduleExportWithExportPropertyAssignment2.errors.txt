@@ -1,4 +1,5 @@
 tests/cases/conformance/salsa/a.js(4,6): error TS2339: Property 'f' does not exist on type 'number'.
+tests/cases/conformance/salsa/mod1.js(3,16): error TS2339: Property 'f' does not exist on type 'number'.
 
 
 ==== tests/cases/conformance/salsa/a.js (1 errors) ====
@@ -12,8 +13,10 @@ tests/cases/conformance/salsa/a.js(4,6): error TS2339: Property 'f' does not exi
 ==== tests/cases/conformance/salsa/requires.d.ts (0 errors) ====
     declare var module: { exports: any };
     declare function require(name: string): any;
-==== tests/cases/conformance/salsa/mod1.js (0 errors) ====
+==== tests/cases/conformance/salsa/mod1.js (1 errors) ====
     /// <reference path='./requires.d.ts' />
     module.exports = 1
     module.exports.f = function () { }
+                   ~
+!!! error TS2339: Property 'f' does not exist on type 'number'.
     

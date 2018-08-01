@@ -146,8 +146,10 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
 
             const expectedWatchedDirectoriesRecursive = createMap<number>();
-            expectedWatchedDirectoriesRecursive.set("/a/b", 2); // TypingInstaller and wild card
+            expectedWatchedDirectoriesRecursive.set("/a/b", 1); // wild card
             expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
+            expectedWatchedDirectoriesRecursive.set("/a/b/node_modules", 1); // TypingInstaller
+            expectedWatchedDirectoriesRecursive.set("/a/b/bower_components", 1); // TypingInstaller
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
@@ -844,9 +846,7 @@ namespace ts.projectSystem {
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
 
-            const watchedRecursiveDirectoriesExpected = createMap<number>();
-            watchedRecursiveDirectoriesExpected.set("/", 2); // wild card + type installer
-            checkWatchedDirectoriesDetailed(host, watchedRecursiveDirectoriesExpected, /*recursive*/ true);
+            checkWatchedDirectoriesDetailed(host, ["/", "/node_modules", "/bower_components"], 1, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 

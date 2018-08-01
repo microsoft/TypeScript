@@ -2,17 +2,13 @@
 /// <reference types="lib"/>
 /// <reference path="ref.d.ts" />
 interface A {
->A : A
-
     x: () => $
 >x : () => $
->$ : $
 }
 === /ref.d.ts ===
 // $ comes from d.ts file - no need to add type reference directive
 
 interface $ { x }
->$ : $
 >x : any
 
 === /types/lib/index.d.ts ===

@@ -2,7 +2,6 @@
 function f(x: Promise<number>) {
 >f : (x: Promise<number>) => void
 >x : Promise<number>
->Promise : Promise<T>
 
     x.toLowerCase();
 >x.toLowerCase() : any

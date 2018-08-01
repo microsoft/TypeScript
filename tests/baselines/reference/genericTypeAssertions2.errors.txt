@@ -5,7 +5,7 @@ tests/cases/compiler/genericTypeAssertions2.ts(10,5): error TS2322: Type 'B<stri
         Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/genericTypeAssertions2.ts(11,5): error TS2322: Type 'A<number>' is not assignable to type 'B<number>'.
   Property 'bar' is missing in type 'A<number>'.
-tests/cases/compiler/genericTypeAssertions2.ts(13,21): error TS2352: Type 'undefined[]' cannot be converted to type 'A<number>'.
+tests/cases/compiler/genericTypeAssertions2.ts(13,21): error TS2352: Conversion of type 'undefined[]' to type 'A<number>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'foo' is missing in type 'undefined[]'.
 
 
@@ -33,5 +33,5 @@ tests/cases/compiler/genericTypeAssertions2.ts(13,21): error TS2352: Type 'undef
     var r4: A<number> = <A<number>>new A();
     var r5: A<number> = <A<number>>[]; // error
                         ~~~~~~~~~~~~~
-!!! error TS2352: Type 'undefined[]' cannot be converted to type 'A<number>'.
+!!! error TS2352: Conversion of type 'undefined[]' to type 'A<number>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'foo' is missing in type 'undefined[]'.

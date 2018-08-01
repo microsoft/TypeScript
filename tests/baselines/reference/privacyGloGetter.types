@@ -28,7 +28,6 @@ module m1 {
         private set p1_private(m1_c3_p1_arg: C1_public) {
 >p1_private : C1_public
 >m1_c3_p1_arg : C1_public
->C1_public : C1_public
         }
 
         private get p2_private() {
@@ -42,7 +41,6 @@ module m1 {
         private set p2_private(m1_c3_p2_arg: C1_public) {
 >p2_private : C1_public
 >m1_c3_p2_arg : C1_public
->C1_public : C1_public
         }
 
         private get p3_private() {
@@ -56,12 +54,10 @@ module m1 {
         private set p3_private(m1_c3_p3_arg: C2_private) {
 >p3_private : C2_private
 >m1_c3_p3_arg : C2_private
->C2_private : C2_private
         }
 
         public get p4_public(): C2_private { // error
 >p4_public : C2_private
->C2_private : C2_private
 
             return new C2_private(); //error
 >new C2_private() : C2_private
@@ -71,7 +67,6 @@ module m1 {
         public set p4_public(m1_c3_p4_arg: C2_private) { // error
 >p4_public : C2_private
 >m1_c3_p4_arg : C2_private
->C2_private : C2_private
         }
     }
 
@@ -89,7 +84,6 @@ module m1 {
         private set p1_private(m1_c3_p1_arg: C1_public) {
 >p1_private : C1_public
 >m1_c3_p1_arg : C1_public
->C1_public : C1_public
         }
 
         private get p2_private() {
@@ -103,7 +97,6 @@ module m1 {
         private set p2_private(m1_c3_p2_arg: C1_public) {
 >p2_private : C1_public
 >m1_c3_p2_arg : C1_public
->C1_public : C1_public
         }
 
         private get p3_private() {
@@ -117,12 +110,10 @@ module m1 {
         private set p3_private(m1_c3_p3_arg: C2_private) {
 >p3_private : C2_private
 >m1_c3_p3_arg : C2_private
->C2_private : C2_private
         }
 
         public get p4_public(): C2_private {
 >p4_public : C2_private
->C2_private : C2_private
 
             return new C2_private();
 >new C2_private() : C2_private
@@ -132,7 +123,6 @@ module m1 {
         public set p4_public(m1_c3_p4_arg: C2_private) {
 >p4_public : C2_private
 >m1_c3_p4_arg : C2_private
->C2_private : C2_private
         }
     }
 }
@@ -155,7 +145,6 @@ class C7_public {
     private set p1_private(m1_c3_p1_arg: C6_public) {
 >p1_private : C6_public
 >m1_c3_p1_arg : C6_public
->C6_public : C6_public
     }
 
     private get p2_private() {
@@ -169,6 +158,5 @@ class C7_public {
     private set p2_private(m1_c3_p2_arg: C6_public) {
 >p2_private : C6_public
 >m1_c3_p2_arg : C6_public
->C6_public : C6_public
     }
 }

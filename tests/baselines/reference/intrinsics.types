@@ -1,7 +1,6 @@
 === tests/cases/compiler/intrinsics.ts ===
 var hasOwnProperty: hasOwnProperty; // Error
 >hasOwnProperty : any
->hasOwnProperty : No type information available!
 
 module m1 {
 >m1 : typeof m1
@@ -10,12 +9,9 @@ module m1 {
 >__proto__ : any
 
     interface __proto__ {}
->__proto__ : __proto__
 
     class C<T extends { __proto__: __proto__ }> { }
 >C : C<T>
->T : T
->__proto__ : __proto__
 >__proto__ : __proto__
 }
 
@@ -33,7 +29,6 @@ m1.__proto__ = 0;
 
 class Foo<__proto__> { }
 >Foo : Foo<__proto__>
->__proto__ : __proto__
 
 var foo: (__proto__: number) => void;
 >foo : (__proto__: number) => void

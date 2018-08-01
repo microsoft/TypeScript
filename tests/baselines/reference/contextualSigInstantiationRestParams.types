@@ -1,13 +1,8 @@
 === tests/cases/compiler/contextualSigInstantiationRestParams.ts ===
 declare function toInstantiate<A, B>(a?: A, b?: B): B;
 >toInstantiate : <A, B>(a?: A, b?: B) => B
->A : A
->B : B
 >a : A
->A : A
 >b : B
->B : B
->B : B
 
 declare function contextual(...s: string[]): string
 >contextual : (...s: string[]) => string

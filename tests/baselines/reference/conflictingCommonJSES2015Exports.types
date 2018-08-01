@@ -7,11 +7,11 @@ export function abc(a, b, c) { return 5; }
 >5 : 5
 
 module.exports = { abc };
->module.exports = { abc } : { [x: string]: any; abc: (a: any, b: any, c: any) => number; }
+>module.exports = { abc } : any
 >module.exports : any
 >module : any
 >exports : any
->{ abc } : { [x: string]: any; abc: (a: any, b: any, c: any) => number; }
+>{ abc } : { abc: (a: any, b: any, c: any) => number; }
 >abc : (a: any, b: any, c: any) => number
 
 === tests/cases/conformance/salsa/use.js ===
