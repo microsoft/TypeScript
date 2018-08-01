@@ -27784,7 +27784,8 @@ namespace ts {
                         setAccessor,
                         getAccessor
                     };
-                }
+                },
+                getSymbolAtLocation
             };
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {

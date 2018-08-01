@@ -2629,10 +2629,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export interface ExportedModulesFromDeclarationEmit {
-        exportedModuleSpecifiers: ReadonlyArray<StringLiteralLike>;
-        exportedModuleSymbolsUsingImportTypeNodes: ReadonlyArray<Symbol>;
-    }
+    export type ExportedModulesFromDeclarationEmit = ReadonlyArray<Symbol>;
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
@@ -3375,6 +3372,7 @@ namespace ts {
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
+        getSymbolAtLocation(node: Node): Symbol | undefined;
     }
 
     export const enum SymbolFlags {

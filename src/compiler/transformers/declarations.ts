@@ -37,8 +37,7 @@ namespace ts {
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
         let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
         let suppressNewDiagnosticContexts: boolean;
-        let exportedModuleSpecifiers: StringLiteralLike[] | undefined;
-        let exportedModuleSymbolsUsingImportTypeNodes: Symbol[] | undefined;
+        let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
         const host = context.getEmitHost();
         const symbolTracker: SymbolTracker = {
@@ -120,7 +119,7 @@ namespace ts {
 
         function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
             if (!isBundledEmit) {
-                (exportedModuleSymbolsUsingImportTypeNodes || (exportedModuleSymbolsUsingImportTypeNodes = [])).push(symbol);
+                (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
             }
         }
 
@@ -233,12 +232,7 @@ namespace ts {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
-            if (exportedModuleSpecifiers || exportedModuleSymbolsUsingImportTypeNodes) {
-                updated.exportedModulesFromDeclarationEmit = {
-                    exportedModuleSpecifiers: exportedModuleSpecifiers || emptyArray,
-                    exportedModuleSymbolsUsingImportTypeNodes: exportedModuleSymbolsUsingImportTypeNodes || emptyArray
-                };
-            }
+            updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
             return updated;
 
             function getFileReferencesForUsedTypeReferences() {
@@ -506,7 +500,10 @@ namespace ts {
                     }
                 }
                 else {
-                    (exportedModuleSpecifiers || (exportedModuleSpecifiers = [])).push(input);
+                    const symbol = resolver.getSymbolAtLocation(input);
+                    if (symbol) {
+                        (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+                    }
                 }
             }
             return input;

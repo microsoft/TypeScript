@@ -260,7 +260,7 @@ namespace ts.BuilderState {
             if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
                 latestSignature = computeHash(emitOutput.outputFiles[0].text);
                 if (exportedModulesMapCache && latestSignature !== prevSignature) {
-                    updateExportedModules(programOfThisState, sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
+                    updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
                 }
             }
             else {
@@ -276,20 +276,14 @@ namespace ts.BuilderState {
     /**
      * Coverts the declaration emit result into exported modules map
      */
-    function updateExportedModules(programOfThisState: Program, sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ComputingExportedModulesMap) {
+    function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ComputingExportedModulesMap) {
         if (!exportedModulesFromDeclarationEmit) {
             exportedModulesMapCache.set(sourceFile.path, false);
             return;
         }
 
-        const checker = programOfThisState.getTypeChecker();
         let exportedModules: Map<true> | undefined;
-
-        exportedModulesFromDeclarationEmit.exportedModuleSpecifiers.forEach(importName =>
-            addExportedModule(getReferencedFileFromImportLiteral(checker, importName)));
-        exportedModulesFromDeclarationEmit.exportedModuleSymbolsUsingImportTypeNodes.forEach(symbol =>
-            addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
-
+        exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
         exportedModulesMapCache.set(sourceFile.path, exportedModules || false);
 
         function addExportedModule(exportedModulePath: Path | undefined) {
