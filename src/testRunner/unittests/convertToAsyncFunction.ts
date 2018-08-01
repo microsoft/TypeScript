@@ -458,6 +458,12 @@ interface Array<T> {}`
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
 }`);
+    _testConvertToAsyncFunction("convertToAsyncFunction_basicWithComments", `
+function [#|f|](): Promise<void>{
+    // here's a comment
+    return fetch('https://typescriptlang.org').then( /* another one! */ result => { /* comment */ console.log(result) });
+}`);
+
         _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunction", `
 [#|():Promise<void> => {|]
     return fetch('https://typescriptlang.org').then(result => console.log(result));
@@ -816,7 +822,6 @@ function my_print (resp): Promise<void> {
 
 `
         );
-
 
         _testConvertToAsyncFunction("convertToAsyncFunction_MultipleReturns1", `
 function [#|f|](): Promise<void> {
