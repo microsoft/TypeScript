@@ -500,7 +500,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const symbol = resolver.getSymbolAtLocation(input);
+                    const symbol = resolver.getSymbolOfExternalModuleSpecifier(input);
                     if (symbol) {
                         (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
                     }

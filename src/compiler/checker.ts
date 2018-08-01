@@ -28090,7 +28090,7 @@ namespace ts {
                         getAccessor
                     };
                 },
-                getSymbolAtLocation
+                getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined)
             };
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {
