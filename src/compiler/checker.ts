@@ -3888,14 +3888,15 @@ namespace ts {
                     const links = getSymbolLinks(symbol);
                     let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
                     if (!specifier) {
-                        specifier = flatten(moduleSpecifiers.getModuleSpecifiers(
+                        specifier = moduleSpecifiers.getModuleSpecifierForDeclarationFile(
                             symbol,
                             compilerOptions,
                             contextFile,
                             context.tracker.moduleResolverHost,
                             context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
-                            { importModuleSpecifierPreference: "non-relative" }
-                        ))[0];
+                            { importModuleSpecifierPreference: "non-relative" },
+                            host.redirectTargetsMap,
+                        );
                         links.specifierCache = links.specifierCache || createMap();
                         links.specifierCache.set(contextFile.path, specifier);
                     }

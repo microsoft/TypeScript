@@ -275,7 +275,7 @@ namespace ts.codefix {
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
         const isJs = isSourceFileJavaScript(sourceFile);
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, ReadonlyArray<FixAddNewImport | FixUseImportType>>(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) => {
-            const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences);
+            const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap);
             return modulePathsGroups.map(group => group.map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                 exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
