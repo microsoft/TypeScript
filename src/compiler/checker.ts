@@ -19592,7 +19592,7 @@ namespace ts {
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp);
-                if (!isJavaScriptConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
+                if (signature.declaration && !isJavaScriptConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
                 if (getThisTypeOfSignature(signature) === voidType) {
