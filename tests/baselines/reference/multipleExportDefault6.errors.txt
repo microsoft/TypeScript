@@ -10,7 +10,7 @@ tests/cases/conformance/externalModules/multipleExportDefault6.ts(5,1): error TS
     }
     ~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2731 tests/cases/conformance/externalModules/multipleExportDefault6.ts:5:1: Another export default is here.
+!!! related TS2734 tests/cases/conformance/externalModules/multipleExportDefault6.ts:5:1: Another export default is here.
     
     export default {
     ~~~~~~~~~~~~~~~~
@@ -19,4 +19,4 @@ tests/cases/conformance/externalModules/multipleExportDefault6.ts(5,1): error TS
     }
     ~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2730 tests/cases/conformance/externalModules/multipleExportDefault6.ts:1:1: The first export default is here.
+!!! related TS2733 tests/cases/conformance/externalModules/multipleExportDefault6.ts:1:1: The first export default is here.
