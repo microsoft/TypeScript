@@ -3293,8 +3293,8 @@ namespace ts {
         // TODO: GH#18217
         let firstAccessor!: AccessorDeclaration;
         let secondAccessor!: AccessorDeclaration;
-        let getAccessor!: AccessorDeclaration;
-        let setAccessor!: AccessorDeclaration;
+        let getAccessor!: GetAccessorDeclaration;
+        let setAccessor!: SetAccessorDeclaration;
         if (hasDynamicName(accessor)) {
             firstAccessor = accessor;
             if (accessor.kind === SyntaxKind.GetAccessor) {
@@ -3322,11 +3322,11 @@ namespace ts {
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                            getAccessor = <AccessorDeclaration>member;
+                            getAccessor = <GetAccessorDeclaration>member;
                         }
 
                         if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                            setAccessor = <AccessorDeclaration>member;
+                            setAccessor = <SetAccessorDeclaration>member;
                         }
                     }
                 }
