@@ -1,8 +1,9 @@
 tests/cases/conformance/salsa/index.js(22,15): error TS2348: Value of type 'typeof C3' is not callable. Did you mean to include 'new'?
 tests/cases/conformance/salsa/index.js(30,15): error TS2348: Value of type 'typeof C4' is not callable. Did you mean to include 'new'?
+tests/cases/conformance/salsa/index.js(55,13): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/conformance/salsa/index.js (2 errors) ====
+==== tests/cases/conformance/salsa/index.js (3 errors) ====
     function C1() {
         if (!(this instanceof C1)) return new C1();
         this.x = 1;
@@ -53,4 +54,15 @@ tests/cases/conformance/salsa/index.js(30,15): error TS2348: Value of type 'type
     };
     
     var c6_v1 = new C6();
+    
+    
+    /**
+     * @constructor
+     * @param {number} num
+     */
+    function C7(num) {}
+    
+    var c7_v1 = new C7();
+                ~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
     
