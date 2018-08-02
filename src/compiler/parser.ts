@@ -719,6 +719,7 @@ namespace ts {
             // Set source file so that errors will be reported with this file name
             sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false);
             sourceFile.flags = contextFlags;
+            noPragmas(sourceFile);
 
             // Prime the scanner.
             nextToken();
@@ -7738,8 +7739,16 @@ namespace ts {
         }
     }
 
-    /*@internal*/
     type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
+
+    function noPragmas(sf: SourceFile) {
+        sf.referencedFiles = emptyArray;
+        sf.typeReferenceDirectives = emptyArray;
+        sf.libReferenceDirectives = emptyArray;
+        sf.amdDependencies = emptyArray;
+        sf.hasNoDefaultLib = false;
+        sf.pragmas = emptyMap;
+    }
 
     /*@internal*/
     export function processPragmasIntoFields(context: PragmaContext, reportDiagnostic: PragmaDiagnosticReporter): void {

@@ -2630,7 +2630,7 @@ namespace ts {
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective?: CheckJsDirective;
         /* @internal */ version: string;
-        /* @internal */ pragmas: PragmaMap;
+        /* @internal */ pragmas: ReadonlyPragmaMap;
         /* @internal */ localJsxNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
 
@@ -5582,13 +5582,19 @@ namespace ts {
     /* @internal */
     export type PragmaPsuedoMapEntry = {[K in keyof PragmaPsuedoMap]: {name: K, args: PragmaPsuedoMap[K]}}[keyof PragmaPsuedoMap];
 
+    /* @internal */
+    export interface ReadonlyPragmaMap extends ReadonlyMap<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]> {
+        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    }
+
     /**
      * A strongly-typed es6 map of pragma entries, the values of which are either a single argument
      * value (if only one was found), or an array of multiple argument values if the pragma is present
      * in multiple places
      */
     /* @internal */
-    export interface PragmaMap extends Map<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]> {
+    export interface PragmaMap extends Map<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]>, ReadonlyPragmaMap {
         set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
         get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
         forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
