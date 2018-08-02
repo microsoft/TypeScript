@@ -30,6 +30,7 @@ node_modules/npm/bin/npm-cli.js(132,17): error TS2339: Property 'config' does no
 node_modules/npm/bin/npm-cli.js(134,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(136,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/html/static/toc.js(3,40): error TS2531: Object is possibly 'null'.
+node_modules/npm/html/static/toc.js(28,3): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/access.js(58,46): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/access.js(65,18): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/access.js(115,19): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
