@@ -1,0 +1,93 @@
+=== tests/cases/compiler/arrayEvery.ts ===
+declare const baseReadonlyArray: ReadonlyArray<number | string>;
+>baseReadonlyArray : ReadonlyArray<string | number>
+>ReadonlyArray : ReadonlyArray<T>
+
+const isNumber = (x: any): x is number => "number" === typeof x;
+>isNumber : (x: any) => x is number
+>(x: any): x is number => "number" === typeof x : (x: any) => x is number
+>x : any
+>x : any
+>"number" === typeof x : boolean
+>"number" : "number"
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : any
+
+if (baseReadonlyArray.every<number>((x): x is number => "number" === typeof x)) {
+>baseReadonlyArray.every<number>((x): x is number => "number" === typeof x) : boolean
+>baseReadonlyArray.every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>baseReadonlyArray : ReadonlyArray<string | number>
+>every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>(x): x is number => "number" === typeof x : (x: string | number) => x is number
+>x : string | number
+>x : any
+>"number" === typeof x : boolean
+>"number" : "number"
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : ReadonlyArray<number>
+>ReadonlyArray : ReadonlyArray<T>
+>baseReadonlyArray : ReadonlyArray<number>
+}
+if (baseReadonlyArray.every<number>(isNumber)) {
+>baseReadonlyArray.every<number>(isNumber) : boolean
+>baseReadonlyArray.every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>baseReadonlyArray : ReadonlyArray<string | number>
+>every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>isNumber : (x: any) => x is number
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : ReadonlyArray<number>
+>ReadonlyArray : ReadonlyArray<T>
+>baseReadonlyArray : ReadonlyArray<number>
+}
+
+if (baseReadonlyArray.every((x: any): x is number => "number" === typeof x)) {
+>baseReadonlyArray.every((x: any): x is number => "number" === typeof x) : boolean
+>baseReadonlyArray.every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>baseReadonlyArray : ReadonlyArray<string | number>
+>every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>(x: any): x is number => "number" === typeof x : (x: any) => x is number
+>x : any
+>x : any
+>"number" === typeof x : boolean
+>"number" : "number"
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : any
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : ReadonlyArray<number>
+>ReadonlyArray : ReadonlyArray<T>
+>baseReadonlyArray : ReadonlyArray<number>
+}
+if (baseReadonlyArray.every(isNumber)) {
+>baseReadonlyArray.every(isNumber) : boolean
+>baseReadonlyArray.every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>baseReadonlyArray : ReadonlyArray<string | number>
+>every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>isNumber : (x: any) => x is number
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : ReadonlyArray<number>
+>ReadonlyArray : ReadonlyArray<T>
+>baseReadonlyArray : ReadonlyArray<number>
+}
+
+baseReadonlyArray.every(x => "number" === typeof x && x > 2);
+>baseReadonlyArray.every(x => "number" === typeof x && x > 2) : boolean
+>baseReadonlyArray.every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>baseReadonlyArray : ReadonlyArray<string | number>
+>every : { <U extends string | number>(callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => value is U, thisArg?: any): this is ReadonlyArray<U>; (callbackfn: (value: string | number, index: number, array: ReadonlyArray<string | number>) => boolean, thisArg?: any): boolean; }
+>x => "number" === typeof x && x > 2 : (x: string | number) => boolean
+>x : string | number
+>"number" === typeof x && x > 2 : boolean
+>"number" === typeof x : boolean
+>"number" : "number"
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>x > 2 : boolean
+>x : number
+>2 : 2
+

@@ -1,0 +1,69 @@
+=== tests/cases/compiler/arrayEvery.ts ===
+declare const baseReadonlyArray: ReadonlyArray<number | string>;
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+
+const isNumber = (x: any): x is number => "number" === typeof x;
+>isNumber : Symbol(isNumber, Decl(arrayEvery.ts, 1, 5))
+>x : Symbol(x, Decl(arrayEvery.ts, 1, 18))
+>x : Symbol(x, Decl(arrayEvery.ts, 1, 18))
+>x : Symbol(x, Decl(arrayEvery.ts, 1, 18))
+
+if (baseReadonlyArray.every<number>((x): x is number => "number" === typeof x)) {
+>baseReadonlyArray.every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+>every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 3, 37))
+>x : Symbol(x, Decl(arrayEvery.ts, 3, 37))
+>x : Symbol(x, Decl(arrayEvery.ts, 3, 37))
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : Symbol(numberReadonlyArray, Decl(arrayEvery.ts, 4, 7))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+}
+if (baseReadonlyArray.every<number>(isNumber)) {
+>baseReadonlyArray.every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+>every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>isNumber : Symbol(isNumber, Decl(arrayEvery.ts, 1, 5))
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : Symbol(numberReadonlyArray, Decl(arrayEvery.ts, 7, 7))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+}
+
+if (baseReadonlyArray.every((x: any): x is number => "number" === typeof x)) {
+>baseReadonlyArray.every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+>every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 10, 29))
+>x : Symbol(x, Decl(arrayEvery.ts, 10, 29))
+>x : Symbol(x, Decl(arrayEvery.ts, 10, 29))
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : Symbol(numberReadonlyArray, Decl(arrayEvery.ts, 11, 7))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+}
+if (baseReadonlyArray.every(isNumber)) {
+>baseReadonlyArray.every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+>every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>isNumber : Symbol(isNumber, Decl(arrayEvery.ts, 1, 5))
+
+  const numberReadonlyArray: ReadonlyArray<number> = baseReadonlyArray; // should be ReadonlyArray<number>
+>numberReadonlyArray : Symbol(numberReadonlyArray, Decl(arrayEvery.ts, 14, 7))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+}
+
+baseReadonlyArray.every(x => "number" === typeof x && x > 2);
+>baseReadonlyArray.every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>baseReadonlyArray : Symbol(baseReadonlyArray, Decl(arrayEvery.ts, 0, 13))
+>every : Symbol(ReadonlyArray.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 17, 24))
+>x : Symbol(x, Decl(arrayEvery.ts, 17, 24))
+>x : Symbol(x, Decl(arrayEvery.ts, 17, 24))
+
