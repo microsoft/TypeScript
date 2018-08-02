@@ -2243,6 +2243,20 @@ namespace ts.server {
                     toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
                     markOriginalProjectsAsUsed(project);
                 }
+                else {
+                    // If the configured project for project reference has more than zero references, keep it alive
+                    const resolvedProjectReferences = project.getResolvedProjectReferences();
+                    if (resolvedProjectReferences) {
+                        for (const ref of resolvedProjectReferences) {
+                            if (ref) {
+                                const refProject = this.configuredProjects.get(ref.sourceFile.path);
+                                if (refProject && refProject.hasOpenRef()) {
+                                    toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
+                                }
+                            }
+                        }
+                    }
+                }
             });
 
             // Remove all the non marked projects

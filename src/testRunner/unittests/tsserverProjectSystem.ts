@@ -9183,8 +9183,21 @@ export function Test2() {
             content: 'import { fnA, instanceA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
         };
 
-        function makeSampleProjects() {
-            const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, userTs, dummyFile]);
+        const userTsForConfigProject: File = {
+            path: "/user/user.ts",
+            content: 'import { fnA, instanceA } from "../a/a";\nimport { fnB } from "../b/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
+        };
+
+        const userTsconfig: File = {
+            path: "/user/tsconfig.json",
+            content: JSON.stringify({
+                file: ["user.ts"],
+                references: [{ path: "../a" }, { path: "../b" }]
+            })
+        };
+
+        function makeSampleProjects(addUserTsConfig?: boolean) {
+            const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
             const session = createSession(host);
 
             checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
@@ -9195,7 +9208,7 @@ export function Test2() {
 
             openFilesForSession([userTs], session);
             const service = session.getProjectService();
-            checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 1 } : { inferredProjects: 1 });
             return session;
         }
 
@@ -9247,6 +9260,10 @@ export function Test2() {
             verifyATsConfigProject(session); // ATsConfig should still be alive
         }
 
+        function verifyUserTsConfigProject(session: TestSession) {
+            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aDts.path, userTsconfig.path]);
+        }
+
         it("goToDefinition", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
@@ -9262,6 +9279,29 @@ export function Test2() {
                 definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
             });
             verifySingleInferredProject(session);
+        });
+
+        it("getDefinitionAndBoundSpan with file navigation", () => {
+            const session = makeSampleProjects(/*addUserTsConfig*/ true);
+            const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, {
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
+            });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 }); debugger;
+            verifyUserTsConfigProject(session);
+
+            // Navigate to the definition
+            closeFilesForSession([userTs], session);
+            openFilesForSession([aTs], session);
+
+            // UserTs configured project should be alive
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+            verifyUserTsConfigProject(session);
+            verifyATsConfigProject(session);
+
+            closeFilesForSession([aTs], session);
+            verifyOnlyOrphanInferredProject(session);
         });
 
         it("goToType", () => {
