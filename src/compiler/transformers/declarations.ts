@@ -37,6 +37,7 @@ namespace ts {
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
         let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
         let suppressNewDiagnosticContexts: boolean;
+        let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
         const host = context.getEmitHost();
         const symbolTracker: SymbolTracker = {
@@ -46,6 +47,7 @@ namespace ts {
             reportPrivateInBaseOfClassExpression,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
+            trackExternalModuleSymbolOfImportTypeNode
         };
         let errorNameNode: DeclarationName | undefined;
 
@@ -112,6 +114,12 @@ namespace ts {
                             symbolAccessibilityResult.errorModuleName));
                     }
                 }
+            }
+        }
+
+        function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
+            if (!isBundledEmit) {
+                (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
             }
         }
 
@@ -224,6 +232,7 @@ namespace ts {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
+            updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
             return updated;
 
             function getFileReferencesForUsedTypeReferences() {
@@ -483,10 +492,18 @@ namespace ts {
         function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
             if (!input) return undefined!; // TODO: GH#18217
             resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
-            if (input.kind === SyntaxKind.StringLiteral && isBundledEmit) {
-                const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
-                if (newName) {
-                    return createLiteral(newName);
+            if (isStringLiteralLike(input)) {
+                if (isBundledEmit) {
+                    const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
+                    if (newName) {
+                        return createLiteral(newName);
+                    }
+                }
+                else {
+                    const symbol = resolver.getSymbolOfExternalModuleSpecifier(input);
+                    if (symbol) {
+                        (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+                    }
                 }
             }
             return input;

@@ -2633,7 +2633,12 @@ namespace ts {
         /* @internal */ pragmas: PragmaMap;
         /* @internal */ localJsxNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
+
+        /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
+
+    /*@internal*/
+    export type ExportedModulesFromDeclarationEmit = ReadonlyArray<Symbol>;
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
@@ -2878,6 +2883,7 @@ namespace ts {
         diagnostics: ReadonlyArray<Diagnostic>;
         emittedFiles?: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps?: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
+        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     /* @internal */
@@ -3381,6 +3387,7 @@ namespace ts {
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
+        getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
     }
 
     export const enum SymbolFlags {
@@ -5413,6 +5420,7 @@ namespace ts {
         reportInaccessibleUniqueSymbolError?(): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
+        trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }
 
     export interface TextSpan {
