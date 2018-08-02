@@ -164,12 +164,12 @@ namespace ts.server {
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
-            this.updateGraph();
+            updateProjectIfDirty(this);
             return allFilesAreJsOrDts(this);
         }
 
         public isJsOnlyProject() {
-            this.updateGraph();
+            updateProjectIfDirty(this);
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
@@ -459,7 +459,7 @@ namespace ts.server {
 
         getLanguageService(ensureSynchronized = true): LanguageService {
             if (ensureSynchronized) {
-                this.updateGraph();
+                updateProjectIfDirty(this);
             }
             return this.languageService;
         }
@@ -477,7 +477,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return [];
             }
-            this.updateGraph();
+            updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program, this.projectService.toCanonicalFileName, this.builderState);
             return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
@@ -1025,7 +1025,7 @@ namespace ts.server {
 
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
-            this.updateGraph();
+            updateProjectIfDirty(this);
 
             const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
