@@ -28,7 +28,7 @@ verify.rangeIs(`
     m2(c: C): any {
         throw new Error("Method not implemented.");
     }
-    y: { [x: string]: any; };
+    y: {};
     m1(): any {
         throw new Error("Method not implemented.");
     }

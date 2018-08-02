@@ -1,0 +1,22 @@
+=== tests/cases/compiler/file.js ===
+// @ts-check
+const obj = {
+>obj : Symbol(obj, Decl(file.js, 1, 5))
+
+    x: 1,
+>x : Symbol(x, Decl(file.js, 1, 13))
+
+    y: 2
+>y : Symbol(y, Decl(file.js, 2, 9))
+
+};
+
+/**
+ * @type {keyof typeof obj}
+ */
+let selected = "x";
+>selected : Symbol(selected, Decl(file.js, 9, 3))
+
+selected = "z"; // should fail
+>selected : Symbol(selected, Decl(file.js, 9, 3))
+

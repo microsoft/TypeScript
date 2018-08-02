@@ -13,11 +13,11 @@ class C { constructor() { this.p = 1; } }
 // and that only works on classes with no superclass.
 // (Object.defineProperty isn't recognised as a JS special assignment right now.)
 C.prototype = { q: 2 };
->C.prototype = { q: 2 } : { [x: string]: any; q: number; }
+>C.prototype = { q: 2 } : { q: number; }
 >C.prototype : C
 >C : typeof C
 >prototype : C
->{ q: 2 } : { [x: string]: any; q: number; }
+>{ q: 2 } : { q: number; }
 >q : number
 >2 : 2
 

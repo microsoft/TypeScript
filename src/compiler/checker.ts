@@ -425,7 +425,6 @@ namespace ts {
         const resolvingSignaturesArray = [resolvingSignature];
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
-        const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createSymbolTable();
         let amalgamatedDuplicates: Map<{ firstFile: SourceFile, secondFile: SourceFile, firstFileInstances: Map<{ instances: Node[], blockScoped: boolean }>, secondFileInstances: Map<{ instances: Node[], blockScoped: boolean }> }> | undefined;
@@ -4809,13 +4808,15 @@ namespace ts {
                             members.set(name, s);
                         }
                     });
-                    return createAnonymousType(
+                    const result = createAnonymousType(
                         exportedType.symbol,
                         members,
                         exportedType.callSignatures,
                         exportedType.constructSignatures,
                         exportedType.stringIndexInfo,
                         exportedType.numberIndexInfo);
+                    result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Propagate JSLiteral flag
+                    return result;
                 }
                 if (isEmptyArrayLiteralType(type)) {
                     if (noImplicitAny) {
@@ -5123,7 +5124,9 @@ namespace ts {
                 if (s && hasEntries(s.exports)) {
                     mergeSymbolTable(exports, s.exports);
                 }
-                return createAnonymousType(symbol, exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+                const type = createAnonymousType(symbol, exports, emptyArray, emptyArray, undefined, undefined);
+                type.objectFlags |= ObjectFlags.JSLiteral;
+                return type;
             }
         }
 
@@ -9074,6 +9077,34 @@ namespace ts {
             return type;
         }
 
+        /**
+         * Returns if a type is or consists of a JSLiteral object type
+         * In addition to objects which are directly literals,
+         * * unions where every element is a jsliteral
+         * * intersections where at least one element is a jsliteral
+         * * and instantiable types constrained to a jsliteral
+         * Should all count as literals and not print errors on access or assignment of possibly existing properties.
+         * This mirrors the behavior of the index signature propagation, to which this behaves similarly (but doesn't affect assignability or inference).
+         */
+        function isJSLiteralType(type: Type): boolean {
+            if (noImplicitAny) {
+                return false; // Flag is meaningless under `noImplicitAny` mode
+            }
+            if (getObjectFlags(type) & ObjectFlags.JSLiteral) {
+                return true;
+            }
+            if (type.flags & TypeFlags.Union) {
+                return every((type as UnionType).types, isJSLiteralType);
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return some((type as IntersectionType).types, isJSLiteralType);
+            }
+            if (type.flags & TypeFlags.Instantiable) {
+                return isJSLiteralType(getResolvedBaseConstraint(type));
+            }
+            return false;
+        }
+
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | undefined, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = isTypeUsableAsLateBoundName(indexType) ? getLateBoundNameFromType(indexType) :
@@ -9122,6 +9153,9 @@ namespace ts {
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
                 }
+                if (isJSLiteralType(objectType)) {
+                    return anyType;
+                }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
                     if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                         if (getIndexTypeOfType(objectType, IndexKind.Number)) {
@@ -9141,6 +9175,9 @@ namespace ts {
                     }
                     return anyType;
                 }
+            }
+            if (isJSLiteralType(objectType)) {
+                return anyType;
             }
             if (accessNode) {
                 const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
@@ -11217,6 +11254,9 @@ namespace ts {
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, discriminant: Type | undefined, reportErrors: boolean): boolean {
+                if (!noImplicitAny && getObjectFlags(target) & ObjectFlags.JSLiteral) {
+                    return false; // Disable excess property checks on JS literals to simulate having an implicit "index signature" - but only outside of noImplicitAny
+                }
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                     if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
@@ -12705,7 +12745,7 @@ namespace ts {
                 resolved.stringIndexInfo,
                 resolved.numberIndexInfo);
             regularNew.flags = resolved.flags & ~TypeFlags.FreshLiteral;
-            regularNew.objectFlags |= ObjectFlags.ObjectLiteral;
+            regularNew.objectFlags |= ObjectFlags.ObjectLiteral | (getObjectFlags(resolved) & ObjectFlags.JSLiteral);
             (<FreshObjectLiteralType>type).regularType = regularNew;
             return regularNew;
         }
@@ -12784,9 +12824,11 @@ namespace ts {
             }
             const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
-            return createAnonymousType(type.symbol, members, emptyArray, emptyArray,
+            const result = createAnonymousType(type.symbol, members, emptyArray, emptyArray,
                 stringIndexInfo && createIndexInfo(getWidenedType(stringIndexInfo.type), stringIndexInfo.isReadonly),
                 numberIndexInfo && createIndexInfo(getWidenedType(numberIndexInfo.type), numberIndexInfo.isReadonly));
+            result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Retain js literal flag through widening
+            return result;
         }
 
         function getWidenedType(type: Type) {
@@ -16791,12 +16833,15 @@ namespace ts {
             return createObjectLiteralType();
 
             function createObjectLiteralType() {
-                const stringIndexInfo = isJSObjectLiteral ? jsObjectLiteralIndexInfo : hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
+                const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
                 const numberIndexInfo = hasComputedNumberProperty && !isJSObjectLiteral ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
                 const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
                 result.flags |= TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
+                if (isJSObjectLiteral) {
+                    result.objectFlags |= ObjectFlags.JSLiteral;
+                }
                 if (patternWithComputedProperties) {
                     result.objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
                 }
@@ -17872,6 +17917,9 @@ namespace ts {
             if (!prop) {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
                 if (!(indexInfo && indexInfo.type)) {
+                    if (isJSLiteralType(leftType)) {
+                        return anyType;
+                    }
                     if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
                         reportNonexistentProperty(right, leftType.flags & TypeFlags.TypeParameter && (leftType as TypeParameter).isThisType ? apparentType : leftType);
                     }
@@ -20009,7 +20057,8 @@ namespace ts {
                 if (decl) {
                     const jsSymbol = getSymbolOfNode(decl);
                     if (jsSymbol && hasEntries(jsSymbol.exports)) {
-                        jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+                        jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, undefined, undefined);
+                        (jsAssignmentType as ObjectType).objectFlags |= ObjectFlags.JSLiteral;
                     }
                 }
             }
