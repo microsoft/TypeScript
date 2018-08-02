@@ -1,0 +1,12 @@
+tests/cases/compiler/explicitReturnUnknow.ts(1,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/explicitReturnUnknow.ts(2,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+
+
+==== tests/cases/compiler/explicitReturnUnknow.ts (2 errors) ====
+    function f(): unknown { ""; }
+                  ~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+    function g(): string | undefined { ""; }
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+    
