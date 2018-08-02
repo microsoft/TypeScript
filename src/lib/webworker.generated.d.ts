@@ -1019,6 +1019,7 @@ interface Event {
      */
     readonly isTrusted: boolean;
     returnValue: boolean;
+    readonly srcElement: object | null;
     /**
      * Returns the object to which event is dispatched (its target).
      */
