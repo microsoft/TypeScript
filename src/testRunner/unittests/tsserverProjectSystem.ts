@@ -9020,6 +9020,51 @@ export const x = 10;`
         });
     });
 
+    describe("tsserverProjectSystem with large file", () => {
+        const projectRoot = "/user/username/projects/project";
+        const largeFile: File = {
+            path: `${projectRoot}/src/large.ts`,
+            content: "export var x = 10;",
+            fileSize: server.maxFileSize + 1
+        };
+
+        it("when large file is included by tsconfig", () => {
+            const file: File = {
+                path: `${projectRoot}/src/file.ts`,
+                content: "export var y = 10;"
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ files: ["src/file.ts", "src/large.ts"] })
+            };
+            const files = [file, largeFile, libFile, tsconfig];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            checkProjectActualFiles(project, [file.path, libFile.path, largeFile.path, tsconfig.path]);
+            const info = service.getScriptInfo(largeFile.path)!;
+            assert.equal(info.cacheSourceFile.sourceFile.text, "");
+        });
+
+        it("when large file is included by module resolution", () => {
+            const file: File = {
+                path: `${projectRoot}/src/file.ts`,
+                content: `export var y = 10;import {x} from "./large"`
+            };
+            const files = [file, largeFile, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
+            service.checkNumberOfProjects({ inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [file.path, libFile.path, largeFile.path]);
+            const info = service.getScriptInfo(largeFile.path)!;
+            assert.equal(info.cacheSourceFile.sourceFile.text, "");
+        });
+    });
+
     describe("tsserverProjectSystem syntax operations", () => {
         function navBarFull(session: TestSession, file: File) {
             return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
@@ -9535,7 +9580,7 @@ export function Test2() {
         });
     });
 
-    describe("duplicate packages", () => {
+    describe("tsserverProjectSystem duplicate packages", () => {
         // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
         it("works with import fixes", () => {
             const packageContent = "export const foo: number;";
