@@ -268,7 +268,7 @@ namespace ts {
                     nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<PropertyDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName),
-                    visitNode((<PropertyDeclaration>node).questionToken, tokenVisitor, isToken),
+                    (visitNode((<PropertyDeclaration>node).questionToken, tokenVisitor, isToken), visitNode((<PropertyDeclaration>node).exclamationToken, tokenVisitor, isToken)),
                     visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression));
 
