@@ -1141,7 +1141,6 @@ namespace ts.tscWatch {
             }
 
             it("without outDir or outFile is specified", () => {
-                debugger;
                 verifyWithOptions({ module: ModuleKind.AMD }, ["file1.js", "src/file2.js"]);
             });
 
