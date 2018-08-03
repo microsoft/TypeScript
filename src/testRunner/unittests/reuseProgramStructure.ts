@@ -400,6 +400,7 @@ namespace ts {
         });
 
         it("works with updated SourceFiles", () => {
+            // adapted repro from https://github.com/Microsoft/TypeScript/issues/26166
             const files = [
                 { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";a;') },
                 { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
