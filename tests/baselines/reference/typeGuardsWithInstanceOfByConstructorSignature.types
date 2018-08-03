@@ -447,13 +447,13 @@ declare var G: GConstructor;
 >GConstructor : GConstructor
 
 var obj13: G1 | G2;
->obj13 : G2 | G1
+>obj13 : G1 | G2
 >G1 : G1
 >G2 : G2
 
 if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
 >obj13 instanceof G : boolean
->obj13 : G2 | G1
+>obj13 : G1 | G2
 >G : GConstructor
 
     obj13.foo1;

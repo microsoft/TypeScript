@@ -4,7 +4,7 @@ export interface F {
 >F : F
 
     (): E;
->E : D<any>
+>E : D<F>
 }
 export interface D<T extends F = F> {}
 >D : D<T>
