@@ -1626,21 +1626,21 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<[Identifier, number]>, checker?: TypeChecker): T {
+    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<SynthIdentifier>, checker?: TypeChecker): T {
         const clone = renameMap && checker && needsRenaming(node, checker, renameMap) ?
-                    node && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node!)!)))![0] :
+                    node && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node!)!)))!.identifier :
                     node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker);
 
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
         return clone as T;
     }
 
-    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker, renameMap: Map<[Identifier, number]>): boolean {
+    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker, renameMap: Map<SynthIdentifier>): boolean {
         return !!(node && isIdentifier(node) && checker.getSymbolAtLocation(node) && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node)!))))
                 && !checker.getTypeAtLocation(node)!.getCallSignatures().length;
     }
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<[Identifier, number]>, checker?: TypeChecker): T {
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<SynthIdentifier>, checker?: TypeChecker): T {
         const visited = visitEachChild(node, function wrapper(node) {
                 return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, checker);
             }, nullTransformationContext);

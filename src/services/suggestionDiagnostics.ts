@@ -115,7 +115,7 @@ namespace ts {
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
 
-        const functionType = node.type ? checker.getTypeFromTypeNode(node.type) : undefined; 
+        const functionType = node.type ? checker.getTypeFromTypeNode(node.type) : undefined;
         if (isAsyncFunction(node) || !node.body || !functionType) {
             return;
         }

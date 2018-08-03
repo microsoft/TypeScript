@@ -169,6 +169,12 @@ namespace ts {
         fileName: Path;
         packageName: string;
     }
+    
+    /* @internal */
+    export interface SynthIdentifier {
+        identifier: Identifier;
+        numberOfUses: number;
+    }
 
     //
     // Public interface of the host of a language service instance.
