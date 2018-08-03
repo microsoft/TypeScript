@@ -115,12 +115,12 @@ namespace ts {
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
 
-        const functionType = checker.getTypeAtLocation(node);
+        const functionType = node.type ? checker.getTypeFromTypeNode(node.type) : undefined; 
         if (isAsyncFunction(node) || !node.body || !functionType) {
             return;
         }
 
-        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
+        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call); 
         const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
 
         if (!returnType || !checker.getPromisedTypeOfPromise(returnType)) {
