@@ -951,8 +951,11 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
+                if (!oldProgramState.program) {
+                    return false;
+                }
                 const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile!, moduleName); // TODO: GH#18217
-                const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
+                const resolvedFile = resolutionToFile && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
                     // In the old program, we resolved to an ambient module that was in the same
                     //   place as we expected to find an actual module file.
@@ -960,16 +963,11 @@ namespace ts {
                     //   because the normal module resolution algorithm will find this anyway.
                     return false;
                 }
-                const ambientModule = oldProgramState.program && oldProgramState.program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
-                if (!(ambientModule && ambientModule.declarations)) {
-                    return false;
-                }
 
                 // at least one of declarations should come from non-modified source file
-                const firstUnmodifiedFile = forEach(ambientModule.declarations, d => {
-                    const f = getSourceFileOfNode(d);
-                    return !contains(oldProgramState.modifiedFilePaths, f.path) && f;
-                });
+                const firstUnmodifiedFile = oldProgramState.program.getSourceFiles().find(
+                    f => !contains(oldProgramState.modifiedFilePaths, f.path) && contains(f.ambientModuleNames, moduleName)
+                );
 
                 if (!firstUnmodifiedFile) {
                     return false;
