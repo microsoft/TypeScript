@@ -1,9 +1,0 @@
-=== tests/cases/compiler/explicitReturnUnknow.ts ===
-function f(): unknown { ""; }
->f : () => unknown
->"" : ""
-
-function g(): string | undefined { ""; }
->g : () => string
->"" : ""
-
