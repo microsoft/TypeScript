@@ -86,6 +86,7 @@ namespace ts.formatting {
             // For functions and control block place } on a new line [multi-line rule]
             rule("NewLineBeforeCloseBraceInBlockContext", anyTokenIncludingMultilineComments, SyntaxKind.CloseBraceToken, [isMultilineBlockContext], RuleAction.NewLine),
 
+            rule("MultiLineBlock", SyntaxKind.CommaToken, anyToken, [isMultilineBlockContext], RuleAction.NewLine),
             // Space/new line after }.
             rule("SpaceAfterCloseBrace", SyntaxKind.CloseBraceToken, anyTokenExcept(SyntaxKind.CloseParenToken), [isNonJsxSameLineTokenContext, isAfterCodeBlockContext], RuleAction.Space),
             // Special case for (}, else) and (}, while) since else & while tokens are not part of the tree which makes SpaceAfterCloseBrace rule not applied
