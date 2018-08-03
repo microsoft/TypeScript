@@ -635,21 +635,21 @@ function [#|f|]():Promise<void> {
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_Finally1", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Finally1", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").then(res => console.log(res)).catch(rej => console.log("error", rej)).finally(console.log("finally!"));
 }
 `
         );
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_Finally2", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Finally2", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").then(res => console.log(res)).finally(console.log("finally!"));
 }
 `
         );
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_Finally3", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Finally3", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").finally(console.log("finally!"));
 }
