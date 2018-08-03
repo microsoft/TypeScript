@@ -3374,10 +3374,9 @@ namespace ts {
      * JavaScript file, gets the return type annotation from JSDoc.
      */
     export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
-        if (isJSDocSignature(node)) {
-            return node.type && node.type.typeExpression && node.type.typeExpression.type;
-        }
-        return node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
+        return isJSDocSignature(node) ?
+            node.type && node.type.typeExpression && node.type.typeExpression.type :
+            node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {

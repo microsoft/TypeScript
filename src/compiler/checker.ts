@@ -7532,9 +7532,10 @@ namespace ts {
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
                 const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
-                const returnType = getSignatureReturnTypeFromDeclaration(declaration, isJSConstructSignature, classType);
                 const hasRestLikeParameter = hasRestParameter(declaration) || isInJavaScriptFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters);
-                links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, /*resolvedTypePredicate*/ undefined, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
+                links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters,
+                    /*resolvedReturnType*/ undefined, /*resolvedTypePredicate*/ undefined,
+                    minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
             }
             return links.resolvedSignature;
         }
@@ -7562,34 +7563,6 @@ namespace ts {
             }
             parameters.push(syntheticArgsSymbol);
             return true;
-        }
-
-        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration | JSDocSignature, isJSConstructSignature: boolean, classType: Type | undefined) {
-            if (isJSConstructSignature) {
-                return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type!); // TODO: GH#18217
-            }
-            else if (classType) {
-                return classType;
-            }
-
-            const typeNode = getEffectiveReturnTypeNode(declaration);
-            if (typeNode) {
-                return getTypeFromTypeNode(typeNode);
-            }
-
-            // TypeScript 1.0 spec (April 2014):
-            // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-            if (declaration.kind === SyntaxKind.GetAccessor && !hasNonBindableDynamicName(declaration)) {
-                const setter = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration), SyntaxKind.SetAccessor);
-                return getAnnotatedAccessorType(setter);
-            }
-            const typeFromTag = getReturnTypeOfTypeTag(declaration);
-            if (typeFromTag) {
-                return typeFromTag;
-            }
-            if (nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
-                return anyType;
-            }
         }
 
         function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
@@ -7696,32 +7669,59 @@ namespace ts {
                 if (!pushTypeResolution(signature, TypeSystemPropertyName.ResolvedReturnType)) {
                     return errorType;
                 }
-                let type: Type;
-                if (signature.target) {
-                    type = instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper!);
-                }
-                else if (signature.unionSignatures) {
-                    type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-                }
-                else {
-                    type = getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration);
-                }
+                let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper!) :
+                    signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
+                    getReturnTypeFromAnnotationOrBody(signature.declaration!);
                 if (!popTypeResolution()) {
-                    type = anyType;
-                    if (noImplicitAny) {
-                        const declaration = <Declaration>signature.declaration;
-                        const name = getNameOfDeclaration(declaration);
-                        if (name) {
-                            error(name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, declarationNameToString(name));
+                    if (signature.declaration) {
+                        const typeNode = getEffectiveReturnTypeNode(signature.declaration);
+                        if (typeNode) {
+                            error(typeNode, Diagnostics.Return_type_annotation_circularly_references_itself);
                         }
-                        else {
-                            error(declaration, Diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions);
+                        else if (noImplicitAny) {
+                            const declaration = <Declaration>signature.declaration;
+                            const name = getNameOfDeclaration(declaration);
+                            if (name) {
+                                error(name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, declarationNameToString(name));
+                            }
+                            else {
+                                error(declaration, Diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions);
+                            }
                         }
                     }
+                    type = anyType;
                 }
                 signature.resolvedReturnType = type;
             }
             return signature.resolvedReturnType;
+        }
+
+        function getReturnTypeFromAnnotationOrBody(declaration: SignatureDeclaration | JSDocSignature) {
+            if (declaration.kind === SyntaxKind.Constructor) {
+                return getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
+            }
+            if (isJSDocConstructSignature(declaration)) {
+                return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type!); // TODO: GH#18217
+            }
+            const typeNode = getEffectiveReturnTypeNode(declaration);
+            if (typeNode) {
+                return getTypeFromTypeNode(typeNode);
+            }
+            if (declaration.kind === SyntaxKind.GetAccessor && !hasNonBindableDynamicName(declaration)) {
+                const setter = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration), SyntaxKind.SetAccessor);
+                const setterType = getAnnotatedAccessorType(setter);
+                if (setterType) {
+                    return setterType;
+                }
+            }
+            const typeFromTag = getReturnTypeOfTypeTag(declaration);
+            if (typeFromTag) {
+                return typeFromTag;
+            }
+            if (nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
+                return anyType;
+            }
+            return getReturnTypeFromBody(<FunctionLikeDeclaration>declaration);
         }
 
         function isResolvingReturnTypeOfSignature(signature: Signature) {
@@ -20674,7 +20674,7 @@ namespace ts {
                                 contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
-                        if (!getEffectiveReturnTypeNode(node) && !signature.resolvedReturnType) {
+                        if (!getReturnOrPromisedType(node, getFunctionFlags(node)) && !signature.resolvedReturnType) {
                             const returnType = getReturnTypeFromBody(node, checkMode);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
@@ -22659,6 +22659,10 @@ namespace ts {
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
             checkTypeAssignableTo(constraintType, keyofConstraintType, node.typeParameter.constraint);
+        }
+
+        function checkThisType(node: ThisTypeNode) {
+            getTypeFromThisTypeNode(node);
         }
 
         function checkTypeOperator(node: TypeOperatorNode) {
@@ -26533,6 +26537,8 @@ namespace ts {
                 case SyntaxKind.OptionalType:
                 case SyntaxKind.RestType:
                     return checkSourceElement((<ParenthesizedTypeNode | OptionalTypeNode>node).type);
+                case SyntaxKind.ThisType:
+                    return checkThisType(<ThisTypeNode>node);
                 case SyntaxKind.TypeOperator:
                     return checkTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.ConditionalType:
