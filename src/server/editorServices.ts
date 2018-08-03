@@ -1,5 +1,7 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
+    /*@internal*/
+    export const maxFileSize = 4 * 1024 * 1024;
 
     // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
