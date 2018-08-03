@@ -6967,6 +6967,49 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
+    export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions) {
+        if (oldOptions === newOptions) {
+            return false;
+        }
+
+        return changedCompileOptionValueOf(newOptions, oldOptions, [
+            "noImplicitReturns",
+            "strict",
+            "suppressExcessPropertyErrors",
+            "suppressImplicitAnyIndexErrors",
+            "noFallthroughCasesInSwitch",
+            "noStrictGenericChecks",
+            "noUnusedLocals",
+            "noUnusedParameters",
+            "noImplicitUseStrict"
+        ]) || changedStrictOptionValueOf(newOptions, oldOptions, [
+            "noImplicitAny",
+            "noImplicitThis",
+            "strictNullChecks",
+            "strictFunctionTypes",
+            "strictPropertyInitialization",
+            "alwaysStrict"
+        ]);
+    }
+
+    function changedStrictOptionValueOf(newOptions: CompilerOptions, oldOptions: CompilerOptions, flags: StrictOptionName[]) {
+        for (const flag of flags) {
+            if (getStrictOptionValue(newOptions, flag) !== getStrictOptionValue(oldOptions, flag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function changedCompileOptionValueOf(newOptions: CompilerOptions, oldOptions: CompilerOptions, optionKeys: (keyof CompilerOptions)[]) {
+        for (const optionKey of optionKeys) {
+            if (newOptions[optionKey] !== oldOptions[optionKey]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {

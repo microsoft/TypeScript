@@ -1312,6 +1312,49 @@ export class B
             // File a need not be rewritten
             assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
         });
+
+        it("updates errors when strictNullChecks changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `declare function foo(): null | { hello: any };
+foo().hello`
+            };
+            const compilerOptions: CompilerOptions = {
+            };
+            const config: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions })
+            };
+            const files = [aFile, config, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
+            compilerOptions.strictNullChecks = true;
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            const expectedStrictNullErrors = [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("foo()"), 5, Diagnostics.Object_is_possibly_null)
+            ];
+            checkOutputErrorsIncremental(host, expectedStrictNullErrors);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+            compilerOptions.strict = true;
+            delete (compilerOptions.strictNullChecks);
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, expectedStrictNullErrors);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+            delete (compilerOptions.strict);
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, emptyArray);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {
