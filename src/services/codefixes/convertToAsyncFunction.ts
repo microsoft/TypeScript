@@ -11,6 +11,12 @@ namespace ts.codefix {
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
     });
 
+
+    interface SynthIdentifier {
+        identifier: Identifier;
+        numberOfUses: number;
+    }
+
     class Transformer {
         checker: TypeChecker;
         synthNamesMap: Map<SynthIdentifier>;

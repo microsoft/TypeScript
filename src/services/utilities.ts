@@ -1620,13 +1620,17 @@ namespace ts {
         return position;
     }
 
+    type RenamedIdentifier = {
+        identifier: Identifier;        
+    }
+
     /**
      * Creates a deep, memberwise clone of a node with no source map location.
      *
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<SynthIdentifier>, checker?: TypeChecker): T {
+    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<RenamedIdentifier>, checker?: TypeChecker): T {
         const clone = renameMap && checker && needsRenaming(node, checker, renameMap) ?
                     node && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node!)!)))!.identifier :
                     node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker);
@@ -1635,12 +1639,12 @@ namespace ts {
         return clone as T;
     }
 
-    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker, renameMap: Map<SynthIdentifier>): boolean {
+    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker, renameMap: Map<RenamedIdentifier>): boolean {
         return !!(node && isIdentifier(node) && checker.getSymbolAtLocation(node) && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node)!))))
                 && !checker.getTypeAtLocation(node)!.getCallSignatures().length;
     }
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<SynthIdentifier>, checker?: TypeChecker): T {
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<RenamedIdentifier>, checker?: TypeChecker): T {
         const visited = visitEachChild(node, function wrapper(node) {
                 return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, checker);
             }, nullTransformationContext);
