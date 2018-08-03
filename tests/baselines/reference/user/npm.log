@@ -30,7 +30,6 @@ node_modules/npm/bin/npm-cli.js(132,17): error TS2339: Property 'config' does no
 node_modules/npm/bin/npm-cli.js(134,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(136,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/html/static/toc.js(3,40): error TS2531: Object is possibly 'null'.
-node_modules/npm/html/static/toc.js(28,3): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/access.js(58,46): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/access.js(65,18): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/access.js(115,19): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
@@ -446,11 +445,11 @@ node_modules/npm/lib/install.js(768,13): error TS2339: Property 'config' does no
 node_modules/npm/lib/install.js(770,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(771,14): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/npm/lib/install.js(890,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(897,26): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(899,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(901,27): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(903,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(905,27): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(897,26): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(899,25): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(901,27): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(903,25): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(905,27): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(948,8): error TS2454: Variable 'previousPath' is used before being assigned.
 node_modules/npm/lib/install.js(985,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(1007,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -493,11 +492,11 @@ node_modules/npm/lib/ls.js(152,11): error TS2339: Property 'config' does not exi
 node_modules/npm/lib/ls.js(180,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(191,52): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(254,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/ls.js(260,16): error TS2339: Property 'problems' does not exist on type 'string | { [x: string]: any; name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { [x: string]: any; required: any; missing: boolean; } | { ...; }'.
+node_modules/npm/lib/ls.js(260,16): error TS2339: Property 'problems' does not exist on type 'string | { name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { required: any; missing: boolean; } | { ...; }'.
   Property 'problems' does not exist on type 'string'.
-node_modules/npm/lib/ls.js(262,54): error TS2339: Property 'problems' does not exist on type 'string | { [x: string]: any; name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { [x: string]: any; required: any; missing: boolean; } | { ...; }'.
+node_modules/npm/lib/ls.js(262,54): error TS2339: Property 'problems' does not exist on type 'string | { name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { required: any; missing: boolean; } | { ...; }'.
   Property 'problems' does not exist on type 'string'.
-node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ [x: string]: any; name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; }' cannot be used as an index type.
+node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; }' cannot be used as an index type.
 node_modules/npm/lib/ls.js(357,40): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(362,26): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(365,15): error TS2339: Property 'color' does not exist on type 'typeof EventEmitter'.
@@ -862,7 +861,7 @@ node_modules/npm/lib/version.js(116,35): error TS2339: Property 'localPrefix' do
 node_modules/npm/lib/version.js(160,19): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(201,15): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(206,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/version.js(206,31): error TS2322: Type 'string' is not assignable to type '{ [x: string]: any; npm: any; }'.
+node_modules/npm/lib/version.js(206,31): error TS2322: Type 'string' is not assignable to type '{ npm: any; }'.
 node_modules/npm/lib/version.js(213,25): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(257,28): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(276,32): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -913,6 +912,7 @@ node_modules/npm/test/common-tap.js(10,3): error TS2322: Type '(...args: any[]) 
   Property '__promisify__' is missing in type '(...args: any[]) => void'.
 node_modules/npm/test/common-tap.js(175,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(181,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
+node_modules/npm/test/common-tap.js(192,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(4,19): error TS2307: Cannot find module '../../lib/npm.js'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(5,22): error TS2307: Cannot find module '../common-tap.js'.
@@ -1255,8 +1255,8 @@ node_modules/npm/test/tap/init-interrupt.js(8,29): error TS2307: Cannot find mod
 node_modules/npm/test/tap/init-interrupt.js(28,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-actions.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-actions.js(13,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/install-actions.js(108,27): error TS2345: Argument of type '{ [x: string]: any; path: string; package: { [x: string]: any; dependencies: { [x: string]: any; b: string; }; optionalDependencies: { [x: string]: any; a: string; }; }; children: ({ [x: string]: any; name: string; path: string; package: { [x: string]: any; scripts: { ...; }; dependencies: { ...; }; }; isTop: boolea...' is not assignable to parameter of type '{ [x: string]: any; name: string; path: string; package: { [x: string]: any; scripts: { [x: string]: any; postinstall: string; }; dependencies: { [x: string]: any; b: string; }; }; isTop: boolean; }'.
-  Property 'name' is missing in type '{ [x: string]: any; path: string; package: { [x: string]: any; dependencies: { [x: string]: any; b: string; }; optionalDependencies: { [x: string]: any; a: string; }; }; children: ({ [x: string]: any; name: string; path: string; package: { [x: string]: any; scripts: { ...; }; dependencies: { ...; }; }; isTop: boolea...'.
+node_modules/npm/test/tap/install-actions.js(108,27): error TS2345: Argument of type '{ path: string; package: { dependencies: { b: string; }; optionalDependencies: { a: string; }; }; children: ({ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; } | { ...; })[]; requires: ({ ...; } | { ...; })[]; isTop: boolean; }' is not assignable to parameter of type '{ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; }'.
+  Property 'name' is missing in type '{ path: string; package: { dependencies: { b: string; }; optionalDependencies: { a: string; }; }; children: ({ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; } | { ...; })[]; requires: ({ ...; } | { ...; })[]; isTop: boolean; }'.
 node_modules/npm/test/tap/install-at-locally.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-bad-dep-format.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-bad-man.js(7,20): error TS2307: Cannot find module 'tap'.
@@ -1654,9 +1654,9 @@ node_modules/npm/test/tap/unit-deps-earliestInstallable.js(2,20): error TS2307: 
 node_modules/npm/test/tap/unit-deps-earliestInstallable.js(3,29): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(3,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(32,26): error TS2345: Argument of type '{ [x: string]: any; requires: { [x: string]: any; requiredBy: never[]; }[]; }' is not assignable to parameter of type 'never'.
-node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(40,26): error TS2345: Argument of type '{ [x: string]: any; requires: { [x: string]: any; requiredBy: { [x: string]: any; isTop: boolean; }[]; }[]; }' is not assignable to parameter of type '{ [x: string]: any; isTop: boolean; }'.
-  Property 'isTop' is missing in type '{ [x: string]: any; requires: { [x: string]: any; requiredBy: { [x: string]: any; isTop: boolean; }[]; }[]; }'.
+node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(32,26): error TS2345: Argument of type '{ requires: { requiredBy: never[]; }[]; }' is not assignable to parameter of type 'never'.
+node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(40,26): error TS2345: Argument of type '{ requires: { requiredBy: { isTop: boolean; }[]; }[]; }' is not assignable to parameter of type '{ isTop: boolean; }'.
+  Property 'isTop' is missing in type '{ requires: { requiredBy: { isTop: boolean; }[]; }[]; }'.
 node_modules/npm/test/tap/unit-deps-replaceModule.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/unit-deps-replaceModule.js(6,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/unit-module-name.js(2,20): error TS2307: Cannot find module 'tap'.
