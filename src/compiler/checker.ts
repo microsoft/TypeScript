@@ -7565,10 +7565,15 @@ namespace ts {
             return true;
         }
 
-        function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
+        function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
             const typeTag = isInJavaScriptFile(node) ? getJSDocTypeTag(node) : undefined;
             const signature = typeTag && typeTag.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
-            return signature && getReturnTypeOfSignature(getErasedSignature(signature));
+            return signature && getErasedSignature(signature);
+        }
+
+        function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
+            const signature = getSignatureOfTypeTag(node);
+            return signature && getReturnTypeOfSignature(signature);
         }
 
         function containsArgumentsReference(declaration: SignatureDeclaration): boolean {
@@ -16389,16 +16394,11 @@ namespace ts {
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature | undefined {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            let type: Type | undefined;
-            if (isInJavaScriptFile(node)) {
-                const jsdoc = getJSDocType(node);
-                if (jsdoc) {
-                    type = getTypeFromTypeNode(jsdoc);
-                }
+            const typeTagSignature = getSignatureOfTypeTag(node);
+            if (typeTagSignature) {
+                return typeTagSignature;
             }
-            if (!type) {
-                type = getContextualTypeForFunctionLikeDeclaration(node);
-            }
+            const type = getContextualTypeForFunctionLikeDeclaration(node);
             if (!type) {
                 return undefined;
             }
