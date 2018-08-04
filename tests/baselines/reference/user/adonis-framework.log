@@ -76,7 +76,6 @@ node_modules/adonis-framework/src/Helpers/index.js(256,45): error TS2345: Argume
   Type 'undefined' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/src/Middleware/index.js(92,19): error TS2538: Type 'undefined' cannot be used as an index type.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.
 node_modules/adonis-framework/src/Request/index.js(64,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(66,15): error TS2304: Cannot find name 'Mixed'.
