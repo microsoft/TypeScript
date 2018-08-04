@@ -7567,8 +7567,8 @@ namespace ts {
 
         function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
             const typeTag = isInJavaScriptFile(node) ? getJSDocTypeTag(node) : undefined;
-            const signatures = typeTag && typeTag.typeExpression && getSignaturesOfType(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call);
-            return signatures && signatures.length === 1 ? getReturnTypeOfSignature(signatures[0]) : undefined;
+            const signature = typeTag && typeTag.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
+            return signature && getReturnTypeOfSignature(getErasedSignature(signature));
         }
 
         function containsArgumentsReference(declaration: SignatureDeclaration): boolean {
@@ -7698,7 +7698,7 @@ namespace ts {
 
         function getReturnTypeFromAnnotationOrBody(declaration: SignatureDeclaration | JSDocSignature) {
             if (declaration.kind === SyntaxKind.Constructor) {
-                return getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
+                return getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol));
             }
             if (isJSDocConstructSignature(declaration)) {
                 return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type!); // TODO: GH#18217
