@@ -7676,7 +7676,8 @@ namespace ts {
                 }
                 let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper!) :
                     signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
-                    getReturnTypeFromAnnotationOrBody(signature.declaration!);
+                    getReturnTypeFromAnnotation(signature.declaration!) ||
+                    (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
                 if (!popTypeResolution()) {
                     if (signature.declaration) {
                         const typeNode = getEffectiveReturnTypeNode(signature.declaration);
@@ -7701,7 +7702,7 @@ namespace ts {
             return signature.resolvedReturnType;
         }
 
-        function getReturnTypeFromAnnotationOrBody(declaration: SignatureDeclaration | JSDocSignature) {
+        function getReturnTypeFromAnnotation(declaration: SignatureDeclaration | JSDocSignature) {
             if (declaration.kind === SyntaxKind.Constructor) {
                 return getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol));
             }
@@ -7713,20 +7714,17 @@ namespace ts {
                 return getTypeFromTypeNode(typeNode);
             }
             if (declaration.kind === SyntaxKind.GetAccessor && !hasNonBindableDynamicName(declaration)) {
+                const jsDocType = isInJavaScriptFile(declaration) && getTypeForDeclarationFromJSDocComment(declaration);
+                if (jsDocType) {
+                    return jsDocType;
+                }
                 const setter = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration), SyntaxKind.SetAccessor);
                 const setterType = getAnnotatedAccessorType(setter);
                 if (setterType) {
                     return setterType;
                 }
             }
-            const typeFromTag = getReturnTypeOfTypeTag(declaration);
-            if (typeFromTag) {
-                return typeFromTag;
-            }
-            if (nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
-                return anyType;
-            }
-            return getReturnTypeFromBody(<FunctionLikeDeclaration>declaration);
+            return getReturnTypeOfTypeTag(declaration);
         }
 
         function isResolvingReturnTypeOfSignature(signature: Signature) {
@@ -20674,7 +20672,7 @@ namespace ts {
                                 contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
-                        if (!getReturnOrPromisedType(node, getFunctionFlags(node)) && !signature.resolvedReturnType) {
+                        if (!getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
                             const returnType = getReturnTypeFromBody(node, checkMode);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
@@ -20690,12 +20688,9 @@ namespace ts {
         }
 
         function getReturnOrPromisedType(node: FunctionLikeDeclaration | MethodSignature, functionFlags: FunctionFlags) {
-            const returnTypeNode = getEffectiveReturnTypeNode(node);
-            return returnTypeNode &&
-                ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
-                 checkAsyncFunctionReturnType(node, returnTypeNode) : // Async function
-                 getTypeFromTypeNode(returnTypeNode)) || // AsyncGenerator function, Generator function, or normal function
-                getReturnTypeOfTypeTag(node); // type from JSDoc @type tag
+            const type = getReturnTypeFromAnnotation(node);
+            return type && ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) ?
+                getAwaitedType(type) || errorType : type;
         }
 
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
@@ -23218,16 +23213,15 @@ namespace ts {
          * Checks the return type of an async function to ensure it is a compatible
          * Promise implementation.
          *
-         * This checks that an async function has a valid Promise-compatible return type,
-         * and returns the *awaited type* of the promise. An async function has a valid
-         * Promise-compatible return type if the resolved value of the return type has a
-         * construct signature that takes in an `initializer` function that in turn supplies
-         * a `resolve` function as one of its arguments and results in an object with a
-         * callable `then` signature.
+         * This checks that an async function has a valid Promise-compatible return type.
+         * An async function has a valid Promise-compatible return type if the resolved value
+         * of the return type has a construct signature that takes in an `initializer` function
+         * that in turn supplies a `resolve` function as one of its arguments and results in an
+         * object with a callable `then` signature.
          *
          * @param node The signature to check
          */
-        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature, returnTypeNode: TypeNode): Type {
+        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature, returnTypeNode: TypeNode) {
             // As part of our emit for an async function, we will need to emit the entity name of
             // the return type annotation as an expression. To meet the necessary runtime semantics
             // for __awaiter, we must also check that the type of the declaration (e.g. the static
@@ -23256,14 +23250,14 @@ namespace ts {
 
             if (languageVersion >= ScriptTarget.ES2015) {
                 if (returnType === errorType) {
-                    return errorType;
+                    return;
                 }
                 const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
                 if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
                     // The promise type was not a valid type reference to the global promise type, so we
                     // report an error and return the unknown type.
                     error(returnTypeNode, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
-                    return errorType;
+                    return;
                 }
             }
             else {
@@ -23271,13 +23265,13 @@ namespace ts {
                 markTypeNodeAsReferenced(returnTypeNode);
 
                 if (returnType === errorType) {
-                    return errorType;
+                    return;
                 }
 
                 const promiseConstructorName = getEntityNameFromTypeNode(returnTypeNode);
                 if (promiseConstructorName === undefined) {
                     error(returnTypeNode, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, typeToString(returnType));
-                    return errorType;
+                    return;
                 }
 
                 const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
@@ -23289,7 +23283,7 @@ namespace ts {
                     else {
                         error(returnTypeNode, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
                     }
-                    return errorType;
+                    return;
                 }
 
                 const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType(/*reportErrors*/ true);
@@ -23297,12 +23291,12 @@ namespace ts {
                     // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
                     // compatibility with __awaiter.
                     error(returnTypeNode, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
-                    return errorType;
+                    return;
                 }
 
                 if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, returnTypeNode,
                     Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value)) {
-                    return errorType;
+                    return;
                 }
 
                 // Verify there is no local declaration that could collide with the promise constructor.
@@ -23312,12 +23306,10 @@ namespace ts {
                     error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
                         idText(rootName),
                         entityNameToString(promiseConstructorName));
-                    return errorType;
+                    return;
                 }
             }
-
-            // Get and return the awaited type of the return type.
-            return checkAwaitedType(returnType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+            checkAwaitedType(returnType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
         }
 
         /** Check a decorator */
@@ -24978,7 +24970,7 @@ namespace ts {
                         error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                     }
                 }
-                else if (getEffectiveReturnTypeNode(func) || isGetAccessorWithAnnotatedSetAccessor(func) || getReturnTypeOfTypeTag(func)) {
+                else if (getReturnTypeFromAnnotation(func)) {
                     if (functionFlags & FunctionFlags.Async) { // Async function
                         const promisedType = getPromisedTypeOfPromise(returnType);
                         const awaitedType = checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
