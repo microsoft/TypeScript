@@ -3,5 +3,4 @@ class C {
 >C : C
 
   constructor<T>() { }
->T : T
 }

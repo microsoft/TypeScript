@@ -3,9 +3,7 @@
 
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
->T : T
 
 class A {
 >A : A
@@ -25,10 +23,7 @@ class A {
 
 function mixB<T extends Constructor<{}>>(Cls: T) {
 >mixB : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
->T : T
->Constructor : Constructor<T>
 >Cls : T
->T : T
 
     return class extends Cls {
 >class extends Cls {        protected ptd: number = 10;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
@@ -47,11 +42,7 @@ function mixB<T extends Constructor<{}>>(Cls: T) {
 
 function mixB2<T extends Constructor<A>>(Cls: T) {
 >mixB2 : <T extends Constructor<A>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
->T : T
->Constructor : Constructor<T>
->A : A
 >Cls : T
->T : T
 
     return class extends Cls {
 >class extends Cls {        protected ptd: number = 10;    } : { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
@@ -79,10 +70,7 @@ const
 
 function mixC<T extends Constructor<{}>>(Cls: T) {
 >mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
->T : T
->Constructor : Constructor<T>
 >Cls : T
->T : T
 
     return class extends Cls {
 >class extends Cls {        protected ptd: number = 100;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
@@ -246,11 +234,7 @@ class Person {
 
 function PersonMixin<T extends Constructor<Person>>(Base: T) {
 >PersonMixin : <T extends Constructor<Person>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: PersonMixin<any>.(Anonymous class); } & T
->T : T
->Constructor : Constructor<T>
->Person : Person
 >Base : T
->T : T
 
 	return class extends Base {
 >class extends Base {		constructor(...args: any[]) {			super(...args);		}		myProtectedFunction() {			super.myProtectedFunction();			// do more things		}	} : { new (...args: any[]): (Anonymous class); prototype: PersonMixin<any>.(Anonymous class); } & T

@@ -5,7 +5,6 @@ export namespace TypeGuards {
     export function IsObject(value: any) : value is {[index:string]:any} {
 >IsObject : (value: any) => value is { [index: string]: any; }
 >value : any
->value : any
 >index : string
 
         return typeof(value) === 'object'

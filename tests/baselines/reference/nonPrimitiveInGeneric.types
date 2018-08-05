@@ -1,9 +1,7 @@
 === tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts ===
 function generic<T>(t: T) {
 >generic : <T>(t: T) => void
->T : T
 >t : T
->T : T
 
     var o: object = t; // expect error
 >o : object
@@ -39,9 +37,7 @@ generic<object>(b); // expect error
 
 function bound<T extends object>(t: T) {
 >bound : <T extends object>(t: T) => void
->T : T
 >t : T
->T : T
 
     var o: object = t; // ok
 >o : object
@@ -70,7 +66,6 @@ bound(b); // expect error
 
 function bound2<T extends object>() {}
 >bound2 : <T extends object>() => void
->T : T
 
 bound2<{}>();
 >bound2<{}>() : void
@@ -79,7 +74,6 @@ bound2<{}>();
 bound2<Object>();
 >bound2<Object>() : void
 >bound2 : <T extends object>() => void
->Object : Object
 
 bound2<number>(); // expect error
 >bound2<number>() : any
@@ -91,9 +85,7 @@ bound2<string>(); // expect error
 
 function bound3<T extends {}>(t: T) {
 >bound3 : <T extends {}>(t: T) => void
->T : T
 >t : T
->T : T
 
     var o: object = t; // ok
 >o : object
@@ -101,32 +93,23 @@ function bound3<T extends {}>(t: T) {
 }
 
 interface Proxy<T extends object> {}
->Proxy : Proxy<T>
->T : T
 
 var x: Proxy<number>; // error
 >x : Proxy<number>
->Proxy : Proxy<T>
 
 var y: Proxy<null>; // ok
 >y : Proxy<null>
->Proxy : Proxy<T>
 >null : null
 
 var z: Proxy<undefined> ; // ok
 >z : Proxy<undefined>
->Proxy : Proxy<T>
 
 
 interface Blah {
->Blah : Blah
-
     foo: number;
 >foo : number
 }
 
 var u: Proxy<Blah>; // ok
 >u : Proxy<Blah>
->Proxy : Proxy<T>
->Blah : Blah
 

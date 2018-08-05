@@ -10,11 +10,9 @@ class B { bar() { } }
 function foo(x: A) {
 >foo : (x: A) => void
 >x : A
->A : A
 
    var x: B = new B();
 >x : A
->B : B
 >new B() : B
 >B : typeof B
 

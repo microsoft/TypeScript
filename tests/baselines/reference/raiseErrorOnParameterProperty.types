@@ -4,7 +4,6 @@ class C1 {
 
   constructor(public x: X) {
 >x : any
->X : No type information available!
   }
 }
 var c1 = new C1(0);

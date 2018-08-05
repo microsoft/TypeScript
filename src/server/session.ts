@@ -258,10 +258,6 @@ namespace ts.server {
         readonly symLinkedProjects: MultiMap<Project>;
     };
 
-    function isProjectsArray(projects: Projects): projects is ReadonlyArray<Project> {
-        return !!(<ReadonlyArray<Project>>projects).length;
-    }
-
     /**
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
@@ -273,8 +269,8 @@ namespace ts.server {
         comparer?: (a: U, b: U) => number,
         areEqual?: (a: U, b: U) => boolean,
     ): U[] {
-        const outputs = flatMap(isProjectsArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
-        if (!isProjectsArray(projects) && projects.symLinkedProjects) {
+        const outputs = flatMap(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
+        if (!isArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((projects, path) => {
                 const value = getValue(path as Path);
                 outputs.push(...flatMap(projects, project => action(project, value)));
@@ -370,7 +366,7 @@ namespace ts.server {
     }
 
     function forEachProjectInProjects(projects: Projects, path: string | undefined, cb: (project: Project, path: string | undefined) => void): void {
-        for (const project of isProjectsArray(projects) ? projects : projects.projects) {
+        for (const project of isArray(projects) ? projects : projects.projects) {
             cb(project, path);
         }
         if (!isArray(projects) && projects.symLinkedProjects) {
@@ -431,23 +427,20 @@ namespace ts.server {
         if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         cb(projectAndLocation, (project, location) => {
             seenProjects.set(projectAndLocation.project.projectName, true);
-            const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
+            const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
             if (!originalLocation) return false;
-            const originalProjectAndScriptInfo = projectService.getProjectForFileWithoutOpening(toNormalizedPath(originalLocation.fileName));
-            if (!originalProjectAndScriptInfo) return false;
 
-            if (originalProjectAndScriptInfo) {
-                toDo = toDo || [];
+            const originalScriptInfo = projectService.getScriptInfo(originalLocation.fileName)!;
+            toDo = toDo || [];
 
-                for (const project of originalProjectAndScriptInfo.projects) {
-                    addToTodo({ project, location: originalLocation as TLocation }, toDo, seenProjects);
-                }
-                const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalProjectAndScriptInfo.scriptInfo);
-                if (symlinkedProjectsMap) {
-                    symlinkedProjectsMap.forEach((symlinkedProjects) => {
-                        for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
-                    });
-                }
+            for (const project of originalScriptInfo.containingProjects) {
+                addToTodo({ project, location: originalLocation as TLocation }, toDo, seenProjects);
+            }
+            const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalScriptInfo);
+            if (symlinkedProjectsMap) {
+                symlinkedProjectsMap.forEach((symlinkedProjects) => {
+                    for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
+                });
             }
             return true;
         });
@@ -702,7 +695,7 @@ namespace ts.server {
                 const { fileName, project } = checkList[index];
                 index++;
                 // Ensure the project is upto date before checking if this file is present in the project
-                project.updateGraph();
+                updateProjectIfDirty(project);
                 if (!project.containsFile(fileName, requireOpen)) {
                     return;
                 }
@@ -1091,7 +1084,7 @@ namespace ts.server {
 
         private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string | undefined, needFileNameList: boolean, excludeConfigFiles: boolean) {
             const { project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName);
-            project.updateGraph();
+            updateProjectIfDirty(project);
             const projectInfo = {
                 configFileName: project.getProjectName(),
                 languageServiceDisabled: !project.languageServiceEnabled,
@@ -1106,7 +1099,7 @@ namespace ts.server {
             return project.getLanguageService().getRenameInfo(file, position);
         }
 
-        private getProjects(args: protocol.FileRequestArgs): Projects {
+        private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
             let projects: ReadonlyArray<Project> | undefined;
             let symLinkedProjects: MultiMap<Project> | undefined;
             if (args.projectFileName) {
@@ -1116,13 +1109,18 @@ namespace ts.server {
                 }
             }
             else {
-                const scriptInfo = this.projectService.getScriptInfo(args.file)!;
+                const scriptInfo = getScriptInfoEnsuringProjectsUptoDate ?
+                    this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file) :
+                    this.projectService.getScriptInfo(args.file);
+                if (!scriptInfo) {
+                    return ignoreNoProjectError ? emptyArray : Errors.ThrowNoProject();
+                }
                 projects = scriptInfo.containingProjects;
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
-            if ((!projects || !projects.length) && !symLinkedProjects) {
+            if (!ignoreNoProjectError && (!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
             return symLinkedProjects ? { projects: projects!, symLinkedProjects } : projects!; // TODO: GH#18217
@@ -1465,18 +1463,16 @@ namespace ts.server {
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): ReadonlyArray<protocol.CompileOnSaveAffectedFileListSingleProject> {
-            const info = this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file);
+            const projects = this.getProjects(args, /*getScriptInfoEnsuringProjectsUptoDate*/ true, /*ignoreNoProjectError*/ true);
+            const info = this.projectService.getScriptInfo(args.file);
             if (!info) {
                 return emptyArray;
             }
 
-            // if specified a project, we only return affected file list in this project
-            const projects = args.projectFileName ? [this.projectService.findProject(args.projectFileName)!] : info.containingProjects;
-            const symLinkedProjects = !args.projectFileName && this.projectService.getSymlinkedProjects(info);
             return combineProjectOutput(
                 info,
                 path => this.projectService.getScriptInfoForPath(path)!,
-                symLinkedProjects ? { projects, symLinkedProjects } : projects,
+                projects,
                 (project, info) => {
                     let result: protocol.CompileOnSaveAffectedFileListSingleProject | undefined;
                     if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.isOrphan() && !project.getCompilationSettings().noEmit) {

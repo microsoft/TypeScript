@@ -101,7 +101,6 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     private foo(x: number); 
 >foo : { (x: number): any; (x: T, y: T): any; }
@@ -110,9 +109,7 @@ class D<T> {
     public foo(x: T, y: T); // error
 >foo : { (x: number): any; (x: T, y: T): any; }
 >x : T
->T : T
 >y : T
->T : T
 
     private foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: T, y: T): any; }
@@ -130,9 +127,7 @@ class D<T> {
     private bar(x: T, y: T);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
 >x : T
->T : T
 >y : T
->T : T
 
     private bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
@@ -202,7 +197,6 @@ class D<T> {
 
 var c: C;
 >c : C
->C : C
 
 var r = c.foo(1); // error
 >r : any
@@ -214,7 +208,6 @@ var r = c.foo(1); // error
 
 var d: D<number>;
 >d : D<number>
->D : D<T>
 
 var r2 = d.foo(2); // error
 >r2 : any

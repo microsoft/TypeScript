@@ -1,10 +1,7 @@
 === tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts ===
 function f<T>(x: T): T {
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
     var a: typeof x;
 >a : T

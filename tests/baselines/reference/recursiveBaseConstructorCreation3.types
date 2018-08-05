@@ -1,17 +1,13 @@
 === tests/cases/compiler/recursiveBaseConstructorCreation3.ts ===
 declare class base<T> {
 >base : base<T>
->T : T
 }
 declare class abc<T> extends base<T> {
 >abc : abc<T>
->T : T
 >base : base<T>
->T : T
 
     foo: xyz;
 >foo : xyz
->xyz : xyz
 }
 declare class xyz extends abc {
 >xyz : xyz
@@ -25,7 +21,6 @@ var bar = new xyz(); // Error: Invalid 'new' expression.
 
 var r: xyz = bar.foo;
 >r : xyz
->xyz : xyz
 >bar.foo : any
 >bar : any
 >foo : any

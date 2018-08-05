@@ -158,15 +158,18 @@ namespace ts.server {
         /*@internal*/
         typingFiles: SortedReadonlyArray<string> = emptyArray;
 
+        /*@internal*/
+        originalConfiguredProjects: Map<true> | undefined;
+
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
-            this.updateGraph();
+            updateProjectIfDirty(this);
             return allFilesAreJsOrDts(this);
         }
 
         public isJsOnlyProject() {
-            this.updateGraph();
+            updateProjectIfDirty(this);
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
@@ -456,7 +459,7 @@ namespace ts.server {
 
         getLanguageService(ensureSynchronized = true): LanguageService {
             if (ensureSynchronized) {
-                this.updateGraph();
+                updateProjectIfDirty(this);
             }
             return this.languageService;
         }
@@ -474,7 +477,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return [];
             }
-            this.updateGraph();
+            updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program, this.projectService.toCanonicalFileName, this.builderState);
             return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
@@ -568,6 +571,14 @@ namespace ts.server {
                 // The project could have pending update remaining and hence the info could be in the files but not in program graph
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
+                }
+                const projectReferences = this.program.getProjectReferences();
+                if (projectReferences) {
+                    for (const ref of projectReferences) {
+                        if (ref) {
+                            this.detachScriptInfoFromProject(ref.sourceFile.fileName);
+                        }
+                    }
                 }
             }
             // Release external files
@@ -711,7 +722,7 @@ namespace ts.server {
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean {
-            const info = this.projectService.getScriptInfoForPath(this.toPath(filename));
+            const info = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
@@ -1022,7 +1033,7 @@ namespace ts.server {
 
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
-            this.updateGraph();
+            updateProjectIfDirty(this);
 
             const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
@@ -1362,6 +1373,12 @@ namespace ts.server {
 
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
             this.projectReferences = refs;
+        }
+
+        /*@internal*/
+        getResolvedProjectReferences() {
+            const program = this.getCurrentProgram();
+            return program && program.getProjectReferences();
         }
 
         enablePlugins() {

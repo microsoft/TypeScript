@@ -1,17 +1,13 @@
 === tests/cases/compiler/declFileForTypeParameters.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T
->T : T
 
     foo(a: T): T {
 >foo : (a: T) => T
 >a : T
->T : T
->T : T
 
         return this.x;
 >this.x : T

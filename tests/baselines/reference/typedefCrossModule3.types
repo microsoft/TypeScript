@@ -2,7 +2,7 @@
 /** @typedef {number} Foo */
 const ns = {};
 >ns : typeof ns
->{} : { [x: string]: any; }
+>{} : {}
 
 ns.Foo = class {}
 >ns.Foo = class {} : typeof Foo

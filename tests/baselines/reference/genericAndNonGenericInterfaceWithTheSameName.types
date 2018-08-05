@@ -2,85 +2,51 @@
 // generic and non-generic interfaces with the same name do not merge
 
 interface A {
->A : A<T>
-
     foo: string;
 >foo : string
 }
 
 interface A<T> { // error
->A : A<T>
->T : T
-
     bar: T;
 >bar : T
->T : T
 }
 
 module M {
->M : any
-
     interface A<T> { 
->A : A<T>
->T : T
-
         bar: T;
 >bar : T
->T : T
     }
 
     interface A { // error
->A : A<T>
-
         foo: string;
 >foo : string
     }
 }
 
 module M2 {
->M2 : any
-
     interface A {
->A : A
-
         foo: string;
 >foo : string
     }
 }
 
 module M2 {
->M2 : any
-
     interface A<T> { // ok, different declaration space than other M2
->A : A<T>
->T : T
-
         bar: T;
 >bar : T
->T : T
     }
 }
 
 module M3 {
->M3 : any
-
     export interface A {
->A : A<T>
-
         foo: string;
 >foo : string
     }
 }
 
 module M3 {
->M3 : any
-
     export interface A<T> { // error
->A : A<T>
->T : T
-
         bar: T;
 >bar : T
->T : T
     }
 }

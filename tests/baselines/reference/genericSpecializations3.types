@@ -1,18 +1,12 @@
 === tests/cases/compiler/genericSpecializations3.ts ===
 interface IFoo<T> {
->IFoo : IFoo<T>
->T : T
-
     foo(x: T): T;
 >foo : (x: T) => T
 >x : T
->T : T
->T : T
 }
 
 var iFoo: IFoo<number>;
 >iFoo : IFoo<number>
->IFoo : IFoo<T>
 
 iFoo.foo(1);
 >iFoo.foo(1) : number
@@ -23,7 +17,6 @@ iFoo.foo(1);
 
 class IntFooBad implements IFoo<number> { // error
 >IntFooBad : IntFooBad
->IFoo : IFoo<T>
 
     foo(x: string): string { return null; }
 >foo : (x: string) => string
@@ -33,11 +26,9 @@ class IntFooBad implements IFoo<number> { // error
 
 var intFooBad: IntFooBad;
 >intFooBad : IntFooBad
->IntFooBad : IntFooBad
 
 class IntFoo implements IFoo<number> {
 >IntFoo : IntFoo
->IFoo : IFoo<T>
 
     foo(x: number): number { return null; }
 >foo : (x: number) => number
@@ -47,11 +38,9 @@ class IntFoo implements IFoo<number> {
 
 var intFoo: IntFoo;
 >intFoo : IntFoo
->IntFoo : IntFoo
 
 class StringFoo2 implements IFoo<string> {
 >StringFoo2 : StringFoo2
->IFoo : IFoo<T>
 
     foo(x: string): string { return null; }
 >foo : (x: string) => string
@@ -61,7 +50,6 @@ class StringFoo2 implements IFoo<string> {
 
 var stringFoo2: StringFoo2;
 >stringFoo2 : StringFoo2
->StringFoo2 : StringFoo2
 
 stringFoo2.foo("hm");
 >stringFoo2.foo("hm") : string
@@ -84,17 +72,12 @@ stringFoo2 = intFoo; // error
 
 class StringFoo3 implements IFoo<string> { // error
 >StringFoo3 : StringFoo3
->IFoo : IFoo<T>
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >null : null
 }
 var stringFoo3: StringFoo3;
 >stringFoo3 : StringFoo3
->StringFoo3 : StringFoo3
 

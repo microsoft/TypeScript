@@ -1,20 +1,15 @@
 === tests/cases/compiler/genericTypeAssertions2.ts ===
 class A<T> { foo(x: T) { } }
 >A : A<T>
->T : T
 >foo : (x: T) => void
 >x : T
->T : T
 
 class B<T> extends A<T> {
 >B : B<T>
->T : T
 >A : A<T>
->T : T
 
     bar(): T {
 >bar : () => T
->T : T
 
         return null;
 >null : null
@@ -28,40 +23,30 @@ var foo = new A<number>();
 
 var r: A<string> = <B<string>>new B();
 >r : A<string>
->A : A<T>
 ><B<string>>new B() : B<string>
->B : B<T>
 >new B() : B<string>
 >B : typeof B
 
 var r2: A<number> = <B<string>>new B(); // error
 >r2 : A<number>
->A : A<T>
 ><B<string>>new B() : B<string>
->B : B<T>
 >new B() : B<string>
 >B : typeof B
 
 var r3: B<number> = <A<number>>new B(); // error
 >r3 : B<number>
->B : B<T>
 ><A<number>>new B() : A<number>
->A : A<T>
 >new B() : B<number>
 >B : typeof B
 
 var r4: A<number> = <A<number>>new A();
 >r4 : A<number>
->A : A<T>
 ><A<number>>new A() : A<number>
->A : A<T>
 >new A() : A<number>
 >A : typeof A
 
 var r5: A<number> = <A<number>>[]; // error
 >r5 : A<number>
->A : A<T>
 ><A<number>>[] : A<number>
->A : A<T>
 >[] : undefined[]
 

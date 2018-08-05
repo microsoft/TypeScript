@@ -4,14 +4,9 @@ class Linq {
 
     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
 >select : <T, S>(values: T[], func: (v: T) => any) => any[]
->T : T
->S : S
 >values : T[]
->T : T
 >func : (v: T) => any
 >v : T
->T : T
->A : No type information available!
 
         var result = new Array(values.length);
 >result : any[]

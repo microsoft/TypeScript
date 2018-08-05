@@ -12,7 +12,6 @@ var arrayOfUnions: (string | number)[];
 
 var arrayOfUnions: Array<string | number>;
 >arrayOfUnions : (string | number)[]
->Array : T[]
 
 var unionOfFunctionType: (() => string) | (() => number);
 >unionOfFunctionType : (() => string) | (() => number)

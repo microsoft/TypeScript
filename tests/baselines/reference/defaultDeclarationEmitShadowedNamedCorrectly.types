@@ -3,29 +3,16 @@ import * as me from "./this";
 >me : typeof me
 
 export interface Things<P, T> {
->Things : me.Things<P, T>
->P : P
->T : T
-
     p: P;
 >p : P
->P : P
 
     t: T;
 >t : T
->T : T
 }
 export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
 >make : <P, CTor>(x: new () => CTor & { props: P; }) => me.Things<P, CTor>
->P : P
->CTor : CTor
 >x : new () => CTor & { props: P; }
->CTor : CTor
 >props : P
->P : P
->Things : me.Things<P, T>
->P : P
->CTor : CTor
 
     return null as any;
 >null as any : any
@@ -33,7 +20,6 @@ export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor>
 }
 
 export interface Props {
->Props : me.Props
 }
 
 export default class MyComponent {
@@ -41,7 +27,6 @@ export default class MyComponent {
 
     props: Props;
 >props : me.Props
->Props : me.Props
 }
 export namespace Something {
 >Something : typeof me.Something

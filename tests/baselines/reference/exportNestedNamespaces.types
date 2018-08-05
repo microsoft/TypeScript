@@ -4,7 +4,7 @@ exports.n = {};
 >exports.n : typeof n
 >exports : typeof import("tests/cases/conformance/salsa/mod")
 >n : typeof n
->{} : { [x: string]: any; }
+>{} : {}
 
 exports.n.K = function () {
 >exports.n.K = function () {    this.x = 10;} : typeof K

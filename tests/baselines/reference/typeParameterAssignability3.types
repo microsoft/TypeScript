@@ -7,22 +7,14 @@ class Foo { foo: string; }
 
 function foo<T extends Foo, U extends Foo>(t: T, u: U) {
 >foo : <T extends Foo, U extends Foo>(t: T, u: U) => void
->T : T
->Foo : Foo
->U : U
->Foo : Foo
 >t : T
->T : T
 >u : U
->U : U
 
     var a: T;
 >a : T
->T : T
 
     var b: U;
 >b : U
->U : U
 
     t = a; // ok
 >t = a : T
@@ -57,18 +49,12 @@ function foo<T extends Foo, U extends Foo>(t: T, u: U) {
 
 class C<T extends Foo, U extends Foo> {
 >C : C<T, U>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
 
     t: T;
 >t : T
->T : T
 
     u: U;
 >u : U
->U : U
 
     r = () => {
 >r : () => void

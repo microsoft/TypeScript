@@ -3,8 +3,6 @@ declare module "foo" {
 >"foo" : typeof import("foo")
 
     interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -26,11 +24,7 @@ declare module "foo2" {
 >"foo2" : typeof import("foo2")
 
     namespace Bar {
->Bar : typeof Bar
-
         interface I {
->I : I
-
             a: string;
 >a : string
 
@@ -40,11 +34,7 @@ declare module "foo2" {
     }
 
     namespace Baz {
->Baz : any
-
         interface J {
->J : J
-
             a: number;
 >a : number
 
@@ -59,19 +49,16 @@ declare module "foo2" {
         item: Bar.I;
 >item : Bar.I
 >Bar : any
->I : Bar.I
 
         constructor(input: Baz.J);
 >input : Baz.J
 >Baz : any
->J : Baz.J
     }
 }
 
 let y: import("foo2").Bar.I = { a: "", b: 0 };
 >y : import("foo2").Bar.I
 >Bar : any
->I : import("foo2").Bar.I
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
 >"" : ""

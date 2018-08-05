@@ -16,25 +16,16 @@ class E extends D { baz: number; }
 
 class C2<T> extends E2<T> { foo: T; } // error
 >C2 : C2<T>
->T : T
 >E2 : typeof E2
->T : T
 >foo : T
->T : T
 
 class D2<T> extends C2<T> { bar: T; }
 >D2 : D2<T>
->T : T
 >C2 : typeof C2
->T : T
 >bar : T
->T : T
 
 class E2<T> extends D2<T> { baz: T; }
 >E2 : E2<T>
->T : T
 >D2 : typeof D2
->T : T
 >baz : T
->T : T
 

@@ -12,7 +12,6 @@ enum E {
 const x1: E.static = E.static;
 >x1 : E
 >E : any
->static : E
 >E.static : E
 >E : typeof E
 >static : E

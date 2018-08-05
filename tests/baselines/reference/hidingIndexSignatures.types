@@ -1,22 +1,16 @@
 === tests/cases/compiler/hidingIndexSignatures.ts ===
 interface A {
->A : A
-
     [a: string]: {};
 >a : string
 }
 
 interface B extends A {
->B : B
->A : A
-
     [a: string]: number; // Number is not a subtype of string.  Should error.
 >a : string
 }
 
 var b: B;
 >b : B
->B : B
 
 b[""]; // Should be number
 >b[""] : number
@@ -25,7 +19,6 @@ b[""]; // Should be number
 
 var a: A;
 >a : A
->A : A
 
 a[""]; // Should be {}
 >a[""] : {}

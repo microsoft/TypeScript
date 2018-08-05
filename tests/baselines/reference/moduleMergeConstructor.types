@@ -16,8 +16,6 @@ declare module "foo" {
 >"foo" : typeof import("foo")
 
     export interface Foo {
->Foo : Foo
-
         method2(): any;
 >method2 : () => any
     }
@@ -33,7 +31,6 @@ class Test {
     bar: foo.Foo;
 >bar : foo.Foo
 >foo : any
->Foo : foo.Foo
 
     constructor() {
         this.bar = new foo.Foo();

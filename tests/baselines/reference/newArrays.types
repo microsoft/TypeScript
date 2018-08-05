@@ -10,7 +10,6 @@ module M {
 
 		public fa: Foo[];
 >fa : Foo[]
->Foo : Foo
 
 		public x = 10;
 >x : number
@@ -30,7 +29,6 @@ module M {
 >fa : Foo[]
 >new Array<Foo>(this.x * this.y) : Foo[]
 >Array : ArrayConstructor
->Foo : Foo
 >this.x * this.y : number
 >this.x : number
 >this : this

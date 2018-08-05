@@ -1,35 +1,23 @@
 === tests/cases/compiler/errorMessagesIntersectionTypes01.ts ===
 interface Foo {
->Foo : Foo
-
     fooProp: boolean;
 >fooProp : boolean
 }
 
 interface Bar {
->Bar : Bar
-
     barProp: string;
 >barProp : string
 }
 
 interface FooBar extends Foo, Bar {
->FooBar : FooBar
->Foo : Foo
->Bar : Bar
 }
 
 declare function mixBar<T>(obj: T): T & Bar;
 >mixBar : <T>(obj: T) => T & Bar
->T : T
 >obj : T
->T : T
->T : T
->Bar : Bar
 
 let fooBar: FooBar = mixBar({
 >fooBar : FooBar
->FooBar : FooBar
 >mixBar({    fooProp: "frizzlebizzle"}) : { fooProp: string; } & Bar
 >mixBar : <T>(obj: T) => T & Bar
 >{    fooProp: "frizzlebizzle"} : { fooProp: string; }

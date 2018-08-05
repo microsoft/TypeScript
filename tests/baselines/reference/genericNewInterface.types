@@ -1,11 +1,8 @@
 === tests/cases/compiler/genericNewInterface.ts ===
 function createInstance<T>(ctor: new (s: string) => T): T {
 >createInstance : <T>(ctor: new (s: string) => T) => T
->T : T
 >ctor : new (s: string) => T
 >s : string
->T : T
->T : T
 
     return new ctor(42); //should be an error
 >new ctor(42) : any
@@ -14,21 +11,13 @@ function createInstance<T>(ctor: new (s: string) => T): T {
 }
                    
 interface INewable<T> {
->INewable : INewable<T>
->T : T
-
     new (param: string): T;
 >param : string
->T : T
 }
 
 function createInstance2<T>(ctor: INewable<T>): T {
 >createInstance2 : <T>(ctor: INewable<T>) => T
->T : T
 >ctor : INewable<T>
->INewable : INewable<T>
->T : T
->T : T
 
     return new ctor(1024); //should be an error
 >new ctor(1024) : any

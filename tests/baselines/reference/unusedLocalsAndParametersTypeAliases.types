@@ -4,11 +4,8 @@ type handler1 = () => void;
 >handler1 : handler1
 
 export interface I1 {
->I1 : I1
-
     getHandler: handler1;
 >getHandler : handler1
->handler1 : handler1
 }
 
 // exported
@@ -20,13 +17,8 @@ type handler3 = () => void;
 >handler3 : handler3
 
 export interface I3<T extends handler3> {
->I3 : I3<T>
->T : T
->handler3 : handler3
-
     getHandler: T;
 >getHandler : T
->T : T
 }
 
 // used in another type alias declaration
@@ -35,11 +27,9 @@ type handler4 = () => void;
 
 type handler5 = handler4 | (()=>number);
 >handler5 : handler5
->handler4 : handler4
 
 var x: handler5;
 >x : handler5
->handler5 : handler5
 
 x();
 >x() : number | void
@@ -51,8 +41,6 @@ type handler6 = () => void;
 
 var y: Array<handler6>;
 >y : handler6[]
->Array : T[]
->handler6 : handler6
 
 y[0]();
 >y[0]() : void

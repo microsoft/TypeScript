@@ -11,7 +11,6 @@ export class Broken {
         return { } as TypeB;
 >{ } as TypeB : import("tests/cases/compiler/Uppercased_Dir/src/types").Merge<import("tests/cases/compiler/Uppercased_Dir/src/type-a").TypeA, { b: string; }>
 >{ } : {}
->TypeB : import("tests/cases/compiler/Uppercased_Dir/src/types").Merge<import("tests/cases/compiler/Uppercased_Dir/src/type-a").TypeA, { b: string; }>
     }
 }
 === tests/cases/compiler/Uppercased_Dir/src/type-b.ts ===
@@ -23,8 +22,6 @@ import { TypeA } from './type-a';
 
 export type TypeB = Merge<TypeA, {
 >TypeB : Merge<TypeA, { b: string; }>
->Merge : Merge<T, U>
->TypeA : TypeA
 
     b: string;
 >b : string
@@ -40,8 +37,4 @@ export type TypeA = {
 === tests/cases/compiler/Uppercased_Dir/src/types.ts ===
 export type Merge<T, U> = T & U;
 >Merge : Merge<T, U>
->T : T
->U : U
->T : T
->U : U
 

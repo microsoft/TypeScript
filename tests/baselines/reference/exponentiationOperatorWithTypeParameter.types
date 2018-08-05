@@ -2,9 +2,7 @@
 // type parameter type is not valid for arithmetic operand
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
->T : T
 >t : T
->T : T
 
     var a: any;
 >a : any

@@ -32,7 +32,6 @@ function Goo(s:string); // error - no implementation
 declare function Gar(s:String); // expect no error
 >Gar : (s: String) => any
 >s : String
->String : String
 
 var f1 = new Foo("hey");
 >f1 : any

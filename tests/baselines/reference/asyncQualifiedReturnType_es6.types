@@ -4,14 +4,11 @@ namespace X {
 
     export class MyPromise<T> extends Promise<T> {
 >MyPromise : MyPromise<T>
->T : T
 >Promise : Promise<T>
->T : T
     }
 }
 
 async function f(): X.MyPromise<void> {
 >f : () => X.MyPromise<void>
 >X : any
->MyPromise : X.MyPromise<T>
 }

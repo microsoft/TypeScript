@@ -27,21 +27,11 @@ type SomeLongOptionF = { someLongOptionF: string }
 
 const x: SomeLongOptionA
 >x : SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF
->SomeLongOptionA : SomeLongOptionA
 
        | SomeLongOptionB
->SomeLongOptionB : SomeLongOptionB
-
        | SomeLongOptionC
->SomeLongOptionC : SomeLongOptionC
-
        | SomeLongOptionD
->SomeLongOptionD : SomeLongOptionD
-
        | SomeLongOptionE
->SomeLongOptionE : SomeLongOptionE
-
        | SomeLongOptionF = 42;
->SomeLongOptionF : SomeLongOptionF
 >42 : 42
 

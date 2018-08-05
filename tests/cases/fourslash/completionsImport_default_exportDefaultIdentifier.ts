@@ -20,7 +20,7 @@ verify.completionListContains({ name: "foo", source: "/a" }, "(alias) const foo:
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from module "./a"`,
+    description: `Import default 'foo' from module "./a"`,
     newFileContent: `import foo from "./a";
 
 f;`,

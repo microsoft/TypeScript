@@ -2,7 +2,6 @@
 function f(x: TemplateStringsArray, y: string, z: string) {
 >f : (x: TemplateStringsArray, y: string, z: string) => void
 >x : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >y : string
 >z : string
 }

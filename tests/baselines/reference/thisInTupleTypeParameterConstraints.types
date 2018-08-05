@@ -2,59 +2,37 @@
 /// <reference no-default-lib="true"/>
 
 interface Boolean {}
->Boolean : Boolean
-
 interface IArguments {}
->IArguments : IArguments
-
 interface Function {}
->Function : Function
-
 interface Number {}
->Number : Number
-
 interface RegExp {}
->RegExp : RegExp
-
 interface Object {}
->Object : Object
-
 interface String {}
->String : String
 
 interface Array<T> {
->Array : T[]
->T : T
-
     // 4 methods will run out of memory if this-types are not instantiated
     // correctly for tuple types that are type parameter constraints
     map<U>(arg: this): void;
 >map : <U>(arg: this) => void
->U : U
 >arg : this
 
     reduceRight<U>(arg: this): void;
 >reduceRight : <U>(arg: this) => void
->U : U
 >arg : this
 
     reduce<U>(arg: this): void;
 >reduce : <U>(arg: this) => void
->U : U
 >arg : this
 
     reduce2<U>(arg: this): void;
 >reduce2 : <U>(arg: this) => void
->U : U
 >arg : this
 }
 
 declare function f<T extends [(x: number) => number]>(a: T): void;
 >f : <T extends [(x: number) => number]>(a: T) => void
->T : T
 >x : number
 >a : T
->T : T
 
 let x: [(x: number) => number];
 >x : [(x: number) => number]

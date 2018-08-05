@@ -37,6 +37,7 @@ namespace ts {
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
         let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
         let suppressNewDiagnosticContexts: boolean;
+        let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
         const host = context.getEmitHost();
         const symbolTracker: SymbolTracker = {
@@ -46,6 +47,7 @@ namespace ts {
             reportPrivateInBaseOfClassExpression,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
+            trackExternalModuleSymbolOfImportTypeNode
         };
         let errorNameNode: DeclarationName | undefined;
 
@@ -115,6 +117,12 @@ namespace ts {
             }
         }
 
+        function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
+            if (!isBundledEmit) {
+                (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+            }
+        }
+
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             if (symbol.flags & SymbolFlags.TypeParameter) return;
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
@@ -154,7 +162,7 @@ namespace ts {
 
             if (node.kind === SyntaxKind.Bundle) {
                 isBundledEmit = true;
-                const refs = createMap<SourceFile>();
+                refs = createMap<SourceFile>();
                 let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
@@ -224,6 +232,7 @@ namespace ts {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
+            updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
             return updated;
 
             function getFileReferencesForUsedTypeReferences() {
@@ -483,10 +492,18 @@ namespace ts {
         function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
             if (!input) return undefined!; // TODO: GH#18217
             resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
-            if (input.kind === SyntaxKind.StringLiteral && isBundledEmit) {
-                const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
-                if (newName) {
-                    return createLiteral(newName);
+            if (isStringLiteralLike(input)) {
+                if (isBundledEmit) {
+                    const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
+                    if (newName) {
+                        return createLiteral(newName);
+                    }
+                }
+                else {
+                    const symbol = resolver.getSymbolOfExternalModuleSpecifier(input);
+                    if (symbol) {
+                        (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+                    }
                 }
             }
             return input;
@@ -1164,6 +1181,17 @@ namespace ts {
             return false;
         }
 
+        function isScopeMarker(node: Node) {
+            return isExportAssignment(node) || isExportDeclaration(node);
+        }
+
+        function hasScopeMarker(node: Node) {
+            if (isModuleBlock(node)) {
+                return some(node.statements, isScopeMarker);
+            }
+            return false;
+        }
+
         function ensureModifiers(node: Node, privateDeclaration?: boolean): ReadonlyArray<Modifier> | undefined {
             const currentFlags = getModifierFlags(node);
             const newFlags = ensureModifierFlags(node, privateDeclaration);
@@ -1178,7 +1206,7 @@ namespace ts {
             let additions = (needsDeclare && !isAlwaysType(node)) ? ModifierFlags.Ambient : ModifierFlags.None;
             const parentIsFile = node.parent.kind === SyntaxKind.SourceFile;
             if (!parentIsFile || (isBundledEmit && parentIsFile && isExternalModule(node.parent as SourceFile))) {
-                mask ^= ((privateDeclaration || (isBundledEmit && parentIsFile) ? 0 : ModifierFlags.Export) | ModifierFlags.Default | ModifierFlags.Ambient);
+                mask ^= ((privateDeclaration || (isBundledEmit && parentIsFile) || hasScopeMarker(node.parent) ? 0 : ModifierFlags.Export) | ModifierFlags.Ambient);
                 additions = ModifierFlags.None;
             }
             return maskModifierFlags(node, mask, additions);
@@ -1240,6 +1268,11 @@ namespace ts {
 
     function maskModifierFlags(node: Node, modifierMask: ModifierFlags = ModifierFlags.All ^ ModifierFlags.Public, modifierAdditions: ModifierFlags = ModifierFlags.None): ModifierFlags {
         let flags = (getModifierFlags(node) & modifierMask) | modifierAdditions;
+        if (flags & ModifierFlags.Default && !(flags & ModifierFlags.Export)) {
+            // A non-exported default is a nonsequitor - we usually try to remove all export modifiers
+            // from statements in ambient declarations; but a default export must retain its export modifier to be syntactically valid
+            flags ^= ModifierFlags.Export;
+        }
         if (flags & ModifierFlags.Default && flags & ModifierFlags.Ambient) {
             flags ^= ModifierFlags.Ambient; // `declare` is never required alongside `default` (and would be an error if printed)
         }

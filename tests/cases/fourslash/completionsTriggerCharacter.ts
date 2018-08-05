@@ -2,6 +2,7 @@
 
 // @jsx: preserve
 
+//////</*comment*/
 ////const x: "a" | "b" = "/*openQuote*/"/*closeQuote*/;
 ////const y: 'a' | 'b' = '/*openSingleQuote*/'/*closeSingleQuote*/;
 ////const z: 'a' | 'b' = `/*openTemplate*/`/*closeTemplate*/;
@@ -28,6 +29,8 @@
 ////const divide = 1 //*divide*/
 
 verify.completions(
+    { marker: "comment", exact: undefined, triggerCharacter: "<" },
+
     { marker: "openQuote", exact: ["a", "b"], triggerCharacter: '"' },
     { marker: "closeQuote", exact: undefined, triggerCharacter: '"' },
 

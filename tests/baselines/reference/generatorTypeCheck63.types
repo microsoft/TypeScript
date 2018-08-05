@@ -1,25 +1,15 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts ===
 export interface StrategicState {
->StrategicState : StrategicState
-
     lastStrategyApplied?: string;
 >lastStrategyApplied : string
 }
 
 export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
->T : T
->StrategicState : StrategicState
 >stratName : string
 >gen : (a: T) => IterableIterator<T>
 >a : T
->T : T
->IterableIterator : IterableIterator<T>
->T : T
 >a : T
->T : T
->IterableIterator : IterableIterator<T>
->T : T
 
     return function*(state) {
 >function*(state) {        for (const next of gen(state)) {            if (next) {                next.lastStrategyApplied = stratName;            }            yield next;        }    } : (state: T) => IterableIterator<T>
@@ -49,34 +39,22 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 }
 
 export interface Strategy<T> {
->Strategy : Strategy<T>
->T : T
-
     (a: T): IterableIterator<T | undefined>;
 >a : T
->T : T
->IterableIterator : IterableIterator<T>
->T : T
 }
 
 export interface State extends StrategicState {
->State : State
->StrategicState : StrategicState
-
     foo: number;
 >foo : number
 }
 
 export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing : Strategy<State>
->Strategy : Strategy<T>
->State : State
 >strategy("Nothing", function* (state: State) {    yield 1;    return state;}) : any
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
 >function* (state: State) {    yield 1;    return state;} : (state: State) => IterableIterator<State | 1>
 >state : State
->State : State
 
     yield 1;
 >yield 1 : any
@@ -89,27 +67,21 @@ export const Nothing: Strategy<State> = strategy("Nothing", function* (state: St
 
 export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing1 : Strategy<State>
->Strategy : Strategy<T>
->State : State
 >strategy("Nothing", function* (state: State) {}) : (a: any) => IterableIterator<any>
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
 >function* (state: State) {} : (state: State) => IterableIterator<any>
 >state : State
->State : State
 
 });
 
 export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing2 : Strategy<State>
->Strategy : Strategy<T>
->State : State
 >strategy("Nothing", function* (state: State) {    return 1;}) : any
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
 >function* (state: State) {    return 1;} : (state: State) => IterableIterator<number>
 >state : State
->State : State
 
     return 1;
 >1 : 1
@@ -118,14 +90,11 @@ export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: S
 
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing3 : Strategy<State>
->Strategy : Strategy<T>
->State : State
 >strategy("Nothing", function* (state: State) {    yield state;    return 1;}) : any
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
 >function* (state: State) {    yield state;    return 1;} : (state: State) => IterableIterator<State | 1>
 >state : State
->State : State
 
     yield state;
 >yield state : any

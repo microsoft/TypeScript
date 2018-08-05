@@ -23,7 +23,6 @@ function check(x: Foo.ConstFooEnum): void {
 >check : (x: Foo.ConstFooEnum) => void
 >x : Foo.ConstFooEnum
 >Foo : any
->ConstFooEnum : Foo.ConstFooEnum
 
   switch (x) {
 >x : Foo.ConstFooEnum
