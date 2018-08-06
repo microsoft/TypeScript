@@ -20949,6 +20949,7 @@ namespace ts {
                     }
                     return numberType;
                 case SyntaxKind.ExclamationToken:
+                    checkTruthinessExpression(node.operand);
                     const facts = getTypeFacts(operandType) & (TypeFacts.Truthy | TypeFacts.Falsy);
                     return facts === TypeFacts.Truthy ? falseType :
                         facts === TypeFacts.Falsy ? trueType :
@@ -21316,7 +21317,14 @@ namespace ts {
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode);
             }
-            let leftType = checkExpression(left, checkMode);
+            let leftType: Type;
+            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
+                leftType = checkTruthinessExpression(left, checkMode);
+            }
+            else {
+                leftType = checkExpression(left, checkMode);
+            }
+
             let rightType = checkExpression(right, checkMode);
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
@@ -21649,7 +21657,7 @@ namespace ts {
         }
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
-            checkExpression(node.condition);
+            checkTruthinessExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
             return getUnionType([type1, type2], UnionReduction.Subtype);
@@ -24538,9 +24546,9 @@ namespace ts {
             checkSourceElement(node.statement);
         }
 
-        function checkTruthinessExpression(node: Expression) {
-            const type = checkExpression(node);
-            if (type === voidType) {
+        function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
+            const type = checkExpression(node, checkMode);
+            if (type.flags & TypeFlags.Void) {
                 error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
             }
             return type;
