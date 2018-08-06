@@ -6972,38 +6972,9 @@ namespace ts {
             return false;
         }
 
-        return changedCompileOptionValueOf(newOptions, oldOptions, [
-            "noImplicitReturns",
-            "strict",
-            "suppressExcessPropertyErrors",
-            "suppressImplicitAnyIndexErrors",
-            "noFallthroughCasesInSwitch",
-            "noStrictGenericChecks",
-            "noUnusedLocals",
-            "noUnusedParameters",
-            "noImplicitUseStrict"
-        ]) || changedStrictOptionValueOf(newOptions, oldOptions, [
-            "noImplicitAny",
-            "noImplicitThis",
-            "strictNullChecks",
-            "strictFunctionTypes",
-            "strictPropertyInitialization",
-            "alwaysStrict"
-        ]);
-    }
-
-    function changedStrictOptionValueOf(newOptions: CompilerOptions, oldOptions: CompilerOptions, flags: StrictOptionName[]) {
-        for (const flag of flags) {
-            if (getStrictOptionValue(newOptions, flag) !== getStrictOptionValue(oldOptions, flag)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function changedCompileOptionValueOf(newOptions: CompilerOptions, oldOptions: CompilerOptions, optionKeys: (keyof CompilerOptions)[]) {
-        for (const optionKey of optionKeys) {
-            if (newOptions[optionKey] !== oldOptions[optionKey]) {
+        for (const option of optionDeclarations) {
+            if ((option.strictFlag && getStrictOptionValue(newOptions, option.name as StrictOptionName) !== getStrictOptionValue(oldOptions, option.name as StrictOptionName)) ||
+                (option.affectsSemanticDiagnostics && !newOptions[option.name] !== !oldOptions[option.name])) {
                 return true;
             }
         }
