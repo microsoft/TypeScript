@@ -13,14 +13,14 @@
 ////export const y = 0;
 
 // @Filename: /j.jonah.json
-////{}
+////{ "j": 0 }
 
 // @Filename: /a.js
 ////import { x as x0 } from ".";
 ////import { x as x1 } from "./index";
 ////import { x as x2 } from "./index.js";
 ////import { y } from "./jsx.jsx";
-////import j from "./j.jonah.json";
+////import { j } from "./j.jonah.json";
 
 verify.noErrors();
 
@@ -39,6 +39,6 @@ verify.getEditsForFileRename({
 import { x as x1 } from "../index";
 import { x as x2 } from "../index.js";
 import { y } from "../jsx.jsx";
-import j from "../j.jonah.json";`,
+import { j } from "../j.jonah.json";`,
     },
 });
