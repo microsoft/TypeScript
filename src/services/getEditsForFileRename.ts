@@ -210,7 +210,7 @@ namespace ts {
     }
 
     function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
-        for (const ref of sourceFile.referencedFiles) {
+        for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
             const updated = updateRef(ref.fileName);
             if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
         }

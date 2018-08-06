@@ -26,8 +26,8 @@ namespace ts.moduleSpecifiers {
     function getPreferencesForUpdate(_: ModuleSpecifierPreferences, compilerOptions: CompilerOptions, oldImportSpecifier: string): Preferences {
         return {
             relativePreference: isExternalModuleNameRelative(oldImportSpecifier) ? RelativePreference.Relative : RelativePreference.NonRelative,
-            ending: fileExtensionIs(oldImportSpecifier, Extension.Js) ? Ending.JsExtension
-                : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs || endsWith(oldImportSpecifier, "index") || endsWith(oldImportSpecifier, "index.js") ? Ending.Index : Ending.Minimal,
+            ending: hasJavaScriptOrJsonFileExtension(oldImportSpecifier) ? Ending.JsExtension
+                : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs || endsWith(oldImportSpecifier, "index") ? Ending.Index : Ending.Minimal,
         };
     }
 
@@ -189,7 +189,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJavaScriptOrJsonFileExtension(text) : undefined) || false;
     }
 
     function stringsEqual(a: string, b: string, getCanonicalFileName: GetCanonicalFileName): boolean {
@@ -446,9 +446,25 @@ namespace ts.moduleSpecifiers {
             case Ending.Index:
                 return noExtension;
             case Ending.JsExtension:
-                return noExtension + ".js";
+                return noExtension + getJavaScriptExtensionForFile(fileName);
             default:
                 return Debug.assertNever(ending);
+        }
+    }
+
+    function getJavaScriptExtensionForFile(fileName: string): Extension {
+        const ext = extensionFromPath(fileName);
+        switch (ext) {
+            case Extension.Ts:
+            case Extension.Tsx:
+            case Extension.Dts:
+                return Extension.Js;
+            case Extension.Js:
+            case Extension.Jsx:
+            case Extension.Json:
+                return ext;
+            default:
+                return Debug.assertNever(ext);
         }
     }
 
