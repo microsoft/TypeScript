@@ -114,16 +114,16 @@ namespace ts.codefix {
         const lastDotThen: Map<boolean> = createMap();
 
         forEachChild(func.body, function visit(node: Node) {
-            let nodeType = checker.getTypeAtLocation(node);
+            const nodeType = checker.getTypeAtLocation(node);
             if (isCallExpression(node) && nodeType && !!checker.getPromisedTypeOfPromise(nodeType) && hasPropertyAccessExpressionWithName(node, "then")) {
                 // false - there is no following .then() in the callback chain
-                lastDotThen.set(getNodeId(node).toString(), false);  
+                lastDotThen.set(getNodeId(node).toString(), false);
 
 
-                forEachChild(node, function checkChildren(child: Node){
+                forEachChild(node, function checkChildren(child: Node) {
                     forEachChild(child, checkChildren);
 
-                    let nodeType = checker.getTypeAtLocation(child);
+                    const nodeType = checker.getTypeAtLocation(child);
                     if (isCallExpression(child) && nodeType && !!checker.getPromisedTypeOfPromise(nodeType) && hasPropertyAccessExpressionWithName(child, "then")
                         && child.parent && !isPropertyAccessExpression(child.parent) && lastDotThen.get(getNodeId(child.parent).toString()) === false) {
 
@@ -131,7 +131,7 @@ namespace ts.codefix {
                         // false - there is no following .then() in the callback chain
                         lastDotThen.set(getNodeId(child).toString(), false);
                     }
-                    else if(isCallExpression(child) || isIdentifier(child) && nodeType && checker.getPromisedTypeOfPromise(nodeType)) {
+                    else if (isCallExpression(child) || isIdentifier(child) && nodeType && checker.getPromisedTypeOfPromise(nodeType)) {
 
                         // true - there is a following .then() in the callback chain
                         lastDotThen.set(getNodeId(child).toString(), true);
@@ -139,7 +139,7 @@ namespace ts.codefix {
                 });
             }
             else {
-                forEachChild(node, visit); 
+                forEachChild(node, visit);
             }
         });
 
@@ -245,7 +245,7 @@ namespace ts.codefix {
 
         let varDecl;
         if (prevArgName && transformer.lastDotThenMap.get(getNodeId(node).toString())) {
-            varDecl = createVariableStatement(undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier))], NodeFlags.Let));
+            varDecl = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier))], NodeFlags.Let));
             prevArgName.numberOfUsesOriginal += 2;
         }
         const tryBlock = createBlock(transformCallback(node.expression, transformer, node, prevArgName));
@@ -294,7 +294,7 @@ namespace ts.codefix {
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
         if (hasPrevArgName && nextDotThen && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
-            return createVariableDeclarationOrAssignment(prevArgName!, createAwait(node), transformer).concat(); //hack to make the types match
+            return createVariableDeclarationOrAssignment(prevArgName!, createAwait(node), transformer).concat(); // hack to make the types match
         }
         else if (!hasPrevArgName && nextDotThen && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
             return [createStatement(createAwait(node))];
@@ -447,7 +447,7 @@ namespace ts.codefix {
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return  mapEntry || { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
+            return mapEntry || { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
         }
 
         function getSymbol(node: Node): Symbol | undefined {
