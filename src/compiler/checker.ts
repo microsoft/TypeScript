@@ -15820,20 +15820,10 @@ namespace ts {
             }
             const contextualSignature = getContextualSignature(func);
             if (contextualSignature) {
-                const funcHasRestParameter = hasRestParameter(func);
-                const len = func.parameters.length - (funcHasRestParameter ? 1 : 0);
-                let indexOfParameter = func.parameters.indexOf(parameter);
-                if (getThisParameter(func) !== undefined && !contextualSignature.thisParameter) {
-                    Debug.assert(indexOfParameter !== 0); // Otherwise we should not have called `getContextuallyTypedParameterType`.
-                    indexOfParameter -= 1;
-                }
-                if (indexOfParameter < len) {
-                    return getTypeAtPosition(contextualSignature, indexOfParameter);
-                }
-                // If last parameter is contextually rest parameter get its type
-                if (funcHasRestParameter && indexOfParameter === len) {
-                    return getRestTypeAtPosition(contextualSignature, indexOfParameter);
-                }
+                const index = func.parameters.indexOf(parameter) - (getThisParameter(func) ? 1 : 0);
+                return parameter.dotDotDotToken && lastOrUndefined(func.parameters) === parameter ?
+                    getRestTypeAtPosition(contextualSignature, index) :
+                    tryGetTypeAtPosition(contextualSignature, index);
             }
         }
 
