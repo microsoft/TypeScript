@@ -16,11 +16,11 @@ function /*[#|*/f/*|]*/(): Promise<void> {
 async function f(): Promise<void> {
     let x = fetch("https://microsoft.com").then(res => console.log("Microsoft:", res));
     if (x.ok) {
-        const res_1 = await fetch("https://typescriptlang.org");
-        return console.log(res_1);
+        const res = await fetch("https://typescriptlang.org");
+        return console.log(res);
     }
     const resp = await x;
     var blob = resp.blob().then(blob_1 => blob_1.byteOffset).catch(err => 'Error');
-    const res_1 = await fetch("https://micorosft.com");
+    const res = await fetch("https://micorosft.com");
     return console.log("Another one!");
 }

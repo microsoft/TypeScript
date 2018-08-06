@@ -19,7 +19,7 @@ function /*[#|*/f/*|]*/(){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f(){
-    let res = await fetch("https://typescriptlang.org");
+    const res = await fetch("https://typescriptlang.org");
     if (res.ok) {
         return fetch("https://microsoft.com");
     }
