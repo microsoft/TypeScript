@@ -29,3 +29,48 @@ type typeAlias3 = typeof varOfAliasedType3;
 >typeAlias3 : any
 >varOfAliasedType3 : any
 
+// Repro from #26104
+
+interface Input {
+>Input : Input
+
+  a: number;
+>a : number
+
+  b: number;
+>b : number
+}
+
+type R = ReturnType<typeof mul>;
+>R : any
+>ReturnType : ReturnType<T>
+>mul : (input: Input) => any
+
+function mul(input: Input): R {
+>mul : (input: Input) => any
+>input : Input
+>Input : Input
+>R : any
+
+  return input.a * input.b;
+>input.a * input.b : number
+>input.a : number
+>input : Input
+>a : number
+>input.b : number
+>input : Input
+>b : number
+}
+
+// Repro from #26104
+
+type R2 = ReturnType<typeof f>;
+>R2 : any
+>ReturnType : ReturnType<T>
+>f : () => any
+
+function f(): R2 { return 0; }
+>f : () => any
+>R2 : any
+>0 : 0
+
