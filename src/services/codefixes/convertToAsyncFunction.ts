@@ -18,21 +18,13 @@ namespace ts.codefix {
         numberOfUsesSynthesized: number;
     }
 
-    class Transformer {
+    interface Transformer {
         checker: TypeChecker;
         synthNamesMap: Map<SynthIdentifier>;
         lastDotThenMap: Map<boolean>;
         context: CodeFixContextBase;
         constIdentifiers: Identifier[];
         originalTypeMap: Map<Type>;
-        constructor(_checker: TypeChecker, _synthNamesMap: Map<SynthIdentifier>, _lastDotThenMap: Map<boolean>, _context: CodeFixContextBase, _constIdentifiers: Identifier[], _originalTypeMap: Map<Type>) {
-            this.checker = _checker;
-            this.synthNamesMap = _synthNamesMap;
-            this.lastDotThenMap = _lastDotThenMap;
-            this.context = _context;
-            this.constIdentifiers = _constIdentifiers;
-            this.originalTypeMap = _originalTypeMap;
-        }
     }
 
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, context: CodeFixContextBase): void {
@@ -48,7 +40,7 @@ namespace ts.codefix {
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, lastDotThenMap, originalTypeMap);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
         const returnStatements = getReturnStatementsWithPromiseCallbacks(functionToConvertRenamed);
-        const transformer = new Transformer(checker, synthNamesMap, lastDotThenMap, context, constIdentifiers, originalTypeMap);
+        const transformer = {checker, synthNamesMap, lastDotThenMap, context, constIdentifiers, originalTypeMap};
 
         if (!returnStatements.length) {
             return;
@@ -109,7 +101,6 @@ namespace ts.codefix {
             return createMap();
         }
 
-
         // maps nodes to boolean - true indicates that there is another .then() in the callback chain
         const lastDotThen: Map<boolean> = createMap();
 
@@ -119,14 +110,12 @@ namespace ts.codefix {
                 // false - there is no following .then() in the callback chain
                 lastDotThen.set(getNodeId(node).toString(), false);
 
-
                 forEachChild(node, function checkChildren(child: Node) {
                     forEachChild(child, checkChildren);
 
                     const nodeType = checker.getTypeAtLocation(child);
                     if (isCallExpression(child) && nodeType && !!checker.getPromisedTypeOfPromise(nodeType) && hasPropertyAccessExpressionWithName(child, "then")
                         && child.parent && !isPropertyAccessExpression(child.parent) && lastDotThen.get(getNodeId(child.parent).toString()) === false) {
-
 
                         // false - there is no following .then() in the callback chain
                         lastDotThen.set(getNodeId(child).toString(), false);
