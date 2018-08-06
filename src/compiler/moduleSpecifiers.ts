@@ -128,7 +128,7 @@ namespace ts.moduleSpecifiers {
         const { baseUrl, paths, rootDirs } = compilerOptions;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending);
+            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
         if (!baseUrl || relativePreference === RelativePreference.Relative) {
             return [relativePath];
         }
@@ -138,7 +138,7 @@ namespace ts.moduleSpecifiers {
             return [relativePath];
         }
 
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending);
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
         if (paths) {
             const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
             if (fromPaths) {
@@ -438,7 +438,7 @@ namespace ts.moduleSpecifiers {
         });
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, ending: Ending): string {
+    function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions): string {
         const noExtension = removeFileExtension(fileName);
         switch (ending) {
             case Ending.Minimal:
@@ -446,19 +446,20 @@ namespace ts.moduleSpecifiers {
             case Ending.Index:
                 return noExtension;
             case Ending.JsExtension:
-                return noExtension + getJavaScriptExtensionForFile(fileName);
+                return noExtension + getJavaScriptExtensionForFile(fileName, options);
             default:
                 return Debug.assertNever(ending);
         }
     }
 
-    function getJavaScriptExtensionForFile(fileName: string): Extension {
+    function getJavaScriptExtensionForFile(fileName: string, options: CompilerOptions): Extension {
         const ext = extensionFromPath(fileName);
         switch (ext) {
             case Extension.Ts:
-            case Extension.Tsx:
             case Extension.Dts:
                 return Extension.Js;
+            case Extension.Tsx:
+                return options.jsx === JsxEmit.Preserve ? Extension.Jsx : Extension.Js;
             case Extension.Js:
             case Extension.Jsx:
             case Extension.Json:
