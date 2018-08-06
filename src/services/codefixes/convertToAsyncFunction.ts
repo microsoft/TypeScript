@@ -14,7 +14,8 @@ namespace ts.codefix {
 
     interface SynthIdentifier {
         identifier: Identifier;
-        numberOfUses: number;
+        numberOfUsesOriginal: number;
+        numberOfUsesSynthesized: number;
     }
 
     class Transformer {
@@ -23,12 +24,14 @@ namespace ts.codefix {
         lastDotThenMap: Map<boolean>;
         context: CodeFixContextBase;
         constIdentifiers: Identifier[];
-        constructor(_checker: TypeChecker, _synthNamesMap: Map<SynthIdentifier>, _lastDotThenMap: Map<boolean>, _context: CodeFixContextBase, _constIdentifiers: Identifier[]) {
+        originalTypeMap: Map<Type>;
+        constructor(_checker: TypeChecker, _synthNamesMap: Map<SynthIdentifier>, _lastDotThenMap: Map<boolean>, _context: CodeFixContextBase, _constIdentifiers: Identifier[], _originalTypeMap: Map<Type>) {
             this.checker = _checker;
             this.synthNamesMap = _synthNamesMap;
             this.lastDotThenMap = _lastDotThenMap;
             this.context = _context;
             this.constIdentifiers = _constIdentifiers;
+            this.originalTypeMap = _originalTypeMap;
         }
     }
 
@@ -40,11 +43,12 @@ namespace ts.codefix {
         }
 
         const synthNamesMap: Map<SynthIdentifier> = createMap(); // number indicates the number of times it is used after declaration
-        const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context);
-        const lastDotThenMap = findLastDotThens(functionToConvertRenamed, checker);
+        const originalTypeMap: Map<Type> = createMap();
+        const lastDotThenMap = findLastDotThens(functionToConvert, checker);
+        const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, lastDotThenMap, originalTypeMap);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
         const returnStatements = getReturnStatementsWithPromiseCallbacks(functionToConvertRenamed);
-        const transformer = new Transformer(checker, synthNamesMap, lastDotThenMap, context, constIdentifiers);
+        const transformer = new Transformer(checker, synthNamesMap, lastDotThenMap, context, constIdentifiers, originalTypeMap);
 
         if (!returnStatements.length) {
             return;
@@ -93,7 +97,7 @@ namespace ts.codefix {
     function getConstIdentifiers(synthNamesMap: Map<SynthIdentifier>): Identifier[] {
         const constIdentifiers: Identifier[] = [];
         synthNamesMap.forEach((val) => {
-            if (val.numberOfUses === 1) {
+            if (val.numberOfUsesOriginal === 0) {
                 constIdentifiers.push(val.identifier);
             }
         });
@@ -105,10 +109,6 @@ namespace ts.codefix {
             return createMap();
         }
 
-        function willBeParsed(node: Expression): boolean {
-            let nodeType = checker.getTypeAtLocation(node);
-            return !!nodeType && (returnsAPromise(node, nodeType, checker) || (isCallExpression(node) && !!checker.getPromisedTypeOfPromise(nodeType) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"))));
-        }
 
         // maps nodes to boolean - true indicates that there is another .then() in the callback chain
         const lastDotThen: Map<boolean> = createMap();
@@ -117,41 +117,29 @@ namespace ts.codefix {
             let nodeType = checker.getTypeAtLocation(node);
             if (isCallExpression(node) && nodeType && !!checker.getPromisedTypeOfPromise(nodeType) && hasPropertyAccessExpressionWithName(node, "then")) {
                 // false - there is no following .then() in the callback chain
-                lastDotThen.set(getNodeId(node).toString(), false);
+                lastDotThen.set(getNodeId(node).toString(), false);  
 
-                for (const arg of node.arguments) {
-                    forEachChild(arg, function visitArg(argChild: Expression) {
-                        if (willBeParsed(argChild)) {
-                            // false - there is no following .then() in the callback chain
-                            lastDotThen.set(getNodeId(argChild).toString(), false);
-                        }
-                    });
-                }
 
-                forEachChild(node, function visit(child: Node) {
-                    if (isExpression(child) && willBeParsed(child)) {
+                forEachChild(node, function checkChildren(child: Node){
+                    forEachChild(child, checkChildren);
+
+                    let nodeType = checker.getTypeAtLocation(child);
+                    if (isCallExpression(child) && nodeType && !!checker.getPromisedTypeOfPromise(nodeType) && hasPropertyAccessExpressionWithName(child, "then")
+                        && child.parent && !isPropertyAccessExpression(child.parent) && lastDotThen.get(getNodeId(child.parent).toString()) === false) {
+
+
+                        // false - there is no following .then() in the callback chain
+                        lastDotThen.set(getNodeId(child).toString(), false);
+                    }
+                    else if(isCallExpression(child) || isIdentifier(child) && nodeType && checker.getPromisedTypeOfPromise(nodeType)) {
+
                         // true - there is a following .then() in the callback chain
                         lastDotThen.set(getNodeId(child).toString(), true);
-
-                        if (!isCallExpression(child)) {
-                            return;
-                        }
-
-                        for (const arg of child.arguments) {
-                            forEachChild(arg, function visit(argChild: Expression) {
-                                if (willBeParsed(argChild)) {
-                                    // true - there is a following .then() in the callback chain
-                                    lastDotThen.set(getNodeId(argChild).toString(), true);
-                                }
-                            });
-                        }
                     }
-
-                    forEachChild(child, visit);
                 });
             }
             else {
-                forEachChild(node, visit);
+                forEachChild(node, visit); 
             }
         });
 
@@ -168,7 +156,7 @@ namespace ts.codefix {
     }
 
     // varNamesMap holds all of the variables in original source code. synthNamesMap holds all of the variables created by the refactor
-    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase): FunctionLikeDeclaration {
+    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, lastDotThenMap: Map<boolean>, originalType: Map<Type>): FunctionLikeDeclaration {
         const allVarNames: [Identifier, Symbol][] = [];
 
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -183,27 +171,27 @@ namespace ts.codefix {
                     if (type.getCallSignatures()[0].parameters.length && !synthNamesMap.get(getSymbolId(symbol).toString())) {
                         // add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                         const synthName = getNewNameIfConflict(createIdentifier(type.getCallSignatures()[0].parameters[0].name), allVarNames);
-                        allVarNames.push([synthName.identifier, symbol]);
                         synthNamesMap.set(getSymbolId(symbol).toString(), synthName);
+                        allVarNames.push([synthName.identifier, symbol]);
                     }
                 }
-                else {
+                else if (node.parent && isParameter(node.parent) || isVariableDeclaration(node.parent)) {
                     const newName = getNewNameIfConflict(node, allVarNames);
                     let setName = false;
 
                     for (const ident of allVarNames) {
                         if (ident[0].text === node.text && ident[1] !== symbol) {
-                            allVarNames.push([newName.identifier, symbol]);
                             synthNamesMap.set(getSymbolId(symbol).toString(), newName);
+                            allVarNames.push([newName.identifier, symbol]);
                             setName = true;
                         }
                     }
 
                     if (!setName) {
-                        if (node.parent && isParameter(node.parent) || isVariableDeclaration(node.parent)) {
+                        synthNamesMap.set(getSymbolId(symbol).toString(), { identifier: getSynthesizedDeepClone(node), numberOfUsesOriginal: allVarNames.filter(elem => elem[0].text === node.text).length, numberOfUsesSynthesized: 0 });
+                        if (node.parent && (isParameter(node.parent) && lastDotThenMap.get(getNodeId(node.parent.parent.parent).toString())) || isVariableDeclaration(node.parent)) {
                             allVarNames.push([node, symbol]);
                         }
-                        synthNamesMap.set(getSymbolId(symbol).toString(), {identifier: getSynthesizedDeepClone(node), numberOfUses: allVarNames.filter(elem => elem[0].text === node.text).length});
                     }
                 }
             }
@@ -212,12 +200,12 @@ namespace ts.codefix {
             }
         });
 
-        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, synthNamesMap, checker);
+        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, synthNamesMap, lastDotThenMap, checker, originalType);
     }
 
     function getNewNameIfConflict(name: Identifier, allVarNames: [Identifier, Symbol][]): SynthIdentifier {
         const numVarsSameName = allVarNames.filter(elem => elem[0].text === name.text).length;
-        return numVarsSameName === 0 ? {identifier: name, numberOfUses: 1} : {identifier: createIdentifier(name.text + "_" + numVarsSameName), numberOfUses: numVarsSameName};
+        return numVarsSameName === 0 ? { identifier: name, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 } : { identifier: createIdentifier(name.text + "_" + numVarsSameName), numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
     }
 
     function returnsAPromise(node: Expression, nodeType: Type, checker: TypeChecker): boolean {
@@ -230,7 +218,10 @@ namespace ts.codefix {
             return [];
         }
 
-        const nodeType = transformer.checker.getTypeAtLocation(node);
+        let nodeType = transformer.checker.getTypeAtLocation(node);
+        if (nodeType && (<IntrinsicType>nodeType).intrinsicName === "error" && isIdentifier(node)) {
+            nodeType = transformer.originalTypeMap.get(node.text);
+        }
 
         if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "then") && nodeType && !!transformer.checker.getPromisedTypeOfPromise(nodeType)) {
             return parseThen(node, transformer, outermostParent, prevArgName);
@@ -255,7 +246,7 @@ namespace ts.codefix {
         let varDecl;
         if (prevArgName && transformer.lastDotThenMap.get(getNodeId(node).toString())) {
             varDecl = createVariableStatement(undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier))], NodeFlags.Let));
-            prevArgName.numberOfUses += 2;
+            prevArgName.numberOfUsesOriginal += 2;
         }
         const tryBlock = createBlock(parseCallback(node.expression, transformer, node, prevArgName));
 
@@ -266,7 +257,7 @@ namespace ts.codefix {
         return varDecl ? [varDecl, tryStatement] : [tryStatement];
     }
 
-    function parseThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression,prevArgName?: SynthIdentifier): Statement[] {
+    function parseThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         const [res, rej] = node.arguments;
 
         if (!res) {
@@ -302,36 +293,28 @@ namespace ts.codefix {
         const nextDotThen = transformer.lastDotThenMap.get(getNodeId(node).toString());
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
-        if (hasPrevArgName && nextDotThen && isPropertyAccessExpression(originalNodeParent)) {
-
-            if (prevArgName!.numberOfUses > 1) {
-                prevArgName!.numberOfUses -= 1;
-                return [createStatement(createAssignment(getSynthesizedDeepClone(prevArgName!.identifier), createAwait(node)))];
-            }
-
-            const varDecl = createVariableDeclaration(getSynthesizedDeepClone(prevArgName!.identifier), /*type*/ undefined, createAwait(node));
-            return [createVariableStatement(/*modifiers*/ undefined, (createVariableDeclarationList([varDecl], getFlagOfIdentifier(prevArgName!.identifier, transformer.constIdentifiers))))];
+        if (hasPrevArgName && nextDotThen && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
+            return createVariableDeclarationOrAssignment(prevArgName!, createAwait(node), transformer).concat(); //hack to make the types match
         }
-        else if (!hasPrevArgName && nextDotThen && isPropertyAccessExpression(originalNodeParent)) {
+        else if (!hasPrevArgName && nextDotThen && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
             return [createStatement(createAwait(node))];
         }
 
         return [createReturn(getSynthesizedDeepClone(node))];
     }
 
-    function getCallbackBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
-
-        function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression): NodeArray<Statement> {
-            if (prevArgName.numberOfUses > 1) {
-                prevArgName.numberOfUses -= 1;
-                debugger;
-                return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))]);
-            }
-
-            return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
-                (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
+    function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
+        if (prevArgName.numberOfUsesSynthesized < prevArgName.numberOfUsesOriginal) {
+            prevArgName.numberOfUsesSynthesized += 1;
+            debugger;
+            return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))]);
         }
 
+        return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
+            (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
+    }
+
+    function getCallbackBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const hasArgName = argName && argName.identifier.text.length > 0;
@@ -351,7 +334,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                return createVariableDeclarationOrAssignment(prevArgName!, createAwait(synthCall));
+                return createVariableDeclarationOrAssignment(prevArgName!, createAwait(synthCall), transformer);
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
@@ -383,7 +366,7 @@ namespace ts.codefix {
                     }
 
                     if (hasPrevArgName && nextDotThen) {
-                        return createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression);
+                        return createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
                     }
                     else {
                         return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody) as Expression)]);
@@ -460,11 +443,11 @@ namespace ts.codefix {
             const symbol = getSymbol(originalNode);
 
             if (!symbol) {
-                return {identifier: node, numberOfUses: 1};
+                return { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry ? mapEntry : {identifier: node, numberOfUses: 1};
+            return mapEntry ? mapEntry : { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
         }
 
         function getSymbol(node: Node): Symbol | undefined {
@@ -482,14 +465,14 @@ namespace ts.codefix {
             name = getMapEntryIfExists(param);
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
-            name = {identifier: funcNode.arguments[0] as Identifier, numberOfUses: 1};
+            name = { identifier: funcNode.arguments[0] as Identifier, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
         }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryIfExists(funcNode);
         }
 
         if (!name || name.identifier === undefined || name.identifier.text === "_" || name.identifier.text === "undefined") {
-            return {identifier: createIdentifier(""), numberOfUses: 1};
+            return { identifier: createIdentifier(""), numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
         }
 
         return name;
