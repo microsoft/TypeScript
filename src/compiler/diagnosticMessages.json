@@ -2068,6 +2068,10 @@
         "category": "Error",
         "code": 2576
     },
+    "Return type annotation circularly references itself.": {
+        "category": "Error",
+        "code": 2577
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
