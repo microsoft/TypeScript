@@ -222,7 +222,7 @@ namespace ts {
 
     export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
         return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
-     }
+    }
 
     export function isLabelOfLabeledStatement(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier && isLabeledStatement(node.parent) && node.parent.label === node;
@@ -391,7 +391,7 @@ namespace ts {
     export function isThis(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-            // case SyntaxKind.ThisType: TODO: GH#9267
+                // case SyntaxKind.ThisType: TODO: GH#9267
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
@@ -1620,8 +1620,8 @@ namespace ts {
         return position;
     }
 
-    type RenamedIdentifier = {
-        identifier: Identifier;        
+    interface RenamedIdentifier {
+        identifier: Identifier;
     }
 
     /**
@@ -1631,40 +1631,47 @@ namespace ts {
      * and code fixes (because those are triggered by explicit user actions).
      */
     export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<RenamedIdentifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
-        
-        const nodeNeedsRenaming = renameMap && checker && needsRenaming(node, checker, renameMap);
-        const clone = nodeNeedsRenaming ?
-                    node && createIdentifier(renameMap!.get(String(getSymbolId(checker!.getSymbolAtLocation(node!)!)))!.identifier.text) :
-                    node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, nodeIdMap, checker, originalType);
 
-        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        let clone;
+        if (node && isIdentifier(node!) && renameMap && checker) {
+            const type = checker.getTypeAtLocation(node!);
+            const symbol = checker.getSymbolAtLocation(node!);
+            const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
-        if (nodeNeedsRenaming && originalType) {
-            let newIdentifier = renameMap!.get(String(getSymbolId(checker!.getSymbolAtLocation(node!)!)))!.identifier;
-            let type = checker!.getTypeAtLocation(newIdentifier);
-            if (type) {
-                originalType.set(newIdentifier.text, type);
+            if (renameInfo && type && !type.getCallSignatures().length) {  // never rename a function
+                clone = createIdentifier(renameInfo.identifier.text);
             }
+
+            if (renameInfo && originalType) {
+                const newIdentifier = renameMap.get(String(getSymbolId(symbol!)))!.identifier;
+                if (type) {
+                    originalType.set(newIdentifier.text, type);
+                }
+            }
+
         }
 
-        if (node && nodeIdMap && nodeIdMap.get(getNodeId(node!).toString()) !== undefined){
-            let val = nodeIdMap.get(getNodeId(node!).toString());
-            nodeIdMap.delete(getNodeId(node!).toString());
-            nodeIdMap.set(getNodeId(clone).toString(), val!);
+        if (!clone) {
+            clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, nodeIdMap, checker, originalType);
+        }
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+
+        if (nodeIdMap) {
+            const val = nodeIdMap.get(getNodeId(node!).toString());
+            if (val !== undefined) {
+                nodeIdMap.delete(getNodeId(node!).toString());
+                nodeIdMap.set(getNodeId(clone).toString(), val);
+            }
         }
 
         return clone as T;
     }
 
-    function needsRenaming<T extends Node>(node: T | undefined, checker: TypeChecker, renameMap: Map<RenamedIdentifier>): boolean {
-        return !!(node && isIdentifier(node) && checker.getSymbolAtLocation(node) && renameMap.get(String(getSymbolId(checker.getSymbolAtLocation(node)!)))
-                && !checker.getTypeAtLocation(node)!.getCallSignatures().length); //never rename a function
-    }
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<RenamedIdentifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
         const visited = visitEachChild(node, function wrapper(node) {
-                return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, nodeIdMap, checker, originalType);
-            }, nullTransformationContext);
+            return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, nodeIdMap, checker, originalType);
+        }, nullTransformationContext);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
