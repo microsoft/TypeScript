@@ -567,7 +567,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var startTime = Travis.mark();
         var args = [];
         args.push("-R", "scripts/failed-tests");
-        args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
+        args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + (reporter === "xunit" ? ",output=TEST-results.xml" : "") + '"');
         if (tests) args.push("-g", `"${tests}"`);
         args.push(colors ? "--colors" : "--no-colors");
         if (bail) args.push("--bail");
