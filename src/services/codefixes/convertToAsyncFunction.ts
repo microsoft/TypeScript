@@ -59,8 +59,8 @@ namespace ts.codefix {
 
         const allNewNodes: Map<Node[]> = createMap();
 
-        function startParse(node: CallExpression, nodeToReplace: Node) {
-            const newNodes = parseCallback(node, transformer, node);
+        function startTransformation(node: CallExpression, nodeToReplace: Node) {
+            const newNodes = transformCallback(node, transformer, node);
             if (newNodes.length) {
                 allNewNodes.set(getNodeId(nodeToReplace).toString(), newNodes);
             }
@@ -68,12 +68,12 @@ namespace ts.codefix {
 
         for (const statement of returnStatements) {
             if (isCallExpression(statement)) {
-                startParse(statement, statement);
+                startTransformation(statement, statement);
             }
             else {
                 forEachChild(statement, function visit(node: Node) {
                     if (isCallExpression(node)) {
-                        startParse(node, statement);
+                        startTransformation(node, statement);
                     }
                     else if (!isFunctionLike(node)) {
                         forEachChild(node, visit);
@@ -151,7 +151,7 @@ namespace ts.codefix {
         return !isCallExpression(callExpr) || callExpr.expression !== node;
     }
 
-    function definedInFile(symbol: Symbol, sourceFile: SourceFile): boolean {
+    function declaredInFile(symbol: Symbol, sourceFile: SourceFile): boolean {
         return symbol.valueDeclaration && symbol.valueDeclaration.getSourceFile() === sourceFile;
     }
 
@@ -161,7 +161,7 @@ namespace ts.codefix {
 
         forEachChild(nodeToRename, function visit(node: Node) {
             const symbol = checker.getSymbolAtLocation(node);
-            const isDefinedInFile = symbol ? definedInFile(symbol, context.sourceFile) : undefined;
+            const isDefinedInFile = symbol ? declaredInFile(symbol, context.sourceFile) : undefined;
 
             if (isIdentifier(node) && symbol && isDefinedInFile) {
                 const type = checker.getTypeAtLocation(node);
@@ -213,7 +213,7 @@ namespace ts.codefix {
     }
 
     // dispatch function to recursively build the refactoring
-    function parseCallback(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
+    function transformCallback(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         if (!node) {
             return [];
         }
@@ -224,22 +224,22 @@ namespace ts.codefix {
         }
 
         if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "then") && nodeType && !!transformer.checker.getPromisedTypeOfPromise(nodeType)) {
-            return parseThen(node, transformer, outermostParent, prevArgName);
+            return transformThen(node, transformer, outermostParent, prevArgName);
         }
         else if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "catch") && nodeType && !!transformer.checker.getPromisedTypeOfPromise(nodeType)) {
-            return parseCatch(node, transformer, prevArgName);
+            return transformCatch(node, transformer, prevArgName);
         }
         else if (isPropertyAccessExpression(node)) {
-            return parseCallback(node.expression, transformer, outermostParent, prevArgName);
+            return transformCallback(node.expression, transformer, outermostParent, prevArgName);
         }
         else if (nodeType && returnsAPromise(node, nodeType, transformer.checker)) {
-            return parsePromiseCall(node, transformer, prevArgName);
+            return transformPromiseCall(node, transformer, prevArgName);
         }
 
         return [];
     }
 
-    function parseCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
+    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
         const func = node.arguments[0];
         const argName = getArgName(func, transformer);
 
@@ -248,7 +248,7 @@ namespace ts.codefix {
             varDecl = createVariableStatement(undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier))], NodeFlags.Let));
             prevArgName.numberOfUsesOriginal += 2;
         }
-        const tryBlock = createBlock(parseCallback(node.expression, transformer, node, prevArgName));
+        const tryBlock = createBlock(transformCallback(node.expression, transformer, node, prevArgName));
 
         const callbackBody = getCallbackBody(func, prevArgName, argName, node, transformer);
         const catchClause = createCatchClause(argName.identifier.text, createBlock(callbackBody));
@@ -257,11 +257,11 @@ namespace ts.codefix {
         return varDecl ? [varDecl, tryStatement] : [tryStatement];
     }
 
-    function parseThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
+    function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         const [res, rej] = node.arguments;
 
         if (!res) {
-            return parseCallback(node.expression, transformer, outermostParent);
+            return transformCallback(node.expression, transformer, outermostParent);
         }
 
         const argNameRes = getArgName(res, transformer);
@@ -270,7 +270,7 @@ namespace ts.codefix {
         if (rej) {
             const argNameRej = getArgName(rej, transformer);
 
-            const tryBlock = createBlock(parseCallback(node.expression, transformer, node, argNameRes).concat(callbackBody));
+            const tryBlock = createBlock(transformCallback(node.expression, transformer, node, argNameRes).concat(callbackBody));
 
             const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, transformer);
             const catchClause = createCatchClause(argNameRej.identifier.text, createBlock(callbackBody2));
@@ -278,18 +278,18 @@ namespace ts.codefix {
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
         else {
-            return parseCallback(node.expression, transformer, node, argNameRes).concat(callbackBody);
+            return transformCallback(node.expression, transformer, node, argNameRes).concat(callbackBody);
         }
 
         return [];
     }
 
     function getFlagOfIdentifier(node: Identifier, constIdentifiers: Identifier[]): NodeFlags {
-        const inArr: boolean = constIdentifiers.filter(elem => elem.text === node.text).length > 0;
+        const inArr: boolean = constIdentifiers.some(elem => elem.text === node.text);
         return inArr ? NodeFlags.Const : NodeFlags.Let;
     }
 
-    function parsePromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
+    function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
         const nextDotThen = transformer.lastDotThenMap.get(getNodeId(node).toString());
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
@@ -346,7 +346,7 @@ namespace ts.codefix {
 
                     for (let i = 0; i < func.body.statements.length; i++) {
                         const statement = func.body.statements[i];
-                        if (indices.filter(elem => elem === i).length) {
+                        if (indices.some(elem => elem === i)) {
                             refactoredStmts = refactoredStmts.concat(getInnerCallbackBody(transformer, [statement], prevArgName));
                         }
                         else {
@@ -412,7 +412,7 @@ namespace ts.codefix {
         for (const stmt of innerRetStmts) {
             forEachChild(stmt, function visit(node: Node) {
                 if (isCallExpression(node)) {
-                    const temp = parseCallback(node, transformer, node, prevArgName);
+                    const temp = transformCallback(node, transformer, node, prevArgName);
                     innerCbBody = innerCbBody.concat(temp);
                     if (innerCbBody.length > 0) {
                         return;
@@ -447,7 +447,7 @@ namespace ts.codefix {
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry ? mapEntry : { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
+            return  mapEntry || { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
         }
 
         function getSymbol(node: Node): Symbol | undefined {
@@ -460,9 +460,11 @@ namespace ts.codefix {
 
         let name: SynthIdentifier | undefined;
 
-        if (isFunctionLikeDeclaration(funcNode) && funcNode.parameters.length > 0) {
-            const param = funcNode.parameters[0].name as Identifier;
-            name = getMapEntryIfExists(param);
+        if (isFunctionLikeDeclaration(funcNode)) {
+            if (funcNode.parameters.length > 0) {
+                const param = funcNode.parameters[0].name as Identifier;
+                name = getMapEntryIfExists(param);
+            }
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
             name = { identifier: funcNode.arguments[0] as Identifier, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
