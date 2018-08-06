@@ -8,8 +8,6 @@ function Foo(n: number) { }
 >n : number
 
 interface Foo {
->Foo : Foo
-
     [s: string]: string;
 >s : string
 

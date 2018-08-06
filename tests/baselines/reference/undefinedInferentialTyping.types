@@ -1,12 +1,8 @@
 === tests/cases/compiler/undefinedInferentialTyping.ts ===
 function f<T>(arr: T[], elemnt: T): T {
 >f : <T>(arr: T[], elemnt: T) => T
->T : T
 >arr : T[]
->T : T
 >elemnt : T
->T : T
->T : T
 
     return null;
 >null : null

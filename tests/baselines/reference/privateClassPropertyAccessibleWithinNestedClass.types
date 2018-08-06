@@ -74,7 +74,6 @@ class C {
 
                 let x: C;
 >x : C
->C : C
 
                 var x1 = x.foo;
 >x1 : () => any

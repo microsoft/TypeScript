@@ -17,24 +17,17 @@ class C2 {
 }
 
 interface A extends C {
->A : A
->C : C
-
     y: string;
 >y : string
 }
 
 interface A extends C2 {
->A : A
->C2 : C2
-
     z: string;
 >z : string
 }
 
 class D implements A {
 >D : D
->A : A
 
     a: number;
 >a : number
@@ -51,7 +44,6 @@ class D implements A {
 
 var a: A;
 >a : A
->A : A
 
 var r = a.a;
 >r : number
@@ -65,46 +57,30 @@ module M {
 
     class C<T> {
 >C : C<T>
->T : T
 
         a: T;
 >a : T
->T : T
     }
 
     class C2<T> {
 >C2 : C2<T>
->T : T
 
         b: T;
 >b : T
->T : T
     }
 
     interface A<T> extends C<T> {
->A : A<T>
->T : T
->C : C<T>
->T : T
-
         y: T;
 >y : T
->T : T
     }
 
     interface A<T> extends C2<string> {
->A : A<T>
->T : T
->C2 : C2<T>
-
         z: T;
 >z : T
->T : T
     }
 
     class D implements A<boolean> {
 >D : D
->A : A<T>
 
         a: boolean;
 >a : boolean

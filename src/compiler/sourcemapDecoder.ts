@@ -100,7 +100,8 @@ namespace ts.sourcemaps {
             // Lookup file in program, if provided
             const path = toPath(fileName, location, host.getCanonicalFileName);
             const file = program && program.getSourceFile(path);
-            if (!file) {
+            // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
+            if (!file || file.resolvedPath !== path) {
                 // Otherwise check the cache (which may hit disk)
                 return fallbackCache.get(path);
             }

@@ -6,9 +6,6 @@ class Control {
 >state : any
 }
 interface SelectableControl extends Control {
->SelectableControl : SelectableControl
->Control : Control
-
     select(): void;
 >select : () => void
 }

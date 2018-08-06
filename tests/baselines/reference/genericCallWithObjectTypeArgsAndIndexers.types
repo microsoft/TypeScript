@@ -3,9 +3,7 @@
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
->T : T
 >x : T
->T : T
 
     return x;
 >x : T
@@ -16,11 +14,9 @@ var a: {
 
     [x: string]: Object;
 >x : string
->Object : Object
 
     [x: number]: Date;
 >x : number
->Date : Date
 
 };
 var r = foo(a);
@@ -31,21 +27,16 @@ var r = foo(a);
 
 function other<T extends Date>(arg: T) {
 >other : <T extends Date>(arg: T) => void
->T : T
->Date : Date
 >arg : T
->T : T
 
     var b: {
 >b : { [x: string]: Object; [x: number]: T; }
 
         [x: string]: Object;
 >x : string
->Object : Object
 
         [x: number]: T
 >x : number
->T : T
 
     };
     var r2 = foo(b);

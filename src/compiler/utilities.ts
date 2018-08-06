@@ -3310,8 +3310,8 @@ namespace ts {
         // TODO: GH#18217
         let firstAccessor!: AccessorDeclaration;
         let secondAccessor!: AccessorDeclaration;
-        let getAccessor!: AccessorDeclaration;
-        let setAccessor!: AccessorDeclaration;
+        let getAccessor!: GetAccessorDeclaration;
+        let setAccessor!: SetAccessorDeclaration;
         if (hasDynamicName(accessor)) {
             firstAccessor = accessor;
             if (accessor.kind === SyntaxKind.GetAccessor) {
@@ -3339,11 +3339,11 @@ namespace ts {
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                            getAccessor = <AccessorDeclaration>member;
+                            getAccessor = <GetAccessorDeclaration>member;
                         }
 
                         if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                            setAccessor = <AccessorDeclaration>member;
+                            setAccessor = <SetAccessorDeclaration>member;
                         }
                     }
                 }
@@ -7154,6 +7154,12 @@ namespace ts {
         // but not including any trailing directory separator.
         path = removeTrailingDirectorySeparator(path);
         return path.slice(0, Math.max(rootLength, path.lastIndexOf(directorySeparator)));
+    }
+
+    export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+        const canonicalFileName = getCanonicalFileName(fileName);
+        const canonicalDirectoryName = getCanonicalFileName(directoryName);
+        return startsWith(canonicalFileName, canonicalDirectoryName + "/") || startsWith(canonicalFileName, canonicalDirectoryName + "\\");
     }
 
     export function isUrl(path: string) {

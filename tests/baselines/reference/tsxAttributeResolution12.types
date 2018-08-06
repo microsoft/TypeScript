@@ -1,22 +1,13 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
 	}
 	interface ElementAttributesProperty {
->ElementAttributesProperty : ElementAttributesProperty
-
 		props;
 >props : any
 	}
 	interface IntrinsicAttributes {
->IntrinsicAttributes : IntrinsicAttributes
-
 		ref?: string;
 >ref : string
 	}
@@ -25,28 +16,21 @@ declare module JSX {
 === tests/cases/conformance/jsx/file.tsx ===
 declare class Component<P, S>  {
 >Component : Component<P, S>
->P : P
->S : S
 
 	constructor(props?: P, context?: any);
 >props : P
->P : P
 >context : any
 
 	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
 >f : (prevState: S, props: P) => S
 >prevState : S
->S : S
 >props : P
->P : P
->S : S
 >callback : () => any
 
 	setState(state: S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
 >state : S
->S : S
 >callback : () => any
 
 	forceUpdate(callBack?: () => any): void;
@@ -56,15 +40,12 @@ declare class Component<P, S>  {
 	render(): JSX.Element;
 >render : () => JSX.Element
 >JSX : any
->Element : JSX.Element
 
 	props: P;
 >props : P
->P : P
 
 	state: S;
 >state : S
->S : S
 
 	context: {};
 >context : {}
@@ -72,28 +53,19 @@ declare class Component<P, S>  {
 
 
 interface ComponentClass<P> {
->ComponentClass : ComponentClass<P>
->P : P
-
 	new (props?: P, context?: any): Component<P, any>;
 >props : P
->P : P
 >context : any
->Component : Component<P, S>
->P : P
 }
 
 declare module TestMod {
 >TestMod : typeof TestMod
 
 	interface TestClass extends ComponentClass<{reqd: any}> {
->TestClass : TestClass
->ComponentClass : ComponentClass<P>
 >reqd : any
 	}
 	var Test: TestClass;
 >Test : TestClass
->TestClass : TestClass
 }
 
 // Errors correctly

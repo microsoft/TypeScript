@@ -1,14 +1,11 @@
 === tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
 
 class C implements I {
 >C : C
->I : I
 
     id: number;
 >id : number
@@ -27,22 +24,15 @@ class C2 extends C {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T
->T : T
 
     recurse: D<T>;
 >recurse : D<T>
->D : D<T>
->T : T
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
->D : D<T>
->D : D<T>
->T : T
 }
 
 function F(x: string): number { return 42; }
@@ -240,17 +230,14 @@ do { }while(new C())
 if (new D<C>()) { }
 >new D<C>() : D<C>
 >D : typeof D
->C : C
 
 while (new D<C>()) { }
 >new D<C>() : D<C>
 >D : typeof D
->C : C
 
 do { }while(new D<C>())
 >new D<C>() : D<C>
 >D : typeof D
->C : C
 
 // references
 var a = true;
@@ -405,7 +392,6 @@ do { }while(k)
 function fn(x?: string): I { return null; }
 >fn : (x?: string) => I
 >x : string
->I : I
 >null : null
 
 if (fn()) { }

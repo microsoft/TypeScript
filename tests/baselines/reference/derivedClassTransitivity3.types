@@ -3,52 +3,40 @@
 
 class C<T> {
 >C : C<T>
->T : T
 
     foo(x: T, y: T) { }
 >foo : (x: T, y: T) => void
 >x : T
->T : T
 >y : T
->T : T
 }
 
 class D<T> extends C<T> {
 >D : D<T>
->T : T
 >C : C<T>
->T : T
 
     foo(x: T) { } // ok to drop parameters
 >foo : (x: T) => void
 >x : T
->T : T
 }
 
 class E<T> extends D<T> {
 >E : E<T>
->T : T
 >D : D<T>
->T : T
 
     foo(x: T, y?: number) { } // ok to add optional parameters
 >foo : (x: T, y?: number) => void
 >x : T
->T : T
 >y : number
 }
 
 var c: C<string>;
 >c : C<string>
->C : C<T>
 
 var d: D<string>;
 >d : D<string>
->D : D<T>
 
 var e: E<string>;
 >e : E<string>
->E : E<T>
 
 c = e;
 >c = e : E<string>

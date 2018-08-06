@@ -1,19 +1,14 @@
 === tests/cases/compiler/server.ts ===
 export interface I {
->I : I
-
     prop: string;
 >prop : string
 }
 export interface I2 {
->I2 : I2
-
     prop2: string;
 >prop2 : string
 }
 export class C implements I {
 >C : C
->I : I
 
     prop = "hello";
 >prop : string
@@ -21,7 +16,6 @@ export class C implements I {
 }
 export class C2 implements I2 {
 >C2 : C2
->I2 : I2
 
     prop2 = "world";
 >prop2 : string
@@ -36,7 +30,6 @@ import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file 
 
 export type cValInterface = I;
 >cValInterface : I
->I : I
 
 export var cVal = new C();
 >cVal : C

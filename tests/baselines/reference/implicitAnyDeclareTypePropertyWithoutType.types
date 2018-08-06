@@ -14,7 +14,6 @@ var x: { y; z; }             // error at "y,z"
 var x1: { y1: C; z1; };      // error at "z1" 
 >x1 : { y1: C; z1: any; }
 >y1 : C
->C : C
 >z1 : any
 
 var x11: { new (); };        // error at "new"
@@ -38,7 +37,6 @@ var bar: { a: number; b: number };
 var foo: { littleC: C; c: string };
 >foo : { littleC: C; c: string; }
 >littleC : C
->C : C
 >c : string
 
 var x4: new () => any;

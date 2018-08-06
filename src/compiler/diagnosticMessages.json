@@ -3905,7 +3905,7 @@
         "category": "Error",
         "code": 7034
     },
-    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+    "Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
         "category": "Error",
         "code": 7035
     },
@@ -3925,7 +3925,7 @@
         "category": "Error",
         "code": 7039
     },
-    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`": {
         "category": "Error",
         "code": 7040
     },
@@ -4299,6 +4299,14 @@
     "Replace all unused 'infer' with 'unknown'": {
         "category": "Message",
         "code": 90031
+    },
+    "Import default '{0}' from module \"{1}\"": {
+        "category": "Message",
+        "code": 90032
+    },
+    "Add default import '{0}' to existing import declaration from \"{1}\"": {
+        "category": "Message",
+        "code": 90033
     },
     "Convert function to an ES2015 class": {
         "category": "Message",

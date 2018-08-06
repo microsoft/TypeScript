@@ -2,58 +2,42 @@
 // Check that we only cache results of type comparisons that are free of assumptions
 
 interface A {
->A : A
-
     p: C;
 >p : C
->C : C
 
     s: string;
 >s : string
 }
 
 interface B {
->B : B
-
     p: D;
 >p : D
->D : D
 
     s: number;
 >s : number
 }
 
 interface C {
->C : C
-
     q: A;
 >q : A
->A : A
 }
 
 interface D {
->D : D
-
     q: B;
 >q : B
->B : B
 }
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 var c: C;
 >c : C
->C : C
 
 var d: D;
 >d : D
->D : D
 
 a = b;
 >a = b : B

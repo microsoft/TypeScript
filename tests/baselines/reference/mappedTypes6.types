@@ -1,143 +1,57 @@
 === tests/cases/conformance/types/mapped/mappedTypes6.ts ===
 type T00<T> = { [P in keyof T]: T[P] };
 >T00 : T00<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T01<T> = { [P in keyof T]?: T[P] };
 >T01 : T01<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T02<T> = { [P in keyof T]+?: T[P] };
 >T02 : T02<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T03<T> = { [P in keyof T]-?: T[P] };
 >T03 : T03<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T04<T> = { readonly [P in keyof T]: T[P] };
 >T04 : T04<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T05<T> = { readonly [P in keyof T]?: T[P] };
 >T05 : T05<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T06<T> = { readonly [P in keyof T]+?: T[P] };
 >T06 : T06<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T07<T> = { readonly [P in keyof T]-?: T[P] };
 >T07 : T07<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T08<T> = { +readonly [P in keyof T]: T[P] };
 >T08 : T08<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T09<T> = { +readonly [P in keyof T]?: T[P] };
 >T09 : T09<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T10<T> = { +readonly [P in keyof T]+?: T[P] };
 >T10 : T10<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T11<T> = { +readonly [P in keyof T]-?: T[P] };
 >T11 : T11<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T12<T> = { -readonly [P in keyof T]: T[P] };
 >T12 : T12<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T13<T> = { -readonly [P in keyof T]?: T[P] };
 >T13 : T13<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T14<T> = { -readonly [P in keyof T]+?: T[P] };
 >T14 : T14<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 type T15<T> = { -readonly [P in keyof T]-?: T[P] };
 >T15 : T15<T>
->T : T
->P : P
->T : T
->T : T
->P : P
 
 function f1<T>(x: Required<T>, y: T, z: Partial<T>) {
 >f1 : <T>(x: Required<T>, y: T, z: Partial<T>) => void
->T : T
 >x : Required<T>
->Required : Required<T>
->T : T
 >y : T
->T : T
 >z : Partial<T>
->Partial : Partial<T>
->T : T
 
     x = x;
 >x = x : Required<T>
@@ -187,27 +101,13 @@ function f1<T>(x: Required<T>, y: T, z: Partial<T>) {
 
 type Denullified<T> = { [P in keyof T]-?: NonNullable<T[P]> };
 >Denullified : Denullified<T>
->T : T
->P : P
->T : T
->NonNullable : NonNullable<T>
->T : T
->P : P
 
 function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >f2 : <T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) => void
->T : T
 >w : Denullified<T>
->Denullified : Denullified<T>
->T : T
 >x : Required<T>
->Required : Required<T>
->T : T
 >y : T
->T : T
 >z : Partial<T>
->Partial : Partial<T>
->T : T
 
     w = w;
 >w = w : Denullified<T>
@@ -293,18 +193,10 @@ function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 
 function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >f3 : <T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) => void
->T : T
 >w : Denullified<T>
->Denullified : Denullified<T>
->T : T
 >x : Required<T>
->Required : Required<T>
->T : T
 >y : T
->T : T
 >z : Partial<T>
->Partial : Partial<T>
->T : T
 
     w = {};  // Error
 >w = {} : {}
@@ -329,26 +221,15 @@ function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 
 type Readwrite<T> = {
 >Readwrite : Readwrite<T>
->T : T
 
     -readonly [P in keyof T]: T[P];
->P : P
->T : T
->T : T
->P : P
 }
 
 function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
 >f10 : <T>(x: Readonly<T>, y: T, z: Readwrite<T>) => void
->T : T
 >x : Readonly<T>
->Readonly : Readonly<T>
->T : T
 >y : T
->T : T
 >z : Readwrite<T>
->Readwrite : Readwrite<T>
->T : T
 
     x = x;
 >x = x : Readonly<T>
@@ -414,7 +295,6 @@ type Foo = {
 
 declare let x1: Foo;
 >x1 : Foo
->Foo : Foo
 
 x1.a;  // number
 >x1.a : number
@@ -478,8 +358,6 @@ x1 = { a: 1, b: 1, c: 1, d: 1 };
 
 declare let x2: Required<Foo>;
 >x2 : Required<Foo>
->Required : Required<T>
->Foo : Foo
 
 x1.a;  // number
 >x1.a : number
@@ -553,7 +431,6 @@ type Bar = {
 
 declare let x3: Bar;
 >x3 : Bar
->Bar : Bar
 
 x3.a = 1;
 >x3.a = 1 : 1
@@ -571,8 +448,6 @@ x3.b = 1;  // Error
 
 declare let x4: Readonly<Bar>;
 >x4 : Readonly<Bar>
->Readonly : Readonly<T>
->Bar : Bar
 
 x4.a = 1;  // Error
 >x4.a = 1 : 1
@@ -590,8 +465,6 @@ x4.b = 1;  // Error
 
 declare let x5: Readwrite<Bar>;
 >x5 : Readwrite<Bar>
->Readwrite : Readwrite<T>
->Bar : Bar
 
 x5.a = 1;
 >x5.a = 1 : 1

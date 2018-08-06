@@ -19,17 +19,10 @@ type Shape =
 >Shape : Shape
 
     | Square
->Square : Square
-
     | Rectangle
->Rectangle : Rectangle
-
     | Circle;
->Circle : Circle
-
 let shape: Shape = {
 >shape : Shape
->Shape : Shape
 >{    kind: "sq",    x: 12,    y: 13,} : { kind: "sq"; x: number; y: number; }
 
     kind: "sq",

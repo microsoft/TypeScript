@@ -12,7 +12,6 @@ module test {
 
     var obj: Object;
 >obj : Object
->Object : Object
 
 
 

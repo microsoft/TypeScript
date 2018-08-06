@@ -4,11 +4,7 @@
 function f1(a: <T>() => keyof T, b: <U>() => keyof U) {
 >f1 : (a: <T>() => keyof T, b: <U>() => keyof U) => void
 >a : <T>() => keyof T
->T : T
->T : T
 >b : <U>() => keyof U
->U : U
->U : U
 
     a = b;
 >a = b : <U>() => keyof U
@@ -24,17 +20,7 @@ function f1(a: <T>() => keyof T, b: <U>() => keyof U) {
 function f2(a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) {
 >f2 : (a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) => void
 >a : <T, K extends keyof T>() => T[K]
->T : T
->K : K
->T : T
->T : T
->K : K
 >b : <U, L extends keyof U>() => U[L]
->U : U
->L : L
->U : U
->U : U
->L : L
 
     a = b;
 >a = b : <U, L extends keyof U>() => U[L]
@@ -50,17 +36,7 @@ function f2(a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => 
 function f3(a: <T>() => { [K in keyof T]: T[K] }, b: <U>() => { [K in keyof U]: U[K] }) {
 >f3 : (a: <T>() => { [K in keyof T]: T[K]; }, b: <U>() => { [K in keyof U]: U[K]; }) => void
 >a : <T>() => { [K in keyof T]: T[K]; }
->T : T
->K : K
->T : T
->T : T
->K : K
 >b : <U>() => { [K in keyof U]: U[K]; }
->U : U
->K : K
->U : U
->U : U
->K : K
 
     a = b;
 >a = b : <U>() => { [K in keyof U]: U[K]; }
@@ -77,25 +53,12 @@ function f3(a: <T>() => { [K in keyof T]: T[K] }, b: <U>() => { [K in keyof U]: 
 
 type IdMapped<T> = { [K in keyof T]: T[K] }
 >IdMapped : IdMapped<T>
->T : T
->K : K
->T : T
->T : T
->K : K
 
 declare const f: <T>() => IdMapped<T>;
 >f : <T>() => IdMapped<T>
->T : T
->IdMapped : IdMapped<T>
->T : T
 
 declare const g: <U>() => { [K in keyof U]: U[K] };
 >g : <U>() => { [K in keyof U]: U[K]; }
->U : U
->K : K
->U : U
->U : U
->K : K
 
 const h: typeof g = f;
 >h : <U>() => { [K in keyof U]: U[K]; }

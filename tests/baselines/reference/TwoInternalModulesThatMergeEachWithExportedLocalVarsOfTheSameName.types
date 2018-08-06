@@ -3,8 +3,6 @@ export module A {
 >A : typeof A
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -17,10 +15,7 @@ export module A {
 
         export function mirror<T extends Point>(p: T) {
 >mirror : <T extends Point>(p: T) => { x: number; y: number; }
->T : T
->Point : Point
 >p : T
->T : T
 
             return { x: p.y, y: p.x };
 >{ x: p.y, y: p.x } : { x: number; y: number; }
@@ -37,7 +32,6 @@ export module A {
 
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
->Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -52,7 +46,6 @@ export module A {
     // collision with 'Origin' var in other part of merged module
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : any
->Point : No type information available!
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -67,9 +60,7 @@ export module A {
 
             constructor(public tl: Point, public br: Point) { }
 >tl : any
->Point : No type information available!
 >br : any
->Point : No type information available!
         }
     }
 }

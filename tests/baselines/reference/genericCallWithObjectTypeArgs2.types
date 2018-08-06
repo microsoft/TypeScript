@@ -23,15 +23,9 @@ class Derived2 extends Base {
 // returns {}[]
 function f<T extends Base, U extends Base>(a: { x: T; y: U }) {
 >f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[]
->T : T
->Base : Base
->U : U
->Base : Base
 >a : { x: T; y: U; }
 >x : T
->T : T
 >y : U
->U : U
 
     return [a.x, a.y];
 >[a.x, a.y] : (T | U)[]
@@ -70,20 +64,13 @@ var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
 
 function f2<T extends Base, U extends Base>(a: { x: T; y: U }) {
 >f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
->T : T
->Base : Base
->U : U
->Base : Base
 >a : { x: T; y: U; }
 >x : T
->T : T
 >y : U
->U : U
 
     return (x: T) => a.y;
 >(x: T) => a.y : (x: T) => U
 >x : T
->T : T
 >a.y : U
 >a : { x: T; y: U; }
 >y : U
@@ -102,24 +89,15 @@ var r3 = f2({ x: new Derived(), y: new Derived2() }); // Derived => Derived2
 >Derived2 : typeof Derived2
 
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
-
     x: T;
 >x : T
->T : T
 
     y: U;
 >y : U
->U : U
 }
 
 var i: I<Base, Derived>;
 >i : I<Base, Derived>
->I : I<T, U>
->Base : Base
->Derived : Derived
 
 var r4 = f2(i); // Base => Derived
 >r4 : (x: Base) => Derived

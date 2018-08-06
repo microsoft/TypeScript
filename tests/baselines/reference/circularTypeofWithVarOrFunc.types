@@ -5,11 +5,9 @@ type typeAlias1 = typeof varOfAliasedType1;
 
 var varOfAliasedType1: typeAlias1;
 >varOfAliasedType1 : any
->typeAlias1 : any
 
 var varOfAliasedType2: typeAlias2;
 >varOfAliasedType2 : any
->typeAlias2 : any
 
 type typeAlias2 = typeof varOfAliasedType2;
 >typeAlias2 : any
@@ -17,7 +15,6 @@ type typeAlias2 = typeof varOfAliasedType2;
 
 function func(): typeAlias3 { return null; }
 >func : () => any
->typeAlias3 : any
 >null : null
 
 var varOfAliasedType3 = func();
@@ -32,8 +29,6 @@ type typeAlias3 = typeof varOfAliasedType3;
 // Repro from #26104
 
 interface Input {
->Input : Input
-
   a: number;
 >a : number
 
@@ -43,14 +38,11 @@ interface Input {
 
 type R = ReturnType<typeof mul>;
 >R : any
->ReturnType : ReturnType<T>
 >mul : (input: Input) => any
 
 function mul(input: Input): R {
 >mul : (input: Input) => any
 >input : Input
->Input : Input
->R : any
 
   return input.a * input.b;
 >input.a * input.b : number
@@ -66,11 +58,9 @@ function mul(input: Input): R {
 
 type R2 = ReturnType<typeof f>;
 >R2 : any
->ReturnType : ReturnType<T>
 >f : () => any
 
 function f(): R2 { return 0; }
 >f : () => any
->R2 : any
 >0 : 0
 

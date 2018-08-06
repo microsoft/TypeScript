@@ -12,7 +12,6 @@ class a {
 >x : string
 >y : number
 >z : B[]
->B : B
 }
 
 

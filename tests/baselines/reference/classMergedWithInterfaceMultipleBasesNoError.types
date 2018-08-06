@@ -1,18 +1,8 @@
 === tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts ===
 interface Bar { }
->Bar : Bar
-
 interface Baz { }
->Baz : Baz
-
 interface Q { }
->Q : Q
-
 interface Foo extends Bar, Baz { }
->Foo : Foo
->Bar : Bar
->Baz : Baz
-
 class Foo { }
 >Foo : Foo
 

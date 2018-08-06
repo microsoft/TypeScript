@@ -14,19 +14,13 @@ export class ActualClass extends Configurable(HiddenClass) {}
 === tests/cases/compiler/Configurable.ts ===
 export type Constructor<T> = {
 >Constructor : Constructor<T>
->T : T
 
     new(...args: any[]): T;
 >args : any[]
->T : T
 }
 export function Configurable<T extends Constructor<{}>>(base: T): T {
 >Configurable : <T extends Constructor<{}>>(base: T) => T
->T : T
->Constructor : Constructor<T>
 >base : T
->T : T
->T : T
 
     return class extends base {
 >class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: Configurable<any>.(Anonymous class); } & T

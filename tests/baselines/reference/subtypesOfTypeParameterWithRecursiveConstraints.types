@@ -3,27 +3,13 @@
 
 class Foo<T> { foo: T; }
 >Foo : Foo<T>
->T : T
 >foo : T
->T : T
 
 function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
 >f : <T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) => void
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >t : T
->T : T
 >u : U
->U : U
 >v : V
->V : V
 
     // ok
     var r1 = true ? t : u;
@@ -78,7 +64,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >t : T
 >new Foo<T>() : Foo<T>
 >Foo : typeof Foo
->T : T
 
     var r4 = true ? new Foo<T>() : t;
 >r4 : T | Foo<T>
@@ -86,7 +71,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<T>() : Foo<T>
 >Foo : typeof Foo
->T : T
 >t : T
 
     // ok
@@ -97,7 +81,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >u : U
 >new Foo<T>() : Foo<T>
 >Foo : typeof Foo
->T : T
 
     var r5 = true ? new Foo<T>() : u;
 >r5 : Foo<T>
@@ -105,7 +88,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<T>() : Foo<T>
 >Foo : typeof Foo
->T : T
 >u : U
 
     // ok
@@ -116,7 +98,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >v : V
 >new Foo<T>() : Foo<T>
 >Foo : typeof Foo
->T : T
 
     var r6 = true ? new Foo<T>() : v;
 >r6 : Foo<T> | V
@@ -124,7 +105,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<T>() : Foo<T>
 >Foo : typeof Foo
->T : T
 >v : V
 
 
@@ -136,7 +116,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >t : T
 >new Foo<U>() : Foo<U>
 >Foo : typeof Foo
->U : U
 
     var r7 = true ? new Foo<U>() : t;
 >r7 : Foo<U>
@@ -144,7 +123,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<U>() : Foo<U>
 >Foo : typeof Foo
->U : U
 >t : T
 
     // ok
@@ -155,7 +133,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >u : U
 >new Foo<U>() : Foo<U>
 >Foo : typeof Foo
->U : U
 
     var r8 = true ? new Foo<U>() : u;
 >r8 : U | Foo<U>
@@ -163,7 +140,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<U>() : Foo<U>
 >Foo : typeof Foo
->U : U
 >u : U
 
     // ok
@@ -174,7 +150,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >v : V
 >new Foo<U>() : Foo<U>
 >Foo : typeof Foo
->U : U
 
     var r9 = true ? new Foo<U>() : v;
 >r9 : Foo<U> | V
@@ -182,7 +157,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<U>() : Foo<U>
 >Foo : typeof Foo
->U : U
 >v : V
 
 
@@ -194,7 +168,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >t : T
 >new Foo<V>() : Foo<V>
 >Foo : typeof Foo
->V : V
 
     var r10 = true ? new Foo<V>() : t;
 >r10 : T | Foo<V>
@@ -202,7 +175,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<V>() : Foo<V>
 >Foo : typeof Foo
->V : V
 >t : T
 
     // ok
@@ -213,7 +185,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >u : U
 >new Foo<V>() : Foo<V>
 >Foo : typeof Foo
->V : V
 
     var r11 = true ? new Foo<V>() : u;
 >r11 : U | Foo<V>
@@ -221,7 +192,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<V>() : Foo<V>
 >Foo : typeof Foo
->V : V
 >u : U
 
     // ok
@@ -232,7 +202,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >v : V
 >new Foo<V>() : Foo<V>
 >Foo : typeof Foo
->V : V
 
     var r12 = true ? new Foo<V>() : v;
 >r12 : Foo<V>
@@ -240,7 +209,6 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >true : true
 >new Foo<V>() : Foo<V>
 >Foo : typeof Foo
->V : V
 >v : V
 }
 
@@ -249,218 +217,108 @@ module M1 {
 
     class Base<T> {
 >Base : Base<T>
->T : T
 
         foo: T;
 >foo : T
->T : T
     }
 
     class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
 >D1 : D1<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<T>
->T : T
 
         [x: string]: T;
 >x : string
->T : T
 
         foo: T
 >foo : T
->T : T
     }
 
     class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
 >D2 : D2<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<T>
->T : T
 
         [x: string]: T;
 >x : string
->T : T
 
         foo: U
 >foo : U
->U : U
     }
 
     class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
 >D3 : D3<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<T>
->T : T
 
         [x: string]: T;
 >x : string
->T : T
 
         foo: V
 >foo : V
->V : V
     }
 
     class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
 >D4 : D4<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<U>
->U : U
 
         [x: string]: U;
 >x : string
->U : U
 
         foo: T
 >foo : T
->T : T
     }
 
     class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
 >D5 : D5<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<U>
->U : U
 
         [x: string]: U;
 >x : string
->U : U
 
         foo: U
 >foo : U
->U : U
     }
 
     class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
 >D6 : D6<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<U>
->U : U
 
         [x: string]: U;
 >x : string
->U : U
 
         foo: V
 >foo : V
->V : V
     }
 
     class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
 >D7 : D7<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<V>
->V : V
 
         [x: string]: V;
 >x : string
->V : V
 
         foo: T
 >foo : T
->T : T
     }
 
     class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
 >D8 : D8<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<V>
->V : V
 
         [x: string]: V;
 >x : string
->V : V
 
         foo: U
 >foo : U
->U : U
     }
 
     class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
 >D9 : D9<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base : Base<V>
->V : V
 
         [x: string]: V;
 >x : string
->V : V
 
         foo: V
 >foo : V
->V : V
     }
 }
 
@@ -470,218 +328,107 @@ module M2 {
 
     class Base2<T> {
 >Base2 : Base2<T>
->T : T
 
         foo: Foo<T>;
 >foo : Foo<T>
->Foo : Foo<T>
->T : T
     }
 
     class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
 >D1 : D1<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<T>
->T : T
 
         [x: string]: T;
 >x : string
->T : T
 
         foo: T
 >foo : T
->T : T
     }
 
     class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
 >D2 : D2<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<T>
->T : T
 
         [x: string]: T;
 >x : string
->T : T
 
         foo: U
 >foo : U
->U : U
     }
 
     class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
 >D3 : D3<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<T>
->T : T
 
         [x: string]: T;
 >x : string
->T : T
 
         foo: V
 >foo : V
->V : V
     }
 
     class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
 >D4 : D4<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<U>
->U : U
 
         [x: string]: U;
 >x : string
->U : U
 
         foo: T
 >foo : T
->T : T
     }
 
     class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
 >D5 : D5<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<U>
->U : U
 
         [x: string]: U;
 >x : string
->U : U
 
         foo: U
 >foo : U
->U : U
     }
 
     class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
 >D6 : D6<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<U>
->U : U
 
         [x: string]: U;
 >x : string
->U : U
 
         foo: V
 >foo : V
->V : V
     }
 
     class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
 >D7 : D7<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<V>
->V : V
 
         [x: string]: V;
 >x : string
->V : V
 
         foo: T
 >foo : T
->T : T
     }
 
     class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
 >D8 : D8<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<V>
->V : V
 
         [x: string]: V;
 >x : string
->V : V
 
         foo: U
 >foo : U
->U : U
     }
 
     class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
 >D9 : D9<T, U, V>
->T : T
->Foo : Foo<T>
->U : U
->U : U
->Foo : Foo<T>
->T : T
->V : V
->Foo : Foo<T>
->V : V
 >Base2 : Base2<V>
->V : V
 
         [x: string]: V;
 >x : string
->V : V
 
         foo: V
 >foo : V
->V : V
     }
 }

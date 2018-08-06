@@ -1,18 +1,12 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { something; }
->Element : Element
 >something : any
 
 	interface IntrinsicElements { }
->IntrinsicElements : IntrinsicElements
 }
 
 interface Obj1 {
->Obj1 : Obj1
-
 	new(n: string): { x: number };
 >n : string
 >x : number
@@ -23,15 +17,12 @@ interface Obj1 {
 }
 var Obj1: Obj1;
 >Obj1 : Obj1
->Obj1 : Obj1
 
 <Obj1 />; // Error, return type is not an object type
 ><Obj1 /> : JSX.Element
 >Obj1 : Obj1
 
 interface Obj2 {
->Obj2 : Obj2
-
 	(n: string): { x: number };
 >n : string
 >x : number
@@ -42,15 +33,12 @@ interface Obj2 {
 }
 var Obj2: Obj2;
 >Obj2 : Obj2
->Obj2 : Obj2
 
 <Obj2 />; // Error, return type is not an object type
 ><Obj2 /> : JSX.Element
 >Obj2 : Obj2
 
 interface Obj3 {
->Obj3 : Obj3
-
 	(n: string): { x: number };
 >n : string
 >x : number
@@ -61,7 +49,6 @@ interface Obj3 {
 >y : string
 }
 var Obj3: Obj3;
->Obj3 : Obj3
 >Obj3 : Obj3
 
 <Obj3 x={42} />; // OK

@@ -1,25 +1,17 @@
 === tests/cases/compiler/specializedInheritedConstructors1.ts ===
 interface ViewOptions<TModel> {
->ViewOptions : ViewOptions<TModel>
->TModel : TModel
-
     model: TModel;
 >model : TModel
->TModel : TModel
 }
 
 class View<TModel> {
 >View : View<TModel>
->TModel : TModel
 
     constructor(options: ViewOptions<TModel>) { }
 >options : ViewOptions<TModel>
->ViewOptions : ViewOptions<TModel>
->TModel : TModel
 
     model: TModel;
 >model : TModel
->TModel : TModel
 }
 
 class Model { }
@@ -28,12 +20,9 @@ class Model { }
 class MyView extends View<Model> { }
 >MyView : MyView
 >View : View<Model>
->Model : Model
 
 var m: ViewOptions<Model> = { model: new Model() };
 >m : ViewOptions<Model>
->ViewOptions : ViewOptions<TModel>
->Model : Model
 >{ model: new Model() } : { model: Model; }
 >model : Model
 >new Model() : Model

@@ -634,7 +634,8 @@ namespace ts {
         const packageIdToSourceFile = createMap<SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
         let sourceFileToPackageName = createMap<string>();
-        let redirectTargetsSet = createMap<true>();
+        // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
+        let redirectTargetsMap = createMultiMap<string>();
 
         const filesByName = createMap<SourceFile | undefined>();
         let missingFilePaths: ReadonlyArray<Path> | undefined;
@@ -752,7 +753,7 @@ namespace ts {
             getSourceFileFromReference,
             getLibFileFromReference,
             sourceFileToPackageName,
-            redirectTargetsSet,
+            redirectTargetsMap,
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
@@ -1073,7 +1074,7 @@ namespace ts {
                     fileChanged = false;
                     newSourceFile = oldSourceFile; // Use the redirect.
                 }
-                else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
+                else if (oldProgram.redirectTargetsMap.has(oldSourceFile.path)) {
                     // If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1220,7 +1221,7 @@ namespace ts {
             resolvedProjectReferences = oldProgram.getProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
-            redirectTargetsSet = oldProgram.redirectTargetsSet;
+            redirectTargetsMap = oldProgram.redirectTargetsMap;
 
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
@@ -2079,7 +2080,7 @@ namespace ts {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
                     const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path); // TODO: GH#18217
-                    redirectTargetsSet.set(fileFromPackageId.path, true);
+                    redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageName.set(path, packageId.name);
                     processingOtherFiles!.push(dupFile);
@@ -2357,7 +2358,7 @@ namespace ts {
             if (sourceFile === undefined) {
                 return undefined;
             }
-
+            sourceFile.path = toPath(refPath);
             const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             return { commandLine, sourceFile };
         }

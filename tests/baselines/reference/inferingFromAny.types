@@ -7,180 +7,90 @@ var t: [any, any];
 
 declare function f1<T>(t: T): T
 >f1 : <T>(t: T) => T
->T : T
 >t : T
->T : T
->T : T
 
 declare function f2<T>(t: T[]): T;
 >f2 : <T>(t: T[]) => T
->T : T
 >t : T[]
->T : T
->T : T
 
 declare function f3<T, U>(t: [T, U]): [T, U];
 >f3 : <T, U>(t: [T, U]) => [T, U]
->T : T
->U : U
 >t : [T, U]
->T : T
->U : U
->T : T
->U : U
 
 declare function f4<T>(x: { bar: T; baz: T }): T;
 >f4 : <T>(x: { bar: T; baz: T; }) => T
->T : T
 >x : { bar: T; baz: T; }
 >bar : T
->T : T
 >baz : T
->T : T
->T : T
 
 declare function f5<T>(x: (a: T) => void): T;
 >f5 : <T>(x: (a: T) => void) => T
->T : T
 >x : (a: T) => void
 >a : T
->T : T
->T : T
 
 declare function f6<T>(x: new (a: T) => {}): T;
 >f6 : <T>(x: new (a: T) => {}) => T
->T : T
 >x : new (a: T) => {}
 >a : T
->T : T
->T : T
 
 declare function f7<T>(x: (a: any) => a is T): T;
 >f7 : <T>(x: (a: any) => a is T) => T
->T : T
 >x : (a: any) => a is T
 >a : any
->a : any
->T : T
->T : T
 
 declare function f8<T>(x: () => T): T;
 >f8 : <T>(x: () => T) => T
->T : T
 >x : () => T
->T : T
->T : T
 
 declare function f9<T>(x: new () => T): T;
 >f9 : <T>(x: new () => T) => T
->T : T
 >x : new () => T
->T : T
->T : T
 
 declare function f10<T>(x: { [x: string]: T }): T;
 >f10 : <T>(x: { [x: string]: T; }) => T
->T : T
 >x : { [x: string]: T; }
 >x : string
->T : T
->T : T
 
 declare function f11<T>(x: { [x: number]: T }): T;
 >f11 : <T>(x: { [x: number]: T; }) => T
->T : T
 >x : { [x: number]: T; }
 >x : number
->T : T
->T : T
 
 declare function f12<T, U>(x: T | U): [T, U];
 >f12 : <T, U>(x: T | U) => [T, U]
->T : T
->U : U
 >x : T | U
->T : T
->U : U
->T : T
->U : U
 
 declare function f13<T, U>(x: T & U): [T, U];
 >f13 : <T, U>(x: T & U) => [T, U]
->T : T
->U : U
 >x : T & U
->T : T
->U : U
->T : T
->U : U
 
 declare function f14<T, U>(x: { a: T | U, b: U & T }): [T, U];
 >f14 : <T, U>(x: { a: T | U; b: U & T; }) => [T, U]
->T : T
->U : U
 >x : { a: T | U; b: U & T; }
 >a : T | U
->T : T
->U : U
 >b : U & T
->U : U
->T : T
->T : T
->U : U
 
 interface I<T> { }
->I : I<T>
->T : T
-
 declare function f15<T>(x: I<T>): T;
 >f15 : <T>(x: I<T>) => T
->T : T
 >x : I<T>
->I : I<T>
->T : T
->T : T
 
 declare function f16<T>(x: Partial<T>): T;
 >f16 : <T>(x: Partial<T>) => T
->T : T
 >x : Partial<T>
->Partial : Partial<T>
->T : T
->T : T
 
 declare function f17<T, K>(x: {[P in keyof T]: K}): T;
 >f17 : <T, K>(x: { [P in keyof T]: K; }) => T
->T : T
->K : K
 >x : { [P in keyof T]: K; }
->P : P
->T : T
->K : K
->T : T
 
 declare function f18<T, K extends keyof T>(x: {[P in K]: T[P]}): T;
 >f18 : <T, K extends keyof T>(x: { [P in K]: T[P]; }) => T
->T : T
->K : K
->T : T
 >x : { [P in K]: T[P]; }
->P : P
->K : K
->T : T
->P : P
->T : T
 
 declare function f19<T, K extends keyof T>(k: K, x: T[K]): T;
 >f19 : <T, K extends keyof T>(k: K, x: T[K]) => T
->T : T
->K : K
->T : T
 >k : K
->K : K
 >x : T[K]
->T : T
->K : K
->T : T
 
 === tests/cases/conformance/salsa/a.js ===
 var a = f1(a);
