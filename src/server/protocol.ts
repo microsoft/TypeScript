@@ -2785,6 +2785,7 @@ namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        placeNewLineForMultiLineBlocks?: boolean;
     }
 
     export interface UserPreferences {

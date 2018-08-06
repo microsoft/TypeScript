@@ -703,6 +703,7 @@ namespace ts {
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        placeNewLineForMultiLineBlocks?: boolean;
     }
 
     export interface FormatCodeSettings extends EditorSettings {
@@ -723,6 +724,7 @@ namespace ts {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
         indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        placeNewLineForMultiLineBlocks?: boolean;
     }
 
     export interface DefinitionInfo extends DocumentSpan {

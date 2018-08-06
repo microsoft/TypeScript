@@ -5185,6 +5185,7 @@ declare namespace ts {
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        placeNewLineForMultiLineBlocks?: boolean;
     }
     interface FormatCodeSettings extends EditorSettings {
         insertSpaceAfterCommaDelimiter?: boolean;
@@ -5204,6 +5205,7 @@ declare namespace ts {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
         indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        placeNewLineForMultiLineBlocks?: boolean;
     }
     interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
@@ -7956,6 +7958,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        placeNewLineForMultiLineBlocks?: boolean;
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;

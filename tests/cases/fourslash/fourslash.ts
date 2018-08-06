@@ -100,6 +100,7 @@ declare namespace FourSlashInterface {
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         insertSpaceBeforeTypeAnnotation: boolean;
+        placeNewLineForMultiLineBlocks: boolean
         [s: string]: boolean | number | string | undefined;
     }
     interface Range {

@@ -48,6 +48,7 @@ namespace ts {
                 insertSpaceBeforeFunctionParenthesis: false,
                 placeOpenBraceOnNewLineForFunctions: false,
                 placeOpenBraceOnNewLineForControlBlocks: false,
+                placeNewLineForMultiLineBlocks: false
             };
             verifyOperationCancelledAfter(file, 1, service => // The LS doesn't do any top-level checks on the token for completion entry details, so the first check is within the checker
                 service.getCompletionEntryDetails("file.ts", file.lastIndexOf("f"), "foo", options, /*content*/ undefined, {})!,

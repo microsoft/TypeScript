@@ -84,6 +84,7 @@ namespace ts {
         insertSpaceBeforeFunctionParenthesis: false,
         placeOpenBraceOnNewLineForFunctions: false,
         placeOpenBraceOnNewLineForControlBlocks: false,
+        placeNewLineForMultiLineBlocks: false
     };
 
     const notImplementedHost: LanguageServiceHost = {

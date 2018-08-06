@@ -352,7 +352,8 @@ namespace FourSlash {
                 insertSpaceAfterTypeAssertion: false,
                 placeOpenBraceOnNewLineForFunctions: false,
                 placeOpenBraceOnNewLineForControlBlocks: false,
-                insertSpaceBeforeTypeAnnotation: false
+                insertSpaceBeforeTypeAnnotation: false,
+                placeNewLineForMultiLineBlocks: false
             };
 
             // Open the first file by default

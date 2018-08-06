@@ -77,6 +77,7 @@ namespace ts.server {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
+            placeNewLineForMultiLineBlocks: false
         };
     }
 

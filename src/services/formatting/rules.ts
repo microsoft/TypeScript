@@ -86,7 +86,6 @@ namespace ts.formatting {
             // For functions and control block place } on a new line [multi-line rule]
             rule("NewLineBeforeCloseBraceInBlockContext", anyTokenIncludingMultilineComments, SyntaxKind.CloseBraceToken, [isMultilineBlockContext], RuleAction.NewLine),
 
-            rule("MultiLineBlock", SyntaxKind.CommaToken, anyToken, [isMultilineBlockContext], RuleAction.NewLine),
             // Space/new line after }.
             rule("SpaceAfterCloseBrace", SyntaxKind.CloseBraceToken, anyTokenExcept(SyntaxKind.CloseParenToken), [isNonJsxSameLineTokenContext, isAfterCodeBlockContext], RuleAction.Space),
             // Special case for (}, else) and (}, while) since else & while tokens are not part of the tree which makes SpaceAfterCloseBrace rule not applied
@@ -234,10 +233,12 @@ namespace ts.formatting {
 
         // These rules are applied after high priority
         const userConfigurableRules = [
+
             // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
             rule("SpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.Delete),
 
+            rule("placeNewLineInMultiLineBlocks", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("placeNewLineForMultiLineBlocks"), isMultilineBlockContext], RuleAction.NewLine, RuleFlags.CanDeleteNewLines),
             rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket], RuleAction.Space),
             rule("NoSpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext], RuleAction.Delete),
 
