@@ -3894,7 +3894,6 @@ namespace ts {
                             contextFile,
                             context.tracker.moduleResolverHost,
                             context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
-                            { importModuleSpecifierPreference: "non-relative" },
                             host.redirectTargetsMap,
                         );
                         links.specifierCache = links.specifierCache || createMap();

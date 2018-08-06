@@ -6,7 +6,7 @@ namespace ts {
         newFileOrDirPath: string,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
-        preferences: UserPreferences,
+        _preferences: UserPreferences,
         sourceMapper: SourceMapper,
     ): ReadonlyArray<FileTextChanges> {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
@@ -15,7 +15,7 @@ namespace ts {
         const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
-            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
+            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
         });
     }
 
@@ -122,7 +122,6 @@ namespace ts {
         newToOld: PathUpdater,
         host: LanguageServiceHost,
         getCanonicalFileName: GetCanonicalFileName,
-        preferences: UserPreferences,
     ): void {
         const allFiles = program.getSourceFiles();
         for (const sourceFile of allFiles) {
@@ -156,7 +155,7 @@ namespace ts {
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), newImportFromPath, toImport.newFileName, host, allFiles, preferences, program.redirectTargetsMap, importLiteral.text)
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), newImportFromPath, toImport.newFileName, host, allFiles, program.redirectTargetsMap, importLiteral.text)
                         : undefined;
                 });
         }

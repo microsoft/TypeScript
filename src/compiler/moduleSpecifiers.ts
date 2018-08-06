@@ -1,12 +1,8 @@
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 /* @internal */
 namespace ts.moduleSpecifiers {
-    export interface ModuleSpecifierPreferences {
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
-    }
-
     const enum RelativePreference { Relative, NonRelative, Auto }
-    // Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js"
+    // See UserPreferences#importPathEnding
     const enum Ending { Minimal, Index, JsExtension }
 
     // Processed preferences
@@ -15,15 +11,23 @@ namespace ts.moduleSpecifiers {
         readonly ending: Ending;
     }
 
-    function getPreferences({ importModuleSpecifierPreference }: ModuleSpecifierPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
+    function getPreferences({ importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
         return {
             relativePreference: importModuleSpecifierPreference === "relative" ? RelativePreference.Relative : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative : RelativePreference.Auto,
-            ending: usesJsExtensionOnImports(importingSourceFile) ? Ending.JsExtension
-                : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs ? Ending.Index : Ending.Minimal,
+            ending: getEnding(),
         };
+        function getEnding(): Ending {
+            switch (importModuleSpecifierEnding) {
+                case "minimal": return Ending.Minimal;
+                case "index": return Ending.Index;
+                case "js": return Ending.JsExtension;
+                default: return usesJsExtensionOnImports(importingSourceFile) ? Ending.JsExtension
+                    : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs ? Ending.Index : Ending.Minimal;
+            }
+        }
     }
 
-    function getPreferencesForUpdate(_: ModuleSpecifierPreferences, compilerOptions: CompilerOptions, oldImportSpecifier: string): Preferences {
+    function getPreferencesForUpdate(compilerOptions: CompilerOptions, oldImportSpecifier: string): Preferences {
         return {
             relativePreference: isExternalModuleNameRelative(oldImportSpecifier) ? RelativePreference.Relative : RelativePreference.NonRelative,
             ending: hasJavaScriptOrJsonFileExtension(oldImportSpecifier) ? Ending.JsExtension
@@ -37,11 +41,10 @@ namespace ts.moduleSpecifiers {
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
-        preferences: ModuleSpecifierPreferences = {},
         redirectTargetsMap: RedirectTargetsMap,
         oldImportSpecifier: string,
     ): string | undefined {
-        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferencesForUpdate(preferences, compilerOptions, oldImportSpecifier));
+        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferencesForUpdate(compilerOptions, oldImportSpecifier));
         if (res === oldImportSpecifier) return undefined;
         return res;
     }
@@ -54,7 +57,7 @@ namespace ts.moduleSpecifiers {
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
-        preferences: ModuleSpecifierPreferences = {},
+        preferences: UserPreferences = {},
         redirectTargetsMap: RedirectTargetsMap,
     ): string {
         return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferences(preferences, compilerOptions, importingSourceFile));
@@ -81,10 +84,9 @@ namespace ts.moduleSpecifiers {
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
-        preferences: ModuleSpecifierPreferences,
         redirectTargetsMap: RedirectTargetsMap,
     ): string {
-        return first(first(getModuleSpecifiers(moduleSymbol, compilerOptions, importingSourceFile, host, files, preferences, redirectTargetsMap)));
+        return first(first(getModuleSpecifiers(moduleSymbol, compilerOptions, importingSourceFile, host, files, { importModuleSpecifierPreference: "non-relative" }, redirectTargetsMap)));
     }
 
     // For each symlink/original for a module, returns a list of ways to import that file.
@@ -94,7 +96,7 @@ namespace ts.moduleSpecifiers {
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
-        userPreferences: ModuleSpecifierPreferences,
+        userPreferences: UserPreferences,
         redirectTargetsMap: RedirectTargetsMap,
     ): ReadonlyArray<ReadonlyArray<string>> {
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
