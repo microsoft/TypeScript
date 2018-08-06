@@ -135,15 +135,21 @@ namespace ts.GoToDefinition {
         }
 
         const symbol = typeChecker.getSymbolAtLocation(node);
-        const type = symbol && getTypeForTypeDefinition(symbol, node, typeChecker);
-        return type && flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
-            t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
+        if (!symbol) return undefined;
+
+        const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+        const returnType = tryGetReturnTypeOfFunction(symbol, typeAtLocation, typeChecker);
+        const fromReturnType = returnType && definitionFromType(returnType, typeChecker, node);
+        // If a function returns 'void' or some other type with no definition, just return the function definition.
+        return fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
     }
 
-    function getTypeForTypeDefinition(symbol: Symbol, node: Node, checker: TypeChecker): Type | undefined {
-        const type = checker.getTypeOfSymbolAtLocation(symbol, node);
-        if (!type) return undefined;
+    function definitionFromType(type: Type, checker: TypeChecker, node: Node): DefinitionInfo[] {
+        return flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
+            t.symbol && getDefinitionFromSymbol(checker, t.symbol, node));
+    }
 
+    function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChecker): Type | undefined {
         // If the type is just a function's inferred type,
         // go-to-type should go to the return type instead, since go-to-definition takes you to the function anyway.
         if (type.symbol === symbol ||
@@ -152,7 +158,7 @@ namespace ts.GoToDefinition {
             const sigs = type.getCallSignatures();
             if (sigs.length === 1) return checker.getReturnTypeOfSignature(first(sigs));
         }
-        return type;
+        return undefined;
     }
 
     export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {

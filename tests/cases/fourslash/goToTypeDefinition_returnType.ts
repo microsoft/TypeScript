@@ -42,6 +42,6 @@ verify.goToType({
     f4: "I",
     f5: ["I", "J"],
     f6: ["I", "J"],
-    f7: [],
+    f7: "f7Def",
     f8: "f8Def",
 });
