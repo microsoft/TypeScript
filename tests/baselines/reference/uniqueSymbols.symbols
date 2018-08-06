@@ -738,7 +738,7 @@ interface Context {
 
     method3(): AsyncIterableIterator<typeof s>;
 >method3 : Symbol(Context.method3, Decl(uniqueSymbols.ts, 215, 33))
->AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.esnext.asynciterable.d.ts, --, --))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     method4(): IterableIterator<typeof s>;

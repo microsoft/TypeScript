@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/forAwait/types.forAwait.esnext.1.ts ===
 declare const asyncIterable: AsyncIterable<number>;
 >asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.esnext.1.ts, 0, 13))
->AsyncIterable : Symbol(AsyncIterable, Decl(lib.esnext.asynciterable.d.ts, --, --))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
 
 declare const iterable: Iterable<number>;
 >iterable : Symbol(iterable, Decl(types.forAwait.esnext.1.ts, 1, 13))
