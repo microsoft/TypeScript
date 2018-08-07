@@ -9211,22 +9211,6 @@ namespace ts {
             return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Index);
         }
 
-        // Return true if the given type is a non-generic object type with a string index signature and no
-        // other members.
-        function isStringIndexOnlyType(type: Type): boolean {
-            if (type.flags & TypeFlags.Object && !isGenericMappedType(type)) {
-                const t = resolveStructuredTypeMembers(<ObjectType>type);
-                return t.properties.length === 0 &&
-                    t.callSignatures.length === 0 && t.constructSignatures.length === 0 &&
-                    !!t.stringIndexInfo && !t.numberIndexInfo;
-            }
-            return false;
-        }
-
-        function isMappedTypeToNever(type: Type): boolean {
-            return !!(getObjectFlags(type) & ObjectFlags.Mapped) && getTemplateTypeFromMappedType(type as MappedType) === neverType;
-        }
-
         function getSimplifiedType(type: Type): Type {
             return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type) : type;
         }
@@ -9241,35 +9225,11 @@ namespace ts {
             // We recursively simplify the object type as it may in turn be an indexed access type. For example, with
             // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
             const objectType = getSimplifiedType(type.objectType);
-            if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType)) {
-                // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
-                // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
-                // transformed type of the form '(U & V)[K] | D'. This allows us to properly reason about higher order indexed
-                // access types with default property values as expressed by D.
-                if (some((<IntersectionType>objectType).types, isStringIndexOnlyType)) {
-                    const regularTypes: Type[] = [];
-                    const stringIndexTypes: Type[] = [];
-                    for (const t of (<IntersectionType>objectType).types) {
-                        if (isStringIndexOnlyType(t)) {
-                            stringIndexTypes.push(getIndexTypeOfType(t, IndexKind.String)!);
-                        }
-                        else {
-                            regularTypes.push(t);
-                        }
-                    }
-                    return type.simplified = getUnionType([
-                        getSimplifiedType(getIndexedAccessType(getIntersectionType(regularTypes), type.indexType)),
-                        getIntersectionType(stringIndexTypes)
-                    ]);
-                }
-                // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
-                // more mapped types with a template type `never`, '(U & V & { [P in T]: never })[K]', return a
-                // transformed type that removes the never-mapped type: '(U & V)[K]'. This mirrors what would happen
-                // eventually anyway, but it easier to reason about.
-                if (some((<IntersectionType>objectType).types, isMappedTypeToNever)) {
-                    const nonNeverTypes = filter((<IntersectionType>objectType).types, t => !isMappedTypeToNever(t));
-                    return type.simplified = getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
-                }
+            if (objectType.flags & TypeFlags.Union) {
+                return type.simplified = mapType(objectType, t => getIndexedAccessType(t, type.indexType));
+            }
+            if (objectType.flags & TypeFlags.Intersection) {
+                return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getIndexedAccessType(t, type.indexType)));
             }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
@@ -9296,12 +9256,6 @@ namespace ts {
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode): Type {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
-            }
-            if (objectType.flags & TypeFlags.Union) {
-                return mapType(objectType, t => getIndexedAccessType(t, indexType));
-            }
-            if (objectType.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((objectType as IntersectionType).types, t => getIndexedAccessType(t, indexType)));
             }
             // If the index type is generic, or if the object type is generic and doesn't originate in an expression,
             // we are performing a higher-order index access where we cannot meaningfully access the properties of the
