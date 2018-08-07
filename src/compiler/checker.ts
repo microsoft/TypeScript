@@ -9124,7 +9124,7 @@ namespace ts {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
                         if (isAssignmentTarget(accessExpression) && (isReferenceToReadonlyEntity(accessExpression, prop) || isReferenceThroughNamespaceImport(accessExpression))) {
                             error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, symbolToString(prop));
-                            return errorType;
+                            return accessNode ? errorType : unknownType;
                         }
                         if (cacheSymbol) {
                             getNodeLinks(accessNode!).resolvedSymbol = prop;
@@ -9182,7 +9182,7 @@ namespace ts {
                             }
                         }
                     }
-                    return anyType;
+                    return accessNode ? errorType : unknownType;
                 }
             }
             if (isJSLiteralType(objectType)) {
@@ -9200,7 +9200,7 @@ namespace ts {
                     error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                 }
             }
-            return errorType;
+            return accessNode ? errorType : unknownType;
         }
 
         function isGenericObjectType(type: Type): boolean {
@@ -9297,6 +9297,12 @@ namespace ts {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
+            if (objectType.flags & TypeFlags.Union) {
+                return mapType(objectType, t => getIndexedAccessType(t, indexType));
+            }
+            if (objectType.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((objectType as IntersectionType).types, t => getIndexedAccessType(t, indexType)));
+            }
             // If the index type is generic, or if the object type is generic and doesn't originate in an expression,
             // we are performing a higher-order index access where we cannot meaningfully access the properties of the
             // object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in
@@ -9322,6 +9328,9 @@ namespace ts {
                 const propTypes: Type[] = [];
                 for (const t of (<UnionType>indexType).types) {
                     const propType = getPropertyTypeForIndexType(apparentObjectType, t, accessNode, /*cacheSymbol*/ false);
+                    if (propType === unknownType) {
+                        return unknownType;
+                    }
                     if (propType === errorType) {
                         return errorType;
                     }
