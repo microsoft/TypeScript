@@ -112,26 +112,18 @@ namespace ts.codefix {
 
     export function createMethodFromCallExpression(
         context: CodeFixContextBase,
-        { typeArguments, arguments: args, parent: parent }: CallExpression,
+        { typeArguments, arguments: args, parent }: CallExpression,
         methodName: string,
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
     ): MethodDeclaration {
         const checker = context.program.getTypeChecker();
-        const types = map(args,
-            arg => {
-                let type = checker.getTypeAtLocation(arg);
-                if (type === undefined) {
-                    return undefined;
-                }
-                // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-                type = checker.getBaseTypeOfLiteralType(type);
-                return checker.typeToTypeNode(type);
-            });
+        const types = map(args, arg => resolveTypeFromNode(checker, arg));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text :
             isPropertyAccessExpression(arg) ? arg.name.text : undefined);
+        const returnType = inJs ? undefined : isVariableLike(parent) && resolveTypeFromNode(checker, parent) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
@@ -141,8 +133,18 @@ namespace ts.codefix {
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
-            /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            /*type*/ returnType,
             createStubbedMethodBody(preferences));
+
+        function resolveTypeFromNode (checker: TypeChecker, node: Node): TypeNode | undefined {
+            let type = checker.getTypeAtLocation(node);
+            if (type === undefined) {
+                return undefined;
+            }
+            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+            type = checker.getBaseTypeOfLiteralType(type);
+            return checker.typeToTypeNode(type);
+        }
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
