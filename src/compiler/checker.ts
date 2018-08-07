@@ -20861,7 +20861,7 @@ namespace ts {
                     // If func.parent is a class and symbol is a (readonly) property of that class, or
                     // if func is a constructor and symbol is a (readonly) parameter property declared in it,
                     // then symbol is writeable here.
-                    return !(func.parent === symbol.valueDeclaration.parent || func === symbol.valueDeclaration.parent);
+                    return !symbol.valueDeclaration || !(func.parent === symbol.valueDeclaration.parent || func === symbol.valueDeclaration.parent);
                 }
                 return true;
             }
