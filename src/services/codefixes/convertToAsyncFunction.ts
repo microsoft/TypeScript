@@ -51,13 +51,9 @@ namespace ts.codefix {
         // add the async keyword
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
-        const allNewNodes: Map<Node[]> = createMap();
-
         function startTransformation(node: CallExpression, nodeToReplace: Node) {
             const newNodes = transformCallback(node, transformer, node);
-            if (newNodes.length) {
-                allNewNodes.set(getNodeId(nodeToReplace).toString(), newNodes);
-            }
+            changes.replaceNodeWithNodes(sourceFile, nodeToReplace, newNodes);
         }
 
         for (const statement of returnStatements) {
@@ -73,17 +69,6 @@ namespace ts.codefix {
                         forEachChild(node, visit);
                     }
                 });
-            }
-        }
-
-        replaceNodes(changes, sourceFile, returnStatements, allNewNodes);
-    }
-
-    function replaceNodes(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldNodes: Node[], allNewNodes: Map<Node[]>) {
-        for (const statement of oldNodes) {
-            const newNodes = allNewNodes.get(getNodeId(statement).toString());
-            if (newNodes) {
-                changes.replaceNodeWithNodes(sourceFile, statement, newNodes);
             }
         }
     }
