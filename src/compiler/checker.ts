@@ -31,6 +31,18 @@ namespace ts {
     }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
+        const getPackagesSet: () => Map<true> = memoize(() => {
+            const set = createMap<true>();
+            host.getSourceFiles().forEach(sf => {
+                if (!sf.resolvedModules) return;
+
+                forEachEntry(sf.resolvedModules, r => {
+                    if (r && r.packageId) set.set(r.packageId.name, true);
+                });
+            });
+            return set;
+        });
+
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
         // computing something, and we will leave our internals in an inconsistent state.  Callers
@@ -2259,8 +2271,7 @@ namespace ts {
                 resolvedFileName));
         }
         function typesPackageExists(packageName: string): boolean {
-            return host.getSourceFiles().some(sf => !!sf.resolvedModules && !!forEachEntry(sf.resolvedModules, r =>
-                r && r.packageId && r.packageId.name === getTypesPackageName(packageName)));
+            return getPackagesSet().has(getTypesPackageName(packageName));
         }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
