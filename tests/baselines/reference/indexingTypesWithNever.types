@@ -69,8 +69,8 @@ declare function genericFn3<
 
 // Should be never
 const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
->result5 : any
->genericFn3({ g: "gtest", h: "htest" }, "g", "h") : any
+>result5 : unknown
+>genericFn3({ g: "gtest", h: "htest" }, "g", "h") : unknown
 >genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
 >{ g: "gtest", h: "htest" } : { g: string; h: string; }
 >g : string
