@@ -987,6 +987,10 @@
         "category": "Error",
         "code": 1344
     },
+    "An expression of type 'void' cannot be tested for truthiness": {
+        "category": "Error",
+        "code": 1345
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

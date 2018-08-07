@@ -459,12 +459,15 @@ namespace ts.server {
             if (this.isDynamicOrHasMixedContent()) {
                 this.textStorage.reload("");
                 this.markContainingProjectsAsDirty();
+                return true;
             }
             else {
                 if (this.textStorage.reloadWithFileText(tempFileName)) {
                     this.markContainingProjectsAsDirty();
+                    return true;
                 }
             }
+            return false;
         }
 
         /*@internal*/
