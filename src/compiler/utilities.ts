@@ -1016,6 +1016,8 @@ namespace ts {
                         return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
+                    case SyntaxKind.JSDocTemplateTag:
+                        return node === (<JSDocTemplateTag>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.Parameter:
