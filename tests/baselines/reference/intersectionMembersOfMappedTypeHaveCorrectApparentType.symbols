@@ -1,0 +1,75 @@
+=== tests/cases/compiler/intersectionMembersOfMappedTypeHaveCorrectApparentType.ts ===
+interface Spy {
+>Spy : Symbol(Spy, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 0, 0))
+
+    (...params: any[]): any;
+>params : Symbol(params, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 1, 5))
+
+    identity: string;
+>identity : Symbol(Spy.identity, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 1, 28))
+
+    and: Function;
+>and : Symbol(Spy.and, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 3, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    mostRecentCall: { args: any[]; };
+>mostRecentCall : Symbol(Spy.mostRecentCall, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 4, 18))
+>args : Symbol(args, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 5, 21))
+
+    argsForCall: any[];
+>argsForCall : Symbol(Spy.argsForCall, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 5, 37))
+}
+
+type SpyObj<T> = T & {
+>SpyObj : Symbol(SpyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 7, 1))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 9, 12))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 9, 12))
+
+    [k in keyof T]: Spy;
+>k : Symbol(k, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 10, 5))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 9, 12))
+>Spy : Symbol(Spy, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 0, 0))
+}
+
+declare function createSpyObj<T>(
+>createSpyObj : Symbol(createSpyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 11, 1))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 13, 30))
+
+    name: string, names: Array<keyof T>): SpyObj<T>;
+>name : Symbol(name, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 13, 33))
+>names : Symbol(names, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 14, 17))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 13, 30))
+>SpyObj : Symbol(SpyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 7, 1))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 13, 30))
+
+function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
+>mock : Symbol(mock, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 14, 52))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 14))
+>spyName : Symbol(spyName, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 17))
+>methodNames : Symbol(methodNames, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 33))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 14))
+>SpyObj : Symbol(SpyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 7, 1))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 14))
+
+    const spyObj = createSpyObj<T>(spyName, methodNames);
+>spyObj : Symbol(spyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 17, 9))
+>createSpyObj : Symbol(createSpyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 11, 1))
+>T : Symbol(T, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 14))
+>spyName : Symbol(spyName, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 17))
+>methodNames : Symbol(methodNames, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 33))
+
+    for (const methodName of methodNames) {
+>methodName : Symbol(methodName, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 18, 14))
+>methodNames : Symbol(methodNames, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 16, 33))
+
+        spyObj[methodName].and.returnValue(1);
+>spyObj[methodName].and : Symbol(Spy.and, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 3, 21))
+>spyObj : Symbol(spyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 17, 9))
+>methodName : Symbol(methodName, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 18, 14))
+>and : Symbol(Spy.and, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 3, 21))
+    }
+    return spyObj;
+>spyObj : Symbol(spyObj, Decl(intersectionMembersOfMappedTypeHaveCorrectApparentType.ts, 17, 9))
+}

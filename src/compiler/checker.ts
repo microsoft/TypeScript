@@ -9227,6 +9227,14 @@ namespace ts {
             return !!(getObjectFlags(type) & ObjectFlags.Mapped) && getTemplateTypeFromMappedType(type as MappedType) === neverType;
         }
 
+        function isMappedTypeOverKeyofGenericInSet(set: ReadonlyArray<Type>): (type: Type) => boolean {
+            return (type) => {
+                if (!(getObjectFlags(type) & ObjectFlags.Mapped)) return false;
+                const constraint = getConstraintTypeFromMappedType(type as MappedType);
+                return some(set, t => getIndexType(t) === constraint);
+            };
+        }
+
         function getSimplifiedType(type: Type): Type {
             return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type) : type;
         }
@@ -9269,6 +9277,33 @@ namespace ts {
                 if (some((<IntersectionType>objectType).types, isMappedTypeToNever)) {
                     const nonNeverTypes = filter((<IntersectionType>objectType).types, t => !isMappedTypeToNever(t));
                     return type.simplified = getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
+                }
+
+                // Given an indexed access type T[K], if T is an intersection containing a generic type and one or
+                // more mapped types which map over the keys of that generic, '(T & {[P in keyof T]: Foo})[K]', return a
+                // transformed type that moves the top-level intersection into the mapped type: '{[P in keyof T]: T[P] & Foo}[K]'
+                // If we don't do such a transformation now, due to how we reason over intersections, we will never come to the
+                // realization that the member we're trying to pluck out is influenced by both `T[P]` _and_ the mapped type template
+                const isInSet = isMappedTypeOverKeyofGenericInSet((<IntersectionType>objectType).types);
+                if (some((<IntersectionType>objectType).types, isInSet)) {
+                    for (const t of (<IntersectionType>objectType).types) {
+                        if (isInSet(t)) {
+                            const constraint = getConstraintTypeFromMappedType(t as MappedType);
+                            let matchIndex: number | undefined;
+                            const match = forEach((<IntersectionType>objectType).types, (t, i) => getIndexType(t) === constraint ? (matchIndex = i, t) : undefined)!;
+                            const indexedMatch = getIndexedAccessType(match, getTypeParameterFromMappedType(t as MappedType));
+                            const newTemaplate = getIntersectionType([indexedMatch, getTemplateTypeFromMappedType(t as MappedType)]);
+                            const newMappedType = <MappedType>createObjectType(ObjectFlags.Mapped, t.symbol);
+                            newMappedType.declaration = (t as MappedType).declaration;
+                            newMappedType.templateType = newTemaplate;
+                            newMappedType.typeParameter = (t as MappedType).typeParameter;
+                            newMappedType.constraintType = (t as MappedType).constraintType;
+                            const newSet = (<IntersectionType>objectType).types.slice();
+                            newSet.splice(matchIndex!, 1); // Remove the generic
+                            newSet.splice(newSet.indexOf(t), 1, newMappedType); // Remove the original mapped type
+                            return type.simplified = getSimplifiedType(getIndexedAccessType(getIntersectionType(newSet), type.indexType));
+                        }
+                    }
                 }
             }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper

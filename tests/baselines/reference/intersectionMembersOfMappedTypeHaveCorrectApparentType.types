@@ -1,0 +1,81 @@
+=== tests/cases/compiler/intersectionMembersOfMappedTypeHaveCorrectApparentType.ts ===
+interface Spy {
+>Spy : Spy
+
+    (...params: any[]): any;
+>params : any[]
+
+    identity: string;
+>identity : string
+
+    and: Function;
+>and : Function
+>Function : Function
+
+    mostRecentCall: { args: any[]; };
+>mostRecentCall : { args: any[]; }
+>args : any[]
+
+    argsForCall: any[];
+>argsForCall : any[]
+}
+
+type SpyObj<T> = T & {
+>SpyObj : SpyObj<T>
+>T : T
+>T : T
+
+    [k in keyof T]: Spy;
+>k : k
+>T : T
+>Spy : Spy
+}
+
+declare function createSpyObj<T>(
+>createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
+>T : T
+
+    name: string, names: Array<keyof T>): SpyObj<T>;
+>name : string
+>names : (keyof T)[]
+>Array : T[]
+>T : T
+>SpyObj : SpyObj<T>
+>T : T
+
+function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
+>mock : <T>(spyName: string, methodNames: (keyof T)[]) => SpyObj<T>
+>T : T
+>spyName : string
+>methodNames : (keyof T)[]
+>Array : T[]
+>T : T
+>SpyObj : SpyObj<T>
+>T : T
+
+    const spyObj = createSpyObj<T>(spyName, methodNames);
+>spyObj : SpyObj<T>
+>createSpyObj<T>(spyName, methodNames) : SpyObj<T>
+>createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
+>T : T
+>spyName : string
+>methodNames : (keyof T)[]
+
+    for (const methodName of methodNames) {
+>methodName : keyof T
+>methodNames : (keyof T)[]
+
+        spyObj[methodName].and.returnValue(1);
+>spyObj[methodName].and.returnValue(1) : any
+>spyObj[methodName].and.returnValue : any
+>spyObj[methodName].and : Function
+>spyObj[methodName] : SpyObj<T>[keyof T]
+>spyObj : SpyObj<T>
+>methodName : keyof T
+>and : Function
+>returnValue : any
+>1 : 1
+    }
+    return spyObj;
+>spyObj : SpyObj<T>
+}
