@@ -169,7 +169,7 @@ namespace ts {
         fileName: Path;
         packageName: string;
     }
-    
+
     //
     // Public interface of the host of a language service instance.
     //

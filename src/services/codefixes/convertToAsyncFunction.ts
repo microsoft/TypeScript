@@ -24,10 +24,15 @@ namespace ts.codefix {
         numberOfUsesSynthesized: number;
     }
 
+    interface SymbolAndIdentifier {
+        identifier: Identifier;
+        symbol: Symbol; 
+    }
+
     interface Transformer {
         checker: TypeChecker;
         synthNamesMap: Map<SynthIdentifier>;
-        allVarNames: [Identifier, Symbol][];
+        allVarNames: SymbolAndIdentifier[];
         setOfCallbacksToReturn: Map<true>;
         context: CodeFixContextBase;
         constIdentifiers: Identifier[];
@@ -43,7 +48,7 @@ namespace ts.codefix {
 
         const synthNamesMap: Map<SynthIdentifier> = createMap(); // number indicates the number of times it is used after declaration
         const originalTypeMap: Map<Type> = createMap();
-        const allVarNames: [Identifier, Symbol][] = [];
+        const allVarNames: SymbolAndIdentifier[] = [];
         const setOfCallbacksToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfCallbacksToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
@@ -139,7 +144,7 @@ namespace ts.codefix {
     }
 
     // varNamesMap holds all of the variables in original source code. synthNamesMap holds all of the variables created by the refactor
-    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllCallbacksToReturn: Map<true>, originalType: Map<Type>, allVarNames: [Identifier, Symbol][]): FunctionLikeDeclaration {
+    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllCallbacksToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
 
         let identsToRenameMap: Map<Identifier> = createMap();
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -155,7 +160,7 @@ namespace ts.codefix {
                         // add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                         const synthName = getNewNameIfConflict(createIdentifier(type.getCallSignatures()[0].parameters[0].name), allVarNames);
                         synthNamesMap.set(getSymbolId(symbol).toString(), synthName);
-                        allVarNames.push([synthName.identifier, symbol]);
+                        allVarNames.push({identifier: synthName.identifier, symbol});
                     }
                 }
                 else if (node.parent && isParameter(node.parent) || isVariableDeclaration(node.parent)) {
@@ -163,19 +168,19 @@ namespace ts.codefix {
                     let setName = false;
 
                     for (const ident of allVarNames) {
-                        if (ident[0].text === node.text && ident[1] !== symbol) {
+                        if (ident.identifier.text === node.text && ident.symbol !== symbol) {
                             identsToRenameMap.set(getSymbolId(symbol).toString(), newName.identifier);
                             synthNamesMap.set(getSymbolId(symbol).toString(), newName);
-                            allVarNames.push([newName.identifier, symbol]);
+                            allVarNames.push({identifier: newName.identifier, symbol});
                             setName = true;
                         }
                     }
 
                     if (!setName) {
                         identsToRenameMap.set(getSymbolId(symbol).toString(), getSynthesizedDeepClone(node));
-                        synthNamesMap.set(getSymbolId(symbol).toString(), { identifier: getSynthesizedDeepClone(node), numberOfUsesOriginal: allVarNames.filter(elem => elem[0].text === node.text).length, numberOfUsesSynthesized: 0 });
+                        synthNamesMap.set(getSymbolId(symbol).toString(), { identifier: getSynthesizedDeepClone(node), numberOfUsesOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfUsesSynthesized: 0 });
                         if ((isParameter(node.parent) && isCallbackOnTypePromise(node.parent.parent, setOfAllCallbacksToReturn)) || isVariableDeclaration(node.parent)) {
-                            allVarNames.push([node, symbol]);
+                            allVarNames.push({identifier: node, symbol});
                         }
                     }
                 }
@@ -220,8 +225,8 @@ namespace ts.codefix {
         return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, /*setOfAllCallbacksToReturn,*/ checker, /*originalType*/ deepCloneCallback);
     }
 
-    function getNewNameIfConflict(name: Identifier, allVarNames: [Identifier, Symbol][]): SynthIdentifier {
-        const numVarsSameName = allVarNames.filter(elem => elem[0].text === name.text).length;
+    function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
+        const numVarsSameName = allVarNames.filter(elem => elem.identifier.text === name.text).length;
         return numVarsSameName === 0 ? { identifier: name, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 } : { identifier: createIdentifier(name.text + "_" + numVarsSameName), numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
     }
 
@@ -236,7 +241,7 @@ namespace ts.codefix {
         }
 
         let nodeType = transformer.checker.getTypeAtLocation(node);
-        if (nodeType && (<IntrinsicType>nodeType).intrinsicName === "error" && isIdentifier(node)) {
+        if (nodeType && nodeType.flags & 1 && (<IntrinsicType>nodeType).intrinsicName === "error" && isIdentifier(node)) {
             nodeType = transformer.originalTypeMap.get(node.text);
         }
 

@@ -120,7 +120,7 @@ namespace ts {
             return;
         }
 
-        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call); 
+        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
         const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
 
         if (!returnType || !checker.getPromisedTypeOfPromise(returnType)) {
@@ -155,10 +155,10 @@ namespace ts {
             }
 
             if (isReturnStatement(child)) {
-                forEachChild(child, hasCallback);
+                forEachChild(child, addCallbacks);
             }
 
-            function hasCallback(returnChild: Node) {
+            function addCallbacks(returnChild: Node) {
                 if (isCallback(returnChild)) {
                     returnStatements.push(child as ReturnStatement);
                 }
