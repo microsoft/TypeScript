@@ -20,7 +20,7 @@ namespace ts.codefix {
     */
     interface SynthIdentifier {
         identifier: Identifier;
-        type: Type | undefined;
+        types: Type[];
         numberOfAssignmentsOriginal: number;
         numberOfAssignmentsSynthesized: number;
     }
@@ -184,7 +184,7 @@ namespace ts.codefix {
                     else {
                         const identifier = getSynthesizedDeepClone(node);
                         identsToRenameMap.set(symbolIdString, identifier);
-                        synthNamesMap.set(symbolIdString, { identifier, type: undefined, numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
+                        synthNamesMap.set(symbolIdString, { identifier, types: [], numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
                         if ((isParameter(node.parent) && isExpressionOrCallOnTypePromise(node.parent.parent)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push({ identifier, symbol });
                         }
@@ -233,9 +233,8 @@ namespace ts.codefix {
     function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
         const numVarsSameName = allVarNames.filter(elem => elem.identifier.text === name.text).length;
         const numberOfAssignmentsOriginal = 0, numberOfAssignmentsSynthesized = 0;
-        const type = undefined;
         const identifier = numVarsSameName == 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
-        return { identifier: identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
+        return { identifier: identifier, types: [], numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
     }
 
     // dispatch function to recursively build the refactoring
@@ -290,10 +289,8 @@ namespace ts.codefix {
         }
 
         const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));
-        const tryType = prevArgName && prevArgName.type;
 
         const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
-        const catchType = prevArgName && prevArgName.type;
         const catchClause = createCatchClause(argName.identifier.text, createBlock(transformationBody));
 
         /*
@@ -301,9 +298,7 @@ namespace ts.codefix {
         */
         let varDeclList;
         if (prevArgName && !shouldReturn) {
-            let typeArray: Type[] = [];
-            if (tryType) typeArray.push(tryType);
-            if (catchType) typeArray.push(catchType);
+            let typeArray: Type[] = prevArgName.types;
             const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
             const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType);
             const varDecl = [createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), unionTypeNode)]
@@ -379,23 +374,21 @@ namespace ts.codefix {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
             case SyntaxKind.Identifier:
-                if (!hasArgName) {
-                    break;
-                }
+                if (!hasArgName) break;
 
                 const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName.identifier]);
                 if (shouldReturn) {
                     return createNodeArray([createReturn(synthCall)]);
                 }
 
-                if (!hasPrevArgName) {
-                    break;
-                }
+                if (!hasPrevArgName) break;
 
                 const type = transformer.originalTypeMap.get((<Identifier>func).text);
                 const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
                 const returnType = callSignatures && callSignatures[0].getReturnType();
-                prevArgName!.type = returnType;
+                if (returnType) {
+                    prevArgName!.types.push(returnType);
+                }
                 return createVariableDeclarationOrAssignment(prevArgName!, createAwait(synthCall), transformer);
 
             case SyntaxKind.FunctionDeclaration:
@@ -432,7 +425,9 @@ namespace ts.codefix {
                         const type = transformer.checker.getTypeAtLocation(func);
                         const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
                         const returnType = callSignatures && callSignatures[0].getReturnType();
-                        prevArgName!.type = returnType;
+                        if (returnType) {
+                            prevArgName!.types.push(returnType);
+                        }
                         return createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
                     }
                     else {
@@ -504,7 +499,7 @@ namespace ts.codefix {
     function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier {
 
         const numberOfAssignmentsOriginal = 0, numberOfAssignmentsSynthesized = 0;
-        const type = undefined;
+        const types: Type[] = [];
 
         function getMapEntryIfExists(node: Identifier): SynthIdentifier {
             const originalNode = getOriginalNode(node);
@@ -513,11 +508,11 @@ namespace ts.codefix {
 
 
             if (!symbol) {
-                return { identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
+                return { identifier, types, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry || { identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
+            return mapEntry || { identifier, types, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
         }
 
         function getSymbol(node: Node): Symbol | undefined {
@@ -537,14 +532,14 @@ namespace ts.codefix {
             }
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
-            name = { identifier: funcNode.arguments[0] as Identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
+            name = { identifier: funcNode.arguments[0] as Identifier, types, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
         }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryIfExists(funcNode);
         }
 
         if (!name || name.identifier === undefined || name.identifier.text === "_" || name.identifier.text === "undefined") {
-            return { identifier: createIdentifier(""), type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
+            return { identifier: createIdentifier(""), types, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
         }
 
         return name;
