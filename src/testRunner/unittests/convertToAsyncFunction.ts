@@ -977,6 +977,22 @@ function rej(reject): number {
 `
         );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMatchingTypes01NoAnnotations", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result){
+    return 5;
+}
+
+function rej(reject){
+    return 3;
+}
+`
+        );
+
+
 _testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMatchingTypes02", `
 function [#|f|](){
     return fetch("https://typescriptlang.org").then(res => 0).catch(rej => 1).then(res);
@@ -987,6 +1003,89 @@ function res(result): number {
 }
 `
         );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMatchingTypes02NoAnnotations", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res => 0).catch(rej => 1).then(res);
+}
+
+function res(result){
+    return 5;
+}
+`
+);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMismatchTypes01", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result){
+    return 5;
+}
+
+function rej(reject){
+    return "Error";
+}
+`
+        );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMismatchTypes02", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result){
+    return 5;
+}
+
+function rej(reject){
+    return reject;
+}
+`
+        );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMismatchTypes03", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result){
+    return 5;
+}
+
+function rej(reject){
+    return Promise.resolve(1);
+}
+`
+        );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMismatchTypes04", `
+interface a {
+    name: string;
+    age: number;
+}
+
+interface b extends a {
+    color: string;
+}
+
+
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result){
+    return {name: "myName", age: 22, color: "red"};
+}
+
+function rej(reject){
+    return {name: "myName", age: 27};
+}
+`
+        );
+
+
 
 
         _testConvertToAsyncFunction("convertToAsyncFunction_LocalReturn", `
