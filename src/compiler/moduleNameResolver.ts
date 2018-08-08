@@ -407,7 +407,7 @@ namespace ts {
                 // directory: /a/b/c/d/e
                 // resolvedFileName: /a/b/foo.d.ts
                 const commonPrefix = getCommonPrefix(path, resolvedFileName);
-                if (commonPrefix === undefined) {
+                if (!commonPrefix) {
                     return;
                 }
                 let current = path;
@@ -427,23 +427,21 @@ namespace ts {
                 }
                 const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
 
-                // find first position where directory and resolution differs
-                let i = 0;
-                while (i < Math.min(directory.length, resolutionDirectory.length) && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
-                    i++;
+                let current = directory;
+                let parent = getDirectoryPath(current);
+                while (
+                    // keep going until we find a matching prefix
+                    !startsWith(resolutionDirectory, current) ||
+                    // keep going if the prefix is not a complete directory segment, e.g. '/dir' as prefix of '/directory'
+                    resolutionDirectory.length > current.length && resolutionDirectory[current.length] !== directorySeparator && current !== parent
+                ) {
+                    if (current === parent) {
+                        return undefined;
+                    }
+                    current = parent;
+                    parent = getDirectoryPath(current);
                 }
-
-                if (i === directory.length && resolutionDirectory.length > i && resolutionDirectory[i] === directorySeparator) {
-                    return directory;
-                }
-
-                // find last directory separator before position i
-                const sep = directory.lastIndexOf(directorySeparator, i);
-                if (sep < 0) {
-                    return undefined;
-                }
-
-                return directory.substr(0, sep);
+                return current;
             }
         }
     }

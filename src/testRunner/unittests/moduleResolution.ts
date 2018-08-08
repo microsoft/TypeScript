@@ -195,7 +195,8 @@ namespace ts {
 
     describe("Node module resolution - non-relative paths", () => {
         it("computes correct commonPrefix for moduleName cache", () => {
-            const cache = createModuleResolutionCache("/", (f) => f).getOrCreateCacheForModuleName("a");
+            const resolutionCache = createModuleResolutionCache("/", (f) => f);
+            let cache = resolutionCache.getOrCreateCacheForModuleName("a");
             cache.set("/sub", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -207,6 +208,62 @@ namespace ts {
             });
             assert.isDefined(cache.get("/sub"));
             assert.isUndefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("b");
+            cache.set("/sub/dir/foo", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/sub/directory/node_modules/b/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/sub/dir/foo"));
+            assert.isDefined(cache.get("/sub/dir"));
+            assert.isDefined(cache.get("/sub"));
+            assert.isUndefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("c");
+            cache.set("/foo/bar", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/bar/node_modules/c/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/foo/bar"));
+            assert.isDefined(cache.get("/foo"));
+            assert.isDefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("d");
+            cache.set("/foo", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/foo/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/foo"));
+            assert.isUndefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("e");
+            cache.set("c:/foo", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "d:/bar/node_modules/e/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("c:/foo"));
+            assert.isUndefined(cache.get("c:/"));
+            assert.isUndefined(cache.get("d:/"));
         });
 
         it("load module as file - ts files not loaded", () => {
