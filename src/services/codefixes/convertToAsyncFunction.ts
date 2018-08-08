@@ -282,6 +282,11 @@ namespace ts.codefix {
                     transformer.synthNamesMap.set(key, getNewNameIfConflict(prevArgName.identifier, transformer.allVarNames))
                 }
             })
+
+            // update the constIdentifiers list
+            if (transformer.constIdentifiers.some(elem => elem.text === prevArgName.identifier.text)) {
+                transformer.constIdentifiers.push(getNewNameIfConflict(prevArgName.identifier, transformer.allVarNames).identifier);
+            }
         }
 
         const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));

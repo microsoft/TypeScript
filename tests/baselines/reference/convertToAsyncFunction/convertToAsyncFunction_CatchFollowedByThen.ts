@@ -17,7 +17,7 @@ function rej(reject){
 async function f(){
     let result: any;
     try {
-        let result_1 = await fetch("https://typescriptlang.org");
+        const result_1 = await fetch("https://typescriptlang.org");
         result = await res(result_1);
     }
     catch (reject) {
