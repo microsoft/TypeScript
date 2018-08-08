@@ -17,11 +17,11 @@ function rej(reject){
 async function f(){
     let result;
     try {
-        result = await fetch("https://typescriptlang.org");
-        result = await res(result);
+        let result_1 = await fetch("https://typescriptlang.org");
+        result = await res(result_1);
     }
     catch (reject) {
-        const result = await rej(reject);
+        result = await rej(reject);
     }
     return res(result);
 }

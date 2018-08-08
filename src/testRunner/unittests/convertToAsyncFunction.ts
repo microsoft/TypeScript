@@ -460,8 +460,9 @@ function [#|f|](): Promise<void>{
 }`);
     _testConvertToAsyncFunction("convertToAsyncFunction_basicWithComments", `
 function [#|f|](): Promise<void>{
-    // here's a comment
-    return fetch('https://typescriptlang.org').then( /* another one! */ result => { /* comment */ console.log(result) });
+    // a 
+    /*b*/ return /*c*/ fetch( /*d*/ 'https://typescriptlang.org' /*e*/).then( /*f*/ result /*g*/ => { /*h*/ console.log(/*i*/ result /*j*/) /*k*/}/*l*/);
+    // m
 }`);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunction", `
@@ -958,6 +959,62 @@ function rej(reject){
 }
 `
         );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMatchingTypes01", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result): number {
+    return 5;
+}
+
+function rej(reject): number {
+    return 3;
+}
+`
+        );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMatchingTypes02", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res => 0).catch(rej => 1).then(res);
+}
+
+function res(result): number {
+    return 5;
+}
+`
+        );
+
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_LocalReturn", `
+function [#|f|]() {
+    let x = fetch("https://typescriptlang.org").then(res => console.log(res));
+    return x.catch(err => console.log("Error!", err));
+}
+
+`)
+       _testConvertToAsyncFunction("convertToAsyncFunction_PromiseCallInner", `
+function [#|f|]() {
+    return fetch(Promise.resolve(1).then(res => "https://typescriptlang.org")).catch(err => console.log(err));
+}
+
+`)
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_CatchFollowedByCall", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).toString();
+}
+
+function res(result){
+    return result;
+}
+
+function rej(reject){
+    return reject;
+}
+`
+        );
+
 
         _testConvertToAsyncFunction("convertToAsyncFunction_Scope2", `
 function [#|f|](){

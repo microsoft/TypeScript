@@ -4,18 +4,18 @@ function /*[#|*/f/*|]*/(){
     return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
 }
 
-function res(result){
-    return result;
+function res(result): number {
+    return 5;
 }
 
-function rej(reject){
-    return reject;
+function rej(reject): number {
+    return 3;
 }
 
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f(){
-    let result: any;
+    let result: number;
     try {
         let result_1 = await fetch("https://typescriptlang.org");
         result = await res(result_1);
@@ -26,10 +26,10 @@ async function f(){
     return res(result);
 }
 
-function res(result){
-    return result;
+function res(result): number {
+    return 5;
 }
 
-function rej(reject){
-    return reject;
+function rej(reject): number {
+    return 3;
 }

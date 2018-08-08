@@ -12,7 +12,7 @@ function /*[#|*/innerPromise/*|]*/(): Promise<string> {
 
 async function innerPromise(): Promise<string> {
     const resp = await fetch("https://typescriptlang.org");
-    let blob_1;
+    let blob_1: any;
     try {
         const blob = await resp.blob();
         blob_1 = blob.byteOffset;
