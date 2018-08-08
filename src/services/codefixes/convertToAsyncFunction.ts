@@ -20,8 +20,8 @@ namespace ts.codefix {
     */
     interface SynthIdentifier {
         identifier: Identifier;
-        numberOfUsesOriginal: number;
-        numberOfUsesSynthesized: number;
+        numberOfAssignmentsOriginal: number;
+        numberOfAssignmentsSynthesized: number;
     }
 
     interface SymbolAndIdentifier {
@@ -87,7 +87,7 @@ namespace ts.codefix {
     function getConstIdentifiers(synthNamesMap: Map<SynthIdentifier>): Identifier[] {
         const constIdentifiers: Identifier[] = [];
         synthNamesMap.forEach((val) => {
-            if (val.numberOfUsesOriginal === 0) {
+            if (val.numberOfAssignmentsOriginal === 0) {
                 constIdentifiers.push(val.identifier);
             }
         });
@@ -178,7 +178,7 @@ namespace ts.codefix {
 
                     if (!setName) {
                         identsToRenameMap.set(getSymbolId(symbol).toString(), getSynthesizedDeepClone(node));
-                        synthNamesMap.set(getSymbolId(symbol).toString(), { identifier: getSynthesizedDeepClone(node), numberOfUsesOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfUsesSynthesized: 0 });
+                        synthNamesMap.set(getSymbolId(symbol).toString(), { identifier: getSynthesizedDeepClone(node), numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
                         if ((isParameter(node.parent) && isCallbackOnTypePromise(node.parent.parent, setOfAllCallbacksToReturn)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push({identifier: node, symbol});
                         }
@@ -227,11 +227,7 @@ namespace ts.codefix {
 
     function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
         const numVarsSameName = allVarNames.filter(elem => elem.identifier.text === name.text).length;
-        return numVarsSameName === 0 ? { identifier: name, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 } : { identifier: createIdentifier(name.text + "_" + numVarsSameName), numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
-    }
-
-    function returnsAPromise(node: Expression, nodeType: Type, checker: TypeChecker): boolean {
-        return (!isCallExpression(node) || !hasPropertyAccessExpressionWithName(node, "then") && !hasPropertyAccessExpressionWithName(node, "catch")) && !!checker.getPromisedTypeOfPromise(nodeType);
+        return numVarsSameName === 0 ? { identifier: name, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 } : { identifier: createIdentifier(name.text + "_" + numVarsSameName), numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
     }
 
     // dispatch function to recursively build the refactoring
@@ -254,7 +250,7 @@ namespace ts.codefix {
         else if (isPropertyAccessExpression(node)) {
             return transformCallback(node.expression, transformer, outermostParent, prevArgName);
         }
-        else if (nodeType && returnsAPromise(node, nodeType, transformer.checker)) {
+        else if (nodeType && transformer.checker.getPromisedTypeOfPromise(nodeType)) {
             return transformPromiseCall(node, transformer, prevArgName);
         }
 
@@ -268,7 +264,7 @@ namespace ts.codefix {
 
         let varDecl;
         if (prevArgName && !shouldReturn) {
-            prevArgName.numberOfUsesOriginal = 2; // Try block and catch block
+            prevArgName.numberOfAssignmentsOriginal = 2; // Try block and catch block
             varDecl = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier))], NodeFlags.Let));
             transformer.synthNamesMap.forEach((val, key) => {
                 if (val.identifier.text === prevArgName.identifier.text) {
@@ -332,12 +328,12 @@ namespace ts.codefix {
     }
 
     function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
-        if (prevArgName.numberOfUsesSynthesized < prevArgName.numberOfUsesOriginal) {
-            prevArgName.numberOfUsesSynthesized += 1;
+        if (prevArgName.numberOfAssignmentsSynthesized < prevArgName.numberOfAssignmentsOriginal) {
+            prevArgName.numberOfAssignmentsSynthesized += 1;
             return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))]);
         }
 
-        prevArgName.numberOfUsesSynthesized += 1;
+        prevArgName.numberOfAssignmentsSynthesized += 1;
         return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
             (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
     }
@@ -470,11 +466,11 @@ namespace ts.codefix {
             const symbol = getSymbol(originalNode);
 
             if (!symbol) {
-                return { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
+                return { identifier: node, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry || { identifier: node, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
+            return mapEntry || { identifier: node, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
         }
 
         function getSymbol(node: Node): Symbol | undefined {
@@ -494,14 +490,14 @@ namespace ts.codefix {
             }
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
-            name = { identifier: funcNode.arguments[0] as Identifier, numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
+            name = { identifier: funcNode.arguments[0] as Identifier, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
         }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryIfExists(funcNode);
         }
 
         if (!name || name.identifier === undefined || name.identifier.text === "_" || name.identifier.text === "undefined") {
-            return { identifier: createIdentifier(""), numberOfUsesOriginal: 0, numberOfUsesSynthesized: 0 };
+            return { identifier: createIdentifier(""), numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
         }
 
         return name;
