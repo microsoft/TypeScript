@@ -20,8 +20,8 @@ namespace ts.codefix {
     */
     interface SynthIdentifier {
         identifier: Identifier;
-        numberOfUsesOriginal: number; 
-        numberOfUsesSynthesized: number; 
+        numberOfUsesOriginal: number;
+        numberOfUsesSynthesized: number;
     }
 
     interface Transformer {
@@ -108,10 +108,10 @@ namespace ts.codefix {
             else if (isPromiseReturningExpression(node, checker, "catch")) {
                 setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
                 // if .catch() is the last callback, move leftward in the callback chain until we hit something else that should be returned
-                forEachChild(node, visit); 
+                forEachChild(node, visit);
             }
             else if (isPromiseReturningExpression(node, checker)) {
-                setOfCallbacksToReturn.set(getNodeId(node).toString(), true); 
+                setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
                 // don't recurse here, since we won't refactor any children or arguments of the expression
             }
             else {
@@ -196,7 +196,28 @@ namespace ts.codefix {
             return false;
         }
 
-        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, setOfAllCallbacksToReturn, checker, originalType);
+        function deepCloneCallback(node: Node, clone: Node) {
+           const type = checker.getTypeAtLocation(node);
+           const symbol = checker.getSymbolAtLocation(node);
+           const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
+ 
+            if (renameInfo && originalType) {
+                const newIdentifier = identsToRenameMap.get(String(getSymbolId(symbol!)))!;
+                if (type) {
+                    originalType.set(newIdentifier.text, type);
+                }
+            }
+
+            if (setOfAllCallbacksToReturn) {
+                const val = setOfAllCallbacksToReturn.get(getNodeId(node!).toString());
+                if (val !== undefined) {
+                    setOfAllCallbacksToReturn.delete(getNodeId(node!).toString());
+                    setOfAllCallbacksToReturn.set(getNodeId(clone).toString(), val);
+                }
+            }
+        }
+
+        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, /*setOfAllCallbacksToReturn,*/ checker, /*originalType*/ deepCloneCallback);
     }
 
     function getNewNameIfConflict(name: Identifier, allVarNames: [Identifier, Symbol][]): SynthIdentifier {

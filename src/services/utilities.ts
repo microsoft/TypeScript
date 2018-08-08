@@ -1626,49 +1626,32 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
-
-        // TODO use a callback to update the nodeIdMap and originalType
+    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any/*nodeIdMap?: Map<boolean>, originalType?: Map<Type>*/): T {
 
         let clone;
         if (node && isIdentifier(node!) && renameMap && checker) {
-            const type = checker.getTypeAtLocation(node!);
             const symbol = checker.getSymbolAtLocation(node!);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
-            if (renameInfo) {  // never rename a function TODO: do this on the renameFunction side
+            if (renameInfo) { 
                 clone = createIdentifier(renameInfo.text);
             }
-
-            if (renameInfo && originalType) {
-                const newIdentifier = renameMap.get(String(getSymbolId(symbol!)))!;
-                if (type) {
-                    originalType.set(newIdentifier.text, type);
-                }
-            }
-
         }
 
         if (!clone) {
-            clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, nodeIdMap, checker, originalType);
+            clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker, callback);
         }
-        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
 
-        if (nodeIdMap) {
-            const val = nodeIdMap.get(getNodeId(node!).toString());
-            if (val !== undefined) {
-                nodeIdMap.delete(getNodeId(node!).toString());
-                nodeIdMap.set(getNodeId(clone).toString(), val);
-            }
-        }
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        if (callback && node) callback(node!, clone);
 
         return clone as T;
     }
 
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         const visited = visitEachChild(node, function wrapper(node) {
-            return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, nodeIdMap, checker, originalType);
+            return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, checker, callback);
         }, nullTransformationContext);
 
         if (visited === node) {
