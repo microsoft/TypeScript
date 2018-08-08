@@ -9200,6 +9200,9 @@ namespace ts {
                     error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                 }
             }
+            if (isTypeAny(indexType)) {
+                return indexType;
+            }
             return accessNode ? errorType : unknownType;
         }
 
