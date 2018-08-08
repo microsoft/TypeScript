@@ -329,9 +329,14 @@ namespace ts {
                     name: "/a.ts",
                     symlinks: ["/sub/node_modules/a/index.ts"],
                 },
+                {
+                    name: "/sub/node_modules/a/package.json",
+                    content: '{"version": "0.0.0", "main": "./index"}'
+                }
             );
+            const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
             const cache = createModuleResolutionCache("/", (f) => f);
-            let resolution = nodeModuleNameResolver("a", "/sub/foo.ts", {}, host, cache);
+            let resolution = resolveModuleName("a", "/sub/foo.ts", compilerOptions, host, cache);
             checkResolvedModule(resolution.resolvedModule, {
                 extension: Extension.Ts,
                 isExternalLibraryImport: true,
@@ -339,7 +344,7 @@ namespace ts {
                 packageId: undefined,
                 resolvedFileName: "/a.ts",
             });
-            resolution = nodeModuleNameResolver("a", "/foo.ts", {}, host, cache);
+            resolution = resolveModuleName("a", "/foo.ts", compilerOptions, host, cache);
             assert.isUndefined(resolution.resolvedModule, "lookup in parent directory doesn't hit the cache");
         });
     });
