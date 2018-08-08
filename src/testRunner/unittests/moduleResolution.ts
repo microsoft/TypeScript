@@ -336,7 +336,7 @@ namespace ts {
             );
             const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
             const cache = createModuleResolutionCache("/", (f) => f);
-            let resolution = resolveModuleName("a", "/sub/foo.ts", compilerOptions, host, cache);
+            let resolution = resolveModuleName("a", "/sub/dir/foo.ts", compilerOptions, host, cache);
             checkResolvedModule(resolution.resolvedModule, {
                 extension: Extension.Ts,
                 isExternalLibraryImport: true,
