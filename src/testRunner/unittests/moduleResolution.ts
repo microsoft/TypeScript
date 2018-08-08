@@ -194,6 +194,21 @@ namespace ts {
     });
 
     describe("Node module resolution - non-relative paths", () => {
+        it("computes correct commonPrefix for moduleName cache", () => {
+            const cache = createModuleResolutionCache("/", (f) => f).getOrCreateCacheForModuleName("a");
+            cache.set("/sub", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/sub/node_modules/a/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/sub"));
+            assert.isUndefined(cache.get("/"));
+        });
+
         it("load module as file - ts files not loaded", () => {
             test(/*hasDirectoryExists*/ false);
             test(/*hasDirectoryExists*/ true);
