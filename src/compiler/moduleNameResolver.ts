@@ -407,18 +407,17 @@ namespace ts {
                 // directory: /a/b/c/d/e
                 // resolvedFileName: /a/b/foo.d.ts
                 const commonPrefix = getCommonPrefix(path, resolvedFileName);
+                if (commonPrefix === undefined) {
+                    return;
+                }
                 let current = path;
-                while (true) {
+                while (current !== commonPrefix) {
                     const parent = getDirectoryPath(current);
                     if (parent === current || directoryPathMap.has(parent)) {
                         break;
                     }
                     directoryPathMap.set(parent, result);
                     current = parent;
-
-                    if (current === commonPrefix) {
-                        break;
-                    }
                 }
             }
 
@@ -432,6 +431,10 @@ namespace ts {
                 let i = 0;
                 while (i < Math.min(directory.length, resolutionDirectory.length) && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
                     i++;
+                }
+
+                if (i === directory.length && resolutionDirectory.length > i && resolutionDirectory[i] === directorySeparator) {
+                    return directory;
                 }
 
                 // find last directory separator before position i
