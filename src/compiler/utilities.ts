@@ -907,6 +907,10 @@ namespace ts {
         return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
     }
 
+    export function isDeclarationReadonly(declaration: Declaration): boolean {
+        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration));
+    }
+
     export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
         return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
     }

@@ -21732,7 +21732,7 @@ namespace ts {
             const initializer = getEffectiveInitializer(declaration)!;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
+                isDeclarationReadonly(declaration) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
             if (isInJavaScriptFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
@@ -28063,7 +28063,7 @@ namespace ts {
         }
 
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
-            if (isVariableDeclaration(node) && isVarConst(node)) {
+            if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
                 return !!(type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral);
             }
@@ -29399,26 +29399,27 @@ namespace ts {
                 (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
         }
 
+        function checkAmbientInitializer(node: VariableDeclaration | PropertyDeclaration | PropertySignature) {
+            const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
+            if (node.initializer) {
+                if (isConstOrReadonly && !node.type) {
+                    if (!isStringOrNumberLiteralExpression(node.initializer)) {
+                        return grammarErrorOnNode(node.initializer, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
+                    }
+                }
+                else {
+                    return grammarErrorOnNode(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                }
+            }
+            if (node.initializer && !(isConstOrReadonly && isStringOrNumberLiteralExpression(node.initializer))) {
+                return grammarErrorOnNode(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+            }
+        }
+
         function checkGrammarVariableDeclaration(node: VariableDeclaration) {
             if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
                 if (node.flags & NodeFlags.Ambient) {
-                    if (node.initializer) {
-                        if (isVarConst(node) && !node.type) {
-                            if (!isStringOrNumberLiteralExpression(node.initializer)) {
-                                return grammarErrorOnNode(node.initializer, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
-                            }
-                        }
-                        else {
-                            // Error on equals token which immediate precedes the initializer
-                            const equalsTokenLength = "=".length;
-                            return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-                        }
-                    }
-                    if (node.initializer && !(isVarConst(node) && isStringOrNumberLiteralExpression(node.initializer))) {
-                        // Error on equals token which immediate precedes the initializer
-                        const equalsTokenLength = "=".length;
-                        return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-                    }
+                    checkAmbientInitializer(node);
                 }
                 else if (!node.initializer) {
                     if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
@@ -29611,8 +29612,8 @@ namespace ts {
                 }
             }
 
-            if (node.flags & NodeFlags.Ambient && node.initializer) {
-                return grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+            if (node.flags & NodeFlags.Ambient) {
+                checkAmbientInitializer(node);
             }
 
             if (isPropertyDeclaration(node) && node.exclamationToken && (!isClassLike(node.parent) || !node.type || node.initializer ||
