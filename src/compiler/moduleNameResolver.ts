@@ -403,10 +403,12 @@ namespace ts {
 
                 const resolvedFileName = result.resolvedModule && result.resolvedModule.resolvedFileName;
                 // find common prefix between directory and resolved file name
-                // this common prefix should be the shorted path that has the same resolution
+                // this common prefix should be the shortest path that has the same resolution
                 // directory: /a/b/c/d/e
                 // resolvedFileName: /a/b/foo.d.ts
-                const commonPrefix = getCommonPrefix(path, resolvedFileName);
+                // commonPrefix: /a/b
+                // for failed lookups use the root directory as commonPrefix
+                const commonPrefix = resolvedFileName ? getCommonPrefix(path, resolvedFileName) : path.substr(0, getRootLength(path));
                 if (!commonPrefix) {
                     return;
                 }
@@ -421,10 +423,7 @@ namespace ts {
                 }
             }
 
-            function getCommonPrefix(directory: Path, resolution: string | undefined) {
-                if (resolution === undefined) {
-                    return undefined;
-                }
+            function getCommonPrefix(directory: Path, resolution: string) {
                 const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
 
                 let current = directory;

@@ -264,6 +264,16 @@ namespace ts {
             assert.isDefined(cache.get("c:/foo"));
             assert.isUndefined(cache.get("c:/"));
             assert.isUndefined(cache.get("d:/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("f");
+            cache.set("/foo/bar/baz", {
+                resolvedModule: undefined,
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/foo/bar/baz"));
+            assert.isDefined(cache.get("/foo/bar"));
+            assert.isDefined(cache.get("/foo"));
+            assert.isDefined(cache.get("/"));
         });
 
         it("load module as file - ts files not loaded", () => {
