@@ -20,6 +20,7 @@ namespace ts.codefix {
     */
     interface SynthIdentifier {
         identifier: Identifier;
+        type: Type | undefined;
         numberOfAssignmentsOriginal: number;
         numberOfAssignmentsSynthesized: number;
     }
@@ -180,7 +181,7 @@ namespace ts.codefix {
                     else {
                         const identifier = getSynthesizedDeepClone(node);
                         identsToRenameMap.set(symbolIdString, identifier);
-                        synthNamesMap.set(symbolIdString, { identifier, numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
+                        synthNamesMap.set(symbolIdString, { identifier, type: undefined, numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
                         if ((isParameter(node.parent) && isCallbackOnTypePromise(node.parent.parent, setOfAllCallbacksToReturn)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push({ identifier, symbol });
                         }
@@ -221,12 +222,15 @@ namespace ts.codefix {
             }
         }
 
-        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, /*setOfAllCallbacksToReturn,*/ checker, /*originalType*/ deepCloneCallback);
+        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker, deepCloneCallback);
     }
 
     function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
         const numVarsSameName = allVarNames.filter(elem => elem.identifier.text === name.text).length;
-        return numVarsSameName === 0 ? { identifier: name, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 } : { identifier: createIdentifier(name.text + "_" + numVarsSameName), numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
+        const numberOfAssignmentsOriginal = 0, numberOfAssignmentsSynthesized = 0;
+        const type = undefined;
+        const identifier = numVarsSameName == 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
+        return { identifier: identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized } ;
     }
 
     // dispatch function to recursively build the refactoring
@@ -261,23 +265,44 @@ namespace ts.codefix {
         const argName = getArgName(func, transformer);
         const shouldReturn = transformer.setOfCallbacksToReturn.get(getNodeId(node).toString());
 
-        let varDecl;
+        /* 
+            If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
+            To do this, we will need to synthesize a variable that we were not aware of while we were adding identifiers to the synthNamesMap
+            We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
+        */
         if (prevArgName && !shouldReturn) {
             prevArgName.numberOfAssignmentsOriginal = 2; // Try block and catch block
-            varDecl = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier))], NodeFlags.Let));
             transformer.synthNamesMap.forEach((val, key) => {
                 if (val.identifier.text === prevArgName.identifier.text) {
                     transformer.synthNamesMap.set(key, getNewNameIfConflict(prevArgName.identifier, transformer.allVarNames))
                 }
             })
         }
+
         const tryBlock = createBlock(transformCallback(node.expression, transformer, node, prevArgName));
+        const tryType = prevArgName && prevArgName.type;
 
         const callbackBody = getCallbackBody(func, prevArgName, argName, node, transformer);
+        const catchType = prevArgName && prevArgName.type;
         const catchClause = createCatchClause(argName.identifier.text, createBlock(callbackBody));
+        
+
+        /*
+            In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
+        */
+        let varDeclList;
+        if (prevArgName && !shouldReturn) {
+            let typeArray: Type[] = [];
+            if (tryType) typeArray.push(tryType);
+            if (catchType) typeArray.push(catchType);
+            const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
+            const unionTypeNode = isInJavaScriptFile(node) ? transformer.checker.typeToTypeNode(unionType) : undefined;
+            const varDecl = [createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), unionTypeNode)]
+            varDeclList = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(varDecl, NodeFlags.Let));
+        }
 
         const tryStatement = createTry(tryBlock, catchClause, /*finallyBlock*/ undefined);
-        return varDecl ? [varDecl, tryStatement] : [tryStatement];
+        return varDeclList ? [varDeclList, tryStatement] : [tryStatement];
     }
 
     function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
@@ -327,6 +352,8 @@ namespace ts.codefix {
     }
 
     function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
+        prevArgName.type = transformer.checker.getTypeAtLocation(rightHandSide);
+
         if (prevArgName.numberOfAssignmentsSynthesized < prevArgName.numberOfAssignmentsOriginal) {
             prevArgName.numberOfAssignmentsSynthesized += 1;
             return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))]);
@@ -460,16 +487,21 @@ namespace ts.codefix {
 
     function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier {
 
+        const numberOfAssignmentsOriginal = 0, numberOfAssignmentsSynthesized = 0;
+        const type = undefined;
+
         function getMapEntryIfExists(node: Identifier): SynthIdentifier {
             const originalNode = getOriginalNode(node);
             const symbol = getSymbol(originalNode);
+            const identifier = node;
+            
 
             if (!symbol) {
-                return { identifier: node, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
+                return { identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized};
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry || { identifier: node, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
+            return mapEntry || { identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
         }
 
         function getSymbol(node: Node): Symbol | undefined {
@@ -489,14 +521,14 @@ namespace ts.codefix {
             }
         }
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
-            name = { identifier: funcNode.arguments[0] as Identifier, numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
+            name = { identifier: funcNode.arguments[0] as Identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
         }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryIfExists(funcNode);
         }
 
         if (!name || name.identifier === undefined || name.identifier.text === "_" || name.identifier.text === "undefined") {
-            return { identifier: createIdentifier(""), numberOfAssignmentsOriginal: 0, numberOfAssignmentsSynthesized: 0 };
+            return { identifier: createIdentifier(""), type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
         }
 
         return name;
