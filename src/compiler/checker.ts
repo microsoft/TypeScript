@@ -14028,10 +14028,10 @@ namespace ts {
                 getInitialTypeOfBindingElement(node);
         }
 
-        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression) {
-            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
+        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression, reference: Node) {
+            return getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
                 getInitialType(<VariableDeclaration | BindingElement>node) :
-                getAssignedType(node);
+                getAssignedType(node), reference);
         }
 
         function isEmptyArrayAssignment(node: VariableDeclaration | BindingElement | Expression) {
@@ -14414,11 +14414,11 @@ namespace ts {
                         if (isEmptyArrayAssignment(node)) {
                             return getEvolvingArrayType(neverType);
                         }
-                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(node));
+                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(node, reference));
                         return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
                     }
                     if (declaredType.flags & TypeFlags.Union) {
-                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node));
+                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node, reference));
                     }
                     return declaredType;
                 }
@@ -15030,14 +15030,14 @@ namespace ts {
             return type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
         }
 
-        function getConstraintForLocation(type: Type, node: Node): Type;
-        function getConstraintForLocation(type: Type | undefined, node: Node): Type | undefined;
-        function getConstraintForLocation(type: Type, node: Node): Type | undefined {
+        function getConstraintForLocation(type: Type, node?: Node): Type;
+        function getConstraintForLocation(type: Type | undefined, node?: Node): Type | undefined;
+        function getConstraintForLocation(type: Type, node?: Node): Type | undefined {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            if (type && isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
+            if (node && type && isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
                 return mapType(getWidenedType(type), getBaseConstraintOrType);
             }
             return type;
