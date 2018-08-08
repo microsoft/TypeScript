@@ -1633,7 +1633,7 @@ namespace ts {
             const symbol = checker.getSymbolAtLocation(node!);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
-            if (renameInfo) { 
+            if (renameInfo) {
                 clone = createIdentifier(renameInfo.text);
             }
         }

@@ -12,7 +12,7 @@ namespace ts.codefix {
     });
 
 
-    /* 
+    /*
         custom type to encapsulate information for variable declarations synthesized in the refactor
         numberOfUsesOriginal - number of times the variable should be assigned in the refactor
         numberOfUsesSynthesized - count of how many times the variable has been assigned so far
@@ -37,7 +37,7 @@ namespace ts.codefix {
         setOfExpressionsToReturn: Map<true>; // keys are the node ids of the expressions
         context: CodeFixContextBase;
         constIdentifiers: Identifier[];
-        originalTypeMap: Map<Type>; // keys are the identifier's text 
+        originalTypeMap: Map<Type>; // keys are the identifier's text
         isInJSFile: boolean;
     }
 
@@ -149,7 +149,7 @@ namespace ts.codefix {
     */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllExpressionsToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
 
-        let identsToRenameMap: Map<Identifier> = createMap();
+        const identsToRenameMap: Map<Identifier> = createMap();
         forEachChild(nodeToRename, function visit(node: Node) {
             if (!isIdentifier(node)) {
                 forEachChild(node, visit);
@@ -165,7 +165,7 @@ namespace ts.codefix {
                 const symbolIdString = getSymbolId(symbol).toString();
 
                 // if the identifier refers to a function we want to add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
-                // Note - the choice of the first call signature is arbitrary 
+                // Note - the choice of the first call signature is arbitrary
                 if (callSignatures && callSignatures.length > 0 && callSignatures[0].parameters.length && !synthNamesMap.has(symbolIdString)) {
                     const synthName = getNewNameIfConflict(createIdentifier(callSignatures[0].parameters[0].name), allVarNames);
                     synthNamesMap.set(symbolIdString, synthName);
@@ -196,7 +196,7 @@ namespace ts.codefix {
         return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker, deepCloneCallback);
 
         function isExpressionOrCallOnTypePromise(child: Node): boolean {
-            let node = child.parent;
+            const node = child.parent;
             if (isCallExpression(node) || isIdentifier(node) && !setOfAllExpressionsToReturn.get(getNodeId(node).toString())) {
                 const nodeType = checker.getTypeAtLocation(node);
                 const isPromise = nodeType && checker.getPromisedTypeOfPromise(nodeType);
@@ -221,9 +221,9 @@ namespace ts.codefix {
                 }
             }
 
-            const val = setOfAllExpressionsToReturn.get(getNodeId(node!).toString());
+            const val = setOfAllExpressionsToReturn.get(getNodeId(node).toString());
             if (val !== undefined) {
-                setOfAllExpressionsToReturn.delete(getNodeId(node!).toString());
+                setOfAllExpressionsToReturn.delete(getNodeId(node).toString());
                 setOfAllExpressionsToReturn.set(getNodeId(clone).toString(), val);
             }
         }
@@ -233,8 +233,8 @@ namespace ts.codefix {
     function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
         const numVarsSameName = allVarNames.filter(elem => elem.identifier.text === name.text).length;
         const numberOfAssignmentsOriginal = 0, numberOfAssignmentsSynthesized = 0;
-        const identifier = numVarsSameName == 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
-        return { identifier: identifier, types: [], numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
+        const identifier = numVarsSameName === 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
+        return { identifier, types: [], numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
     }
 
     // dispatch function to recursively build the refactoring
@@ -269,7 +269,7 @@ namespace ts.codefix {
         const argName = getArgName(func, transformer);
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
 
-        /* 
+        /*
             If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
             To do this, we will need to synthesize a variable that we were not aware of while we were adding identifiers to the synthNamesMap
             We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
@@ -278,9 +278,9 @@ namespace ts.codefix {
             prevArgName.numberOfAssignmentsOriginal = 2; // Try block and catch block
             transformer.synthNamesMap.forEach((val, key) => {
                 if (val.identifier.text === prevArgName.identifier.text) {
-                    transformer.synthNamesMap.set(key, getNewNameIfConflict(prevArgName.identifier, transformer.allVarNames))
+                    transformer.synthNamesMap.set(key, getNewNameIfConflict(prevArgName.identifier, transformer.allVarNames));
                 }
-            })
+            });
 
             // update the constIdentifiers list
             if (transformer.constIdentifiers.some(elem => elem.text === prevArgName.identifier.text)) {
@@ -298,10 +298,10 @@ namespace ts.codefix {
         */
         let varDeclList;
         if (prevArgName && !shouldReturn) {
-            let typeArray: Type[] = prevArgName.types;
+            const typeArray: Type[] = prevArgName.types;
             const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
             const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType);
-            const varDecl = [createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), unionTypeNode)]
+            const varDecl = [createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), unionTypeNode)];
             varDeclList = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(varDecl, NodeFlags.Let));
         }
 

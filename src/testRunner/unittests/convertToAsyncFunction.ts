@@ -1094,13 +1094,13 @@ function [#|f|]() {
     return x.catch(err => console.log("Error!", err));
 }
 
-`)
+`);
        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseCallInner", `
 function [#|f|]() {
     return fetch(Promise.resolve(1).then(res => "https://typescriptlang.org")).catch(err => console.log(err));
 }
 
-`)
+`);
 _testConvertToAsyncFunctionFailed("convertToAsyncFunction_CatchFollowedByCall", `
 function [#|f|](){
     return fetch("https://typescriptlang.org").then(res).catch(rej).toString();
