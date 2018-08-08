@@ -26,7 +26,7 @@ namespace ts.codefix {
 
     interface SymbolAndIdentifier {
         identifier: Identifier;
-        symbol: Symbol; 
+        symbol: Symbol;
     }
 
     interface Transformer {
@@ -143,50 +143,53 @@ namespace ts.codefix {
         return symbol.valueDeclaration && symbol.valueDeclaration.getSourceFile() === sourceFile;
     }
 
-    // varNamesMap holds all of the variables in original source code. synthNamesMap holds all of the variables created by the refactor
+    /*
+        Renaming of identifiers may be neccesary as the refactor changes scopes -
+        This function collects all existing identifier names and names of identifiers that will be created in the refactor.
+        It then checks for any collisions and renames them through getSynthesizedDeepClone
+    */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllCallbacksToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
 
         let identsToRenameMap: Map<Identifier> = createMap();
         forEachChild(nodeToRename, function visit(node: Node) {
-            const symbol = checker.getSymbolAtLocation(node);
-            const isDefinedInFile = symbol ? declaredInFile(symbol, context.sourceFile) : undefined;
+            if (!isIdentifier(node)) {
+                forEachChild(node, visit);
+                return;
+            }
 
-            if (isIdentifier(node) && symbol && isDefinedInFile) {
+            const symbol = checker.getSymbolAtLocation(node);
+            const isDefinedInFile = symbol && declaredInFile(symbol, context.sourceFile);
+
+            if (symbol && isDefinedInFile) {
                 const type = checker.getTypeAtLocation(node);
+                const callSignatures = type && type.getCallSignatures();
+                const symbolIdString = getSymbolId(symbol).toString();
 
                 // if the identifier refers to a function
-                if (type && type.getCallSignatures().length > 0 && isFunctionRef(node)) {
-                    if (type.getCallSignatures()[0].parameters.length && !synthNamesMap.get(getSymbolId(symbol).toString())) {
+                if (callSignatures && callSignatures.length > 0 && isFunctionRef(node)) {
+                    if (callSignatures[0].parameters.length && !synthNamesMap.has(symbolIdString)) {
                         // add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
-                        const synthName = getNewNameIfConflict(createIdentifier(type.getCallSignatures()[0].parameters[0].name), allVarNames);
-                        synthNamesMap.set(getSymbolId(symbol).toString(), synthName);
-                        allVarNames.push({identifier: synthName.identifier, symbol});
+                        const synthName = getNewNameIfConflict(createIdentifier(callSignatures[0].parameters[0].name), allVarNames);
+                        synthNamesMap.set(symbolIdString, synthName);
+                        allVarNames.push({ identifier: synthName.identifier, symbol });
                     }
                 }
-                else if (node.parent && isParameter(node.parent) || isVariableDeclaration(node.parent)) {
-                    const newName = getNewNameIfConflict(node, allVarNames);
-                    let setName = false;
+                else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent))) {
 
-                    for (const ident of allVarNames) {
-                        if (ident.identifier.text === node.text && ident.symbol !== symbol) {
-                            identsToRenameMap.set(getSymbolId(symbol).toString(), newName.identifier);
-                            synthNamesMap.set(getSymbolId(symbol).toString(), newName);
-                            allVarNames.push({identifier: newName.identifier, symbol});
-                            setName = true;
-                        }
+                    if (allVarNames.some(ident => ident.identifier.text === node.text && ident.symbol !== symbol)) {
+                        const newName = getNewNameIfConflict(node, allVarNames);
+                        identsToRenameMap.set(symbolIdString, newName.identifier);
+                        synthNamesMap.set(symbolIdString, newName);
+                        allVarNames.push({ identifier: newName.identifier, symbol });
                     }
-
-                    if (!setName) {
-                        identsToRenameMap.set(getSymbolId(symbol).toString(), getSynthesizedDeepClone(node));
-                        synthNamesMap.set(getSymbolId(symbol).toString(), { identifier: getSynthesizedDeepClone(node), numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
+                    else {
+                        identsToRenameMap.set(symbolIdString, getSynthesizedDeepClone(node));
+                        synthNamesMap.set(symbolIdString, { identifier: getSynthesizedDeepClone(node), numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
                         if ((isParameter(node.parent) && isCallbackOnTypePromise(node.parent.parent, setOfAllCallbacksToReturn)) || isVariableDeclaration(node.parent)) {
-                            allVarNames.push({identifier: node, symbol});
+                            allVarNames.push({ identifier: node as Identifier, symbol });
                         }
                     }
                 }
-            }
-            else {
-                forEachChild(node, visit);
             }
         });
 
@@ -202,10 +205,10 @@ namespace ts.codefix {
         }
 
         function deepCloneCallback(node: Node, clone: Node) {
-           const type = checker.getTypeAtLocation(node);
-           const symbol = checker.getSymbolAtLocation(node);
-           const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
- 
+            const type = checker.getTypeAtLocation(node);
+            const symbol = checker.getSymbolAtLocation(node);
+            const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
+
             if (renameInfo && originalType) {
                 const newIdentifier = identsToRenameMap.get(String(getSymbolId(symbol!)))!;
                 if (type) {
