@@ -638,6 +638,10 @@ namespace ts {
         return false;
     }
 
+    export function getNonAugmentationDeclaration(symbol: Symbol) {
+        return forEach(symbol.declarations, d => isExternalModuleAugmentation(d) ? undefined : d);
+    }
+
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
         return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
     }

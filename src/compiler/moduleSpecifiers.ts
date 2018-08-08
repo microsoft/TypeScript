@@ -51,7 +51,7 @@ namespace ts.moduleSpecifiers {
         if (!files) {
             return Debug.fail("Files list must be present to resolve symlinks in specifier resolution");
         }
-        const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration);
+        const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(files, importingSourceFile.path, moduleSourceFile.fileName, info.getCanonicalFileName, host, redirectTargetsMap);
 
         const global = mapDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions));
@@ -232,8 +232,17 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
-        const decl = moduleSymbol.valueDeclaration;
-        if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
+        const decl = forEach(moduleSymbol.declarations, d => {
+            if (!isAmbientModule(d)) return;
+            if (isExternalModuleAugmentation(d)) {
+                if (!isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name))) {
+                    return d;
+                }
+                return;
+            }
+            return d;
+        });
+        if (decl && isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
             return decl.name.text;
         }
     }

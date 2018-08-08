@@ -46,13 +46,13 @@ var t = p.x;
 
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
 export as namespace Math2d;
->Math2d : typeof import("2")
+>Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
 
 export = M2D;
 >M2D : typeof M2D
 
 declare namespace M2D {
->M2D : typeof import("2")
+>M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
 
 	interface Point {
 		x: number;
