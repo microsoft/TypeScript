@@ -134,11 +134,6 @@ namespace ts.codefix {
         return !!(nodeType && checker.getPromisedTypeOfPromise(nodeType));
     }
 
-    function isFunctionRef(node: Node): boolean {
-        const callExpr = climbPastPropertyAccess(node);
-        return !isCallExpression(callExpr) || callExpr.expression !== node;
-    }
-
     function declaredInFile(symbol: Symbol, sourceFile: SourceFile): boolean {
         return symbol.valueDeclaration && symbol.valueDeclaration.getSourceFile() === sourceFile;
     }
@@ -165,17 +160,17 @@ namespace ts.codefix {
                 const callSignatures = type && type.getCallSignatures();
                 const symbolIdString = getSymbolId(symbol).toString();
 
-                // if the identifier refers to a function
-                if (callSignatures && callSignatures.length > 0 && isFunctionRef(node)) {
-                    if (callSignatures[0].parameters.length && !synthNamesMap.has(symbolIdString)) {
-                        // add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
-                        const synthName = getNewNameIfConflict(createIdentifier(callSignatures[0].parameters[0].name), allVarNames);
-                        synthNamesMap.set(symbolIdString, synthName);
-                        allVarNames.push({ identifier: synthName.identifier, symbol });
-                    }
+                // if the identifier refers to a function we want to add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
+                // Note - the choice of the first call signature is arbitrary 
+                if (callSignatures && callSignatures.length > 0 && callSignatures[0].parameters.length && !synthNamesMap.has(symbolIdString)) {
+                    const synthName = getNewNameIfConflict(createIdentifier(callSignatures[0].parameters[0].name), allVarNames);
+                    synthNamesMap.set(symbolIdString, synthName);
+                    allVarNames.push({ identifier: synthName.identifier, symbol });
                 }
+                // we only care about identifiers that are parameters and declarations (don't care about other uses)
                 else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent))) {
 
+                    // if the identifier name conflicts with a different identifier that we've already seen
                     if (allVarNames.some(ident => ident.identifier.text === node.text && ident.symbol !== symbol)) {
                         const newName = getNewNameIfConflict(node, allVarNames);
                         identsToRenameMap.set(symbolIdString, newName.identifier);
@@ -183,10 +178,11 @@ namespace ts.codefix {
                         allVarNames.push({ identifier: newName.identifier, symbol });
                     }
                     else {
-                        identsToRenameMap.set(symbolIdString, getSynthesizedDeepClone(node));
-                        synthNamesMap.set(symbolIdString, { identifier: getSynthesizedDeepClone(node), numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
+                        const identifier = getSynthesizedDeepClone(node);
+                        identsToRenameMap.set(symbolIdString, identifier);
+                        synthNamesMap.set(symbolIdString, { identifier, numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
                         if ((isParameter(node.parent) && isCallbackOnTypePromise(node.parent.parent, setOfAllCallbacksToReturn)) || isVariableDeclaration(node.parent)) {
-                            allVarNames.push({ identifier: node as Identifier, symbol });
+                            allVarNames.push({ identifier, symbol });
                         }
                     }
                 }
