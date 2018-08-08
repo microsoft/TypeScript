@@ -15,9 +15,9 @@ import { BindingKey } from '@loopback/context';
 export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
 >CONTROLLER_CLASS : BindingKey<import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>
 >BindingKey.create<ControllerClass>(null as any) : BindingKey<import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>
->BindingKey.create : <T extends import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>(ctor: T) => BindingKey<T>
+>BindingKey.create : <T extends any>(ctor: T) => BindingKey<T>
 >BindingKey : typeof BindingKey
->create : <T extends import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>(ctor: T) => BindingKey<T>
+>create : <T extends any>(ctor: T) => BindingKey<T>
 >null as any : any
 >null : null
 
@@ -37,7 +37,7 @@ export class BindingKey<T> {
 >__type : T
 
   static create<T extends Constructor<any>>(ctor: T) {
->create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
+>create : <T extends any>(ctor: T) => BindingKey<T>
 >ctor : T
 
     return new BindingKey<T>();

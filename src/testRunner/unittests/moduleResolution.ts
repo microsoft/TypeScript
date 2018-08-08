@@ -321,6 +321,27 @@ namespace ts {
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));
             });
         }
+
+        it("uses originalPath for caching", () => {
+            const host = createModuleResolutionHost(
+                /*hasDirectoryExists*/ true,
+                {
+                    name: "/a.ts",
+                    symlinks: ["/sub/node_modules/a/index.ts"],
+                },
+            );
+            const cache = createModuleResolutionCache("/", (f) => f);
+            let resolution = nodeModuleNameResolver("a", "/sub/foo.ts", {}, host, cache);
+            checkResolvedModule(resolution.resolvedModule, {
+                extension: Extension.Ts,
+                isExternalLibraryImport: true,
+                originalPath: "/sub/node_modules/a/index.ts",
+                packageId: undefined,
+                resolvedFileName: "/a.ts",
+            });
+            resolution = nodeModuleNameResolver("a", "/foo.ts", {}, host, cache);
+            assert.isUndefined(resolution.resolvedModule, "lookup in parent directory doesn't hit the cache");
+        });
     });
 
     describe("Module resolution - relative imports", () => {
