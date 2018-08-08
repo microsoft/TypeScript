@@ -177,15 +177,10 @@ namespace ts {
         file.text = file.text.updateProgram(newProgramText);
     }
 
-    function checkResolvedTypeDirective(expected: ResolvedTypeReferenceDirective, actual: ResolvedTypeReferenceDirective): boolean {
-        if (!expected === !actual) {
-            if (expected) {
-                assert.equal(expected.resolvedFileName, actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.equal(expected.primary, actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
-            }
-            return true;
-        }
-        return false;
+    function checkResolvedTypeDirective(actual: ResolvedTypeReferenceDirective, expected: ResolvedTypeReferenceDirective) {
+        assert.equal(actual.resolvedFileName, expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
+        assert.equal(actual.primary, expected.primary, `'primary': expected '${actual.primary}' to be equal to '${expected.primary}'`);
+        return true;
     }
 
     function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T> | undefined, getCache: (f: SourceFile) => Map<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
