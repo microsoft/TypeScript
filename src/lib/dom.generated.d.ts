@@ -3480,7 +3480,7 @@ declare var DOMMatrixReadOnly: {
 };
 
 interface DOMParser {
-    parseFromString(source: string, mimeType: string): Document;
+    parseFromString(str: string, type: SupportedType): Document;
 }
 
 declare var DOMParser: {
@@ -3887,6 +3887,8 @@ interface DhKeyGenParams extends Algorithm {
 }
 
 interface DocumentEventMap extends GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
+    "fullscreenchange": Event;
+    "fullscreenerror": Event;
     "readystatechange": ProgressEvent;
     "visibilitychange": Event;
 }
@@ -3928,7 +3930,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     /**
      * Specifies the beginning and end of the document body.
      */
-    body: HTMLElement | null;
+    body: HTMLElement;
     /**
      * Returns document's encoding.
      */
@@ -4004,6 +4006,13 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * Retrieves a collection, in source order, of all form objects in the document.
      */
     readonly forms: HTMLCollectionOf<HTMLFormElement>;
+    /** @deprecated */
+    readonly fullscreen: boolean;
+    /**
+     * Returns true if document has the ability to display elements fullscreen
+     * and fullscreen is supported, or false otherwise.
+     */
+    readonly fullscreenEnabled: boolean;
     /**
      * Returns the head element.
      */
@@ -4038,6 +4047,8 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * Contains information about the current URL.
      */
     location: Location | null;
+    onfullscreenchange: ((this: Document, ev: Event) => any) | null;
+    onfullscreenerror: ((this: Document, ev: Event) => any) | null;
     /**
      * Fires when the state of the object has changed.
      * @param ev The event
@@ -4085,6 +4096,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     /** @deprecated */
     captureEvents(): void;
     caretPositionFromPoint(x: number, y: number): CaretPosition | null;
+    caretRangeFromPoint(x: number, y: number): Range;
     /** @deprecated */
     clear(): void;
     /**
@@ -4309,7 +4321,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * @param filter A custom NodeFilter function to use.
      * @param entityReferenceExpansion A flag that specifies whether entity reference nodes are expanded.
      */
-    createTreeWalker(root: Node, whatToShow?: number, filter?: NodeFilter | null): TreeWalker;
+    createTreeWalker(root: Node, whatToShow?: number, filter?: NodeFilter | null, entityReferenceExpansion?: boolean): TreeWalker;
     /**
      * Returns the element for the specified x coordinate and the specified y coordinate.
      * @param x The x-offset
@@ -4325,6 +4337,11 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * @param value Value to assign.
      */
     execCommand(commandId: string, showUI?: boolean, value?: string): boolean;
+    /**
+     * Stops document's fullscreen element from being displayed fullscreen and
+     * resolves promise when done.
+     */
+    exitFullscreen(): Promise<void>;
     getAnimations(): Animation[];
     /**
      * Returns a reference to the first object with the specified value of the ID or NAME attribute.
@@ -4341,64 +4358,12 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      */
     getElementsByName(elementName: string): NodeListOf<HTMLElement>;
     /**
-     * Displays help information for the given command identifier.
-     * @param commandId Displays help information for the given command identifier.
-     */
-    /**
      * Retrieves a collection of objects based on the specified element name.
      * @param name Specifies the name of an element.
      */
     getElementsByTagName<K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>;
     getElementsByTagName<K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>;
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
-    /**
-     * Causes the element to receive the focus and executes the code specified by the onfocus event.
-     */
-    /**
-     * Retrieves the string associated with a command.
-     * @param commandId String that contains the identifier of a command. This can be any command identifier given in the list of Command Identifiers.
-     */
-    /**
-     * Returns the current value of the document, range, or current selection for the given command.
-     * @param commandId String that specifies a command identifier.
-     */
-    queryCommandValue(commandId: string): string;
-    /**
-     * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
-     */
-    /**
-     * Returns a Boolean value that indicates the current state of the command.
-     * @param commandId String that specifies a command identifier.
-     */
-    queryCommandState(commandId: string): boolean;
-    /** @deprecated */
-    releaseEvents(): void;
-    /**
-     * Returns a Boolean value that indicates whether the specified command is in the indeterminate state.
-     * @param commandId String that specifies a command identifier.
-     */
-    queryCommandIndeterm(commandId: string): boolean;
-    /**
-     * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
-     * @param commandId Specifies a command identifier.
-     */
-    queryCommandEnabled(commandId: string): boolean;
-    /**
-     * Gets a value indicating whether the object currently has focus.
-     */
-    hasFocus(): boolean;
-    /**
-     * Returns a Boolean value that indicates whether the current command is supported on the current range.
-     * @param commandId Specifies a command identifier.
-     */
-    queryCommandSupported(commandId: string): boolean;
-    msElementsFromRect(left: number, top: number, width: number, height: number): NodeListOf<Element>;
-    msElementsFromPoint(x: number, y: number): NodeListOf<Element>;
-    /**
-     * Writes one or more HTML expressions to a document in the specified window.
-     * @param content Specifies the text and HTML tags to write.
-     */
-    write(...text: string[]): void;
     /**
      * If namespace and localName are
      * "*" returns a HTMLCollection of all descendant elements.
@@ -4410,6 +4375,11 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
     getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
     /**
+     * Gets a value indicating whether the object currently has focus.
+     */
+    hasFocus(): boolean;
+    importNode<T extends Node>(importedNode: T, deep: boolean): T;
+    /**
      * Opens a new window and loads a document specified by a given URL. Also, opens a new window that uses the url parameter and the name parameter to collect the output of the write method and the writeln method.
      * @param url Specifies a MIME type for the document.
      * @param name Specifies the name of the window. This name is used as the value for the TARGET attribute on a form or an anchor element.
@@ -4417,12 +4387,46 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * @param replace Specifies whether the existing entry for the document is replaced in the history list.
      */
     open(url?: string, name?: string, features?: string, replace?: boolean): Document;
-    importNode<T extends Node>(importedNode: T, deep: boolean): T;
+    /**
+     * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
+     * @param commandId Specifies a command identifier.
+     */
+    queryCommandEnabled(commandId: string): boolean;
+    /**
+     * Returns a Boolean value that indicates whether the specified command is in the indeterminate state.
+     * @param commandId String that specifies a command identifier.
+     */
+    queryCommandIndeterm(commandId: string): boolean;
+    /**
+     * Returns a Boolean value that indicates the current state of the command.
+     * @param commandId String that specifies a command identifier.
+     */
+    queryCommandState(commandId: string): boolean;
+    /**
+     * Returns a Boolean value that indicates whether the current command is supported on the current range.
+     * @param commandId Specifies a command identifier.
+     */
+    queryCommandSupported(commandId: string): boolean;
+    /**
+     * Returns the current value of the document, range, or current selection for the given command.
+     * @param commandId String that specifies a command identifier.
+     */
+    queryCommandValue(commandId: string): string;
+    /** @deprecated */
+    releaseEvents(): void;
+    /**
+     * Writes one or more HTML expressions to a document in the specified window.
+     * @param content Specifies the text and HTML tags to write.
+     */
+    write(...text: string[]): void;
     /**
      * Writes one or more HTML expressions, followed by a carriage return, to a document in the specified window.
      * @param content The text and HTML tags to write.
      */
     writeln(...text: string[]): void;
+    /**
+     * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
+     */
     addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -4626,6 +4630,11 @@ declare var EXT_texture_filter_anisotropic: {
     readonly TEXTURE_MAX_ANISOTROPY_EXT: number;
 };
 
+interface ElementEventMap {
+    "fullscreenchange": Event;
+    "fullscreenerror": Event;
+}
+
 interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode, Slotable, Animatable {
     readonly assignedSlot: HTMLSlotElement | null;
     readonly attributes: NamedNodeMap;
@@ -4648,6 +4657,7 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
      * change it.
      */
     id: string;
+    innerHTML: string;
     /**
      * Returns the local name.
      */
@@ -4656,6 +4666,9 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
      * Returns the namespace.
      */
     readonly namespaceURI: string | null;
+    onfullscreenchange: ((this: Element, ev: Event) => any) | null;
+    onfullscreenerror: ((this: Element, ev: Event) => any) | null;
+    outerHTML: string;
     /**
      * Returns the namespace prefix.
      */
@@ -4705,7 +4718,7 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
     getAttributeNodeNS(namespaceURI: string, localName: string): Attr | null;
     getBoundingClientRect(): ClientRect | DOMRect;
     getClientRects(): ClientRectList | DOMRectList;
-    getElementsByClassName(classNames: string): NodeListOf<Element>;
+    getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
     getElementsByTagName<K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>;
     getElementsByTagName<K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>;
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
@@ -4743,6 +4756,10 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
      */
     removeAttributeNS(namespace: string | null, localName: string): void;
     removeAttributeNode(attr: Attr): Attr;
+    /**
+     * Displays element fullscreen and resolves promise when done.
+     */
+    requestFullscreen(): Promise<void>;
     scroll(options?: ScrollToOptions): void;
     scroll(x: number, y: number): void;
     scrollBy(options?: ScrollToOptions): void;
@@ -4768,12 +4785,20 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
      */
     toggleAttribute(qualifiedName: string, force?: boolean): boolean;
     webkitMatchesSelector(selectors: string): boolean;
+    addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Element, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Element, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var Element: {
     prototype: Element;
     new(): Element;
 };
+
+interface ElementCSSInlineStyle {
+    readonly style: CSSStyleDeclaration;
+}
 
 interface ElementContentEditable {
     contentEditable: string;
@@ -4822,6 +4847,7 @@ interface Event {
      */
     readonly isTrusted: boolean;
     returnValue: boolean;
+    readonly srcElement: Element | null;
     /**
      * Returns the object to which event is dispatched (its target).
      */
@@ -5311,7 +5337,7 @@ interface GlobalEventHandlers {
      * Fires when an error occurs during object loading.
      * @param ev The event.
      */
-    onerror: ((this: GlobalEventHandlers, ev: ErrorEvent) => any) | null;
+    onerror: ErrorEventHandler;
     /**
      * Fires when the object receives focus.
      * @param ev The event.
@@ -6013,10 +6039,10 @@ declare var HTMLDocument: {
     new(): HTMLDocument;
 };
 
-interface HTMLElementEventMap extends GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
+interface HTMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
 }
 
-interface HTMLElement extends Element, GlobalEventHandlers, DocumentAndElementEventHandlers, ElementContentEditable, HTMLOrSVGElement {
+interface HTMLElement extends Element, GlobalEventHandlers, DocumentAndElementEventHandlers, ElementContentEditable, HTMLOrSVGElement, ElementCSSInlineStyle {
     accessKey: string;
     readonly accessKeyLabel: string;
     autocapitalize: string;
@@ -6244,6 +6270,7 @@ interface HTMLFormElement extends HTMLElement {
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFormElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     [index: number]: Element;
+    [name: string]: any;
 }
 
 declare var HTMLFormElement: {
@@ -7392,6 +7419,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
      * Returns whether a form will validate when it is submitted, without having to submit it.
      */
     checkValidity(): boolean;
+    reportValidity(): boolean;
     /**
      * Sets a custom error message that is displayed when a form is submitted.
      * @param error Sets a custom error message that is displayed when a form is submitted.
@@ -9256,7 +9284,7 @@ interface Location {
     /**
      * Reloads the current page.
      */
-    reload(): void;
+    reload(forcedReload?: boolean): void;
     /**
      * Removes the current page from the session history and navigates to the given URL.
      */
@@ -9667,14 +9695,16 @@ declare var MediaList: {
 };
 
 interface MediaQueryListEventMap {
-    "change": Event;
+    "change": MediaQueryListEvent;
 }
 
 interface MediaQueryList extends EventTarget {
     readonly matches: boolean;
     readonly media: string;
-    onchange: ((this: MediaQueryList, ev: Event) => any) | null;
-    addListener(listener: EventListenerOrEventListenerObject | null): void;
+    onchange: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null;
+    /** @deprecated */
+    addListener(listener: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null): void;
+    /** @deprecated */
     removeListener(listener: EventListenerOrEventListenerObject | null): void;
     addEventListener<K extends keyof MediaQueryListEventMap>(type: K, listener: (this: MediaQueryList, ev: MediaQueryListEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -10228,6 +10258,7 @@ interface Node extends EventTarget {
      * Returns the last child.
      */
     readonly lastChild: ChildNode | null;
+    readonly namespaceURI: string | null;
     /**
      * Returns the next sibling.
      */
@@ -10265,7 +10296,7 @@ interface Node extends EventTarget {
     /**
      * Returns the parent element.
      */
-    readonly parentElement: Element | null;
+    readonly parentElement: HTMLElement | null;
     /**
      * Returns the parent.
      */
@@ -11707,6 +11738,7 @@ interface Range extends AbstractRange {
      * in the range, and 1 if the point is after the range.
      */
     comparePoint(node: Node, offset: number): number;
+    createContextualFragment(fragment: string): DocumentFragment;
     deleteContents(): void;
     detach(): void;
     extractContents(): DocumentFragment;
@@ -12113,10 +12145,10 @@ declare var SVGDescElement: {
     new(): SVGDescElement;
 };
 
-interface SVGElementEventMap extends GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
+interface SVGElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
 }
 
-interface SVGElement extends Element, GlobalEventHandlers, DocumentAndElementEventHandlers, SVGElementInstance, HTMLOrSVGElement {
+interface SVGElement extends Element, GlobalEventHandlers, DocumentAndElementEventHandlers, SVGElementInstance, HTMLOrSVGElement, ElementCSSInlineStyle {
     /** @deprecated */
     readonly className: any;
     readonly ownerSVGElement: SVGSVGElement | null;
@@ -16465,6 +16497,7 @@ interface WindowOrWorkerGlobalScope {
     createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
     fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+    queueMicrotask(callback: Function): void;
     setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
     setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 }
@@ -16708,7 +16741,7 @@ declare var XMLHttpRequestUpload: {
 };
 
 interface XMLSerializer {
-    serializeToString(target: Node): string;
+    serializeToString(root: Node): string;
 }
 
 declare var XMLSerializer: {
@@ -16945,6 +16978,7 @@ interface HTMLElementTagNameMap {
     "del": HTMLModElement;
     "details": HTMLDetailsElement;
     "dfn": HTMLElement;
+    "dialog": HTMLDialogElement;
     "dir": HTMLDirectoryElement;
     "div": HTMLDivElement;
     "dl": HTMLDListElement;
@@ -17334,7 +17368,7 @@ declare var onended: ((this: Window, ev: Event) => any) | null;
  * Fires when an error occurs during object loading.
  * @param ev The event.
  */
-declare var onerror: ((this: Window, ev: ErrorEvent) => any) | null;
+declare var onerror: ErrorEventHandler;
 /**
  * Fires when the object receives focus.
  * @param ev The event.
@@ -17519,6 +17553,7 @@ declare function clearTimeout(handle?: number): void;
 declare function createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
 declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+declare function queueMicrotask(callback: Function): void;
 declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 declare var sessionStorage: Storage;
@@ -17591,6 +17626,7 @@ type IDBKeyPath = string;
 type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
 type RTCIceGatherCandidate = RTCIceCandidateDictionary | RTCIceCandidateComplete;
 type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
+type MouseWheelEvent = WheelEvent;
 type WindowProxy = Window;
 type AlignSetting = "start" | "center" | "end" | "left" | "right";
 type AnimationPlayState = "idle" | "running" | "paused" | "finished";
@@ -17705,6 +17741,7 @@ type ServiceWorkerUpdateViaCache = "imports" | "all" | "none";
 type ShadowRootMode = "open" | "closed";
 type SpeechRecognitionErrorCode = "no-speech" | "aborted" | "audio-capture" | "network" | "not-allowed" | "service-not-allowed" | "bad-grammar" | "language-not-supported";
 type SpeechSynthesisErrorCode = "canceled" | "interrupted" | "audio-busy" | "audio-hardware" | "network" | "synthesis-unavailable" | "synthesis-failed" | "language-unavailable" | "voice-unavailable" | "text-too-long" | "invalid-argument";
+type SupportedType = "text/html" | "text/xml" | "application/xml" | "application/xhtml+xml" | "image/svg+xml";
 type TextTrackKind = "subtitles" | "captions" | "descriptions" | "chapters" | "metadata";
 type TextTrackMode = "disabled" | "hidden" | "showing";
 type TouchType = "direct" | "stylus";

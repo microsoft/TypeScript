@@ -2231,6 +2231,7 @@ declare namespace ts {
         ReverseMapped = 2048,
         JsxAttributes = 4096,
         MarkerType = 8192,
+        JSLiteral = 16384,
         ClassOrInterface = 3
     }
     interface ObjectType extends Type {
@@ -8113,7 +8114,7 @@ declare namespace ts.server {
         setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
-        reloadFromFile(tempFileName?: NormalizedPath): void;
+        reloadFromFile(tempFileName?: NormalizedPath): boolean;
         editContent(start: number, end: number, newText: string): void;
         markContainingProjectsAsDirty(): void;
         isOrphan(): boolean;

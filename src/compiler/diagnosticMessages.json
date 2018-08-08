@@ -987,6 +987,10 @@
         "category": "Error",
         "code": 1344
     },
+    "An expression of type 'void' cannot be tested for truthiness": {
+        "category": "Error",
+        "code": 1345
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2063,6 +2067,14 @@
     "No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.": {
         "category": "Error",
         "code": 2575
+    },
+    "Property '{0}' is a static member of type '{1}'": {
+        "category": "Error",
+        "code": 2576
+    },
+    "Return type annotation circularly references itself.": {
+        "category": "Error",
+        "code": 2577
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -3901,7 +3913,7 @@
         "category": "Error",
         "code": 7034
     },
-    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+    "Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
         "category": "Error",
         "code": 7035
     },
@@ -3921,7 +3933,7 @@
         "category": "Error",
         "code": 7039
     },
-    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`": {
         "category": "Error",
         "code": 7040
     },

@@ -1,4 +1,4 @@
-tests/cases/compiler/staticOffOfInstance1.ts(3,10): error TS2339: Property 'Foo' does not exist on type 'List'.
+tests/cases/compiler/staticOffOfInstance1.ts(3,10): error TS2576: Property 'Foo' is a static member of type 'List'
 
 
 ==== tests/cases/compiler/staticOffOfInstance1.ts (1 errors) ====
@@ -6,7 +6,7 @@ tests/cases/compiler/staticOffOfInstance1.ts(3,10): error TS2339: Property 'Foo'
       public Blah() {
         this.Foo();
              ~~~
-!!! error TS2339: Property 'Foo' does not exist on type 'List'.
+!!! error TS2576: Property 'Foo' is a static member of type 'List'
       }
       public static Foo() {}
     }

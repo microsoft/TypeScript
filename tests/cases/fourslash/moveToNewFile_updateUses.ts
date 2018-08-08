@@ -6,9 +6,9 @@
 
 // @Filename: /user.ts
 ////import { x, y } from "./a";
-////
-
-// TODO: GH#23728 Shouldn't need `////` above
+////import { x as x2 } from "./a";
+////import { y as y2 } from "./a";
+////import {} from "./a";
 
 verify.moveToNewFile({
     newFileContents: {
@@ -22,6 +22,8 @@ verify.moveToNewFile({
         "/user.ts":
 `import { x } from "./a";
 import { y } from "./y";
-`,
+import { x as x2 } from "./a";
+import { y as y2 } from "./y";
+import {} from "./a";`,
     },
 });
