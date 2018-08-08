@@ -1620,17 +1620,15 @@ namespace ts {
         return position;
     }
 
-    interface RenamedIdentifier {
-        identifier: Identifier;
-    }
-
     /**
      * Creates a deep, memberwise clone of a node with no source map location.
      *
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<RenamedIdentifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
+    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
+
+        // TODO use a callback to update the nodeIdMap and originalType
 
         let clone;
         if (node && isIdentifier(node!) && renameMap && checker) {
@@ -1638,12 +1636,12 @@ namespace ts {
             const symbol = checker.getSymbolAtLocation(node!);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
-            if (renameInfo && type && !type.getCallSignatures().length) {  // never rename a function
-                clone = createIdentifier(renameInfo.identifier.text);
+            if (renameInfo) {  // never rename a function TODO: do this on the renameFunction side
+                clone = createIdentifier(renameInfo.text);
             }
 
             if (renameInfo && originalType) {
-                const newIdentifier = renameMap.get(String(getSymbolId(symbol!)))!.identifier;
+                const newIdentifier = renameMap.get(String(getSymbolId(symbol!)))!;
                 if (type) {
                     originalType.set(newIdentifier.text, type);
                 }
@@ -1668,7 +1666,7 @@ namespace ts {
     }
 
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<RenamedIdentifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, nodeIdMap?: Map<boolean>, checker?: TypeChecker, originalType?: Map<Type>): T {
         const visited = visitEachChild(node, function wrapper(node) {
             return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, nodeIdMap, checker, originalType);
         }, nullTransformationContext);

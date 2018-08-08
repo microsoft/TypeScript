@@ -12,10 +12,16 @@ namespace ts.codefix {
     });
 
 
+    /* 
+        custom type to encapsulate information for variable declarations synthesized in the refactor
+        numberOfUsesOriginal - number of times the variable should be assigned in the refactor
+        numberOfUsesSynthesized - count of how many times the variable has been assigned so far
+        At the end of the refactor, numberOfUsesOriginal should === numberOfUsesSynthesized
+    */
     interface SynthIdentifier {
         identifier: Identifier;
-        numberOfUsesOriginal: number;
-        numberOfUsesSynthesized: number;
+        numberOfUsesOriginal: number; 
+        numberOfUsesSynthesized: number; 
     }
 
     interface Transformer {
@@ -38,7 +44,7 @@ namespace ts.codefix {
         const synthNamesMap: Map<SynthIdentifier> = createMap(); // number indicates the number of times it is used after declaration
         const originalTypeMap: Map<Type> = createMap();
         const allVarNames: [Identifier, Symbol][] = [];
-        const setOfCallbacksToReturn = getAllCallbacksToReturn(functionToConvert, checker);
+        const setOfCallbacksToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfCallbacksToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
         const returnStatements = getReturnStatementsWithPromiseCallbacks(functionToConvertRenamed);
@@ -84,7 +90,10 @@ namespace ts.codefix {
     }
 
 
-    function getAllCallbacksToReturn(func: FunctionLikeDeclaration, checker: TypeChecker): Map<true> {
+    /*
+        Finds all of the expressions of promise type that should not be saved in a variable during the refactor
+    */
+    function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker: TypeChecker): Map<true> {
         if (!func.body) {
             return createMap<true>();
         }
@@ -92,16 +101,18 @@ namespace ts.codefix {
         const setOfCallbacksToReturn: Map<true> = createMap<true>();
 
         forEachChild(func.body, function visit(node: Node) {
-            if (isCallbackOnPromiseOfName(node, checker, "then")) {
+            if (isPromiseReturningExpression(node, checker, "then")) {
                 setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
                 forEach((<CallExpression>node).arguments, visit);
             }
-            else if (isCallbackOnPromiseOfName(node, checker, "catch")) {
+            else if (isPromiseReturningExpression(node, checker, "catch")) {
                 setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
-                forEachChild(node, visit); // if .catch() is the last callback, move leftward in the callback chain until we hit a .then()
+                // if .catch() is the last callback, move leftward in the callback chain until we hit something else that should be returned
+                forEachChild(node, visit); 
             }
-            else if (isCallbackOnPromiseOfName(node, checker)) {
-                setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
+            else if (isPromiseReturningExpression(node, checker)) {
+                setOfCallbacksToReturn.set(getNodeId(node).toString(), true); 
+                // don't recurse here, since we won't refactor any children or arguments of the expression
             }
             else {
                 forEachChild(node, visit);
@@ -111,8 +122,8 @@ namespace ts.codefix {
         return setOfCallbacksToReturn;
     }
 
-    function isCallbackOnPromiseOfName(node: Node, checker: TypeChecker, name?: string): boolean {
-        const isCallback = isCallExpression(node);
+    function isPromiseReturningExpression(node: Node, checker: TypeChecker, name?: string): boolean {
+        const isCallback = (name && isCallExpression(node)) || (!name && isExpression(node));
         const isCallbackOfName = isCallback && (!name || hasPropertyAccessExpressionWithName(node as CallExpression, name));
         const nodeType = isCallbackOfName && checker.getTypeAtLocation(node);
         return !!(nodeType && checker.getPromisedTypeOfPromise(nodeType));
@@ -130,6 +141,7 @@ namespace ts.codefix {
     // varNamesMap holds all of the variables in original source code. synthNamesMap holds all of the variables created by the refactor
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllCallbacksToReturn: Map<true>, originalType: Map<Type>, allVarNames: [Identifier, Symbol][]): FunctionLikeDeclaration {
 
+        let identsToRenameMap: Map<Identifier> = createMap();
         forEachChild(nodeToRename, function visit(node: Node) {
             const symbol = checker.getSymbolAtLocation(node);
             const isDefinedInFile = symbol ? declaredInFile(symbol, context.sourceFile) : undefined;
@@ -152,6 +164,7 @@ namespace ts.codefix {
 
                     for (const ident of allVarNames) {
                         if (ident[0].text === node.text && ident[1] !== symbol) {
+                            identsToRenameMap.set(getSymbolId(symbol).toString(), newName.identifier);
                             synthNamesMap.set(getSymbolId(symbol).toString(), newName);
                             allVarNames.push([newName.identifier, symbol]);
                             setName = true;
@@ -159,6 +172,7 @@ namespace ts.codefix {
                     }
 
                     if (!setName) {
+                        identsToRenameMap.set(getSymbolId(symbol).toString(), getSynthesizedDeepClone(node));
                         synthNamesMap.set(getSymbolId(symbol).toString(), { identifier: getSynthesizedDeepClone(node), numberOfUsesOriginal: allVarNames.filter(elem => elem[0].text === node.text).length, numberOfUsesSynthesized: 0 });
                         if ((isParameter(node.parent) && isCallbackOnTypePromise(node.parent.parent, setOfAllCallbacksToReturn)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push([node, symbol]);
@@ -182,7 +196,7 @@ namespace ts.codefix {
             return false;
         }
 
-        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, synthNamesMap, setOfAllCallbacksToReturn, checker, originalType);
+        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, setOfAllCallbacksToReturn, checker, originalType);
     }
 
     function getNewNameIfConflict(name: Identifier, allVarNames: [Identifier, Symbol][]): SynthIdentifier {
@@ -294,10 +308,10 @@ namespace ts.codefix {
     function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
         if (prevArgName.numberOfUsesSynthesized < prevArgName.numberOfUsesOriginal) {
             prevArgName.numberOfUsesSynthesized += 1;
-            debugger;
             return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))]);
         }
 
+        prevArgName.numberOfUsesSynthesized += 1;
         return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
             (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
     }
