@@ -326,7 +326,7 @@ namespace ts {
             const host = createModuleResolutionHost(
                 /*hasDirectoryExists*/ true,
                 {
-                    name: "/a.ts",
+                    name: "/modules/a.ts",
                     symlinks: ["/sub/node_modules/a/index.ts"],
                 },
                 {
@@ -342,7 +342,7 @@ namespace ts {
                 isExternalLibraryImport: true,
                 originalPath: "/sub/node_modules/a/index.ts",
                 packageId: undefined,
-                resolvedFileName: "/a.ts",
+                resolvedFileName: "/modules/a.ts",
             });
             resolution = resolveModuleName("a", "/foo.ts", compilerOptions, host, cache);
             assert.isUndefined(resolution.resolvedModule, "lookup in parent directory doesn't hit the cache");
