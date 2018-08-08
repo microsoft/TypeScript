@@ -129,7 +129,7 @@ namespace ts {
 
         // collect all the return statements
         // check that a property access expression exists in there and that it is a handler
-        const returnStatements = getReturnStatementsWithPromiseCallbacks(node);
+        const returnStatements = getReturnStatementsWithPromiseHandlers(node);
         if (returnStatements.length > 0) {
             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
         }
@@ -140,7 +140,7 @@ namespace ts {
     }
 
     /** @internal */
-    export function getReturnStatementsWithPromiseCallbacks(node: Node): Node[] {
+    export function getReturnStatementsWithPromiseHandlers(node: Node): Node[] {
         const returnStatements: Node[] = [];
         if (isFunctionLike(node)) {
             forEachChild(node, visit);
@@ -155,11 +155,11 @@ namespace ts {
             }
 
             if (isReturnStatement(child)) {
-                forEachChild(child, addCallbacks);
+                forEachChild(child, addHandlers);
             }
 
-            function addCallbacks(returnChild: Node) {
-                if (isCallback(returnChild)) {
+            function addHandlers(returnChild: Node) {
+                if (isPromiseHandler(returnChild)) {
                     returnStatements.push(child as ReturnStatement);
                 }
             }
@@ -169,7 +169,7 @@ namespace ts {
         return returnStatements;
     }
 
-    function isCallback(node: Node): boolean {
+    function isPromiseHandler(node: Node): boolean {
         return (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
             (node.expression.name.text === "then" || node.expression.name.text === "catch"));
     }

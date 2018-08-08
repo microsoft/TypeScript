@@ -32,12 +32,13 @@ namespace ts.codefix {
 
     interface Transformer {
         checker: TypeChecker;
-        synthNamesMap: Map<SynthIdentifier>;
+        synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
         allVarNames: SymbolAndIdentifier[];
-        setOfCallbacksToReturn: Map<true>;
+        setOfExpressionsToReturn: Map<true>; // keys are the node ids of the expressions
         context: CodeFixContextBase;
         constIdentifiers: Identifier[];
-        originalTypeMap: Map<Type>;
+        originalTypeMap: Map<Type>; // keys are the identifier's text 
+        isInJSFile: boolean;
     }
 
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, context: CodeFixContextBase): void {
@@ -50,11 +51,12 @@ namespace ts.codefix {
         const synthNamesMap: Map<SynthIdentifier> = createMap(); // number indicates the number of times it is used after declaration
         const originalTypeMap: Map<Type> = createMap();
         const allVarNames: SymbolAndIdentifier[] = [];
-        const setOfCallbacksToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
-        const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfCallbacksToReturn, originalTypeMap, allVarNames);
+        const isInJSFile = isInJavaScriptFile(functionToConvert);
+        const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
+        const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
-        const returnStatements = getReturnStatementsWithPromiseCallbacks(functionToConvertRenamed);
-        const transformer = { checker, synthNamesMap, allVarNames, setOfCallbacksToReturn, context, constIdentifiers, originalTypeMap };
+        const returnStatements = getReturnStatementsWithPromiseHandlers(functionToConvertRenamed);
+        const transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, context, constIdentifiers, originalTypeMap, isInJSFile };
 
         if (!returnStatements.length) {
             return;
@@ -64,7 +66,7 @@ namespace ts.codefix {
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
         function startTransformation(node: CallExpression, nodeToReplace: Node) {
-            const newNodes = transformCallback(node, transformer, node);
+            const newNodes = transformExpression(node, transformer, node);
             changes.replaceNodeWithNodes(sourceFile, nodeToReplace, newNodes);
         }
 
@@ -85,6 +87,7 @@ namespace ts.codefix {
         }
     }
 
+    // Returns the identifiers that are never reassigned in the refactor
     function getConstIdentifiers(synthNamesMap: Map<SynthIdentifier>): Identifier[] {
         const constIdentifiers: Identifier[] = [];
         synthNamesMap.forEach((val) => {
@@ -104,20 +107,20 @@ namespace ts.codefix {
             return createMap<true>();
         }
 
-        const setOfCallbacksToReturn: Map<true> = createMap<true>();
+        const setOfExpressionsToReturn: Map<true> = createMap<true>();
 
         forEachChild(func.body, function visit(node: Node) {
             if (isPromiseReturningExpression(node, checker, "then")) {
-                setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
                 forEach((<CallExpression>node).arguments, visit);
             }
             else if (isPromiseReturningExpression(node, checker, "catch")) {
-                setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
-                // if .catch() is the last callback, move leftward in the callback chain until we hit something else that should be returned
+                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
+                // if .catch() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
                 forEachChild(node, visit);
             }
             else if (isPromiseReturningExpression(node, checker)) {
-                setOfCallbacksToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
                 // don't recurse here, since we won't refactor any children or arguments of the expression
             }
             else {
@@ -125,13 +128,13 @@ namespace ts.codefix {
             }
         });
 
-        return setOfCallbacksToReturn;
+        return setOfExpressionsToReturn;
     }
 
     function isPromiseReturningExpression(node: Node, checker: TypeChecker, name?: string): boolean {
-        const isCallback = (name && isCallExpression(node)) || (!name && isExpression(node));
-        const isCallbackOfName = isCallback && (!name || hasPropertyAccessExpressionWithName(node as CallExpression, name));
-        const nodeType = isCallbackOfName && checker.getTypeAtLocation(node);
+        const isNodeExpression = name ? isCallExpression(node) : isExpression(node);
+        const isExpressionOfName = isNodeExpression && (!name || hasPropertyAccessExpressionWithName(node as CallExpression, name));
+        const nodeType = isExpressionOfName && checker.getTypeAtLocation(node);
         return !!(nodeType && checker.getPromisedTypeOfPromise(nodeType));
     }
 
@@ -144,7 +147,7 @@ namespace ts.codefix {
         This function collects all existing identifier names and names of identifiers that will be created in the refactor.
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
-    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllCallbacksToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
+    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllExpressionsToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
 
         let identsToRenameMap: Map<Identifier> = createMap();
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -182,7 +185,7 @@ namespace ts.codefix {
                         const identifier = getSynthesizedDeepClone(node);
                         identsToRenameMap.set(symbolIdString, identifier);
                         synthNamesMap.set(symbolIdString, { identifier, type: undefined, numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length, numberOfAssignmentsSynthesized: 0 });
-                        if ((isParameter(node.parent) && isCallbackOnTypePromise(node.parent.parent, setOfAllCallbacksToReturn)) || isVariableDeclaration(node.parent)) {
+                        if ((isParameter(node.parent) && isExpressionOrCallOnTypePromise(node.parent.parent)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push({ identifier, symbol });
                         }
                     }
@@ -190,9 +193,11 @@ namespace ts.codefix {
             }
         });
 
-        function isCallbackOnTypePromise(child: Node, setOfAllCallbacksToReturn: Map<true>): boolean {
+        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker, deepCloneCallback);
+
+        function isExpressionOrCallOnTypePromise(child: Node): boolean {
             let node = child.parent;
-            if (isCallExpression(node) || isIdentifier(node) && !setOfAllCallbacksToReturn.get(getNodeId(node).toString())) {
+            if (isCallExpression(node) || isIdentifier(node) && !setOfAllExpressionsToReturn.get(getNodeId(node).toString())) {
                 const nodeType = checker.getTypeAtLocation(node);
                 const isPromise = nodeType && checker.getPromisedTypeOfPromise(nodeType);
                 return !!isPromise;
@@ -202,27 +207,25 @@ namespace ts.codefix {
         }
 
         function deepCloneCallback(node: Node, clone: Node) {
-            const type = checker.getTypeAtLocation(node);
             const symbol = checker.getSymbolAtLocation(node);
-            const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
+            const symboldIdString = symbol && getSymbolId(symbol).toString();
+            const renameInfo = symbol && identsToRenameMap.get(symboldIdString!);
 
-            if (renameInfo && originalType) {
-                const newIdentifier = identsToRenameMap.get(String(getSymbolId(symbol!)))!;
+            if (renameInfo) {
+                const type = checker.getTypeAtLocation(node);
+                const newIdentifier = identsToRenameMap.get(symboldIdString!)!;
                 if (type) {
                     originalType.set(newIdentifier.text, type);
                 }
             }
 
-            if (setOfAllCallbacksToReturn) {
-                const val = setOfAllCallbacksToReturn.get(getNodeId(node!).toString());
-                if (val !== undefined) {
-                    setOfAllCallbacksToReturn.delete(getNodeId(node!).toString());
-                    setOfAllCallbacksToReturn.set(getNodeId(clone).toString(), val);
-                }
+            const val = setOfAllExpressionsToReturn.get(getNodeId(node!).toString());
+            if (val !== undefined) {
+                setOfAllExpressionsToReturn.delete(getNodeId(node!).toString());
+                setOfAllExpressionsToReturn.set(getNodeId(clone).toString(), val);
             }
         }
 
-        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker, deepCloneCallback);
     }
 
     function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
@@ -234,7 +237,7 @@ namespace ts.codefix {
     }
 
     // dispatch function to recursively build the refactoring
-    function transformCallback(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
+    function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         if (!node) {
             return [];
         }
@@ -251,7 +254,7 @@ namespace ts.codefix {
             return transformCatch(node, transformer, prevArgName);
         }
         else if (isPropertyAccessExpression(node)) {
-            return transformCallback(node.expression, transformer, outermostParent, prevArgName);
+            return transformExpression(node.expression, transformer, outermostParent, prevArgName);
         }
         else if (nodeType && transformer.checker.getPromisedTypeOfPromise(nodeType)) {
             return transformPromiseCall(node, transformer, prevArgName);
@@ -263,7 +266,7 @@ namespace ts.codefix {
     function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
         const func = node.arguments[0];
         const argName = getArgName(func, transformer);
-        const shouldReturn = transformer.setOfCallbacksToReturn.get(getNodeId(node).toString());
+        const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
 
         /* 
             If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
@@ -279,14 +282,13 @@ namespace ts.codefix {
             })
         }
 
-        const tryBlock = createBlock(transformCallback(node.expression, transformer, node, prevArgName));
+        const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));
         const tryType = prevArgName && prevArgName.type;
 
-        const callbackBody = getCallbackBody(func, prevArgName, argName, node, transformer);
+        const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
         const catchType = prevArgName && prevArgName.type;
-        const catchClause = createCatchClause(argName.identifier.text, createBlock(callbackBody));
+        const catchClause = createCatchClause(argName.identifier.text, createBlock(transformationBody));
         
-
         /*
             In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
         */
@@ -296,7 +298,7 @@ namespace ts.codefix {
             if (tryType) typeArray.push(tryType);
             if (catchType) typeArray.push(catchType);
             const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
-            const unionTypeNode = isInJavaScriptFile(node) ? transformer.checker.typeToTypeNode(unionType) : undefined;
+            const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType);
             const varDecl = [createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), unionTypeNode)]
             varDeclList = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(varDecl, NodeFlags.Let));
         }
@@ -309,24 +311,24 @@ namespace ts.codefix {
         const [res, rej] = node.arguments;
 
         if (!res) {
-            return transformCallback(node.expression, transformer, outermostParent);
+            return transformExpression(node.expression, transformer, outermostParent);
         }
 
         const argNameRes = getArgName(res, transformer);
-        const callbackBody = getCallbackBody(res, prevArgName, argNameRes, node, transformer);
+        const transformationBody = getTransformationBody(res, prevArgName, argNameRes, node, transformer);
 
         if (rej) {
             const argNameRej = getArgName(rej, transformer);
 
-            const tryBlock = createBlock(transformCallback(node.expression, transformer, node, argNameRes).concat(callbackBody));
+            const tryBlock = createBlock(transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody));
 
-            const callbackBody2 = getCallbackBody(rej, prevArgName, argNameRej, node, transformer);
-            const catchClause = createCatchClause(argNameRej.identifier.text, createBlock(callbackBody2));
+            const transformationBody2 = getTransformationBody(rej, prevArgName, argNameRej, node, transformer);
+            const catchClause = createCatchClause(argNameRej.identifier.text, createBlock(transformationBody2));
 
             return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
         }
         else {
-            return transformCallback(node.expression, transformer, node, argNameRes).concat(callbackBody);
+            return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
         }
 
         return [];
@@ -338,7 +340,7 @@ namespace ts.codefix {
     }
 
     function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
-        const shouldReturn = transformer.setOfCallbacksToReturn.get(getNodeId(node).toString());
+        const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
         if (hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
@@ -364,11 +366,11 @@ namespace ts.codefix {
             (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
     }
 
-    function getCallbackBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
+    function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const hasArgName = argName && argName.identifier.text.length > 0;
-        const shouldReturn = transformer.setOfCallbacksToReturn.get(getNodeId(parent).toString());
+        const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
             case SyntaxKind.Identifier:
                 if (!hasArgName) {
@@ -391,13 +393,13 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
                 // Arrow functions with block bodies { } will enter this control flow
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    const indices = getReturnStatementsWithPromiseCallbacksIndices(func.body);
+                    const indices = getReturnStatementsWithPromiseHandlersIndices(func.body);
                     let refactoredStmts: Statement[] = [];
 
                     for (let i = 0; i < func.body.statements.length; i++) {
                         const statement = func.body.statements[i];
                         if (indices.some(elem => elem === i)) {
-                            refactoredStmts = refactoredStmts.concat(getInnerCallbackBody(transformer, [statement], prevArgName));
+                            refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                         }
                         else {
                             refactoredStmts.push(statement);
@@ -409,8 +411,8 @@ namespace ts.codefix {
                 }
                 else {
                     const funcBody = (<ArrowFunction>func).body;
-                    const innerRetStmts = getReturnStatementsWithPromiseCallbacks(createReturn(funcBody as Expression));
-                    const innerCbBody = getInnerCallbackBody(transformer, innerRetStmts, prevArgName);
+                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody as Expression));
+                    const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
                         return createNodeArray(innerCbBody);
@@ -428,11 +430,11 @@ namespace ts.codefix {
         return createNodeArray([]);
     }
 
-    function getReturnStatementsWithPromiseCallbacksIndices(block: Block): number[] {
+    function getReturnStatementsWithPromiseHandlersIndices(block: Block): number[] {
         const indices: number[] = [];
         for (let i = 0; i < block.statements.length; i++) {
             const statement = block.statements[i];
-            if (getReturnStatementsWithPromiseCallbacks(statement).length) {
+            if (getReturnStatementsWithPromiseHandlers(statement).length) {
                 indices.push(i);
             }
         }
@@ -457,13 +459,13 @@ namespace ts.codefix {
     }
 
 
-    function getInnerCallbackBody(transformer: Transformer, innerRetStmts: Node[], prevArgName?: SynthIdentifier) {
+    function getInnerTransformationBody(transformer: Transformer, innerRetStmts: Node[], prevArgName?: SynthIdentifier) {
 
         let innerCbBody: Statement[] = [];
         for (const stmt of innerRetStmts) {
             forEachChild(stmt, function visit(node: Node) {
                 if (isCallExpression(node)) {
-                    const temp = transformCallback(node, transformer, node, prevArgName);
+                    const temp = transformExpression(node, transformer, node, prevArgName);
                     innerCbBody = innerCbBody.concat(temp);
                     if (innerCbBody.length > 0) {
                         return;
