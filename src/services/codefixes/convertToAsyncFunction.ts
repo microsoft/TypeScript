@@ -48,7 +48,7 @@ namespace ts.codefix {
             return;
         }
 
-        const synthNamesMap: Map<SynthIdentifier> = createMap(); // number indicates the number of times it is used after declaration
+        const synthNamesMap: Map<SynthIdentifier> = createMap();
         const originalTypeMap: Map<Type> = createMap();
         const allVarNames: SymbolAndIdentifier[] = [];
         const isInJSFile = isInJavaScriptFile(functionToConvert);
@@ -209,13 +209,15 @@ namespace ts.codefix {
         function deepCloneCallback(node: Node, clone: Node) {
             const symbol = checker.getSymbolAtLocation(node);
             const symboldIdString = symbol && getSymbolId(symbol).toString();
-            const renameInfo = symbol && identsToRenameMap.get(symboldIdString!);
+            const renameInfo = symbol && synthNamesMap.get(symboldIdString!);
 
             if (renameInfo) {
                 const type = checker.getTypeAtLocation(node);
-                const newIdentifier = identsToRenameMap.get(symboldIdString!)!;
                 if (type) {
-                    originalType.set(newIdentifier.text, type);
+                    originalType.set(renameInfo.identifier.text, type);
+                    if (isIdentifier(node)) {
+                        originalType.set(node.text, type);
+                    }
                 }
             }
 
@@ -233,7 +235,7 @@ namespace ts.codefix {
         const numberOfAssignmentsOriginal = 0, numberOfAssignmentsSynthesized = 0;
         const type = undefined;
         const identifier = numVarsSameName == 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
-        return { identifier: identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized } ;
+        return { identifier: identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
     }
 
     // dispatch function to recursively build the refactoring
@@ -288,7 +290,7 @@ namespace ts.codefix {
         const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
         const catchType = prevArgName && prevArgName.type;
         const catchClause = createCatchClause(argName.identifier.text, createBlock(transformationBody));
-        
+
         /*
             In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
         */
@@ -354,7 +356,6 @@ namespace ts.codefix {
     }
 
     function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
-        prevArgName.type = transformer.checker.getTypeAtLocation(rightHandSide);
 
         if (prevArgName.numberOfAssignmentsSynthesized < prevArgName.numberOfAssignmentsOriginal) {
             prevArgName.numberOfAssignmentsSynthesized += 1;
@@ -386,6 +387,10 @@ namespace ts.codefix {
                     break;
                 }
 
+                const type = transformer.originalTypeMap.get((<Identifier>func).text);
+                const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
+                const returnType = callSignatures && callSignatures[0].getReturnType();
+                prevArgName!.type = returnType;
                 return createVariableDeclarationOrAssignment(prevArgName!, createAwait(synthCall), transformer);
 
             case SyntaxKind.FunctionDeclaration:
@@ -419,6 +424,10 @@ namespace ts.codefix {
                     }
 
                     if (hasPrevArgName && !shouldReturn) {
+                        const type = transformer.checker.getTypeAtLocation(func);
+                        const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
+                        const returnType = callSignatures && callSignatures[0].getReturnType();
+                        prevArgName!.type = returnType;
                         return createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
                     }
                     else {
@@ -496,10 +505,10 @@ namespace ts.codefix {
             const originalNode = getOriginalNode(node);
             const symbol = getSymbol(originalNode);
             const identifier = node;
-            
+
 
             if (!symbol) {
-                return { identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized};
+                return { identifier, type, numberOfAssignmentsOriginal, numberOfAssignmentsSynthesized };
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
