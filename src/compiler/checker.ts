@@ -4788,48 +4788,45 @@ namespace ts {
         }
 
         /** If we don't have an explicit JSDoc type, get the type from the initializer. */
-        function getInitializerTypeFromSpecialDeclarations(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: Expression, special: SpecialPropertyAssignmentKind) {
-            if (isBinaryExpression(expression)) {
-                const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
-                if (type.flags & TypeFlags.Object &&
-                    special === SpecialPropertyAssignmentKind.ModuleExports &&
-                    symbol.escapedName === InternalSymbolName.ExportEquals) {
-                    const exportedType = resolveStructuredTypeMembers(type as ObjectType);
-                    const members = createSymbolTable();
-                    copyEntries(exportedType.members, members);
-                    if (resolvedSymbol && !resolvedSymbol.exports) {
-                        resolvedSymbol.exports = createSymbolTable();
-                    }
-                    (resolvedSymbol || symbol).exports!.forEach((s, name) => {
-                        if (members.has(name)) {
-                            const exportedMember = exportedType.members.get(name)!;
-                            const union = createSymbol(s.flags | exportedMember.flags, name);
-                            union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
-                            members.set(name, union);
-                        }
-                        else {
-                            members.set(name, s);
-                        }
-                    });
-                    const result = createAnonymousType(
-                        exportedType.symbol,
-                        members,
-                        exportedType.callSignatures,
-                        exportedType.constructSignatures,
-                        exportedType.stringIndexInfo,
-                        exportedType.numberIndexInfo);
-                    result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Propagate JSLiteral flag
-                    return result;
+        function getInitializerTypeFromSpecialDeclarations(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: BinaryExpression, special: SpecialPropertyAssignmentKind) {
+            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+            if (type.flags & TypeFlags.Object &&
+                special === SpecialPropertyAssignmentKind.ModuleExports &&
+                symbol.escapedName === InternalSymbolName.ExportEquals) {
+                const exportedType = resolveStructuredTypeMembers(type as ObjectType);
+                const members = createSymbolTable();
+                copyEntries(exportedType.members, members);
+                if (resolvedSymbol && !resolvedSymbol.exports) {
+                    resolvedSymbol.exports = createSymbolTable();
                 }
-                if (isEmptyArrayLiteralType(type)) {
-                    if (noImplicitAny) {
-                        reportImplicitAnyError(expression, anyArrayType);
+                (resolvedSymbol || symbol).exports!.forEach((s, name) => {
+                    if (members.has(name)) {
+                        const exportedMember = exportedType.members.get(name)!;
+                        const union = createSymbol(s.flags | exportedMember.flags, name);
+                        union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                        members.set(name, union);
                     }
-                    return anyArrayType;
-                }
-                return type;
+                    else {
+                        members.set(name, s);
+                    }
+                });
+                const result = createAnonymousType(
+                    exportedType.symbol,
+                    members,
+                    exportedType.callSignatures,
+                    exportedType.constructSignatures,
+                    exportedType.stringIndexInfo,
+                    exportedType.numberIndexInfo);
+                result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Propagate JSLiteral flag
+                return result;
             }
-            return neverType;
+            if (isEmptyArrayLiteralType(type)) {
+                if (noImplicitAny) {
+                    reportImplicitAnyError(expression, anyArrayType);
+                }
+                return anyArrayType;
+            }
+            return type;
         }
 
         function isDeclarationInConstructor(expression: Expression) {
@@ -5049,7 +5046,9 @@ namespace ts {
                     if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                         return getTypeOfFuncClassEnumModule(symbol);
                     }
-                    type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
+                    type = isBinaryExpression(declaration.parent) ?
+                        getWidenedTypeFromJSSpecialPropertyDeclarations(symbol) :
+                        tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
                 }
                 else if (isPropertyAssignment(declaration)) {
                     type = tryGetTypeFromEffectiveTypeNode(declaration) || checkPropertyAssignment(declaration);
@@ -15994,7 +15993,7 @@ namespace ts {
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for special property assignments unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
         function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
-            const kind = getSpecialPropertyAssignmentKind(binaryExpression);
+            const kind = getSpetzPropertyAssignmentKind(binaryExpression);
             switch (kind) {
                 case SpecialPropertyAssignmentKind.None:
                     return true;

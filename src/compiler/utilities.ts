@@ -1719,12 +1719,15 @@ namespace ts {
     }
 
     export function getDeclarationOfJSInitializer(node: Node): Node | undefined {
-        if (!isInJavaScriptFile(node) || !node.parent) {
+        if (!node.parent) {
             return undefined;
         }
         let name: Expression | BindingName | undefined;
         let decl: Node | undefined;
         if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
+            if (!isInJavaScriptFile(node) && !isVarConst(node.parent)) {
+                return undefined;
+            }
             name = node.parent.name;
             decl = node.parent;
         }
@@ -1885,9 +1888,8 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
-        if (!isInJavaScriptFile(expr) ||
-            expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
+    export function spetz(expr: BinaryExpression): SpecialPropertyAssignmentKind {
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
             !isPropertyAccessExpression(expr.left)) {
             return SpecialPropertyAssignmentKind.None;
         }
@@ -1898,6 +1900,16 @@ namespace ts {
         }
         return getSpecialPropertyAccessKind(lhs);
     }
+
+    export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
+        return isInJavaScriptFile(expr) ? spetz(expr) : SpecialPropertyAssignmentKind.None;
+    }
+
+    export function getSpetzPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
+        const special = spetz(expr);
+        return special === SpecialPropertyAssignmentKind.Property || isInJavaScriptFile(expr) ? special : SpecialPropertyAssignmentKind.None;
+    }
+
 
     export function getSpecialPropertyAccessKind(lhs: PropertyAccessExpression): SpecialPropertyAssignmentKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
