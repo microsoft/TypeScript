@@ -104,10 +104,10 @@ var y2 = id2(D);
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 >D : typeof D
 
-var z2 = new y(33);
+var z2 = new y2(33);
 >z2 : { length: number; }
->new y(33) : { length: number; }
->y : new (arg1: number) => { length: number; }
+>new y2(33) : { length: number; }
+>y2 : new (arg1: number) => { length: number; }
 >33 : 33
 
 z2.length;

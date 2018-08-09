@@ -89,9 +89,9 @@ var y2 = id2(D);
 >id2 : Symbol(id2, Decl(functions.js, 8, 53))
 >D : Symbol(D, Decl(functions.js, 30, 61))
 
-var z2 = new y(33);
+var z2 = new y2(33);
 >z2 : Symbol(z2, Decl(functions.js, 42, 3))
->y : Symbol(y, Decl(functions.js, 25, 3))
+>y2 : Symbol(y2, Decl(functions.js, 41, 3))
 
 z2.length;
 >z2.length : Symbol(length, Decl(functions.js, 12, 27))

@@ -46,7 +46,7 @@ tests/cases/conformance/jsdoc/functions.js(65,14): error TS2345: Argument of typ
     }
     
     var y2 = id2(D);
-    var z2 = new y(33);
+    var z2 = new y2(33);
     z2.length;
     
     

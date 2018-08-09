@@ -47,7 +47,7 @@ function D(n) {
 }
 
 var y2 = id2(D);
-var z2 = new y(33);
+var z2 = new y2(33);
 z2.length;
 
 
